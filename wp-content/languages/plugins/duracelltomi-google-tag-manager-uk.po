@@ -1,0 +1,1170 @@
+# Translation of Plugins - GTM4WP &#8211; A Google Tag Manager (GTM) plugin for WordPress - Stable (latest release) in Ukrainian
+# This file is distributed under the same license as the Plugins - GTM4WP &#8211; A Google Tag Manager (GTM) plugin for WordPress - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-11-20 18:40:44+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.3\n"
+"Language: uk_UA\n"
+"Project-Id-Version: Plugins - GTM4WP &#8211; A Google Tag Manager (GTM) plugin for WordPress - Stable (latest release)\n"
+
+#. translators: 1: anchor element linking to the official GA4 doc about
+#. clearing the ecommerce object. 2: closing anchor element.
+#: admin/admin-tab-integrate.php:159
+msgid ""
+"When a user clicks on a product in a list, the <code>select_item</code> event uses a callback function with Google Tag Manager (GTM).\n"
+"\t\t\t\t\tThis ensures that GTM can fire all related tags before the browser navigates to the product detail page.\n"
+"\t\t\t\t\tYou can customize a timeout period (in milliseconds). This timeout only comes into play if a tag fails to fire within the specified time\n"
+"\t\t\t\t\tfor some reason. If all tags fire correctly, this timeout won't affect anything."
+msgstr ""
+"Коли користувач натискає на продукт у списку, подія <code>select_item</code> використовує функцію зворотного виклику з Google Tag Manager (GTM).\n"
+"\t\t\t\t\tЦе гарантує, що GTM зможе запустити всі пов'язані теги до того, як браузер перейде на сторінку деталізації продукту.\n"
+"\t\t\t\t\tВи можете налаштувати період очікування (в мілісекундах). Цей таймаут спрацьовує тільки в тому випадку, якщо тег не спрацьовує протягом зазначеного часу\n"
+"\t\t\t\t\tз якоїсь причини. Якщо всі теги спрацювали коректно, цей таймаут ні на що не вплине."
+
+#: admin/admin-tab-integrate.php:155
+msgid "Set maximum timeout for select_item event"
+msgstr "Встановити максимальний таймаут для події select_item"
+
+#: admin/admin-tab-integrate.php:287
+msgid ""
+"Enabling this feature will fire a GTM event (cookie_consent_update) when the consent banner has been closed\n"
+"\t\t\t\twith consents being set or during pageload when previously set consents have been found.\n"
+"\t\t\t\tYou do not need to use this integration with v3.x or above since it includes all the necessary codes to integrate\n"
+"\t\t\t\tthe consent banner with Google Tag Manager. Just use their wcc_gcm_consent_update event to fire\n"
+"\t\t\t\ttags that do not support advanced consent mode (usually non-Google tags) or if you would like to implement\n"
+"\t\t\t\tbasic consent mode."
+msgstr ""
+"Увімкнення цієї функції викличе подію GTM (cookie_consent_update), коли банер зі згодою буде закрито\n"
+"\t\t\t\tпри встановленні згоди або під час перезавантаження сторінки, коли знайдено раніше встановлену згоду.\n"
+"\t\t\t\tВам не потрібно використовувати цю інтеграцію з версією v3.x або вище, оскільки вона містить всі необхідні коди для інтеграції\n"
+"\t\t\t\tбанер згоди з Google Tag Manager. Просто використовуйте їхню подію wcc_gcm_consent_update для запуску\n"
+"\t\t\t\tтегів, які не підтримують розширений режим згоди (зазвичай це не теги Google), або якщо ви хочете реалізувати\n"
+"\t\t\t\tбазовий режим згоди."
+
+#: admin/admin-tab-integrate.php:285
+msgid "WebToffee GDPR Cookie Consent (v2.x)"
+msgstr "Згода WebToffee на використання файлів cookie GDPR (v2.x)"
+
+#: admin/admin-tab-integrate.php:120
+msgid "If this option is turned on, the view_item event will be also fired during page load of a variable product using parent product data."
+msgstr "Якщо цю опцію увімкнено, подія view_item буде також спрацьовувати під час завантаження сторінки змінного товару з використанням даних батьківського товару."
+
+#: admin/admin-tab-integrate.php:119
+msgid "Fire view_item on parent product"
+msgstr "Пожежа view_item у батьківському продукті"
+
+#. translators: 1: anchor element linking to GA4 Ecommerce docs. 2: closing
+#. anchor element. 3: anchor element linking to GTM4WP setup guide for Google
+#. Analytics 4. 4: closing anchor element.
+#: admin/admin-tab-integrate.php:23
+msgid ""
+"Choose this option if you would like to track e-commerce data using \n"
+"\t\t\t\t\t %1$secommerce tracking%2$s.<br>\n"
+"\t\t\t\t\t Use the plugin's %3$sofficial guides%4$s to setup your Google Tag Manager container:<br/>\n"
+"\t\t\t\t\t <strong>WooCommerce 5.0+ is required to use this integration</strong>"
+msgstr ""
+"Виберіть цю опцію, якщо ви хочете відстежувати дані електронної комерції за допомогою \n"
+"\t\t\t\t\t %1$sвідстеження електронної комерції%2$s.<br>\n"
+"\t\t\t\t\t Скористайтеся офіційними посібниками плагіна %3$sта%4$s для налаштування контейнера Google Tag Manager:<br/>\n"
+"\t\t\t\t\t <strong>Для використання цієї інтеграції потрібна версія WooCommerce 5.0+</strong>"
+
+#: admin/admin-tab-integrate.php:42
+msgid ""
+"If you have many products shown on product category pages and/or on your site home, you could miss pageviews in Google Analytics due to the\n"
+"\t\t\t\tamount of data that is needed to be sent. To prevent this, you can split product impression data into multiple Google Analytics events by\n"
+"\t\t\t\tentering a number here (minimum 10-15 recommended)<br /><br />Leave this value 0 to include product impression data in your pageview hit."
+msgstr ""
+"Якщо у вас багато товарів, показаних на сторінках категорій товарів та/або на головній сторінці сайту, ви можете пропустити перегляди сторінок в Google Analytics через\n"
+"\t\t\t\tчерез велику кількість даних, які потрібно надсилати. Щоб запобігти цьому, ви можете розділити дані про покази продуктів на кілька подій Google Analytics\n"
+"\t\t\t\tввівши тут число (рекомендується мінімум 10-15)<br /><br />Залиште це значення 0, щоб включити дані про покази продукту до показів сторінок."
+
+#: admin/admin.php:1057
+msgid "WebToffee GDPR Cookie Consent"
+msgstr "Згода на використання файлів cookie GDPR WebToffee"
+
+#: admin/admin-tab-integrate.php:253
+msgid "Select this checkbox to make the ad_personalization flag \"granted\" by default."
+msgstr "Встановіть цей прапорець, щоб прапорець ad_personalization був встановлений за замовчуванням."
+
+#: admin/admin-tab-integrate.php:252
+msgid "Ad Personalization"
+msgstr "Персоналізація оголошень"
+
+#: admin/admin-tab-integrate.php:245
+msgid "Select this checkbox to make the ad_user_data flag \"granted\" by default."
+msgstr "Встановіть цей прапорець, щоб прапорець ad_user_data за замовчуванням був \"дозволений\"."
+
+#: admin/admin-tab-integrate.php:244
+msgid "Ad User Data"
+msgstr "Дані користувача оголошення"
+
+#. translators: 1: opening anchor tag linking to Google's documentation about
+#. the consent mode command. 2: Closing anchor tag.
+#: admin/admin-tab-integrate.php:215
+msgid ""
+"Enable this checkbox if you wish to execute the \"default\" command of %1$sGoogle Consent Mode%2$s before the container loads.\n"
+"\t\t\t\t\tThe \"update\" command needs to be executed from your consent management tool.<br /><br />\n"
+"\t\t\t\t\tDO NOT enable this feature if your consent manager tool supports firing both the \"default\" and the \"update\" command."
+msgstr ""
+"Увімкніть цей прапорець, якщо ви хочете, щоб перед завантаженням контейнера виконувалася команда \"за замовчуванням\" %1$sGoogle Consent Mode%2$s.\n"
+"\t\t\t\t\tКоманда \"update\" має бути виконана з вашого інструменту управління згодою.<br /><br />\n"
+"\t\t\t\t\tНЕ вмикайте цю функцію, якщо ваш інструмент управління згодою підтримує запуск як команди \"за замовчуванням\", так і команди \"оновити\"."
+
+#: admin/admin-tab-basicdata.php:109
+msgid "By default, the plugin will check the so called REMOTE_ADDR system variable for IP addresses. In some cases, this might not include the correct address. You may specify a custom header to read the IP address from."
+msgstr "За замовчуванням плагін перевіряє системну змінну REMOTE_ADDR на наявність IP-адрес. У деяких випадках вона може містити неправильну адресу. Ви можете вказати спеціальний заголовок для зчитування IP-адреси."
+
+#: admin/admin-tab-basicdata.php:108
+msgid "Visitor IP - Read from custom header."
+msgstr "IP відвідувача - зчитується з користувацького заголовка."
+
+#. Plugin Name of the plugin
+#: duracelltomi-google-tag-manager-for-wordpress.php
+msgid "GTM4WP - A Google Tag Manager (GTM) plugin for WordPress"
+msgstr "GTM4WP - плагін Google Tag Manager (GTM) для WordPress"
+
+#: admin/admin-tab-integrate.php:269
+msgid "Select this checkbox to make the security_storage flag \"granted\" by default."
+msgstr "Позначте цей прапорець, щоб прапорець security_storage було встановлено \"гарантовано\" за замовчуванням."
+
+#: admin/admin-tab-integrate.php:261
+msgid "Select this checkbox to make the functionality_storage flag \"granted\" by default."
+msgstr "Позначте цей прапорець, щоб зробити прапорець functionality_storage \"гарантованим\" за замовчуванням."
+
+#: admin/admin-tab-integrate.php:277
+msgid "Select this checkbox to make the personalization_storage flag \"granted\" by default."
+msgstr "Установіть цей прапорець, щоб прапорець personalization_storage був «гарантований» за замовчуванням."
+
+#: admin/admin-tab-integrate.php:229
+msgid "Select this checkbox to make the analytics_storage flag \"granted\" by default."
+msgstr "Установіть цей прапорець, щоб прапорець analytics_storage був «гарантований» за замовчуванням."
+
+#: admin/admin-tab-integrate.php:268
+msgid "Security Storage"
+msgstr "Безпечне сховище"
+
+#: admin/admin-tab-integrate.php:260
+msgid "Functionality Storage"
+msgstr "Функціональність Зберігання"
+
+#: admin/admin-tab-integrate.php:276
+msgid "Personalization Storage"
+msgstr "Персоналізоване сховище"
+
+#: admin/admin-tab-integrate.php:228
+msgid "Analytics Storage"
+msgstr "Сховище аналітики"
+
+#: admin/admin-tab-integrate.php:237
+msgid "Select this checkbox to make the ad_storage flag \"granted\" by default."
+msgstr "Встановіть цей прапорець, щоб прапорець ad_storage був \"гарантований\"за замовчуванням."
+
+#: admin/admin-tab-integrate.php:236
+msgid "Ad Storage"
+msgstr "Зберігання оголошень"
+
+#: admin/admin-tab-integrate.php:211 admin/admin.php:1056
+msgid "Google Consent Mode"
+msgstr "Режим згоди Google"
+
+#. translators: 1: anchor element linking to the official GA4 doc about
+#. clearing the ecommerce object. 2: closing anchor element.
+#: admin/admin-tab-integrate.php:141
+msgid ""
+"Clear the ecommerce object before any new event being pushed into the data layer.<br /><br />\n"
+"\t\t\t\t\tAlthought it is %1$srecommended by Google%2$s, it is not mandatory to activate this feature as\n"
+"\t\t\t\t\tthe GA4 event tag reads only the last pushed ecommerce data on any new event.<br />\n"
+"\t\t\t\t\tUse it if you encounter issues with your GTM implementation."
+msgstr ""
+"Очищайте об'єкт електронної комерції перед тим, як будь-яка нова подія буде перенесена в рівень даних.<br /><br />\n"
+"\t\t\t\t\tХоча це %1$sрекомендовано Google%2$s, активація цієї функції не є обов'язковою, оскільки\n"
+"\t\t\t\t\tтег події GA4 зчитує лише останні дані електронної комерції для будь-якої нової події.<br />\n"
+"\t\t\t\t\tВикористовуйте її, якщо у вас виникли проблеми з реалізацією GTM."
+
+#: admin/admin-tab-integrate.php:137
+msgid "Clear ecommerce object before new event"
+msgstr "Очистити об'єкт електронної комерції перед новою подією"
+
+#: admin/admin.php:595
+msgid "Invalid GTM custom domain path. Value can include anything between a-z, A-Z, 0-9 or any of the characters . - _"
+msgstr "Неправильний шлях до власного домену GTM. Значення може містити будь-який символ з діапазону a-z, A-Z, 0-9 або будь-який з символів . - _"
+
+#: admin/admin-tab-advanced.php:44
+msgid "Enter a custom path for your custom domain name if it is not gtm.js. Do not include the / prefix. Leave this blank to use gtm.js"
+msgstr "Введіть власний шлях для вашого доменного імені, якщо це не gtm.js. Не додавайте префікс /. Залиште це поле порожнім, щоб використовувати gtm.js"
+
+#: admin/admin-tab-advanced.php:43
+msgid "Container custom path"
+msgstr "Користувацький шлях до контейнера"
+
+#: admin/admin-tab-advanced.php:34
+msgid "GTM4WP puts several useful messages into the console of your browser which can also help give proper support in some cases. If you see any issues regarding this functionality, you can disable it here."
+msgstr "GTM4WP надсилає кілька корисних повідомлень у консоль вашого браузера, які також можуть допомогти надати належну підтримку в деяких випадках. Якщо у вас виникли проблеми з цією функцією, ви можете вимкнути її тут."
+
+#: admin/admin-tab-advanced.php:33
+msgid "Do not use console.log() messages on frontend"
+msgstr "Не використовуйте повідомлення console.log() на фронтенді"
+
+#. translators: %s: PHP version number.
+#: admin/admin.php:1293
+msgid "Warning: You are using an outdated version of PHP (%s) that might be not compatible with future versions of the plugin Google Tag Manager for WordPress (GTM4WP). Please consider to upgrade your PHP."
+msgstr "Попередження: Ви використовуєте застарілу версію PHP (%s), яка може бути несумісною з майбутніми версіями плагіна Google Tag Manager для WordPress (GTM4WP). Будь ласка, подумайте про оновлення вашого PHP."
+
+#. translators: 1: the name of the conflicting plugin being checked. 2: either
+#. 'active' or 'inactive' using bolded formatting.
+#: admin/admin.php:475
+msgid "This plugin (%1$s) is %2$s, enabling this integration could cause issues on frontend!"
+msgstr "Цей плагін (%1$s) є %2$s, ввімкнення цієї інтеграції може спричинити проблеми на фронтенді!"
+
+#. translators: 1: the name of the conflicting plugin being checked. 2: either
+#. 'active' or 'inactive' using bolded formatting.
+#: admin/admin.php:465
+msgid "This plugin (%1$s) is %2$s, it is strongly recommended to enable this integration!"
+msgstr "Цей плагін (%1$s) є %2$s, настійно рекомендується увімкнути цю інтеграцію!"
+
+#. translators: 1: opening anchor tag that points to the corresponding
+#. Analytics Talks blog post. 2: closing anchor tag.
+#: admin/admin.php:183
+msgid "Based on the script originaly posted to %1$sAnalytics Talk%2$s"
+msgstr "На основі сценарію, спочатку опублікованого на %1$sAnalytics Talk%2$s"
+
+#. translators: 1: opening anchor tag linking to GTM's developer doc homepage.
+#. 2: Closing anchor tag.
+#: admin/admin.php:147
+msgid ""
+"This plugin is intended to be used by IT and marketing staff. Please be sure you read the\n"
+"\t\t\t\t\t%1$sGoogle Tag Manager Help Center%2$s before you start using this plugin.<br /><br />"
+msgstr ""
+"Цей плагін призначений для використання ІТ-спеціалістами та маркетологами. Будь ласка, переконайтеся, що ви прочитали\n"
+"\t\t\t\t\t%1$sДовідковий центр Google Tag Manager%2$s перед початком використання цього плагіна.<br /><br />"
+
+#. translators: 1: opening anchor tag linking to Cookiebot's documentation
+#. about the automatic cookie blocking feature. 2: Closing anchor tag.
+#: admin/admin-tab-integrate.php:200
+msgid "Enable this checkbox if you wish to use the %1$sautomatic cookie blocking mode of Cookiebot with Google Tag Manager%2$s."
+msgstr "Увімкніть цей прапорець, якщо ви хочете використовувати режим %1$s автоматичного блокування файлів cookie Cookiebot з Google Tag Manager%2$s."
+
+#. translators: 1: anchor element linking to GTM4WP setup guide for Google Ads
+#. dynamic remarketing. 2: closing anchor element.
+#: admin/admin-tab-integrate.php:96
+msgid ""
+"Select which vertical category to add next to each product to utilize dynamic remarketing for Google Ads.\n"
+"\t\t\t\t\t <br />Use the plugin's %1$sofficial setup guide for dynamic remarketing%2$s\n"
+"\t\t\t\t\t to setup your Google Tag Manager container."
+msgstr ""
+"Виберіть, яку вертикальну категорію додати поруч з кожним продуктом, щоб використовувати динамічний ремаркетинг для Google Ads.\n"
+"\t\t\t\t\t <br />Скористайтеся офіційним посібником з налаштування динамічного ремаркетингу плагіна %1$s%2$s\n"
+"\t\t\t\t\t щоб налаштувати контейнер Google Tag Manager."
+
+#. translators: 1: opening anchor tag linking to Open Weather Map's pricing
+#. page. 2: closing anchor tag.
+#: admin/admin-tab-basicdata.php:179
+msgid "Enter your OpenWeatherMap API key here. %1$sGet a free API key here%2$s."
+msgstr "Введіть свій ключ API OpenWeatherMap тут. %1$sОтримайте безкоштовний ключ API тут%2$s."
+
+#. translators: 1: opening anchor tag linking to ipstack.com product page. 2:
+#. closing anchor tag. 3: opening anchor tag linking to OpenWeatherMap pricing
+#. page. 4: closing anchor tag.
+#: admin/admin-tab-basicdata.php:152
+msgid ""
+"Check this option to include the current weather conditions around the current visitor.<br /><br />\n"
+"\t\t\t\t\t <strong>Attention!</strong> This feature uses %1$sipstack.com%2$s and\n"
+"\t\t\t\t\t %3$sopenweathermap.org%4$s to collect data.<br />\n"
+"\t\t\t\t\t Depending on your website's traffic, additional fees may apply!<br />\n"
+"\t\t\t\t\t This plugin caches weather data for 1 hour to lower the need to access those services.<br /><br />\n"
+"\t\t\t\t\t If you activate weather data, <strong>you will need</strong> to add an IPStack.com API key regardless of whether you\n"
+"\t\t\t\t\t activate the 'Geo data' option!"
+msgstr ""
+"Позначте цю опцію, щоб враховувати поточні погодні умови навколо поточного відвідувача.<br /><br />\n"
+"\t\t\t\t\t <strong>Увага!</strong> Ця функція використовує %1$sipstack.com%2$s та\n"
+"\t\t\t\t\t %3$sopenweathermap.org%4$s для збору даних.<br />\n"
+"\t\t\t\t\t Залежно від відвідуваності вашого сайту може стягуватися додаткова плата!<br />\n"
+"\t\t\t\t\t Цей плагін кешує погодні дані на 1 годину, щоб зменшити потребу в доступі до цих сервісів.<br /><br />\n"
+"\t\t\t\t\t Якщо ви активуєте погодні дані, <strong>вам потрібно буде</strong> додати ключ API IPStack.com незалежно від того, чи ви\n"
+"\t\t\t\t\t активували опцію \"Геодані\"!"
+
+#. translators: 1: the anchor eleemnt pointing to ipstack.com to register for
+#. API keys. 2: closing anchor tag.
+#: admin/admin-tab-basicdata.php:133
+msgid "Enter your IPStack.com API key here. %1$sGet a free API key here%2$s."
+msgstr "Введіть свій ключ API IPStack.com тут. %1$sОтримайте безкоштовний ключ API тут%2$s."
+
+#: admin/admin.php:768
+msgid ""
+"Compatibility mode decides where to put the second, so called <code>&lt;noscript&gt;</code> or <code>&lt;iframe&gt;</code> part of the GTM container code.<br />\n"
+"\t\t\t\t\tThis code is usually only executed if your visitor has disabled JavaScript for some reason.<br/>\n"
+"\t\t\t\t\tIt is also mandatory in order to verify your site in Google Search Console using the GTM method.<br/>\n"
+"\t\t\t\t\tThe main GTM container code will be placed into the <code>&lt;head&gt;</code> section of your webpages anyway (where it belongs to).<br/><br/>\n"
+"\t\t\t\t\tIf you select \"Manually coded\", you need to edit your template files and add the following line just after the opening <code>&lt;body&gt;</code> tag:<br />\n"
+"\t\t\t\t\t<code>&lt;?php if ( function_exists( 'gtm4wp_the_gtm_tag' ) ) { gtm4wp_the_gtm_tag(); } ?&gt;</code>"
+msgstr ""
+"Режим сумісності вирішує, де розмістити другу, так звану <code>&lt;noscript&gt;</code> або <code>&lt;iframe&gt;</code> частину коду контейнера GTM.<br />\n"
+"\t\t\t\t\tЦей код зазвичай виконується лише в тому випадку, якщо ваш відвідувач з якихось причин відключив JavaScript.<br/>\n"
+"\t\t\t\t\tВін також є обов'язковим для перевірки вашого сайту в Google Search Console за допомогою методу GTM.<br/>\n"
+"\t\t\t\t\tОсновний код контейнера GTM в будь-якому випадку буде розміщено в розділі <code>&lt;head&gt;</code> ваших сторінок (де йому і належить бути).<br/><br/>\n"
+"\t\t\t\t\tЯкщо ви виберете \"Вручну\", вам потрібно буде відредагувати файли шаблону і додати наступний рядок відразу після відкриваючого тегу <code>&lt;body&gt;:</code><br />\n"
+"\t\t\t\t\t<code>&lt;?php if ( function_exists( 'gtm4wp_the_gtm_tag' ) ) { gtm4wp_the_gtm_tag(); } ?&gt;</code>"
+
+#: admin/admin.php:761
+msgid "Container code compatibility mode"
+msgstr "Режим сумісності коду контейнера"
+
+#: admin/admin.php:750
+msgid ""
+"Turning OFF the Google Tag Manager container itself will remove both the head and the body part of the container code but leave data layer codes working.<br/>\n"
+"\t\t\t\t\tThis should be only used in specific cases where you need to place the container code manually or using another tool."
+msgstr ""
+"Якщо вимкнути сам контейнер Google Tag Manager, ви видалите як заголовок, так і тіло коду контейнера, але коди рівня даних залишаться робочими.<br/>\n"
+"\t\t\t\t\tЦе слід використовувати лише в особливих випадках, коли вам потрібно розмістити код контейнера вручну або за допомогою іншого інструменту."
+
+#: admin/admin.php:743
+msgid "Container code ON/OFF"
+msgstr "Код контейнера ON/OFF"
+
+#: admin/admin.php:279
+msgid "Manually coded (needs tweak in your template)"
+msgstr "Ручне кодування (потребує налаштування у вашому шаблоні)"
+
+#: admin/admin.php:278
+msgid "Footer of the page (not recommended by Google, Search Console verification will not work)"
+msgstr "Нижній колонтитул сторінки (не рекомендується Google, перевірка Search Console не працюватиме)"
+
+#: admin/admin.php:277
+msgid "Off (no tweak, right placement)"
+msgstr "Вимкнено (без налаштувань, правильне розміщення)"
+
+#: admin/admin.php:269
+msgid "Off"
+msgstr "Вимкнено"
+
+#: admin/admin.php:268
+msgid "On"
+msgstr "Увімкнено"
+
+#: admin/admin-tab-advanced.php:49
+msgid "Do not load GTM container on the frontend if role of the logged in user is any of this"
+msgstr "Не завантажуйте контейнер GTM на фронтенді, якщо роль користувача, що увійшов до системи, є однією з наступних"
+
+#: admin/admin-tab-advanced.php:48
+msgid "User roles to exclude"
+msgstr "Ролі користувачів, які слід виключити"
+
+#: admin/admin-tab-advanced.php:39
+msgid "Enter your custom domain name if you are using a server side GTM container for tracking. Do not include https:// prefix. Leave this blank to use www.googletagmanager.com"
+msgstr "Введіть власне доменне ім'я, якщо ви використовуєте серверний GTM-контейнер для відстеження. Не додавайте префікс https://. Залиште це поле порожнім, щоб використовувати www.googletagmanager.com"
+
+#: admin/admin-tab-integrate.php:126
+msgid ""
+"Turn this on to prevent the plugin to flag orders as being already tracked.<br /><br />\n"
+"\t\t\t \tLeaving this unchecked ensures that no order data will be tracked multiple times\n"
+"\t\t\t\tin any ad or measurement system.<br />\n"
+"\t\t\t\tPlease only turn this feature on if you really need it!"
+msgstr ""
+"Увімкніть цю опцію, щоб плагін не позначав замовлення як такі, що вже відстежуються.<br /><br />\n"
+"\t\t\t \tЯкщо ви не ввімкнете цю опцію, дані замовлення не будуть відстежуватися кілька разів\n"
+"\t\t\t\tв будь-якій рекламі або системі вимірювань.<br />\n"
+"\t\t\t\tБудь ласка, вмикайте цю функцію, тільки якщо вона вам дійсно потрібна!"
+
+#: admin/admin-tab-integrate.php:14
+msgid "Check this to fire dataLayer events after Contact Form 7 submissions (supported events: invalid input, spam detected, form submitted, form submitted and mail sent, form submitted and mail send failed)."
+msgstr "Встановіть цей прапорець, щоб запускати події dataLayer після надсилання контактної форми 7 (підтримувані події: невірне введення, виявлено спам, форму надіслано, форму надіслано та надіслано поштою, форму надіслано та не вдалося надіслати пошту)."
+
+#: admin/admin.php:1050
+msgid "Cookiebot"
+msgstr "Cookiebot"
+
+#: admin/admin-tab-advanced.php:38
+msgid "Container domain name"
+msgstr "Контейнерне доменне ім'я"
+
+#: admin/admin-tab-integrate.php:197
+msgid "Cookiebot auto blocking"
+msgstr "Автоматичне блокування кукі-ботів"
+
+#: admin/admin-tab-integrate.php:92
+msgid "Google Ads Business Vertical"
+msgstr "Бізнес-вертикаль Google Ads"
+
+#: admin/admin-tab-integrate.php:83
+msgid "To prevent duplicate transaction tracking at the order received page, enter the maximum age (in minutes) of the order or its payment for the transaction to be measured. Viewing the order received page of older orders will be ignored from transaction tracking, as it is considered to be a measured in an earlier session."
+msgstr "Щоб запобігти дублюванню відстеження транзакцій на сторінці отримання замовлення, введіть максимальний вік (у хвилинах) замовлення або його оплати для транзакції, яку потрібно виміряти. Перегляд сторінки отримання старіших замовлень буде ігноруватися при відстеженні транзакцій, оскільки вони вважатимуться такими, що були виміряні в попередній сесії."
+
+#: admin/admin-tab-integrate.php:82
+msgid "Only track orders younger than"
+msgstr "Відстежуйте тільки замовлення, молодші за"
+
+#: admin/admin.php:1046
+msgid "Blacklist variables"
+msgstr "Змінні чорного списку"
+
+#: admin/admin.php:1045
+msgid "Blacklist triggers"
+msgstr "Тригери чорного списку"
+
+#: admin/admin.php:875
+msgid "Custom tag/variable templates"
+msgstr "Користувацькі шаблони тегів/змінних"
+
+#: admin/admin.php:855
+msgid "Security"
+msgstr "Безпека"
+
+#: admin/admin.php:359
+msgid "Block all, except the checked items on all blacklist tabs (whitelist)"
+msgstr "Блокувати все, крім позначених елементів на всіх вкладках чорного списку (білого списку)"
+
+#: admin/admin.php:358
+msgid "Allow all, except the checked items on all blacklist tabs (blacklist)"
+msgstr "Дозволити все, крім позначених елементів на всіх вкладках чорного списку (чорний список)"
+
+#: admin/admin.php:198
+msgid "For example blacklisting everything and only whitelisting the Google Analytics tag without whitelisting the URL variable type will cause your Google Analytics tags to be blocked anyway since the attached triggers (Page View) can not fire!"
+msgstr "Наприклад, внесення до чорного списку всього і лише тегу Google Analytics без внесення до білого списку типу змінної URL-адреси призведе до того, що ваші теги Google Analytics все одно будуть заблоковані, оскільки прикріплені тригери (перегляд сторінки) не зможуть спрацювати!"
+
+#: integration/woocommerce.php:1444
+msgid "Grouped Product Detail Page"
+msgstr "Згрупована сторінка деталізації товару"
+
+#: admin/admin-tab-integrate.php:73
+msgid "Enable this to add all order attribute into the data layer on the order received page regardless and independently from classic and enhanced ecommerce tracking (WooCommerce 3.x required)"
+msgstr "Увімкніть цю функцію, щоб додати всі атрибути замовлення до рівня даних на сторінці отриманого замовлення незалежно від класичного та розширеного відстеження електронної комерції (потрібен WooCommerce 3.x)"
+
+#: admin/admin-tab-integrate.php:72
+msgid "Order data in data layer"
+msgstr "Замовлення даних у шарі даних"
+
+#: admin/admin.php:1051
+msgid "Weather & geo data"
+msgstr "Погода та гео дані"
+
+#: admin/admin-tab-integrate.php:88
+msgid "Enable this to exclude shipping costs from the revenue variable while generating the purchase data"
+msgstr "Увімкніть цю опцію, щоб виключити витрати на доставку зі змінної доходу під час створення даних про покупки"
+
+#: admin/admin-tab-integrate.php:87
+msgid "Exclude shipping from revenue"
+msgstr "Виключіть доставку з доходу"
+
+#: admin/admin-tab-integrate.php:63
+msgid "Select which custom taxonomy is being used to add the brand of products"
+msgstr "Виберіть, яка користувацька таксономія використовується для додавання бренду товарів"
+
+#: admin/admin-tab-integrate.php:62
+msgid "Taxonomy to be used for product brands"
+msgstr "Таксономія для брендів продуктів"
+
+#: admin/admin-tab-integrate.php:53
+msgid "Enable this option to include the content of the cart in the data layer on each page. Needs WooCommerce v3.2 or newer. Especially useful for site personalization tools."
+msgstr "Увімкніть цю опцію, щоб включити вміст кошика до рівня даних на кожній сторінці. Потрібна версія WooCommerce v3.2 або новіша. Особливо корисно для інструментів персоналізації сайту."
+
+#: admin/admin-tab-integrate.php:52
+msgid "Cart content in data layer"
+msgstr "Вміст кошика в шарі даних"
+
+#: admin/admin-tab-basicdata.php:144
+msgid "Add the country code of the user provided by Cloudflare (if Cloudflare is used with your site)"
+msgstr "Додайте код країни користувача, наданий Cloudflare (якщо Cloudflare використовується з вашим сайтом)"
+
+#: admin/admin-tab-basicdata.php:143
+msgid "Cloudflare country code"
+msgstr "Код країни Cloudflare"
+
+#: admin/admin-tab-basicdata.php:64
+msgid "Check this option to include taxonomy values associated with a given post."
+msgstr "Позначте цю опцію, щоб включити значення таксономії, пов'язані з даним дописом."
+
+#: admin/admin-tab-basicdata.php:63
+msgid "Post Terms"
+msgstr "Умови Запису"
+
+#: admin/admin.php:1049
+msgid "Accelerated Mobile Pages"
+msgstr "Прискорення мобільних сторінок"
+
+#: admin/admin.php:616
+msgid "Invalid AMP Google Tag Manager Container ID. Valid ID format: GTM-XXXXX. Use comma without additional space (,) to enter more than one ID."
+msgstr "Невірний ідентифікатор контейнера AMP Google Tag Manager. Допустимий формат ідентифікатора: GTM-XXXXX. Використовуйте кому без додаткового пробілу (,), щоб ввести більше одного ідентифікатора."
+
+#: admin/admin-tab-advanced.php:29
+msgid "Turning on this option will load your Google Tag Manager container as early as possible during page load. This can cause issues if you are using jQuery in your custom HTML tags that fire on 'Page View' events."
+msgstr "Якщо увімкнути цей параметр, ваш контейнер Google Tag Manager буде завантажено якомога раніше під час завантаження сторінки. Це може спричинити проблеми, якщо ви використовуєте jQuery у власних HTML-тегах, які спрацьовують на події \"Перегляд сторінки\"."
+
+#: admin/admin-tab-advanced.php:28
+msgid "Load GTM container as early as possible"
+msgstr "Завантажуйте контейнер GTM якомога раніше"
+
+#: admin/admin-tab-integrate.php:186
+msgid ""
+"This does not seems to be a valid Google Tag Manager Container ID! Valid format: GTM-XXXXXX\n"
+"\t\t\t\twhere X can be numbers and capital letters. Use comma without any space (,) to enter multpile IDs."
+msgstr ""
+"Здається, це недійсний ідентифікатор контейнера Google Tag Manager! Допустимий формат: GTM-XXXXXX\n"
+"\t\t\t\tде X може бути як цифрами, так і великими літерами. Використовуйте кому без пробілу (,), щоб ввести кілька ідентифікаторів."
+
+#. translators: 1: opening anchor tag for a link pointing to the official GTM
+#. help center article about the AMP container snippet 2: Closing anchor tag.
+#: admin/admin-tab-integrate.php:177
+msgid ""
+"Enter a comma separated list of Google Tag Manager container IDs that you would like to use on your site.\n"
+"\t\t\t\tThis plugin will add the %1$sAMP GTM snippet%2$s to your AMP pages."
+msgstr ""
+"Введіть через кому список ідентифікаторів контейнерів Google Tag Manager, які ви хочете використовувати на своєму сайті.\n"
+"\t\t\t\tЦей плагін додасть фрагмент %1$sAMP GTM%2$s до ваших AMP-сторінок."
+
+#: admin/admin-tab-integrate.php:174
+msgid "Google Tag Manager 'AMP' Container ID"
+msgstr "Ідентифікатор контейнера Google Tag Manager 'AMP'"
+
+#: admin/admin-tab-integrate.php:124
+msgid "Do not flag orders as being tracked"
+msgstr "Не позначайте замовлення як такі, що відстежуються"
+
+#: admin/admin-tab-integrate.php:40
+msgid "Products per impression"
+msgstr "Продукти на показ"
+
+#: admin/admin-tab-integrate.php:78
+msgid "Enable this to exclude tax from the revenue variable while generating the purchase data"
+msgstr "Увімкніть цю опцію, щоб виключити податок зі змінної доходу під час створення даних про покупки"
+
+#: admin/admin-tab-integrate.php:77
+msgid "Exclude tax from revenue"
+msgstr "Виключити податок з доходу"
+
+#: admin/admin-tab-events.php:24
+msgid "Check this option to include a Tag Manager event when an existing user has been logged in on the frontend of your site (admin events not included)"
+msgstr "Позначте цю опцію, щоб увімкнути подію Менеджера тегів, коли існуючий користувач увійшов до інтерфейсу вашого сайту (події адміністратора не включаються)"
+
+#: admin/admin-tab-events.php:23
+msgid "User logged in"
+msgstr "Користувач увійшов"
+
+#: admin/admin-tab-events.php:19
+msgid "Check this option to include a Tag Manager event when a new user registration has been completed on the frontend of your site (admin events not included)"
+msgstr "Позначте цю опцію, щоб включити подію менеджера тегів після завершення реєстрації нового користувача у фронтенді вашого сайту (події адміністратора не включаються)"
+
+#: admin/admin-tab-events.php:18
+msgid "New user registration"
+msgstr "Нова реєстрація користувача"
+
+#: admin/admin-tab-basicdata.php:130
+msgid "IPStack.com API key"
+msgstr "Ключ API IPStack.com"
+
+#: admin/admin-tab-basicdata.php:104
+msgid "Check this option to include the IP address of the visitor. You might use this to filter internal traffic inside your GTM container. Please be aware that per GDPR its not allowed to transmit this full IP address to Google Analytics or to any other measurement system without explicit consent from the visitor."
+msgstr "Позначте цю опцію, щоб включити IP-адресу відвідувача. Ви можете використовувати її для фільтрації внутрішнього трафіку всередині вашого GTM-контейнера. Зверніть увагу, що згідно з GDPR заборонено передавати цю повну IP-адресу в Google Analytics або будь-яку іншу систему вимірювання без явної згоди відвідувача."
+
+#: admin/admin-tab-basicdata.php:103
+msgid "Visitor IP"
+msgstr "IP відвідувача"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: duracelltomi-google-tag-manager-for-wordpress.php
+msgid "https://gtm4wp.com/"
+msgstr "https://gtm4wp.com/"
+
+#: public/frontend.php:563 public/frontend.php:564 public/frontend.php:565
+#: public/frontend.php:566 public/frontend.php:567 public/frontend.php:568
+#: public/frontend.php:569 public/frontend.php:570
+msgid "(no geo data available)"
+msgstr "(географічні дані відсутні)"
+
+#: admin/admin.php:1270
+msgid "Incomplete Google Tag Manager environment configuration: either gtm_preview or gtm_auth parameter value is missing!"
+msgstr "Неповна конфігурація середовища Google Tag Manager: відсутнє значення параметра gtm_preview або gtm_auth!"
+
+#: admin/admin.php:1055
+msgid "Misc"
+msgstr "Різне"
+
+#: admin/admin.php:648
+msgid "Invalid gtm_preview environment parameter value. It should have the format 'env-NN' where NN is an integer number."
+msgstr "Неправильне значення параметра середовища gtm_preview. Він повинен мати формат 'env-NN', де NN - ціле число."
+
+#: admin/admin.php:645
+msgid "Invalid gtm_auth environment parameter value. It should only contain letters, numbers or the '-' and '_' characters."
+msgstr "Неправильне значення параметра оточення gtm_auth. Має містити лише літери, цифри або символи '-' та '_'."
+
+#: admin/admin.php:352
+msgid "This does not seems to be a valid gtm_preview parameter! It should have the format &quot;env-NN&quot; where NN is an integer number. Please check and try again"
+msgstr "Здається, це не є коректним параметром gtm_preview! Він повинен мати формат &quot;env-NN&quot;, де NN - ціле число. Будь ласка, перевірте і спробуйте ще раз"
+
+#: admin/admin.php:319
+msgid "This does not seems to be a valid gtm_auth parameter! It should only contain letters, number and the &quot;-&quot; character. Please check and try again"
+msgstr "Здається, це не є коректним параметром gtm_auth! Він має містити лише літери, цифру та символ &quot;-&quot;. Будь ласка, перевірте і спробуйте ще раз"
+
+#: admin/admin-tab-advanced.php:23
+msgid "Environment gtm_preview parameter"
+msgstr "Параметр середовища gtm_preview"
+
+#: admin/admin-tab-advanced.php:19 admin/admin-tab-advanced.php:24
+msgid "Enter the gtm_auth parameter of the Google Tag Manager environment that has to be activated on this site. Both gtm_auth and gtm_preview parameters are required to activate the desired environment."
+msgstr "Введіть параметр gtm_auth середовища Google Tag Manager, яке потрібно активувати на цьому сайті. Для активації потрібного середовища потрібні обидва параметри gtm_auth і gtm_preview."
+
+#: admin/admin-tab-advanced.php:18
+msgid "Environment gtm_auth parameter"
+msgstr "Параметр оточення gtm_auth"
+
+#: admin/admin-tab-integrate.php:58
+msgid "Check this to inclulde the full category path of each product in enhanced ecommerce tracking. WARNING! This can lead to performance issues on large sites with lots of traffic!"
+msgstr "Поставте цей прапорець, щоб включити повний шлях до категорії кожного товару до розширеного відстеження електронної комерції. УВАГА! Це може призвести до проблем з продуктивністю на великих сайтах з великим трафіком!"
+
+#: admin/admin-tab-integrate.php:57
+msgid "Include full category path."
+msgstr "Вкажіть повний шлях до категорії."
+
+#: admin/admin-tab-integrate.php:68
+msgid "Enable this to add all customer data (billing and shipping data, total number of orders and order value) into the data layer (WooCommerce 3.x required)"
+msgstr "Увімкніть цю функцію, щоб додати всі дані клієнта (дані про виставлення рахунків і доставку, загальну кількість замовлень і вартість замовлення) до рівня даних (потрібен WooCommerce 3.x)"
+
+#: admin/admin-tab-integrate.php:67
+msgid "Customer data in data layer"
+msgstr "Дані клієнта в шари даних"
+
+#: admin/admin-tab-basicdata.php:126
+msgid "Add geo data (latitude, longitude, country, city, etc) of the current visitor (provided by ipstack.com)"
+msgstr "Додайте географічні дані (широта, довгота, країна, місто тощо) поточного відвідувача (надані ipstack.com)"
+
+#: admin/admin-tab-basicdata.php:125
+msgid "Geo data"
+msgstr "Географічні дані"
+
+#: admin/admin-tab-basicdata.php:89
+msgid "Check this option to include the username of the logged in user."
+msgstr "Позначте цю опцію, щоб включити ім'я користувача, який увійшов до системи."
+
+#: admin/admin-tab-basicdata.php:88
+msgid "Logged in user name"
+msgstr "Ім'я користувача, що увійшов в систему"
+
+#: admin/admin-tab-basicdata.php:59
+msgid "Check this option to include the post format."
+msgstr "Позначте цю опцію, щоб включити формат повідомлення."
+
+#: admin/admin-tab-basicdata.php:58
+msgid "Post Format"
+msgstr "Формат публікації"
+
+#: integration/woocommerce.php:1091
+msgid "Upsell Products"
+msgstr "З цим товаром купують"
+
+#: integration/woocommerce.php:1076
+msgid "Cross-Sell Products"
+msgstr "Продукти для перехресних продажів"
+
+#: admin/admin-tab-basicdata.php:99
+msgid "Check this option to include the date of creation (registration) of the logged in user."
+msgstr "Позначте цю опцію, щоб включити дату створення (реєстрації) користувача, який увійшов до системи."
+
+#: admin/admin-tab-basicdata.php:98
+msgid "Logged in user creation date"
+msgstr "Дата створення користувача, що увійшов в систему"
+
+#: admin/admin-tab-integrate.php:110
+msgid "Some product feed generator plugins prefix product IDs with a fixed text like 'woocommerce_gpf'. You can enter this prefix here so that tags in your website include this prefix as well."
+msgstr "Деякі плагіни генераторів товарних стрічок додають до ідентифікаторів товарів фіксований текст, наприклад, \"woocommerce_gpf\". Ви можете ввести цей префікс тут, щоб теги на вашому сайті також включали цей префікс."
+
+#: admin/admin-tab-integrate.php:109
+msgid "Product ID prefix"
+msgstr "Префікс ідентифікатора товару"
+
+#: admin/admin-tab-integrate.php:115
+msgid "Check this to use product SKU instead of the ID of the products for remarketing and ecommerce tracking. Will fallback to ID if no SKU is set."
+msgstr "Позначте цю опцію, щоб використовувати SKU товару замість ідентифікатора для ремаркетингу та відстеження електронної комерції. Якщо не вказано SKU, буде використано ідентифікатор."
+
+#: admin/admin-tab-basicdata.php:94
+msgid "Check this option to include the email address of the logged in user."
+msgstr "Позначте цю опцію, щоб додати адресу електронної пошти користувача, який увійшов до системи."
+
+#: admin/admin-tab-basicdata.php:93
+msgid "Logged in user email"
+msgstr "Електронна пошта користувача, що увійшов в систему"
+
+#: admin/admin-tab-basicdata.php:29
+msgid "Check this option to include the ID of the author on the current post or author page."
+msgstr "Позначте цю опцію, щоб додати ідентифікатор автора до поточного допису або сторінки автора."
+
+#: admin/admin.php:1054
+msgid "Site"
+msgstr "Сайт"
+
+#: admin/admin-tab-basicdata.php:195
+msgid "Name of the current site in a WordPress Multisite environment"
+msgstr "Назва поточного сайту в багатосайтовому середовищі WordPress"
+
+#: admin/admin-tab-basicdata.php:194
+msgid "Site name"
+msgstr "Назва сайту"
+
+#: admin/admin-tab-basicdata.php:190
+msgid "ID of the current site in a WordPress Multisite environment"
+msgstr "Ідентифікатор поточного сайту в багатосайтовому середовищі WordPress"
+
+#: admin/admin-tab-basicdata.php:189
+msgid "Site ID"
+msgstr "ID сайту"
+
+#: admin/admin-tab-basicdata.php:28
+msgid "Post author ID"
+msgstr "Ідентифікатор автора допису"
+
+#: admin/admin-tab-basicdata.php:176
+msgid "OpenWeatherMap API key"
+msgstr "Ключ API OpenWeatherMap"
+
+#: integration/woocommerce.php:1172
+msgid "Featured Products"
+msgstr "Рекомендовані товари"
+
+#: integration/woocommerce.php:1160
+msgid "Top Rated Products"
+msgstr "Товари з найвищою оцінкою"
+
+#: integration/woocommerce.php:1148
+msgid "Best Selling Products"
+msgstr "Найпопулярніші продукти"
+
+#: integration/woocommerce.php:1136
+msgid "Sale Products"
+msgstr "Продаж продукції"
+
+#: integration/woocommerce.php:1124
+msgid "Recent Products"
+msgstr "Останні товари"
+
+#: integration/woocommerce.php:1110
+msgid " (widget)"
+msgstr " (віджет)"
+
+#: integration/woocommerce.php:1061 integration/woocommerce.php:1184
+msgid "Related Products"
+msgstr "Супутні товари"
+
+#: integration/woocommerce.php:1272
+msgid "General Product List"
+msgstr "Загальний перелік продуктів"
+
+#: integration/woocommerce.php:1268
+msgid "Search Results"
+msgstr "Результати пошуку"
+
+#: admin/admin.php:737
+msgid "Enter your Google Tag Manager ID here. Use comma without space (,) to enter multiple IDs."
+msgstr "Введіть тут свій ідентифікатор Google Tag Manager. Використовуйте кому без пробілу (,), щоб ввести кілька ідентифікаторів."
+
+#: admin/admin.php:637
+msgid "Invalid Google Tag Manager ID. Valid ID format: GTM-XXXXX. Use comma without additional space (,) to enter more than one container ID."
+msgstr "Невірний ідентифікатор Google Tag Manager. Допустимий формат ідентифікатора: GTM-XXXXX. Використовуйте кому без додаткового пробілу (,), щоб ввести більше одного ідентифікатора контейнера."
+
+#: admin/admin.php:260
+msgid "This does not seems to be a valid Google Tag Manager ID! Valid format: GTM-XXXXX where X can be numbers and capital letters. Use comma without any space (,) to enter multpile container IDs."
+msgstr "Здається, це недійсний ідентифікатор Google Tag Manager! Допустимий формат: GTM-XXXXX, де X може бути як цифрами, так і великими літерами. Використовуйте кому без пробілу (,) для введення ідентифікаторів контейнерів, що складаються з декількох стопок."
+
+#: admin/admin-tab-basicdata.php:54
+msgid "Check this option to include the post id."
+msgstr "Позначте цю опцію, щоб включити ідентифікатор публікації."
+
+#: admin/admin-tab-basicdata.php:53
+msgid "Post ID"
+msgstr "Запис ID"
+
+#. Author of the plugin
+#: duracelltomi-google-tag-manager-for-wordpress.php
+msgid "Thomas Geiger"
+msgstr "Томас Ґайґер"
+
+#. Description of the plugin
+#: duracelltomi-google-tag-manager-for-wordpress.php
+msgid "The first Google Tag Manager plugin for WordPress with business goals in mind"
+msgstr "Перший плагін Google Tag Manager для WordPress з бізнес-цілями"
+
+#: public/frontend.php:553 public/frontend.php:554
+msgid "(no weather data available)"
+msgstr "(дані про погоду відсутні)"
+
+#: admin/admin.php:1356
+msgid "Settings"
+msgstr "Налаштування"
+
+#: admin/admin.php:1285
+msgid "Notice: you should deactivate the plugin \"Google Analytics for WordPress by MonsterInsights\" if you are using Google Analytics tags inside Google Tag Manager!"
+msgstr "Увага: вам слід деактивувати плагін \"Google Analytics для WordPress від MonsterInsights\", якщо ви використовуєте теги Google Analytics в Google Tag Manager!"
+
+#: admin/admin.php:1281
+msgid "Notice: you should deactivate the plugin \"WooCommerce Google Analytics Integration\" if you are using Google Analytics tags inside Google Tag Manager!"
+msgstr "Примітка: вам слід деактивувати плагін \"Інтеграція WooCommerce Google Analytics\", якщо ви використовуєте теги Google Analytics в Google Tag Manager!"
+
+#. translators: 1: opening anchor element pointing to the GTM4WP options page.
+#. 2: clsing anchor element.
+#: admin/admin.php:1254
+msgid "To start using Google Tag Manager for WordPress, please %1$senter your GTM ID%2$s"
+msgstr "Щоб почати використовувати Google Tag Manager для WordPress, будь ласка, %1$sвведіть свій GTM ID%2$s"
+
+#: admin/admin.php:1053
+msgid "Media events"
+msgstr "Медійні події"
+
+#: admin/admin.php:1052
+msgid "General events"
+msgstr "Загальні події"
+
+#: admin/admin.php:1048
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: admin/admin.php:1043
+msgid "Browser/OS/Device"
+msgstr "Браузер/ОС/Пристрій"
+
+#: admin/admin.php:1042
+msgid "Visitors"
+msgstr "Відвідувачі"
+
+#: admin/admin.php:1041
+msgid "Search"
+msgstr "Шукати"
+
+#: admin/admin.php:1040
+msgid "Posts"
+msgstr "Записи"
+
+#: admin/admin.php:1017
+msgid "Google Tag Manager"
+msgstr "Менеджер тегів Google"
+
+#: admin/admin.php:1016
+msgid "Google Tag Manager for WordPress settings"
+msgstr "Google Tag Manager для налаштування WordPress"
+
+#: admin/admin.php:992
+msgid "Google Tag Manager for WordPress options"
+msgstr "Опції Google Tag Manager для WordPress"
+
+#: admin/admin.php:962
+msgid "Author"
+msgstr "Автор"
+
+#: admin/admin.php:955
+msgid "Credits"
+msgstr "Подяки"
+
+#: admin/admin-tab-advanced.php:14
+msgid "In some cases you need to rename the dataLayer variable. You can enter your name here. Leave black for default name: dataLayer"
+msgstr "У деяких випадках вам потрібно перейменувати змінну dataLayer. Ви можете ввести своє ім'я тут. За замовчуванням залиште назву чорним кольором: dataLayer"
+
+#: admin/admin-tab-advanced.php:13
+msgid "dataLayer variable name"
+msgstr "ім'я змінної dataLayer"
+
+#: admin/admin.php:930
+msgid "Advanced"
+msgstr "Додатково"
+
+#: admin/admin.php:905
+msgid "Integration"
+msgstr "Інтеграція"
+
+#: admin/admin.php:1044
+msgid "Blacklist tags"
+msgstr "Теги чорного списку"
+
+#: admin/admin.php:831
+msgid "Scroll tracking"
+msgstr "Відстеження прокрутки"
+
+#: admin/admin.php:807
+msgid "Events"
+msgstr "Події"
+
+#: admin/admin.php:783
+msgid "Basic data"
+msgstr "Основні дані"
+
+#: admin/admin.php:731
+msgid "Google Tag Manager ID"
+msgstr "Ідентифікатор Google Tag Manager"
+
+#: admin/admin.php:724
+msgid "General"
+msgstr "Загальне"
+
+#: admin/admin.php:642
+msgid "Invalid dataLayer variable name. Please start with a character from a-z or A-Z followed by characters from a-z, A-Z, 0-9 or '_' or '-'!"
+msgstr "Неправильне ім'я змінної dataLayer. Будь ласка, починайте з символів від a-z або A-Z, за якими слідують символи від a-z, A-Z, 0-9 або '_' чи '-'!"
+
+#: admin/admin.php:367
+msgid "Fahrenheit"
+msgstr "Фаренгейт"
+
+#: admin/admin.php:366
+msgid "Celsius"
+msgstr "Цельсій"
+
+#: admin/admin.php:357
+msgid "Disable feature: control everything on Google Tag Manager interface"
+msgstr "Вимкнути функцію: контролювати все в інтерфейсі Google Tag Manager"
+
+#: admin/admin.php:287
+msgid "This does not seems to be a valid JavaScript variable name! Please check and try again"
+msgstr "Здається, це невірне ім'я змінної JavaScript! Будь ласка, перевірте та спробуйте ще раз"
+
+#: admin/admin.php:213
+msgid "Some info about the author of this plugin"
+msgstr "Трохи інформації про автора цього плагіна"
+
+#: admin/admin.php:208
+msgid "You usually do not need to modify thoose settings. Please be carefull while hacking here."
+msgstr "Зазвичай вам не потрібно змінювати ці налаштування. Будь ласка, будьте обережні під час злому тут."
+
+#: admin/admin.php:203
+msgid "Google Tag Manager for WordPress can integrate with several popular plugins. Please check the plugins you would like to integrate with:"
+msgstr "Google Tag Manager для WordPress може інтегруватися з кількома популярними плагінами. Будь ласка, перевірте плагіни, з якими ви хочете інтегруватися:"
+
+#: admin/admin.php:196
+msgid "Do not modify if you do not know what to do, since it can cause issues with your tag deployment!"
+msgstr "Не вносьте зміни, якщо не знаєте, що робити, оскільки це може спричинити проблеми з розгортанням тегів!"
+
+#: admin/admin.php:194
+msgid "Here you can control which types of tags, triggers and variables can be executed on your site regardless of what tags are included in your container on the Google Tag Manager site. Use this to increase security!"
+msgstr "Тут ви можете контролювати, які типи тегів, тригерів і змінних можуть виконуватися на вашому сайті, незалежно від того, які теги включені в ваш контейнер на сайті Google Tag Manager. Використовуйте це для підвищення безпеки!"
+
+#: admin/admin.php:179
+msgid "Fire tags based on how the visitor scrolls through your page."
+msgstr "Запускайте теги на основі того, як відвідувач прокручує вашу сторінку."
+
+#: admin/admin.php:174
+msgid "Fire tags in Google Tag Manager on special events on your website"
+msgstr "Вмикайте теги в Диспетчері тегів Google під час спеціальних подій на вашому сайті"
+
+#. translators: 1: opening anchor tag that points to WhichBrowser website. 2:
+#. closing anchor tag.
+#: admin/admin.php:163
+msgid "* Browser, OS and Device data is provided using %1$sWhichBrowser%2$s library."
+msgstr "* Дані про браузер, ОС та пристрій надаються за допомогою бібліотеки %1$sWhichBrowser%2$s."
+
+#: admin/admin.php:159
+msgid "Here you can check what data is needed to be included in the dataLayer to be able to access them in Google Tag Manager"
+msgstr "Тут ви можете перевірити, які дані потрібно включити в dataLayer, щоб мати доступ до них в Google Tag Manager"
+
+#: admin/admin-tab-integrate.php:114
+msgid "Use SKU instead of ID"
+msgstr "Використовуйте SKU замість ID"
+
+#: admin/admin-tab-integrate.php:13 admin/admin.php:1047
+msgid "Contact Form 7"
+msgstr "Contact Form 7"
+
+#: admin/admin.php:862
+msgid "Enable blacklist/whitelist"
+msgstr "Увімкнути чорний/білий список"
+
+#: admin/admin-tab-scrolltracking.php:39
+msgid "Enter the number of seconds after the the scroller user is being treated as a reader, someone who really reads the content, not just scrolls through it."
+msgstr "Введіть кількість секунд після того, як користувач скроллера буде вважатися читачем, тобто тим, хто дійсно читає вміст, а не просто прокручує його."
+
+#: admin/admin-tab-scrolltracking.php:38
+msgid "Scroller time"
+msgstr "Час прокрутки"
+
+#: admin/admin-tab-scrolltracking.php:34
+msgid "Enter the DOM ID of the content element in your template. Leave it empty for default(content). Do not include the # sign."
+msgstr "Введіть DOM ID елемента контенту у вашому шаблоні. Залиште його порожнім для default(content). Не використовуйте знак #."
+
+#: admin/admin-tab-scrolltracking.php:33
+msgid "Content ID"
+msgstr "Ідентифікатор вмісту"
+
+#: admin/admin-tab-scrolltracking.php:29
+msgid "The minimum amount of pixels that a visitor has to scroll before we treat the move as scrolling."
+msgstr "Мінімальна кількість пікселів, яку відвідувач повинен прокрутити, перш ніж ми вважатимемо рух прокруткою."
+
+#: admin/admin-tab-scrolltracking.php:28
+msgid "Minimum distance"
+msgstr "Мінімальна відстань"
+
+#: admin/admin-tab-scrolltracking.php:24
+msgid "Enter the number of milliseconds after the script checks the current location. It prevents too many events being fired while scrolling."
+msgstr "Введіть кількість мілісекунд після того, як скрипт перевірить поточне місцезнаходження. Це запобігає надмірній кількості подій під час прокрутки."
+
+#: admin/admin-tab-scrolltracking.php:23
+msgid "Time delay before location check"
+msgstr "Затримка перед перевіркою місцезнаходження"
+
+#: admin/admin-tab-scrolltracking.php:19
+msgid "Fire console.log() commands instead of dataLayer events."
+msgstr "Запускати команди console.log() замість подій dataLayer."
+
+#: admin/admin-tab-scrolltracking.php:18
+msgid "Debug mode"
+msgstr "Режим налагодження"
+
+#: admin/admin-tab-scrolltracking.php:14
+msgid "Enable scroll tracker script on your website."
+msgstr "Увімкніть скрипт скролл-трекера на вашому сайті."
+
+#: admin/admin-tab-scrolltracking.php:13
+msgid "Enabled"
+msgstr "Увімкнено"
+
+#: admin/admin-tab-events.php:39
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Soundcloud media embeded on your site."
+msgstr "Позначте цю опцію, щоб увімкнути подію диспетчера тегів, коли відвідувач взаємодіє з медіафайлом Soundcloud, вбудованим на вашому сайті."
+
+#: admin/admin-tab-events.php:38
+msgid "Soundcloud events"
+msgstr "Події на Soundcloud"
+
+#: admin/admin-tab-events.php:34
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Vimeo video embeded on your site."
+msgstr "Позначте цю опцію, щоб увімкнути подію диспетчера тегів, коли відвідувач взаємодіє з відео Vimeo, вбудованим на вашому сайті."
+
+#: admin/admin-tab-events.php:33
+msgid "Vimeo video events"
+msgstr "Подій Vimeo відео"
+
+#: admin/admin-tab-events.php:29
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a YouTube video embeded on your site."
+msgstr "Позначте цю опцію, щоб увімкнути подію Tag Manager, коли відвідувач взаємодіє з відео YouTube, вбудованим на вашому сайті."
+
+#: admin/admin-tab-events.php:28
+msgid "YouTube video events"
+msgstr "Відеоподії на YouTube"
+
+#: admin/admin-tab-events.php:14
+msgid "Check this option to include a Tag Manager event when a visitor moves between elements of a form (comment, contact, etc)."
+msgstr "Позначте цю опцію, щоб включити подію Tag Manager, коли відвідувач переміщується між елементами форми (коментар, контакт тощо)."
+
+#: admin/admin-tab-events.php:13
+msgid "Form fill events (gtm4wp.formElementEnter & gtm4wp.formElementLeave)"
+msgstr "Події заповнення форми (gtm4wp.formElementEnter & gtm4wp.formElementLeave)"
+
+#: admin/admin-tab-basicdata.php:172
+msgid "Select which temperature units you would like to use."
+msgstr "Виберіть, які одиниці температури ви хочете використовувати."
+
+#: admin/admin-tab-basicdata.php:171
+msgid "Weather data units"
+msgstr "Одиниці виміру даних погоди"
+
+#: admin/admin-tab-basicdata.php:148
+msgid "Weather data"
+msgstr "Дані про погоду"
+
+#: admin/admin-tab-basicdata.php:122
+msgid "Check this option to include the type of device the user is currently using (desktop, tablet or mobile) including manufacturer and model data."
+msgstr "Позначте цю опцію, щоб вказати тип пристрою, який зараз використовує користувач (настільний комп'ютер, планшет або мобільний телефон), включаючи дані про виробника та модель."
+
+#: admin/admin-tab-basicdata.php:121
+msgid "Device data *"
+msgstr "Дані пристрою*"
+
+#: admin/admin-tab-basicdata.php:118
+msgid "Check this option to include the name and version of the operating system the visitor uses."
+msgstr "Позначте цю опцію, щоб додати назву та версію операційної системи, яку використовує відвідувач."
+
+#: admin/admin-tab-basicdata.php:117
+msgid "OS data *"
+msgstr "Дані операційної системи *"
+
+#: admin/admin-tab-basicdata.php:114
+msgid "Check this option to include the name, version and engine data of the browser the visitor uses."
+msgstr "Позначте цю опцію, щоб включити назву, версію та дані движка браузера, який використовує відвідувач."
+
+#: admin/admin-tab-basicdata.php:113
+msgid "Browser data *"
+msgstr "Дані браузера*"
+
+#: admin/admin-tab-basicdata.php:84
+msgid "Check this option to include the ID of the logged in user."
+msgstr "Позначте цю опцію, щоб включити ідентифікатор користувача, який увійшов до системи."
+
+#: admin/admin-tab-basicdata.php:83
+msgid "Logged in user ID"
+msgstr "Ідентифікатор користувача, що увійшов в систему"
+
+#: admin/admin-tab-basicdata.php:79
+msgid "Check this option to include the role of the logged in user."
+msgstr "Позначте цю опцію, щоб включити роль користувача, який увійшов до системи."
+
+#: admin/admin-tab-basicdata.php:78
+msgid "Logged in user role"
+msgstr "Роль користувача що увійшов в систему"
+
+#: admin/admin-tab-basicdata.php:74
+msgid "Check this option to include whether there is a logged in user on your website."
+msgstr "Позначте цю опцію, щоб дізнатися, чи є на вашому сайті зареєстрований користувач."
+
+#: admin/admin-tab-basicdata.php:73
+msgid "Logged in status"
+msgstr "Статус входу в систему"
+
+#: admin/admin-tab-basicdata.php:69
+msgid "Check this option to include the search term, referring page URL and number of results on the search page."
+msgstr "Позначте цю опцію, щоб включити пошуковий запит, URL-адресу сторінки-джерела та кількість результатів на сторінці пошуку."
+
+#: admin/admin-tab-basicdata.php:68
+msgid "Search data"
+msgstr "Дані пошуку"
+
+#: admin/admin-tab-basicdata.php:49
+msgid "Check this option to include the count of the posts currently shown on the page and the total number of posts in the category/tag/any taxonomy."
+msgstr "Позначте цю опцію, щоб включити підрахунок дописів, які наразі відображаються на сторінці, а також загальну кількість дописів у категорії/тезі/будь-якій таксономії."
+
+#: admin/admin-tab-basicdata.php:48
+msgid "Post count"
+msgstr "Кількість публікацій"
+
+#: admin/admin-tab-basicdata.php:44
+msgid "Check this option to include the title of the current post."
+msgstr "Позначте цю опцію, щоб відображати назву поточного допису."
+
+#: admin/admin-tab-basicdata.php:43
+msgid "Post title"
+msgstr "Заголовок запису"
+
+#: admin/admin-tab-basicdata.php:39
+msgid "Check this option to include the date of the current post. This will include 4 dataLayer variables: full date, post year, post month, post date."
+msgstr "Позначте цю опцію, щоб включити дату поточного допису. Це буде включати 4 змінні dataLayer: повна дата, рік публікації, місяць публікації, дата публікації."
+
+#: admin/admin-tab-basicdata.php:38
+msgid "Post date"
+msgstr "Дата запису"
+
+#: admin/admin-tab-basicdata.php:34
+msgid "Check this option to include the name of the author on the current post or author page."
+msgstr "Позначте цю опцію, щоб включити ім'я автора до поточного допису або сторінки автора."
+
+#: admin/admin-tab-basicdata.php:33
+msgid "Post author name"
+msgstr "Ім'я автора допису"
+
+#: admin/admin-tab-basicdata.php:24
+msgid "Check this option to include the tags of the current post."
+msgstr "Позначте цю опцію, щоб включити теги поточного допису."
+
+#: admin/admin-tab-basicdata.php:23
+msgid "Tags of current post"
+msgstr "Теги поточної публікації"
+
+#: admin/admin-tab-basicdata.php:19
+msgid "Check this option to include the category names of the current post or archive page"
+msgstr "Позначте цю опцію, щоб включити назви категорій поточного допису або сторінки архіву"
+
+#: admin/admin-tab-basicdata.php:18
+msgid "Category list of current post/archive"
+msgstr "Список категорій поточного допису/архіву"
+
+#: admin/admin-tab-basicdata.php:14
+msgid "Check this option to include the type of the current post or archive page (post, page or any custom post type)."
+msgstr "Позначте цю опцію, щоб включити тип поточного допису або сторінки архіву (допис, сторінка або будь-який інший тип допису)."
+
+#: admin/admin-tab-basicdata.php:13
+msgid "Posttype of current post/archive"
+msgstr "Тип поточного допису/архіву"

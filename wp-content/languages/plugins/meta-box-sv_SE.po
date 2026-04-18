@@ -1,0 +1,703 @@
+# Translation of Plugins - Meta Box - Stable (latest release) in Swedish
+# This file is distributed under the same license as the Plugins - Meta Box - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-04-23 12:16:38+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: sv_SE\n"
+"Project-Id-Version: Plugins - Meta Box - Stable (latest release)\n"
+
+#: src/Dashboard/Dashboard.php:185
+msgid "Activating..."
+msgstr "Aktiverar …"
+
+#: src/Dashboard/Dashboard.php:184
+msgid "Activate"
+msgstr "Aktivera"
+
+#: src/Dashboard/Dashboard.php:177 src/Dashboard/Dashboard.php:186
+#: src/Dashboard/Dashboard.php:192
+msgid "Active"
+msgstr "Aktivt"
+
+#: src/Dashboard/Dashboard.php:176
+msgid "Installing..."
+msgstr "Installerar …"
+
+#: src/Dashboard/Dashboard.php:175
+msgid "Install"
+msgstr "Installera"
+
+#: src/Dashboard/content.php:664
+msgid "Gettings news..."
+msgstr "Hämtar nyheter …"
+
+#: src/Dashboard/content.php:652
+msgid "Submit a review"
+msgstr "Skicka en recension"
+
+#: src/Dashboard/content.php:650
+msgid "Are you are enjoying Meta Box? We would love to hear your feedback."
+msgstr "Gillar du Meta Box? Vi vill gärna höra din feedback."
+
+#: src/Dashboard/content.php:648
+msgid "Leave us a review"
+msgstr "Lämna oss en recension"
+
+#: src/Dashboard/content.php:641
+msgid "Join our Facebook Group"
+msgstr "Gå med i vår Facebook-grupp"
+
+#: src/Dashboard/content.php:637
+msgid "Join the community"
+msgstr "Gå med i communityn"
+
+#: src/Dashboard/content.php:600
+msgid "Recommended plugins"
+msgstr "Rekommenderade tillägg"
+
+#: src/Dashboard/content.php:582
+msgid "Upgrade Now"
+msgstr "Uppgradera nu"
+
+#: src/Dashboard/content.php:579
+msgid "Priority support"
+msgstr "Prioriterad support"
+
+#: src/Dashboard/content.php:578
+msgid "Submit & manage posts on the frontend"
+msgstr "Skicka och hantera inlägg på front-end"
+
+#: src/Dashboard/content.php:575
+msgid "Custom tables to boost performance"
+msgstr "Anpassade tabeller för att öka prestanda"
+
+#: src/Dashboard/content.php:570
+msgid "Wanna advanced features?"
+msgstr "Vill du ha fler funktioner?"
+
+#. Translators: %s - Meta Box AIO.
+#: src/Dashboard/content.php:555
+msgid "Do more with %s"
+msgstr "Gör mer med %s"
+
+#: src/Dashboard/content.php:512
+msgid "Display fields in admin columns"
+msgstr "Visa fält i adminkolumner"
+
+#: src/Dashboard/content.php:507
+msgid "Create custom Gutenberg blocks"
+msgstr "Skapa anpassade Gutenberg-block"
+
+#: src/Dashboard/content.php:467
+msgid "Create user profile"
+msgstr "Skapa användarprofil"
+
+#: src/Dashboard/content.php:462
+msgid "Create Customizer sections & panels"
+msgstr "Skapa anpassade sektioner och paneler"
+
+#: src/Dashboard/content.php:452
+msgid "Create custom fields for users"
+msgstr "Skapa anpassade fält för användare"
+
+#: src/Dashboard/content.php:447
+msgid "Create custom fields for taxonomies"
+msgstr "Skapa anpassade fält för taxonomier"
+
+#: src/Dashboard/content.php:442
+msgid "Auto update"
+msgstr "Automatisk uppdatering"
+
+#: src/Dashboard/content.php:437
+msgid "Add custom fields to comments in WordPress"
+msgstr "Skapa anpassade fält till kommentarer i WordPress"
+
+#: src/Dashboard/content.php:432
+msgid "Limit text length"
+msgstr "Begränsa textlängd"
+
+#: src/Dashboard/content.php:422
+msgid "Relationships"
+msgstr "Relationer"
+
+#: src/Dashboard/content.php:407
+msgid "Create custom fields with UI"
+msgstr "Skapa anpassade fält med UI"
+
+#: src/Dashboard/content.php:402
+msgid "Create custom post types & taxonomies"
+msgstr "Skapa anpassade inläggstyper och taxonomier"
+
+#: src/Dashboard/content.php:394
+msgid "Paid"
+msgstr "Betald"
+
+#: src/Dashboard/content.php:393
+msgid "Free"
+msgstr "Gratis"
+
+#: src/Dashboard/content.php:392
+msgid "Pricing"
+msgstr "Priser"
+
+#: src/Dashboard/content.php:379 src/Dashboard/content.php:560
+msgid "Upgrade now"
+msgstr "Uppgradera nu"
+
+#. Translators: %s - Meta Box AIO.
+#: src/Dashboard/content.php:373
+msgid "Get access to %s"
+msgstr "Skaffa åtkomst till %s"
+
+#: src/Dashboard/content.php:361
+msgid "View all tutorials"
+msgstr "Visa alla handledningar"
+
+#: src/Dashboard/content.php:327 src/Dashboard/content.php:330
+msgid "Export and import custom fields"
+msgstr "Exportera och importera anpassade fält"
+
+#: src/Dashboard/content.php:283 src/Dashboard/content.php:286
+msgid "Filtering posts by custom fields and taxonomies"
+msgstr "Filtrera inlägg efter anpassade fält och taxonomier"
+
+#: src/Dashboard/content.php:176 src/Dashboard/Dashboard.php:55
+msgid "Upgrade"
+msgstr "Uppgradera"
+
+#: src/Dashboard/content.php:160
+msgid "For global settings of your website"
+msgstr "För globala inställningar för din webbplats"
+
+#: src/Dashboard/content.php:159
+msgid "Create a settings page"
+msgstr "Skapa en inställningssida"
+
+#: src/Dashboard/content.php:148
+msgid "Create a view"
+msgstr "Skapa en vy"
+
+#: src/Dashboard/content.php:137
+msgid "To establish connections between posts"
+msgstr "Att etablera anslutningar mellan inlägg"
+
+#: src/Dashboard/content.php:136
+msgid "Create a relationship"
+msgstr "Skapa en relation"
+
+#: src/Dashboard/content.php:128
+msgid "To add custom fields to your posts"
+msgstr "För att lägga till anpassade fält i dina inlägg"
+
+#: src/Dashboard/content.php:127
+msgid "Create a field group"
+msgstr "Skapa en fältgrupp"
+
+#: src/Dashboard/content.php:118
+msgid "To group or categorize your posts"
+msgstr "För att gruppera eller kategorisera dina inlägg"
+
+#: src/Dashboard/content.php:117
+msgid "Create a taxonomy"
+msgstr "Skapa en taxonomi"
+
+#: src/Dashboard/content.php:109
+msgid "For a new type of content on your website"
+msgstr "För en ny typ av innehåll på din webbplats"
+
+#: src/Dashboard/content.php:108
+msgid "Create a post type"
+msgstr "Skapa en inläggstyp"
+
+#: src/Dashboard/content.php:91
+msgid "Get started"
+msgstr "Kom igång"
+
+#. Translators: %s - current user display name.
+#: src/Dashboard/content.php:73
+msgid "Hello %s,"
+msgstr "Hej %s,"
+
+#: src/Dashboard/content.php:56 src/Dashboard/content.php:667
+msgid "What's new?"
+msgstr "Vad är nytt?"
+
+#: src/Dashboard/content.php:19
+msgid "No results found."
+msgstr "Inga resultat hittades."
+
+#: src/Dashboard/content.php:18
+msgid "Searching..."
+msgstr "Söker …"
+
+#: src/Dashboard/content.php:14
+msgid "Need some help? Search here..."
+msgstr "Behöver du lite hjälp? Sök här …"
+
+#: inc/fields/icon.php:226
+msgid "Select an icon"
+msgstr "Välj en ikon"
+
+#: inc/fields/user.php:189
+msgid "Add New User"
+msgstr "Lägg till ny användare"
+
+#: src/Dashboard/content.php:171
+msgid "Tutorials"
+msgstr "Handledningar"
+
+#: src/Updater/Settings.php:79
+msgid "Your license key is <b style=\"color: #00a32a\">active</b>."
+msgstr "Din licensnyckel är <b style=\"color: #00a32a\">aktiv</b>."
+
+#: src/Updater/Settings.php:78
+msgid "Your license key is <b style=\"color: #d63638\">expired</b>."
+msgstr "Din licensnyckel har <b style=\"color: #d63638\">löpt ut</b>."
+
+#: src/Updater/Settings.php:76 src/Updater/Settings.php:77
+msgid "Your license key is <b style=\"color: #d63638\">invalid</b>."
+msgstr "Din licensnyckel är <b style=\"color: #d63638\">ogiltig</b>."
+
+#: inc/fields/post.php:140 inc/fields/taxonomy.php:134 inc/fields/user.php:135
+msgid "(No title)"
+msgstr "(Ingen rubrik)"
+
+#: inc/meta-box.php:306
+msgid "Meta Box Title"
+msgstr "Metarutans rubrik"
+
+#: inc/fields/background.php:123
+msgid "-- Size --"
+msgstr "-- Storlek --"
+
+#: inc/fields/background.php:109
+msgid "-- Attachment --"
+msgstr "-- Fixering --"
+
+#: inc/fields/background.php:89
+msgid "-- Position --"
+msgstr "-- Position --"
+
+#: inc/fields/background.php:73
+msgid "-- Repeat --"
+msgstr "-- Repetera --"
+
+#: inc/core.php:13
+msgid "Docs"
+msgstr "Dokumentation"
+
+#: src/Updater/Notification.php:111
+msgid "Update License"
+msgstr "Uppdatera licens"
+
+#: src/Updater/Notification.php:111
+msgid "Activate License"
+msgstr "Aktivera licens"
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:95
+msgid "Your license key is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a>."
+msgstr "Din licensnyckel har <b>löpt ut</b>. <a href=\"%3$s\" target=\"_blank\">Förnya din licens</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:91 src/Updater/Notification.php:93
+msgid "Your license key is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Din licensnyckel är <b>ogiltig</b>. <a href=\"%1$s\">Uppdatera din licensnyckel</a> eller <a href=\"%2$s\" target=\"_blank\">skaffa en ny här</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:89
+msgid "Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "<a href=\"%1$s\">Ange din licensnyckel</a> eller <a href=\"%2$s\" target=\"_blank\">skaffa en ny här</a>."
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:65
+msgid "Your license key for Meta Box is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a> to get automatic updates and premium support."
+msgstr "Din licensnyckel för Meta Box har <b>löpt ut</b>. <a href=\"%3$s\" target=\"_blank\">förnya din licens</a> för att få automatiska uppdateringar och premiumsupport."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:61 src/Updater/Notification.php:63
+msgid "Your license key for Meta Box is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one</a> to enable automatic updates."
+msgstr "Din licensnyckel för Meta Box är <b>ogiltig</b>. <a href=\"%1$s\">Uppdatera din licensnyckel</a> eller <a href=\"%2$s\" target=\"_blank\">skaffa en ny</a> för att aktivera automatiska uppdateringar."
+
+#: src/Updater/Checker.php:124
+msgid "UPDATE UNAVAILABLE! Please enter a valid license key to enable automatic updates."
+msgstr "UPPDATERING INTE TILLGÄNGLIG! Ange en giltig licensnyckel för att aktivera automatiska uppdateringar."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:134
+msgid "Invalid license. Please <a href=\"%1$s\" target=\"_blank\">check again</a> or <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "Ogiltig licens. <a href=\"%1$s\" target=\"_blank\">Kontrollera igen</a> eller <a href=\"%2$s\" target=\"_blank\">skaffa en ny licens här</a>."
+
+#. Translators: %s - URL to the My Account page.
+#: src/Updater/Settings.php:128
+msgid "License expired. Please renew on the <a href=\"%s\" target=\"_blank\">My Account</a> page on metabox.io website."
+msgstr "Licensen har löpt ut. Förnya på <a href=\"%s\" target=\"_blank\">Mitt konto</a>-sidan på metabox.io webbplats."
+
+#: src/Updater/Settings.php:125
+msgid "Your license is activated."
+msgstr "Din licens är aktiverad."
+
+#: src/Updater/Settings.php:123
+msgid "Something wrong with the connection to metabox.io. Please try again later."
+msgstr "Något fel med anslutningen till metabox.io. Försök igen senare."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:60
+msgid "To get the license key, visit the <a href=\"%1$s\" target=\"_blank\">My Account</a> page on metabox.io website. If you have not purchased any extension yet, please <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "För att skaffa licensnyckeln, besök sidan <a href=\"%1$s\" target=\"_blank\">Mitt konto</a> på metabox.io webbplats. Om du inte har köpt någon utökning än <a href=\"%2$s\" target=\"_blank\">skaffa en ny licens här</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:59
+msgid "You have not set your Meta Box license key yet, which means you are missing out on automatic updates and support! Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Du har inte angett din ”Meta Box”-licensnyckel än, vilket innebär att du går miste om automatiska uppdateringar och support! Ange <a href=\"%1$s\">din licensnyckel</a> eller <a href=\"%2$s\" target=\"_blank\">skaffa en ny här</a>."
+
+#: src/Updater/Settings.php:92
+msgid "Save Changes"
+msgstr "Spara ändringar"
+
+#: src/Updater/Settings.php:72
+msgid "License Key"
+msgstr "Licensnyckel"
+
+#: src/Updater/Settings.php:55
+msgid "Please enter your license key to enable automatic updates for Meta Box extensions."
+msgstr "Ange din licensnyckel för att aktivera automatiska uppdateringar för Meta Box-utökningar."
+
+#: src/Updater/Settings.php:39 src/Updater/Settings.php:54
+msgid "Meta Box License"
+msgstr "Meta Box-licens"
+
+#: src/Updater/Settings.php:39
+msgid "License"
+msgstr "Licens"
+
+#: inc/fields/input-list.php:83
+msgid "Toggle All"
+msgstr "Slå på/av alla"
+
+#: inc/fields/file.php:48
+msgid "Error: Invalid file"
+msgstr "Fel: Ogiltig fil"
+
+#: inc/fields/map.php:29 inc/fields/osm.php:16
+msgid "No results found"
+msgstr "Inga resultat hittades"
+
+#. Translators: %s - Meta Box (plugin name).
+#: src/Dashboard/content.php:79
+msgid "Welcome to %s,"
+msgstr "Välkommen till %s,"
+
+#: src/Dashboard/Dashboard.php:53 src/Dashboard/Dashboard.php:78
+#: src/Dashboard/Dashboard.php:79
+msgid "Dashboard"
+msgstr "Adminpanel"
+
+#: src/Dashboard/content.php:580
+msgid "And much more!"
+msgstr "Och mycket mer!"
+
+#: src/Dashboard/content.php:457
+msgid "Create custom settings pages"
+msgstr "Skapa anpassade inställningssidor"
+
+#: src/Dashboard/content.php:592
+msgid "Go to the support forum"
+msgstr "Gå till supportforum"
+
+#: src/Dashboard/content.php:522 src/Dashboard/content.php:588
+msgid "Premium support"
+msgstr "Premiumsupport"
+
+#: inc/fields/switch.php:85
+msgid "Off"
+msgstr "Av"
+
+#: inc/fields/switch.php:84
+msgid "On"
+msgstr "På"
+
+#: inc/fields/background.php:127
+msgid "Contain"
+msgstr "Inneslut"
+
+#: inc/fields/background.php:126
+msgid "Cover"
+msgstr "Täck"
+
+#: inc/fields/background.php:112
+msgid "Scroll"
+msgstr "Rulla"
+
+#: inc/fields/background.php:111
+msgid "Fixed"
+msgstr "Fixerad"
+
+#: inc/fields/background.php:99
+msgid "Bottom Right"
+msgstr "Nere till höger"
+
+#: inc/fields/background.php:98
+msgid "Bottom Center"
+msgstr "Nere centrerat"
+
+#: inc/fields/background.php:97
+msgid "Bottom Left"
+msgstr "Nere till vänster"
+
+#: inc/fields/background.php:96
+msgid "Center Right"
+msgstr "Centrerat höger"
+
+#: inc/fields/background.php:95
+msgid "Center Center"
+msgstr "Centrerat mitten"
+
+#: inc/fields/background.php:94
+msgid "Center Left"
+msgstr "Centrerat vänster"
+
+#: inc/fields/background.php:93
+msgid "Top Right"
+msgstr "Uppe till höger"
+
+#: inc/fields/background.php:92
+msgid "Top Center"
+msgstr "Uppe centrerat"
+
+#: inc/fields/background.php:91
+msgid "Top Left"
+msgstr "Uppe till vänster"
+
+#: inc/fields/background.php:79 inc/fields/background.php:113
+#: inc/fields/background.php:125
+msgid "Inherit"
+msgstr "Ärv"
+
+#: inc/fields/background.php:78
+msgid "Repeat Vertically"
+msgstr "Repetera vertikalt"
+
+#: inc/fields/background.php:77
+msgid "Repeat Horizontally"
+msgstr "Repetera horisontellt"
+
+#: inc/fields/background.php:76
+msgid "Repeat All"
+msgstr "Repetera allt"
+
+#: inc/fields/background.php:75
+msgid "No Repeat"
+msgstr "Ingen repetering"
+
+#: inc/fields/background.php:61
+msgid "Background Image"
+msgstr "Bakgrundsbild"
+
+#: inc/fields/sidebar.php:10
+msgid "Select a sidebar"
+msgstr "Välj en sidopanel"
+
+#: src/Dashboard/content.php:99
+msgid "Getting Started"
+msgstr "Kom igång"
+
+#: src/Dashboard/content.php:534
+msgid "Learn more"
+msgstr "Lär dig mer"
+
+#. Author of the plugin
+#: meta-box.php
+msgid "MetaBox.io"
+msgstr "MetaBox.io"
+
+#. Description of the plugin
+#: meta-box.php
+msgid "Create custom meta boxes and custom fields in WordPress."
+msgstr "Skapa anpassade meta-rutor och anpassade fält i WordPress."
+
+#: inc/fields/media.php:30
+msgctxt "media"
+msgid "or"
+msgstr "eller"
+
+#: inc/fields/select-advanced.php:44
+msgid "Select an item"
+msgstr "Välj ett objekt"
+
+#: inc/fields/media.php:31
+msgctxt "media"
+msgid "Drop files here to upload"
+msgstr "Släpp filer här för att ladda upp"
+
+#: inc/fields/media.php:29
+msgctxt "media"
+msgid "Select Files"
+msgstr "Välj filer"
+
+#: inc/fields/taxonomy.php:84
+msgid "Select a term"
+msgstr "Välj en term"
+
+#: inc/fields/media.php:26
+msgctxt "media"
+msgid "No Title"
+msgstr "Ingen rubrik"
+
+#: inc/fields/media.php:22
+msgctxt "media"
+msgid " files"
+msgstr " filer"
+
+#: inc/fields/media.php:21
+msgctxt "media"
+msgid " file"
+msgstr " fil"
+
+#: inc/fields/media.php:25
+msgctxt "media"
+msgid "View"
+msgstr "Visa"
+
+#: inc/fields/media.php:24
+msgctxt "media"
+msgid "Edit"
+msgstr "Redigera"
+
+#: inc/fields/media.php:23
+msgctxt "media"
+msgid "Remove"
+msgstr "Ta bort"
+
+#: inc/fields/media.php:20
+msgctxt "media"
+msgid "+ Add Media"
+msgstr "+ Lägg till media"
+
+#: inc/field.php:309
+msgid "+ Add more"
+msgstr "+ Lägg till mer"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: meta-box.php
+msgid "https://metabox.io"
+msgstr "https://metabox.io"
+
+#. Plugin Name of the plugin
+#: meta-box.php src/Dashboard/Dashboard.php:65 src/Dashboard/Dashboard.php:66
+#: src/Integrations/Block.php:12 src/Integrations/Bricks.php:10
+#: src/Integrations/Elementor.php:13 src/Integrations/Oxygen.php:14
+msgid "Meta Box"
+msgstr "Meta Box"
+
+#: inc/validation.php:66
+msgid "Please correct the errors highlighted below and try again."
+msgstr "Rätta de fel som är markerade nedan och försök igen."
+
+#: inc/fields/user.php:75
+msgid "Select a user"
+msgstr "Välj en användare"
+
+#: inc/fields/select.php:80
+msgid "None"
+msgstr "Ingen"
+
+#: inc/fields/select.php:80
+msgid "All"
+msgstr "Allt"
+
+#. Translators: %s is the post singular label.
+#. Translators: %s is the taxonomy singular label.
+#: inc/fields/post.php:75 inc/fields/taxonomy.php:88
+msgid "Select a %s"
+msgstr "Välj en %s"
+
+#: inc/fields/post.php:69
+msgid "Select a post"
+msgstr "Välj ett inlägg"
+
+#: inc/fields/oembed.php:18
+msgid "Embed HTML not available."
+msgstr "Inbäddning av HTML inte tillgängligt."
+
+#: inc/fields/key-value.php:80
+msgid "Value"
+msgstr "Värde"
+
+#: inc/fields/key-value.php:79
+msgid "Key"
+msgstr "Nyckel"
+
+#: inc/fields/file.php:86
+msgctxt "file upload"
+msgid "+ Add new file"
+msgstr "+ Lägg till ny fil"
+
+#: inc/fields/file.php:61
+msgid "Error: Cannot delete file"
+msgstr "Fel: Kan inte ta bort fil"
+
+#. Translators: %d is the number of files in plural form.
+#: inc/fields/file.php:17
+msgid "You may only upload maximum %d files"
+msgstr "Du får bara ladda upp maximalt %d filer"
+
+#. Translators: %d is the number of files in singular form.
+#: inc/fields/file.php:15
+msgid "You may only upload maximum %d file"
+msgstr "Du får bara ladda upp maximalt %d fil"
+
+#: inc/fields/file-input.php:48
+msgid "Remove"
+msgstr "Ta bort"
+
+#: inc/fields/file-input.php:46 inc/fields/select.php:80
+msgid "Select"
+msgstr "Välj"
+
+#: inc/fields/file-input.php:17
+msgid "Select File"
+msgstr "Välj fil"
+
+#: inc/fields/file.php:167
+msgctxt "file upload"
+msgid "Edit"
+msgstr "Redigera"
+
+#: inc/fields/file.php:166
+msgctxt "file upload"
+msgid "Delete"
+msgstr "Ta bort"
+
+#: inc/fields/checkbox.php:43
+msgid "No"
+msgstr "Nej"
+
+#: inc/fields/checkbox.php:43
+msgid "Yes"
+msgstr "Ja"
+
+#: inc/fields/button.php:28
+msgid "Click me"
+msgstr "Klicka på mig"
+
+#: inc/fields/autocomplete.php:14 inc/fields/autocomplete.php:79
+#: inc/fields/autocomplete.php:91
+msgid "Delete"
+msgstr "Ta bort"
+
+#: src/Dashboard/content.php:51
+msgid "Documentation"
+msgstr "Dokumentation"

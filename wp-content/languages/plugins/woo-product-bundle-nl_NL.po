@@ -1,0 +1,712 @@
+# Translation of Plugins - WPC Product Bundles for WooCommerce - Development (trunk) in Dutch
+# This file is distributed under the same license as the Plugins - WPC Product Bundles for WooCommerce - Development (trunk) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2021-12-07 06:39:13+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - WPC Product Bundles for WooCommerce - Development (trunk)\n"
+
+#: includes/class-woosb.php:831
+msgid "Alert"
+msgstr "Waarschuwing"
+
+#. Author of the plugin
+msgid "WPClever"
+msgstr "WPClever"
+
+#: includes/wpc-kit.php:216 includes/wpc-kit.php:269
+msgid "Activate"
+msgstr "Activeren"
+
+#: includes/wpc-kit.php:209 includes/wpc-kit.php:262
+msgid "Deactivate"
+msgstr "Deactiveren"
+
+#: includes/wpc-kit.php:223
+msgid "Install Now"
+msgstr "Installeer nu"
+
+#: includes/wpc-kit.php:297
+msgid "Version"
+msgstr "Versie"
+
+#: includes/wpc-kit.php:232
+msgid "More Details"
+msgstr "Meer details"
+
+#: includes/wpc-kit.php:310
+msgid "%s ago"
+msgstr "%s geleden"
+
+#: includes/wpc-kit.php:309
+msgid "Last Updated:"
+msgstr "Laatst geüpdatet:"
+
+#: includes/wpc-kit.php:115
+msgid "WPC Essential Kit"
+msgstr "WPC Essential Kit"
+
+#: includes/class-woosb.php:312 includes/wpc-kit.php:115
+msgid "Essential Kit"
+msgstr "Essential Kit"
+
+#: includes/wpc-kit.php:230
+msgid "More information about %s"
+msgstr "Meer informatie over %s"
+
+#: includes/wpc-kit.php:303
+msgid "+ Active Installations"
+msgstr "+ actieve installaties"
+
+#: includes/class-woosb.php:304 includes/class-woosb.php:1134
+msgid "Docs"
+msgstr "Documentatie"
+
+#: includes/class-woosb.php:492
+msgid "Show plus/minus button"
+msgstr "Toon plus/min knop"
+
+#: includes/class-woosb.php:504
+msgid "Show the plus/minus button for the quantity input."
+msgstr "Toon de plus/min knop voor de hoeveelheid ingave."
+
+#: includes/class-woosb.php:2134
+msgid "All items' quantity limit"
+msgstr "De maximale hoeveelheid van alle artikelen"
+
+#: includes/class-woosb.php:2118
+msgid "Each item's quantity limit"
+msgstr "De hoeveelheidlimiet van elk item"
+
+#: includes/class-woosb.php:908
+msgid "WooCommerce PDF Invoices, Packing Slips, Delivery Notes & Shipping Labels"
+msgstr "WooCommerce PDF-facturen, plakbonnen, pakbonnen en verzendetiketten"
+
+#: includes/class-woosb.php:898 includes/class-woosb.php:924
+msgid "Hide bundled products"
+msgstr "Gebundelde producten verbergen"
+
+#: includes/class-woosb.php:889 includes/class-woosb.php:915
+msgid "Hide bundles"
+msgstr "Verberg bundels"
+
+#: includes/class-woosb.php:363
+msgid "Bundled pricing methods: from Sale price (default) or Regular price."
+msgstr "Gebundelde prijsmethoden: van uitverkoopprijs (standaard) of normale prijs."
+
+#: includes/class-woosb.php:359
+msgid "from Regular price"
+msgstr "van normale prijs"
+
+#: includes/class-woosb.php:355
+msgid "from Sale price"
+msgstr "naar uitverkoopprijs"
+
+#: includes/class-woosb.php:350
+msgid "Calculate bundled prices"
+msgstr "Bereken gebundelde prijzen"
+
+#: includes/class-woosb.php:301
+msgid "Compatible"
+msgstr "Compatibel"
+
+#: includes/class-woosb.php:2235
+msgid "sold individually"
+msgstr "wordt individueel verkocht"
+
+#: includes/class-woosb.php:882
+msgid "WooCommerce PDF Invoices & Packing Slips"
+msgstr "WooCommerce PDF Invoices & Packing Slips"
+
+#: includes/class-woosb.php:649
+msgid "Exclude both bundles and bundled products"
+msgstr "Sluit zowel bundels als gebundelde producten uit"
+
+#: includes/class-woosb.php:645
+msgid "Exclude bundled products"
+msgstr "Sluit gebundelde producten uit"
+
+#: includes/class-woosb.php:641
+msgid "Exclude bundles"
+msgstr "Sluit bundels uit"
+
+#: includes/class-woosb.php:653
+msgid "Choose products you want to exclude from coupons."
+msgstr "Kies producten die jr van waardebonnen wil uitsluiten."
+
+#: includes/class-woosb.php:632
+msgid "Coupon restrictions"
+msgstr "Waardebon restricties"
+
+#: includes/class-woosb.php:2110
+msgid "Custom quantity"
+msgstr "Aangepaste hoeveelheid"
+
+#: includes/class-woosb.php:390
+msgid "Under the price"
+msgstr "Onder de prijs"
+
+#: includes/class-woosb.php:386
+msgid "Under the title"
+msgstr "Onder de titel"
+
+#: includes/class-woosb.php:619 includes/class-woosb.php:2183
+msgid "Under text"
+msgstr "Onder de tekst"
+
+#: includes/class-woosb.php:610 includes/class-woosb.php:2174
+msgid "Above text"
+msgstr "Boven de tekst"
+
+#: includes/class-woosb.php:394
+msgid "Under the excerpt"
+msgstr "Onder de samenvatting"
+
+#: includes/class-woosb.php:3073
+msgid "Added %s product(s) to this bundle."
+msgstr "%s product(en) toegevoegd aan deze bundel."
+
+#: includes/class-woosb.php:3054
+msgid "Create a Smart bundle"
+msgstr "Maak een slimme bundel"
+
+#: includes/class-woosb.php:1262
+msgid "One of the bundled products is unavailable."
+msgstr "Een van de gebundelde producten is niet beschikbaar."
+
+#: includes/class-woosb.php:3035
+msgid "Bundle (%s)"
+msgstr "Bundel (%s)"
+
+#: includes/class-woosb.php:658
+msgid "Exclude un-purchasable products"
+msgstr "Sluit niet-aankoopbare producten uit"
+
+#: includes/class-woosb.php:671
+msgid "Make the bundle still purchasable when one of the bundled products is un-purchasable. These bundled products are excluded from the orders."
+msgstr "Bied de bundel te koop aan ook al is een van de gebundelde producten niet verkoopbaar. Die producten worden uitgesloten in de bestelling."
+
+#: includes/class-woosb.php:1269 includes/class-woosb.php:1276
+msgid "\"%s\" is un-purchasable."
+msgstr "\"%s\" kan niet worden gekocht."
+
+#: includes/class-woosb.php:2162
+msgid "By default, the bundle' stock was calculated automatically from bundled products. After enabling, please press \"Update\" then you can change the stock settings on the \"Inventory\" tab."
+msgstr "Standaard werd de voorraad van de bundel automatisch berekend op basis van gebundelde producten. Druk na het inschakelen op \"Update\", dan kunt je de voorraadinstellingen wijzigen op het tabblad \"Voorraad\"."
+
+#: includes/class-woosb.php:560
+msgid "Yes, custom selector"
+msgstr "Ja, aangepaste selector"
+
+#: includes/class-woosb.php:2084
+msgid "Fixed price"
+msgstr "Vaste prijs"
+
+#: includes/class-woosb.php:415
+msgid "Default"
+msgstr "Standaard"
+
+#: includes/class-woosb.php:419
+msgid "Use WPC Variations Radio Buttons"
+msgstr "Gebruik WPC-variaties keuzerondjes"
+
+#: includes/class-woosb.php:410
+msgid "Variations selector"
+msgstr "Variaties selector"
+
+#: includes/class-woosb.php:382 includes/class-woosb.php:593
+msgid "Under the add to cart button"
+msgstr "Onder de knop toevoegen aan winkelwagen"
+
+#: includes/class-woosb.php:378 includes/class-woosb.php:589
+msgid "Above the add to cart button"
+msgstr "Boven de knop Toevoegen aan winkelwagen"
+
+#: includes/class-woosb.php:989
+msgid "Search by ID"
+msgstr "Zoeken op ID"
+
+#: includes/class-woosb.php:2166
+msgid "Custom display price"
+msgstr "Aangepaste weergaveprijs"
+
+#: includes/class-woosb.php:2106
+msgid "If you fill both, the amount will be used."
+msgstr "Als je beide invult, wordt het bedrag gebruikt."
+
+#: includes/class-woosb.php:3083
+msgid "Bundle(s) out of stock"
+msgstr "Bundel(s) niet op voorraad"
+
+#: includes/class-woosb.php:3117
+msgid "%1$s is low in stock. There are %2$d left."
+msgstr "%1$s is bijna uitverkocht. Er zijn nog %2$d op voorraad."
+
+#: includes/class-woosb.php:3109
+msgid "Bundle(s) low in stock"
+msgstr "Bundel(s) laag in voorraad"
+
+#: includes/class-woosb.php:3114
+msgid "%s is low in stock."
+msgstr "%s is laag in voorraad."
+
+#: includes/class-woosb.php:402 includes/class-woosb.php:601
+msgid "No (hide it)"
+msgstr "Nee (verbergen)"
+
+#: includes/class-woosb.php:3088 includes/class-woosb.php:3091
+msgid "%s is out of stock."
+msgstr "%s is niet op voorraad."
+
+#: includes/class-woosb.php:508
+msgid "Link to individual product"
+msgstr "Link naar individueel product"
+
+#: includes/class-woosb.php:521
+msgid "Yes, open quick view popup"
+msgstr "Ja, open de snelweergave pop-up"
+
+#: includes/class-woosb.php:604
+msgid "Choose the position to show the bundles list."
+msgstr "Kies de positie om de bundellijst weer te geven."
+
+#: includes/class-woosb.php:580
+msgid "Settings for bundles on the bundled product page."
+msgstr "Instellingen voor bundels op de gebundelde productpagina."
+
+#: includes/class-woosb.php:577 includes/class-woosb.php:1968
+msgid "Bundles"
+msgstr "Bundels"
+
+#: includes/class-woosb.php:551
+msgid "Change price"
+msgstr "Verander prijs"
+
+#: includes/class-woosb.php:2100
+msgid "% or amount"
+msgstr "% of bedrag"
+
+#: includes/class-woosb.php:1283 includes/class-woosb.php:1300
+msgid "\"%s\" has not enough stock."
+msgstr "\"%s\" heeft niet genoeg voorraad."
+
+#: includes/class-woosb.php:787
+msgid "Use [d] to show the saved percentage or amount."
+msgstr "Gebruik [d] om het bespaarde percentage of bedrag te tonen."
+
+#: includes/class-woosb.php:782
+msgid "Saved text"
+msgstr "Opgeslagen tekst"
+
+#: includes/class-woosb.php:774
+msgid "Total text"
+msgstr "Totale tekst"
+
+#: includes/class-woosb.php:571
+msgid "Change the main product price when choosing the variation of bundled products. It uses JavaScript to change product price so it is very dependent on theme’s HTML. If it cannot find and update the product price, please contact us and we can help you find the right selector or adjust the JS file."
+msgstr "Wijzig de prijs van het hoofdproduct bij het kiezen van de variatie van gebundelde producten. Het gebruikt JavaScript om de productprijs te wijzigen, dus het is erg afhankelijk van de HTML van het thema. Als het de productprijs niet kan vinden en updaten, neem dan contact met ons op en wij kunnen je helpen de juiste selector te vinden of het JS-bestand aan te passen."
+
+#: includes/class-woosb.php:786 includes/class-woosb.php:1096
+msgid "(saved [d])"
+msgstr "([d] bespaard)"
+
+#: includes/class-woosb.php:2089
+msgid "If checked, %s click here to set price %s by manually."
+msgstr "Indien aangevinkt, %s klik hier om handmatig de prijs %s in te stellen."
+
+#: includes/class-woosb.php:2088
+msgid "Disable auto calculate price."
+msgstr "Schakel automatisch berekenen prijs uit."
+
+#: includes/class-woosb.php:2235
+msgid "Default quantity"
+msgstr "Standaard aantal"
+
+#: includes/class-woosb.php:2223
+msgid "Remove"
+msgstr "Verwijder"
+
+#: includes/class-woosb.php:2122
+msgid "Use default quantity as min?"
+msgstr "Standaardhoeveelheid gebruiken als min?"
+
+#: includes/class-woosb.php:2221
+msgid "Add"
+msgstr "Toevoegen"
+
+#: includes/class-woosb.php:1308
+msgid "\"%s\" is protected and cannot be purchased."
+msgstr "\"%s\" is beschermd en kan niet worden gekocht."
+
+#: includes/class-woosb.php:1290
+msgid "You cannot add another \"%s\" to the cart."
+msgstr "Je kan geen \"%s\" aan je winkelwagen toevoegen."
+
+#: includes/class-woosb.php:1263 includes/class-woosb.php:1270
+#: includes/class-woosb.php:1277 includes/class-woosb.php:1284
+#: includes/class-woosb.php:1291 includes/class-woosb.php:1301
+#: includes/class-woosb.php:1309
+msgid "You cannot add this bundle to the cart."
+msgstr "Je kan deze bundel niet aan de winkelwagen toevoegen."
+
+#: includes/class-woosb.php:405
+msgid "Choose the position to show the bundled products list."
+msgstr "Kies de positie om de lijst met gebundelde producten weer te geven."
+
+#: includes/class-woosb.php:373 includes/class-woosb.php:584
+msgid "Position"
+msgstr "Positie"
+
+#: includes/class-woosb.php:398 includes/class-woosb.php:597
+msgid "In a new tab"
+msgstr "In een nieuwe tab"
+
+#: includes/class-woosb.php:2093
+msgid "Discount"
+msgstr "Korting"
+
+#. Description of the plugin
+msgid "WPC Product Bundles is a plugin help you bundle a few products, offer them at a discount and watch the sales go up!"
+msgstr "WPC Product Bundles is een plugin die je helpt een paar producten te bundelen, deze met korting aan te bieden en de verkoop te zien stijgen!"
+
+#: includes/class-woosb.php:689
+msgid "Both bundles and bundled products"
+msgstr "Zowel bundels als gebundelde producten"
+
+#: includes/class-woosb.php:685
+msgid "Bundled products only"
+msgstr "Alleen gebundelde producten"
+
+#: includes/class-woosb.php:681
+msgid "Bundles only"
+msgstr "Alleen bundels"
+
+#: includes/class-woosb.php:676
+msgid "Cart contents count"
+msgstr "Winkelwagen inhouden telling"
+
+#: includes/class-woosb.php:2160
+msgid "Enable stock management at bundle level."
+msgstr "Activeer voorraadbeheer op bundelniveau."
+
+#: includes/class-woosb.php:2156
+msgid "Manage stock"
+msgstr "Beheer voorraad"
+
+#: includes/class-product.php:36 includes/class-woosb.php:809
+msgid "Select options"
+msgstr "Selecteer opties"
+
+#: includes/class-woosb.php:437 includes/class-woosb.php:452
+#: includes/class-woosb.php:467 includes/class-woosb.php:486
+#: includes/class-woosb.php:501 includes/class-woosb.php:525
+#: includes/class-woosb.php:542 includes/class-woosb.php:564
+#: includes/class-woosb.php:637 includes/class-woosb.php:667
+#: includes/class-woosb.php:704 includes/class-woosb.php:723
+#: includes/class-woosb.php:738 includes/class-woosb.php:893
+#: includes/class-woosb.php:902 includes/class-woosb.php:919
+#: includes/class-woosb.php:928 includes/class-woosb.php:983
+#: includes/class-woosb.php:998 includes/class-woosb.php:1014
+#: includes/class-woosb.php:1030 includes/class-woosb.php:1046
+msgid "No"
+msgstr "Nee"
+
+#: includes/class-woosb.php:433 includes/class-woosb.php:448
+#: includes/class-woosb.php:463 includes/class-woosb.php:497
+#: includes/class-woosb.php:538 includes/class-woosb.php:556
+#: includes/class-woosb.php:663 includes/class-woosb.php:700
+#: includes/class-woosb.php:734 includes/class-woosb.php:892
+#: includes/class-woosb.php:901 includes/class-woosb.php:918
+#: includes/class-woosb.php:927 includes/class-woosb.php:979
+#: includes/class-woosb.php:994 includes/class-woosb.php:1010
+#: includes/class-woosb.php:1026 includes/class-woosb.php:1042
+msgid "Yes"
+msgstr "Ja"
+
+#: includes/class-woosb.php:332 includes/class-woosb.php:768
+msgid "General"
+msgstr "Algemeen"
+
+#. Plugin URI of the plugin
+msgid "https://wpclever.net/"
+msgstr "https://wpclever.net/"
+
+#. Author URI of the plugin
+msgid "https://wpclever.net"
+msgstr "https://wpclever.net"
+
+#: includes/class-product.php:39 includes/class-woosb.php:816
+msgid "Read more"
+msgstr "Lees meer"
+
+#: includes/class-woosb.php:261
+msgid "Product Bundles"
+msgstr "Product bundels"
+
+#: includes/class-woosb.php:261 includes/class-woosb.php:272
+msgid "WPC Product Bundles"
+msgstr "WPC Product Bundles"
+
+#: includes/class-woosb.php:278
+msgid "Reviews"
+msgstr "Beoordelingen"
+
+#: includes/class-woosb.php:280
+msgid "Changelog"
+msgstr "Wijzigingen"
+
+#: includes/class-woosb.php:282
+msgid "Discussion"
+msgstr "Discussie"
+
+#: includes/class-woosb.php:289
+msgid "How to use?"
+msgstr "Hoe te gebruiken?"
+
+#: includes/class-woosb.php:293 includes/class-woosb.php:1124
+msgid "Settings"
+msgstr "Instellingen"
+
+#: includes/class-woosb.php:478
+msgid "Price"
+msgstr "Prijs"
+
+#: includes/class-woosb.php:482
+msgid "Subtotal"
+msgstr "Subtotaal"
+
+#: includes/class-woosb.php:2151
+msgid "Apply to each bundled product"
+msgstr "Op elk gebundeld product van toepassing maken"
+
+#: includes/class-woosb.php:2150
+msgid "Apply to the whole bundle"
+msgstr "Gelden voor de gehele bundel"
+
+#: includes/class-woosb.php:2147
+msgid "Shipping fee"
+msgstr "Verzendkosten"
+
+#: includes/class-woosb.php:2078
+msgid "Regular price"
+msgstr "Normale prijs"
+
+#: includes/class-woosb.php:2047
+msgid "Selected"
+msgstr "Geselecteerd"
+
+#: includes/class-woosb.php:2041
+msgid "Type any keyword to search"
+msgstr "Voer een zoekterm in"
+
+#: includes/class-woosb.php:2039
+msgid "searching..."
+msgstr "Zoeken..."
+
+#: includes/class-woosb.php:2033
+msgid "settings"
+msgstr "instellingen"
+
+#: includes/class-woosb.php:1931 includes/class-woosb.php:1986
+msgid "Smart bundle"
+msgstr "Slimme bundel"
+
+#: includes/class-woosb.php:1884
+msgid "No results found for \"%s\""
+msgstr "Geen resultaten gevonden voor '%s'"
+
+#: includes/class-woosb.php:1756
+msgid "(bundled in %s)"
+msgstr "(gebundeld in%s)"
+
+#: includes/class-woosb.php:1938
+msgid "Bundled Products"
+msgstr "Gebundelde producten"
+
+#: includes/class-woosb.php:1049
+msgid "If yes, a product can be added many times."
+msgstr "Zo ja, dan kan een product meerdere keren worden toegevoegd."
+
+#: includes/class-woosb.php:1037
+msgid "Accept same products"
+msgstr "Accepteer dezelfde producten"
+
+#: includes/class-woosb.php:1033
+msgid "Do a phrase search?"
+msgstr "Zoek een zin?"
+
+#: includes/class-woosb.php:1021
+msgid "Search sentence"
+msgstr "Zoek zin"
+
+#: includes/class-woosb.php:1017
+msgid "Match whole product title or content?"
+msgstr "Komt overeen met de volledige producttitel of inhoud?"
+
+#: includes/class-woosb.php:1005
+msgid "Search exact"
+msgstr "Zoek exact"
+
+#: includes/class-woosb.php:974
+msgid "Search by SKU"
+msgstr "Zoeken op artikelnummer"
+
+#: includes/class-woosb.php:966
+msgid "Search limit"
+msgstr "Zoeklimiet"
+
+#: includes/class-woosb.php:748 includes/class-woosb.php:2031
+msgid "Search"
+msgstr "Zoeken"
+
+#: includes/class-woosb.php:719
+msgid "Yes, but show bundled product names under the main product"
+msgstr "Ja, maar toon gebundelde productnamen onder het hoofdproduct"
+
+#: includes/class-woosb.php:715
+msgid "Yes, just show the main product"
+msgstr "Ja, toon gewoon het hoofdproduct"
+
+#: includes/class-woosb.php:710
+msgid "Hide bundled products on cart & checkout page"
+msgstr "Verberg gebundelde producten op winkelwagen en afrekenpagina"
+
+#: includes/class-woosb.php:695
+msgid "Hide bundle name before bundled products"
+msgstr "Verberg de bundelnaam vóór gebundelde producten"
+
+#: includes/class-woosb.php:778 includes/class-woosb.php:1097
+msgid "Bundle price:"
+msgstr "Bundelprijs:"
+
+#: includes/class-woosb.php:546
+msgid "Change the main product image when choosing the variation of bundled products."
+msgstr "Verander de hoofdproductafbeelding bij het kiezen van de variatie van gebundelde producten."
+
+#: includes/class-woosb.php:533
+msgid "Change image"
+msgstr "Wijzig afbeelding"
+
+#: includes/class-woosb.php:517
+msgid "Yes, open in the new tab"
+msgstr "Ja, open in het nieuwe tabblad"
+
+#: includes/class-woosb.php:513
+msgid "Yes, open in the same tab"
+msgstr "Ja, open op hetzelfde tabblad"
+
+#: includes/class-woosb.php:473
+msgid "Show price"
+msgstr "Toon prijs"
+
+#: includes/class-woosb.php:458
+msgid "Show short description"
+msgstr "Toon korte beschrijving"
+
+#: includes/class-woosb.php:443
+msgid "Show quantity"
+msgstr "Toon hoeveelheid"
+
+#: includes/class-woosb.php:369 includes/class-woosb.php:1637
+#: includes/class-woosb.php:1660 includes/class-woosb.php:1960
+msgid "Bundled products"
+msgstr "Gebundelde producten"
+
+#: includes/class-woosb.php:345
+msgid "Choose the price format for bundle on the shop page."
+msgstr "Kies het prijsformaat voor bundel op de winkelpagina."
+
+#: includes/class-woosb.php:342
+msgid "Regular and sale price"
+msgstr "Normale en uitverkoopprijs"
+
+#: includes/class-woosb.php:341
+msgid "Min - max"
+msgstr "Min - max"
+
+#: includes/class-woosb.php:340
+msgid "Min price only"
+msgstr "Min prijs alleen"
+
+#: includes/class-woosb.php:339
+msgid "From min price"
+msgstr "Vanaf min. Prijs"
+
+#: includes/class-woosb.php:309 includes/class-woosb.php:1125
+msgid "Premium Version"
+msgstr "Premium versie"
+
+#: includes/class-woosb.php:742
+msgid "Hide bundled products, just show the main product on mini-cart."
+msgstr "Verberg gebundelde producten, toon gewoon het hoofdproduct op mini-winkelwagen."
+
+#: includes/class-woosb.php:729
+msgid "Hide bundled products on mini-cart"
+msgstr "Verberg gebundelde producten op mini-winkelwagen"
+
+#: includes/class-woosb.php:628
+msgid "Cart & Checkout"
+msgstr "Winkelwagen & afrekenen"
+
+#: includes/class-woosb.php:822
+msgid "Single product page"
+msgstr "Enkel productpagina"
+
+#: includes/class-woosb.php:817
+msgid "For un-purchasable bundle."
+msgstr "Voor niet-aankoopbare bundel."
+
+#: includes/class-woosb.php:810
+msgid "For purchasable bundle and has variable product(s)."
+msgstr "Voor aankoopbare bundel en heeft variabele product(en)."
+
+#: includes/class-woosb.php:803
+msgid "For purchasable bundle."
+msgstr "Voor aankoopbare bundel."
+
+#: includes/class-woosb.php:792
+msgid "\"Add to cart\" button labels"
+msgstr "\"Toevoegen aan winkelwagen\" knop labels"
+
+#: includes/class-woosb.php:428
+msgid "Show thumbnail"
+msgstr "Toon thumbnail"
+
+#: includes/class-woosb.php:320
+msgid "When creating the product, please choose product data is \"Smart Bundle\" then you can see the search field to start search and add products to the bundle."
+msgstr "Kies bij het aanmaken van het product dat de productgegevens \"Smart Bundle\" zijn, dan kunt je het zoekveld zien om te beginnen met zoeken en producten aan de bundel toe te voegen."
+
+#: includes/class-woosb.php:847 includes/class-woosb.php:1099
+msgid "Please choose at least one product before adding this bundle to the cart."
+msgstr "Kies ten minste één product voordat je deze bundel aan de winkelwagen toevoegt."
+
+#: includes/class-woosb.php:755 includes/class-woosb.php:869
+#: includes/class-woosb.php:935 includes/class-woosb.php:2023
+msgid "Update Options"
+msgstr "Instellingen updaten"
+
+#: includes/class-woosb.php:2470 includes/class-woosb.php:2501
+msgid "From"
+msgstr "Vanaf"
+
+#: includes/class-product.php:34 includes/class-product.php:48
+#: includes/class-woosb.php:802 includes/class-woosb.php:826
+msgid "Add to cart"
+msgstr "Toevoegen aan winkelwagen"
+
+#: includes/class-woosb.php:275
+msgid "Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating."
+msgstr "Bedankt voor het gebruik van onze plugin! Als je tevreden bent, geef ons dan een 5 %s sterren waardering."
+
+#. Plugin Name of the plugin
+msgid "WPC Product Bundles for WooCommerce"
+msgstr "WPC Product Bundles for WooCommerce"
+
+#: includes/class-woosb.php:336
+msgid "Price format"
+msgstr "Prijsformat"

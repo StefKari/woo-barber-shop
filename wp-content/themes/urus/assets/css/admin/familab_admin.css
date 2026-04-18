@@ -1,0 +1,188 @@
+.toplevel_page_urus-intro #wpfooter{
+    position: static;
+}
+.toplevel_page_urus-intro #setting-error-tgmpa, .toplevel_page_urus-intro .dokan-upgrade-promotional-notice{display: none!important;}
+.toplevel_page_urus-intro .tr-container{padding-right: 30px; padding-top: 30px;}
+.tr-container a:active,.tr-container a:focus{
+    box-shadow: none;
+}
+.tr-container .welcome-panel-content{
+    margin: 0;
+}
+.tr-container .welcome-panel{border: none;box-shadow: none;margin: 0;
+    padding: 0;}
+.tr-box{padding: 10px 15px}
+
+#tr-tabs-container .nav-tab-wrapper{
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+#tr-tabs-container .nav-tab-wrapper li{
+    display: inline-block;
+    padding: 10px 15px;
+    background: #000;
+    color: #fff;
+    cursor: default;
+    font-size: 14px;
+    line-height: normal;
+    margin: 0;
+}
+
+#tr-tabs-container .nav-tab-wrapper li.active{
+    background: #fe7b21;
+}
+#tr-tabs-container .nav-tab-wrapper li:not(.active):hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+#tr-tabs-container .nav-tab-wrapper li.disabled{
+    color: #8b8b8b;
+    background: #272727;
+}
+#tr-tabs-container .nav-tab-wrapper li.disabled:hover{
+    cursor: default;
+    opacity: 1;
+}
+.tr-tab-content .tab-pane{display: none}
+.tr-tab-content .tab-pane.active{display: block}
+.dashboard-head{margin: 20px 0}
+.text-center{text-align: center}
+.dashboard-logo{
+    width: 250px;
+}
+.theme-desc{
+    font-size: 18px;
+    line-height: 28px;
+    margin-top: 20px;
+}
+.theme_demo{
+    max-width: 100%;
+}
+.welcome-text{line-height: 24px;margin-bottom: 50px;}
+.welcome-panel.tr-panel{margin-bottom: 13px}
+.welcome-panel.tr-panel h3{
+    margin-top: 5px;
+}
+.tr-box .welcome-icon:before{
+    vertical-align: middle;
+}
+.tr-box .tr-panel .welcome-icon:before{
+    font-size: 40px;
+}
+.welcome-icon.disabled{
+    color: #9a9898;
+}
+.welcome-icon.disabled:hover{
+    cursor: default;
+}
+.tr-box .version-info{display: inline-block; vertical-align: middle}
+.tr-button {
+    padding: 10px 20px;
+    background: #fe7b21;
+    color: #fff;
+    font-weight: 500;
+    margin-top: 10px;
+    display: inline-block;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 0;
+    outline: none;
+    font-size: 14px;
+}
+.tr-button.dark{
+    background: #000;
+}
+.tr-button:not(.disabled):hover{
+    opacity: 0.8;
+    color: #fff;
+}
+.tr-button:active,.tr-button:focus{
+    color: #fff;
+}
+.tr-button.disabled{
+    background: #c2c2c2;
+    color : #a1a1a1;
+    cursor: not-allowed;
+}
+#support .tr-box{
+    padding: 30px 0 0;
+}
+.tr-container .content-box{
+    margin: 0 0 30px;
+    padding: 30px;
+    border: 1px solid #e0e0e0;
+    position: relative;overflow: visible;
+}
+
+.content-box h2.welcome-icon,.content-box h2.welcome-icon:before {
+    font-size: 30px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.ribbon {
+    position: absolute;
+    left: -5px; top: -5px;
+    z-index: 1;
+    overflow: hidden;
+    width: 100px; height: 100px;
+    text-align: right;
+}
+.ribbon span {
+    font-size: 10px;
+    font-weight: bold;
+    color: #FFF;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 20px;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    width: 130px;
+    display: block;
+    background: #F63030;
+    background: linear-gradient(#F6AB2A 0%, #F63030 100%);
+    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 30px;
+    left: -26px;
+}
+.ribbon span::before {
+    content: "";
+    position: absolute; left: 0px; top: 100%;
+    z-index: -1;
+    border-left: 3px solid #F63030;
+    border-right: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #F63030;
+}
+.ribbon span::after {
+    content: "";
+    position: absolute; right: 0px; top: 100%;
+    z-index: -1;
+    border-left: 3px solid transparent;
+    border-right: 3px solid #F63030;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #F63030;
+}
+.postbox.tr-box .welcome-panel h3{
+    margin-top: 10px;
+}
+#welcome .wp-admin select {height: 35px}
+table.changelogs ul{
+    padding: 0;
+    margin: 0;
+
+}
+table.changelogs ul li{
+    margin: 0;
+    padding: 0;
+    list-style: disc;
+    list-style-position: inside
+}
+.welcome-panel h2.welcome-icon{
+    font-size: 18px;
+}
+.postbox-content>h2{
+    margin-top: 0;
+}

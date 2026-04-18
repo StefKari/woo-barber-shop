@@ -1,0 +1,190 @@
+# Translation of Yoast - WooCommerce SEO in Swedish
+# This file is distributed under the same license as the Yoast - WooCommerce SEO package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-09-02 21:54:53+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-rc.1\n"
+"Language: sv_SE\n"
+"Project-Id-Version: Yoast - WooCommerce SEO\n"
+
+#: classes/woocommerce-seo.php:549
+msgid "Size"
+msgstr "Storlek"
+
+#: classes/woocommerce-seo.php:564
+msgid "Return policy page"
+msgstr "Sida med policy för returer"
+
+#: classes/woocommerce-seo.php:552
+msgid "If you have a general return policy for your business, please select it here."
+msgstr "Om du har en övergripande policy för returer bör du välja den här."
+
+#. translators: %1$s: WordPress
+#. translators: %1$s: Yoast SEO
+#: classes/woocommerce-dependencies.php:146
+#: classes/woocommerce-dependencies.php:174
+msgid "Update %1$s"
+msgstr "Uppdatera %1$s"
+
+#. translators: %1$s: WooCommerce
+#. translators: %1$s: Yoast SEO
+#: classes/woocommerce-dependencies.php:84
+#: classes/woocommerce-dependencies.php:115
+msgid "Install %1$s"
+msgstr "Installera %1$s"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:580
+msgid "Note that %1$s breadcrumbs will not be replaced if you’re using a block-based template for single products."
+msgstr "Observera att synliga sökvägar i %1$s inte kommer att ersättas om du använder en blockbaserad mall för enstaka produkter."
+
+#. Author URI of the plugin
+#: wpseo-woocommerce.php
+msgid "https://yoa.st/team-yoast-woocommerce"
+msgstr "https://yoa.st/team-yoast-woocommerce"
+
+#: classes/woocommerce-seo.php:548
+msgid "Material"
+msgstr "Material"
+
+#: classes/woocommerce-seo.php:547
+msgid "Pattern"
+msgstr "Mönster"
+
+#: classes/woocommerce-yoast-ids.php:45
+msgid "If this product variation has unique identifiers, you can enter them here"
+msgstr "Om denna produktvariant har unika ID-värden kan du ange dem här"
+
+#: classes/woocommerce-yoast-ids.php:44
+msgid "Yoast SEO options"
+msgstr "Alternativ för Yoast SEO"
+
+#. Plugin URI of the plugin
+#: wpseo-woocommerce.php
+msgid "https://yoa.st/4fu"
+msgstr "https://yoa.st/4fu"
+
+#: classes/woocommerce-seo.php:541
+msgid "Schema & OpenGraph additions"
+msgstr "Schema & OpenGraph-tillägg"
+
+#: classes/woocommerce-seo.php:542
+msgid "If you have product attributes for the following types, select them here, the plugin will make sure they're used for the appropriate Schema.org and OpenGraph markup."
+msgstr "Om du har produktattribut för följande typer, välj dem här, så kommer tillägget att se till att de används för lämplig Schema.org och OpenGraph-markering."
+
+#: classes/woocommerce-seo.php:545
+msgid "Brand"
+msgstr "Varumärke"
+
+#: classes/woocommerce-seo.php:544
+msgid "Manufacturer"
+msgstr "Tillverkare"
+
+#: classes/woocommerce-seo.php:567
+msgid "Breadcrumbs"
+msgstr "Synliga sökvägar"
+
+#. translators: %1$s resolves to internal links options page, %2$s resolves to
+#. closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:571
+msgid "Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sBreadcrumbs settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced."
+msgstr "Både %4$s och %3$s har funktionalitet för synliga sökvägar. %3$s synliga sökvägar har en något större chans att bli upptagna av sökmotorer och du kan konfigurera dem lite mer på %1$sinställningssidan för synliga sökvägar%2$s. För att aktivera dem, markera rutan nedan och de synliga sökvägarna för WooCommerce kommer att ersättas."
+
+#: classes/woocommerce-seo.php:595
+msgid "Admin"
+msgstr "Admin"
+
+#: classes/woocommerce-slack.php:46
+msgid "In stock"
+msgstr "I lager"
+
+#: classes/woocommerce-slack.php:63
+msgid "Price"
+msgstr "Pris"
+
+#. translators: %1$s resolves to Yoast WooCommerce SEO
+#: classes/woocommerce-dependencies.php:154
+msgid "Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly."
+msgstr "Uppgradera WordPress till den senaste versionen så att WordPress och modulen %1$s fungerar korrekt."
+
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to Yoast WooCommerce
+#. SEO
+#: classes/woocommerce-dependencies.php:182
+msgid "Please upgrade the %1$s plugin to the latest version to allow the %2$s module to work."
+msgstr "Uppgradera tillägget %1$s till den senaste versionen så att modul %2$s kan fungera."
+
+#. Description of the plugin
+#: wpseo-woocommerce.php
+msgid "This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins."
+msgstr "Denna utökning till WooCommerce och Yoast SEO ser till att det är perfekt kommunikation mellan dessa två tillägg."
+
+#. Author of the plugin
+#: wpseo-woocommerce.php
+msgid "Team Yoast"
+msgstr "Team Yoast"
+
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:599
+msgid "Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s to be above %1$s, check the box."
+msgstr "Både %2$s och %1$s lägger till metaboxar på sidan för produktredigering, om du vill att %2$s ska vara över %1$s, markera rutan."
+
+#. Plugin Name of the plugin
+#: wpseo-woocommerce.php
+msgid "Yoast SEO: WooCommerce"
+msgstr "Yoast SEO: WooCommerce"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:589
+msgid "Replace %1$s Breadcrumbs"
+msgstr "Ersätt synliga sökvägar för %1$s"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:609
+msgid "Move %1$s up"
+msgstr "Flytta upp %1$s"
+
+#. translators: %1$s resolves to WooCommerce SEO
+#: classes/woocommerce-seo.php:483
+msgid "%1$s Settings"
+msgstr "%1$s inställningar"
+
+#. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
+#. to the closing tag, %3$s resolves to WooCommerce, %4$s resolves to Yoast
+#. WooCommerce SEO
+#. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
+#. to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to Yoast
+#. WooCommerce SEO
+#: classes/woocommerce-dependencies.php:92
+#: classes/woocommerce-dependencies.php:123
+msgid "Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work."
+msgstr "%1$sInstallera och aktivera %3$s%2$s så att modulen %4$s kan fungera."
+
+#: classes/woocommerce-yoast-tab.php:63
+#: js/src/initializers/registerAssessments.js:280
+msgid "Product identifiers"
+msgstr "Produktidentifierare"
+
+#. translators: %1$s resolves to Yoast SEO
+#: classes/woocommerce-yoast-tab.php:66
+msgid "If you have any of these unique identifiers for your products, please add them here. %1$s will use them in your Schema and OpenGraph output."
+msgstr "Om du har någon av dessa unika ID-strängar för dina produkter behöver du lägga till dem här. %1$s kommer att använda dem i din utmatning för Schema och OpenGraph."
+
+#: classes/woocommerce-seo.php:546
+msgid "Color"
+msgstr "Färg"
+
+#: classes/woocommerce-slack.php:42
+msgid "Out of stock"
+msgstr "Slut i lager"
+
+#: classes/woocommerce-slack.php:50
+msgid "On backorder"
+msgstr "På restorder"
+
+#: classes/woocommerce-slack.php:65
+msgid "Availability"
+msgstr "Tillgänglig"

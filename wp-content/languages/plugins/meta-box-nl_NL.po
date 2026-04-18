@@ -1,0 +1,883 @@
+# Translation of Plugins - Meta Box - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - Meta Box - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-03-14 18:36:31+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - Meta Box - Stable (latest release)\n"
+
+#: src/Dashboard/Dashboard.php:264
+msgid "Error installing plugin. Please try again."
+msgstr "Fout bij het installeren van de plugin. Probeer het opnieuw."
+
+#: src/Dashboard/Dashboard.php:185
+msgid "Activating..."
+msgstr "Aan het activeren..."
+
+#: src/Dashboard/Dashboard.php:184
+msgid "Activate"
+msgstr "Activeren"
+
+#: src/Dashboard/Dashboard.php:177 src/Dashboard/Dashboard.php:186
+#: src/Dashboard/Dashboard.php:192
+msgid "Active"
+msgstr "Actief"
+
+#: src/Dashboard/Dashboard.php:176
+msgid "Installing..."
+msgstr "Aan het installeren..."
+
+#: src/Dashboard/Dashboard.php:175
+msgid "Install"
+msgstr "Installeer"
+
+#: src/Dashboard/content.php:664
+msgid "Gettings news..."
+msgstr "Verkrijgen van nieuws..."
+
+#: src/Dashboard/content.php:663 src/Dashboard/Dashboard.php:291
+msgid "No items available"
+msgstr "Geen items beschikbaar"
+
+#: src/Dashboard/content.php:652
+msgid "Submit a review"
+msgstr "Verzend een beoordeling"
+
+#: src/Dashboard/content.php:650
+msgid "Are you are enjoying Meta Box? We would love to hear your feedback."
+msgstr "Vind je Meta Box leuk? We horen graag je feedback."
+
+#: src/Dashboard/content.php:648
+msgid "Leave us a review"
+msgstr "Laat ons een beoordeling achter"
+
+#: src/Dashboard/content.php:641
+msgid "Join our Facebook Group"
+msgstr "Volg onze Facebook groep"
+
+#: src/Dashboard/content.php:639
+msgid "Share opinions, ask questions and help each other on our Meta Box community!"
+msgstr "Deel meningen, stel vragen en help elkaar op onze Meta Box community!"
+
+#: src/Dashboard/content.php:637
+msgid "Join the community"
+msgstr "Voeg je bij de community"
+
+#: src/Dashboard/content.php:614
+msgid "WordPress Optimizations & Tweaks"
+msgstr "WordPress optimalisaties & tweaks"
+
+#: src/Dashboard/content.php:608
+msgid "Fast & Automated WordPress SEO Plugin"
+msgstr "Snel & geautomatiseerde WordPress seo plugin"
+
+#: src/Dashboard/content.php:600
+msgid "Recommended plugins"
+msgstr "Aanbevolen plugins"
+
+#: src/Dashboard/content.php:590
+msgid "If you have any questions, need a hand with a technical issue, or just want to say hi, we've got you covered. Get in touch with us and we'll be happy to assist you!"
+msgstr "Als je vragen hebt, hulp nodig hebt bij een technisch probleem of gewoon even gedag wil zeggen, dan kun je bij ons terecht. Neem contact met ons op en we helpen je graag!"
+
+#: src/Dashboard/content.php:582
+msgid "Upgrade Now"
+msgstr "Upgrade nu"
+
+#: src/Dashboard/content.php:579
+msgid "Priority support"
+msgstr "Ondersteuning met prioriteit"
+
+#: src/Dashboard/content.php:578
+msgid "Submit & manage posts on the frontend"
+msgstr "Indienen & berichten beheren op de front-end"
+
+#: src/Dashboard/content.php:577
+msgid "Create login, register & edit profile pages"
+msgstr "Login aanmaken, registreren & profielpagina's bewerken"
+
+#: src/Dashboard/content.php:576
+msgid "Create custom blocks with low code"
+msgstr "Maak aangepaste blokken met weinig code"
+
+#: src/Dashboard/content.php:575
+msgid "Custom tables to boost performance"
+msgstr "Aangepaste tabellen om prestaties te verbeteren"
+
+#: src/Dashboard/content.php:574
+msgid "More location rules & conditional logic"
+msgstr "Meer locatieregels & voorwaardelijke logica"
+
+#: src/Dashboard/content.php:573
+msgid "Organize fields into groups (repeater)"
+msgstr "Velden organiseren in groepen (repeater)"
+
+#: src/Dashboard/content.php:570
+msgid "Wanna advanced features?"
+msgstr "Wil je geavanceerde functies?"
+
+#: src/Dashboard/content.php:558
+msgid "Get access to the all-in-one version of Meta Box with full of top-notch features for building robust and dynamic websites."
+msgstr "Verkrijg toegang tot de all-in-one versie van Meta Box met alle topfuncties voor het bouwen van robuuste en dynamische sites."
+
+#. Translators: %s - Meta Box AIO.
+#: src/Dashboard/content.php:555
+msgid "Do more with %s"
+msgstr "Doe meer met %s"
+
+#: src/Dashboard/content.php:527
+msgid "Licensing management system, including sub-licensing"
+msgstr "Licentiebeheerdersysteem, inclusief sublicenties"
+
+#: src/Dashboard/content.php:517
+msgid "UI features: columns, tooltips, tabs"
+msgstr "Ui functies: kolommen, tooltips, tabs"
+
+#: src/Dashboard/content.php:512
+msgid "Display fields in admin columns"
+msgstr "Velden weergeven in beheerkolommen"
+
+#: src/Dashboard/content.php:507
+msgid "Create custom Gutenberg blocks"
+msgstr "Aangepaste Gutenberg blokken maken"
+
+#: src/Dashboard/content.php:502
+msgid "Save post/term meta to custom tables"
+msgstr "Bericht/term meta opslaan in aangepaste tabellen"
+
+#: src/Dashboard/content.php:497
+msgid "Create templates and displaying fields with views"
+msgstr "Templates maken en velden weergeven met weergaven"
+
+#: src/Dashboard/content.php:492
+msgid "Frontend submission forms and dashboard"
+msgstr "Front-end formulieren en dashboard voor inzendingen"
+
+#: src/Dashboard/content.php:487
+msgid "Toogle fields or field groups with conditional logic"
+msgstr "Toogle velden of veldgroepen met voorwaardelijke logica"
+
+#: src/Dashboard/content.php:482
+msgid "Advanced location rules for field groups"
+msgstr "Geavanceerde locatieregels voor veldgroepen"
+
+#: src/Dashboard/content.php:472
+msgid "Create custom content models and save their data to custom tables"
+msgstr "Aangepaste inhoudsmodellen maken en hun gegevens opslaan in aangepaste tabellen"
+
+#: src/Dashboard/content.php:467
+msgid "Create user profile"
+msgstr "Gebruikersprofiel aanmaken"
+
+#: src/Dashboard/content.php:462
+msgid "Create Customizer sections & panels"
+msgstr "Creëer customizer secties & panelen"
+
+#: src/Dashboard/content.php:452
+msgid "Create custom fields for users"
+msgstr "Aangepaste velden voor gebruikers maken"
+
+#: src/Dashboard/content.php:447
+msgid "Create custom fields for taxonomies"
+msgstr "Aangepaste velden maken voor taxonomieën"
+
+#: src/Dashboard/content.php:442
+msgid "Auto update"
+msgstr "Automatische update"
+
+#: src/Dashboard/content.php:437
+msgid "Add custom fields to comments in WordPress"
+msgstr "Aangepaste velden toevoegen aan reacties in WordPress"
+
+#: src/Dashboard/content.php:432
+msgid "Limit text length"
+msgstr "Tekstlengte beperken"
+
+#: src/Dashboard/content.php:427
+msgid "Get/set meta values with REST API"
+msgstr "Meta waarden verkrijgen/instellen met REST API"
+
+#: src/Dashboard/content.php:422
+msgid "Relationships"
+msgstr "Relaties"
+
+#: src/Dashboard/content.php:417
+msgid "Intergrations with Elementor, Divi, FacetWP, Yoast SEO,..."
+msgstr "Intergraties met Elementor, Divi, FacetWP, Yoast SEO,..."
+
+#: src/Dashboard/content.php:412
+msgid "Migration from ACF, Pods, Toolset"
+msgstr "Migratie van ACF, Pods, Toolset"
+
+#: src/Dashboard/content.php:407
+msgid "Create custom fields with UI"
+msgstr "Aangepaste velden maken met ui"
+
+#: src/Dashboard/content.php:402
+msgid "Create custom post types & taxonomies"
+msgstr "Creëer extra berichttypes & taxonomieën"
+
+#: src/Dashboard/content.php:397
+msgid "The Meta Box framework"
+msgstr "Het Meta Box kader"
+
+#: src/Dashboard/content.php:394
+msgid "Paid"
+msgstr "Betaald"
+
+#: src/Dashboard/content.php:393
+msgid "Free"
+msgstr "Gratis"
+
+#: src/Dashboard/content.php:392
+msgid "Pricing"
+msgstr "Prijs"
+
+#: src/Dashboard/content.php:385
+msgid "Feature"
+msgstr "Functie"
+
+#: src/Dashboard/content.php:379 src/Dashboard/content.php:560
+msgid "Upgrade now"
+msgstr "Upgrade nu"
+
+#: src/Dashboard/content.php:376
+msgid "An all-in-one plugin that provides all free & pro Meta Box extensions for building powerful and dynamic WordPress websites!"
+msgstr "Een all-in-one plugin die alle gratis & Pro Meta Box extensies biedt voor het bouwen van krachtige en dynamische WordPress sites!"
+
+#. Translators: %s - Meta Box AIO.
+#: src/Dashboard/content.php:373
+msgid "Get access to %s"
+msgstr "Verkrijg toegang tot %s"
+
+#: src/Dashboard/content.php:361
+msgid "View all tutorials"
+msgstr "Bekijk alle handleidingen"
+
+#: src/Dashboard/content.php:354
+msgid "How to create listings and use Elementor to show and filter them."
+msgstr "Hoe je lijsten maakt en Elementor gebruikt om ze te tonen en te filteren."
+
+#: src/Dashboard/content.php:349 src/Dashboard/content.php:352
+msgid "Creating a listing site with Meta Box and Elementor"
+msgstr "Een site voor vermeldingen maken met Meta Box en Elementor"
+
+#: src/Dashboard/content.php:332
+msgid "How to export custom fields settings and data and import them into another site."
+msgstr "Hoe je aangepaste velden instellingen en gegevens kunt exporteren en importeren naar een andere site."
+
+#: src/Dashboard/content.php:327 src/Dashboard/content.php:330
+msgid "Export and import custom fields"
+msgstr "Aangepaste velden exporteren en importeren"
+
+#: src/Dashboard/content.php:310
+msgid "How to create a post type with custom fields and show them with Bricks."
+msgstr "Hoe maak je een extra berichttype met aangepaste velden en toon je ze met bricks."
+
+#: src/Dashboard/content.php:305 src/Dashboard/content.php:308
+msgid "Creating a recipe with Meta Box and Bricks"
+msgstr "Een recept maken met Meta Box en Bricks"
+
+#: src/Dashboard/content.php:288
+msgid "How to query, filter and show posts by taxonomies and by custom fields."
+msgstr "Hoe je berichten kunt opvragen, filteren en tonen op taxonomieën en aangepaste velden."
+
+#: src/Dashboard/content.php:283 src/Dashboard/content.php:286
+msgid "Filtering posts by custom fields and taxonomies"
+msgstr "Berichten filteren op aangepaste velden en taxonomieën"
+
+#: src/Dashboard/content.php:266
+msgid "How to create featured images for categories and show them on the frontend."
+msgstr "Hoe maak je uitgelichte afbeeldingen voor categorieën en toon je ze op de front-end."
+
+#: src/Dashboard/content.php:261 src/Dashboard/content.php:264
+msgid "Creating category thumbnails"
+msgstr "Categorie thumbnails maken"
+
+#: src/Dashboard/content.php:244
+msgid "Understanding custom fields and how to create them with Meta Box."
+msgstr "Inzicht in aangepaste velden en hoe je ze maakt met Meta Box."
+
+#: src/Dashboard/content.php:239 src/Dashboard/content.php:242
+msgid "Creating and configure custom fields"
+msgstr "Aangepaste velden maken en configureren"
+
+#: src/Dashboard/content.php:222
+msgid "If you want to change a field ID after entering data, here is the guide."
+msgstr "Als je een ID van een veld wilt wijzigen nadat je gegevens hebt ingevoerd, is hier de handleiding."
+
+#: src/Dashboard/content.php:217 src/Dashboard/content.php:220
+msgid "Changing the ID of a field"
+msgstr "Het ID van een veld wijzigen"
+
+#: src/Dashboard/content.php:200
+msgid "Step-by-step guide to create custom post types and custom taxonomies."
+msgstr "Stap-voor-stap handleiding voor het maken van extra berichttypen en aangepaste taxonomieën."
+
+#: src/Dashboard/content.php:195 src/Dashboard/content.php:198
+msgid "Creating post types and taxonomies"
+msgstr "Berichttypen en taxonomieën maken"
+
+#: src/Dashboard/content.php:192 src/Dashboard/content.php:214
+#: src/Dashboard/content.php:236 src/Dashboard/content.php:258
+#: src/Dashboard/content.php:280 src/Dashboard/content.php:302
+#: src/Dashboard/content.php:324 src/Dashboard/content.php:346
+msgid "Click to view the video version"
+msgstr "Klik om de video versie te bekijken"
+
+#: src/Dashboard/content.php:177
+msgid "Cool"
+msgstr "Cool"
+
+#: src/Dashboard/content.php:176 src/Dashboard/Dashboard.php:55
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: src/Dashboard/content.php:160
+msgid "For global settings of your website"
+msgstr "Voor globale instellingen van je site"
+
+#: src/Dashboard/content.php:159
+msgid "Create a settings page"
+msgstr "Een instellingenpagina maken"
+
+#: src/Dashboard/content.php:149
+msgid "To output fields on the frontend"
+msgstr "Velden uitvoeren op de front-end"
+
+#: src/Dashboard/content.php:148
+msgid "Create a view"
+msgstr "Een weergave maken"
+
+#: src/Dashboard/content.php:137
+msgid "To establish connections between posts"
+msgstr "Verbindingen leggen tussen berichten"
+
+#: src/Dashboard/content.php:136
+msgid "Create a relationship"
+msgstr "Creëer een relatie"
+
+#: src/Dashboard/content.php:128
+msgid "To add custom fields to your posts"
+msgstr "Aangepaste velden toe te voegen aan je berichten"
+
+#: src/Dashboard/content.php:127
+msgid "Create a field group"
+msgstr "Een veldgroep maken"
+
+#: src/Dashboard/content.php:118
+msgid "To group or categorize your posts"
+msgstr "Je berichten groeperen of categoriseren"
+
+#: src/Dashboard/content.php:117
+msgid "Create a taxonomy"
+msgstr "Een taxonomie maken"
+
+#: src/Dashboard/content.php:109
+msgid "For a new type of content on your website"
+msgstr "Voor een nieuw contenttype op je site"
+
+#: src/Dashboard/content.php:108
+msgid "Create a post type"
+msgstr "Een berichttype maken"
+
+#: src/Dashboard/content.php:91
+msgid "Get started"
+msgstr "Aan de slag"
+
+#. Translators: %s - Meta Box (plugin name).
+#: src/Dashboard/content.php:85
+msgid "%s is a powerful, lightweight WordPress plugin for creating custom post types, fields, relationships, and more. With a user-friendly interface and flexible options, it simplifies dynamic content creation without complex coding. Free and reliable, it's perfect for beginners and experts alike."
+msgstr "%s is een krachtige, lichtgewicht WordPress plugin voor het maken van extra berichttypes, velden, relaties en meer. Met een gebruiksvriendelijke interface en flexibele opties vereenvoudigt het het maken van dynamische inhoud zonder ingewikkelde codering. Gratis en betrouwbaar, perfect voor beginners en experts."
+
+#. Translators: %s - current user display name.
+#: src/Dashboard/content.php:73
+msgid "Hello %s,"
+msgstr "Hallo %s,"
+
+#: src/Dashboard/content.php:56 src/Dashboard/content.php:667
+msgid "What's new?"
+msgstr "Wat is er vernieuwd?"
+
+#: src/Dashboard/content.php:19
+msgid "No results found."
+msgstr "Niets gevonden."
+
+#: src/Dashboard/content.php:18
+msgid "Searching..."
+msgstr "Zoeken…"
+
+#: src/Dashboard/content.php:14
+msgid "Need some help? Search here..."
+msgstr "Hulp nodig? Zoekopdracht hier..."
+
+#: inc/fields/icon.php:226
+msgid "Select an icon"
+msgstr "Selecteer een pictogram"
+
+#: inc/fields/user.php:189
+msgid "Add New User"
+msgstr "Nieuwe gebruiker toevoegen"
+
+#: src/Dashboard/content.php:171
+msgid "Tutorials"
+msgstr "Handleidingen"
+
+#: src/Updater/Settings.php:79
+msgid "Your license key is <b style=\"color: #00a32a\">active</b>."
+msgstr "Je licentiesleutel is <b style=\"color: #00a32a\">actief</b>."
+
+#: src/Updater/Settings.php:78
+msgid "Your license key is <b style=\"color: #d63638\">expired</b>."
+msgstr "Je licentiesleutel is <b style=\"color: #d63638\">verlopen</b>."
+
+#: src/Updater/Settings.php:76 src/Updater/Settings.php:77
+msgid "Your license key is <b style=\"color: #d63638\">invalid</b>."
+msgstr "Je licentiesleutel is <b style=\"color: #d63638\">ongeldig</b>."
+
+#: inc/fields/post.php:140 inc/fields/taxonomy.php:134 inc/fields/user.php:135
+msgid "(No title)"
+msgstr "(Geen titel)"
+
+#: inc/meta-box.php:306
+msgid "Meta Box Title"
+msgstr "Meta box Titel"
+
+#: inc/fields/background.php:123
+msgid "-- Size --"
+msgstr "- Grootte -"
+
+#: inc/fields/background.php:109
+msgid "-- Attachment --"
+msgstr "-- Bijlage --"
+
+#: inc/fields/background.php:89
+msgid "-- Position --"
+msgstr "-- Positie --"
+
+#: inc/fields/background.php:73
+msgid "-- Repeat --"
+msgstr "- Herhaal -"
+
+#: src/Dashboard/content.php:477
+msgid "Organize custom fields into repeatable groups"
+msgstr "Organiseer velden in herhaalbare groepen"
+
+#: inc/core.php:13
+msgid "Docs"
+msgstr "Documenten"
+
+#: src/Updater/Notification.php:111
+msgid "Update License"
+msgstr "Licentie updaten"
+
+#: src/Updater/Notification.php:111
+msgid "Activate License"
+msgstr "Activeer licentie"
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:95
+msgid "Your license key is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a>."
+msgstr "Je licentiesleutel is <b>verlopen</b>. <a href=\"%3$s\" target=\"_blank\">verleng je licentie</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:91 src/Updater/Notification.php:93
+msgid "Your license key is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Je licentiesleutel is <b> ongeldig </b>. <a href=\"%1$s\"> update je licentiesleutel </a> of <a href=\"%2$s\" target=\"_blank\"> koop hier een nieuwe </a> ."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:89
+msgid "Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "<a href=\"%1$s\"> voer je licentiesleutel </a> in of <a href=\"%2$s\" target=\"_blank\"> koop hier een nieuwe </a> ."
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:65
+msgid "Your license key for Meta Box is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a> to get automatic updates and premium support."
+msgstr "Je licentiesleutel voor Meta Box is <b> verlopen </b>. <a href=\"%3$s\" target=\"_blank\"> verleng je licentie </a> om automatische updates en premium ondersteuning te krijgen."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:61 src/Updater/Notification.php:63
+msgid "Your license key for Meta Box is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one</a> to enable automatic updates."
+msgstr "Je licentiesleutel voor Meta Box is <b> ongeldig </b>. <a href=\"%1$s\"> update je licentiesleutel </a> of <a href=\"%2$s\" target=\"_blank\"> ontvang een nieuwe </a> om automatische updates in te schakelen."
+
+#: src/Updater/Checker.php:124
+msgid "UPDATE UNAVAILABLE! Please enter a valid license key to enable automatic updates."
+msgstr "UPDATE NIET BESCHIKBAAR! Voer een geldige licentiesleutel in om automatische updates in te schakelen."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:134
+msgid "Invalid license. Please <a href=\"%1$s\" target=\"_blank\">check again</a> or <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "Ongeldige licentie. <a href=\"%1$s\" target=\"_blank\"> nogmaals controleren </a> of <a href=\"%2$s\" target=\"_blank\"> ontvang een nieuwe licentie hier </a>."
+
+#. Translators: %s - URL to the My Account page.
+#: src/Updater/Settings.php:128
+msgid "License expired. Please renew on the <a href=\"%s\" target=\"_blank\">My Account</a> page on metabox.io website."
+msgstr "Licentie verlopen. Verleng alstublieft op de <a href=\"%s\" target=\"_blank\"> Mijn account </a> pagina op de metabox.io site."
+
+#: src/Updater/Settings.php:125
+msgid "Your license is activated."
+msgstr "Je licentie is geactiveerd."
+
+#: src/Updater/Settings.php:123
+msgid "Something wrong with the connection to metabox.io. Please try again later."
+msgstr "Er is iets mis met de verbinding met metabox.io. Probeer het later opnieuw."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:60
+msgid "To get the license key, visit the <a href=\"%1$s\" target=\"_blank\">My Account</a> page on metabox.io website. If you have not purchased any extension yet, please <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "Ga naar de pagina <a href=\"%1$s\" target=\"_blank\"> Mijn account </a> op de metabox.io site om de licentiesleutel te krijgen. Als je nog geen extensie hebt gekocht, <a href=\"%2$s\" target=\"_blank\"> krijg je hier een nieuwe licentie </a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:59
+msgid "You have not set your Meta Box license key yet, which means you are missing out on automatic updates and support! Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Je hebt je Meta Box licentiesleutel nog niet ingesteld, wat betekent dat je automatische updates en ondersteuning misloopt! <a href=\"%1$s\"> voer je licentiesleutel </a> in of <a href=\"%2$s\" target=\"_blank\"> koop hier een nieuwe </a> ."
+
+#: src/Updater/Settings.php:92
+msgid "Save Changes"
+msgstr "Wijzigingen opslaan"
+
+#: src/Updater/Settings.php:72
+msgid "License Key"
+msgstr "Licentiesleutel"
+
+#: src/Updater/Settings.php:55
+msgid "Please enter your license key to enable automatic updates for Meta Box extensions."
+msgstr "Voer je licentiesleutel in om automatische updates voor Meta Box-extensies in te schakelen."
+
+#: src/Updater/Settings.php:39 src/Updater/Settings.php:54
+msgid "Meta Box License"
+msgstr "Meta Box licentie"
+
+#: src/Updater/Settings.php:39
+msgid "License"
+msgstr "Licentie"
+
+#: inc/fields/input-list.php:83
+msgid "Toggle All"
+msgstr "Alles aanvinken"
+
+#: inc/fields/file.php:48
+msgid "Error: Invalid file"
+msgstr "Fout: ongeldig bestand"
+
+#: inc/fields/map.php:29 inc/fields/osm.php:16
+msgid "No results found"
+msgstr "Geen resultaten gevonden"
+
+#. Translators: %s - Meta Box (plugin name).
+#: src/Dashboard/content.php:79
+msgid "Welcome to %s,"
+msgstr "Welkom bij %s,"
+
+#: src/Dashboard/Dashboard.php:53 src/Dashboard/Dashboard.php:78
+#: src/Dashboard/Dashboard.php:79
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: src/Dashboard/content.php:580
+msgid "And much more!"
+msgstr "En veel meer!"
+
+#: src/Dashboard/content.php:457
+msgid "Create custom settings pages"
+msgstr "Maak aangepaste instellingenpagina's"
+
+#: src/Dashboard/content.php:592
+msgid "Go to the support forum"
+msgstr "Ga naar het ondersteuningsforum"
+
+#: src/Dashboard/content.php:522 src/Dashboard/content.php:588
+msgid "Premium support"
+msgstr "Premium ondersteuning"
+
+#: inc/fields/switch.php:85
+msgid "Off"
+msgstr "Uit"
+
+#: inc/fields/switch.php:84
+msgid "On"
+msgstr "Aan"
+
+#: inc/fields/background.php:127
+msgid "Contain"
+msgstr "Bevat"
+
+#: inc/fields/background.php:126
+msgid "Cover"
+msgstr "Omslagafbeelding"
+
+#: inc/fields/background.php:112
+msgid "Scroll"
+msgstr "Rol"
+
+#: inc/fields/background.php:111
+msgid "Fixed"
+msgstr "Vast"
+
+#: inc/fields/background.php:99
+msgid "Bottom Right"
+msgstr "Rechtsonder"
+
+#: inc/fields/background.php:98
+msgid "Bottom Center"
+msgstr "Middenonder"
+
+#: inc/fields/background.php:97
+msgid "Bottom Left"
+msgstr "Linksonder"
+
+#: inc/fields/background.php:96
+msgid "Center Right"
+msgstr "Midden rechts"
+
+#: inc/fields/background.php:95
+msgid "Center Center"
+msgstr "Center Center"
+
+#: inc/fields/background.php:94
+msgid "Center Left"
+msgstr "Centrum links"
+
+#: inc/fields/background.php:93
+msgid "Top Right"
+msgstr "Rechtsboven"
+
+#: inc/fields/background.php:92
+msgid "Top Center"
+msgstr "Midden boven"
+
+#: inc/fields/background.php:91
+msgid "Top Left"
+msgstr "Linksboven"
+
+#: inc/fields/background.php:79 inc/fields/background.php:113
+#: inc/fields/background.php:125
+msgid "Inherit"
+msgstr "Overnemen"
+
+#: inc/fields/background.php:78
+msgid "Repeat Vertically"
+msgstr "Verticaal herhalen"
+
+#: inc/fields/background.php:77
+msgid "Repeat Horizontally"
+msgstr "Horizontaal herhalen"
+
+#: inc/fields/background.php:76
+msgid "Repeat All"
+msgstr "Herhaal alles"
+
+#: inc/fields/background.php:75
+msgid "No Repeat"
+msgstr "Geen herhaling"
+
+#: inc/fields/background.php:61
+msgid "Background Image"
+msgstr "Achtergrond afbeelding"
+
+#: inc/fields/sidebar.php:10
+msgid "Select a sidebar"
+msgstr "Selecteer een zijbalk"
+
+#: src/Dashboard/content.php:99
+msgid "Getting Started"
+msgstr "Beginnen"
+
+#: src/Dashboard/content.php:534
+msgid "Learn more"
+msgstr "Lees verder"
+
+#. Author of the plugin
+#: meta-box.php
+msgid "MetaBox.io"
+msgstr "MetaBox.io"
+
+#. Description of the plugin
+#: meta-box.php
+msgid "Create custom meta boxes and custom fields in WordPress."
+msgstr "Maak aangepaste metaboxen en aangepaste velden in WordPress."
+
+#: inc/fields/media.php:30
+msgctxt "media"
+msgid "or"
+msgstr "of"
+
+#: inc/fields/select-advanced.php:44
+msgid "Select an item"
+msgstr "Selecteer een item"
+
+#: inc/fields/media.php:31
+msgctxt "media"
+msgid "Drop files here to upload"
+msgstr "Sleep bestanden hierheen om te uploaden"
+
+#: inc/fields/media.php:29
+msgctxt "media"
+msgid "Select Files"
+msgstr "Selecteer bestanden"
+
+#: inc/fields/taxonomy.php:84
+msgid "Select a term"
+msgstr "Selecteer een term"
+
+#: inc/fields/media.php:26
+msgctxt "media"
+msgid "No Title"
+msgstr "Geen titel"
+
+#: inc/fields/media.php:22
+msgctxt "media"
+msgid " files"
+msgstr " bestanden"
+
+#: inc/fields/media.php:21
+msgctxt "media"
+msgid " file"
+msgstr " bestand"
+
+#: inc/fields/media.php:25
+msgctxt "media"
+msgid "View"
+msgstr "Bekijken"
+
+#: inc/fields/media.php:24
+msgctxt "media"
+msgid "Edit"
+msgstr "Bewerken"
+
+#: inc/fields/media.php:23
+msgctxt "media"
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: inc/fields/media.php:20
+msgctxt "media"
+msgid "+ Add Media"
+msgstr "+ Media toevoegen"
+
+#: inc/field.php:309
+msgid "+ Add more"
+msgstr "+ Toevoegen"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: meta-box.php
+msgid "https://metabox.io"
+msgstr "https://metabox.io"
+
+#. Plugin Name of the plugin
+#: meta-box.php src/Dashboard/Dashboard.php:65 src/Dashboard/Dashboard.php:66
+#: src/Integrations/Block.php:12 src/Integrations/Bricks.php:10
+#: src/Integrations/Elementor.php:13 src/Integrations/Oxygen.php:14
+msgid "Meta Box"
+msgstr "Meta Box"
+
+#: inc/validation.php:66
+msgid "Please correct the errors highlighted below and try again."
+msgstr "Corrigeer de fouten hieronder gemarkeerd en probeer opnieuw."
+
+#: inc/fields/user.php:75
+msgid "Select a user"
+msgstr "Selecteer een gebruiker"
+
+#: inc/fields/select.php:80
+msgid "None"
+msgstr "Geen"
+
+#: inc/fields/select.php:80
+msgid "All"
+msgstr "Alles"
+
+#. Translators: %s is the post singular label.
+#. Translators: %s is the taxonomy singular label.
+#: inc/fields/post.php:75 inc/fields/taxonomy.php:88
+msgid "Select a %s"
+msgstr "Een %s selecteren"
+
+#: inc/fields/post.php:69
+msgid "Select a post"
+msgstr "Selecteer een item"
+
+#: inc/fields/oembed.php:18
+msgid "Embed HTML not available."
+msgstr "Embed HTML is niet beschikbaar."
+
+#: inc/fields/key-value.php:80
+msgid "Value"
+msgstr "Waarde"
+
+#: inc/fields/key-value.php:79
+msgid "Key"
+msgstr "Sleutel"
+
+#: inc/fields/file.php:86
+msgctxt "file upload"
+msgid "+ Add new file"
+msgstr "+ Nieuw bestand toevoegen"
+
+#: inc/fields/file.php:61
+msgid "Error: Cannot delete file"
+msgstr "Foutmelding: Kan bestand niet verwijderen"
+
+#. Translators: %d is the number of files in plural form.
+#: inc/fields/file.php:17
+msgid "You may only upload maximum %d files"
+msgstr "Je mag maximaal %d bestanden uploaden"
+
+#. Translators: %d is the number of files in singular form.
+#: inc/fields/file.php:15
+msgid "You may only upload maximum %d file"
+msgstr "Je mag maximaal %d bestand uploaden"
+
+#: inc/fields/file-input.php:48
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: inc/fields/file-input.php:46 inc/fields/select.php:80
+msgid "Select"
+msgstr "Selecteren"
+
+#: inc/fields/file-input.php:17
+msgid "Select File"
+msgstr "Bestand selecteren"
+
+#: inc/fields/file.php:167
+msgctxt "file upload"
+msgid "Edit"
+msgstr "Bewerken"
+
+#: inc/fields/file.php:166
+msgctxt "file upload"
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: inc/fields/checkbox.php:43
+msgid "No"
+msgstr "Nee"
+
+#: inc/fields/checkbox.php:43
+msgid "Yes"
+msgstr "Ja"
+
+#: inc/fields/button.php:28
+msgid "Click me"
+msgstr "Klik hier"
+
+#: inc/fields/autocomplete.php:14 inc/fields/autocomplete.php:79
+#: inc/fields/autocomplete.php:91
+msgid "Delete"
+msgstr "Verwijder"
+
+#: src/Dashboard/content.php:51
+msgid "Documentation"
+msgstr "Documentatie"

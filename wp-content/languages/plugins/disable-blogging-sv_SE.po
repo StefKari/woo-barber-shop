@@ -1,0 +1,316 @@
+# Translation of Plugins - Disable Blogging in WordPress - Stable (latest release) in Swedish
+# This file is distributed under the same license as the Plugins - Disable Blogging in WordPress - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-01-16 11:16:38+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-alpha.3\n"
+"Language: sv_SE\n"
+"Project-Id-Version: Plugins - Disable Blogging in WordPress - Stable (latest release)\n"
+
+#: admin/settings-page.php:311
+msgid "Reorder Pages menu to the top"
+msgstr "Flytta menyvalet ”Sidor” högst upp"
+
+#: admin/settings-page.php:310
+msgid "Pages Menu"
+msgstr "Menyn för ”Sidor”"
+
+#: admin/settings-page.php:305
+msgid "Removed"
+msgstr "Borttagen"
+
+#: admin/settings-page.php:300
+msgid "This is the spacing between some of the menu items."
+msgstr "Detta är avståndet mellan några av menyvalen."
+
+#: admin/settings-page.php:299
+msgid "Menu separators will be"
+msgstr "Menyavgränsare kommer att vara"
+
+#: admin/settings-page.php:294
+msgid "Hidden"
+msgstr "Dold"
+
+#: admin/settings-page.php:293 admin/settings-page.php:304
+msgid "Shown"
+msgstr "Visad"
+
+#: admin/settings-page.php:289
+msgid "<a target=\"_blank\" href=\"https://developer.wordpress.org/resource/dashicons\">Dashicons</a> will only be shown when the menu is collapsed."
+msgstr "<a target=\"_blank\" href=\"https://developer.wordpress.org/resource/dashicons\">Dashicons</a> visas bara när menyn är minimerad."
+
+#: admin/settings-page.php:288
+msgid "Have menu dashicons"
+msgstr "Har ”dashicons” i menyn"
+
+#: admin/settings-page.php:281
+msgid "This will be the new default page when visiting the admin panel."
+msgstr "Detta kommer att vara den nya standardsidan när du besöker adminpanelen."
+
+#: admin/settings-page.php:280
+msgid "Redirect Dashboard menu to"
+msgstr "Omdirigera adminpanel-menyn till"
+
+#: admin/settings-page.php:272
+msgid ""
+"some_label\n"
+"another_label\n"
+"yet_another_label"
+msgstr ""
+"en_etikett\n"
+"en_annan_etikett\n"
+"en_tredje_etikett"
+
+#: admin/settings-page.php:271
+msgid "Hide additional profile fields created by plugins/theme by their label ID.<br>Read the <a href=\"https://wordpress.org/plugins/disable-blogging/faq\" target=\"_blank\">FAQ</a> on how to find the label IDs."
+msgstr "Dölj extra profilfält som skapats av tillägg eller teman genom att ange deras etikett-ID:n.<br>Läs <a href=\"https://sv.wordpress.org/plugins/disable-blogging/faq\" target=\"_blank\">Vanliga frågor</a> för information om hur du hittar etikett-ID:n."
+
+#: admin/settings-page.php:270
+msgid "Additional Fields"
+msgstr "Ytterligare fält"
+
+#: admin/settings-page.php:265
+msgid "Avatar Display"
+msgstr "Visning av profilbild"
+
+#: admin/settings-page.php:264
+msgid "Biographical Info"
+msgstr "Biografisk information"
+
+#: admin/settings-page.php:258
+msgid "If Comments are enabled, additional avatar settings can be managed in "
+msgstr "Om Kommentarer är aktiverade kan ytterligare inställningar för profilbilden hanteras i "
+
+#: admin/settings-page.php:257
+msgid "About Yourself"
+msgstr "Om dig själv"
+
+#: admin/settings-page.php:248
+msgid "Contact Info"
+msgstr "Kontaktinformation"
+
+#: admin/settings-page.php:243
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#: admin/settings-page.php:242
+msgid "Nickname"
+msgstr "Smeknamn"
+
+#: admin/settings-page.php:241
+msgid "Last Name"
+msgstr "Efternamn"
+
+#: admin/settings-page.php:240
+msgid "First Name"
+msgstr "Förnamn"
+
+#: admin/settings-page.php:233
+msgid "Name"
+msgstr "Namn"
+
+#: admin/settings-page.php:228
+msgid "Toolbar"
+msgstr "Verktygsfält"
+
+#: admin/settings-page.php:227
+msgid "Keyboard Shortcuts"
+msgstr "Tangentbordsgenvägar"
+
+#: admin/settings-page.php:226
+msgid "Admin Color Scheme"
+msgstr "Färgschema för adminpanel"
+
+#: admin/settings-page.php:225
+msgid "Visual Editor"
+msgstr "Visuell redigerare"
+
+#: admin/settings-page.php:216
+msgid "Personal Options"
+msgstr "Personliga alternativ"
+
+#: admin/settings-page.php:208
+msgid "<strong>None</strong>: Remove the WordPress credits"
+msgstr "<strong>Inget</strong>: Ta bort WordPress-erkännandena"
+
+#: admin/settings-page.php:207
+msgid "<strong>Site Info</strong>: <code>Copyright &copy; "
+msgstr "<strong>Webbplatsinformation</strong>: <code>Upphovsrätt &copy; "
+
+#: admin/settings-page.php:206
+msgid "<strong>Default</strong>: <code>Thank you for creating with <a href=\"https://wordpress.org/\" target=\"_blank\">WordPress</a>.</code>"
+msgstr "<strong>Standard</strong>: <code>Tack för att du skapar med <a href=\"https://sv.wordpress.org/\" target=\"_blank\">WordPress</a>.</code>"
+
+#: admin/settings-page.php:202
+msgid "Change admin footer to"
+msgstr "Ändra sidfoten i adminpanelen till"
+
+#: admin/settings-page.php:196
+msgid "Remove code in header used to add support for emojis<p class=\"description\"><a href=\"https://codex.wordpress.org/Emoji\" target=\"_blank\">Emojis</a> will still work in browsers which have built in support for them.</p>"
+msgstr "Ta bort kod i sidhuvudet som används för att lägga till stöd för emojis<p class=\"description\"><a href=\"https://codex.wordpress.org/Emoji\" target=\"_blank\">Emojis</a> fungerar fortfarande i webbläsare som har inbyggt stöd för dem.</p>"
+
+#: admin/settings-page.php:195
+msgid "Emojis Support"
+msgstr "Stöd för emojis"
+
+#: admin/settings-page.php:190
+msgid "<strong>Removed</strong>: %s"
+msgstr "<strong>Borttaget</strong>: %s"
+
+#: admin/settings-page.php:189
+msgid "<strong>Shown</strong>: %s"
+msgstr "<strong>Visas</strong>: %s"
+
+#: admin/settings-page.php:185
+msgid "It will improve cache performance and overall <a href=\"https://developers.google.com/speed/pagespeed\" target=\"_blank\">page speed</a> score."
+msgstr "Det kommer att förbättra cacheprestanda och övergripande poäng för <a href=\"https://developers.google.com/speed/pagespeed\" target=\"_blank\">sidhastighet</a> ."
+
+#: admin/settings-page.php:184
+msgid "Have query string version"
+msgstr "Har version för query-strängar"
+
+#: admin/settings-page.php:178
+msgid "Remove the admin bar greeting next to the username"
+msgstr "Ta bort hälsning bredvid användarnamnet i adminmenyn"
+
+#: admin/settings-page.php:177
+msgid "Admin Greeting"
+msgstr "Hälsning i adminpanelen"
+
+#: admin/settings-page.php:171
+msgid "Remove <span class=\"description\">Help</span> tabs from the admin header"
+msgstr "Ta bort <span class=\"description\">Hjälp</span>-flikar från sidhuvudet i adminpanelen"
+
+#: admin/settings-page.php:170
+msgid "Help Tabs"
+msgstr "Hjälp-flikar"
+
+#: admin/settings-page.php:165
+msgid "Remove <span class=\"description\">Screen Options</span> tab from the admin header"
+msgstr "Ta bort fliken <span class=\"description\">Skärmalternativ</span> från sidhuvudet i adminpanelen"
+
+#: admin/settings-page.php:164
+msgid "Screen Options"
+msgstr "Skärmalternativ"
+
+#: admin/settings-page.php:151
+msgid "Includes <a href=\"https://codex.wordpress.org/Glossary#Pingback\" target=\"_blank\">pingbacks</a>, <a href=\"https://codex.wordpress.org/Glossary#Trackback\" target=\"_blank\">trackbacks</a>, & <a href=\"https://codex.wordpress.org/XML-RPC_Support\" target=\"_blank\">XML-RPC</a>."
+msgstr "Inkluderar <a href=\"https://codex.wordpress.org/Glossary#Pingback\" target=\"_blank\">pingbacks</a>, <a href=\"https://codex.wordpress.org/Glossary#Trackback\" target=\"_blank\">trackbacks</a> och <a href=\"https://codex.wordpress.org/XML-RPC_Support\" target=\"_blank\">XML-RPC</a>."
+
+#: admin/settings-page.php:150
+msgid "Feeds & Related"
+msgstr "Webbflöden och relaterat"
+
+#: admin/settings-page.php:140
+msgid "Prevent <a title=\"A common technique hackers use to reveal the usernames.\">user enumeration</a>, redirects author links to homepage."
+msgstr "Förhindra <a title=\"En vanligt förekommande teknik hackare använder för att hitta användarnamn.\">uppräkning av användarnamn</a>. Detta omdirigerar författarlänkar till startsidan."
+
+#: admin/settings-page.php:139
+msgid "Author Page"
+msgstr "Författarsida"
+
+#: admin/settings-page.php:129
+msgid "Previous comments will be hidden from view."
+msgstr "Tidigare kommentarer kommer att döljas från vyn."
+
+#: admin/settings-page.php:128
+msgid "Comments"
+msgstr "Kommentarer"
+
+#: admin/settings-page.php:123 admin/settings-page.php:134
+#: admin/settings-page.php:145 admin/settings-page.php:156
+msgid "Disable"
+msgstr "Inaktivera"
+
+#: admin/settings-page.php:122 admin/settings-page.php:133
+#: admin/settings-page.php:144 admin/settings-page.php:155
+msgid "Enable"
+msgstr "Aktivera"
+
+#: admin/settings-page.php:118
+msgid "Links to previous posts will still be accessible."
+msgstr "Länkar till tidigare inlägg kommer fortfarande vara åtkomliga."
+
+#: admin/settings-page.php:117
+msgid "Posting"
+msgstr "Publicering"
+
+#: admin/settings-page.php:100
+msgid "- None -"
+msgstr "- Ingen -"
+
+#: admin/settings-page.php:92
+msgid "Website"
+msgstr "Webbplats"
+
+#: admin/settings-page.php:84
+msgid "Menu"
+msgstr "Meny"
+
+#: admin/settings-page.php:80
+msgid "Profile"
+msgstr "Profil"
+
+#: admin/settings-page.php:76
+msgid "Extra"
+msgstr "Extra"
+
+#: admin/settings-page.php:72
+msgid "General"
+msgstr "Allmänt"
+
+#: admin/settings-page.php:37
+msgid "Blogging"
+msgstr "Blogga"
+
+#: admin/settings-page.php:36 admin/settings-page.php:324
+msgid "Blogging Settings"
+msgstr "Inställningar för att blogga"
+
+#: admin/settings-api.php:369
+msgid "Choose File"
+msgstr "Välj fil"
+
+#: admin/plugin-meta.php:45
+msgid "Settings"
+msgstr "﻿Inställningar"
+
+#: admin/plugin-meta.php:32
+msgid "GitHub"
+msgstr "GitHub"
+
+#: admin/plugin-meta.php:31
+msgid "Review"
+msgstr "Recensera"
+
+#: admin/plugin-meta.php:30
+msgid "Support"
+msgstr "Support"
+
+#: includes/functions-extra.php:126
+msgid "Copyright &copy; "
+msgstr "Upphovsrätt &copy; "
+
+#. Author URI of the plugin
+msgid "https://factmaven.com/"
+msgstr "https://factmaven.com/"
+
+#. Author of the plugin
+msgid "Fact Maven"
+msgstr "Fact Maven"
+
+#. Description of the plugin
+msgid "Turn WordPress into a non-blogging, CMS platform by disabling posts, comments, feeds, and other related blogging features."
+msgstr "Förvandla WordPress till en bloggfri CMS-plattform genom att inaktivera inlägg, kommentarer, flöden och andra relaterade bloggfunktioner."
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/disable-blogging/"
+msgstr "https://sv.wordpress.org/plugins/disable-blogging/"
+
+#. Plugin Name of the plugin
+msgid "Disable Blogging"
+msgstr "Disable Blogging"

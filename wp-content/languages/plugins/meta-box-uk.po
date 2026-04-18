@@ -1,0 +1,578 @@
+# Translation of Plugins - Meta Box - Stable (latest release) in Ukrainian
+# This file is distributed under the same license as the Plugins - Meta Box - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-03-14 09:20:54+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: uk_UA\n"
+"Project-Id-Version: Plugins - Meta Box - Stable (latest release)\n"
+
+#: src/Dashboard/Dashboard.php:185
+msgid "Activating..."
+msgstr "Активація..."
+
+#: src/Dashboard/Dashboard.php:184
+msgid "Activate"
+msgstr "Активувати"
+
+#: src/Dashboard/Dashboard.php:177 src/Dashboard/Dashboard.php:186
+#: src/Dashboard/Dashboard.php:192
+msgid "Active"
+msgstr "Активний"
+
+#: src/Dashboard/Dashboard.php:176
+msgid "Installing..."
+msgstr "Встановлення…"
+
+#: src/Dashboard/Dashboard.php:175
+msgid "Install"
+msgstr "Встановити"
+
+#: src/Dashboard/content.php:652
+msgid "Submit a review"
+msgstr "Відправити відгук"
+
+#: src/Dashboard/content.php:648
+msgid "Leave us a review"
+msgstr "Залишите нам відгук"
+
+#: src/Dashboard/content.php:641
+msgid "Join our Facebook Group"
+msgstr "Приєднуйтесь до нашої групи на Facebook"
+
+#: src/Dashboard/content.php:637
+msgid "Join the community"
+msgstr "Приєднуйтесь до спільноти"
+
+#: src/Dashboard/content.php:600
+msgid "Recommended plugins"
+msgstr "Рекомендовані плагіни"
+
+#: src/Dashboard/content.php:582
+msgid "Upgrade Now"
+msgstr "Оновити зараз"
+
+#: src/Dashboard/content.php:579
+msgid "Priority support"
+msgstr "Пріоритетна підтримка"
+
+#. Translators: %s - Meta Box AIO.
+#: src/Dashboard/content.php:555
+msgid "Do more with %s"
+msgstr "Робіть більше за допомогою %s"
+
+#: src/Dashboard/content.php:467
+msgid "Create user profile"
+msgstr "Створити профіль користувача"
+
+#: src/Dashboard/content.php:394
+msgid "Paid"
+msgstr "Оплачений"
+
+#: src/Dashboard/content.php:393
+msgid "Free"
+msgstr "Безкоштовно"
+
+#: src/Dashboard/content.php:392
+msgid "Pricing"
+msgstr "Ціноутворення"
+
+#: src/Dashboard/content.php:385
+msgid "Feature"
+msgstr "Особливість"
+
+#: src/Dashboard/content.php:379 src/Dashboard/content.php:560
+msgid "Upgrade now"
+msgstr "Оновити зараз"
+
+#: src/Dashboard/content.php:176 src/Dashboard/Dashboard.php:55
+msgid "Upgrade"
+msgstr "Оновлення"
+
+#: src/Dashboard/content.php:148
+msgid "Create a view"
+msgstr "Створити перегляд"
+
+#: src/Dashboard/content.php:91
+msgid "Get started"
+msgstr "Початок роботи"
+
+#. Translators: %s - current user display name.
+#: src/Dashboard/content.php:73
+msgid "Hello %s,"
+msgstr "Привіт %s,"
+
+#: src/Dashboard/content.php:19
+msgid "No results found."
+msgstr "Нічого не знайдено."
+
+#: src/Dashboard/content.php:18
+msgid "Searching..."
+msgstr "Пошук..."
+
+#: inc/fields/icon.php:226
+msgid "Select an icon"
+msgstr "Вибрати іконку"
+
+#: inc/fields/user.php:189
+msgid "Add New User"
+msgstr "Додати нового користувача"
+
+#: src/Dashboard/content.php:171
+msgid "Tutorials"
+msgstr "Підручники"
+
+#: src/Updater/Settings.php:79
+msgid "Your license key is <b style=\"color: #00a32a\">active</b>."
+msgstr "Ваш ліцензійний ключ <b style=\"color: #00a32a\">діючий</b>."
+
+#: src/Updater/Settings.php:78
+msgid "Your license key is <b style=\"color: #d63638\">expired</b>."
+msgstr "Термін дії вашого ліцензійного ключа <b style=\"color: #d63638\">закінчився</b>."
+
+#: src/Updater/Settings.php:76 src/Updater/Settings.php:77
+msgid "Your license key is <b style=\"color: #d63638\">invalid</b>."
+msgstr "Ваш ліцензійний ключ <b style=\"color: #d63638\">невірний</b>."
+
+#: inc/fields/post.php:140 inc/fields/taxonomy.php:134 inc/fields/user.php:135
+msgid "(No title)"
+msgstr "(без назви)"
+
+#: inc/meta-box.php:306
+msgid "Meta Box Title"
+msgstr "Заголовок Meta Box"
+
+#: inc/fields/background.php:123
+msgid "-- Size --"
+msgstr "-- Розмір --"
+
+#: inc/fields/background.php:109
+msgid "-- Attachment --"
+msgstr "-- Додаток --"
+
+#: inc/fields/background.php:89
+msgid "-- Position --"
+msgstr "-- Позиція --"
+
+#: inc/fields/background.php:73
+msgid "-- Repeat --"
+msgstr "-- Повтори --"
+
+#: inc/core.php:13
+msgid "Docs"
+msgstr "Документація"
+
+#: src/Updater/Notification.php:111
+msgid "Update License"
+msgstr "Оновлення ліцензії"
+
+#: src/Updater/Notification.php:111
+msgid "Activate License"
+msgstr "Активувати ліцензію"
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:95
+msgid "Your license key is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a>."
+msgstr "Термін дії вашого ліцензійного ключа <b>минув</b>. Будь ласка, <a href=\"%3$s\" target=\"_blank\">поновіть ліцензію</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:91 src/Updater/Notification.php:93
+msgid "Your license key is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Ваш ліцензійний ключ <b>недійсний</b>. Будь ласка, <a href=\"%1$s\">оновіть ліцензійний ключ</a> або <a href=\"%2$s\" target=\"_blank\">отримайте новий</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:89
+msgid "Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Будь ласка, <a href=\"%1$s\">введіть свій ліцензійний ключ</a> або <a href=\"%2$s\" target=\"_blank\">отримайте новий</a>."
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:65
+msgid "Your license key for Meta Box is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a> to get automatic updates and premium support."
+msgstr "Термін дії вашого ліцензійного ключа для Meta Box <b>закінчився</b>. Будь ласка, <a href=\"%3$s\" target=\"_blank\">поновіть ліцензію</a>, щоб отримати автоматичні оновлення та преміум-підтримку."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:61 src/Updater/Notification.php:63
+msgid "Your license key for Meta Box is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one</a> to enable automatic updates."
+msgstr "Ваш ліцензійний ключ для Meta Box <b>недійсний</b>. Щоб увімкнути автоматичне оновлення, <a href=\"%1$s\">оновіть свій ліцензійний ключ</a> або <a href=\"%2$s\" target=\"_blank\">отримайте новий</a>."
+
+#: src/Updater/Checker.php:124
+msgid "UPDATE UNAVAILABLE! Please enter a valid license key to enable automatic updates."
+msgstr "ОНОВЛЕННЯ НЕДОСТУПНЕ! Будь ласка, введіть дійсний ліцензійний ключ, щоб увімкнути автоматичні оновлення."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:134
+msgid "Invalid license. Please <a href=\"%1$s\" target=\"_blank\">check again</a> or <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "Недійсна ліцензія. Будь ласка, <a href=\"%1$s\" target=\"_blank\">перевірте ще раз</a> або <a href=\"%2$s\" target=\"_blank\">отримайте нову ліцензію</a>."
+
+#. Translators: %s - URL to the My Account page.
+#: src/Updater/Settings.php:128
+msgid "License expired. Please renew on the <a href=\"%s\" target=\"_blank\">My Account</a> page on metabox.io website."
+msgstr "Термін дії ліцензії закінчився. Будь ласка, поновіть підписку на сторінці <a href=\"%s\" target=\"_blank\">Мій обліковий запис</a> сайту metabox.io."
+
+#: src/Updater/Settings.php:125
+msgid "Your license is activated."
+msgstr "Ваша ліцензія активована."
+
+#: src/Updater/Settings.php:123
+msgid "Something wrong with the connection to metabox.io. Please try again later."
+msgstr "Щось не так із підключенням до metabox.io. Будь ласка, спробуйте пізніше."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:60
+msgid "To get the license key, visit the <a href=\"%1$s\" target=\"_blank\">My Account</a> page on metabox.io website. If you have not purchased any extension yet, please <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "Щоб отримати ліцензійний ключ, відвідайте сторінку <a href=\"%1$s\" target=\"_blank\">Мій обліковий запис</a> на сайті metabox.io. Якщо ви ще не придбали жодного розширення, будь ласка, <a href=\"%2$s\" target=\"_blank\">отримайте нову ліцензію</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:59
+msgid "You have not set your Meta Box license key yet, which means you are missing out on automatic updates and support! Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Ви ще не встановили ліцензійний ключ Meta Box, а це означає, що ви втрачаєте автоматичні оновлення та підтримку! Будь ласка, <a href=\"%1$s\">введіть свій ліцензійний ключ</a> або <a href=\"%2$s\" target=\"_blank\">отримайте новий</a>."
+
+#: src/Updater/Settings.php:92
+msgid "Save Changes"
+msgstr "Зберегти зміни"
+
+#: src/Updater/Settings.php:72
+msgid "License Key"
+msgstr "Ліцензійний ключ"
+
+#: src/Updater/Settings.php:55
+msgid "Please enter your license key to enable automatic updates for Meta Box extensions."
+msgstr "Будь ласка, введіть ліцензійний ключ, щоб увімкнути автоматичне оновлення для розширень Meta Box."
+
+#: src/Updater/Settings.php:39 src/Updater/Settings.php:54
+msgid "Meta Box License"
+msgstr "Ліцензія Meta Box"
+
+#: src/Updater/Settings.php:39
+msgid "License"
+msgstr "Ліцензія"
+
+#: inc/fields/input-list.php:83
+msgid "Toggle All"
+msgstr "Перемкнути всі"
+
+#: inc/fields/file.php:48
+msgid "Error: Invalid file"
+msgstr "Помилка: недійсний файл"
+
+#: inc/fields/map.php:29 inc/fields/osm.php:16
+msgid "No results found"
+msgstr "Результатів не знайдено"
+
+#. Translators: %s - Meta Box (plugin name).
+#: src/Dashboard/content.php:79
+msgid "Welcome to %s,"
+msgstr "Вітаємо у %s"
+
+#: src/Dashboard/Dashboard.php:53 src/Dashboard/Dashboard.php:78
+#: src/Dashboard/Dashboard.php:79
+msgid "Dashboard"
+msgstr "Майстерня"
+
+#: src/Dashboard/content.php:580
+msgid "And much more!"
+msgstr "Та навіть більше!"
+
+#: src/Dashboard/content.php:457
+msgid "Create custom settings pages"
+msgstr "Створення власних сторінок налаштувань."
+
+#: src/Dashboard/content.php:592
+msgid "Go to the support forum"
+msgstr "Перейдіть на форум підтримки"
+
+#: src/Dashboard/content.php:522 src/Dashboard/content.php:588
+msgid "Premium support"
+msgstr "Преміальна підтримка"
+
+#: inc/fields/switch.php:85
+msgid "Off"
+msgstr "Вимк."
+
+#: inc/fields/switch.php:84
+msgid "On"
+msgstr "Увімк."
+
+#: inc/fields/background.php:127
+msgid "Contain"
+msgstr "Містити"
+
+#: inc/fields/background.php:126
+msgid "Cover"
+msgstr "Обкладинка"
+
+#: inc/fields/background.php:112
+msgid "Scroll"
+msgstr "Прокручувати"
+
+#: inc/fields/background.php:111
+msgid "Fixed"
+msgstr "Фіксоване"
+
+#: inc/fields/background.php:99
+msgid "Bottom Right"
+msgstr "Внизу праворуч"
+
+#: inc/fields/background.php:98
+msgid "Bottom Center"
+msgstr "Знизу по центру"
+
+#: inc/fields/background.php:97
+msgid "Bottom Left"
+msgstr "Внизу ліворуч"
+
+#: inc/fields/background.php:96
+msgid "Center Right"
+msgstr "По центру праворуч"
+
+#: inc/fields/background.php:95
+msgid "Center Center"
+msgstr "По центру в центрі"
+
+#: inc/fields/background.php:94
+msgid "Center Left"
+msgstr "По центру ліворуч"
+
+#: inc/fields/background.php:93
+msgid "Top Right"
+msgstr "Вгорі праворуч"
+
+#: inc/fields/background.php:92
+msgid "Top Center"
+msgstr "Зверху по центру"
+
+#: inc/fields/background.php:91
+msgid "Top Left"
+msgstr "Вгорі ліворуч"
+
+#: inc/fields/background.php:79 inc/fields/background.php:113
+#: inc/fields/background.php:125
+msgid "Inherit"
+msgstr "Успадковано"
+
+#: inc/fields/background.php:78
+msgid "Repeat Vertically"
+msgstr "Повторювати вертикально"
+
+#: inc/fields/background.php:77
+msgid "Repeat Horizontally"
+msgstr "Повторювати горизонтально"
+
+#: inc/fields/background.php:76
+msgid "Repeat All"
+msgstr "Повторювати все"
+
+#: inc/fields/background.php:75
+msgid "No Repeat"
+msgstr "Не повторювати"
+
+#: inc/fields/background.php:61
+msgid "Background Image"
+msgstr "Фонове зображення"
+
+#: inc/fields/sidebar.php:10
+msgid "Select a sidebar"
+msgstr "Оберіть бічну колонку"
+
+#: src/Dashboard/content.php:99
+msgid "Getting Started"
+msgstr "Почати"
+
+#: src/Dashboard/content.php:534
+msgid "Learn more"
+msgstr "Дізнатись більше"
+
+#. Author of the plugin
+#: meta-box.php
+msgid "MetaBox.io"
+msgstr "MetaBox.io"
+
+#. Description of the plugin
+#: meta-box.php
+msgid "Create custom meta boxes and custom fields in WordPress."
+msgstr "Створення власних метаблоків та власних полів у WordPress."
+
+#: inc/fields/media.php:30
+msgctxt "media"
+msgid "or"
+msgstr "або"
+
+#: inc/fields/select-advanced.php:44
+msgid "Select an item"
+msgstr "Оберіть елемент"
+
+#: inc/fields/media.php:31
+msgctxt "media"
+msgid "Drop files here to upload"
+msgstr "Перетягніть файл сюди, для завантаження"
+
+#: inc/fields/media.php:29
+msgctxt "media"
+msgid "Select Files"
+msgstr "Обрати файли"
+
+#: inc/fields/taxonomy.php:84
+msgid "Select a term"
+msgstr "Оберіть таксономію"
+
+#: inc/fields/media.php:26
+msgctxt "media"
+msgid "No Title"
+msgstr "Без заголовка"
+
+#: inc/fields/media.php:22
+msgctxt "media"
+msgid " files"
+msgstr " файли"
+
+#: inc/fields/media.php:21
+msgctxt "media"
+msgid " file"
+msgstr " файл"
+
+#: inc/fields/media.php:25
+msgctxt "media"
+msgid "View"
+msgstr "Переглянути"
+
+#: inc/fields/media.php:24
+msgctxt "media"
+msgid "Edit"
+msgstr "Редагувати"
+
+#: inc/fields/media.php:23
+msgctxt "media"
+msgid "Remove"
+msgstr "Видалити"
+
+#: inc/fields/media.php:20
+msgctxt "media"
+msgid "+ Add Media"
+msgstr "+ Додати медіа"
+
+#: inc/field.php:309
+msgid "+ Add more"
+msgstr "+ Додати більше"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: meta-box.php
+msgid "https://metabox.io"
+msgstr "https://metabox.io"
+
+#. Plugin Name of the plugin
+#: meta-box.php src/Dashboard/Dashboard.php:65 src/Dashboard/Dashboard.php:66
+#: src/Integrations/Block.php:12 src/Integrations/Bricks.php:10
+#: src/Integrations/Elementor.php:13 src/Integrations/Oxygen.php:14
+msgid "Meta Box"
+msgstr "Meta Box"
+
+#: inc/validation.php:66
+msgid "Please correct the errors highlighted below and try again."
+msgstr "Бідь ласка, виправте підсвічені нижче помилки та спробуйте ще раз."
+
+#: inc/fields/user.php:75
+msgid "Select a user"
+msgstr "Оберіть користувача"
+
+#: inc/fields/select.php:80
+msgid "None"
+msgstr "Немає"
+
+#: inc/fields/select.php:80
+msgid "All"
+msgstr "Всі"
+
+#. Translators: %s is the post singular label.
+#. Translators: %s is the taxonomy singular label.
+#: inc/fields/post.php:75 inc/fields/taxonomy.php:88
+msgid "Select a %s"
+msgstr "Оберіть %s"
+
+#: inc/fields/post.php:69
+msgid "Select a post"
+msgstr "Оберіть запис"
+
+#: inc/fields/oembed.php:18
+msgid "Embed HTML not available."
+msgstr "HTML вставка недоступна."
+
+#: inc/fields/key-value.php:80
+msgid "Value"
+msgstr "Значення"
+
+#: inc/fields/key-value.php:79
+msgid "Key"
+msgstr "Ключ"
+
+#: inc/fields/file.php:86
+msgctxt "file upload"
+msgid "+ Add new file"
+msgstr "+ Додайте новий файл"
+
+#: inc/fields/file.php:61
+msgid "Error: Cannot delete file"
+msgstr "Помилка: Неможливо видалити файл"
+
+#. Translators: %d is the number of files in plural form.
+#: inc/fields/file.php:17
+msgid "You may only upload maximum %d files"
+msgstr "Ви можете завантажувати максимум %d файлів"
+
+#. Translators: %d is the number of files in singular form.
+#: inc/fields/file.php:15
+msgid "You may only upload maximum %d file"
+msgstr "Ви можете завантажувати максимум %d файл"
+
+#: inc/fields/file-input.php:48
+msgid "Remove"
+msgstr "Видалити"
+
+#: inc/fields/file-input.php:46 inc/fields/select.php:80
+msgid "Select"
+msgstr "Вибір"
+
+#: inc/fields/file-input.php:17
+msgid "Select File"
+msgstr "Вибрати файл"
+
+#: inc/fields/file.php:167
+msgctxt "file upload"
+msgid "Edit"
+msgstr "Редагувати"
+
+#: inc/fields/file.php:166
+msgctxt "file upload"
+msgid "Delete"
+msgstr "Видалити"
+
+#: inc/fields/checkbox.php:43
+msgid "No"
+msgstr "Ні"
+
+#: inc/fields/checkbox.php:43
+msgid "Yes"
+msgstr "Так"
+
+#: inc/fields/button.php:28
+msgid "Click me"
+msgstr "Натисни мене"
+
+#: inc/fields/autocomplete.php:14 inc/fields/autocomplete.php:79
+#: inc/fields/autocomplete.php:91
+msgid "Delete"
+msgstr "Видалити"
+
+#: src/Dashboard/content.php:51
+msgid "Documentation"
+msgstr "Документація"

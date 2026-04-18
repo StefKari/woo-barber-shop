@@ -1,0 +1,324 @@
+/*
+Theme Name: Urus
+Theme URI: https://urus.familab.net
+Author: Familab Team
+Author URI: https://familab.net/
+Description: Urus – Urus - Multipurpose Responsive WooCommerce Theme
+Version: 1.4.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: blog, two-columns, left-sidebar, accessibility-ready, custom-background, custom-colors, custom-header, custom-logo, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, threaded-comments, translation-ready
+Text Domain: urus
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+*/
+
+
+.tax-pwb-brand #shop-page-wapper {
+    position: relative;
+    top: 123px;
+}
+
+
+#ponudanedelje{
+	    border: 1px solid black;
+	    color: black;
+	  
+}
+
+.blog-heading.banner {
+    padding: 150px 0 0px!important;
+}
+
+/*.flashs{
+	display: none;
+}
+*/
+
+/*.novo{
+    background: #d2ac67;
+    width: 46px;
+    height: 46px;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    line-height: 43px;
+    color: white;
+    border-radius: 30px;
+    z-index: 10;
+}
+
+
+.akcija{
+       background: #ff7a1b;
+    width: 46px;
+    height: 46px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    line-height: 43px;
+    color: white;
+    border-radius: 30px;
+    z-index: 10;
+}
+*/
+
+
+.product-item .flashs > span {
+/*    height: 50px;
+    width: 50px;
+    display: inline-block;
+    text-align: center;
+    background-color: #fc1111;
+    line-height: 50px;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 50%;
+    letter-spacing: 2px;*/
+    font-size: 8px;
+}
+
+#search_drawer_content .search-result{
+    display: none!important;
+}
+
+
+.woocommerce-product-gallery__image{
+text-align: center!important;
+}
+
+
+ul.products .woocommerce-product-gallery__image img {
+    padding: 15px;
+    max-height: 300px!important;
+}
+
+.shop-page .woocommerce-product-gallery__image img{
+	   max-height: 300px!important;
+}
+
+.product-brands{
+    display: none;
+}
+
+
+
+
+.images .woocommerce-product-gallery__image img {
+	max-height: 300px!important;
+}
+
+.woocommerce-product-gallery--columns-4 .woocommerce-product-gallery__image img {
+    padding: 15px;
+    max-height: 450px!important;
+    width: auto!important;
+}
+
+
+#ponudanedelje .wpb_wrapper{
+	  padding-left: 45%;
+}
+
+#ponudanedelje .vc_column-inner {
+    padding-bottom: 8%!important;
+        padding-top: 13.7%!important;
+}
+
+#shurda a{
+	background: none;
+}
+
+
+#shurda{
+	text-align: center;
+}
+
+#shurda .vc_column-inner{
+	padding: 30% 0px!important;
+}
+
+.urus-nav.main-menu > .menu-item {
+    padding: 0 18px;
+}
+
+ul.footermobile{
+	text-align: center;
+	    padding-top: 20px;
+}
+
+.f{
+	display: flex;
+}
+
+.socialf{
+	padding-top: 20px;
+}
+
+.socialf li{
+display: inline-block;
+padding: 0px 15px;
+}
+
+.socialf li a i{
+	font-size: 26px;
+}
+
+.socialf{
+	text-align: right;
+}
+
+
+.f .wpb_column{
+width: 33.33%;
+}
+
+footer.footer{
+    background: #f6f6f6;
+    float: left;
+    width: 100%;
+    padding: 20px;
+}
+
+
+ul.footermobile li{
+	display: inline-block;
+	padding: 0px 12px;
+}
+
+ul.footermobile li a{
+	font-size: 18px;
+	color:black;
+}
+
+.backtotop {
+    bottom: 24px;
+}
+
+.summary .product-brands label{
+	display: block!important;
+	float: left;margin-right: 5px;
+}
+
+.product-brands li {
+    margin-right: 5px!important;
+}
+
+
+.urus-box-products .box-head .title::after {
+    background-color: #d2ac67;
+}
+
+
+.woocommerce-product-gallery__image img{
+padding: 15px
+}
+
+.urus-shop-column{
+    display: none;
+}
+
+
+.woocommerce-tabs-mobile .tab__inner{
+    font-weight: 100;
+}
+
+
+.menu-search-link-click > .form-search{
+    background: none;
+}
+
+
+#urus-quickview .images .woocommerce-product-gallery__image img {
+    width: auto;
+}
+
+.urus-products-carousel .images .woocommerce-product-gallery__image img{
+ width: auto;
+}
+
+
+.shop-control > .block-filter-drawer {
+    position: absolute;
+}
+
+
+.blog-heading.banner{
+    background-image: none!important;
+        padding: 245px 0 00px;
+        background-color: white!important;
+}
+
+
+.woocommerce-ordering{
+justify-content: flex-end!important;
+}
+
+
+
+
+
+
+
+
+
+
+@media(max-width: 1441px) {
+
+    .urus-nav.main-menu > .menu-item>a {
+        font-size: 12px !important;
+    }
+
+
+#ponudanedelje .vc_column-inner {
+    padding-bottom: 8%!important;
+    padding-top: 8.5%!important;
+}
+
+}
+
+
+@media(max-width: 1025px) {
+
+    .tax-pwb-brand #shop-page-wapper {
+        top: 0;
+    }
+}
+
+
+@media (min-width: 991px){
+.backtotop.show {
+    right: 10px;
+}
+
+
+
+}
+
+@media (max-width: 991px){
+
+.product-item .flashs > span {
+    height: 50px!important;
+    width: 50px!important;
+    display: inline-block;
+    text-align: center;
+    background-color: #fc1111;
+    line-height: 50px!important;
+    color: #fff;
+    padding: 0px!important;
+    font-weight: 700;
+    border-radius: 50%;
+    letter-spacing: 2px;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.product-item .flashs > span.new::after{
+    display: none;
+}
+
+.blog-heading.banner {
+    padding: 50px 0 0px!important;
+}
+
+}

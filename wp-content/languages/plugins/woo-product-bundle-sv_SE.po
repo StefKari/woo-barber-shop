@@ -1,0 +1,492 @@
+# Translation of Plugins - WPC Product Bundles for WooCommerce - Development (trunk) in Swedish
+# This file is distributed under the same license as the Plugins - WPC Product Bundles for WooCommerce - Development (trunk) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-12-30 01:57:48+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: sv_SE\n"
+"Project-Id-Version: Plugins - WPC Product Bundles for WooCommerce - Development (trunk)\n"
+
+#: includes/wpc-kit.php:310
+msgid "%s ago"
+msgstr "%s sedan"
+
+#: includes/wpc-kit.php:309
+msgid "Last Updated:"
+msgstr "Senast uppdaterat:"
+
+#: includes/wpc-kit.php:297
+msgid "Version"
+msgstr "Version"
+
+#: includes/wpc-kit.php:232
+msgid "More Details"
+msgstr "Mer detaljer"
+
+#: includes/wpc-kit.php:230
+msgid "More information about %s"
+msgstr "Mer information om %s"
+
+#: includes/wpc-kit.php:223
+msgid "Install Now"
+msgstr "Installera nu"
+
+#: includes/wpc-kit.php:216 includes/wpc-kit.php:269
+msgid "Activate"
+msgstr "Aktivera"
+
+#: includes/wpc-kit.php:209 includes/wpc-kit.php:262
+msgid "Deactivate"
+msgstr "Inaktivera"
+
+#: includes/wpc-kit.php:303
+msgid "+ Active Installations"
+msgstr "Aktiva Installationer"
+
+#: includes/class-woosb.php:304 includes/class-woosb.php:1134
+msgid "Docs"
+msgstr "Dokumentation"
+
+#: includes/class-woosb.php:504
+msgid "Show the plus/minus button for the quantity input."
+msgstr "Visa plus/minus knappen för kvantitets inmatning"
+
+#: includes/class-woosb.php:492
+msgid "Show plus/minus button"
+msgstr "Visa plus/minus knappen"
+
+#: includes/class-woosb.php:889 includes/class-woosb.php:915
+msgid "Hide bundles"
+msgstr "Dölj paket"
+
+#: includes/class-woosb.php:2235
+msgid "sold individually"
+msgstr "Lägg till enstaka"
+
+#: includes/class-woosb.php:619 includes/class-woosb.php:2183
+msgid "Under text"
+msgstr "Under text"
+
+#: includes/class-woosb.php:610 includes/class-woosb.php:2174
+msgid "Above text"
+msgstr "Över text"
+
+#: includes/class-woosb.php:394
+msgid "Under the excerpt"
+msgstr "Under utdraget"
+
+#: includes/class-woosb.php:390
+msgid "Under the price"
+msgstr "Under priset"
+
+#: includes/class-woosb.php:2084
+msgid "Fixed price"
+msgstr "Fast pris"
+
+#: includes/class-woosb.php:415
+msgid "Default"
+msgstr "Standard"
+
+#: includes/class-woosb.php:989
+msgid "Search by ID"
+msgstr "Sök efter ID"
+
+#: includes/class-woosb.php:2166
+msgid "Custom display price"
+msgstr "Anpassat visningspris"
+
+#: includes/class-woosb.php:402 includes/class-woosb.php:601
+msgid "No (hide it)"
+msgstr "Nej (dölj det)"
+
+#: includes/class-woosb.php:3088 includes/class-woosb.php:3091
+msgid "%s is out of stock."
+msgstr "%s är slut i lager."
+
+#: includes/class-woosb.php:577 includes/class-woosb.php:1968
+msgid "Bundles"
+msgstr "Paket"
+
+#: includes/class-woosb.php:551
+msgid "Change price"
+msgstr "Ändra pris"
+
+#: includes/class-woosb.php:2100
+msgid "% or amount"
+msgstr "% eller belopp"
+
+#: includes/class-woosb.php:2089
+msgid "If checked, %s click here to set price %s by manually."
+msgstr "Om det är markerat, %s klicka här för att ställa in pris %s manuellt."
+
+#: includes/class-woosb.php:2223
+msgid "Remove"
+msgstr "Ta bort"
+
+#: includes/class-woosb.php:2221
+msgid "Add"
+msgstr "Lägg till"
+
+#: includes/class-woosb.php:2235
+msgid "Default quantity"
+msgstr "Standardantal"
+
+#: includes/class-woosb.php:2122
+msgid "Use default quantity as min?"
+msgstr "Använd standardantal som min?"
+
+#: includes/class-woosb.php:1308
+msgid "\"%s\" is protected and cannot be purchased."
+msgstr "”%s” är skyddad och kan inte köpas."
+
+#: includes/class-woosb.php:1263 includes/class-woosb.php:1270
+#: includes/class-woosb.php:1277 includes/class-woosb.php:1284
+#: includes/class-woosb.php:1291 includes/class-woosb.php:1301
+#: includes/class-woosb.php:1309
+msgid "You cannot add this bundle to the cart."
+msgstr "Du kan inte lägga till detta paket till varukorgen."
+
+#: includes/class-woosb.php:398 includes/class-woosb.php:597
+msgid "In a new tab"
+msgstr "I en ny flik"
+
+#: includes/class-woosb.php:373 includes/class-woosb.php:584
+msgid "Position"
+msgstr "Position"
+
+#: includes/class-woosb.php:2093
+msgid "Discount"
+msgstr "Rabatt"
+
+#. Description of the plugin
+msgid "WPC Product Bundles is a plugin help you bundle a few products, offer them at a discount and watch the sales go up!"
+msgstr "WPC Product Bundles är ett tillägg som hjälper dig att paketera några produkter, erbjuda dem med rabatt och ser till att din försäljning ökar!"
+
+#: includes/class-woosb.php:689
+msgid "Both bundles and bundled products"
+msgstr "Både paket och paketprodukter"
+
+#: includes/class-woosb.php:685
+msgid "Bundled products only"
+msgstr "Endast paketprodukter"
+
+#: includes/class-woosb.php:681
+msgid "Bundles only"
+msgstr "Endast paket"
+
+#: includes/class-woosb.php:676
+msgid "Cart contents count"
+msgstr "Antal artiklar i kundkorgen"
+
+#: includes/class-woosb.php:2156
+msgid "Manage stock"
+msgstr "Hantera lager"
+
+#: includes/class-woosb.php:2470 includes/class-woosb.php:2501
+msgid "From"
+msgstr "Från"
+
+#: includes/class-woosb.php:2078
+msgid "Regular price"
+msgstr "Ordinarie pris"
+
+#: includes/class-woosb.php:2047
+msgid "Selected"
+msgstr "Vald"
+
+#: includes/class-woosb.php:2033
+msgid "settings"
+msgstr "inställningar"
+
+#: includes/class-woosb.php:1756
+msgid "(bundled in %s)"
+msgstr "(kombinerade i %s)"
+
+#: includes/class-woosb.php:1037
+msgid "Accept same products"
+msgstr "Acceptera samma produkter"
+
+#: includes/class-woosb.php:1033
+msgid "Do a phrase search?"
+msgstr "Gör en frasökning?"
+
+#: includes/class-woosb.php:1021
+msgid "Search sentence"
+msgstr "Sök mening"
+
+#: includes/class-woosb.php:974
+msgid "Search by SKU"
+msgstr "Sök via SKU"
+
+#: includes/class-woosb.php:748 includes/class-woosb.php:2031
+msgid "Search"
+msgstr "Sök"
+
+#: includes/class-woosb.php:533
+msgid "Change image"
+msgstr "Ändra bild"
+
+#: includes/class-woosb.php:513
+msgid "Yes, open in the same tab"
+msgstr "Ja, öppna i samma flik"
+
+#: includes/class-woosb.php:482
+msgid "Subtotal"
+msgstr "Delsumma"
+
+#: includes/class-woosb.php:478
+msgid "Price"
+msgstr "Pris"
+
+#: includes/class-woosb.php:473
+msgid "Show price"
+msgstr "Visa pris"
+
+#: includes/class-woosb.php:443
+msgid "Show quantity"
+msgstr "Visa antal"
+
+#: includes/class-woosb.php:332 includes/class-woosb.php:768
+msgid "General"
+msgstr "Allmänt"
+
+#: includes/class-woosb.php:293 includes/class-woosb.php:1124
+msgid "Settings"
+msgstr "Inställningar"
+
+#: includes/class-woosb.php:282
+msgid "Discussion"
+msgstr "Diskussion"
+
+#: includes/class-woosb.php:261 includes/class-woosb.php:272
+msgid "WPC Product Bundles"
+msgstr "WPC Product Bundles"
+
+#: includes/class-woosb.php:2147
+msgid "Shipping fee"
+msgstr "Fraktavgift"
+
+#: includes/class-woosb.php:437 includes/class-woosb.php:452
+#: includes/class-woosb.php:467 includes/class-woosb.php:486
+#: includes/class-woosb.php:501 includes/class-woosb.php:525
+#: includes/class-woosb.php:542 includes/class-woosb.php:564
+#: includes/class-woosb.php:637 includes/class-woosb.php:667
+#: includes/class-woosb.php:704 includes/class-woosb.php:723
+#: includes/class-woosb.php:738 includes/class-woosb.php:893
+#: includes/class-woosb.php:902 includes/class-woosb.php:919
+#: includes/class-woosb.php:928 includes/class-woosb.php:983
+#: includes/class-woosb.php:998 includes/class-woosb.php:1014
+#: includes/class-woosb.php:1030 includes/class-woosb.php:1046
+msgid "No"
+msgstr "Nej"
+
+#: includes/class-woosb.php:433 includes/class-woosb.php:448
+#: includes/class-woosb.php:463 includes/class-woosb.php:497
+#: includes/class-woosb.php:538 includes/class-woosb.php:556
+#: includes/class-woosb.php:663 includes/class-woosb.php:700
+#: includes/class-woosb.php:734 includes/class-woosb.php:892
+#: includes/class-woosb.php:901 includes/class-woosb.php:918
+#: includes/class-woosb.php:927 includes/class-woosb.php:979
+#: includes/class-woosb.php:994 includes/class-woosb.php:1010
+#: includes/class-woosb.php:1026 includes/class-woosb.php:1042
+msgid "Yes"
+msgstr "Ja"
+
+#: includes/class-woosb.php:342
+msgid "Regular and sale price"
+msgstr "Ordinarie och reapris"
+
+#: includes/class-woosb.php:336
+msgid "Price format"
+msgstr "Prisformat"
+
+#: includes/class-woosb.php:278
+msgid "Reviews"
+msgstr "Recensioner"
+
+#: includes/class-woosb.php:1049
+msgid "If yes, a product can be added many times."
+msgstr "Om ja, kan en produkt läggas till många gånger."
+
+#: includes/class-product.php:39 includes/class-woosb.php:816
+msgid "Read more"
+msgstr "Läs mer"
+
+#: includes/class-product.php:36 includes/class-woosb.php:809
+msgid "Select options"
+msgstr "Välj alternativ"
+
+#: includes/class-woosb.php:715
+msgid "Yes, just show the main product"
+msgstr "Ja, visa bara huvudprodukten"
+
+#: includes/class-woosb.php:458
+msgid "Show short description"
+msgstr "Visa kort beskrivning"
+
+#. Author URI of the plugin
+msgid "https://wpclever.net"
+msgstr "https://wpclever.net"
+
+#. Plugin URI of the plugin
+msgid "https://wpclever.net/"
+msgstr "https://wpclever.net/"
+
+#. Plugin Name of the plugin
+msgid "WPC Product Bundles for WooCommerce"
+msgstr "WPC Product Bundles för WooCommerce"
+
+#: includes/class-woosb.php:1884
+msgid "No results found for \"%s\""
+msgstr "Inga resultat hittades för ”%s”"
+
+#: includes/class-product.php:34 includes/class-product.php:48
+#: includes/class-woosb.php:802 includes/class-woosb.php:826
+msgid "Add to cart"
+msgstr "Lägg till i varukorg"
+
+#: includes/class-woosb.php:428
+msgid "Show thumbnail"
+msgstr "Visa miniatyr"
+
+#: includes/class-woosb.php:517
+msgid "Yes, open in the new tab"
+msgstr "Ja, öppna i den nya fliken"
+
+#: includes/class-woosb.php:2039
+msgid "searching..."
+msgstr "söker…"
+
+#: includes/class-woosb.php:2041
+msgid "Type any keyword to search"
+msgstr "Skriv ett nyckelord för att söka"
+
+#: includes/class-woosb.php:1931 includes/class-woosb.php:1986
+msgid "Smart bundle"
+msgstr "Smart produktpaket"
+
+#: includes/class-woosb.php:1938
+msgid "Bundled Products"
+msgstr "Produktpaket"
+
+#: includes/class-woosb.php:275
+msgid "Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating."
+msgstr "Tack för att du använder vårt tillägg. Om du är nöjd får du gärna ge oss femstjärnigt %s betyg."
+
+#: includes/class-woosb.php:289
+msgid "How to use?"
+msgstr "Hur gör man?"
+
+#: includes/class-woosb.php:309 includes/class-woosb.php:1125
+msgid "Premium Version"
+msgstr "Premiumversion"
+
+#: includes/class-woosb.php:369 includes/class-woosb.php:1637
+#: includes/class-woosb.php:1660 includes/class-woosb.php:1960
+msgid "Bundled products"
+msgstr "Komboprodukter"
+
+#: includes/class-woosb.php:822
+msgid "Single product page"
+msgstr "Sida med en produkt"
+
+#: includes/class-woosb.php:628
+msgid "Cart & Checkout"
+msgstr "Varukorg och betalningssida"
+
+#: includes/class-woosb.php:719
+msgid "Yes, but show bundled product names under the main product"
+msgstr "Ja, men visa produktpaketets namn under huvudprodukten"
+
+#: includes/class-woosb.php:729
+msgid "Hide bundled products on mini-cart"
+msgstr "Dölj produktpaket i förhandsvisningen av varukorgen"
+
+#: includes/class-woosb.php:1017
+msgid "Match whole product title or content?"
+msgstr "Matcha hela produktrubriken eller innehållet?"
+
+#: includes/class-woosb.php:755 includes/class-woosb.php:869
+#: includes/class-woosb.php:935 includes/class-woosb.php:2023
+msgid "Update Options"
+msgstr "Uppdateringsalternativ"
+
+#: includes/class-woosb.php:261
+msgid "Product Bundles"
+msgstr "Produktpaket"
+
+#: includes/class-woosb.php:345
+msgid "Choose the price format for bundle on the shop page."
+msgstr "Välj prisformat för produktpaketet på butiksidan."
+
+#: includes/class-woosb.php:778 includes/class-woosb.php:1097
+msgid "Bundle price:"
+msgstr "Paketpris:"
+
+#: includes/class-woosb.php:803
+msgid "For purchasable bundle."
+msgstr "För produktpaket som går att köpa."
+
+#: includes/class-woosb.php:810
+msgid "For purchasable bundle and has variable product(s)."
+msgstr "För produktpaket som går att köpa och som innehåller produkt(er) med varianter."
+
+#: includes/class-woosb.php:817
+msgid "For un-purchasable bundle."
+msgstr "För produktpaket som inte går att köpa."
+
+#: includes/class-woosb.php:695
+msgid "Hide bundle name before bundled products"
+msgstr "Visa inte produktpaketets namn före produkterna i paketet"
+
+#: includes/class-woosb.php:742
+msgid "Hide bundled products, just show the main product on mini-cart."
+msgstr "Dölj inkluderade produkter, visa endast huvudprodukten i förhandsvisningen av varukorgen."
+
+#: includes/class-woosb.php:2151
+msgid "Apply to each bundled product"
+msgstr "Applicera på varje produktpaket"
+
+#: includes/class-woosb.php:2150
+msgid "Apply to the whole bundle"
+msgstr "Applicera på hela produktpaketet"
+
+#: includes/class-woosb.php:847 includes/class-woosb.php:1099
+msgid "Please choose at least one product before adding this bundle to the cart."
+msgstr "Var god välj minst en produkt innan du lägger till det här produktpaketet i varukorgen."
+
+#: includes/class-woosb.php:340
+msgid "Min price only"
+msgstr "Bara minimum pris"
+
+#: includes/class-woosb.php:341
+msgid "Min - max"
+msgstr "Minimum - maximum"
+
+#: includes/class-woosb.php:339
+msgid "From min price"
+msgstr "Från minimipris"
+
+#: includes/class-woosb.php:966
+msgid "Search limit"
+msgstr "Sökgräns"
+
+#: includes/class-woosb.php:1005
+msgid "Search exact"
+msgstr "Exakt sökning"
+
+#: includes/class-woosb.php:320
+msgid "When creating the product, please choose product data is \"Smart Bundle\" then you can see the search field to start search and add products to the bundle."
+msgstr "När du skapar produkten, välj produktdata är \"Smart Produktpaket\" då kan du se sökfältet för att starta sökningen och lägga till produkter i produktpaketet."
+
+#: includes/class-woosb.php:710
+msgid "Hide bundled products on cart & checkout page"
+msgstr "Dölj produktpaket i varukorgen och i kassan"
+
+#: includes/class-woosb.php:280
+msgid "Changelog"
+msgstr "Ändringslogg"

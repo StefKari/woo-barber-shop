@@ -1,0 +1,342 @@
+/*@import url('progress.css');*/
+#import-log_wrapper{display: none!important;}
+.import-status {
+	width: 100%;
+
+	font-size: 14px;
+	line-height: 16px;
+	margin-bottom: 1em;
+}
+.import-status thead th {
+	width: 32%;
+	text-align: left;
+	font-size: 16px;
+	padding-bottom: 1em;
+}
+.import-status thead th:first-child {
+	width: 36%;
+}
+
+.import-status th,
+.import-status td {
+	padding: 0 0 8px;
+	margin-bottom: 6px;
+}
+
+#import-log {
+	border-collapse: collapse;
+}
+
+#import-log tbody {
+	max-height: 40em;
+}
+
+#import-log tr
+{
+	border-left: 4px solid transparent;
+}
+
+#import-log tbody tr.info
+{
+	border-left-color: #46b450;
+}
+
+#import-log tbody tr.warning,
+#import-log tbody tr.notice
+{
+	border-left-color: #ffb900;
+}
+
+#import-log tbody tr.error
+{
+	border-left-color: #dc3232;
+}
+
+.import-status-indicator {
+	margin-bottom: 1em;
+}
+.import-status-indicator progress {
+	width: 100%;
+}
+.import-status-indicator .status {
+	text-align: center;
+}
+.import-status-indicator .status .dashicons {
+	color: #46B450;
+	font-size: 3rem;
+	height: auto;
+	width: auto;
+}
+#completed-total {
+	display: none;
+}
+#import-status-message {
+	border-top: 1px solid #f2f2f2;
+	height: 40px;
+	line-height: 40px;
+	margin: 20px 0;
+}
+
+.cssProgress {
+	width: 100%;
+	margin-bottom: 20px;
+}
+.cssProgress .progress1
+{
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	font-family: "Roboto", sans-serif;
+}
+.cssProgress .cssProgress-bar {
+	display: block;
+	float: left;
+	width: 0%;
+	height: 100%;
+	background: #66bb6a;
+	box-shadow: inset 0px -1px 2px rgba(0, 0, 0, 0.1);
+	-webkit-transition: width 0.8s ease-in-out;
+	transition: width 0.8s ease-in-out;
+}
+.cssProgress .cssProgress-bar.done{
+	background: #3798d9;
+}
+
+.cssProgress .cssProgress-label {
+	position: absolute;
+	overflow: hidden;
+	left: 0px;
+	right: 0px;
+	color: rgba(0, 0, 0, 0.6);
+	font-size: 0.7em;
+	text-align: center;
+	text-shadow: 0px 1px rgba(0, 0, 0, 0.3);
+}
+.cssProgress .cssProgress-info {
+	background-color: #9575cd !important;
+}
+.cssProgress .cssProgress-danger {
+	background-color: #ef5350 !important;
+}
+.cssProgress .cssProgress-success {
+	background-color: #66bb6a !important;
+}
+.cssProgress .cssProgress-warning {
+	background-color: #ffb74d !important;
+}
+.cssProgress .cssProgress-right {
+	float: right !important;
+}
+.cssProgress .cssProgress-label-left {
+	margin-left: 10px;
+	text-align: left !important;
+}
+.cssProgress .cssProgress-label-right {
+	margin-right: 10px;
+	text-align: right !important;
+}
+.cssProgress .cssProgress-label2 {
+	display: block;
+	margin: 2px 0;
+	padding: 0 8px;
+	font-size: 0.8em;
+}
+.cssProgress .cssProgress-label2.cssProgress-label2-right {
+	text-align: right;
+}
+.cssProgress .cssProgress-label2.cssProgress-label2-center {
+	text-align: center;
+}
+.cssProgress .cssProgress-active {
+	background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, 0.125) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.125) 50%, rgba(255, 255, 255, 0.125) 75%, transparent 75%, transparent);
+	background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.125) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.125) 50%, rgba(255, 255, 255, 0.125) 75%, transparent 75%, transparent);
+	background-size: 35px 35px;
+}
+.cssProgress .cssProgress-active:not(.done) {
+	-webkit-animation: cssProgressActive 2s linear infinite;
+	-ms-animation: cssProgressActive 2s linear infinite;
+	animation: cssProgressActive 2s linear infinite;
+}
+
+@-webkit-keyframes cssProgressActive {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 35px 35px;
+	}
+}
+@-ms-keyframes cssProgressActive {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 35px 35px;
+	}
+}
+@keyframes cssProgressActive {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 35px 35px;
+	}
+}
+@-webkit-keyframes cssProgressActiveRight {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: -35px -35px;
+	}
+}
+@-ms-keyframes cssProgressActiveRight {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: -35px -35px;
+	}
+}
+@keyframes cssProgressActiveRight {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: -35px -35px;
+	}
+}
+/* -----------------------------------------------------
+  Progress Bar 1
+-------------------------------------------------------- */
+.progress1 {
+	background-color: #EEE;
+	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2);
+}
+.progress1 .cssProgress-bar {
+	height: 18px;
+}
+.progress1 .cssProgress-label {
+	line-height: 18px;
+}
+
+@-webkit-keyframes cssProgressGlowActive1 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #3798D9;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #3798D9;
+	}
+}
+@-ms-keyframes cssProgressGlowActive1 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #3798D9;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #3798D9;
+	}
+}
+@keyframes cssProgressGlowActive1 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #3798D9;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #3798D9;
+	}
+}
+@-webkit-keyframes cssProgressGlowActive2 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #9575cd;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #9575cd;
+	}
+}
+@-ms-keyframes cssProgressGlowActive2 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #9575cd;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #9575cd;
+	}
+}
+@keyframes cssProgressGlowActive2 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #9575cd;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #9575cd;
+	}
+}
+@-webkit-keyframes cssProgressGlowActive3 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #ef5350;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #ef5350;
+	}
+}
+@-ms-keyframes cssProgressGlowActive3 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #ef5350;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #ef5350;
+	}
+}
+@keyframes cssProgressGlowActive3 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #ef5350;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #ef5350;
+	}
+}
+@-webkit-keyframes cssProgressGlowActive4 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #66bb6a;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #66bb6a;
+	}
+}
+@-ms-keyframes cssProgressGlowActive4 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #66bb6a;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #66bb6a;
+	}
+}
+@keyframes cssProgressGlowActive4 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #66bb6a;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #66bb6a;
+	}
+}
+@-webkit-keyframes cssProgressGlowActive5 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #ffb74d;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #ffb74d;
+	}
+}
+@-ms-keyframes cssProgressGlowActive5 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #ffb74d;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #ffb74d;
+	}
+}
+@keyframes cssProgressGlowActive5 {
+	0%, 100% {
+		box-shadow: 5px 0px 15px 0px #ffb74d;
+	}
+	45% {
+		box-shadow: 1px 0px 4px 0px #ffb74d;
+	}
+}

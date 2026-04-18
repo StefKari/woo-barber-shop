@@ -1,0 +1,1343 @@
+# Translation of Yoast - Yoast SEO Premium (for WordPress) in Serbian
+# This file is distributed under the same license as the Yoast - Yoast SEO Premium (for WordPress) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-04-12 22:46:28+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.0-rc.1\n"
+"Language: sr_RS\n"
+"Project-Id-Version: Yoast - Yoast SEO Premium (for WordPress)\n"
+
+#. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
+#. to a closing p tag
+#: src/task-list/application/tasks/set-social-sharing-images.php:108
+msgid "%1$sUnstyled preview images can lower engagement when shared on social media. Keep every post on brand. %2$s%3$sOpen the post, go to Yoast SEO Analysis tab, click on Social, and add a relevant image to your preview.%4$s"
+msgstr "%1$s Нестилизоване прегледне слике могу смањити ангажовање када се деле на друштвеним мрежама. Одржите доследност бренда у свакој објави. %2$s %3$s Отворите објаву, идите на Yoast SEO Analysis таб, кликните на Social и додајте релевантну слику за преглед. %4$s"
+
+#. translators: %1$s expands to the post type label this task is about.
+#: src/task-list/application/tasks/set-social-sharing-images.php:105
+msgid "Set social sharing images in your recent content: %1$s"
+msgstr "Подесите слике за дељење на друштвеним мрежама у вашем недавном садржају: %1$s"
+
+#: src/task-list/application/tasks/child-tasks/set-social-sharing-images-child.php:89
+msgid "Open editor"
+msgstr "Отвори уређивач"
+
+#. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
+#. to a closing p tag
+#: src/task-list/application/tasks/set-social-appearance-templates.php:148
+msgid "%1$sUnstyled previews and general descriptions can lower engagement when shared on social media. Templates keep every post on brand and share-ready automatically.%2$s%3$sOpen Social settings, choose your content type, and set a default image, title, and description.%4$s"
+msgstr "%1$s Нестилизовани прегледи и општи описи могу смањити ангажовање када се деле на друштвеним мрежама. Шаблони осигуравају да свака објава остане у складу са брендом и аутоматски спремна за дељење. %2$s %3$s Отворите Social подешавања, изаберите тип садржаја и подесите подразумевану слику, наслов и опис. %4$s"
+
+#. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
+#. to a closing p tag
+#: src/task-list/application/tasks/organization-schema.php:119
+msgid "%1$sMissing organization details makes it harder for search engines to recognize your brand. Completing this helps your business appear correctly in search results.%2$s%3$sGo to Site representation, open Additional organization info, and fill in the information.%4$s"
+msgstr "%1$s Недостају подаци о организацији што отежава претраживачима да препознају ваш бренд. Попуњавање ових података помаже да се ваше предузеће исправно прикаже у резултатима претраге. %2$s %3$s Идите на Site representation, отворите Additional organization info и унесите податке. %4$s"
+
+#: classes/redirect/redirect-ajax.php:226
+msgid "You don't have permission to update the redirect."
+msgstr "Немате дозволу за ажурирање преусмерења."
+
+#: classes/redirect/redirect-ajax.php:206
+msgid "You don't have permission to add the redirect."
+msgstr "Немате дозволу за додавање преусмерења."
+
+#. translators: %1$s expands to the post type label this task is about
+#: src/task-list/application/tasks/set-social-appearance-templates.php:145
+msgid "Set social media appearance templates: %1$s"
+msgstr "Подесите шаблоне изгледа за друштвене мреже: %1$s"
+
+#: src/task-list/application/tasks/set-social-appearance-templates.php:129
+msgid "Set social templates"
+msgstr "Подесите шаблоне за друштвене мреже"
+
+#: src/task-list/application/tasks/orphaned-workout.php:106
+msgid "Pages without internal links are hard to find by users and search engines. Linking them up improves discoverability for both users and search engines."
+msgstr "Странице без унутрашњег повезивања тешко је пронаћи и корисницима и претраживачима. Повезивање унутрашњим везама побољшава њихову видљивост и откривање и за кориснике и за претраживаче."
+
+#: src/task-list/application/tasks/orphaned-workout.php:105
+msgid "Do the Orphaned Content workout"
+msgstr "Започните тренинг за осиромашени садржај"
+
+#: src/task-list/application/tasks/organization-schema.php:116
+msgid "Fill in Organization Schema"
+msgstr "Попуните организациону шему"
+
+#: src/task-list/application/tasks/organization-schema.php:103
+msgid "Take me there"
+msgstr "Води ме тамо"
+
+#: src/task-list/application/tasks/cornerstone-workout.php:106
+msgid "When important pages aren't well-linked, search engines can't tell they matter most. Strengthening cornerstone content helps your main topics rank better."
+msgstr "Када важне странице нису добро повезане линковима, претраживачи не могу да препознају да су оне најважније. Јачање cornerstone садржаја помаже да се ваше главне теме боље рангирају."
+
+#: src/task-list/application/tasks/cornerstone-workout.php:105
+msgid "Do the Cornerstone Approach workout"
+msgstr "Урадите Cornerstone Approach тренинг"
+
+#: src/task-list/application/tasks/cornerstone-workout.php:92
+#: src/task-list/application/tasks/orphaned-workout.php:92
+msgid "Start the workout"
+msgstr "Започни тренинг"
+
+#: classes/redirect/validation/redirect-self-wp-json-redirect-validation.php:35
+msgid "You cannot create a redirect to the WordPress REST API endpoint (/wp-json). Please choose a different URL to redirect to."
+msgstr "Не можете креирати преусмеравање на Вордпрес REST API крајњу тачку (/wp-json). Молимо, одаберите другу URL адресу за преусмеравање."
+
+#: classes/redirect/validation/redirect-self-wp-json-redirect-validation.php:28
+msgid "You cannot create a redirect from the WordPress REST API endpoint (/wp-json). Please choose a different origin URL."
+msgstr "Не можете креирати преусмеравање са Вордпрес REST API крајње тачке (/wp-json). Молимо, одаберите другу почетну URL адресу."
+
+#. translators: %1$s expands to Yoast.
+#: src/ai/summarize/user-interface/ai-summarize-integration.php:149
+msgid "%1$s AI Blocks"
+msgstr "%1$s AI блокови"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block keyword"
+msgid "key takeaways"
+msgstr "кључне поуке"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block keyword"
+msgid "tldr"
+msgstr "tldr"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block keyword"
+msgid "summary"
+msgstr "сажетак"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block description"
+msgid "Adds a short AI summary of your content."
+msgstr "Додаје кратак AI сажетак вашег садржаја."
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block title"
+msgid "Yoast AI Summarize"
+msgstr "Yoast AI сажетак"
+
+#: classes/premium-redirect-service.php:163
+#: classes/premium-redirect-service.php:330
+msgid "Something went wrong while updating this redirect."
+msgstr "Нешто је пошло наопако приликом ажурирања овог преусмеравања."
+
+#: classes/premium-redirect-service.php:162
+msgid "Redirect not updated."
+msgstr "Преусмеравање није ажурирано."
+
+#: classes/premium-redirect-service.php:51
+msgid "The redirect was created successfully."
+msgstr "Преусмеравање је успешно креирано."
+
+#: classes/premium-redirect-service.php:50
+msgid "Redirect created."
+msgstr "Преусмеравање креирано."
+
+#: classes/premium-redirect-service.php:35
+#: classes/premium-redirect-service.php:59
+msgid "Redirect not created."
+msgstr "Преусмеравање није креирано."
+
+#: classes/premium-redirect-endpoint.php:251
+msgid "Whether to write redirects into a separate file instead of .htaccess."
+msgstr "Изаберите да ли ће преусмеравања бити у посебној датотеци уместо у .htaccess."
+
+#: classes/premium-redirect-endpoint.php:245
+msgid "Whether to disable PHP-based redirects and use .htaccess instead."
+msgstr "Изаберите да ли да онемогућите PHP преусмеравања и преусмеравања обављате преко .htaccess."
+
+#: classes/premium-redirect-endpoint.php:137
+#: classes/premium-redirect-endpoint.php:201
+msgid "The format of the redirects to retrieve."
+msgstr "Облик преусмеравања који треба добити."
+
+#: classes/premium-redirect-endpoint.php:76
+msgid "The format of the redirect to create."
+msgstr "Облик преусмеравања који треба направити."
+
+#: assets/js/src/new-redirects/helpers/submit-utils.js:45
+#: classes/premium-redirect-service.php:60
+msgid "Something went wrong when creating this redirect."
+msgstr "Нешто је пошло наопако приликом креирања овог преусмеравања."
+
+#. translators: The text to show when a paragraph break is suggested through AI
+#. Optimize.
+#: src/ai/optimize/suggestions-postprocessor/application/suggestion-processor.php:141
+msgid "Paragraph break"
+msgstr "Нови пасус"
+
+#. translators: %1$s: Yoast SEO
+#: src/addon-installer.php:144
+msgid "Install latest %1$s"
+msgstr "Постави најновији %1$s"
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "toc"
+msgstr "табела садржаја"
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "links"
+msgstr "везе"
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block description"
+msgid "Adds a table of contents to this page."
+msgstr "Додаје табелу садржаја на ову страницу."
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block title"
+msgid "Yoast Table of Contents"
+msgstr "Yoast табела садржаја"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block keyword"
+msgid "related pages"
+msgstr "повезане странице"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block keyword"
+msgid "related posts"
+msgstr "повезани чланци"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block description"
+msgid "Adds a list of links related to this page."
+msgstr "Додаје листу веза повезаних са овом страницом."
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block title"
+msgid "Yoast Related Links"
+msgstr "Yoast повезане везе"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block keyword"
+msgid "content length"
+msgstr "дужина садржаја"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block keyword"
+msgid "reading time"
+msgstr "време читања"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block description"
+msgid "Shows an estimated reading time based on the content length."
+msgstr "Показује очекивано време читања засновано на дужини садржаја."
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block title"
+msgid "Yoast Estimated Reading Time"
+msgstr "Yoast очекивано време читања"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "children"
+msgstr "потомци"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "childpages"
+msgstr "странице за децу"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "subpages"
+msgstr "подстранице"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block description"
+msgid "Adds a list of internal links to subpages of this page."
+msgstr "Додаје листу интерних веза подстраницама на овој страници."
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block title"
+msgid "Yoast Subpages"
+msgstr "Yoast подстранице"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+#: assets/blocks/dynamic-blocks/siblings/block.json
+#: assets/blocks/dynamic-blocks/subpages/block.json
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "site structure"
+msgstr "структура веб места"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+#: assets/blocks/dynamic-blocks/siblings/block.json
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "internal linking"
+msgstr "интерно повезивање"
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block keyword"
+msgid "siblings pages"
+msgstr "странице истог нивоа"
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block keyword"
+msgid "siblings"
+msgstr "странице истог нивоа"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+#: assets/blocks/dynamic-blocks/siblings/block.json
+#: assets/blocks/dynamic-blocks/subpages/block.json
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "SEO"
+msgstr "SEO"
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block description"
+msgid "Adds a list of internal links to sibling pages which share the same parent."
+msgstr "Додајте листу интерних веза на странице истог нивоа које деле истог родитеља."
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block title"
+msgid "Yoast Siblings"
+msgstr "Yoast странице истог нивоа"
+
+#: src/deprecated/integrations/admin/ai-consent-integration.php:137
+msgid "AI features"
+msgstr "AI функционалности"
+
+#. translators: 1: Yoast SEO Premium
+#: src/integrations/admin/update-premium-notification.php:129
+msgid "Update to the latest version of %1$s!"
+msgstr "Ажурирајте на најновију %1$s верзију!"
+
+#. translators: 1: Yoast SEO Premium, 2 and 3: opening and closing anchor tag.
+#: src/integrations/admin/update-premium-notification.php:121
+msgid "Please %2$supdate %1$s to the latest version%3$s to ensure you can fully use all Premium settings and features."
+msgstr "Молимо вас да %2$sажурирате %1$s на најновију верзију%3$s како бисте били сигурни да можете у потпуности да искористите сва премијум подешавања и функционалности."
+
+#: src/integrations/admin/inclusive-language-filter-integration.php:65
+msgid "All Inclusive Language Scores"
+msgstr "Свеобухватни језички резултати"
+
+#. translators: Hidden accessibility text.
+#: src/integrations/admin/inclusive-language-filter-integration.php:60
+msgid "Filter by Inclusive Language Score"
+msgstr "Филтрирај према резултату инклузивног језика"
+
+#: src/integrations/admin/inclusive-language-column-integration.php:155
+#: src/integrations/admin/inclusive-language-column-integration.php:156
+#: src/integrations/admin/inclusive-language-taxonomy-column-integration.php:116
+#: src/integrations/admin/inclusive-language-taxonomy-column-integration.php:117
+msgid "Inclusive language score"
+msgstr "Резултат инклузивног језика"
+
+#. translators: Hidden accessibility text.
+#: src/integrations/admin/cornerstone-column-integration.php:138
+#: src/integrations/admin/cornerstone-taxonomy-column-integration.php:110
+msgid "Cornerstone content"
+msgstr "Битан садржај"
+
+#: src/integrations/admin/cornerstone-column-integration.php:136
+#: src/integrations/admin/cornerstone-taxonomy-column-integration.php:108
+msgid "Is this cornerstone content?"
+msgstr "Да ли је ово кључни садржај?"
+
+#. Author URI of the plugin
+#: wp-seo-premium.php
+msgid "https://yoa.st/team-yoast-premium"
+msgstr "https://yoa.st/team-yoast-premium"
+
+#: src/integrations/third-party/mastodon.php:147
+#: src/user-meta/framework/additional-contactmethods/mastodon.php:28
+msgid "Mastodon profile URL"
+msgstr "URL Mastodon профила"
+
+#: assets/js/src/frontend-inspector/components/frontend-inspector.js:29
+#: src/integrations/frontend-inspector.php:92
+msgid "Front-end SEO inspector"
+msgstr "Front-end SEO инспектор"
+
+#: classes/redirect/views/redirects-tab-settings.php:84
+msgid "Read more about why web server redirect methods have been disabled on a multisite."
+msgstr "Прочитајте више о томе зашто су методе преусмеравања веб сервера онемогућене на мрежи сајтова."
+
+#: classes/redirect/views/redirects-tab-settings.php:82
+msgid "Since this site is a multisite, web server redirect methods have been disabled to prevent issues."
+msgstr "Пошто је ово веб место мрежа, методе преусмеравања веб сервера су онемогућене да би се спречили проблеми."
+
+#: src/integrations/admin/thank-you-page-integration.php:84
+msgid "Installation Successful"
+msgstr "Инсталација успешна"
+
+#: classes/views/thank-you.php:104
+msgid "Browse our courses"
+msgstr "Прегледајте наше курсеве"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: <strong>, %3$s: Yoast SEO, %4$s:
+#. </strong>
+#: classes/views/thank-you.php:91
+msgid "%1$s grants you direct access to %2$sall premium %3$s academy courses%4$s. Learn all the ins and outs of holistic SEO from industry experts."
+msgstr "%1$s вам даје директан приступ %2$sсвим премиум %3$s курсевима академије%4$s. Научите све детаље холистичког SEO-а од стручњака у индустрији."
+
+#: classes/views/thank-you.php:84
+msgid "Master vital SEO skills with our online courses"
+msgstr "Савладајте важне SEO вештине помоћу наших онлине курсева"
+
+#: classes/views/thank-you.php:79
+msgid "Check out the Redirect Manager"
+msgstr "Погледајте управљача преусмеравања"
+
+#. translators: %1$s: Yoast SEO, %2$s: <strong>, %3$s: </strong>
+#: classes/views/thank-you.php:68
+msgid "The %1$s %2$sRedirect Manager%3$s automatically prevents visitors from reaching a dead end whenever you move or delete content. It also makes managing your existing redirects easy."
+msgstr "%1$s %2$sМенаџер преусмеравања%3$s аутоматски спречава посетиоце да се нађу у ћорсокаку кад год преместите или избришете садржај. Такође олакшава управљање постојећим преусмеравањима."
+
+#: classes/views/thank-you.php:61
+msgid "Keep your site well-organised so people won't get lost"
+msgstr "Нека ваше веб место буде добро организовано како се људи не би изгубили"
+
+#: classes/views/thank-you.php:56
+msgid "Score some more green bullets"
+msgstr "Освоји још неколико зелених ставки"
+
+#. translators: %1$s: <strong>, %2$s: </strong>
+#: classes/views/thank-you.php:46
+msgid "Different people search with different search terms. With our %1$spremium analysis%2$s, you are free to use variations and synonyms of your keywords in your content, which will make your writing style far more natural."
+msgstr "Различити људи претражују различитим изразима за претрагу. Са нашом %1$sпремиум анализом%2$s, у свом садржају можете слободно користити варијације и синониме кључних речи, што ће ваш стил писања учинити много природнијим."
+
+#: classes/views/thank-you.php:39
+msgid "Optimize your content further with our smart analysis"
+msgstr "Додатно оптимизирајте свој садржај помоћу наше паметне анализе"
+
+#: classes/views/thank-you.php:34
+msgid "Do the cornerstone workout!"
+msgstr "Одрадите тренинг кључног садржаја!"
+
+#. translators: %1$s: <strong>, %2$s: </strong>
+#: classes/views/thank-you.php:24
+msgid "%1$sCornerstone content%2$s is the content on your site that’s most important. You want to rank highest in Google with these articles. Make sure your internal linking structure reflects what pages are most important. Want to know how?"
+msgstr "%1$sКључни садржај%2$s је најважнији садржај на вашем веб месту. Овим чланцима желите да се рангирате на највишем месту на Гуглу. Уверите се да ваша унутрашња структура повезивања одражава странице које су најважније. Желите да знате како?"
+
+#: assets/js/src/workouts/components/CornerstoneWorkout.js:107
+#: classes/views/thank-you.php:17
+msgid "Rank with articles you want to rank with"
+msgstr "Рангирајте чланке са којима желите да будете рангирани"
+
+#: classes/views/thank-you.php:12
+msgid "So, what's next?"
+msgstr "И, шта је следеће?"
+
+#: classes/views/thank-you.php:10
+msgid "Installation successful!"
+msgstr "Инсталација успешна!"
+
+#: src/integrations/admin/user-profile-integration.php:146
+msgid "The info you add below is added to the data Yoast SEO outputs in its schema.org output, for instance when you're the author of a page. Please only add the info you feel good sharing publicly."
+msgstr "Подаци које додате у наставку додају се подацима које Yoast SEO поставља у својим schema.org излазима, на пример када сте аутор странице. Молимо вас да само оне информације за које се осећате добро делите јавно."
+
+#: src/integrations/admin/user-profile-integration.php:145
+msgid "Yoast SEO Schema enhancements"
+msgstr "Yoast SEO Schema побољшања"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:129
+msgid "E.g. %1$sAcme inc%2$s"
+msgstr "Нпр. %1$sЈугоалат%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:127
+msgid "Employer name"
+msgstr "Име послодавца"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:123
+msgid "E.g. %1$ssoftware engineer%2$s"
+msgstr "Нпр. %1$sсофтверски инжењер%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:117
+msgid "Employer information"
+msgstr "Подаци о послодавцима"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:113
+msgid "Comma separated, e.g. %1$sEnglish, French, Dutch%2$s"
+msgstr "Одвојени зарезима, нпр. %1$sЕнглески, француски, холандски%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:111
+msgid "Language(s) spoken"
+msgstr "Језици који су у употреби"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:107
+msgid "Comma separated, e.g. %1$sPHP, JavaScript, 90's rock music%2$s"
+msgstr "Одвојени зарезима, нпр. %1$sPHP, JavaScript, рок музика 90-их%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:105
+msgid "Expertise in"
+msgstr "Стручност у"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:101
+msgid "Comma separated, e.g. %1$sMost likely to succeed - 1991, Smartest in class - 1990%2$s"
+msgstr "Одвојени зарезима, нпр. %1$sНајвероватније ће успети - 1991, Најпаметнији у класи - 1990%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:99
+msgid "Awards"
+msgstr "Награде"
+
+#: src/integrations/admin/user-profile-integration.php:95
+msgid "Extra information"
+msgstr "Додатне информације"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:91
+msgid "E.g. %1$sfemale%2$s, %1$smale%2$s, %1$snon-binary%2$s"
+msgstr "Нпр. %1$sженско%2$s, %1$sмушко%2$s, %1$sне-бинарни%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:89
+msgid "Gender"
+msgstr "Пол"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:85
+msgid "Use format: %1$sYYYY-MM-DD%2$s"
+msgstr "Користите формат: %1$sYYYY-MM-DD%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:83
+msgid "Birth date"
+msgstr "Датум рођења"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:79
+msgid "E.g. %1$sMD%2$s, %1$sPhD%2$s"
+msgstr "Нпр %1$sДоктор медицине%2$s, %1$sДр%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:77
+msgid "Honorific suffix"
+msgstr "Почасни суфикс"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:73
+msgid "E.g. %1$sDr%2$s, %1$sMs%2$s, %1$sMr%2$s"
+msgstr "Нпр. %1$sДр%2$s, %1$sГђа%2$s, %1$sГдин%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:71
+msgid "Honorific prefix"
+msgstr "Почасни префикс"
+
+#: src/integrations/admin/user-profile-integration.php:67
+msgid "Basic information"
+msgstr "Основне информације"
+
+#: premium.php:318
+msgid "Custom fields to include in page analysis"
+msgstr "Прилагођена поља која треба укључити у анализу странице"
+
+#: premium.php:311
+msgid "Learn more about including custom fields in the page analysis"
+msgstr "Сазнајте више о укључивању прилагођених поља у анализу странице"
+
+#: src/integrations/admin/user-profile-integration.php:121
+msgid "Job title"
+msgstr "Звање"
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:202
+msgid "%2$sActivate %1$s now%3$s"
+msgstr "%2$sУкључите %1$s сада%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:209
+msgid "%2$sUpgrade %1$s now%3$s"
+msgstr "%2$sНадоградите %1$s сада%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:214
+msgid "%2$sInstall %1$s now%3$s"
+msgstr "%2$sПоставите %1$s сада%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required,
+#. %3$s: Yoast SEO Premium.
+#: src/addon-installer.php:152
+msgid "%1$s %2$s must be installed and activated in order to use %3$s."
+msgstr "%1$s %2$s мора бити постављен и укључен да бисте користили %3$s."
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:197
+msgid "%2$sNetwork Activate %1$s now%3$s"
+msgstr "%2$sУкључите %1$s за мрежу сада%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required.
+#: src/addon-installer.php:227
+msgid "Please contact a network administrator to install %1$s %2$s."
+msgstr "Обратите се мрежном администратору како бисте поставили %1$s %2$s."
+
+#. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required.
+#: src/addon-installer.php:231
+msgid "Please contact an administrator to install %1$s %2$s."
+msgstr "Обратите се администратору како бисте поставили %1$s %2$s."
+
+#: assets/js/src/blocks/estimated-reading-time/block.js:69
+#: assets/js/src/blocks/estimated-reading-time/legacy/15.6.js:58
+#: assets/js/src/blocks/estimated-reading-time/legacy/15.6.non-admin.js:28
+#: assets/js/src/blocks/estimated-reading-time/legacy/15.8.js:22
+#: assets/js/src/blocks/estimated-reading-time/legacy/22.9.js:21
+#: src/integrations/blocks/estimated-reading-time-block.php:54
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "минут"
+msgstr[1] "минута"
+msgstr[2] "минута"
+
+#: classes/redirect/redirect-table.php:125
+msgid "Filter"
+msgstr "Филтер"
+
+#: assets/js/src/new-redirects/components/table-rows.js:135
+#: classes/premium-javascript-strings.php:63
+#: classes/redirect/redirect-table.php:434
+msgid "Edit"
+msgstr "Уреди"
+
+#: assets/js/src/components/RedirectNotification.js:128
+#: assets/js/src/elementor/components/RedirectNotification.js:101
+#: assets/js/src/frontend-inspector/components/frontend-inspector.js:87
+#: classes/premium-javascript-strings.php:55
+msgid "OK"
+msgstr "OK"
+
+#: classes/export/export-keywords-csv.php:70
+msgid "title"
+msgstr "Naslov"
+
+#: classes/export/export-keywords-csv.php:76
+msgid "meta description"
+msgstr "meta opis"
+
+#: premium.php:276
+msgid "Create Redirect"
+msgstr "Napravite redirekciju"
+
+#: assets/js/src/new-redirects/components/menu.js:52
+#: assets/js/src/new-redirects/routes/redirects.js:72
+#: classes/redirect/redirect-formats.php:23 premium.php:337
+msgid "Redirects"
+msgstr "Redirects"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:36
+#: classes/redirect/views/redirects-form.php:59
+msgid "URL"
+msgstr "URL"
+
+#: classes/premium-import-manager.php:238
+msgid "Redirect import failed: the Redirection plugin is not installed or activated."
+msgstr "Neuspešan uvoz redirekcija: Plugin za redirekcije nije instaliran ili aktiviran"
+
+#: classes/premium-import-manager.php:314
+msgid "Redirect import failed: no redirects found."
+msgstr "Redirekcije nisu uspele: Nijedna od redirekcija nije nađena."
+
+#: classes/premium-javascript-strings.php:33
+msgid "You have unsaved redirects, are you sure you want to leave?"
+msgstr "Imate nesačuvane redirekcije, da li ste sigurni da želite da ih napustite?"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:36
+#: classes/redirect/redirect-table.php:140
+msgid "New URL"
+msgstr "Novi URL"
+
+#: assets/js/src/new-redirects/components/table-rows.js:141
+#: assets/js/src/new-redirects/constants/index.js:29
+#: classes/premium-javascript-strings.php:64
+#: classes/redirect/redirect-table.php:316
+#: classes/redirect/redirect-table.php:435
+msgid "Delete"
+msgstr "Obriši"
+
+#: classes/redirect/views/redirects-tab-plain.php:61
+#: classes/redirect/views/redirects-tab-regex.php:72
+msgid "Search"
+msgstr "Pretraži"
+
+#: classes/redirect/views/redirects-tab-settings.php:122
+msgid "Save Changes"
+msgstr "Sačuvajte izmene"
+
+#: classes/redirect/redirect-formats.php:24
+msgid "Regex Redirects"
+msgstr "Regex redirekcije"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:27
+#: classes/redirect/presenters/redirect-table-presenter.php:71
+msgid "Old URL"
+msgstr "Stari URL"
+
+#: classes/redirect/views/redirects-tab-plain.php:41
+#: classes/redirect/views/redirects-tab-regex.php:52
+msgid "Add Redirect"
+msgstr "Dodajte redirekciju"
+
+#: classes/redirect/views/redirects-tab-settings.php:50
+msgid "As you're on Nginx, you should add the following include to the Nginx config file:"
+msgstr "Kako ste na Nginx, trebalo bi da dodate sledeće u vaš NGINX konfiguracioni fajl"
+
+#: classes/redirect/views/redirects-tab-settings.php:24
+msgid "As you're on Apache, you should add the following include to the website httpd config file:"
+msgstr "Kako se na Apacheu, trebalo bi da dodate sledeće u httpd konfiguracioni dokument Vašeg sajta"
+
+#. Description of the plugin
+#: wp-seo-premium.php
+msgid "The first true all-in-one SEO solution for WordPress, including on-page content analysis, XML sitemaps and much more."
+msgstr "Прво право све-у једном SEO решење за WordPress, укључујући on-page анализу садржаја, XML мапу веб-места и још много тога. "
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:18
+#: assets/js/src/new-redirects/components/table-header.js:42
+#: assets/js/src/workouts/components/CornerstoneWorkout/MostLinked.js:98
+#: classes/redirect/exporters/redirect-csv-exporter.php:76
+msgid "Type"
+msgstr "Тип"
+
+#. translators: %s: '.htaccess' file name.
+#: classes/redirect/views/redirects-tab-settings.php:37
+msgid "We're unable to save the redirects to your %s file. Please make the file writable."
+msgstr "Nismo bili u mogućnosti da sačuvamo preusmeravanja u Vaš  %s fajl. Molimo Vas postarajte se da je omogućeno pisanje dokumenta."
+
+#: assets/js/src/new-redirects/components/apache-settings.js:17
+#: classes/redirect/views/redirects-tab-settings.php:111
+msgid "Generate a separate redirect file"
+msgstr "Generišite zaseban fajl za preusmeravanje"
+
+#: classes/views/import-redirects.php:79
+msgid "Import .htaccess"
+msgstr "Uvezite .htaccess"
+
+#: classes/premium-javascript-strings.php:28
+msgid "The old URL field can't be empty."
+msgstr "Polje starog URL-a ne može biti prazno"
+
+#: classes/premium-javascript-strings.php:30
+msgid "The new URL field can't be empty."
+msgstr "Polje za novi URL ne može biti prazno"
+
+#: assets/js/src/new-redirects/components/redirect-warning-modal.js:33
+#: classes/premium-javascript-strings.php:31
+msgid "Error while saving this redirect"
+msgstr "Dogodila se greška prilikom čuvanja preusmeravanja"
+
+#: classes/premium-javascript-strings.php:32
+msgid "New type can't be empty."
+msgstr "Novi tip ne može biti prazan"
+
+#. Author of the plugin
+#: wp-seo-premium.php
+msgid "Team Yoast"
+msgstr "Yoast Тим"
+
+#: classes/premium-javascript-strings.php:27
+msgid "You can't redirect a URL to itself."
+msgstr "Ne možete preusmeriti URL na njega samog."
+
+#. translators: %s: '.htaccess' file name
+#: classes/redirect/views/redirects-tab-settings.php:114
+msgid "By default we write the redirects to your %s file, check this if you want the redirects written to a separate file. Only check this option if you know what you are doing!"
+msgstr "Po pravilu, mi pišemo redirekcije u Vaš %s fajl, označite ovo polje ukoliko želite da redirekcije budu upisane u poseban fajl. Označite ovu opciju samo ukoliko ste sigurni u ono što radite!"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:27
+#: classes/redirect/presenters/redirect-table-presenter.php:68
+msgid "Regular Expression"
+msgstr "Normalni izraz"
+
+#. translators: 1: '.htaccess' file name
+#: classes/redirect/views/redirects-tab-settings.php:109
+msgid "Write redirects to the %1$s file. Make sure the %1$s file is writable."
+msgstr "Zapišite redirekcije u %1$s fajl. Pobrinite se da je  %1$s fajlu omogućeno pisanje."
+
+#. translators: %s: '.htaccess' file name
+#: classes/views/import-redirects.php:12
+msgid "Import redirects from %s"
+msgstr "Uvezite redirekcije sa %s"
+
+#: classes/premium-javascript-strings.php:29
+msgid "The Regular Expression field can't be empty."
+msgstr "Polje Regular Expression ne može biti prazno."
+
+#. translators: %s is replaced with the URL that will be deleted.
+#: classes/premium-javascript-strings.php:36
+msgid "Please enter the new URL for %s"
+msgstr "Molimo da unesete novi URL za %s"
+
+#. translators: variables will be replaced with from and to URLs.
+#: classes/premium-javascript-strings.php:38
+msgid "Redirect created from %1$s to %2$s!"
+msgstr "Redirekcija je izvršena sa linka  %1$s na link %2$s!"
+
+#: classes/redirect/redirect-table.php:138
+#: classes/redirect/views/redirects-form.php:22
+msgctxt "noun"
+msgid "Type"
+msgstr "Vrsta"
+
+#. translators: %1$s: '.htaccess' file name, %2$s: plugin name
+#: classes/views/import-redirects.php:18
+msgid "You can copy the contents of any %1$s file in here, and it will import the redirects into %2$s."
+msgstr "Možete kopirati sadržaj bilo kog %1$s fajla ovde  i sve redirekcije će biti uvezene u  %2$s."
+
+#: classes/premium-javascript-strings.php:43
+msgid "Redirect added."
+msgstr "Preusmeravanje dodato."
+
+#: classes/premium-javascript-strings.php:44
+msgid "The redirect was added successfully."
+msgstr "Preusmeravanje je uspešno dodato."
+
+#: classes/premium-javascript-strings.php:47
+#: classes/premium-redirect-service.php:153
+msgid "Redirect updated."
+msgstr "Preusmeravanje ažurirano."
+
+#: classes/premium-javascript-strings.php:48
+#: classes/premium-redirect-service.php:154
+msgid "The redirect was updated successfully."
+msgstr "Preusmeravanje je uspešno ažurirano."
+
+#: classes/premium-javascript-strings.php:51
+#: classes/premium-redirect-service.php:86
+#: classes/redirect-undo-endpoint.php:98
+msgid "Redirect deleted."
+msgstr "Preusmeravanje izbrisano."
+
+#: classes/premium-javascript-strings.php:52
+#: classes/premium-redirect-service.php:87
+#: classes/redirect-undo-endpoint.php:99
+msgid "The redirect was deleted successfully."
+msgstr "Preusmeravanje je uspešno izbrisano."
+
+#: assets/js/src/new-redirects/components/delete-modal.js:50
+#: assets/js/src/new-redirects/components/edit-redirect-row.js:104
+#: assets/js/src/new-redirects/components/redirect-warning-modal.js:42
+#: classes/premium-javascript-strings.php:56
+#: classes/redirect/views/redirects-quick-edit.php:43
+msgid "Cancel"
+msgstr "Откажи"
+
+#: assets/js/src/new-redirects/components/edit-redirect-row.js:97
+#: classes/premium-javascript-strings.php:57
+msgid "Save"
+msgstr "Сними"
+
+#: assets/js/src/new-redirects/components/redirect-warning-modal.js:45
+#: classes/premium-javascript-strings.php:58
+msgid "Save anyway"
+msgstr "Ipak sačuvaj"
+
+#: classes/premium-javascript-strings.php:60
+#: classes/redirect/views/redirects-quick-edit.php:22
+msgid "Edit redirect"
+msgstr "Izmenin preusmeravanje"
+
+#: classes/premium-javascript-strings.php:61
+msgid "You are already editing a redirect, please finish this one first"
+msgstr "Већ уређујете једно преусмеравање, прво довршите ово"
+
+#: classes/redirect/validation/redirect-accessible-validation.php:29
+msgid "The URL you entered could not be resolved."
+msgstr "Није могуће решити URL који сте унели."
+
+#. translators: %1$s expands to the returned http code
+#: classes/redirect/validation/redirect-accessible-validation.php:40
+msgid "The URL you are redirecting to seems to return a %1$s status. You might want to check if the target can be reached manually before saving."
+msgstr "Чини се да URL на који преусмеравате враћа статус %1$s. Проверите да ли је циљ могуће постићи ручно пре него што сачувате."
+
+#: classes/redirect/validation/redirect-accessible-validation.php:49
+msgid "You're redirecting to a target that returns a 301 HTTP code (permanently moved). Make sure the target you specify is directly reachable."
+msgstr "Преусмеравате на циљ који враћа 301 HTTP код (трајно премештен). Уверите се да је циљ који наведете директно доступан."
+
+#. translators: %1$s expands to the returned http code
+#: classes/redirect/validation/redirect-accessible-validation.php:57
+msgid "The URL you entered returned a HTTP code different than 200(OK). The received HTTP code is %1$s."
+msgstr "URL који сте унели вратио је HTTP код који се разликује од 200 (ОК). Примљени HTTP код је %1$s."
+
+#: classes/redirect/redirect-ajax.php:69
+msgid "Unknown error. Failed to create redirect."
+msgstr "Nepoznata greška Neuspelo kreiranje preusmeravanja."
+
+#: classes/redirect/redirect-ajax.php:106
+msgid "Unknown error. Failed to update redirect."
+msgstr "Nepoznata greška. Neuspelo ažuriranje preusmeravanja."
+
+#: classes/redirect/validation/redirect-endpoint-validation.php:40
+msgid "The redirect you are trying to save will create a redirect loop. This means there probably already exists a redirect that points to the origin of the redirect you are trying to save"
+msgstr "Преусмеравање које покушавате да сачувате створиће петљу преусмеравања. То значи да вероватно већ постоји преусмеравање које води на почетно преусмеравање које покушавате да сачувате"
+
+#. translators: %1$s: will be the target, %2$s: will be the found endpoint.
+#: classes/redirect/validation/redirect-endpoint-validation.php:48
+msgid "%1$s will be redirected to %2$s. Maybe it's worth considering to create a direct redirect to %2$s."
+msgstr "%1$s ће бити преусмерен на %2$s. Размислите о директном преусмеравању на %2$s."
+
+#. translators: %s expands to the file path that we tried to write to
+#: classes/redirect/redirect-file-util.php:88
+msgid "We're unable to write data to the file %s"
+msgstr "Не можемо записати податке у датотеку %s"
+
+#: assets/js/src/new-redirects/constants/index.js:12
+#: classes/redirect/redirect-types.php:26
+msgid "301 Moved Permanently"
+msgstr "301 trajno pomereno"
+
+#: assets/js/src/new-redirects/constants/index.js:13
+#: classes/redirect/redirect-types.php:27
+msgid "302 Found"
+msgstr "301 pronađeno"
+
+#: assets/js/src/new-redirects/constants/index.js:14
+#: classes/redirect/redirect-types.php:28
+msgid "307 Temporary Redirect"
+msgstr "307 privremeno preusmerenje"
+
+#: assets/js/src/new-redirects/constants/index.js:15
+#: classes/redirect/redirect-types.php:29
+msgid "410 Content Deleted"
+msgstr "410 izbrisan sadržaj"
+
+#: assets/js/src/new-redirects/constants/index.js:16
+#: classes/redirect/redirect-types.php:30
+msgid "451 Unavailable For Legal Reasons"
+msgstr "451 nedostupno iz zakonskih razloga"
+
+#: classes/redirect/validation/redirect-presence-validation.php:34
+msgid "Not all the required fields are filled."
+msgstr "Nisu popunjena sva obavezna polja"
+
+#: classes/redirect/validation/redirect-uniqueness-validation.php:32
+msgid "The old URL already exists as a redirect."
+msgstr "Стара URL адреса већ постоји као преусмеравање."
+
+#: classes/redirect/views/redirects-quick-edit.php:42
+msgid "Update Redirect"
+msgstr "Ažuriraj redirekciju"
+
+#. translators: %s expands to the folder location where the redirects fill will
+#. be saved.
+#: classes/redirect/views/redirects-tab-settings.php:63
+msgid "We're unable to save the redirect file to %s"
+msgstr "Не можемо да сачувамо датотеку за преусмеравање у %s"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
+#. href=''>, %4$s: </a>, %5$s: Slug to post
+#: classes/post-watcher.php:286
+msgid "%1$s detected that you moved a post (%5$s) to the trash. You can either: %2$s Don't know what to do? %3$sRead this post%4$s."
+msgstr "%1$s је открио да сте преместили чланак (%5$s) у отпад. Можете да: %2$s Не знате шта да радите? %3$sПрочитајте овај чланак %4$s."
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
+#. href='{post_with_explaination.}'>, %4$s: </a>, %5%s: The removed url.
+#: classes/post-watcher.php:493
+msgid "%1$s detected that you deleted a post (%5$s). You can either: %2$s Don't know what to do? %3$sRead this post %4$s."
+msgstr "%1$s је открио да сте избрисали чланак (%5$s). Можете да: %2$s Не знате шта да радите? %3$sПрочитајте овај чланак %4$s."
+
+#. translators: %1$s will be replaced with the from URL.
+#: classes/premium-javascript-strings.php:40
+msgid "410 Redirect created from %1$s!"
+msgstr "410 преусмеравање је направљено од %1$s!"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
+#. href='{post_with_explaination.}'>, %4$s: </a>, %5%s: The removed url.
+#: classes/term-watcher.php:309
+msgid "%1$s detected that you deleted a term (%5$s). You can either: %2$s Don't know what to do? %3$sRead this post %4$s."
+msgstr "%1$s је открио да сте избрисали члан (%5$s). Можете да: %2$s Не знате шта да радите? %3$sПрочитајте овај чланак %4$s."
+
+#: classes/watcher.php:267
+msgid "Redirect it to another URL"
+msgstr "Preusmeri na drugi URL"
+
+#: classes/watcher.php:268
+msgid "Make it serve a 410 Content Deleted header"
+msgstr "Нека служи заглавље 410 Content Deleted"
+
+#: classes/redirect/views/redirects-tab-settings.php:101
+msgid "Web server"
+msgstr "Veb server"
+
+#: assets/js/src/new-redirects/components/menu.js:68
+#: assets/js/src/new-redirects/routes/redirect-method.js:91
+#: assets/js/src/new-redirects/routes/redirect-method.js:104
+#: classes/redirect/views/redirects-tab-settings.php:103
+msgid "Redirect method"
+msgstr "Metrod redirekcije"
+
+#. translators: %s: 'Yoast SEO Premium'
+#: classes/redirect/views/redirects-tab-settings.php:118
+msgid "%s can generate redirect files that can be included in your website web server configuration. If you choose this option the PHP redirects will be disabled. Only check this option if you know what you are doing!"
+msgstr "%s може генерисати датотеке за преусмеравање које могу бити укључене у конфигурацију веб сервера вашег веб места. Ако одаберете ову опцију, PHP преусмеравања ће бити онемогућена. Ову опцију означите само ако знате шта радите!"
+
+#. translators: %s expands to the file path that we tried to write to
+#: classes/redirect/redirect-file-util.php:46
+msgid "We're unable to create the directory %s"
+msgstr "Не можемо да креирамо директоријум %s"
+
+#: classes/redirect/validation/redirect-self-redirect-validation.php:25
+msgid "You are attempting to redirect to the same URL as the origin. Please choose a different URL to redirect to."
+msgstr "Покушавате да преусмерите на URL који је исти као и извор. Изаберите други URL на који ћете преусмерити."
+
+#. translators: 1: opens a link to a related help center article. 2: closes the
+#. link.
+#: classes/redirect/views/redirects-form.php:42
+msgid "The redirect type is the HTTP response code sent to the browser telling the browser what type of redirect is served. %1$sLearn more about redirect types%2$s."
+msgstr "Тип преусмеравања је HTTP код одговора који се шаље прегледачу и саопштава прегледачу који се тип преусмеравања сервира. %1$sСазнајте више о типовима преусмеравања%2$s."
+
+#. translators: 1: opens a link to a related help center article. 2: closes the
+#. link.
+#: classes/redirect/views/redirects-tab-regex.php:30
+msgid "Regular Expression (regex) Redirects are extremely powerful redirects. You should only use them if you know what you are doing. %1$sRead more about regex redirects on our help center%2$s."
+msgstr "Преусмеравања путем регуларног израза (regex) су изузетно моћна преусмеравања. Требали бисте их користити само ако знате шта радите. %1$sПрочитајте више о регуларним изразима за преусмеравања на нашој бази знања%2$s."
+
+#: assets/js/src/new-redirects/components/apache-settings.js:41 premium.php:373
+msgid "Enabled"
+msgstr "Укључено"
+
+#. translators: Hidden accessibility text.
+#: classes/views/import-redirects.php:75
+msgid "Enter redirects to import"
+msgstr "Unesi preusmeravanja  za uvoz"
+
+#. translators: %1$s expands to the subdirectory WordPress is installed.
+#: classes/redirect/validation/redirect-subdirectory-validation.php:37
+msgid "Your redirect is missing the subdirectory where WordPress is installed in. This will result in a redirect that won't work. Make sure the redirect starts with %1$s"
+msgstr "У вашем преусмеравању недостаје поддиректоријум у коме је постављен Вордпрес. То ће резултирати преусмеравањем које неће радити. Уверите се да преусмеравање почиње са %1$s"
+
+#. translators: Hidden accessibility text.
+#: classes/redirect/redirect-table.php:248
+msgid "Select this redirect"
+msgstr "Izaberi ovo preusmeravanje"
+
+#. translators: %s expands to Yoast
+#: classes/metabox-link-suggestions.php:103
+msgid "%s internal linking"
+msgstr "%s интерно повезивање"
+
+#. translators: %s: '.htaccess' file name
+#: classes/premium-import-manager.php:67 classes/views/import-redirects.php:45
+msgid "Import redirects"
+msgstr "Uvezi preusmeravanja"
+
+#: classes/views/import-redirects.php:25
+msgid "Redirection"
+msgstr "Preusmeravanje"
+
+#: classes/views/import-redirects.php:26
+msgid "Safe Redirect Manager"
+msgstr "Сигуран управљач преусмеравањима"
+
+#: classes/views/import-redirects.php:27
+msgid "Simple 301 Redirects"
+msgstr "Jednostavna 301 preusmeravanja"
+
+#: classes/views/import-redirects.php:38
+msgid "Import from other redirect plugins"
+msgstr "Uvezi iz drugih dodataka za preusmeravanje"
+
+#: classes/views/import-redirects.php:42
+msgid "Import from:"
+msgstr "Uvezi iz:"
+
+#: classes/watcher.php:238
+msgid "New URL:"
+msgstr "Novi URL:"
+
+#: classes/watcher.php:236
+msgid "Old URL:"
+msgstr "Stari URL"
+
+#: classes/premium-redirect-export-manager.php:35
+#: classes/views/export-redirects.php:15
+msgid "Export redirects"
+msgstr "Izvezite redirekcije"
+
+#: classes/redirect/exporters/redirect-csv-exporter.php:74
+msgid "Origin"
+msgstr "Порекло"
+
+#: classes/redirect/exporters/redirect-csv-exporter.php:75
+msgid "Target"
+msgstr "Cilj"
+
+#: classes/redirect/exporters/redirect-csv-exporter.php:77
+msgid "Format"
+msgstr "Format"
+
+#: classes/views/export-redirects.php:10
+msgid "Export redirects to a CSV file"
+msgstr "Извези преусмеравања у CSV датотеку"
+
+#: classes/views/export-redirects.php:11
+msgid "If you need to have a list of all redirects, you can generate a CSV file using the button below."
+msgstr "Ако вам треба листа свих преусмеравања, можете да генеришете CSV датотеку помоћу дугмета у наставку."
+
+#: classes/views/export-redirects.php:12
+msgid "Please note that the first row in this file is a header. This row should be ignored when parsing or importing the data from the export."
+msgstr "Имајте на уму да је први ред у овој датотеци заглавље. Овај ред треба занемарити приликом рашчлањивања или увоза података из извоза."
+
+#: classes/premium-import-manager.php:272
+msgid "CSV import failed: the provided file could not be parsed using a CSV parser."
+msgstr "CSV увоз није успео: достављена датотека није могла бити рашчлањена помоћу CSV парсера."
+
+#: classes/views/import-redirects.php:52
+msgid "Import from a CSV file"
+msgstr "Uvezite iz CSV dokumenta"
+
+#: classes/views/import-redirects.php:59
+msgid "Import CSV file"
+msgstr "Uvezite CSV fajl"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: <a href='{undo_redirect_url}'>,
+#. %3$s: </a>, %4$s: Slug to post
+#: classes/post-watcher.php:312
+msgid "%1$s detected that you restored a post (%4$s) from the trash, for which a redirect was created. %2$sClick here to remove the redirect%3$s"
+msgstr "%1$s је открио да сте вратили чланак (%4$s) из отпада за који је креирано преусмеравање. %2$sКликните овде да бисте уклонили преусмеравање%3$s"
+
+#. translators: %1$s expands to the link to an article to read more about
+#. orphaned content, %2$s expands to </a>
+#: classes/premium-orphaned-post-filter.php:77
+msgid "%1$sLearn more about orphaned content%2$s."
+msgstr "%1$sСазнајте више о напуштеном садржају%2$s."
+
+#. translators: %1$s: plural form of the current post type, %2$s: a Learn more
+#. about link
+#: classes/premium-orphaned-post-filter.php:85
+msgid "Ask your SEO Manager or Site Administrator to count links in all texts, so we can identify orphaned %1$s. %2$s"
+msgstr "Замолите свог SEO менаџера или администратора веб места да преброји везе у свим текстовима, како бисмо могли да идентификујемо напуптене %1$s. %2$s"
+
+#. translators: %1$s expands to link to the recalculation option, %2$s: anchor
+#. closing, %3$s: plural form of the current post type, %4$s: a Learn more
+#. about link
+#: classes/premium-orphaned-post-filter.php:94
+msgid "%1$sClick here%2$s to index your links, so we can identify orphaned %3$s. %4$s"
+msgstr "%1$sКликните овде%2$s да бисте индексирали своје везе, тако да можемо идентификовати напуштене %3$s. %4$s"
+
+#. translators: %1$s: plural form of the current post type, %2$s: a Learn more
+#. about link
+#: classes/premium-orphaned-post-filter.php:104
+msgid "'Orphaned content' refers to %1$s that have no inbound links, consider adding links towards these %1$s. %2$s"
+msgstr "„Напуштени садржај“ се односи на %1$s који немају долазне везе, размислите о додавању веза ка тим %1$s. %2$s"
+
+#: assets/js/src/workouts/components/OrphanedWorkout.js:89
+#: classes/premium-orphaned-post-filter.php:163
+msgid "Orphaned content"
+msgstr "Напуштени садржај"
+
+#: classes/export/export-keywords-csv.php:71
+msgid "url"
+msgstr "URL"
+
+#: classes/export/export-keywords-csv.php:72
+msgid "readability score"
+msgstr "Rezultat čitljivosti"
+
+#: classes/export/export-keywords-csv.php:79
+msgid "ID"
+msgstr "ID"
+
+#. translators: Hidden accessibility text.
+#: classes/redirect/redirect-table.php:109
+msgid "Filter by redirect type"
+msgstr "Филтрирајте према типу преусмеравања"
+
+#: classes/redirect/redirect-table.php:113
+msgid "All redirect types"
+msgstr "Svi tipovi redirekcije"
+
+#. translators: %s resolves to the button label translation.
+#: classes/views/export-keywords.php:12
+msgid "If you need a list of all public posts, terms and related keyphrases, you can generate a CSV file using the %s button below."
+msgstr "Ако вам је потребна листа свих објављених чланака, чланова и сродних кључних израза, можете да генеришете CSV датотеку помоћу дугмета %s у наставку."
+
+#: classes/views/export-keywords.php:21
+msgid "Export keyphrases to a CSV file"
+msgstr "Izvezite ključne reči kao CSV fajl"
+
+#: classes/views/export-keywords.php:23
+msgid "You can add or remove columns to be included in the export using the checkboxes below."
+msgstr "Помоћу поља за потврду можете да додате или уклоните колоне које ће бити укључене у извоз."
+
+#: classes/views/export-keywords.php:31
+msgid "Export URL"
+msgstr "Izvoz URL-a"
+
+#: classes/views/export-keywords.php:32
+msgid "Export title"
+msgstr "Izvoz zaslova"
+
+#: classes/views/export-keywords.php:35
+msgid "Export readability score"
+msgstr "Izvezite rezultat čitljivosti"
+
+#: classes/views/export-keywords.php:49
+msgid "Please note:"
+msgstr "Molim obratite pažnju"
+
+#: classes/views/export-keywords.php:51
+msgid "The first row in this file is the header row. This row should be ignored when parsing or importing the data from the export."
+msgstr "Први ред у овој датотеци је ред заглавља. Овај ред треба занемарити приликом рашчлањивања или увоза података из извоза."
+
+#: classes/views/export-keywords.php:52
+msgid "Exporting data can take a long time when there are many posts, pages, public custom post types or terms."
+msgstr "Izvoz podataka može potrajati kad postoji mnogo postova, stranica, javnih prilagođenih tipova postova ili uslova"
+
+#: assets/js/src/new-redirects/routes/redirects.js:83
+#: classes/redirect/views/redirects-tab-plain.php:25
+msgid "Plain redirects"
+msgstr "Obična preusmeravanja"
+
+#: classes/redirect/views/redirects-tab-regex.php:25
+msgid "Regular Expression redirects"
+msgstr "Регуларни израз преусмеравања"
+
+#: classes/redirect/views/redirects-tab-settings.php:76
+msgid "Redirects settings"
+msgstr "Postavke preusmeravanja"
+
+#: classes/export/export-keywords-csv.php:80
+msgctxt "post_type of a post or the taxonomy of a term"
+msgid "type"
+msgstr "врста"
+
+#: classes/export/export-keywords-csv.php:75
+msgid "seo title"
+msgstr "SEO naslov"
+
+#: classes/views/export-keywords.php:33
+msgid "Export SEO title"
+msgstr "Izvezite SEO naslov"
+
+#: classes/views/export-keywords.php:34
+msgid "Export meta description"
+msgstr "Izvezite meta opis"
+
+#: classes/export/export-keywords-csv.php:73
+msgid "keyphrase"
+msgstr "кључни израз"
+
+#: classes/export/export-keywords-csv.php:74
+msgid "keyphrase score"
+msgstr "резултат кључног израза"
+
+#: classes/premium-keyword-export-manager.php:37
+#: classes/views/export-keywords.php:8
+msgid "Export keyphrases"
+msgstr "Извези кључни израз"
+
+#: classes/views/export-keywords.php:30
+msgid "Export keyphrase scores"
+msgstr "Извези резултат кључног израза"
+
+#. Plugin URI of the plugin
+#: wp-seo-premium.php
+msgid "https://yoa.st/2jc"
+msgstr "https://yoa.st/2jc"
+
+#. Plugin Name of the plugin
+#: wp-seo-premium.php
+msgid "Yoast SEO Premium"
+msgstr "Yoast SEO Premium"
+
+#. translators: 1: link to redirects overview, 2: closing link tag
+#: classes/premium-import-manager.php:189
+msgid "All redirects have been imported successfully. Go to the %1$sredirects overview%2$s to see the imported redirects."
+msgstr "Сва преусмеравања су успешно увезена. Идите на %1$sпреглед преусмеравања%2$s да бисте видели увезена преусмеравања."
+
+#. translators: 1: link to redirects overview, 2: closing link tag
+#: classes/premium-import-manager.php:198
+msgid "No redirects have been imported. Probably they already exist as a redirect. Go to the %1$sredirects overview%2$s to see the existing redirects."
+msgstr "Нису увезена преусмеравања. Вероватно већ постоје као преусмеравање. Идите на %1$sпреглед преусмеравања%2$s да бисте видели постојећа преусмеравања."
+
+#. translators: 1: amount of imported redirects, 2: total amount of redirects,
+#. 3: link to redirects overview, 4: closing link tag
+#: classes/premium-import-manager.php:206
+msgid "Imported %1$s/%2$s redirects successfully. Go to the %3$sredirects overview%4$s to see the imported redirect."
+msgid_plural "Imported %1$s/%2$s redirects successfully. Go to the %3$sredirects overview%4$s to see the imported redirects."
+msgstr[0] "Увезено %1$s/%2$s преусмеравања. Идите на %3$sпреглед преусмеравања%4$s да бисте видели увезена преусмеравања."
+msgstr[1] "Увезена %1$s/%2$s преусмеравања. Идите на %3$sпреглед преусмеравања%4$s да бисте видели увезена преусмеравања."
+msgstr[2] "Увезено %1$s/%2$s преусмеравања. Идите на %3$sпреглед преусмеравања%4$s да бисте видели увезена преусмеравања."
+
+#: classes/premium-import-manager.php:248
+msgid "Redirect import failed: the selected redirect plugin is not installed or activated."
+msgstr "Преусмеравање увоза није успело: изабрани додатак за преусмеравање није постављен или укључен."
+
+#: classes/premium-import-manager.php:266
+msgid "CSV import failed: No file selected."
+msgstr "CSV import nije uspeo: Fajl nije odabran."
+
+#. translators: 1: The maximum file size
+#: classes/premium-import-manager.php:280
+msgid "CSV import failed: the provided file is larger than %1$s."
+msgstr "CSV увоз није успео: наведена датотека је већа од %1$s."
+
+#: classes/premium-import-manager.php:287
+msgid "CSV import failed: the provided file is not a CSV file."
+msgstr "CSV увоз није успео: наведена датотека није CSV датотека."
+
+#: classes/premium-import-manager.php:306
+msgid "Redirect import failed: we can't recognize this type of import."
+msgstr "Увоз преусмеравања није успео: не можемо да препознамо ову врсту увоза."
+
+#: classes/premium-stale-cornerstone-content-filter.php:51
+msgid "Stale cornerstone content"
+msgstr "Застарели кључни садржај"
+
+#. translators: %1$s expands to dynamic post type label, %2$s expands anchor to
+#. blog post about cornerstone content, %3$s expands to </a>
+#: classes/premium-stale-cornerstone-content-filter.php:68
+msgid "Stale cornerstone content refers to cornerstone content that hasn’t been updated in the last 6 months. Make sure to keep these %1$s up-to-date. %2$sLearn more about cornerstone content%3$s."
+msgstr "Застарели кључни садржај се односи на кључни садржај који није ажуриран у последњих 6 месеци. Обавезно редовно ажурирајте %1$s. %2$sСазнајте више о кључном садржају%3$s."
+
+#: classes/views/import-redirects.php:56
+msgid "Choose a CSV file from your computer:"
+msgstr "Odaberite CSV sa svog kompjutera:"
+
+#: node_modules/@yoast/ai-frontend/dist/build.js:26
+#: assets/js/src/ai/ai-fix-assessments/components/fix-assessments-notification.js:351
+#: assets/js/src/components/RedirectNotification.js:138
+#: assets/js/src/elementor/components/RedirectNotification.js:107
+#: classes/watcher.php:249
+msgid "Undo"
+msgstr "Vrati korak nazad"
+
+#: classes/premium-redirect-service.php:95
+#: classes/premium-redirect-service.php:140
+#: classes/redirect-undo-endpoint.php:87 classes/redirect-undo-endpoint.php:107
+msgid "Redirect not deleted."
+msgstr "Redirakcija nije obrisana"
+
+#: classes/premium-redirect-service.php:96
+#: classes/redirect-undo-endpoint.php:88 classes/redirect-undo-endpoint.php:108
+msgid "Something went wrong when deleting this redirect."
+msgstr "Nešto je pošlo naopako pri brisanju redirekcije."
+
+#: classes/redirect/validation/redirect-relative-origin-validation.php:27
+msgid "The old URL for your redirect is not relative. Only the new URL is allowed to be absolute. Make sure to provide a relative old URL."
+msgstr "Стари URL за ваше преусмеравање није релативан. Само нова URL адреса може бити апсолутна. Проследите стари URL који је релативан."
+
+#. translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the
+#. admin page.
+#: classes/post-watcher.php:480
+msgid "%1$s created a %2$sredirect%3$s from the old post URL to the new post URL."
+msgstr "%1$s је креирао %2$sпреусмеравање%3$s са старог на нови URL чланка."
+
+#. translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the
+#. admin page.
+#: classes/term-watcher.php:296
+msgid "%1$s created a %2$sredirect%3$s from the old term URL to the new term URL."
+msgstr "%1$s је креирао %2$sпреусмеравање%3$s са старог на нови URL члана."
+
+#: classes/watcher.php:243
+msgid "Ok"
+msgstr "Ok"
+
+#: assets/js/src/blocks/table-of-contents-block.js:322
+#: assets/js/src/blocks/table-of-contents-block.js:407
+#: src/integrations/admin/extension-importer/content-processor.php:336
+msgid "Table of contents"
+msgstr "Преглед садржаја"

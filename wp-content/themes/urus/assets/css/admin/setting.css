@@ -1,0 +1,12 @@
+.rAds{display: none!important;}
+.el-resize-small::before{
+   	content: "";
+    background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNv…c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=);
+    width: 19px;
+    height: 19px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: center;
+    display: block;
+}

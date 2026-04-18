@@ -1,0 +1,1341 @@
+# Translation of Yoast - Yoast SEO Premium (for WordPress) in Greek
+# This file is distributed under the same license as the Yoast - Yoast SEO Premium (for WordPress) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-04-09 06:03:26+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-rc.1\n"
+"Language: el_GR\n"
+"Project-Id-Version: Yoast - Yoast SEO Premium (for WordPress)\n"
+
+#. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
+#. to a closing p tag
+#: src/task-list/application/tasks/set-social-sharing-images.php:108
+msgid "%1$sUnstyled preview images can lower engagement when shared on social media. Keep every post on brand. %2$s%3$sOpen the post, go to Yoast SEO Analysis tab, click on Social, and add a relevant image to your preview.%4$s"
+msgstr "%1$sΟι προεπισκοπήσεις εικόνων χωρίς διαμόρφωση μπορούν να μειώσουν την αλληλεπίδραση όταν κοινοποιούνται στα κοινωνικά δίκτυα. Διατηρήστε κάθε δημοσίευση συμβατή με την ταυτότητα της επωνυμίας σας. %2$s%3$sΑνοίξτε την δημοσίευση, μεταβείτε στην καρτέλα Ανάλυση Yoast SEO, κάντε κλικ στο Κοινωνικά δίκτυα και προσθέστε μια σχετική εικόνα στην προεπισκόπησή σας.%4$s"
+
+#. translators: %1$s expands to the post type label this task is about.
+#: src/task-list/application/tasks/set-social-sharing-images.php:105
+msgid "Set social sharing images in your recent content: %1$s"
+msgstr "Καθορίστε εικόνες κοινοποίησης στα κοινωνικά δίκτυα για το πρόσφατο περιεχόμενό σας: %1$s"
+
+#: src/task-list/application/tasks/child-tasks/set-social-sharing-images-child.php:89
+msgid "Open editor"
+msgstr "Άνοιγμα επεξεργαστή"
+
+#. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
+#. to a closing p tag
+#: src/task-list/application/tasks/set-social-appearance-templates.php:148
+msgid "%1$sUnstyled previews and general descriptions can lower engagement when shared on social media. Templates keep every post on brand and share-ready automatically.%2$s%3$sOpen Social settings, choose your content type, and set a default image, title, and description.%4$s"
+msgstr "%1$sΟι προεπισκοπήσεις χωρίς διαμόρφωση και οι γενικές περιγραφές μπορούν να μειώσουν την αλληλεπίδραση όταν κοινοποιούνται στα κοινωνικά δίκτυα. Τα πρότυπα διατηρούν κάθε δημοσίευση συμβατή με την επωνυμία σας και έτοιμη για κοινοποίηση αυτόματα.%2$s%3$sΑνοίξτε τις ρυθμίσεις Κοινωνικών δικτύων, επιλέξτε τον τύπο περιεχομένου σας και ορίστε μια προεπιλεγμένη εικόνα, τίτλο και περιγραφή.%4$s"
+
+#. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
+#. to a closing p tag
+#: src/task-list/application/tasks/organization-schema.php:119
+msgid "%1$sMissing organization details makes it harder for search engines to recognize your brand. Completing this helps your business appear correctly in search results.%2$s%3$sGo to Site representation, open Additional organization info, and fill in the information.%4$s"
+msgstr "%1$sΗ έλλειψη στοιχείων οργανισμού δυσκολεύει τις μηχανές αναζήτησης να αναγνωρίσουν την επωνυμία σας. Η συμπλήρωσή τους βοηθά την επιχείρησή σας να εμφανίζεται σωστά στα αποτελέσματα αναζήτησης.%2$s%3$sΜεταβείτε στην παρουσίαση ιστότοπου, ανοίξτε τις Πρόσθετες πληροφορίες οργανισμού και συμπληρώστε τα στοιχεία.%4$s"
+
+#: classes/redirect/redirect-ajax.php:226
+msgid "You don't have permission to update the redirect."
+msgstr "Δεν έχετε άδεια να εκτελέσετε αυτήν την ανακατεύθυνση."
+
+#: classes/redirect/redirect-ajax.php:206
+msgid "You don't have permission to add the redirect."
+msgstr "Δεν έχετε άδεια να προσθέσετε την ανακατεύθυνση."
+
+#. translators: %1$s expands to the post type label this task is about
+#: src/task-list/application/tasks/set-social-appearance-templates.php:145
+msgid "Set social media appearance templates: %1$s"
+msgstr "Ρυθμίστε πρότυπα εμφάνισης στα κοινωνικά δίκτυα: %1$s"
+
+#: src/task-list/application/tasks/set-social-appearance-templates.php:129
+msgid "Set social templates"
+msgstr "Ορισμός προτύπων κοινωνικής δικτύωσης"
+
+#: src/task-list/application/tasks/orphaned-workout.php:106
+msgid "Pages without internal links are hard to find by users and search engines. Linking them up improves discoverability for both users and search engines."
+msgstr "Οι σελίδες χωρίς εσωτερικούς συνδέσμους είναι δύσκολο να εντοπιστούν από τους χρήστες και τις μηχανές αναζήτησης. Η διασύνδεσή τους βελτιώνει τη δυνατότητα ανακάλυψης τόσο για τους χρήστες όσο και για τις μηχανές αναζήτησης."
+
+#: src/task-list/application/tasks/orphaned-workout.php:105
+msgid "Do the Orphaned Content workout"
+msgstr "Κάντε την άσκηση για το Ορφανό Περιεχόμενο"
+
+#: src/task-list/application/tasks/organization-schema.php:116
+msgid "Fill in Organization Schema"
+msgstr "Συμπληρώστε το Σχήμα Οργανισμού"
+
+#: src/task-list/application/tasks/organization-schema.php:103
+msgid "Take me there"
+msgstr "Πήγαινέ με εκεί"
+
+#: src/task-list/application/tasks/cornerstone-workout.php:106
+msgid "When important pages aren't well-linked, search engines can't tell they matter most. Strengthening cornerstone content helps your main topics rank better."
+msgstr "Όταν οι σημαντικές σελίδες δεν διαθέτουν αρκετούς συνδέσμους, οι μηχανές αναζήτησης δεν μπορούν να διακρίνουν ότι αυτές έχουν τη μεγαλύτερη σημασία. Η ενίσχυση του περιεχομένου βασικού περιεχομένου βοηθά τα κύρια θέματά σας να καταταχθούν καλύτερα."
+
+#: src/task-list/application/tasks/cornerstone-workout.php:105
+msgid "Do the Cornerstone Approach workout"
+msgstr "Κάντε την άσκηση της μεθόδου βασικού περιεχομένου"
+
+#: src/task-list/application/tasks/cornerstone-workout.php:92
+#: src/task-list/application/tasks/orphaned-workout.php:92
+msgid "Start the workout"
+msgstr "Ξεκινήστε την εξάσκηση"
+
+#: classes/redirect/validation/redirect-self-wp-json-redirect-validation.php:35
+msgid "You cannot create a redirect to the WordPress REST API endpoint (/wp-json). Please choose a different URL to redirect to."
+msgstr "Δεν μπορείτε να δημιουργήσετε ανακατεύθυνση στο τελικό σημείο του WordPress REST API (/wp-json). Επιλέξτε διαφορετική διεύθυνση URL για ανακατεύθυνση."
+
+#: classes/redirect/validation/redirect-self-wp-json-redirect-validation.php:28
+msgid "You cannot create a redirect from the WordPress REST API endpoint (/wp-json). Please choose a different origin URL."
+msgstr "Δεν μπορείτε να δημιουργήσετε ανακατεύθυνση από το τελικό σημείο του WordPress REST API (/wp-json). Επιλέξτε διαφορετική διεύθυνση URL προέλευσης."
+
+#. translators: %1$s expands to Yoast.
+#: src/ai/summarize/user-interface/ai-summarize-integration.php:149
+msgid "%1$s AI Blocks"
+msgstr "Μπλοκ %1$s AI"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block keyword"
+msgid "key takeaways"
+msgstr "key takeaways"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block keyword"
+msgid "tldr"
+msgstr "tldr"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block keyword"
+msgid "summary"
+msgstr "περίληψη"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block description"
+msgid "Adds a short AI summary of your content."
+msgstr "Προσθέτει μια σύντομη περίληψη AI του περιεχομένου σας."
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block title"
+msgid "Yoast AI Summarize"
+msgstr "Σύνοψη Yoast AI"
+
+#: classes/premium-redirect-service.php:163
+#: classes/premium-redirect-service.php:330
+msgid "Something went wrong while updating this redirect."
+msgstr "Κάτι πήγε λάθος κατά την ενημέρωση αυτής της ανακατεύθυνσης."
+
+#: classes/premium-redirect-service.php:162
+msgid "Redirect not updated."
+msgstr "Η ανακατεύθυνση ενημερώθηκε."
+
+#: classes/premium-redirect-service.php:51
+msgid "The redirect was created successfully."
+msgstr "Η ανακατεύθυνση δημιουργήθηκε με επιτυχία."
+
+#: classes/premium-redirect-service.php:50
+msgid "Redirect created."
+msgstr "Η ανακατεύθυνση δημιουργήθηκε."
+
+#: classes/premium-redirect-service.php:35
+#: classes/premium-redirect-service.php:59
+msgid "Redirect not created."
+msgstr "Η ανακατεύθυνση δεν δημιουργήθηκε."
+
+#: classes/premium-redirect-endpoint.php:251
+msgid "Whether to write redirects into a separate file instead of .htaccess."
+msgstr "Εάν θα γραφτούν ανακατευθύνσεις σε ξεχωριστό αρχείο αντί για .htaccess."
+
+#: classes/premium-redirect-endpoint.php:245
+msgid "Whether to disable PHP-based redirects and use .htaccess instead."
+msgstr "Εάν θα απενεργοποιηθούν οι ανακατευθύνσεις που βασίζονται σε PHP και θα χρησιμοποιηθεί το .htaccess αντ' αυτού."
+
+#: classes/premium-redirect-endpoint.php:137
+#: classes/premium-redirect-endpoint.php:201
+msgid "The format of the redirects to retrieve."
+msgstr "Η μορφή των ανακατευθύνσεων προς ανάκτηση."
+
+#: classes/premium-redirect-endpoint.php:76
+msgid "The format of the redirect to create."
+msgstr "Η μορφή της ανακατεύθυνσης που θα δημιουργηθεί."
+
+#: assets/js/src/new-redirects/helpers/submit-utils.js:45
+#: classes/premium-redirect-service.php:60
+msgid "Something went wrong when creating this redirect."
+msgstr "Υπήρξε πρόβλημα κατά τη δημιουργία αυτής της ανακατεύθυνσης."
+
+#. translators: The text to show when a paragraph break is suggested through AI
+#. Optimize.
+#: src/ai/optimize/suggestions-postprocessor/application/suggestion-processor.php:141
+msgid "Paragraph break"
+msgstr "Αλλαγή παραγράφου"
+
+#. translators: %1$s: Yoast SEO
+#: src/addon-installer.php:144
+msgid "Install latest %1$s"
+msgstr "Εγκατάσταση πιο πρόσφατο %1$s"
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "toc"
+msgstr "πίνακας περιεχομένου"
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "links"
+msgstr "σύνδεσμοι"
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block description"
+msgid "Adds a table of contents to this page."
+msgstr "Προσθέτει έναν πίνακα περιεχομένων σε αυτή τη σελίδα."
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block title"
+msgid "Yoast Table of Contents"
+msgstr "Πίνακας Περιεχομένου Yoast"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block keyword"
+msgid "related pages"
+msgstr "σχετικές σελίδες"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block keyword"
+msgid "related posts"
+msgstr "σχετικά άρθρα"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block description"
+msgid "Adds a list of links related to this page."
+msgstr "Προσθέτει μια λίστα συνδέσμων σχετικόύς με αυτή τη σελίδα."
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block title"
+msgid "Yoast Related Links"
+msgstr "Yoast σχετικοί σύνδεσμοι"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block keyword"
+msgid "content length"
+msgstr "μήκος περιεχομένου"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block keyword"
+msgid "reading time"
+msgstr "χρόνος ανάγνωσης"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block description"
+msgid "Shows an estimated reading time based on the content length."
+msgstr "Εμφανίζει έναν εκτιμώμενο χρόνο ανάγνωσης με βάση τη διάρκεια του περιεχομένου."
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block title"
+msgid "Yoast Estimated Reading Time"
+msgstr "Εκτιμώμενος χρόνος ανάγνωσης Yoast"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "children"
+msgstr "θυγατρικές"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "childpages"
+msgstr "υποσελίδες"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "subpages"
+msgstr "υποσελίδες"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block description"
+msgid "Adds a list of internal links to subpages of this page."
+msgstr "Προσθέτει μια λίστα εσωτερικών συνδέσμων προς τις υποσελίδες αυτής της σελίδας."
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block title"
+msgid "Yoast Subpages"
+msgstr "Υποσελίδες Yoast"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+#: assets/blocks/dynamic-blocks/siblings/block.json
+#: assets/blocks/dynamic-blocks/subpages/block.json
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "site structure"
+msgstr "δομή ιστότοπου"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+#: assets/blocks/dynamic-blocks/siblings/block.json
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "internal linking"
+msgstr "εσωτερική διασύνδεση"
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block keyword"
+msgid "siblings pages"
+msgstr "συγγενικές σελίδες"
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block keyword"
+msgid "siblings"
+msgstr "συγγενικά"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+#: assets/blocks/dynamic-blocks/siblings/block.json
+#: assets/blocks/dynamic-blocks/subpages/block.json
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "SEO"
+msgstr "SEO"
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block description"
+msgid "Adds a list of internal links to sibling pages which share the same parent."
+msgstr "Προσθέτει μια λίστα εσωτερικών συνδέσμων σε συγγενικές σελίδες που έχουν τον ίδιο γονέα."
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block title"
+msgid "Yoast Siblings"
+msgstr "Yoast Συγγενικά"
+
+#: src/deprecated/integrations/admin/ai-consent-integration.php:137
+msgid "AI features"
+msgstr "Δυνατότητες AI"
+
+#. translators: 1: Yoast SEO Premium
+#: src/integrations/admin/update-premium-notification.php:129
+msgid "Update to the latest version of %1$s!"
+msgstr "Ενημέρωση στην πιο πρόσφατη έκδοση του %1$s!"
+
+#. translators: 1: Yoast SEO Premium, 2 and 3: opening and closing anchor tag.
+#: src/integrations/admin/update-premium-notification.php:121
+msgid "Please %2$supdate %1$s to the latest version%3$s to ensure you can fully use all Premium settings and features."
+msgstr "%2$sΕνημερώστε το %1$s στην πιο πρόσφατη έκδοση%3$s για να διασφαλίσετε ότι μπορείτε να χρησιμοποιήσετε πλήρως όλες τις ρυθμίσεις και τις λειτουργίες Premium."
+
+#: src/integrations/admin/inclusive-language-filter-integration.php:65
+msgid "All Inclusive Language Scores"
+msgstr "Όλες οι βαθμολογίες συμπεριληπτικής γλώσσας"
+
+#. translators: Hidden accessibility text.
+#: src/integrations/admin/inclusive-language-filter-integration.php:60
+msgid "Filter by Inclusive Language Score"
+msgstr "Φιλτράρισμα ανά βαθμολογία συμπεριληπτικής γλώσσας"
+
+#: src/integrations/admin/inclusive-language-column-integration.php:155
+#: src/integrations/admin/inclusive-language-column-integration.php:156
+#: src/integrations/admin/inclusive-language-taxonomy-column-integration.php:116
+#: src/integrations/admin/inclusive-language-taxonomy-column-integration.php:117
+msgid "Inclusive language score"
+msgstr "Βαθμολογία συμπεριληπτικής γλώσσας"
+
+#. translators: Hidden accessibility text.
+#: src/integrations/admin/cornerstone-column-integration.php:138
+#: src/integrations/admin/cornerstone-taxonomy-column-integration.php:110
+msgid "Cornerstone content"
+msgstr "Βασικό περιεχόμενο"
+
+#: src/integrations/admin/cornerstone-column-integration.php:136
+#: src/integrations/admin/cornerstone-taxonomy-column-integration.php:108
+msgid "Is this cornerstone content?"
+msgstr "Είναι αυτό βασικό περιεχόμενο;"
+
+#. Author URI of the plugin
+#: wp-seo-premium.php
+msgid "https://yoa.st/team-yoast-premium"
+msgstr "https://yoa.st/team-yoast-premium"
+
+#: src/integrations/third-party/mastodon.php:147
+#: src/user-meta/framework/additional-contactmethods/mastodon.php:28
+msgid "Mastodon profile URL"
+msgstr "URL Προφίλ Mastodon"
+
+#: assets/js/src/frontend-inspector/components/frontend-inspector.js:29
+#: src/integrations/frontend-inspector.php:92
+msgid "Front-end SEO inspector"
+msgstr "Επιθεωρητής SEO Front-end"
+
+#: classes/redirect/views/redirects-tab-settings.php:84
+msgid "Read more about why web server redirect methods have been disabled on a multisite."
+msgstr "Διαβάστε περισσότερα σχετικά με το γιατί οι μέθοδοι ανακατεύθυνσης διακομιστή ιστού έχουν απενεργοποιηθεί σε έναν πολλαπλό ιστότοπο."
+
+#: classes/redirect/views/redirects-tab-settings.php:82
+msgid "Since this site is a multisite, web server redirect methods have been disabled to prevent issues."
+msgstr "Δεδομένου ότι αυτός ο ιστότοπος είναι πολλαπλός ιστότοπος, οι μέθοδοι ανακατεύθυνσης διακομιστή έχουν απενεργοποιηθεί για την αποφυγή προβλημάτων."
+
+#: src/integrations/admin/thank-you-page-integration.php:84
+msgid "Installation Successful"
+msgstr "Επιτυχής εγκατάσταση"
+
+#: classes/views/thank-you.php:104
+msgid "Browse our courses"
+msgstr "Περιηγηθείτε στα μαθήματα μας"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: <strong>, %3$s: Yoast SEO, %4$s:
+#. </strong>
+#: classes/views/thank-you.php:91
+msgid "%1$s grants you direct access to %2$sall premium %3$s academy courses%4$s. Learn all the ins and outs of holistic SEO from industry experts."
+msgstr "%1$s σας παρέχει άμεση πρόσβαση σε %2$sόλα τα premium %3$s μαθήματα της ακαδημίας μας%4$s. Μάθετε όλες τις πτυχές του ολιστικού SEO από ειδικούς του κλάδου."
+
+#: classes/views/thank-you.php:84
+msgid "Master vital SEO skills with our online courses"
+msgstr "Τελειοποιήστε ζωτικές SEO ικανότητες με τα διαδικτυακά μας μαθήματα"
+
+#: classes/views/thank-you.php:79
+msgid "Check out the Redirect Manager"
+msgstr "Ρίξτε μια ματιά στον Διαχειριστή Ανακατευθύνσεων"
+
+#. translators: %1$s: Yoast SEO, %2$s: <strong>, %3$s: </strong>
+#: classes/views/thank-you.php:68
+msgid "The %1$s %2$sRedirect Manager%3$s automatically prevents visitors from reaching a dead end whenever you move or delete content. It also makes managing your existing redirects easy."
+msgstr "Ο %1$s %2$sΔιαχειριστής Ανακατευθύνσεων%3$s αποτρέπει αυτόματα τους επισκέπτες να φτάσουν σε ένα αδιέξοδο όποτε εσείς μετακινείτε ή διαγράφετε περιεχόμενο. Επίσης κάνει εύκολη τη διαχείριση των υπαρχόντων ανακατευθύνσεων."
+
+#: classes/views/thank-you.php:61
+msgid "Keep your site well-organised so people won't get lost"
+msgstr "Διατηρείστε τον ιστότοπο σας καλά οργανωμένο ώστε να μην χάνονται οι επισκέπτες σας "
+
+#: classes/views/thank-you.php:56
+msgid "Score some more green bullets"
+msgstr "Πετύχετε μερικές επιπλέον πράσινες κουκκίδες"
+
+#. translators: %1$s: <strong>, %2$s: </strong>
+#: classes/views/thank-you.php:46
+msgid "Different people search with different search terms. With our %1$spremium analysis%2$s, you are free to use variations and synonyms of your keywords in your content, which will make your writing style far more natural."
+msgstr "Διαφορετικά άτομα κάνουν αναζητήσεις με διαφορετικούς όρους αναζήτησης. Με την %1$spremium ανάλυση%2$s μας, είστε ελεύθεροι να χρησιμοποιήσετε παραλλαγές και συνώνυμα των λέξεων-κλειδιών σας στο περιεχόμενο σας, το οποίο θα κάνει τον τρόπο γραφής σας πολύ πιο φυσικό."
+
+#: classes/views/thank-you.php:39
+msgid "Optimize your content further with our smart analysis"
+msgstr "Βελτιστοποιήστε περαιτέρω το περιεχόμενο σας με την έξυπνη ανάλυση μας"
+
+#: classes/views/thank-you.php:34
+msgid "Do the cornerstone workout!"
+msgstr "Κάντε την άσκηση για το βασικό περιεχόμενο!"
+
+#. translators: %1$s: <strong>, %2$s: </strong>
+#: classes/views/thank-you.php:24
+msgid "%1$sCornerstone content%2$s is the content on your site that’s most important. You want to rank highest in Google with these articles. Make sure your internal linking structure reflects what pages are most important. Want to know how?"
+msgstr "Το %1$sβασικό περιεχόμενο%2$s είναι το πιο σημαντικό περιεχόμενο στον ιστότοπο σας. Στόχος σας είναι να έχετε την υψηλότερη κατάταξη στο Google με αυτά τα άρθρα. Για αυτό σιγουρευτείτε ότι η δομή των εσωτερικών συνδέσμων σας αντικατοπτρίζει ποιες σελίδες είναι πιο σημαντικές. Θελετε να μάθετε πως;"
+
+#: assets/js/src/workouts/components/CornerstoneWorkout.js:107
+#: classes/views/thank-you.php:17
+msgid "Rank with articles you want to rank with"
+msgstr "Ανεβείτε στην κατάταξη με τα άρθρα που πραγματικά επιθυμείτε. "
+
+#: classes/views/thank-you.php:12
+msgid "So, what's next?"
+msgstr "Άρα, τι ακολουθεί;"
+
+#: classes/views/thank-you.php:10
+msgid "Installation successful!"
+msgstr "Επιτυχής εγκατάσταση!"
+
+#: src/integrations/admin/user-profile-integration.php:146
+msgid "The info you add below is added to the data Yoast SEO outputs in its schema.org output, for instance when you're the author of a page. Please only add the info you feel good sharing publicly."
+msgstr "Οι πληροφορίες που προσθέτετε παρακάτω προστίθενται στα δεδομένα τα οποία η Yoast SEO αποδίδει στην απόδοση (output) του schema.org, για παράδειγμα όταν είστε ο συντάκτης μιας σελίδας. Παρακαλούμε προσθέστε μόνο τις πληροφορίες με τις οποίες αισθάνεστε άνετα να μοιραστείτε δημοσίως."
+
+#: src/integrations/admin/user-profile-integration.php:145
+msgid "Yoast SEO Schema enhancements"
+msgstr "Βελτιώσεις Σχήματος (Schema) Yoast SEO"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:129
+msgid "E.g. %1$sAcme inc%2$s"
+msgstr "Π.χ. %1$sΑκμή Α.Ε.%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:127
+msgid "Employer name"
+msgstr "Όνομα εργοδότη"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:123
+msgid "E.g. %1$ssoftware engineer%2$s"
+msgstr "Π.χ. %1$sμηχανικός λογισμικού%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:117
+msgid "Employer information"
+msgstr "Πληροφορίες εργοδότη"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:113
+msgid "Comma separated, e.g. %1$sEnglish, French, Dutch%2$s"
+msgstr "Διαχωρισμένα με κόμμα, π.χ. %1$sΑγγλικά, Γαλλικά, Ολλανδικά%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:111
+msgid "Language(s) spoken"
+msgstr "Ομιλούσα(ες) γλώσσα(ες)"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:107
+msgid "Comma separated, e.g. %1$sPHP, JavaScript, 90's rock music%2$s"
+msgstr "Διαχωρισμένα με κόμμα, π.χ. %1$sPHP, JavaScript, ροκ μουσική της δεκαετίας του '90%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:105
+msgid "Expertise in"
+msgstr "Εξειδίκευση σε"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:101
+msgid "Comma separated, e.g. %1$sMost likely to succeed - 1991, Smartest in class - 1990%2$s"
+msgstr "Διαχωρισμένα με κόμμα, π.χ. %1$sΒραβείο επιτυχέστερου μαθητή - 1991, Αριστείο - 1990%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:99
+msgid "Awards"
+msgstr "Βραβεύσεις"
+
+#: src/integrations/admin/user-profile-integration.php:95
+msgid "Extra information"
+msgstr "Επιπλέον πληροφορίες"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:91
+msgid "E.g. %1$sfemale%2$s, %1$smale%2$s, %1$snon-binary%2$s"
+msgstr "Π.χ. %1$sθήλυ%2$s, %1$sάρρεν%2$s, %1$snμη-δυαδικό/ουδέτερο φύλο%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:89
+msgid "Gender"
+msgstr "Γένος"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:85
+msgid "Use format: %1$sYYYY-MM-DD%2$s"
+msgstr "Χρησιμοποιήστε τη μορφή: %1$sΕΕΕΕ-ΜΜ-ΗΗ%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:83
+msgid "Birth date"
+msgstr "Ημερομηνία γέννησης"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:79
+msgid "E.g. %1$sMD%2$s, %1$sPhD%2$s"
+msgstr "Π.χ. %1$sΔρ.%2$s, %1$sΔιδάκτωρ%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:77
+msgid "Honorific suffix"
+msgstr "Τιμητικό επίθημα"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:73
+msgid "E.g. %1$sDr%2$s, %1$sMs%2$s, %1$sMr%2$s"
+msgstr "Π.χ. %1$sΔρ.%2$s, %1$sΚα.%2$s, %1$sΚος.%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:71
+msgid "Honorific prefix"
+msgstr "Τιμητικό πρόθεμα"
+
+#: src/integrations/admin/user-profile-integration.php:67
+msgid "Basic information"
+msgstr "Βασικές πληροφορίες"
+
+#: premium.php:318
+msgid "Custom fields to include in page analysis"
+msgstr "Προσαρμοσμένα πεδία για να συμπεριληφθούν στην ανάλυση σελίδας"
+
+#: premium.php:311
+msgid "Learn more about including custom fields in the page analysis"
+msgstr "Μάθετε περισσότερα σχετικά με την συμπερίληψη προσαρμοσμένων πεδίων στην ανάλυση σελίδας"
+
+#: src/integrations/admin/user-profile-integration.php:121
+msgid "Job title"
+msgstr "Τίτλος επαγγέλματος"
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:202
+msgid "%2$sActivate %1$s now%3$s"
+msgstr "%2$sΕνεργοποιήστε %1$s τώρα%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:209
+msgid "%2$sUpgrade %1$s now%3$s"
+msgstr "%2$sΑναβαθμίστε %1$s τώρα%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:214
+msgid "%2$sInstall %1$s now%3$s"
+msgstr "%2$sΕγκαταστήστε %1$s τώρα%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required,
+#. %3$s: Yoast SEO Premium.
+#: src/addon-installer.php:152
+msgid "%1$s %2$s must be installed and activated in order to use %3$s."
+msgstr "Η %1$s %2$s πρέπει να είναι εγκατεστημένη και ενεργοποιημένη ώστε να χρησιμοποιήσετε τη %3$s."
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:197
+msgid "%2$sNetwork Activate %1$s now%3$s"
+msgstr "%2$sΕνεργοποιήστε μέσω δικτύου τη %1$s τώρα%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required.
+#: src/addon-installer.php:227
+msgid "Please contact a network administrator to install %1$s %2$s."
+msgstr "Παρακαλούμε επικοινωνήστε με ένα διαχειριστή δικτύου για να εγκαταστήσετε τη %1$s %2$s."
+
+#. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required.
+#: src/addon-installer.php:231
+msgid "Please contact an administrator to install %1$s %2$s."
+msgstr "Παρακαλούμε επικοινωνήστε με ένα διαχειριστή για να εγκαταστήσετε τη %1$s %2$s."
+
+#: assets/js/src/blocks/estimated-reading-time/block.js:69
+#: assets/js/src/blocks/estimated-reading-time/legacy/15.6.js:58
+#: assets/js/src/blocks/estimated-reading-time/legacy/15.6.non-admin.js:28
+#: assets/js/src/blocks/estimated-reading-time/legacy/15.8.js:22
+#: assets/js/src/blocks/estimated-reading-time/legacy/22.9.js:21
+#: src/integrations/blocks/estimated-reading-time-block.php:54
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "λεπτό"
+msgstr[1] "λεπτά"
+
+#: classes/redirect/redirect-table.php:125
+msgid "Filter"
+msgstr "Φίλτρο"
+
+#: assets/js/src/new-redirects/components/table-rows.js:135
+#: classes/premium-javascript-strings.php:63
+#: classes/redirect/redirect-table.php:434
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#: assets/js/src/components/RedirectNotification.js:128
+#: assets/js/src/elementor/components/RedirectNotification.js:101
+#: assets/js/src/frontend-inspector/components/frontend-inspector.js:87
+#: classes/premium-javascript-strings.php:55
+msgid "OK"
+msgstr "OK"
+
+#: classes/export/export-keywords-csv.php:70
+msgid "title"
+msgstr "τίτλος"
+
+#: classes/export/export-keywords-csv.php:76
+msgid "meta description"
+msgstr "meta περιγραφή"
+
+#: premium.php:276
+msgid "Create Redirect"
+msgstr "Δημιουργία Ανακατεύθυνσης"
+
+#: assets/js/src/new-redirects/components/menu.js:52
+#: assets/js/src/new-redirects/routes/redirects.js:72
+#: classes/redirect/redirect-formats.php:23 premium.php:337
+msgid "Redirects"
+msgstr "Ανακατευθύνσεις"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:36
+#: classes/redirect/views/redirects-form.php:59
+msgid "URL"
+msgstr "Διεύθυνση URL "
+
+#: classes/premium-import-manager.php:238
+msgid "Redirect import failed: the Redirection plugin is not installed or activated."
+msgstr "Η εισαγωγή της ανακατεύθυνσης απέτυχε. Η προσθήκη ανακατεύθυνσης δεν εγκαταστάθηκε ή δεν είναι ενεργοποιημένη."
+
+#: classes/premium-import-manager.php:314
+msgid "Redirect import failed: no redirects found."
+msgstr "Αποτυχία εισαγωγής ανακατεύθυνσης. Δεν βρέθηκαν ανακατευθύνσεις."
+
+#: classes/premium-javascript-strings.php:33
+msgid "You have unsaved redirects, are you sure you want to leave?"
+msgstr "Έχετε μη αποθηκευμένες ανακατευθύνσεις, είστε σίγουροι πως θέλετε να εγκαταλείψετε την διαδικασία?"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:36
+#: classes/redirect/redirect-table.php:140
+msgid "New URL"
+msgstr "Νέα Διεύθυνση URL"
+
+#: assets/js/src/new-redirects/components/table-rows.js:141
+#: assets/js/src/new-redirects/constants/index.js:29
+#: classes/premium-javascript-strings.php:64
+#: classes/redirect/redirect-table.php:316
+#: classes/redirect/redirect-table.php:435
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: classes/redirect/views/redirects-tab-plain.php:61
+#: classes/redirect/views/redirects-tab-regex.php:72
+msgid "Search"
+msgstr "Αναζήτηση"
+
+#: classes/redirect/views/redirects-tab-settings.php:122
+msgid "Save Changes"
+msgstr "Αποθήκευση αλλαγών"
+
+#: classes/redirect/redirect-formats.php:24
+msgid "Regex Redirects"
+msgstr "Ανακατευθύνσεις Regex"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:27
+#: classes/redirect/presenters/redirect-table-presenter.php:71
+msgid "Old URL"
+msgstr "Παλιά Διεύθυνση URL"
+
+#: classes/redirect/views/redirects-tab-plain.php:41
+#: classes/redirect/views/redirects-tab-regex.php:52
+msgid "Add Redirect"
+msgstr "Προσθήκη Ανακατεύθυνσης"
+
+#: classes/redirect/views/redirects-tab-settings.php:50
+msgid "As you're on Nginx, you should add the following include to the Nginx config file:"
+msgstr "Εάν χρησιμοποιείτε Nginx, θα πρέπει να προσθέσετε την ακόλουθη προσθήκη στο αρχείο διαχείρισης του Nginx:"
+
+#: classes/redirect/views/redirects-tab-settings.php:24
+msgid "As you're on Apache, you should add the following include to the website httpd config file:"
+msgstr "Εάν χρησιμοποιείτε Apache, θα πρέπει να προσθέσετε την ακόλουθη προσθήκη στο αρχείο διαχείρισης httpd του ιστότοπου:"
+
+#. Description of the plugin
+#: wp-seo-premium.php
+msgid "The first true all-in-one SEO solution for WordPress, including on-page content analysis, XML sitemaps and much more."
+msgstr "Η πρώτη πραγματικά όλα-σε-ένα SEO λύση για WordPress, η οποία περιλαμβάνει ανάλυση περιεχομένου σελίδας, χάρτες XML και πολλά περισσότερα."
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:18
+#: assets/js/src/new-redirects/components/table-header.js:42
+#: assets/js/src/workouts/components/CornerstoneWorkout/MostLinked.js:98
+#: classes/redirect/exporters/redirect-csv-exporter.php:76
+msgid "Type"
+msgstr "Τύπος"
+
+#. translators: %s: '.htaccess' file name.
+#: classes/redirect/views/redirects-tab-settings.php:37
+msgid "We're unable to save the redirects to your %s file. Please make the file writable."
+msgstr "Δεν είμαστε σε θέση να αποθηκεύσουμε τις ανακατευθύνσεις στο %s αρχείο σας. Παρακαλούμε, κάντε εγγράψιμο το αρχείο. "
+
+#: assets/js/src/new-redirects/components/apache-settings.js:17
+#: classes/redirect/views/redirects-tab-settings.php:111
+msgid "Generate a separate redirect file"
+msgstr "Δημιουργία ξεχωριστού αρχείου ανακατεύθυνσης"
+
+#: classes/views/import-redirects.php:79
+msgid "Import .htaccess"
+msgstr "Εισαγωγή .htaccess"
+
+#: classes/premium-javascript-strings.php:28
+msgid "The old URL field can't be empty."
+msgstr "Το πεδίο της παλιάς διεύθυνσης URL δεν μπορεί να είναι κενό."
+
+#: classes/premium-javascript-strings.php:30
+msgid "The new URL field can't be empty."
+msgstr "Το πεδίο της νέας διεύθυνσης URL δεν μπορεί να είναι κενό."
+
+#: assets/js/src/new-redirects/components/redirect-warning-modal.js:33
+#: classes/premium-javascript-strings.php:31
+msgid "Error while saving this redirect"
+msgstr "Σφάλμα κατά την αποθήκευση της ανακατεύθυνσης"
+
+#: classes/premium-javascript-strings.php:32
+msgid "New type can't be empty."
+msgstr "Ο νέος τύπος δεν μπορεί να είναι κενός. "
+
+#. Author of the plugin
+#: wp-seo-premium.php
+msgid "Team Yoast"
+msgstr "Ομάδα Yoast"
+
+#: classes/premium-javascript-strings.php:27
+msgid "You can't redirect a URL to itself."
+msgstr "Δεν μπορείτε να ανακατευθύνεται μια διεύθυνση URL στον εαυτό της."
+
+#. translators: %s: '.htaccess' file name
+#: classes/redirect/views/redirects-tab-settings.php:114
+msgid "By default we write the redirects to your %s file, check this if you want the redirects written to a separate file. Only check this option if you know what you are doing!"
+msgstr "Από προεπιλογή, γράφουμε τις ανακατευθύνσεις στο %s αρχείο σας, ελέγξτε, εάν θέλετε οι ανακατευθύνσεις να εγγραφούν σε ένα ξεχωριστό αρχείο. Επιλέξτε αυτή την επιλογή, μόνο αν ξέρετε τι κάνετε!"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:27
+#: classes/redirect/presenters/redirect-table-presenter.php:68
+msgid "Regular Expression"
+msgstr "Κανονική Έκφραση"
+
+#. translators: 1: '.htaccess' file name
+#: classes/redirect/views/redirects-tab-settings.php:109
+msgid "Write redirects to the %1$s file. Make sure the %1$s file is writable."
+msgstr "Καταγράψτε τις ανακατευθύνεις στο αρχείο %1$s. Βεβαιωθείτε πως το αρχείο %1$s είναι εγγράψιμο."
+
+#. translators: %s: '.htaccess' file name
+#: classes/views/import-redirects.php:12
+msgid "Import redirects from %s"
+msgstr "Εισαγωγή ανακατευθύνσεων από %s"
+
+#: classes/premium-javascript-strings.php:29
+msgid "The Regular Expression field can't be empty."
+msgstr "Το πεδίο Κανονικών Εκφράσεων (regex) δεν μπορεί να είναι κενό."
+
+#. translators: %s is replaced with the URL that will be deleted.
+#: classes/premium-javascript-strings.php:36
+msgid "Please enter the new URL for %s"
+msgstr "Παρακαλούμε, πληκτρολογήστε την νέα διεύθυνση URL για %s"
+
+#. translators: variables will be replaced with from and to URLs.
+#: classes/premium-javascript-strings.php:38
+msgid "Redirect created from %1$s to %2$s!"
+msgstr "Η ανακατεύθυνση δημιουργήθηκε από %1$s στη %2$s!"
+
+#: classes/redirect/redirect-table.php:138
+#: classes/redirect/views/redirects-form.php:22
+msgctxt "noun"
+msgid "Type"
+msgstr "Τύπος"
+
+#. translators: %1$s: '.htaccess' file name, %2$s: plugin name
+#: classes/views/import-redirects.php:18
+msgid "You can copy the contents of any %1$s file in here, and it will import the redirects into %2$s."
+msgstr "Μπορείτε να αντιγράψετε τα περιεχόμενα οποιουδήποτε %1$s αρχείου εδώ και θα εισαχθούν οι ανακατευθύνσεις στο %2$s."
+
+#: classes/premium-javascript-strings.php:43
+msgid "Redirect added."
+msgstr "Η ανακατεύθυνση προστέθηκε."
+
+#: classes/premium-javascript-strings.php:44
+msgid "The redirect was added successfully."
+msgstr "Η ανακατεύθυνση προστέθηκε με επιτυχία."
+
+#: classes/premium-javascript-strings.php:47
+#: classes/premium-redirect-service.php:153
+msgid "Redirect updated."
+msgstr "Η ανακατεύθυνση ενημερώθηκε."
+
+#: classes/premium-javascript-strings.php:48
+#: classes/premium-redirect-service.php:154
+msgid "The redirect was updated successfully."
+msgstr "Η ανακατεύθυνση ενημερώθηκε με επιτυχία."
+
+#: classes/premium-javascript-strings.php:51
+#: classes/premium-redirect-service.php:86
+#: classes/redirect-undo-endpoint.php:98
+msgid "Redirect deleted."
+msgstr "Η ανακατεύθυνση διαγράφηκε."
+
+#: classes/premium-javascript-strings.php:52
+#: classes/premium-redirect-service.php:87
+#: classes/redirect-undo-endpoint.php:99
+msgid "The redirect was deleted successfully."
+msgstr "Η ανακατεύθυνση διαγράφηκε επιτυχώς."
+
+#: assets/js/src/new-redirects/components/delete-modal.js:50
+#: assets/js/src/new-redirects/components/edit-redirect-row.js:104
+#: assets/js/src/new-redirects/components/redirect-warning-modal.js:42
+#: classes/premium-javascript-strings.php:56
+#: classes/redirect/views/redirects-quick-edit.php:43
+msgid "Cancel"
+msgstr "Ακύρωση "
+
+#: assets/js/src/new-redirects/components/edit-redirect-row.js:97
+#: classes/premium-javascript-strings.php:57
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: assets/js/src/new-redirects/components/redirect-warning-modal.js:45
+#: classes/premium-javascript-strings.php:58
+msgid "Save anyway"
+msgstr "Αποθήκευση οπωσδήποτε"
+
+#: classes/premium-javascript-strings.php:60
+#: classes/redirect/views/redirects-quick-edit.php:22
+msgid "Edit redirect"
+msgstr "Επεξεργασία ανακατεύθυνσης"
+
+#: classes/premium-javascript-strings.php:61
+msgid "You are already editing a redirect, please finish this one first"
+msgstr "Επεξεργάζεστε ήδη μία ανακατεύθυνση, παρακαλούμε ολοκληρώστε πρώτα αυτή. "
+
+#: classes/redirect/validation/redirect-accessible-validation.php:29
+msgid "The URL you entered could not be resolved."
+msgstr "Η URL διεύθυνση που εισάγατε δεν μπόρεσε να βρεθεί."
+
+#. translators: %1$s expands to the returned http code
+#: classes/redirect/validation/redirect-accessible-validation.php:40
+msgid "The URL you are redirecting to seems to return a %1$s status. You might want to check if the target can be reached manually before saving."
+msgstr "Η URL διεύθυνση στην οποία κάνετε ανακατεύθυνση φαίνεται να επιστρέφει μια κατάσταση %1$s. Ελέγξτε χειροκίνητα, πριν από την αποθήκευση, αν η διεύθυνση μπορεί να εμφανιστεί σωστά."
+
+#: classes/redirect/validation/redirect-accessible-validation.php:49
+msgid "You're redirecting to a target that returns a 301 HTTP code (permanently moved). Make sure the target you specify is directly reachable."
+msgstr "Ανακατευθύνετε σε έναν στόχο που επιστρέφει κωδικό HTTP 301 (έχει μετακινηθεί μόνιμα). Βεβαιωθείτε ότι ο στόχος που έχετε ορίσει είναι άμεσα προσβάσιμος."
+
+#. translators: %1$s expands to the returned http code
+#: classes/redirect/validation/redirect-accessible-validation.php:57
+msgid "The URL you entered returned a HTTP code different than 200(OK). The received HTTP code is %1$s."
+msgstr "Η URL διεύθυνση που καταχωρίσατε επέστρεψε έναν HTTP κωδικό διαφορετικό από τον 200(ΟΚ). Ο ληφθείς κώδικας HTTP είναι %1$s."
+
+#: classes/redirect/redirect-ajax.php:69
+msgid "Unknown error. Failed to create redirect."
+msgstr "Άγνωστο σφάλμα. Η δημιουργία ανακατεύθυνσης απέτυχε."
+
+#: classes/redirect/redirect-ajax.php:106
+msgid "Unknown error. Failed to update redirect."
+msgstr "Άγνωστο σφάλμα. Η ενημέρωση της ανακατεύθυνσης απέτυχε."
+
+#: classes/redirect/validation/redirect-endpoint-validation.php:40
+msgid "The redirect you are trying to save will create a redirect loop. This means there probably already exists a redirect that points to the origin of the redirect you are trying to save"
+msgstr "Η ανακατεύθυνση που προσπαθείτε να αποθηκεύσετε θα δημιουργήσει ένα βρόχο ανακατεύθυνσης (loop). Αυτό σημαίνει ότι πιθανώς να υπάρχει ήδη μια ανακατεύθυνση η οποία δείχνει την αρχική προέλευση της ανακατεύθυνσης που προσπαθείτε να αποθηκεύσετε"
+
+#. translators: %1$s: will be the target, %2$s: will be the found endpoint.
+#: classes/redirect/validation/redirect-endpoint-validation.php:48
+msgid "%1$s will be redirected to %2$s. Maybe it's worth considering to create a direct redirect to %2$s."
+msgstr "Θα γίνει ανακατεύθυνση του %1$s στο %2$s. Ίσως είναι προτιμότερο να δημιουργήσετε μια άμεση ανακατεύθυνση στο %2$s."
+
+#. translators: %s expands to the file path that we tried to write to
+#: classes/redirect/redirect-file-util.php:88
+msgid "We're unable to write data to the file %s"
+msgstr "Δεν είναι δυνατή η εγγραφή δεδομένων στο αρχείο %s"
+
+#: assets/js/src/new-redirects/constants/index.js:12
+#: classes/redirect/redirect-types.php:26
+msgid "301 Moved Permanently"
+msgstr "301 Μετακινήθηκε μόνιμα"
+
+#: assets/js/src/new-redirects/constants/index.js:13
+#: classes/redirect/redirect-types.php:27
+msgid "302 Found"
+msgstr "302 Βρέθηκε"
+
+#: assets/js/src/new-redirects/constants/index.js:14
+#: classes/redirect/redirect-types.php:28
+msgid "307 Temporary Redirect"
+msgstr "307 Προσωρινή ανακατεύθυνση"
+
+#: assets/js/src/new-redirects/constants/index.js:15
+#: classes/redirect/redirect-types.php:29
+msgid "410 Content Deleted"
+msgstr "410 Το περιεχόμενο διαγράφηκε"
+
+#: assets/js/src/new-redirects/constants/index.js:16
+#: classes/redirect/redirect-types.php:30
+msgid "451 Unavailable For Legal Reasons"
+msgstr "451 Μη διαθέσιμο για νομικούς λόγους"
+
+#: classes/redirect/validation/redirect-presence-validation.php:34
+msgid "Not all the required fields are filled."
+msgstr "Δεν έχουν συμπηρωθεί όλα τα υποχρεωτικά πεδία."
+
+#: classes/redirect/validation/redirect-uniqueness-validation.php:32
+msgid "The old URL already exists as a redirect."
+msgstr "Η παλιά URL διεύθυνση υπάρχει ήδη ως ανακατεύθυνση."
+
+#: classes/redirect/views/redirects-quick-edit.php:42
+msgid "Update Redirect"
+msgstr "Ενημέρωση Ανακατεύθυνσης"
+
+#. translators: %s expands to the folder location where the redirects fill will
+#. be saved.
+#: classes/redirect/views/redirects-tab-settings.php:63
+msgid "We're unable to save the redirect file to %s"
+msgstr "Δεν είναι δυνατή η αποθήκευση του αρχείου ανακατεύθυνσης στο %s"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
+#. href=''>, %4$s: </a>, %5$s: Slug to post
+#: classes/post-watcher.php:286
+msgid "%1$s detected that you moved a post (%5$s) to the trash. You can either: %2$s Don't know what to do? %3$sRead this post%4$s."
+msgstr "Η %1$s ανίχνευσε ότι μετακινήσατε μια δημοσίευση (%5$s) στον κάδο απορριμμάτων. Μπορείτε είτε: %2$s Δεν γνωρίζετε τι να κάνετε? %3$sΔιαβάστε αυτή την δημοσίευση%4$s."
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
+#. href='{post_with_explaination.}'>, %4$s: </a>, %5%s: The removed url.
+#: classes/post-watcher.php:493
+msgid "%1$s detected that you deleted a post (%5$s). You can either: %2$s Don't know what to do? %3$sRead this post %4$s."
+msgstr "Η %1$s ανίχνευσε ότι διαγράψατε μία δημοσίευση (%5$s). Μπορείτε είτε: %2$s Δεν γνωρίζετε τι να κάνετε; %3$sΔιαβάστε αυτη την δημοσίευση%4$s."
+
+#. translators: %1$s will be replaced with the from URL.
+#: classes/premium-javascript-strings.php:40
+msgid "410 Redirect created from %1$s!"
+msgstr "410 Ανακατεύθυνση δημιουργήθηκε από τη %1$s!"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
+#. href='{post_with_explaination.}'>, %4$s: </a>, %5%s: The removed url.
+#: classes/term-watcher.php:309
+msgid "%1$s detected that you deleted a term (%5$s). You can either: %2$s Don't know what to do? %3$sRead this post %4$s."
+msgstr "Η %1$s ανίχνευσε ότι διαγράψατε έναν όρο (%5$s). Μπορείτε είτε: %2$s Δεν γνωρίζετε τι να κάνετε; %3$sΔιαβάστε αυτή την δημοσίευση%4$s."
+
+#: classes/watcher.php:267
+msgid "Redirect it to another URL"
+msgstr "Δημιουργήστε ανακατεύθυνση σε μία άλλη URL διεύθυνση "
+
+#: classes/watcher.php:268
+msgid "Make it serve a 410 Content Deleted header"
+msgstr "Κάντε την προβολή μιας κεφαλίδας με διαγραφή περιεχομένου 410"
+
+#: classes/redirect/views/redirects-tab-settings.php:101
+msgid "Web server"
+msgstr "Διακομιστής ιστού (Web server)"
+
+#: assets/js/src/new-redirects/components/menu.js:68
+#: assets/js/src/new-redirects/routes/redirect-method.js:91
+#: assets/js/src/new-redirects/routes/redirect-method.js:104
+#: classes/redirect/views/redirects-tab-settings.php:103
+msgid "Redirect method"
+msgstr "Μέθοδος ανακατεύθυνσης"
+
+#. translators: %s: 'Yoast SEO Premium'
+#: classes/redirect/views/redirects-tab-settings.php:118
+msgid "%s can generate redirect files that can be included in your website web server configuration. If you choose this option the PHP redirects will be disabled. Only check this option if you know what you are doing!"
+msgstr "Η %s μπορεί να δημιουργήσει αρχεία ανακατεύθυνσης τα οποία μπορούν να συμπεριληφθούν στις ρυθμίσεις του διακομιστή (server) του ιστότοπού σας. Αν κάνετε αυτή την επιλογή, οι ανακατευθύνσεις PHP θα απενεργοποιηθούν. Επιλέξτε αυτήν την ρύθμιση μόνο αν γνωρίζετε τι κάνετε!"
+
+#. translators: %s expands to the file path that we tried to write to
+#: classes/redirect/redirect-file-util.php:46
+msgid "We're unable to create the directory %s"
+msgstr "Δεν μπορούμε να δημιουργήσουμε τον κατάλογο %s"
+
+#: classes/redirect/validation/redirect-self-redirect-validation.php:25
+msgid "You are attempting to redirect to the same URL as the origin. Please choose a different URL to redirect to."
+msgstr "Προσπαθείτε να κάνετε ανακατεύθυνση στην ίδια με την προέλευση URL διεύθυνση. Επιλέξτε διαφορετική URL διεύθυνση για την σωστή ανακατεύθυνση."
+
+#. translators: 1: opens a link to a related help center article. 2: closes the
+#. link.
+#: classes/redirect/views/redirects-form.php:42
+msgid "The redirect type is the HTTP response code sent to the browser telling the browser what type of redirect is served. %1$sLearn more about redirect types%2$s."
+msgstr "Ο τύπος ανακατεύθυνσης είναι ο κωδικός απόκρισης HTTP που αποστέλλεται στο πρόγραμμα περιήγησης λέγοντας του τον τύπο της ανακατεύθυνσης που προβάλλεται. %1$sΜάθετε περισσότερα σχετικά με τους τύπους ανακατεύθυνσης%2$s."
+
+#. translators: 1: opens a link to a related help center article. 2: closes the
+#. link.
+#: classes/redirect/views/redirects-tab-regex.php:30
+msgid "Regular Expression (regex) Redirects are extremely powerful redirects. You should only use them if you know what you are doing. %1$sRead more about regex redirects on our help center%2$s."
+msgstr "Οι ανακατευθύνσεις Κανονικής Έκφρασης (regex) είναι εξαιρετικά ισχυρές ανακατευθύνσεις. Για αυτό θα πρέπει να τις χρησιμοποιείτε μόνο αν γνωρίζετε τι κάνετε. %1$sΔιαβάστε περισσότερα σχετικα με την ανακατευθύνσεις regex στο κέντρο βοήθειας μας%2$s."
+
+#: assets/js/src/new-redirects/components/apache-settings.js:41 premium.php:373
+msgid "Enabled"
+msgstr "Ενεργοποιημένο"
+
+#. translators: Hidden accessibility text.
+#: classes/views/import-redirects.php:75
+msgid "Enter redirects to import"
+msgstr "Εισάγετε ανακατευθύνσεις για εισαγωγή"
+
+#. translators: %1$s expands to the subdirectory WordPress is installed.
+#: classes/redirect/validation/redirect-subdirectory-validation.php:37
+msgid "Your redirect is missing the subdirectory where WordPress is installed in. This will result in a redirect that won't work. Make sure the redirect starts with %1$s"
+msgstr "Στην ανακατεύθυνση σας λείπει ο υποκατάλογος όπου είναι εγκατεστημένο το WordPress. Αυτό θα έχει ως αποτέλεσμα μια ανακατεύθυνση που δεν θα λειτουργήσει σωστά. Βεβαιωθείτε ότι η ανακατεύθυνση ξεκινάει με %1$s"
+
+#. translators: Hidden accessibility text.
+#: classes/redirect/redirect-table.php:248
+msgid "Select this redirect"
+msgstr "Επιλέξτε αυτήν την ανακατεύθυνση"
+
+#. translators: %s expands to Yoast
+#: classes/metabox-link-suggestions.php:103
+msgid "%s internal linking"
+msgstr "%s εσωτερική σύνδεση"
+
+#. translators: %s: '.htaccess' file name
+#: classes/premium-import-manager.php:67 classes/views/import-redirects.php:45
+msgid "Import redirects"
+msgstr "Εισαγωγή ανακατευθύνσεων"
+
+#: classes/views/import-redirects.php:25
+msgid "Redirection"
+msgstr "Ανακατεύθυνση"
+
+#: classes/views/import-redirects.php:26
+msgid "Safe Redirect Manager"
+msgstr "Διαχειριστής ασφαλούς ανακατεύθυνσης"
+
+#: classes/views/import-redirects.php:27
+msgid "Simple 301 Redirects"
+msgstr "Απλή 301 Ανακατεύθυνση"
+
+#: classes/views/import-redirects.php:38
+msgid "Import from other redirect plugins"
+msgstr "Εισαγωγή από άλλα πρόσθετα ανακατεύθυνσης"
+
+#: classes/views/import-redirects.php:42
+msgid "Import from:"
+msgstr "Εισαγωγή από:"
+
+#: classes/watcher.php:238
+msgid "New URL:"
+msgstr "Νέα διεύθυνση URL:"
+
+#: classes/watcher.php:236
+msgid "Old URL:"
+msgstr "Παλαιό URL:"
+
+#: classes/premium-redirect-export-manager.php:35
+#: classes/views/export-redirects.php:15
+msgid "Export redirects"
+msgstr "Εξαγωγή ανακατευθύνσεων"
+
+#: classes/redirect/exporters/redirect-csv-exporter.php:74
+msgid "Origin"
+msgstr "Προέλευση"
+
+#: classes/redirect/exporters/redirect-csv-exporter.php:75
+msgid "Target"
+msgstr "Στόχος"
+
+#: classes/redirect/exporters/redirect-csv-exporter.php:77
+msgid "Format"
+msgstr "Μορφή"
+
+#: classes/views/export-redirects.php:10
+msgid "Export redirects to a CSV file"
+msgstr "Εξαγωγή των ανακατευθύνσεων σε αρχείο CSV"
+
+#: classes/views/export-redirects.php:11
+msgid "If you need to have a list of all redirects, you can generate a CSV file using the button below."
+msgstr "Αν χρειάζεται να έχετε μια λίστα με όλες τις ανακατευθύνσεις, μπορείτε να δημιουργήσετε ένα αρχείο CSV χρησιμοποιώντας το παρακάτω κουμπί."
+
+#: classes/views/export-redirects.php:12
+msgid "Please note that the first row in this file is a header. This row should be ignored when parsing or importing the data from the export."
+msgstr "Σημειώστε ότι η πρώτη σειρά σε αυτό το αρχείο είναι μια κεφαλίδα (header). Αυτή η γραμμή θα πρέπει να αγνοείται κατά την ανάλυση ή εισαγωγή των δεδομένων από την εξαγωγή."
+
+#: classes/premium-import-manager.php:272
+msgid "CSV import failed: the provided file could not be parsed using a CSV parser."
+msgstr "Η εισαγωγή του CSV απέτυχε: το παρεχόμενο αρχείο δεν μπόρεσε να αναλυθεί χρησιμοποιώντας έναν αναλυτή CSV."
+
+#: classes/views/import-redirects.php:52
+msgid "Import from a CSV file"
+msgstr "Εισαγωγή από αρχείο CSV"
+
+#: classes/views/import-redirects.php:59
+msgid "Import CSV file"
+msgstr "Εισαγωγή αρχείου CSV"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: <a href='{undo_redirect_url}'>,
+#. %3$s: </a>, %4$s: Slug to post
+#: classes/post-watcher.php:312
+msgid "%1$s detected that you restored a post (%4$s) from the trash, for which a redirect was created. %2$sClick here to remove the redirect%3$s"
+msgstr "Το %1$s ανίχνευσε ότι επαναφέρατε μια δημοσίευση (%4$s) από τον κάδο απορριμμάτων, για τον οποίο δημιουργήθηκε μια ανακατεύθυνση. %2$sΚάντε κλικ εδώ για να αφαιρέσετε την ανακατεύθυνση%3$s"
+
+#. translators: %1$s expands to the link to an article to read more about
+#. orphaned content, %2$s expands to </a>
+#: classes/premium-orphaned-post-filter.php:77
+msgid "%1$sLearn more about orphaned content%2$s."
+msgstr "%1$sΜάθετε περισσότερα σχετικά με το ορφανό περιεχόμενο%2$s."
+
+#. translators: %1$s: plural form of the current post type, %2$s: a Learn more
+#. about link
+#: classes/premium-orphaned-post-filter.php:85
+msgid "Ask your SEO Manager or Site Administrator to count links in all texts, so we can identify orphaned %1$s. %2$s"
+msgstr "Ζητήστε από τον υπεύθυνο διαχείρισης SEO ή τον διαχειριστή του ιστοτόπου σας να μετρήσει τους συνδέσμους σε όλα τα κείμενα, έτσι ώστε να εντοπίσουμε τα ορφανά αντικείμενα %1$s. %2$s"
+
+#. translators: %1$s expands to link to the recalculation option, %2$s: anchor
+#. closing, %3$s: plural form of the current post type, %4$s: a Learn more
+#. about link
+#: classes/premium-orphaned-post-filter.php:94
+msgid "%1$sClick here%2$s to index your links, so we can identify orphaned %3$s. %4$s"
+msgstr "%1$sΚάντε κλικ εδώ%2$s για να προσθέσετε τους συνδέσμους σας στο ευρετήριο. Έτσι μπορούμε να προσδιορίσουμε τα ορφανά αντικείμενα %3$s. %4$s"
+
+#. translators: %1$s: plural form of the current post type, %2$s: a Learn more
+#. about link
+#: classes/premium-orphaned-post-filter.php:104
+msgid "'Orphaned content' refers to %1$s that have no inbound links, consider adding links towards these %1$s. %2$s"
+msgstr "'Ορφανό περιεχόμενο' αναφέρεται σε %1$s που δεν έχουν εισερχόμενους συνδέσμους, σκεφτείτε να προσθέσετε συνδέσμους προς αυτά τα %1$s. %2$s"
+
+#: assets/js/src/workouts/components/OrphanedWorkout.js:89
+#: classes/premium-orphaned-post-filter.php:163
+msgid "Orphaned content"
+msgstr "Ορφανό περιεχόμενο"
+
+#: classes/export/export-keywords-csv.php:71
+msgid "url"
+msgstr "url"
+
+#: classes/export/export-keywords-csv.php:72
+msgid "readability score"
+msgstr "βαθμολογία αναγνωσιμότητας"
+
+#: classes/export/export-keywords-csv.php:79
+msgid "ID"
+msgstr "ID"
+
+#. translators: Hidden accessibility text.
+#: classes/redirect/redirect-table.php:109
+msgid "Filter by redirect type"
+msgstr "Φίλτρο ανά τύπο ανακατεύθυνσης"
+
+#: classes/redirect/redirect-table.php:113
+msgid "All redirect types"
+msgstr "Όλοι οι τύποι ανακατεύθυνσης"
+
+#. translators: %s resolves to the button label translation.
+#: classes/views/export-keywords.php:12
+msgid "If you need a list of all public posts, terms and related keyphrases, you can generate a CSV file using the %s button below."
+msgstr "Εάν χρειάζεστε μια λίστα με όλες τις δημόσιες δημοσιεύσεις, τους όρους και τις σχετικές φράσεις-κλειδιά, μπορείτε να δημιουργήσετε ένα αρχείο CSV χρησιμοποιώντας το παρακάτω κουμπί %s."
+
+#: classes/views/export-keywords.php:21
+msgid "Export keyphrases to a CSV file"
+msgstr "Εξαγωγή των φράσεων-κλειδιών σε ένα αρχείο CSV"
+
+#: classes/views/export-keywords.php:23
+msgid "You can add or remove columns to be included in the export using the checkboxes below."
+msgstr "Μπορείτε να προσθέσετε ή να αφαιρέσετε στήλες που θα συμπεριληφθούν στην εξαγωγή, χρησιμοποιώντας τα παρακάτω πλαίσια ελέγχου."
+
+#: classes/views/export-keywords.php:31
+msgid "Export URL"
+msgstr "Εξαγωγή διεύθυνσης URL"
+
+#: classes/views/export-keywords.php:32
+msgid "Export title"
+msgstr "Εξαγωγή τίτλου"
+
+#: classes/views/export-keywords.php:35
+msgid "Export readability score"
+msgstr "Εξάγετε την βαθμολογία αναγνωσιμότητας"
+
+#: classes/views/export-keywords.php:49
+msgid "Please note:"
+msgstr "Παρακαλούμε λάβετε υπόψιν:"
+
+#: classes/views/export-keywords.php:51
+msgid "The first row in this file is the header row. This row should be ignored when parsing or importing the data from the export."
+msgstr "Η πρώτη σειρά σε αυτό το αρχείο είναι η γραμμή κεφαλίδας. Αυτή η γραμμή θα πρέπει να αγνοείται κατά την ανάλυση ή εισαγωγή των δεδομένων από την εξαγωγή."
+
+#: classes/views/export-keywords.php:52
+msgid "Exporting data can take a long time when there are many posts, pages, public custom post types or terms."
+msgstr "Η εξαγωγή δεδομένων μπορεί να διαρκέσει αρκετά ειδικά όταν υπάρχουν πολλές αναρτήσεις, σελίδες, δημόσιοι προσαρμοσμένοι τύποι δημοσιεύσεων ή όροι."
+
+#: assets/js/src/new-redirects/routes/redirects.js:83
+#: classes/redirect/views/redirects-tab-plain.php:25
+msgid "Plain redirects"
+msgstr "Απλές ανακατευθύνσεις"
+
+#: classes/redirect/views/redirects-tab-regex.php:25
+msgid "Regular Expression redirects"
+msgstr "Ανακατευθύνσεις Κανονικών εκφράσεων (regex)"
+
+#: classes/redirect/views/redirects-tab-settings.php:76
+msgid "Redirects settings"
+msgstr "Ρυθμίσεις ανακατευθύνσεων"
+
+#: classes/export/export-keywords-csv.php:80
+msgctxt "post_type of a post or the taxonomy of a term"
+msgid "type"
+msgstr "τύπος"
+
+#: classes/export/export-keywords-csv.php:75
+msgid "seo title"
+msgstr "τίτλος seo"
+
+#: classes/views/export-keywords.php:33
+msgid "Export SEO title"
+msgstr "Εξαγωγή του τίτλου SEO"
+
+#: classes/views/export-keywords.php:34
+msgid "Export meta description"
+msgstr "Εξαγωγή της meta περιγραφής"
+
+#: classes/export/export-keywords-csv.php:73
+msgid "keyphrase"
+msgstr "φράση-κλειδί"
+
+#: classes/export/export-keywords-csv.php:74
+msgid "keyphrase score"
+msgstr "βαθμολογία φράσης-κλειδί"
+
+#: classes/premium-keyword-export-manager.php:37
+#: classes/views/export-keywords.php:8
+msgid "Export keyphrases"
+msgstr "Εξαγωγή φράσεων-κλειδιών"
+
+#: classes/views/export-keywords.php:30
+msgid "Export keyphrase scores"
+msgstr "Εξαγωγή των αποτελεσμάτων των φράσεων-κλειδιών"
+
+#. Plugin URI of the plugin
+#: wp-seo-premium.php
+msgid "https://yoa.st/2jc"
+msgstr "https://yoa.st/2jc"
+
+#. Plugin Name of the plugin
+#: wp-seo-premium.php
+msgid "Yoast SEO Premium"
+msgstr "Yoast SEO Premium"
+
+#. translators: 1: link to redirects overview, 2: closing link tag
+#: classes/premium-import-manager.php:189
+msgid "All redirects have been imported successfully. Go to the %1$sredirects overview%2$s to see the imported redirects."
+msgstr "Όλες οι ανακατευθύνσεις έχουν εισαχθεί με επιτυχία. Μεταβείτε στην %1$sεπισκόπηση ανακατευθύνσεων%2$s για να δείτε τις εισαγόμενες ανακατευθύνσεις."
+
+#. translators: 1: link to redirects overview, 2: closing link tag
+#: classes/premium-import-manager.php:198
+msgid "No redirects have been imported. Probably they already exist as a redirect. Go to the %1$sredirects overview%2$s to see the existing redirects."
+msgstr "Δεν έχουν εισαχθεί ανακατευθύνσεις. Πιθανώς υπάρχουν ήδη ως ανακατεύθυνση. Μεταβείτε στην %1$sεπισκόπηση ανακατευθύνσεων%2$s για να δείτε τις υπάρχουσες ανακατευθύνσεις."
+
+#. translators: 1: amount of imported redirects, 2: total amount of redirects,
+#. 3: link to redirects overview, 4: closing link tag
+#: classes/premium-import-manager.php:206
+msgid "Imported %1$s/%2$s redirects successfully. Go to the %3$sredirects overview%4$s to see the imported redirect."
+msgid_plural "Imported %1$s/%2$s redirects successfully. Go to the %3$sredirects overview%4$s to see the imported redirects."
+msgstr[0] "Η %1$s/%2$s παρεχόμενη εισαγωγή ανακατευθύνει με επιτυχία. Μεταβείτε στην %3$sεπισκόπηση ανακατευθύνσεων%4$s για να δείτε την εισαγόμενη ανακατεύθυνση."
+msgstr[1] "Οι %1$s/%2$s παρεχόμενες εισαγωγές ανακατευθύνουν με επιτυχία. Μεταβείτε στην %3$sεπισκόπηση ανακατευθύνσεων%4$s για να δείτε τις εισαγόμενες ανακατεύθυνσεις."
+
+#: classes/premium-import-manager.php:248
+msgid "Redirect import failed: the selected redirect plugin is not installed or activated."
+msgstr "Η εισαγωγή ανακατεύθυνσης απέτυχε: η επιλεγμένη προσθήκη ανακατεύθυνσης δεν έχει εγκατασταθεί ή ενεργοποιηθεί."
+
+#: classes/premium-import-manager.php:266
+msgid "CSV import failed: No file selected."
+msgstr "Η εισαγωγή CSV απέτυχε: Δεν έχει επιλεγεί αρχείο."
+
+#. translators: 1: The maximum file size
+#: classes/premium-import-manager.php:280
+msgid "CSV import failed: the provided file is larger than %1$s."
+msgstr "Η εισαγωγή CSV απέτυχε: το παρεχόμενο αρχείο είναι μεγαλύτερο από %1$s."
+
+#: classes/premium-import-manager.php:287
+msgid "CSV import failed: the provided file is not a CSV file."
+msgstr "Η εισαγωγή CSV απέτυχε: το παρεχόμενο αρχείο δεν είναι αρχείο CSV."
+
+#: classes/premium-import-manager.php:306
+msgid "Redirect import failed: we can't recognize this type of import."
+msgstr "Η εισαγωγή ανακατεύθυνσης απέτυχε: δεν μπορούμε να αναγνωρίσουμε αυτόν τον τύπο εισαγωγής."
+
+#: classes/premium-stale-cornerstone-content-filter.php:51
+msgid "Stale cornerstone content"
+msgstr "Παλαιό σημαντικό περιεχόμενο"
+
+#. translators: %1$s expands to dynamic post type label, %2$s expands anchor to
+#. blog post about cornerstone content, %3$s expands to </a>
+#: classes/premium-stale-cornerstone-content-filter.php:68
+msgid "Stale cornerstone content refers to cornerstone content that hasn’t been updated in the last 6 months. Make sure to keep these %1$s up-to-date. %2$sLearn more about cornerstone content%3$s."
+msgstr "Το παλαιό σημαντικό περιεχόμενο είναι το βασικό περιεχόμενο που δεν έχει ενημερωθεί τους τελευταίους 6 μήνες. Βεβαιωθείτε ότι έχετε διατηρήσει αυτά τα στοιχεία %1$s ενημερωμένα. %2$sΜάθετε περισσότερα σχετικά με το σημαντικό περιεχόμενο%3$s."
+
+#: classes/views/import-redirects.php:56
+msgid "Choose a CSV file from your computer:"
+msgstr "Επιλέξτε ένα αρχείο CSV από τον υπολογιστή σας:"
+
+#: node_modules/@yoast/ai-frontend/dist/build.js:26
+#: assets/js/src/ai/ai-fix-assessments/components/fix-assessments-notification.js:351
+#: assets/js/src/components/RedirectNotification.js:138
+#: assets/js/src/elementor/components/RedirectNotification.js:107
+#: classes/watcher.php:249
+msgid "Undo"
+msgstr "Αναίρεση"
+
+#: classes/premium-redirect-service.php:95
+#: classes/premium-redirect-service.php:140
+#: classes/redirect-undo-endpoint.php:87 classes/redirect-undo-endpoint.php:107
+msgid "Redirect not deleted."
+msgstr "Η ανακατεύθυνση δεν διαγράφηκε."
+
+#: classes/premium-redirect-service.php:96
+#: classes/redirect-undo-endpoint.php:88 classes/redirect-undo-endpoint.php:108
+msgid "Something went wrong when deleting this redirect."
+msgstr "Υπήρξε πρόβλημα κατά τη διαγραφή αυτής της ανακατεύθυνσης."
+
+#: classes/redirect/validation/redirect-relative-origin-validation.php:27
+msgid "The old URL for your redirect is not relative. Only the new URL is allowed to be absolute. Make sure to provide a relative old URL."
+msgstr "Η παλιά διεύθυνση URL για την ανακατεύθυνση δεν είναι σχετική. Μόνο η νέα διεύθυνση URL επιτρέπεται να είναι απόλυτη. Βεβαιωθείτε ότι έχετε δώσει μια σχετική παλιά διεύθυνση URL."
+
+#. translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the
+#. admin page.
+#: classes/post-watcher.php:480
+msgid "%1$s created a %2$sredirect%3$s from the old post URL to the new post URL."
+msgstr "Η %1$s δημιούργησε μία %2$sανακατεύθυνση%3$s από την παλαιά URL διεύθυνση της δημοσίευσης προς τη νέα."
+
+#. translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the
+#. admin page.
+#: classes/term-watcher.php:296
+msgid "%1$s created a %2$sredirect%3$s from the old term URL to the new term URL."
+msgstr "Η %1$s δημιούργησε μία %2$sανακατεύθυνση%3$s από την παλαιά URL διεύθυνση του όρου, προς τη νέα."
+
+#: classes/watcher.php:243
+msgid "Ok"
+msgstr "Ok"
+
+#: assets/js/src/blocks/table-of-contents-block.js:322
+#: assets/js/src/blocks/table-of-contents-block.js:407
+#: src/integrations/admin/extension-importer/content-processor.php:336
+msgid "Table of contents"
+msgstr "Πίνακας περιεχομένων (TOC)"

@@ -1,0 +1,1168 @@
+# Translation of Plugins - Product Addons for Woocommerce - Stable (latest release) in Spanish (Spain)
+# This file is distributed under the same license as the Plugins - Product Addons for Woocommerce - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-09-03 11:55:58+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-alpha.1\n"
+"Language: es\n"
+"Project-Id-Version: Plugins - Product Addons for Woocommerce - Stable (latest release)\n"
+
+#: includes/views/settings-main.php:59
+msgid "If unchecked, It will add '_' for all field labels after checkout, then it will be hidden from <strong>order details</strong>, <strong>email</strong> and <strong>invoice</strong> as well. "
+msgstr "Si se desmarca, se añadirá '_' para todas las etiquetas de los campos después de finalizar la compra, entonces se ocultará de los <strong>detalles de pedido</strong>, <strong>correo electrónico</strong> y también de la <strong>factura</strong>."
+
+#: includes/views/settings-main.php:95
+msgid "Hide empty fields in cart, checkout and order"
+msgstr "Oculta los campos vacíos en el carrito, finalizar la compra y pedido"
+
+#: includes/views/settings-main.php:86
+msgid "Hide empty fields in cart"
+msgstr "Oculta los campos vacíos en el carrito"
+
+#: includes/translations.php:84
+msgid "Save"
+msgstr "Guardar"
+
+#: includes/translations.php:33
+msgid "Drag a field from the right to this area"
+msgstr "Arrastra un campo de la derecha a esta área"
+
+#: includes/translations.php:104
+msgid "Text Field"
+msgstr "Campo de texto"
+
+#: includes/translations.php:107
+msgid "Text Area"
+msgstr "Área de texto"
+
+#: includes/translations.php:86
+msgid "Select"
+msgstr "Seleccionar"
+
+#: includes/translations.php:11
+msgid "Checkboxes"
+msgstr "Casillas de verificación"
+
+#: includes/translations.php:10
+msgid "Checkbox"
+msgstr "Casilla de verificación"
+
+#: includes/translations.php:9
+msgid "Checkbox Group"
+msgstr "Grupo de casillas de verificación"
+
+#: includes/translations.php:76
+msgid "Radio"
+msgstr "Radio"
+
+#: includes/translations.php:75
+msgid "Radio Group"
+msgstr "Grupo de radio"
+
+#: includes/translations.php:20
+msgid "Date Field"
+msgstr "Campo de fecha"
+
+#: includes/translations.php:221
+msgid "Date Is After"
+msgstr "La fecha es posterior"
+
+#: includes/translations.php:220
+msgid "Date Is Before"
+msgstr "La fecha es previa"
+
+#: includes/translations.php:219
+msgid "Date Is"
+msgstr "La fecha es"
+
+#: includes/translations.php:194
+msgid "Min Date"
+msgstr "Fecha mínima"
+
+#: includes/translations.php:190
+msgid "Max Date"
+msgstr "Fecha máxima"
+
+#: includes/translations.php:119
+msgid "Date Time"
+msgstr "Fecha y hora"
+
+#: includes/translations.php:32
+msgid "Form Updated"
+msgstr "Formulario actualizado."
+
+#: includes/translations.php:51
+msgid "Number"
+msgstr "Número"
+
+#: includes/translations.php:118
+msgid "Color Picker"
+msgstr "Selector de color"
+
+#: includes/translations.php:88
+msgid "Select Color"
+msgstr "Seleccionar el color"
+
+#: includes/translations.php:147
+msgid "Color Group"
+msgstr "Grupo de color"
+
+#: includes/translations.php:275
+msgid "Show Label inside of the color field"
+msgstr "Mostrar etiqueta dentro del campo de color"
+
+#: includes/translations.php:156
+msgid "Display color box in cart"
+msgstr "Mostrar caja de color en el carrito"
+
+#: includes/translations.php:36
+msgid "Hidden Input"
+msgstr "Entrada oculta"
+
+#: includes/translations.php:61 includes/translations.php:250
+msgid "Paragraph"
+msgstr "Párrafo"
+
+#: includes/translations.php:34
+msgid "Header"
+msgstr "Cabecera"
+
+#: includes/translations.php:54
+msgid "Option"
+msgstr "Opción"
+
+#: includes/translations.php:55 includes/translations.php:85
+msgid "Options"
+msgstr "Opciones"
+
+#: includes/translations.php:56
+msgid "optional"
+msgstr "opcional"
+
+#: includes/translations.php:3
+msgid "Add Option +"
+msgstr "Añadir opción +"
+
+#: includes/translations.php:44
+msgid "This field requires a minimum of 2 options"
+msgstr "Este campo requiere un mínimo de 2 opciones"
+
+#: includes/translations.php:28
+msgid "Let users to enter an unlisted option"
+msgstr "Permite a los usuarios introducir una opción no listada"
+
+#: includes/translations.php:279
+msgid "Same Price for All Options"
+msgstr "El msmo precio para todas las opciones"
+
+#: includes/translations.php:278
+msgid "Different Price for Each Options"
+msgstr "Precio diferente para cada opción"
+
+#: includes/translations.php:80
+msgid "Required"
+msgstr "Obligatorio"
+
+#: includes/translations.php:306
+msgid "(required)"
+msgstr "(obligatorio)"
+
+#: includes/translations.php:293
+msgid "Is Field Required?"
+msgstr "¿El campo es obligatorio?"
+
+#: includes/translations.php:137
+msgid "Min File Size Required(in MB)"
+msgstr "Tamaño mínimo de archivo requerido (en MB)"
+
+#: includes/translations.php:276
+msgid "Adjust width based on the label inside"
+msgstr "Ajustar el ancho basado en la etiqueta interior"
+
+#: includes/translations.php:40
+msgid "Field Label cannot be empty"
+msgstr "La etiqueta del campo no puede quedar vacía"
+
+#: includes/translations.php:39 includes/translations.php:57
+#: includes/translations.php:66
+msgid "Label"
+msgstr "Etiqueta"
+
+#: includes/translations.php:63
+msgid "Placeholder"
+msgstr "Marcador de posición"
+
+#: includes/translations.php:12
+msgid "Class"
+msgstr "Clase"
+
+#: includes/translations.php:71
+msgid "space separated classes"
+msgstr "Clases separadas por espacios"
+
+#: includes/translations.php:117
+msgid "Clear Selection"
+msgstr "Vaciar selección"
+
+#: includes/translations.php:50
+msgid "There are no fields to clear"
+msgstr "No hay campos para vaciar"
+
+#: includes/translations.php:14
+msgid "Clear"
+msgstr "Vaciar"
+
+#: includes/translations.php:13
+msgid "Are you sure you want to clear all fields?"
+msgstr "¿Estás seguro de que quieres vaciar todos los campos?"
+
+#: includes/translations.php:294
+msgid "+ Add Condition"
+msgstr "+ Añadir condición"
+
+#: includes/translations.php:253
+msgid "Show Address fields"
+msgstr "Mostrar campos de dirección"
+
+#: includes/translations.php:237
+msgid "+ Add Group"
+msgstr "+ Añadir grupo"
+
+#: includes/translations.php:15
+msgid "Close"
+msgstr "Cerrar"
+
+#: includes/translations.php:236
+msgid "Remove Group"
+msgstr "Eliminar grupo"
+
+#: includes/translations.php:78
+msgid "Remove Option"
+msgstr "Eliminar opción"
+
+#: includes/translations.php:77
+msgid "Remove Element"
+msgstr "Eliminar elemento"
+
+#: includes/translations.php:30
+msgid "Are you sure you want to remove this field?"
+msgstr "¿Estás seguro de que quieres eliminar este campo?"
+
+#: includes/translations.php:4
+msgid "All fields were removed."
+msgstr "Se eliminaron todos los campos."
+
+#: includes/translations.php:17
+msgid "Copy To Clipboard"
+msgstr "Copiar al portapapeles"
+
+#: includes/translations.php:59
+msgid "Option value required"
+msgstr "La opción valor es obligatoria"
+
+#: includes/translations.php:297
+msgid "(This will be multiplied by the value customer enter)"
+msgstr "(Se multiplicará por el valor que introduzca el cliente)"
+
+#: includes/translations.php:281
+msgid "Multiply by Value"
+msgstr "Multiplicar por el valor"
+
+#: includes/translations.php:247
+msgid "Will disable entering value manually"
+msgstr "Desactivará el ingreso manual de valores"
+
+#: includes/translations.php:103
+msgid "Type"
+msgstr "Tipo"
+
+#: includes/translations.php:121
+msgid "Fields"
+msgstr "Campos"
+
+#: includes/translations.php:105
+msgid "Password"
+msgstr "Contraseña"
+
+#: includes/translations.php:72
+msgid "Enter your password"
+msgstr "Introduce tu contraseña"
+
+#: includes/translations.php:106
+msgid "Email"
+msgstr "Correo eletrónico"
+
+#: includes/translations.php:69
+msgid "Enter your email"
+msgstr "Introduce tu correo electrónico"
+
+#: includes/translations.php:239
+msgid "Show helptext as Tooltip"
+msgstr "Mostrar el texto de ayuda como información emergente"
+
+#: includes/translations.php:83
+msgid "Rows"
+msgstr "Filas"
+
+#: includes/translations.php:43
+msgid "Max Length"
+msgstr "Longitud máxima:"
+
+#: includes/translations.php:128
+msgid "Max File Size(in MB)"
+msgstr "Tamaño máximo de archivo (en MB)"
+
+#: includes/translations.php:305
+msgid "Select a Form"
+msgstr "Selecciona un formulario"
+
+#: includes/translations.php:304
+msgid "Conditional Logic"
+msgstr "Lógica condicional"
+
+#: includes/translations.php:303
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: includes/translations.php:302
+msgid "General"
+msgstr "General"
+
+#: includes/translations.php:300
+msgid "Price per character"
+msgstr "Precio por carácter"
+
+#: includes/translations.php:299
+msgid "Percentage "
+msgstr "Porcentaje"
+
+#: includes/translations.php:298
+msgid "Percentage of the product base price"
+msgstr "Porcentaje del precio base del producto"
+
+#: includes/translations.php:295
+msgid "Select or Upload Media Of Your Chosen "
+msgstr "Selecciona o sube los medios que has elegido"
+
+#: includes/translations.php:291
+msgid "It can use just to show the price value, price will not count in total amount"
+msgstr "Esto se puede utilizar solo para mostrar el valor del precio, el precio no contará en la cantidad total"
+
+#: includes/translations.php:290
+msgid "Use just for show"
+msgstr "Usar solo para mostrar"
+
+#: includes/translations.php:284
+msgid "Per Character"
+msgstr "Por carácter"
+
+#: includes/translations.php:286
+msgid "Use Regular expression"
+msgstr "Usa una expresión regular"
+
+#: includes/translations.php:287
+msgid "Regular expression can be used to exlude/include charactes"
+msgstr "La expresión regular se puede usar para expluir/incluir carácteres"
+
+#: includes/translations.php:280
+msgid "Fixed Price"
+msgstr "Precio fijo"
+
+#: includes/translations.php:283
+msgid "Custom Formula"
+msgstr "Fórmula personalizada"
+
+#: includes/translations.php:282
+msgid "Percentage of Product Price"
+msgstr "Porcentaje del precio del producto"
+
+#: includes/translations.php:277
+msgid "Pricing Options"
+msgstr "Opciones de precio"
+
+#: includes/translations.php:273
+msgid "Shadow"
+msgstr "Sombra"
+
+#: includes/translations.php:272
+msgid "Outline"
+msgstr "Contorno"
+
+#: includes/translations.php:271
+msgid "Desktop only"
+msgstr "Solo escritorio"
+
+#: includes/translations.php:270
+msgid "In touch devices only"
+msgstr "Solo en dispositivos móviles"
+
+#: includes/translations.php:269
+msgid "All devices"
+msgstr "Todos los dispositivos"
+
+#: includes/translations.php:267
+msgid "Zoom Image On Hover"
+msgstr "Zoom en la imagen al pasar el cursor"
+
+#: includes/translations.php:266
+msgid "Box"
+msgstr "Caja"
+
+#: includes/translations.php:260
+msgid "Square"
+msgstr "Cuadrado"
+
+#: includes/translations.php:258
+msgid "Tomorrow"
+msgstr "Mañana"
+
+#: includes/translations.php:257
+msgid "Yesterday"
+msgstr "Ayer"
+
+#: includes/translations.php:256
+msgid "Today"
+msgstr "Hoy"
+
+#: includes/translations.php:255
+msgid "None"
+msgstr "Ninguno"
+
+#: includes/translations.php:254
+msgid "(City, State, Country, Postal code and so on)"
+msgstr "(ciudad, provincia, país, código postal y demás)"
+
+#: includes/translations.php:252
+msgid "Show Google Map"
+msgstr "Mostrar el mapa de Google"
+
+#: includes/translations.php:251
+msgid "Show this in Cart, Checkout and Order Details pages"
+msgstr "Mostrar esto en las páginas de carrito, finalizar compra y detalles de pedido"
+
+#: includes/translations.php:249
+msgid "Enable custom styled upload button"
+msgstr "Activa el estilo personalizado del botón de subidas"
+
+#: includes/translations.php:248
+msgid "Custom styled Upload button"
+msgstr "Estilo personalizado del botón de subidas"
+
+#: includes/translations.php:261
+msgid "Circle"
+msgstr "Círculo"
+
+#: includes/translations.php:246
+msgid "Disable Manual input"
+msgstr "Desactivar la entrada manual"
+
+#: includes/translations.php:245
+msgid "Enable Ajax file upload"
+msgstr "Activar la subida Ajax de archivos "
+
+#: includes/translations.php:244
+msgid "Ajax File Upload"
+msgstr "Subida Ajax de archivos"
+
+#: includes/translations.php:242
+msgid "Tooltip/Description for each items"
+msgstr "Información emergente/descripción para cada elemento"
+
+#: includes/translations.php:243
+msgid "Enable tooltip/description option for each items"
+msgstr "Activar la opción de información emergente/descripción para cada elemento"
+
+#: includes/translations.php:240
+msgid "WPML/PolyLang"
+msgstr "WPML/PolyLang"
+
+#: includes/translations.php:238
+msgid "Enable Conditional Logic"
+msgstr "Activar la lógica condicional"
+
+#: includes/translations.php:234
+msgid "Hide"
+msgstr "Ocultar"
+
+#: includes/translations.php:233
+msgid "Show"
+msgstr "Mostrar"
+
+#: includes/translations.php:232
+msgid "Select Field"
+msgstr "Seleccionar campo"
+
+#: includes/translations.php:235
+msgid "Field if below condtions are true"
+msgstr "Campo si las siguientes condiciones son verdaderas"
+
+#: includes/translations.php:224
+msgid "Time Is After"
+msgstr "La hora es posterior"
+
+#: includes/translations.php:223
+msgid "Time Is Before"
+msgstr "La hora es previa"
+
+#: includes/translations.php:222
+msgid "Time Is"
+msgstr "La hora es"
+
+#: includes/translations.php:218
+msgid "Text Ends With"
+msgstr "El texto termina con"
+
+#: includes/translations.php:217
+msgid "Text Starts With"
+msgstr "El texto empieza con"
+
+#: includes/translations.php:216
+msgid "Text Not Contains"
+msgstr "El texto no contiene"
+
+#: includes/translations.php:215
+msgid "Text Contains"
+msgstr "El texto contiene"
+
+#: includes/translations.php:213
+msgid "Is Greater Than Or Equal"
+msgstr "es mayor que o igual a"
+
+#: includes/translations.php:214
+msgid "Is Less Than Or Equal"
+msgstr "es menor que o igual a"
+
+#: includes/translations.php:212
+msgid "Is Less Than"
+msgstr "es menor que"
+
+#: includes/translations.php:211
+msgid "Is Greater Than"
+msgstr "es mayor que"
+
+#: includes/translations.php:210
+msgid "Is Not Empty"
+msgstr "No está vacío"
+
+#: includes/translations.php:209
+msgid "Is Empty"
+msgstr "Está vacío"
+
+#: includes/translations.php:208
+msgid "Is Not In"
+msgstr "No está en"
+
+#: includes/translations.php:207
+msgid "Is In"
+msgstr "Está en"
+
+#: includes/translations.php:206
+msgid "Is Not"
+msgstr "No es"
+
+#: includes/translations.php:205
+msgid "Is"
+msgstr "Es"
+
+#: includes/translations.php:204
+msgid "You must setup Google Map API keys in plugin settings at (Settings>>Custom Product Addons>>Others) in order to work this place selector"
+msgstr "Debes configurar las API keys de Google Map en los ajustes del plugin en (Ajustes>>Custom Product Addons>>Otros) in order to work this place selector"
+
+#: includes/translations.php:203
+msgid "On Backorder"
+msgstr "En reserva"
+
+#: includes/translations.php:202
+msgid "Out of Stock"
+msgstr "Sin existencias"
+
+#: includes/translations.php:201
+msgid "In Stock"
+msgstr "Hay existencias"
+
+#: includes/translations.php:199
+msgid "Image selected will be shown as product gallery image"
+msgstr "La imagen seleccionada se mostrará como una galería de imagen de producto"
+
+#: includes/translations.php:198
+msgid "Show as Product Image"
+msgstr "Mostrar como imagen de producto"
+
+#: includes/translations.php:195
+msgid "(Disable all days before this)"
+msgstr "(Desactiva todos los días anteriores a este)"
+
+#: includes/translations.php:191
+msgid "(Disable all days after this)"
+msgstr "(Desactiva todos los días después de este)"
+
+#: includes/translations.php:186
+msgid "Maximum fields can select"
+msgstr "Máximo de campos que se pueden seleccionar"
+
+#: includes/translations.php:183 includes/translations.php:187
+msgid "(Leave blank for no restriction )"
+msgstr "(Dejar en blanco para ninguna restricción)"
+
+#: includes/translations.php:182
+msgid "Minimum fields to select"
+msgstr "Mínimo de campos que se puede seleccionar"
+
+#: includes/translations.php:175
+msgid "Example: jpg,jpeg,png,gif (leave blank for using default wordpress types)"
+msgstr "Ejemplo: jpg,jpeg,png,gif (deja en blanco para usar los tipos por defecto de WordPress)"
+
+#: includes/translations.php:174
+msgid "File extentions Supported"
+msgstr "Extensiones de archivo compatibles"
+
+#: includes/translations.php:172
+msgid "Element ID"
+msgstr "ID del elemento"
+
+#: includes/translations.php:170
+msgid "Wordpress SHORTCODE is also supported"
+msgstr "También es compatible con SHORCODES de de WordPress"
+
+#: includes/translations.php:169
+msgid "Configuration (JSON format)"
+msgstr "Configuración (formato JSON)"
+
+#: includes/translations.php:165
+msgid "Use regular expression "
+msgstr "Usar expresiones regulares"
+
+#: includes/translations.php:160
+msgid "Characters to exlude"
+msgstr "Caracteres a excluir"
+
+#: includes/translations.php:145
+msgid "Global Form"
+msgstr "Formulario global"
+
+#: includes/translations.php:141
+msgid "Select form"
+msgstr "Seleccionar formulario"
+
+#: includes/translations.php:138
+msgid "Leave blank for no limit"
+msgstr "Deja en blanco si no quieres límite"
+
+#: includes/translations.php:132
+msgid "Enable PopUp"
+msgstr "Activar el mensaje emergente"
+
+#: includes/translations.php:129
+msgid "(Leave blank for no limit)"
+msgstr "(Deja en blanco si no quieres límite)"
+
+#: includes/translations.php:123
+msgid "Relation"
+msgstr "Relación"
+
+#: includes/translations.php:122
+msgid "Logic Action"
+msgstr "Acción lógica"
+
+#: includes/translations.php:114
+msgid "Price Options"
+msgstr "Opciones de precio"
+
+#: includes/translations.php:115 includes/translations.php:292
+msgid "Enable Price"
+msgstr "Activar el precio"
+
+#: includes/translations.php:116 includes/translations.php:285
+msgid "Pricing Type"
+msgstr "Tipo de precio"
+
+#: includes/translations.php:120
+msgid "Time"
+msgstr "Hora"
+
+#: includes/translations.php:113
+msgid "Yes"
+msgstr "Sí"
+
+#: includes/translations.php:112
+msgid "&lt;/&gt;"
+msgstr "&lt;/&gt;"
+
+#: includes/translations.php:111
+msgid "{  }"
+msgstr "{  }"
+
+#: includes/translations.php:109
+msgid "Warning!"
+msgstr "¡Advertencia!"
+
+#: includes/translations.php:108
+msgid "Toggle"
+msgstr "Alternar"
+
+#: includes/translations.php:102
+msgid "Warning"
+msgstr "Advertencia"
+
+#: includes/translations.php:101
+msgid "Success"
+msgstr "Conseguido"
+
+#: includes/translations.php:100
+msgid "Primary"
+msgstr "Principal"
+
+#: includes/translations.php:99
+msgid "Info"
+msgstr "Información"
+
+#: includes/translations.php:98
+msgid "Danger"
+msgstr "Peligro"
+
+#: includes/translations.php:96
+msgid "Style"
+msgstr "Estilo"
+
+#: includes/translations.php:95
+msgid "Large"
+msgstr "Grande"
+
+#: includes/translations.php:94 includes/translations.php:97
+msgid "Default"
+msgstr "Por defecto"
+
+#: includes/translations.php:93
+msgid "Small"
+msgstr "Pequeño"
+
+#: includes/translations.php:92
+msgid "Extra Small"
+msgstr "Extra pequeño"
+
+#: includes/translations.php:90
+msgid "Size"
+msgstr "Tamaño"
+
+#: includes/translations.php:89
+msgid "Allow Multiple Selections"
+msgstr "Permitir selecciones múltiples"
+
+#: includes/translations.php:87
+msgid "Select Relation"
+msgstr "Seleccionar relación"
+
+#: includes/translations.php:74
+msgid "Preview"
+msgstr "Previsualizar"
+
+#: includes/translations.php:79
+msgid "&#215"
+msgstr "&#215"
+
+#: includes/translations.php:73
+msgid "ToolTip/Description"
+msgstr "Información emergente/Descripción"
+
+#: includes/translations.php:62
+msgid "Separator"
+msgstr "Separador"
+
+#: includes/translations.php:60
+msgid "Other"
+msgstr "Otros"
+
+#: includes/translations.php:53
+msgid "On"
+msgstr "Activo"
+
+#: includes/translations.php:52
+msgid "Off"
+msgstr "Inactivo"
+
+#: includes/translations.php:49 includes/translations.php:65
+msgid "Price"
+msgstr "Precio"
+
+#: includes/translations.php:48 includes/translations.php:268
+msgid "No"
+msgstr "No"
+
+#: includes/translations.php:47
+msgid "Name"
+msgstr "Nombre"
+
+#: includes/translations.php:46
+msgid "Multiple Files"
+msgstr "Archivos múltiples"
+
+#: includes/translations.php:45
+msgid "Minimum {min} selections required"
+msgstr "Se requieren la menos {min} selecciones"
+
+#: includes/translations.php:42
+msgid "Mandatory"
+msgstr "Obligatorio"
+
+#: includes/translations.php:41
+msgid "Limit access to one or more of the following roles:"
+msgstr "Limita el acceso a uno o más de estos perfiles:"
+
+#: includes/translations.php:38
+msgid "Display {type} inline"
+msgstr "Mostrar {type} integrado"
+
+#: includes/translations.php:37
+msgid "Inline"
+msgstr "Integrado"
+
+#: includes/translations.php:35
+msgid "Edit"
+msgstr "Editar"
+
+#: includes/translations.php:31
+msgid "File Upload"
+msgstr "Subir archivo"
+
+#: includes/translations.php:29
+msgid "This field cannot be edited."
+msgstr "Este campo no se puede editar."
+
+#: includes/translations.php:27
+msgid "Enable &quot;Other&quot;"
+msgstr "Activar &quot;Otras&quot;"
+
+#: includes/translations.php:26
+msgid "Edit XML"
+msgstr "Editar XML"
+
+#: includes/translations.php:25
+msgid "Form Elements"
+msgstr "Elementos del formulario"
+
+#: includes/translations.php:24
+msgid "Edit Names"
+msgstr "Editar nombres"
+
+#: includes/translations.php:23
+msgid "Developer Mode"
+msgstr "Modo desarrollador"
+
+#: includes/translations.php:22
+msgid "Description"
+msgstr "Descripción"
+
+#: includes/translations.php:21
+msgid "Help Text"
+msgstr "Texto de ayuda"
+
+#: includes/translations.php:18
+msgid "&#43;"
+msgstr "&#43;"
+
+#: includes/translations.php:16
+msgid "Content"
+msgstr "Contenido"
+
+#: includes/translations.php:8
+msgid "This field cannot be empty"
+msgstr "Este campo no puede estar vacío."
+
+#: includes/translations.php:7
+msgid "Button"
+msgstr "Botón"
+
+#: includes/translations.php:6
+msgid "Autocomplete"
+msgstr "Autocompletar"
+
+#: includes/translations.php:5
+msgid "Allow users to upload multiple files"
+msgstr "Permite a los usuarios subir archivos múltiples"
+
+#: includes/translations.php:241
+msgid "Sync Options with base language"
+msgstr "Sincronizar opciones con el idioma base"
+
+#: includes/translations.php:307
+msgid "No preview available for place selector here, You can check it at front end"
+msgstr "Aquí no hay vista previa disponible para el selector de lugar. Debes revisarlo en la vista frontal"
+
+#: includes/translations.php:301
+msgid " (eg: ({value}>2?{value}*10:0), here value will be the value entered by customer)"
+msgstr " (ejemplo: ({value}>2?{value}*10:0), aquí value será el valor introducido por el cliente)"
+
+#: includes/translations.php:296
+msgid "Use this media"
+msgstr "Usa este medio"
+
+#: includes/translations.php:152
+msgid "(Leave blank or 0 to use default image size)"
+msgstr "(Deja en blanco o 0 para usar el tamaño de imagen por defecto)"
+
+#: includes/translations.php:151
+msgid "Image display size in pixel"
+msgstr "Tamaño de visualización de la imagen en píxel"
+
+#: includes/translations.php:149
+msgid "Item display size in pixel(px)"
+msgstr "Tamaño de visualización del elemento en píxel (px)"
+
+#: includes/translations.php:148
+msgid "Item selection style"
+msgstr "Estilo de selección de artículo"
+
+#: includes/translations.php:146
+msgid "Map Height (in px)"
+msgstr "Altura del mapa (en px)"
+
+#: includes/translations.php:144
+msgid "Google Place Selector"
+msgstr "Selector de Google Place"
+
+#: includes/translations.php:142
+msgid "You can select a form to include here"
+msgstr "Puedes seleccionar un formulario para incluir aquí"
+
+#: includes/translations.php:133
+msgid "Users can see full image on clicking the zoom icon provided"
+msgstr "Los usuarios pueden ver la imagen completa haciendo clic en el icono de zoom proporcionado"
+
+#: includes/translations.php:81
+msgid "Rich Text Editor"
+msgstr "Editor de texto enriquecido"
+
+#: includes/translations.php:265
+msgid "Text Mode"
+msgstr "Modo texto"
+
+#: includes/translations.php:264
+msgid "Border"
+msgstr "Borde"
+
+#: includes/translations.php:231
+msgid "[WCPA Custom Field]"
+msgstr "[WCPA Custom Field]"
+
+#: includes/translations.php:229
+msgid "[Stock Status]"
+msgstr "[Estado del inventario]"
+
+#: includes/translations.php:228
+msgid "[Product IDs]"
+msgstr "[IDs de productos]"
+
+#: includes/translations.php:227
+msgid "[Attributes/Variations]"
+msgstr "[Atributos/Variaciones]"
+
+#: includes/translations.php:226
+msgid "[Product Quantity]"
+msgstr "[Cantidad de producto]"
+
+#: includes/translations.php:225
+msgid "[empty label]"
+msgstr "[etiqueta vacía]"
+
+#: includes/translations.php:262
+msgid "Tick"
+msgstr "Marcar"
+
+#: includes/translations.php:167
+msgid "Image selection type"
+msgstr "Tipo de selección de imagen"
+
+#: includes/translations.php:154
+msgid "Box display type"
+msgstr "Tipo de visualización de caja"
+
+#: includes/translations.php:126
+msgid "Image Group"
+msgstr "Grupo de imágenes"
+
+#: includes/translations.php:82
+msgid "Access"
+msgstr "Acceso"
+
+#: includes/class-wcpa-front-end.php:224
+msgid "WCPA fields will show only if product has set price"
+msgstr "Los campos WCPA solo serán visibles si los productos tienen un precio establecido"
+
+#: includes/class-wcpa-migration.php:33
+msgid "<strong>Woocommerce Custom Product Addons</strong> found data from some old version, Please fix this by going <a href=\""
+msgstr "<strong>Woocommerce Custom Product Addons</strong> se encontraron dotos de una versión antigua, por favor corrige esto visitando <a href=\""
+
+#: includes/class-wcpa-backend.php:271 includes/class-wcpa-front-end.php:172
+msgid "Add New Form"
+msgstr "Añadir nuevo formulario"
+
+#: includes/views/settings-main.php:69
+msgid "Load form in recency order"
+msgstr "Cargar formulario en orden de antigüedad"
+
+#: includes/views/settings-main.php:78
+msgid "If a product has assigned multiple forms, it will be loaded based on form created date"
+msgstr "Si un producto tiene asignados varios formularios, se cargarán en función de la fecha de creación del formulario"
+
+#: includes/class-wcpa-product-meta.php:75
+msgid "Configurations"
+msgstr "Configuraciones"
+
+#: includes/class-wcpa-product-meta.php:57
+msgid "Select Form"
+msgstr "Seleccionar formulario"
+
+#: includes/views/form-edit.php:27
+msgid "You can use this editor only for translating Labels, Values, Help Text, Placeholder and Conditional logic value. All the other configurations and parameters will be populating from the original form."
+msgstr "Puedes utilizar este editor solo para traducir etiquetas, valores, texto de ayuda, marcador de posición y valor lógico condicional. Todas las demás configuraciones y parámetros se rellenarán desde el formulario original."
+
+#: includes/class-wcpa-backend.php:187 includes/translations.php:19
+msgid "Copy"
+msgstr "Copiar"
+
+#: includes/class-wcpa-backend.php:247
+msgid "Duplicate Form"
+msgstr "Duplicar el formulario "
+
+#: includes/views/form-edit.php:14
+msgid "You can't create new form in current language (%s). Please switch to your default language (%s) and try again"
+msgstr "No puedes crear un nuevo formulario en el idioma actual (%s). Por favor cambia a tu idioma por defecto (%s) y prueba nuevamente"
+
+#: includes/class-wcpa-product-meta.php:54
+msgid "You can manage form fields from base language only."
+msgstr "Solo puedes gestionar campos de formularios desde el idioma base."
+
+#: includes/class-wcpa-backend.php:275 includes/class-wcpa-front-end.php:176
+msgid "Custom Product Addons"
+msgstr "Custom Product Addons"
+
+#. Plugin Name of the plugin
+msgid "WooCommerce Custom Product Addons (Free)"
+msgstr "WooCommerce Custom Product Addons (Free)"
+
+#: includes/views/settings-main.php:19
+msgid "Add to cart button text"
+msgstr "Texto del botón añadir al carrito"
+
+#: includes/views/settings-main.php:25
+msgid "Add to cart button text in archive/product listing page in case product has additional fields"
+msgstr "Texto del botón de añadir al carrito en la página de archivo/lista de productos en caso de que el producto tenga campos adicionales"
+
+#: includes/views/settings-main.php:32
+msgid "Display custom fields data in "
+msgstr "Mostrar campos de datos personalizados en "
+
+#: includes/views/settings-main.php:41
+msgid "Show in cart"
+msgstr "Mostrar en el carrito"
+
+#: includes/views/settings-main.php:49
+msgid "Show in Checkout"
+msgstr "Mostrar en la finalización de la compra"
+
+#: includes/views/settings-main.php:57
+msgid "Show in Order"
+msgstr "Mostrar en pedido"
+
+#: includes/class-wcpa-product-meta.php:18
+msgid "Custom Product Options"
+msgstr "Opciones personalizadas de producto"
+
+#: includes/class-wcpa-backend.php:355
+msgid "Product Forms"
+msgstr "Formularios de producto"
+
+#: includes/class-wcpa-settings.php:87
+msgid "Premium version"
+msgstr "Versión premium"
+
+#: includes/views/settings-migration.php:34
+msgid "Migrate Now"
+msgstr "Migrar ahora"
+
+#: includes/views/settings-migration.php:30
+msgid "Found some data from old version of this plugin, You can migrate the old data to compatible with new plugin by clicking the migrate now button below "
+msgstr "Se encontraron algunos datos de la versión antigua de este plugin, puedes migrar los datos antiguos para que sean compatibles con el nuevo plugin haciendo clic en el botón de migrar ahora de abajo"
+
+#. Description of the plugin
+msgid "WooCommerce Product add-on plugin. Add custom fields to your WooCommerce product page. With an easy-to-use Custom Form Builder, now you can add extra product options quickly."
+msgstr "Plugin de complementos para producto de WooCommerce. Añade campos personalizados a tu página de producto de WooCommerce. Con un constructor de formularios personalizados fácil de usar, ahora puedes agregar opciones adicionales de productos rápidamente."
+
+#: includes/class-wcpa-backend.php:272 includes/class-wcpa-front-end.php:173
+msgid "Add New %s"
+msgstr "Añadir nuevo %s"
+
+#: includes/class-wcpa-form.php:205
+msgid "Field %s is required"
+msgstr "El campo %s es obligatorio"
+
+#: includes/class-wcpa-settings.php:85
+msgid "Settings"
+msgstr "Ajustes"
+
+#: includes/class-wcpa-settings.php:86
+msgid "Create Forms"
+msgstr "Crear formularios"
+
+#: includes/translations.php:58 includes/translations.php:64
+#: includes/translations.php:110 includes/translations.php:124
+#: includes/views/order-meta-line-item.php:7
+msgid "Value"
+msgstr "Valor"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://acowebs.com"
+msgstr "https://acowebs.com"
+
+#: includes/views/settings-migration.php:13
+msgid "Custom Product Addons Migration"
+msgstr "Migración de Custom Product Addons"
+
+#: includes/views/order-meta-line-item.php:37
+#: includes/views/order-meta-line-item.php:71
+msgid "Delete item"
+msgstr "Borrar el elemento"
+
+#: includes/class-wcpa-backend.php:273 includes/class-wcpa-front-end.php:174
+msgid "Edit %s"
+msgstr "Editar %s"
+
+#: includes/class-wcpa-backend.php:274 includes/class-wcpa-front-end.php:175
+msgid "New %s"
+msgstr "Nuevo %s"
+
+#: includes/class-wcpa-backend.php:277 includes/class-wcpa-front-end.php:178
+msgid "Search %s"
+msgstr "Buscar %s"
+
+#: includes/class-wcpa-backend.php:279 includes/class-wcpa-front-end.php:180
+msgid "No %s Found In Trash"
+msgstr "No se han encontrado %s en la papelera"
+
+#: includes/class-wcpa-backend.php:278 includes/class-wcpa-front-end.php:179
+msgid "No %s Found"
+msgstr "No se ha encontrado %s"
+
+#: includes/class-wcpa-backend.php:280 includes/class-wcpa-front-end.php:181
+msgid "Parent %s"
+msgstr "%s superior"
+
+#: includes/class-wcpa-backend.php:456 includes/class-wcpa-backend.php:466
+#: includes/class-wcpa-customer.php:52 includes/class-wcpa-customer.php:61
+#: includes/class-wcpa-ml.php:343 includes/class-wcpa-ml.php:352
+#: includes/class-wcpa-settings.php:175 includes/class-wcpa-settings.php:185
+msgid "Cheatin&#8217; huh?"
+msgstr "¡Haciendo trampas! ¿eh?"
+
+#: includes/class-wcpa-backend.php:276 includes/class-wcpa-front-end.php:177
+msgid "View %s"
+msgstr "Ver %s"
+
+#. Author of the plugin
+msgid "Acowebs"
+msgstr "Acowebs"

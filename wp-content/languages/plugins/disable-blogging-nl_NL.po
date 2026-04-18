@@ -1,0 +1,316 @@
+# Translation of Plugins - Disable Blogging in WordPress - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - Disable Blogging in WordPress - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2021-01-02 08:49:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - Disable Blogging in WordPress - Stable (latest release)\n"
+
+#: admin/settings-page.php:311
+msgid "Reorder Pages menu to the top"
+msgstr "Menu pagina's opnieuw ordenen naar boven"
+
+#: admin/settings-page.php:310
+msgid "Pages Menu"
+msgstr "Pagina's menu"
+
+#: admin/settings-page.php:305
+msgid "Removed"
+msgstr "Verwijderd"
+
+#: admin/settings-page.php:300
+msgid "This is the spacing between some of the menu items."
+msgstr "Dit is de afstand tussen enkele menu-items."
+
+#: admin/settings-page.php:299
+msgid "Menu separators will be"
+msgstr "Menu scheidingstekens zullen zijn"
+
+#: admin/settings-page.php:294
+msgid "Hidden"
+msgstr "Verborgen"
+
+#: admin/settings-page.php:293 admin/settings-page.php:304
+msgid "Shown"
+msgstr "Getoond"
+
+#: admin/settings-page.php:289
+msgid "<a target=\"_blank\" href=\"https://developer.wordpress.org/resource/dashicons\">Dashicons</a> will only be shown when the menu is collapsed."
+msgstr "<a target=\"_blank\" href=\"https://developer.wordpress.org/resource/dashicons\">Dashicons</a> worden alleen weergegeven als het menu is ingevouwen."
+
+#: admin/settings-page.php:288
+msgid "Have menu dashicons"
+msgstr "Heeft menu dashicons"
+
+#: admin/settings-page.php:281
+msgid "This will be the new default page when visiting the admin panel."
+msgstr "Dit wordt de nieuwe standaardpagina wanneer je het beheerpaneel bezoekt."
+
+#: admin/settings-page.php:280
+msgid "Redirect Dashboard menu to"
+msgstr "Leid Dashboard menu om naar"
+
+#: admin/settings-page.php:272
+msgid ""
+"some_label\n"
+"another_label\n"
+"yet_another_label"
+msgstr ""
+"some_label\n"
+"another_label\n"
+"yet_another_label"
+
+#: admin/settings-page.php:271
+msgid "Hide additional profile fields created by plugins/theme by their label ID.<br>Read the <a href=\"https://wordpress.org/plugins/disable-blogging/faq\" target=\"_blank\">FAQ</a> on how to find the label IDs."
+msgstr "Verberg extra profielvelden die zijn gemaakt door plugins/thema op basis van hun label ID.<br>Lees de <a href=\"https://wordpress.org/plugins/disable-blogging/faq\" target=\"_blank\">FAQ</a> over het vinden van de label ID's."
+
+#: admin/settings-page.php:270
+msgid "Additional Fields"
+msgstr "Extra velden"
+
+#: admin/settings-page.php:265
+msgid "Avatar Display"
+msgstr "Avatar weergave"
+
+#: admin/settings-page.php:264
+msgid "Biographical Info"
+msgstr "Biografische informatie"
+
+#: admin/settings-page.php:258
+msgid "If Comments are enabled, additional avatar settings can be managed in "
+msgstr "Als reacties zijn ingeschakeld, kunnen aanvullende avatar instellingen worden beheerd in "
+
+#: admin/settings-page.php:257
+msgid "About Yourself"
+msgstr "Over jezelf"
+
+#: admin/settings-page.php:248
+msgid "Contact Info"
+msgstr "Contactinformatie"
+
+#: admin/settings-page.php:243
+msgid "Display Name"
+msgstr "Weergavenaam"
+
+#: admin/settings-page.php:242
+msgid "Nickname"
+msgstr "Bijnaam"
+
+#: admin/settings-page.php:241
+msgid "Last Name"
+msgstr "Achternaam"
+
+#: admin/settings-page.php:240
+msgid "First Name"
+msgstr "Voornaam"
+
+#: admin/settings-page.php:233
+msgid "Name"
+msgstr "Naam"
+
+#: admin/settings-page.php:228
+msgid "Toolbar"
+msgstr "Toolbar"
+
+#: admin/settings-page.php:227
+msgid "Keyboard Shortcuts"
+msgstr "Toetscombinaties"
+
+#: admin/settings-page.php:226
+msgid "Admin Color Scheme"
+msgstr "Beheerder kleurenschema"
+
+#: admin/settings-page.php:225
+msgid "Visual Editor"
+msgstr "Visuele editor"
+
+#: admin/settings-page.php:216
+msgid "Personal Options"
+msgstr "Persoonlijke opties"
+
+#: admin/settings-page.php:208
+msgid "<strong>None</strong>: Remove the WordPress credits"
+msgstr "<strong>Geen</strong>: Verwijder de WordPress credits"
+
+#: admin/settings-page.php:207
+msgid "<strong>Site Info</strong>: <code>Copyright &copy; "
+msgstr "<strong>Site informatie</strong>: <code>Copyright &copy; "
+
+#: admin/settings-page.php:206
+msgid "<strong>Default</strong>: <code>Thank you for creating with <a href=\"https://wordpress.org/\" target=\"_blank\">WordPress</a>.</code>"
+msgstr "<strong>Standaard</strong>: <code>Dank je voor het maken met <a href=\"https://wordpress.org/\" target=\"_blank\">WordPress</a>.</code>"
+
+#: admin/settings-page.php:202
+msgid "Change admin footer to"
+msgstr "Verander beheerder footer naar"
+
+#: admin/settings-page.php:196
+msgid "Remove code in header used to add support for emojis<p class=\"description\"><a href=\"https://codex.wordpress.org/Emoji\" target=\"_blank\">Emojis</a> will still work in browsers which have built in support for them.</p>"
+msgstr "Verwijder code in header die wordt gebruikt om ondersteuning voor emoji's toe te voegen <p class=\"description\"> <a href=\"https://codex.wordpress.org/Emoji\" target=\"_blank\">Emoji's</a> werkt nog steeds in browsers die er ondersteuning voor hebben ingebouwd.</p>"
+
+#: admin/settings-page.php:195
+msgid "Emojis Support"
+msgstr "Ondersteuning van emoji's"
+
+#: admin/settings-page.php:190
+msgid "<strong>Removed</strong>: %s"
+msgstr "<strong>Verwijderd</strong>: %s"
+
+#: admin/settings-page.php:189
+msgid "<strong>Shown</strong>: %s"
+msgstr "<strong>Getoond</strong>: %s"
+
+#: admin/settings-page.php:185
+msgid "It will improve cache performance and overall <a href=\"https://developers.google.com/speed/pagespeed\" target=\"_blank\">page speed</a> score."
+msgstr "Het verbetert de cacheprestaties en in het algemeen <a href=\"https://developers.google.com/speed/pagespeed\" target=\"_blank\">pagina snelheid</a> score."
+
+#: admin/settings-page.php:184
+msgid "Have query string version"
+msgstr "Heeft query string versie"
+
+#: admin/settings-page.php:178
+msgid "Remove the admin bar greeting next to the username"
+msgstr "Verwijder de begroeting in de beheerdersbalk naast de gebruikersnaam"
+
+#: admin/settings-page.php:177
+msgid "Admin Greeting"
+msgstr "Beheerder groet"
+
+#: admin/settings-page.php:171
+msgid "Remove <span class=\"description\">Help</span> tabs from the admin header"
+msgstr "Verwijder <span class=\"description\">Help</span> tabbladen van de beheerder header"
+
+#: admin/settings-page.php:170
+msgid "Help Tabs"
+msgstr "Helptabbladen"
+
+#: admin/settings-page.php:165
+msgid "Remove <span class=\"description\">Screen Options</span> tab from the admin header"
+msgstr "Verwijder <span class=\"description\">Schermopties</span> tabblad van de beheerder header"
+
+#: admin/settings-page.php:164
+msgid "Screen Options"
+msgstr "Schermopties"
+
+#: admin/settings-page.php:151
+msgid "Includes <a href=\"https://codex.wordpress.org/Glossary#Pingback\" target=\"_blank\">pingbacks</a>, <a href=\"https://codex.wordpress.org/Glossary#Trackback\" target=\"_blank\">trackbacks</a>, & <a href=\"https://codex.wordpress.org/XML-RPC_Support\" target=\"_blank\">XML-RPC</a>."
+msgstr "Inclusief <a href=\"https://codex.wordpress.org/Glossary#Pingback\" target=\"_blank\">pingbacks</a>, <a href=\"https://codex.wordpress.org/Glossary#Trackback\" target=\"_blank\">trackbacks</a>, & <a href=\"https://codex.wordpress.org/XML-RPC_Support\" target=\"_blank\">XML-RPC</a>."
+
+#: admin/settings-page.php:150
+msgid "Feeds & Related"
+msgstr "Feeds & gerelateerd"
+
+#: admin/settings-page.php:140
+msgid "Prevent <a title=\"A common technique hackers use to reveal the usernames.\">user enumeration</a>, redirects author links to homepage."
+msgstr "Voorkom dat <a title=\"Een veelvoorkomende techniek die hackers gebruiken om de gebruikersnamen te onthullen.\">gebruikersnummering</a>, auteurlinks omleidt naar de startpagina."
+
+#: admin/settings-page.php:139
+msgid "Author Page"
+msgstr "Auteur pagina"
+
+#: admin/settings-page.php:129
+msgid "Previous comments will be hidden from view."
+msgstr "Eerdere reacties worden aan het zicht onttrokken."
+
+#: admin/settings-page.php:128
+msgid "Comments"
+msgstr "Reacties"
+
+#: admin/settings-page.php:123 admin/settings-page.php:134
+#: admin/settings-page.php:145 admin/settings-page.php:156
+msgid "Disable"
+msgstr "Uitschakelen"
+
+#: admin/settings-page.php:122 admin/settings-page.php:133
+#: admin/settings-page.php:144 admin/settings-page.php:155
+msgid "Enable"
+msgstr "Inschakelen"
+
+#: admin/settings-page.php:118
+msgid "Links to previous posts will still be accessible."
+msgstr "Links naar eerdere berichten zijn nog steeds toegankelijk."
+
+#: admin/settings-page.php:117
+msgid "Posting"
+msgstr "Plaatsen"
+
+#: admin/settings-page.php:100
+msgid "- None -"
+msgstr "- Geen -"
+
+#: admin/settings-page.php:92
+msgid "Website"
+msgstr "Site"
+
+#: admin/settings-page.php:84
+msgid "Menu"
+msgstr "Menu"
+
+#: admin/settings-page.php:80
+msgid "Profile"
+msgstr "Profiel"
+
+#: admin/settings-page.php:76
+msgid "Extra"
+msgstr "Extra"
+
+#: admin/settings-page.php:72
+msgid "General"
+msgstr "Algemeen"
+
+#: admin/settings-page.php:37
+msgid "Blogging"
+msgstr "Bloggen"
+
+#: admin/settings-page.php:36 admin/settings-page.php:324
+msgid "Blogging Settings"
+msgstr "Blog instellingen"
+
+#: admin/settings-api.php:369
+msgid "Choose File"
+msgstr "Kies bestand"
+
+#: admin/plugin-meta.php:45
+msgid "Settings"
+msgstr "Instellingen"
+
+#: admin/plugin-meta.php:32
+msgid "GitHub"
+msgstr "GitHub"
+
+#: admin/plugin-meta.php:31
+msgid "Review"
+msgstr "Beoordeling"
+
+#: admin/plugin-meta.php:30
+msgid "Support"
+msgstr "Ondersteuning"
+
+#: includes/functions-extra.php:126
+msgid "Copyright &copy; "
+msgstr "Copyright &copy; "
+
+#. Author URI of the plugin
+msgid "https://factmaven.com/"
+msgstr "https://factmaven.com/"
+
+#. Author of the plugin
+msgid "Fact Maven"
+msgstr "Fact Maven"
+
+#. Description of the plugin
+msgid "Turn WordPress into a non-blogging, CMS platform by disabling posts, comments, feeds, and other related blogging features."
+msgstr "Verander WordPress in een niet-bloggend CMS-platform door berichten, reacties, feeds en andere gerelateerde blogfuncties uit te schakelen."
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/disable-blogging/"
+msgstr "https://wordpress.org/plugins/disable-blogging/"
+
+#. Plugin Name of the plugin
+msgid "Disable Blogging"
+msgstr "Bloggen uitschakelen"

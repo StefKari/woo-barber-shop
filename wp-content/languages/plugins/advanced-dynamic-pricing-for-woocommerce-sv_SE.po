@@ -1,0 +1,1671 @@
+# Translation of Plugins - Advanced Dynamic Pricing for WooCommerce - Stable (latest release) in Swedish
+# This file is distributed under the same license as the Plugins - Advanced Dynamic Pricing for WooCommerce - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-05-24 05:18:14+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-alpha.1\n"
+"Language: sv_SE\n"
+"Project-Id-Version: Plugins - Advanced Dynamic Pricing for WooCommerce - Stable (latest release)\n"
+
+#: BaseVersion/views/admin_page/tabs/tools/migration_rules.php:23
+#: BaseVersion/views/admin_page/tabs/tools/migration_rules.php:35
+msgid "Migrate"
+msgstr "Migrera"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:64
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:70
+msgid "Product only"
+msgstr "Endast produkt"
+
+#: BaseVersion/views/admin_page/tabs/tools/manage_bulk_ranges.php:13
+msgid "Export into CSV"
+msgstr "Exportera till CSV"
+
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:267
+msgid "on sale products"
+msgstr "produkter på rea"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Compatibility.php:86
+msgid "Compatibility"
+msgstr "Kompatibilitet"
+
+#: BaseVersion/Includes/VolumePricingTable/FiltersFormatter.php:50
+msgid "Product from categories: %s"
+msgstr "Produkt från kategorier: %s"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:354
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:477
+msgid "Subtotal (inc. VAT)"
+msgstr "Delsumma (inkl. moms)"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:428
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:163
+msgid "Custom attributes"
+msgstr "Anpassade attribut"
+
+#: BaseVersion/Includes/VolumePricingTable/FiltersFormatter.php:81
+#: BaseVersion/Includes/VolumePricingTable/FiltersFormatter.php:83
+msgid "Product with "
+msgstr "Produkt med "
+
+#: BaseVersion/Includes/VolumePricingTable/FiltersFormatter.php:34
+msgid "Product from the list: %s"
+msgstr "Produkt från listan: %s"
+
+#: BaseVersion/views/admin_page/tabs/options/replace_price_with_min_bulk_price.php:42
+msgid "{{price}}, {{price_suffix}}, {{price_striked}}, {{initial_price}}, {{regular_price_striked}}"
+msgstr "{{price}}, {{price_suffix}}, {{price_striked}}, {{initial_price}}, {{regular_price_striked}}"
+
+#: BaseVersion/views/admin_page/tabs/options/product_price_html.php:31
+msgid "{{price_html}}, {{Nth_item}}, {{qty_already_in_cart}}, {{regular_price_striked}}"
+msgstr "{{price_html}}, {{Nth_item}}, {{qty_already_in_cart}}, {{regular_price_striked}}"
+
+#: BaseVersion/templates/removed-free-cart-item-stub.php:18
+#: BaseVersion/templates/removed-free-mini-cart-item-stub.php:18
+msgid "You have deleted %d free products from the cart."
+msgstr "Du har tagit bort %d gratisprodukter från varukorgen."
+
+#: BaseVersion/templates/removed-auto-added-cart-item-stub.php:27
+#: BaseVersion/templates/removed-auto-added-mini-cart-item-stub.php:27
+#: BaseVersion/templates/removed-free-cart-item-stub.php:27
+#: BaseVersion/templates/removed-free-mini-cart-item-stub.php:27
+msgid "Restore"
+msgstr "Återställ"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:371
+#: BaseVersion/views/admin_page/tabs/options/external_coupons_behavior.php:9
+msgid "External coupons"
+msgstr "Externa rabattkoder"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:292
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:314
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:373
+#: BaseVersion/views/admin_page/tabs/options/external_coupons_behavior.php:19
+#: BaseVersion/views/admin_page/tabs/options/external_coupons_behavior.php:38
+#: BaseVersion/views/admin_page/tabs/rules.php:109
+msgid "Apply"
+msgstr "Tillämpa"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:386
+msgctxt "select2 msg when searching"
+msgid "Searching…"
+msgstr "Söker …"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:374
+msgctxt "select2 msg when results wasn't found"
+msgid "no results"
+msgstr "inga resultat"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:376
+msgctxt "select2 msg when input is too short"
+msgid "Please enter %d or more characters"
+msgstr "Ange %d eller fler tecken"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:378
+msgctxt "select2 msg when input is too long"
+msgid "Please delete %d character"
+msgstr "Ta bort %d tecken"
+
+#: BaseVersion/Includes/WC/PriceFunctions.php:299
+msgctxt "Price range: from-to"
+msgid "%1$s &ndash; %2$s"
+msgstr "%1$s &ndash; %2$s"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:65
+msgid "Show matched deals"
+msgstr "Visa matchade erbjudanden"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:336
+msgid "Don't disable"
+msgstr "Inaktivera inte"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:334
+msgid "Disable external coupons"
+msgstr "Inaktivera externa rabattkoder"
+
+#: BaseVersion/Includes/CartProcessor/CartProcessor.php:502
+#: BaseVersion/Includes/CartProcessor/CartProcessor.php:914
+msgid "Coupon code applied successfully."
+msgstr "Rabattkod tillämpad."
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:128
+#: BaseVersion/views/admin_page/tabs/options/bulk_table_calculation_mode.php:19
+msgid "All active rules"
+msgstr "Alla aktiva regler"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:145
+msgid "Product price"
+msgstr "Produktpris"
+
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:584
+msgid "Use product from filter"
+msgstr "Använd produkt från filter"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:291
+msgid "Use max price"
+msgstr "Använd maxpris"
+
+#: BaseVersion/views/admin_page/tabs/options/show_debug_bar.php:10
+msgid "Only admins will see this panel"
+msgstr "Endast administratörer kommer se denna panel"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:363
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:486
+msgid "amount"
+msgstr "belopp"
+
+#: BaseVersion/views/admin_page/tabs/options/amount_saved_url_to_customizer.php:10
+msgid "Amount saved"
+msgstr "Belopp sparat"
+
+#: BaseVersion/views/admin_page/tabs/rules.php:125
+msgid "No rules defined"
+msgstr "Inga regler definierade"
+
+#: BaseVersion/views/admin_page/tabs/rules.php:89
+msgid "Only rules for product \"%s\" are shown"
+msgstr "Endast regler för produkt ”%s” visas"
+
+#: BaseVersion/Includes/AdminExtensions/WcProductPageExtensions.php:190
+msgid "Add rule for the product"
+msgstr "Lägg till regel för produkten"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:585
+msgid "Global options"
+msgstr "Globala alternativ"
+
+#: BaseVersion/Includes/Debug/ReporterAjax.php:90
+msgid "Wrong value for parameter \"reports\""
+msgstr "Fel värde för parameter ”rapporter”"
+
+#: BaseVersion/Includes/Debug/ReporterAjax.php:82
+msgid "Import key not provided"
+msgstr "Importnyckel inte angiven"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:390
+msgid "System report"
+msgstr "Systemrapport"
+
+#: BaseVersion/views/admin_page/tabs/options/message_after_add_free_product.php:29
+msgid "{{qty}}, {{product_name}}"
+msgstr "{{qty}}, {{product_name}}"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:678
+msgid "After cart contents"
+msgstr "Efter varukorgens innehåll"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:676
+msgid "Before cart contents"
+msgstr "Före varukorgens innehåll"
+
+#: BaseVersion/views/admin_page/tabs/options/message_after_add_free_product.php:28
+#: BaseVersion/views/admin_page/tabs/options/product_price_html.php:30
+#: BaseVersion/views/admin_page/tabs/options/replace_price_with_min_bulk_price.php:41
+msgid "Available tags"
+msgstr "Tillgängliga etiketter"
+
+#: BaseVersion/views/admin_page/tabs/options/message_after_add_free_product.php:21
+#: BaseVersion/views/admin_page/tabs/options/product_price_html.php:25
+#: BaseVersion/views/admin_page/tabs/options/replace_price_with_min_bulk_price.php:34
+msgid "Output template"
+msgstr "Mall för utmatning"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:396
+msgid "Category table layout"
+msgstr "Layout kategoritabell"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:168
+msgid "Product table layout"
+msgstr "Layout produkttabell"
+
+#: BaseVersion/templates/reporter/main.php:52
+msgid "Refresh"
+msgstr "Ladda om"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:174
+msgid "Display ranges as headers"
+msgstr "Visa intervall som kolumnhuvud"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:172
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:400
+msgid "Display ranges as rows"
+msgstr "Visa intervall som rader"
+
+#: BaseVersion/views/admin_page/tabs/options/message_after_add_free_product.php:16
+#: BaseVersion/views/admin_page/tabs/options/product_price_html.php:20
+msgid "Enable"
+msgstr "Aktivera"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:507
+msgid "Exclude on sale products"
+msgstr "Exkludera på reaprodukter"
+
+#: BaseVersion/Includes/Debug/DebugBar.php:74
+msgid "Rule"
+msgstr "Regel"
+
+#: BaseVersion/Includes/Debug/DebugBar.php:73
+msgid "Rule ID"
+msgstr "Regel-ID"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:177
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/CartAdjustmentsLoader.php:49
+#: BaseVersion/Includes/Debug/DebugBar.php:69
+msgid "Coupons"
+msgstr "Rabattkoder"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:217
+msgid "Debug"
+msgstr "Felsök"
+
+#: BaseVersion/templates/reporter/tabs/reports.php:9
+msgid "Export all"
+msgstr "Exportera alla"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:134
+msgid "Free shipping!"
+msgstr "Gratis frakt!"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:114
+msgid "Cost"
+msgstr "Kostnad"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:112
+msgid "Label"
+msgstr "Etikett"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:37
+#: BaseVersion/templates/reporter/tabs/products.php:15
+msgid "History"
+msgstr "Historik"
+
+#: BaseVersion/templates/reporter/tabs/products.php:11
+msgid "Original price"
+msgstr "Ordinarie pris"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:83
+#: BaseVersion/templates/reporter/tabs/products.php:10
+msgid "Name"
+msgstr "Namn"
+
+#: BaseVersion/Includes/Debug/DebugBar.php:76
+#: BaseVersion/templates/reporter/main.php:22
+#: BaseVersion/views/admin_page/tabs/tools/system_report.php:14
+msgid "Get system report"
+msgstr "Få systemrapport"
+
+#: BaseVersion/Includes/Debug/ReporterAjax.php:86
+msgid "Wrong import key"
+msgstr "Fel importnyckel"
+
+#: BaseVersion/Includes/Debug/ReporterAjax.php:41
+msgid "Import key not found"
+msgstr "Importnyckel hittades inte"
+
+#: BaseVersion/Includes/Debug/DebugBar.php:72
+msgid "Replaced by fee"
+msgstr "Ersatt av avgift"
+
+#: BaseVersion/Includes/Debug/DebugBar.php:70
+msgid "Fees"
+msgstr "Avgifter"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:84
+msgid "Fee amount"
+msgstr "Avgiftsbelopp"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:63
+#: BaseVersion/templates/reporter/tabs/cart.php:86
+#: BaseVersion/templates/reporter/tabs/cart.php:115
+msgid "Affected rules"
+msgstr "Påverkade regler"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:59
+msgid "Coupon code"
+msgstr "Rabattkod"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:8
+msgid "Cart is empty"
+msgstr "Varukorg är tom"
+
+#: BaseVersion/templates/reporter/tabs/base.php:23
+msgid "No changes!"
+msgstr "Inga ändringar!"
+
+#: BaseVersion/templates/reporter/tabs/rules.php:19
+msgid "Applied to visible products"
+msgstr "Tillämpad på synliga produkter"
+
+#: BaseVersion/views/admin_page/tabs/options/replace_price_with_min_bulk_price.php:20
+msgid "Replace price with lowest bulk price"
+msgstr "Ersätt pris med lägsta bulkpris"
+
+#: BaseVersion/Includes/Debug/DebugBar.php:71
+msgid "Replaced by coupon"
+msgstr "Ersatt av rabattkod"
+
+#: BaseVersion/Includes/Debug/DebugBar.php:68
+msgid "Items"
+msgstr "Varor"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:212
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:356
+msgid "From {{price}} {{price_suffix}}"
+msgstr "Från {{price}} {{price_suffix}}"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:61
+msgid "Coupon amount"
+msgstr "Rabattkodsbelopp"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Collections.php:55
+msgid "Product Collections"
+msgstr "Produktkombinationer"
+
+#: BaseVersion/templates/reporter/tabs/base.php:17
+msgid "Gifted!"
+msgstr "Gåva!"
+
+#: BaseVersion/templates/reporter/tabs/rules.php:31
+msgid "Applied to cart items"
+msgstr "Tillämpas på varukorgens varor"
+
+#: BaseVersion/templates/reporter/tabs/rules.php:24
+msgid "Timing"
+msgstr "Tajming"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:284
+#: BaseVersion/views/admin_page/tabs/options/hide_coupon_word_in_totals.php:7
+#: BaseVersion/views/admin_page/tabs/options/hide_coupon_word_in_totals.php:12
+msgid "Hide \"Coupon\" word in cart totals"
+msgstr "Dölj ordet ”rabattkod” i varukorgens totalbelopp"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:251
+#: BaseVersion/views/admin_page/tabs/options/show_debug_bar.php:8
+#: BaseVersion/views/admin_page/tabs/options/show_debug_bar.php:16
+msgid "Show debug panel at bottom of the page"
+msgstr "Visa felsökningspanel längst ned på sidan"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:113
+msgid "Initial cost"
+msgstr "Ursprunglig kostnad"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:33
+msgid "Initial price"
+msgstr "Ursprungligt pris"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:120
+#: BaseVersion/views/admin_page/tabs/options/show_cross_out_subtotal_in_cart_totals.php:7
+#: BaseVersion/views/admin_page/tabs/options/show_cross_out_subtotal_in_cart_totals.php:11
+msgid "Show striked subtotal in cart totals"
+msgstr "Visa överstrukna delsummor i varukorgens totalbelopp"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:351
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:474
+msgid "Based on"
+msgstr "Baserat på"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:337
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:100
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:458
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:460
+msgid "Can be applied"
+msgstr "Kan tillämpas"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:332
+#: BaseVersion/Includes/Helpers/Helpers.php:204
+#: BaseVersion/views/admin_page/tabs/rules.php:28
+msgid "All"
+msgstr "Alla"
+
+#: BaseVersion/views/admin_page/tabs/options/support_persistence_rules.php:26
+#: BaseVersion/views/admin_page/tabs/options/support_shortcode_products_bogo.php:19
+#: BaseVersion/views/admin_page/tabs/options/support_shortcode_products_on_sale.php:19
+#: BaseVersion/views/admin_page/tabs/tools.php:48
+msgid "Read short guide"
+msgstr "Läs kort guide"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:110
+#: BaseVersion/views/admin_page/tabs/options/support_shortcode_products_on_sale.php:7
+#: BaseVersion/views/admin_page/tabs/options/support_shortcode_products_on_sale.php:12
+msgid "Support shortcode [adp_products_on_sale]"
+msgstr "Stöder kortkod [adp_products_on_sale]"
+
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/Impl/FeeAmount.php:36
+msgid "Fixed fee, once"
+msgstr "Fast avgift, en gång"
+
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/Impl/DiscountAmount.php:31
+msgid "Fixed discount, once"
+msgstr "Fast rabatt, en gång"
+
+#: BaseVersion/Includes/VolumePricingTable/FiltersFormatter.php:29
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:153
+msgid "Any product"
+msgstr "Valfri produkt"
+
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/Impl/FeeAmountRepeatableSetsCount.php:41
+msgid "Add fixed fee to each item line affected by rule"
+msgstr "Lägg till en fast avgift för varje varukorgsrad som omfattas av regel"
+
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/Impl/DiscountAmountRepeatableSetsCount.php:36
+msgid "Add fixed discount to each item line affected by rule"
+msgstr "Lägg till ett fast rabattbelopp för varje varukorgsrad som omfattas av regel"
+
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/Impl/DiscountAmountRepeatable.php:36
+msgid "Add fixed discount on each rule execution"
+msgstr "Lägg till ett fast rabattbelopp varje gång regeln tillämpas"
+
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/Impl/FeeAmountRepeatable.php:41
+msgid "Add fixed fee on each rule execution"
+msgstr "Lägg till en fast avgift varje gång regeln tillämpas"
+
+#: BaseVersion/Includes/Helpers/Helpers.php:99
+msgid "Guest"
+msgstr "Gäst"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:321
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:526
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:176
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:239
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:529
+msgid "Fixed price"
+msgstr "Fast pris"
+
+#: BaseVersion/Includes/AdminExtensions/AdminNotice.php:141
+#: BaseVersion/Includes/AdminExtensions/AdminNotice.php:146
+#: BaseVersion/Includes/AdminExtensions/AdminNotice.php:160
+#: BaseVersion/Includes/AdminExtensions/AdminNotice.php:165
+msgid "Edit rule"
+msgstr "Redigera regel"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Paginator.php:130
+msgid "Last page"
+msgstr "Sista sidan"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Paginator.php:119
+msgid "Next page"
+msgstr "Nästa sida"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Paginator.php:110
+msgctxt "paging"
+msgid "%1$s of %2$s"
+msgstr "%1$s av %2$s"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Paginator.php:100
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Paginator.php:104
+msgid "Current Page"
+msgstr "Nuvarande sida"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Paginator.php:93
+msgid "Previous page"
+msgstr "Föregående sida"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Paginator.php:82
+msgid "First page"
+msgstr "Första sidan"
+
+#: BaseVersion/views/admin_page/tabs/tools/import.php:48
+#: BaseVersion/views/admin_page/tabs/tools/import_rule_csv.php:51
+#: BaseVersion/views/admin_page/tabs/tools/manage_bulk_ranges.php:25
+msgid "Import"
+msgstr "Importera"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:105
+#: BaseVersion/views/admin_page/tabs/options/rules_per_page.php:7
+#: BaseVersion/views/admin_page/tabs/options/rules_per_page.php:11
+msgid "Rules per page"
+msgstr "Regler per sida"
+
+#: BaseVersion/views/admin_page/tabs/options/show_matched_bulk_table.php:24
+msgid "You can use shortcode [adp_product_bulk_rules_table] too"
+msgstr "Du kan använda kortkod [adp_product_bulk_rules_table] också"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:485
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:238
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:259
+msgid "Exclude products"
+msgstr "Exkludera produkter"
+
+#: BaseVersion/Includes/Advertising/DiscountMessage.php:43
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:590
+msgid "Amount Saved"
+msgstr "Belopp sparat"
+
+#: BaseVersion/views/admin_page/tabs/tools/import.php:40
+msgid "Clear all rules before import"
+msgstr "Rensa alla regler före import"
+
+#: BaseVersion/views/admin_page/tabs/tools/import.php:22
+msgid "Paste text into this field to import settings into the current WordPress install."
+msgstr "Klistra in text i detta fält för att importera inställningar till den nuvarande WordPress-installationen."
+
+#: BaseVersion/views/admin_page/tabs/tools/export.php:20
+msgid "Copy these settings and use it to migrate plugin to another WordPress install."
+msgstr "Kopiera dessa inställningar och använd det för att migrera tillägget till en annan WordPress-installation."
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:245
+#: BaseVersion/views/admin_page/tabs/options/allow_to_exclude_products.php:7
+#: BaseVersion/views/admin_page/tabs/options/allow_to_exclude_products.php:12
+msgid "Allow to exclude products in filters"
+msgstr "Tillåt att exkludera produkter i filter"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:100
+#: BaseVersion/views/admin_page/tabs/options/rule_max_exec_time.php:7
+#: BaseVersion/views/admin_page/tabs/options/rule_max_exec_time.php:12
+msgid "Disable rule if it runs longer than X seconds"
+msgstr "Inaktivera regel om den körs längre än X sekunder"
+
+#: BaseVersion/Includes/AdminExtensions/AdminNotice.php:163
+msgid "exclusive rules were turned off, it were running too slow."
+msgstr "exkluderade regler stängdes av, det gick för långsamt."
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Paginator.php:44
+msgid "%s item"
+msgid_plural "%s items"
+msgstr[0] "%s vara"
+msgstr[1] "%s varor"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:255
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:460
+msgid "Use bulk table message as table header"
+msgstr "Använd bulktabellens meddelande som tabellrubrik"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:455
+msgid "Qty based on product categories in all cart"
+msgstr "Antal baserat på produktkategorier i hela varukorgen"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:466
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:538
+msgid "Qty based on selected categories in all cart"
+msgstr "Antal baserat på valda kategorier i hela varukorgen"
+
+#: BaseVersion/Includes/Core/RuleProcessor/Exceptions/RuleExecutionTimeout.php:13
+msgid "Rule execution timeout"
+msgstr "Regelkörning timeout"
+
+#: BaseVersion/Includes/AdminExtensions/AdminNotice.php:158
+msgid "The exclusive rule was turned off, it was running too slow."
+msgstr "Den exklusiva regeln stängdes av, då den tog för lång tid att köra."
+
+#: BaseVersion/Includes/AdminExtensions/AdminNotice.php:144
+msgid "common rules were turned off, it were running too slow."
+msgstr "allmänna regler stängdes av, då de tog för lång tid att köra."
+
+#: BaseVersion/Includes/AdminExtensions/AdminNotice.php:139
+msgid "The common rule was turned off, it was running too slow."
+msgstr "Den allmänna regeln stängdes av, då den tog för lång tid att köra."
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:113
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:164
+msgid "Filter by products"
+msgstr "Sortera efter produkter"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:28
+#: BaseVersion/templates/reporter/tabs/cart.php:58
+#: BaseVersion/templates/reporter/tabs/cart.php:82
+#: BaseVersion/templates/reporter/tabs/cart.php:111
+#: BaseVersion/templates/reporter/tabs/products.php:9
+#: BaseVersion/templates/reporter/tabs/rules.php:22
+#: BaseVersion/templates/reporter/tabs/rules.php:34
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:56
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:61
+msgid "#"
+msgstr "#"
+
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:174
+msgid "Custom fields"
+msgstr "Anpassade fält"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:424
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:161
+msgid "Attributes"
+msgstr "Attribut"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:416
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:157
+msgid "Categories"
+msgstr "Kategorier"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:393
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:640
+msgid "Fixed price for set"
+msgstr "Fast pris för set"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:392
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:616
+msgid "Fixed discount for set"
+msgstr "Fast rabatt för set"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:391
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:632
+msgid "Fixed price for item"
+msgstr "Fast pris för objekt"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:390
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:608
+msgid "Fixed discount for item"
+msgstr "Fast rabatt för objekt"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:138
+msgid "Product page"
+msgstr "Produktsida"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:134
+msgid "Category page"
+msgstr "Kategorisida"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:445
+msgid "Qty based on all items in the cart"
+msgstr "Kvantitetsbaserat på alla objekt i varukorgen"
+
+#: BaseVersion/views/admin_page/tabs/options/show_category_bulk_table.php:23
+msgid "You can use shortcode [adp_category_bulk_rules_table]"
+msgstr "Du kan använda kortkod [adp_category_bulk_rules_table]"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:432
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:165
+msgid "Tags"
+msgstr "Etiketter"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:177
+#: BaseVersion/views/admin_page/tabs/options/do_not_modify_price_at_product_page.php:7
+#: BaseVersion/views/admin_page/tabs/options/do_not_modify_price_at_product_page.php:11
+msgid "Don't modify product price on product page"
+msgstr "Ändra inte produktpriset på produktsidan"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:443
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:173
+msgid "SKUs"
+msgstr "Artikelnummer"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:420
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:159
+msgid "Category slugs"
+msgstr "Kategori-slug"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:753
+#: BaseVersion/Includes/Debug/CalculationProfiler.php:157
+#: BaseVersion/Includes/Functions.php:180
+msgid "%1$s should not be called before the %2$s action."
+msgstr "%1$s ska inte anropas före åtgärden %2$s."
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:556
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:565
+msgid "OR"
+msgstr "ELLER"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:554
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:563
+msgid "AND"
+msgstr "OCH"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:552
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:561
+msgid "Conditions relationship"
+msgstr "Villkorssamband"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:347
+msgid "Apply pricing rules to backend orders"
+msgstr "Verkställ prisregler på restnoterade orders"
+
+#: BaseVersion/views/admin_page/tabs/options.php:61
+msgid "Need more settings?"
+msgstr "Behöver du fler inställningar?"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:324
+msgid "Add role discount"
+msgstr "Lägg till rabatt för roll"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:307
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:608
+msgid "Role discounts"
+msgstr "Rabatt för roll"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:207
+msgid "System"
+msgstr "System"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:184
+msgid "Calculation"
+msgstr "Uträkning"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:204
+msgid "Below product meta"
+msgstr "Under produktmeta"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:658
+msgid "Checkout"
+msgstr "Kassa"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:330
+msgid "Skip bulk rules if role rule was applied"
+msgstr "Hoppa över bulkregler om rollregel har verkställts"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:202
+msgid "Above product meta"
+msgstr "Över produktmeta"
+
+#: BaseVersion/views/admin_page/tabs/options/amount_saved_url_to_customizer.php:14
+#: BaseVersion/views/admin_page/tabs/options/show_category_bulk_table.php:21
+#: BaseVersion/views/admin_page/tabs/options/show_matched_bulk_table.php:22
+msgid "Customize"
+msgstr "Anpassa"
+
+#: BaseVersion/views/admin_page/tabs/options/default_fee_tax_class.php:14
+#: BaseVersion/views/cart_adjustments/fee.php:15
+msgid "Standard rate"
+msgstr "Standardtaxa"
+
+#: BaseVersion/views/admin_page/tabs/options/default_fee_tax_class.php:10
+#: BaseVersion/views/cart_adjustments/fee.php:11
+msgid "Not taxable"
+msgstr "Ej momspliktig"
+
+#: BaseVersion/Includes/CustomizerExtensions/Controls/TextAlign.php:21
+msgid "Align right"
+msgstr "Högerjustera"
+
+#: BaseVersion/Includes/CustomizerExtensions/Controls/TextAlign.php:20
+msgid "Align center"
+msgstr "Centrera"
+
+#: BaseVersion/Includes/CustomizerExtensions/Controls/TextAlign.php:19
+msgid "Align left"
+msgstr "Vänsterjustera"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:419
+msgid "At bottom of the page"
+msgstr "På botten av sidan"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:417
+msgid "At top of the page"
+msgstr "På toppen av sidan"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:370
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:566
+msgid "Style footer"
+msgstr "Förändra sidfot"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:352
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:548
+msgid "Style body"
+msgstr "Förändra body"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:338
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:356
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:534
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:552
+msgid "Background color"
+msgstr "Bakgrundsfärg"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:329
+msgid "Discounted price column title"
+msgstr "Kolumntitel för nedsatt pris"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:300
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:505
+msgid "Discount column title"
+msgstr "Kolumntitel för nedsatt"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:291
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:496
+msgid "Quantity column title"
+msgstr "Kolumntitel för antal"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:287
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:492
+msgid "Style columns"
+msgstr "Förändra kolumner"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:276
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:481
+msgid "Header tier title"
+msgstr "Sidhuvuds titelrad"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:267
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:472
+msgid "Header bulk title"
+msgstr "Sidhuvud bulktitel"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:251
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:456
+msgid "Style header"
+msgstr "Förändra sidhuvud"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:237
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:442
+msgid "Show footer"
+msgstr "Visa sidfot"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:200
+msgid "Below add to cart"
+msgstr "Under lägg i varukorg"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:196
+msgid "Below product"
+msgstr "Under produkt"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:49
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:214
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:219
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:164
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:392
+msgid "Options"
+msgstr "Alternativ"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:137
+msgid "Text color"
+msgstr "Textfärg"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:126
+msgid "Text align"
+msgstr "Textjustering"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:113
+msgid "Italic text"
+msgstr "Kursiv text"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:100
+msgid "Bold text"
+msgstr "Fet text"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:194
+msgid "Above product"
+msgstr "Över produkt"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:190
+msgid "Above product summary"
+msgstr "Över produktöversikt"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:192
+msgid "Below product summary"
+msgstr "Under produktöversikt"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:198
+msgid "Above add to cart"
+msgstr "Över lägg i varukorg"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:238
+#: BaseVersion/views/admin_page/tabs/options/suppress_other_pricing_plugins.php:7
+#: BaseVersion/views/admin_page/tabs/options/suppress_other_pricing_plugins.php:12
+msgid "Suppress other pricing plugins in frontend"
+msgstr "Förbjud andra pristillägg i front-end"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:214
+msgid "Show discounted price"
+msgstr "Visa nedsatt pris"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:496
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:564
+msgid "Qty based on product"
+msgstr "Kvantitetsbaserat på produkt"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:504
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:572
+msgid "Qty based on variation"
+msgstr "Kvantitetsbaserat på variation"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:435
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:530
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:596
+msgid "Qty based on all matched products"
+msgstr "Kvantitetsbaserat på alla matchade produkter"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCategorySlugAll.php:22
+msgid "Product category slug"
+msgstr "Produktkategorins slug"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:330
+#: BaseVersion/templates/reporter/tabs/products.php:13
+msgid "Discounted price"
+msgstr "Rabatterat pris"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/AdminPageFilterTitles.php:299
+#: BaseVersion/Includes/AdminExtensions/Ajax.php:190
+msgid "Slug"
+msgstr "Slug"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductSKUAll.php:22
+msgid "Product SKU"
+msgstr "Produkts SKU"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:185
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:412
+msgid "You can use shortcode [adp_product_bulk_rules_table] in product template."
+msgstr "Du kan använda kortkoden [adp_product_bulk_rules_table] in product template."
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:184
+msgid "Product Bulk Table position"
+msgstr "Position för produkt bulktabell"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:410
+msgid "Category Bulk Table position"
+msgstr "Position för kategori bulktabell"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:218
+#: BaseVersion/views/admin_page/tabs/options/uninstall_remove_data.php:7
+#: BaseVersion/views/admin_page/tabs/options/uninstall_remove_data.php:12
+msgid "Remove all data on uninstall"
+msgstr "Ta bort all data vid avinstallering"
+
+#: BaseVersion/views/admin_page/tabs/options/override_cents.php:21
+msgid "If selected, prices will end with: "
+msgstr "Om vald kommer priser att sluta med:"
+
+#: BaseVersion/views/admin_page/tabs/options/override_cents.php:15
+msgid "Override the cents on the calculated price."
+msgstr "Åsidosätt ören på det uträknade priset."
+
+#: BaseVersion/views/admin_page/tabs/options/override_cents.php:8
+msgid "Cents"
+msgstr "Ören"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:599
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:610
+msgid "Bulk rules"
+msgstr "Bulkregler"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:171
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:601
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:441
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:612
+msgid "Free products"
+msgstr "Gratisprodukter"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:595
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:604
+msgid "Product filters"
+msgstr "Produktfilter"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:565
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:574
+msgid "Need more conditions?"
+msgstr "Behöver du fler villkor?"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:225
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:347
+msgid "Bulk mode"
+msgstr "Bulkläge"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:137
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:597
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:192
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:606
+msgid "Product discounts"
+msgstr "Produktrabatter"
+
+#. Author URI of the plugin
+msgid "https://algolplus.com/"
+msgstr "https://algolplus.com/"
+
+#. Author of the plugin
+msgid "AlgolPlus"
+msgstr "AlgolPlus"
+
+#. Description of the plugin
+msgid "Manage discounts/deals for WooCommerce"
+msgstr "Hantera rabatter/erbjudanden i WooCommerce"
+
+#. Plugin Name of the plugin
+msgid "Advanced Dynamic Pricing for WooCommerce"
+msgstr "Advanced Dynamic Pricing för WooCommerce"
+
+#: BaseVersion/views/admin_page/tabs/statistics.php:7
+msgid "Buy a pro version of our plugin and get an access to statistics"
+msgstr "Köp pro-versionen av vårt tillägg och få tillgång till statistik"
+
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:607
+msgid "No filters"
+msgstr "Inga filter"
+
+#: BaseVersion/views/admin_page/tabs/options.php:64
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:607
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:620
+msgid "Save changes"
+msgstr "Spara ändringar"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:588
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:597
+msgid "Add limit"
+msgstr "Lägg till gräns"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:571
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:605
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:580
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:618
+msgid "Limits"
+msgstr "Gränser"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:560
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:569
+msgid "Add condition"
+msgstr "Lägg till villkor"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:536
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:545
+msgid "Conditions"
+msgstr "Villkor"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:537
+msgid "Add cart adjustment"
+msgstr "Lägg till varukorgsjustering"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:520
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:614
+msgid "Cart adjustments"
+msgstr "Varukorgsjustering"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:304
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:428
+msgid "If you leave this field empty, we will show default bulk description"
+msgstr "Om du lämnar detta fält tomt kommer standardbeskrivning att visas"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:301
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:425
+msgid "Bulk table message"
+msgstr "Bulktabellmeddelande"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:293
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:417
+msgid "Add range"
+msgstr "Lägg till omfång"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:288
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:412
+msgid "No ranges"
+msgstr "Inget omfång"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:368
+msgid "Tier"
+msgstr "Rad"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:244
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:138
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:366
+msgid "Bulk"
+msgstr "Bulk"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:390
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:512
+msgid "Add product"
+msgstr "Lägg till produkt"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:193
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:256
+msgid "Max discount sum:"
+msgstr "Max rabattsumma:"
+
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:643
+msgid "Fixed unit price"
+msgstr "Fast styckepris"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:624
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:174
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:237
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:527
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:641
+msgid "Percentage discount"
+msgstr "Procentuell rabatt"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:221
+msgid "Split"
+msgstr "Dela"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:158
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:213
+msgid "Total"
+msgstr "Totalt"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:184
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:614
+msgid "Add product filter"
+msgstr "Lägg till produktfilter"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:122
+msgid "Cheap products"
+msgstr "Billiga produkter"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:120
+msgid "Expensive products"
+msgstr "Dyra produkter"
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:118
+msgid "Apply at first to:"
+msgstr "Verkställ först på:"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:340
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:103
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:463
+msgid "Once"
+msgstr "En gång"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:338
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:102
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:461
+msgid "Unlimited"
+msgstr "Obegränsat"
+
+#: BaseVersion/views/admin_page/tabs/options/default_fee_name.php:18
+msgid "Fees with the same name are grouped in the cart."
+msgstr "Avgifter med samma namn grupperas i varukorgen."
+
+#: BaseVersion/views/admin_page/tabs/options/default_discount_name.php:19
+msgid "Fixed discounts with the same name are grouped in the cart."
+msgstr "Fasta rabatter med samma namn grupperas i varukorgen."
+
+#: BaseVersion/views/admin_page/tabs/rules.php:46
+#: BaseVersion/views/admin_page/tabs/rules.php:129
+msgid "Add rule"
+msgstr "Lägg till regel"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:603
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:616
+msgid "Cart conditions"
+msgstr "Varukorgsvillkor"
+
+#: BaseVersion/views/admin_page/tabs/collections.php:7
+msgid "Buy a pro version of our plugin and get an access to product collections"
+msgstr "Köp Pro-versionen av vårt tillägg och få tillgång till produktkombinationer "
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:628
+msgid "Mini Cart"
+msgstr "Minivarukorg"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:147
+#: BaseVersion/views/admin_page/tabs/options/combine_fees.php:7
+#: BaseVersion/views/admin_page/tabs/options/combine_fees.php:12
+msgid "Combine multiple fees"
+msgstr "Kombinera flera avgifter"
+
+#: BaseVersion/views/conditions/customer/subscriptions.php:15
+msgid "none of selected"
+msgstr "ingen av valda"
+
+#: BaseVersion/views/conditions/customer/subscriptions.php:14
+msgid "only selected"
+msgstr "bara valda"
+
+#: BaseVersion/views/conditions/customer/subscriptions.php:13
+msgid "all of selected"
+msgstr "alla valda"
+
+#: BaseVersion/views/conditions/customer/subscriptions.php:11
+msgid "at least one of selected"
+msgstr "minst en av de valda"
+
+#: BaseVersion/views/conditions/customer/order-count.php:49
+#: BaseVersion/views/conditions/customer/order-count.php:50
+#: BaseVersion/views/conditions/customer/order-count.php:51
+#: BaseVersion/views/conditions/customer/order-count.php:52
+#: BaseVersion/views/conditions/customer/order-count.php:53
+#: BaseVersion/views/conditions/customer/order-count.php:54
+#: BaseVersion/views/conditions/customer/order-count.php:55
+#: BaseVersion/views/conditions/customer/order-count.php:56
+#: BaseVersion/views/conditions/customer/order-count.php:57
+msgid "years"
+msgstr "år"
+
+#: BaseVersion/views/conditions/customer/order-count.php:48
+msgid "Years"
+msgstr "År"
+
+#: BaseVersion/views/conditions/customer/order-count.php:36
+#: BaseVersion/views/conditions/customer/order-count.php:37
+#: BaseVersion/views/conditions/customer/order-count.php:38
+#: BaseVersion/views/conditions/customer/order-count.php:39
+#: BaseVersion/views/conditions/customer/order-count.php:40
+#: BaseVersion/views/conditions/customer/order-count.php:41
+#: BaseVersion/views/conditions/customer/order-count.php:42
+#: BaseVersion/views/conditions/customer/order-count.php:43
+#: BaseVersion/views/conditions/customer/order-count.php:44
+#: BaseVersion/views/conditions/customer/order-count.php:45
+#: BaseVersion/views/conditions/customer/order-count.php:46
+msgid "months"
+msgstr "månader"
+
+#: BaseVersion/views/conditions/customer/order-count.php:35
+msgid "month"
+msgstr "månad"
+
+#: BaseVersion/views/conditions/customer/order-count.php:34
+msgid "Months"
+msgstr "Månader"
+
+#: BaseVersion/views/conditions/customer/order-count.php:30
+#: BaseVersion/views/conditions/customer/order-count.php:31
+#: BaseVersion/views/conditions/customer/order-count.php:32
+msgid "weeks"
+msgstr "veckor"
+
+#: BaseVersion/views/conditions/customer/order-count.php:29
+msgid "week"
+msgstr "vecka"
+
+#: BaseVersion/views/conditions/customer/order-count.php:28
+msgid "Weeks"
+msgstr "Veckor"
+
+#: BaseVersion/views/conditions/customer/order-count.php:22
+#: BaseVersion/views/conditions/customer/order-count.php:23
+#: BaseVersion/views/conditions/customer/order-count.php:24
+#: BaseVersion/views/conditions/customer/order-count.php:25
+#: BaseVersion/views/conditions/customer/order-count.php:26
+msgid "days"
+msgstr "dagar"
+
+#: BaseVersion/views/conditions/customer/order-count.php:21
+msgid "day"
+msgstr "dag"
+
+#: BaseVersion/views/conditions/customer/order-count.php:20
+msgid "Days"
+msgstr "Dagar"
+
+#: BaseVersion/views/conditions/customer/order-count.php:18
+msgid "current year"
+msgstr "nuvarande år"
+
+#: BaseVersion/views/conditions/customer/order-count.php:17
+msgid "current month"
+msgstr "nuvarande månad"
+
+#: BaseVersion/views/conditions/customer/order-count.php:16
+msgid "current week"
+msgstr "nuvarande vecka"
+
+#: BaseVersion/views/conditions/customer/order-count.php:15
+msgid "current day"
+msgstr "nuvarande dag"
+
+#: BaseVersion/views/conditions/customer/order-count.php:14
+msgid "Current"
+msgstr "Nuvarande"
+
+#: BaseVersion/views/conditions/customer/order-count.php:12
+msgid "all time"
+msgstr "alltid"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/CustomerSubscriptions.php:77
+msgid "Active subscriptions"
+msgstr "Aktiva prenumerationer"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/CustomerOrderCount.php:60
+msgid "Order count"
+msgstr "Orderräkning"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage.php:65
+#: BaseVersion/Includes/AdminExtensions/AdminPage.php:66
+#: BaseVersion/Includes/AdminExtensions/WcProductPageExtensions.php:70
+msgid "Pricing Rules"
+msgstr "Prisregler"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCustomFieldsAll.php:22
+msgid "Product custom fields"
+msgstr "Produkts anpassade fält"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/CustomerRole.php:43
+msgid "Role"
+msgstr "Roll"
+
+#: BaseVersion/views/admin_page/tabs/rules.php:107
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:50
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:53
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:55
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:58
+msgid "Delete"
+msgstr "Ta bort"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:44
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:47
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:49
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:52
+msgid "Clone"
+msgstr "Klona"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:37
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:39
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:42
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:44
+msgid "Expand"
+msgstr "Expandera"
+
+#: BaseVersion/views/conditions/datetime/date.php:12
+msgid "specific date"
+msgstr "specifikt datum"
+
+#: BaseVersion/views/conditions/datetime/date.php:11
+#: BaseVersion/views/conditions/datetime/time.php:11
+msgid "to"
+msgstr "till"
+
+#: BaseVersion/views/conditions/datetime/date.php:10
+#: BaseVersion/views/conditions/datetime/time.php:10
+msgid "from"
+msgstr "från"
+
+#: BaseVersion/views/conditions/customer/is-logged-in.php:11
+msgid "No"
+msgstr "Nej"
+
+#: BaseVersion/views/conditions/customer/is-logged-in.php:10
+msgid "Yes"
+msgstr "Ja"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:258
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:268
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:491
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:382
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:392
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:244
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:323
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:336
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:358
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:380
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:402
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:426
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:448
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:470
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:492
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:514
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:629
+#: BaseVersion/views/cart_adjustments/shipping-cost.php:10
+#: BaseVersion/views/conditions/customer/role.php:19
+#: BaseVersion/views/conditions/customer/subscriptions.php:23
+#: BaseVersion/views/conditions/datetime/days-of-week.php:19
+#: BaseVersion/views/conditions/products/product-attributes.php:33
+#: BaseVersion/views/conditions/products/product-categories.php:33
+#: BaseVersion/views/conditions/products/product-category-slug.php:33
+#: BaseVersion/views/conditions/products/product-custom-attributes.php:33
+#: BaseVersion/views/conditions/products/product-custom-fields.php:33
+#: BaseVersion/views/conditions/products/product-sku.php:33
+#: BaseVersion/views/conditions/products/product-tags.php:33
+#: BaseVersion/views/conditions/products/product-taxonomy.php:37
+#: BaseVersion/views/conditions/products/products.php:33
+#: BaseVersion/views/conditions/shipping/country.php:19
+msgid "Select values"
+msgstr "Välj värden"
+
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:313
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:348
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:370
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:392
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:415
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:439
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:461
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:483
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:505
+#: BaseVersion/views/conditions/customer/role.php:11
+#: BaseVersion/views/conditions/datetime/days-of-week.php:11
+#: BaseVersion/views/conditions/products/product-attributes.php:22
+#: BaseVersion/views/conditions/products/product-categories.php:22
+#: BaseVersion/views/conditions/products/product-category-slug.php:22
+#: BaseVersion/views/conditions/products/product-custom-attributes.php:22
+#: BaseVersion/views/conditions/products/product-custom-fields.php:22
+#: BaseVersion/views/conditions/products/product-sku.php:22
+#: BaseVersion/views/conditions/products/product-tags.php:22
+#: BaseVersion/views/conditions/products/product-taxonomy.php:25
+#: BaseVersion/views/conditions/products/products.php:22
+#: BaseVersion/views/conditions/shipping/country.php:11
+msgid "not in list"
+msgstr "inte i listan"
+
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:311
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:346
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:368
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:390
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:413
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:437
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:458
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:480
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:502
+#: BaseVersion/views/conditions/customer/role.php:10
+#: BaseVersion/views/conditions/datetime/days-of-week.php:10
+#: BaseVersion/views/conditions/products/product-attributes.php:21
+#: BaseVersion/views/conditions/products/product-categories.php:21
+#: BaseVersion/views/conditions/products/product-category-slug.php:21
+#: BaseVersion/views/conditions/products/product-custom-attributes.php:21
+#: BaseVersion/views/conditions/products/product-custom-fields.php:21
+#: BaseVersion/views/conditions/products/product-sku.php:21
+#: BaseVersion/views/conditions/products/product-tags.php:21
+#: BaseVersion/views/conditions/products/product-taxonomy.php:24
+#: BaseVersion/views/conditions/products/products.php:21
+#: BaseVersion/views/conditions/shipping/country.php:10
+msgid "in list"
+msgstr "i listan"
+
+#: BaseVersion/views/conditions/cart/subtotal.php:13
+#: BaseVersion/views/conditions/customer/order-count.php:67
+msgid "&gt;"
+msgstr "&gt;"
+
+#: BaseVersion/views/conditions/cart/subtotal.php:12
+#: BaseVersion/views/conditions/customer/order-count.php:66
+msgid "&gt;="
+msgstr "&gt;="
+
+#: BaseVersion/views/conditions/cart/subtotal.php:11
+#: BaseVersion/views/conditions/customer/order-count.php:65
+msgid "&lt;="
+msgstr "&lt;="
+
+#: BaseVersion/views/conditions/cart/subtotal.php:10
+#: BaseVersion/views/conditions/customer/order-count.php:64
+msgid "&lt;"
+msgstr "&lt;"
+
+#: BaseVersion/views/cart_adjustments/fee.php:32
+msgid "fee name"
+msgstr "avgiftsnamn"
+
+#: BaseVersion/templates/deals-table.php:6
+msgid "Active deals"
+msgstr "Aktiva erbjudanden"
+
+#: BaseVersion/Includes/VolumePricingTable/RangeDiscountTable.php:1102
+msgid "Bulk pricing will be applied to package:"
+msgstr "Bulk-prissättning kommer tillämpas på paket:"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:292
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:497
+#: BaseVersion/templates/reporter/tabs/cart.php:31
+msgid "Quantity"
+msgstr "Kvantitet"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:35
+msgid "Price"
+msgstr "Pris"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:277
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:482
+msgid "Tier deal"
+msgstr "Raderbjudande"
+
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:268
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:473
+msgid "Bulk deal"
+msgstr "Bulkererbjudande"
+
+#: BaseVersion/Includes/Core/Rule/Limit/LimitsLoader.php:45
+msgid "Usage restrictions"
+msgstr "Användningsbegränsning"
+
+#: BaseVersion/Includes/Core/Rule/Limit/Impl/MaxUsage.php:43
+msgid "Max usage"
+msgstr "Max antal användningar"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ShippingCountry.php:47
+msgid "Country"
+msgstr "Land"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/DaysOfWeek.php:43
+msgid "Days of week"
+msgstr "Dagar i veckan"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/Date.php:56
+msgid "Date"
+msgstr "Datum"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:77
+msgid "Customer"
+msgstr "Kund"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/CustomerLogged.php:43
+msgid "Is logged in"
+msgstr "Är inloggad"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:163
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:76
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:598
+#: BaseVersion/Includes/Debug/DebugBar.php:65
+#: BaseVersion/templates/reporter/main.php:16
+msgid "Cart"
+msgstr "Varukorg"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductAttributesAll.php:22
+msgid "Product attributes"
+msgstr "Produktattribut"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductTagsAll.php:22
+msgid "Product tags"
+msgstr "Produkttaggar"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCategoriesAll.php:20
+msgid "Product categories"
+msgstr "Produktkategorier"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:75
+msgid "Cart items"
+msgstr "Objekt i varukorg"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductsAll.php:22
+#: BaseVersion/Includes/Debug/DebugBar.php:66
+#: BaseVersion/templates/reporter/main.php:18
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:412
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:155
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:604
+msgid "Products"
+msgstr "Produkter"
+
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/CartAdjustmentsLoader.php:51
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:79
+#: BaseVersion/Includes/Debug/DebugBar.php:75
+msgid "Shipping"
+msgstr "Frakt"
+
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/CartAdjustmentsLoader.php:48
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:301
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:311
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:506
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:516
+msgid "Discount"
+msgstr "Rabatt"
+
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:172
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:235
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:525
+#: BaseVersion/views/admin_page/tabs/rules/templates.php:639
+msgid "Fixed discount"
+msgstr "Fast rabatt"
+
+#: BaseVersion/Includes/Helpers/Helpers.php:290
+msgid "Saturday"
+msgstr "Lördag"
+
+#: BaseVersion/Includes/Helpers/Helpers.php:289
+msgid "Friday"
+msgstr "Fredag"
+
+#: BaseVersion/Includes/Helpers/Helpers.php:288
+msgid "Thursday"
+msgstr "Torsdag"
+
+#: BaseVersion/Includes/Helpers/Helpers.php:287
+msgid "Wednesday"
+msgstr "Onsdag"
+
+#: BaseVersion/Includes/Helpers/Helpers.php:286
+msgid "Tuesday"
+msgstr "Tisdag"
+
+#: BaseVersion/Includes/Helpers/Helpers.php:285
+msgid "Monday"
+msgstr "Måndag"
+
+#: BaseVersion/Includes/Helpers/Helpers.php:284
+msgid "Sunday"
+msgstr "Söndag"
+
+#: BaseVersion/Includes/Core/Rule/CartAdjustment/CartAdjustmentsLoader.php:50
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:151
+msgid "Fee"
+msgstr "Avgift"
+
+#: BaseVersion/Includes/Loader.php:101
+msgid "Advanced Dynamic Pricing for WooCommerce requires WooCommerce version %s or later."
+msgstr "Advanced Dynamic Pricing for WooCommerce kräver WooCommerce version %s eller högre."
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Help.php:118
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:151
+msgid "Tools"
+msgstr "Verktyg"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Statistics.php:60
+msgid "Statistics"
+msgstr "Statistik"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Help.php:103
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:107
+#: BaseVersion/Includes/PluginActions.php:46
+msgid "Settings"
+msgstr "Inställningar"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Help.php:61
+#: BaseVersion/views/admin_page/tabs/help.php:11
+msgid "Help"
+msgstr "Hjälp"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:122
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:88
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:50
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:344
+#: BaseVersion/Includes/Debug/DebugBar.php:67
+#: BaseVersion/templates/reporter/main.php:20
+msgid "Rules"
+msgstr "Regler"
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:388
+msgid "Remove rule?"
+msgstr "Ta bort regel?"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:78
+msgid "Date & time"
+msgstr "Datum och tid"
+
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/Time.php:48
+msgid "Time"
+msgstr "Tid"
+
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:141
+msgid "Coupon"
+msgstr "Rabattkod"
+
+#: BaseVersion/Includes/AdminExtensions/MetaBoxes/OrderAppliedDiscountRules.php:34
+#: BaseVersion/Includes/AdminExtensions/WcOrderPreviewExtensions.php:59
+msgid "Applied discounts"
+msgstr "Tillämpade rabatter"
+
+#: BaseVersion/views/cart_adjustments/discount.php:11
+msgid "discount name"
+msgstr "rabattnamn"
+
+#: BaseVersion/templates/reporter/tabs/cart.php:29
+#: BaseVersion/templates/reporter/tabs/rules.php:23
+#: BaseVersion/templates/reporter/tabs/rules.php:35
+#: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:88
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:95
+msgid "Title"
+msgstr "Rubrik"

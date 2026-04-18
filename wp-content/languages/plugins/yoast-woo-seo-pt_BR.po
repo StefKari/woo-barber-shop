@@ -1,0 +1,190 @@
+# Translation of Yoast - WooCommerce SEO in Portuguese (Brazil)
+# This file is distributed under the same license as the Yoast - WooCommerce SEO package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-09-02 21:54:53+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: GlotPress/4.0.0-rc.1\n"
+"Language: pt_BR\n"
+"Project-Id-Version: Yoast - WooCommerce SEO\n"
+
+#: classes/woocommerce-seo.php:549
+msgid "Size"
+msgstr "Tamanho"
+
+#: classes/woocommerce-seo.php:564
+msgid "Return policy page"
+msgstr "Página de política de devolução"
+
+#: classes/woocommerce-seo.php:552
+msgid "If you have a general return policy for your business, please select it here."
+msgstr "Se você tem uma política geral de devolução para sua empresa, selecione-a aqui."
+
+#. translators: %1$s: WordPress
+#. translators: %1$s: Yoast SEO
+#: classes/woocommerce-dependencies.php:146
+#: classes/woocommerce-dependencies.php:174
+msgid "Update %1$s"
+msgstr "Atualizar %1$s"
+
+#. translators: %1$s: WooCommerce
+#. translators: %1$s: Yoast SEO
+#: classes/woocommerce-dependencies.php:84
+#: classes/woocommerce-dependencies.php:115
+msgid "Install %1$s"
+msgstr "Instalar %1$s"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:580
+msgid "Note that %1$s breadcrumbs will not be replaced if you’re using a block-based template for single products."
+msgstr "Observe que a localização atual de %1$s não será substituída se você estiver usando um modelo baseado em bloco para produtos únicos."
+
+#. Author URI of the plugin
+#: wpseo-woocommerce.php
+msgid "https://yoa.st/team-yoast-woocommerce"
+msgstr "https://yoa.st/team-yoast-woocommerce"
+
+#: classes/woocommerce-seo.php:548
+msgid "Material"
+msgstr "Material"
+
+#: classes/woocommerce-seo.php:547
+msgid "Pattern"
+msgstr "Padrão"
+
+#: classes/woocommerce-yoast-ids.php:45
+msgid "If this product variation has unique identifiers, you can enter them here"
+msgstr "Se esta variação de produto tiver identificadores exclusivos, você pode inseri-los aqui"
+
+#: classes/woocommerce-yoast-ids.php:44
+msgid "Yoast SEO options"
+msgstr "Opções de SEO Yoast"
+
+#. Plugin URI of the plugin
+#: wpseo-woocommerce.php
+msgid "https://yoa.st/4fu"
+msgstr "https://yoa.st/4fu"
+
+#: classes/woocommerce-seo.php:541
+msgid "Schema & OpenGraph additions"
+msgstr "Adições de Schema & OpenGraph"
+
+#: classes/woocommerce-seo.php:542
+msgid "If you have product attributes for the following types, select them here, the plugin will make sure they're used for the appropriate Schema.org and OpenGraph markup."
+msgstr "Se você tem atributos de produtos dos seguintes tipos, selecione eles aqui, e o plugin se certificará que eles sejam usados pela marcação Schema.org e OpenGraph correta."
+
+#: classes/woocommerce-seo.php:545
+msgid "Brand"
+msgstr "Marca"
+
+#: classes/woocommerce-seo.php:544
+msgid "Manufacturer"
+msgstr "Fabricante"
+
+#: classes/woocommerce-seo.php:567
+msgid "Breadcrumbs"
+msgstr "Breadcrumbs"
+
+#. translators: %1$s resolves to internal links options page, %2$s resolves to
+#. closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:571
+msgid "Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sBreadcrumbs settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced."
+msgstr "Ambos %4$s e %3$s possuem funcionalidade de breadcrumbs. Os breadcrumbs %3$s têm uma chance ligeiramente maior de serem captados pelos mecanismos de pesquisa e você pode configurá-los um pouco mais, %1$sna página de configurações Breadcrumbs%2$s. Para ativá-los, marque a caixa abaixo e os breadcrumbs do WooCommerce serão substituídos."
+
+#: classes/woocommerce-seo.php:595
+msgid "Admin"
+msgstr "Admin"
+
+#: classes/woocommerce-slack.php:46
+msgid "In stock"
+msgstr "Em Estoque"
+
+#: classes/woocommerce-slack.php:63
+msgid "Price"
+msgstr "Preço"
+
+#. translators: %1$s resolves to Yoast WooCommerce SEO
+#: classes/woocommerce-dependencies.php:154
+msgid "Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly."
+msgstr "Atualize o WordPress para a versão mais recente para permitir que o WordPress e o módulo %1$s funcionem corretamente."
+
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to Yoast WooCommerce
+#. SEO
+#: classes/woocommerce-dependencies.php:182
+msgid "Please upgrade the %1$s plugin to the latest version to allow the %2$s module to work."
+msgstr "Atualize o plugin %1$s para a versão mais recente para permitir que o módulo %2$s funcione."
+
+#. Description of the plugin
+#: wpseo-woocommerce.php
+msgid "This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins."
+msgstr "Esta extensão para WooCommerce e WordPress SEO by Yoast torna possível uma perfeita comunicação entre os dois plugins."
+
+#. Author of the plugin
+#: wpseo-woocommerce.php
+msgid "Team Yoast"
+msgstr "Time Yoast"
+
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:599
+msgid "Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s to be above %1$s, check the box."
+msgstr "Ambas %2$s e %1$s adicionam caixas de metadados para editar a página de produto, se quiser que %2$s seja acima de %1$s, marque a caixa de marcação."
+
+#. Plugin Name of the plugin
+#: wpseo-woocommerce.php
+msgid "Yoast SEO: WooCommerce"
+msgstr "Yoast SEO: WooCommerce"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:589
+msgid "Replace %1$s Breadcrumbs"
+msgstr "Substituir %1$s Breadcrumbs"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:609
+msgid "Move %1$s up"
+msgstr "Mover %1$s para cima"
+
+#. translators: %1$s resolves to WooCommerce SEO
+#: classes/woocommerce-seo.php:483
+msgid "%1$s Settings"
+msgstr "Configurações de %1$s"
+
+#. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
+#. to the closing tag, %3$s resolves to WooCommerce, %4$s resolves to Yoast
+#. WooCommerce SEO
+#. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
+#. to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to Yoast
+#. WooCommerce SEO
+#: classes/woocommerce-dependencies.php:92
+#: classes/woocommerce-dependencies.php:123
+msgid "Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work."
+msgstr "Favor %1$sinstalar &amp; ativar %3$s%2$s para que o módulo %4$s funcione."
+
+#: classes/woocommerce-yoast-tab.php:63
+#: js/src/initializers/registerAssessments.js:280
+msgid "Product identifiers"
+msgstr "Identificadores de produtos"
+
+#. translators: %1$s resolves to Yoast SEO
+#: classes/woocommerce-yoast-tab.php:66
+msgid "If you have any of these unique identifiers for your products, please add them here. %1$s will use them in your Schema and OpenGraph output."
+msgstr "Se você tiver um desses identificadores únicos para os seus produtos, favor adiciona-los aqui. %1$s usará eles no seu resultado Schema e Opengraph."
+
+#: classes/woocommerce-seo.php:546
+msgid "Color"
+msgstr "Cor"
+
+#: classes/woocommerce-slack.php:42
+msgid "Out of stock"
+msgstr "Fora de estoque"
+
+#: classes/woocommerce-slack.php:50
+msgid "On backorder"
+msgstr "Em espera"
+
+#: classes/woocommerce-slack.php:65
+msgid "Availability"
+msgstr "Disponibilidade"

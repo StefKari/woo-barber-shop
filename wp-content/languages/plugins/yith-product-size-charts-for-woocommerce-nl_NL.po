@@ -1,0 +1,965 @@
+# Translation of Plugins - YITH Product Size Charts for WooCommerce - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - YITH Product Size Charts for WooCommerce - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-05-26 13:35:31+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - YITH Product Size Charts for WooCommerce - Stable (latest release)\n"
+
+#: plugin-fw/templates/fields/dimensions.php:117
+msgctxt "Tooltip in the \"Dimensions\" field"
+msgid "Link values together"
+msgstr "Waarden aan elkaar koppelen"
+
+#: plugin-fw/templates/fields/dimensions.php:19
+msgctxt "Position in the \"Dimensions\" field"
+msgid "Left"
+msgstr "Links"
+
+#: plugin-fw/templates/fields/dimensions.php:18
+msgctxt "Position in the \"Dimensions\" field"
+msgid "Bottom"
+msgstr "Onder"
+
+#: plugin-fw/templates/fields/dimensions.php:17
+msgctxt "Position in the \"Dimensions\" field"
+msgid "Right"
+msgstr "Rechts"
+
+#: plugin-fw/templates/fields/dimensions.php:16
+msgctxt "Position in the \"Dimensions\" field"
+msgid "Top"
+msgstr "Boven"
+
+#: plugin-fw/templates/fields/onoff.php:24
+msgctxt "YES/NO button: use MAX 3 characters!"
+msgid "YES"
+msgstr "Ja"
+
+#: plugin-fw/templates/fields/onoff.php:25
+msgctxt "YES/NO button: use MAX 3 characters!"
+msgid "NO"
+msgstr "Nee"
+
+#: plugin-fw/lib/yit-plugin-panel.php:1269
+msgid ":) Thanks!"
+msgstr ":) Bedankt!"
+
+#: plugin-fw/lib/yit-plugin-panel.php:1268
+msgid "help us by leaving a five-star rating"
+msgstr "help ons door een 5-sterren waardering achter te laten"
+
+#: plugin-fw/lib/yit-plugin-panel.php:1266
+msgid "to keep updating and improving the plugin. Please,"
+msgstr "om de plugin te blijven bijwerken en verbeteren. A.u.b.,"
+
+#: plugin-fw/lib/yit-plugin-panel.php:1265
+msgid "We need your support"
+msgstr "We hebben je hulp nodig"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:46
+msgid "Output IP Address"
+msgstr "Output IP Adres"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:38
+msgid "Site URL"
+msgstr "Site URL"
+
+#: includes/class.yith-wcpsc-admin.php:357
+msgid "It will be visible on detail page of the selected product."
+msgstr "Het zal zichtbaar zijn op de detailpagina van het geselecteerde product."
+
+#: includes/class.yith-wcpsc-admin.php:356
+msgid "Create your Size Chart and assign it to a product."
+msgstr "Maak je maattabel en wijs deze toe aan een product."
+
+#: includes/class.yith-wcpsc-admin.php:354
+msgid "Go to %s menu."
+msgstr "Ga naar %s menu."
+
+#: includes/class.yith-wcpsc-admin.php:353
+msgid "%s allows you to create custom size charts."
+msgstr "%s staat je toe om een aangepaste maattabel te maken."
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:160
+msgid "<b>ImageMagick</b> module is not installed. Ask your hosting company to install it."
+msgstr "<b>ImageMagick</b> module is niet geïnstalleerd. Vraag je hosting maatschappij om het te installeren."
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:157
+msgid "We cannot determine which <b>TLS</b> version is installed because <b>cURL</b> module is disabled. Ask your hosting company to enable it."
+msgstr "We kunnen niet achterhalen welke <b>TLS</b> versie is geïnstalleerd omdat de <b>cURL</b> module is uitgeschakeld. Vraag je hosting maatschappij om het te inschakelen."
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:82
+msgid "N/A"
+msgstr "N.v.t"
+
+#: plugin-fw/lib/yith-system-status.php:298
+msgid "The system check has detected some compatibility issues on your installation. %sClick here%s to know more"
+msgstr "De systeem controle heeft enkele compatibiliteitsproblemen gevonden bij je installatie. %sKlik hier%s voor meer informatie"
+
+#: plugin-fw/lib/yith-system-status.php:297
+msgid "Warning!"
+msgstr "Waarschuwing!"
+
+#: plugin-fw/lib/yith-system-status.php:180
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: plugin-fw/lib/yith-system-status.php:117
+msgid "URL FOpen"
+msgstr "URL FOpen"
+
+#: plugin-fw/lib/yith-system-status.php:116
+msgid "OPCache Save Comments"
+msgstr "OPCache Opmerkingen opslaan"
+
+#: plugin-fw/lib/yith-system-status.php:115
+msgid "Iconv Module"
+msgstr "Verzendmodule inschakelen"
+
+#: plugin-fw/lib/yith-system-status.php:114
+msgid "GD Library"
+msgstr "GD Library"
+
+#: plugin-fw/lib/yith-system-status.php:113
+msgid "ImageMagick Version"
+msgstr "ImageMagick Versie"
+
+#: plugin-fw/lib/yith-system-status.php:112
+msgid "MultiByte String"
+msgstr "MultiByte String"
+
+#: plugin-fw/lib/yith-system-status.php:111
+msgid "SimpleXML"
+msgstr "SimpleXML"
+
+#: plugin-fw/lib/yith-system-status.php:110
+msgid "WordPress Cron"
+msgstr "WordPress Cron"
+
+#: plugin-fw/lib/yith-system-status.php:109
+msgid "TLS Version"
+msgstr "TLS Versie"
+
+#: plugin-fw/lib/yith-system-status.php:108
+msgid "PHP Version"
+msgstr "PHP Versie"
+
+#: plugin-fw/lib/yith-system-status.php:107
+msgid "Available Memory"
+msgstr "Beschikbaar geheugen"
+
+#: plugin-fw/lib/yith-system-status.php:106
+msgid "WooCommerce Version"
+msgstr "WooCommerce Versie"
+
+#: plugin-fw/lib/yith-system-status.php:105
+msgid "WordPress Version"
+msgstr "WordPress Versie"
+
+#: plugin-fw/lib/yith-system-status.php:135
+#: plugin-fw/lib/yith-system-status.php:136
+msgid "System Status"
+msgstr "Systeem Status"
+
+#: plugin-fw/templates/fields/ajax-customers.php:83
+#: plugin-fw/templates/fields/ajax-customers.php:93
+msgid "%1$s (#%2$s &ndash; %3$s)"
+msgstr "%1$s (#%2$s &ndash; %3$s)"
+
+#: plugin-fw/templates/fields/ajax-customers.php:57
+msgid "Search Customers"
+msgstr "Klanten zoeken"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:193
+msgid "Back to top"
+msgstr "Terug naar boven"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:176
+msgid "Back to System panel"
+msgstr "Terugkeren naar systeem paneel"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:172
+msgid "Show full PHPInfo"
+msgstr "Toon volledige PHPInfo"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:102
+#: plugin-fw/templates/sysinfo/system-information-panel.php:137
+#: plugin-fw/templates/sysinfo/system-information-panel.php:151
+msgid "Read more %s here%s or contact your hosting company in order to increase it."
+msgstr "Lees %shier%s meer, of neem contact op met uw hosting provider om het te verhogen."
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:134
+msgid "Contact your hosting company in order to enable it."
+msgstr "Neem contact op met uw hosting provider om het in te schakelen."
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:126
+msgid "Remove %s from %s file"
+msgstr "Verwijder %s van %s bestand"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:122
+msgid "Contact your hosting company in order to update it."
+msgstr "Neem contact op met uw hosting provider om het bij te werken."
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:116
+msgid "Update it to the latest version in order to benefit of all new features and security updates."
+msgstr "Bijwerken naar de laatste versie, om te profiteren van alle nieuwe opties en veiligheidsupdates."
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:105
+msgid "%s needs at least %s version"
+msgstr "%s heeft minstens %s versie nodig"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:100
+#: plugin-fw/templates/sysinfo/system-information-panel.php:149
+msgid "For optimal functioning of our plugins, we suggest setting at least %s of available memory"
+msgstr "Om de plugins optimaal te laten functioneren, adviseren wij minstens %s beschikbaar geheugen"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:98
+msgid "%s needs at least %s of available memory"
+msgstr "%s heeft minstens %s nodig aan beschikbaar geheugen"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:96
+msgid "%s needs %s enabled"
+msgstr "%s moet %s ingeschakeld zijn"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:76
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:76
+msgid "Enabled"
+msgstr "Ingeschakeld"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:30
+msgid "YITH System Information"
+msgstr "YITH Systeem Informatie"
+
+#: plugin-fw/templates/fields/date-format.php:50
+msgid "Custom:"
+msgstr "Aangepast:"
+
+#: plugin-fw/templates/fields/select-buttons.php:34
+msgid "Remove All"
+msgstr "Allen verwijderen"
+
+#: plugin-fw/templates/fields/select-buttons.php:21
+msgid "Add All"
+msgstr "Allen toevoegen"
+
+#: plugin-fw/lib/yith-dashboard.php:143
+msgctxt "Button label"
+msgid "Close"
+msgstr "Sluiten"
+
+#: plugin-fw/lib/yith-dashboard.php:100
+msgctxt "Plugin FW"
+msgid "Latest update released on"
+msgstr "Laatste update uitgebracht op"
+
+#: plugin-fw/lib/yith-dashboard.php:99
+msgctxt "Plugin FW"
+msgid "View Changelog"
+msgstr "Bekijk wijzigingenlogboek"
+
+#: plugin-fw/lib/yith-dashboard.php:71
+msgid "An error has occurred, which probably means the feed is down. Try again later."
+msgstr "Er is een fout opgetreden, wat waarschijnlijk betekent dat de feed niet werkt. Probeer het later opnieuw."
+
+#: plugin-fw/lib/yith-dashboard.php:65
+msgid "RSS Error:"
+msgstr "RSS-fout:"
+
+#: plugin-fw/lib/yith-dashboard.php:41
+msgid "Latest news from YITH Blog"
+msgstr "Laatste nieuws van YITH Blog"
+
+#: plugin-fw/lib/yith-dashboard.php:40
+msgid "YITH Latest Updates"
+msgstr "YITH laatste updates"
+
+#: plugin-fw/lib/yith-gutenberg.php:134
+msgctxt "[gutenberg]: Category Name"
+msgid "YITH"
+msgstr "YITH"
+
+#. Author of the plugin
+msgid "YITH"
+msgstr "YITH"
+
+#. Description of the plugin
+msgid "<code><strong>YITH Product Size Charts for WooCommerce</strong></code> allows adding a table or a detailed and customizable chart with all the information about your product sizes. Perfect to get rid of the objections about size, weight, dimension, etc. made by users when purchasing. <a href=\"https://yithemes.com/\" target=\"_blank\">Get more plugins for your e-commerce shop on <strong>YITH</strong></a>"
+msgstr "<code> <strong> YITH product formaat grafieken voor WooCommerce </strong> </code> toevoegen van een tabel of een gedetailleerde en aanpasbare grafiek met alle informatie over uw product maten. Perfect om zich te ontdoen van de bezwaren over de grootte, gewicht, dimensie, etc. gemaakt door gebruikers bij de aankoop.  <a href=\"https://yithemes.com/\" target=\"_blank\"> Zoek nieuwe awesome plugins op <strong> YITH </strong> </a>"
+
+#: plugin-fw/yit-plugin.php:194
+msgid "License"
+msgstr "Licentie"
+
+#: plugin-fw/yit-plugin.php:190
+msgctxt "Action links"
+msgid "Settings"
+msgstr "Instellingen"
+
+#: plugin-fw/yit-plugin.php:98
+msgctxt "Plugin Row Meta"
+msgid "Premium version"
+msgstr "Premium versie"
+
+#: plugin-fw/yit-plugin.php:93
+msgctxt "Plugin Row Meta"
+msgid "Support"
+msgstr "Ondersteuning"
+
+#: plugin-fw/yit-plugin.php:88
+msgctxt "Plugin Row Meta"
+msgid "Documentation"
+msgstr "Documentatie"
+
+#: plugin-fw/yit-plugin.php:83
+msgctxt "Plugin Row Meta"
+msgid "Live Demo"
+msgstr "Live Demo"
+
+#: plugin-fw/lib/privacy/yit-privacy.php:72
+msgctxt "Privacy Policy Content"
+msgid "Payments"
+msgstr "Betalingen"
+
+#: plugin-fw/lib/privacy/yit-privacy.php:69
+msgctxt "Privacy Policy Content"
+msgid "What we share with others"
+msgstr "Wat wij delen met anderen"
+
+#: plugin-fw/lib/privacy/yit-privacy.php:66
+msgctxt "Privacy Policy Content"
+msgid "Who on our team has access"
+msgstr "Wie van ons team heeft toegang"
+
+#: plugin-fw/lib/privacy/yit-privacy.php:63
+msgctxt "Privacy Policy Content"
+msgid "What we collect and store"
+msgstr "Wat we verzamelen en bewaren"
+
+#: plugin-fw/lib/privacy/yit-privacy.php:59
+msgctxt "Privacy Policy Content"
+msgid "This sample language includes the basics around what personal data your store may be collecting, storing and sharing, as well as who may have access to that data. Depending on what settings are enabled and which additional plugins are used, the specific information shared by your store will vary. We recommend consulting with a lawyer when deciding what information to disclose on your privacy policy."
+msgstr "Dit geschreven voorbeeld bevat de basis rondom welke persoonlijke gegevens je winkel mag verzamelen, bewaren en delen, en wie toegang heeft tot deze gegevens. Afhankelijk van welke instellingen zijn ingeschakeld en welke aanvullende plugins worden gebruikt, zal de informatie die wordt gedeeld door je winkel variëren. We raden aan om een advocaat te raadplegen wanneer je besluit je privacy beleid op te stellen."
+
+#: plugin-fw/lib/privacy/yit-privacy.php:24
+msgctxt "Privacy Policy Guide Title"
+msgid "YITH Plugins"
+msgstr "YITH Plugins"
+
+#: plugin-fw/templates/fields/ajax-products.php:16
+msgid "Search Product"
+msgstr "Zoek Product"
+
+#: plugin-fw/templates/fields/ajax-posts.php:57
+msgid "Search Posts"
+msgstr "Posts zoeken"
+
+#: plugin-fw/templates/fields/icons.php:58
+msgid "Set Default"
+msgstr "Op standaard instellen"
+
+#: plugin-fw/lib/yit-plugin-panel.php:455
+#: plugin-fw/lib/yit-plugin-panel.php:458
+msgid "How to install premium version"
+msgstr "Hoe installeer ik de premium versie"
+
+#: includes/class.yith-wcpsc-admin.php:350
+msgid "Product Size Charts"
+msgstr "Product Size Charts"
+
+#: includes/class.yith-wcpsc-admin.php:213
+msgid "Select the product in which this size chart has to be shown."
+msgstr "Selecteer het product waarin deze maattabel moet worden getoond."
+
+#. Author URI of the plugin
+msgid "https://yithemes.com/"
+msgstr "https://yithemes.com/"
+
+#. Plugin URI of the plugin
+msgid "https://yithemes.com/themes/plugins/yith-product-size-charts-for-woocommerce/"
+msgstr "https://yithemes.com/themes/plugins/yith-product-size-charts-for-woocommerce/"
+
+#. Plugin Name of the plugin
+msgid "YITH Product Size Charts for WooCommerce"
+msgstr "YITH Product Size Charts voor WooCommerce"
+
+#: templates/premium.php:396
+msgid "After creating your customized tab, choose where you want to place it among the tabs of the %1$sproduct page%2$s. One more chance to sort the content of your page."
+msgstr "Nadat je je aangepaste tabblad hebt gemaakt, kies je waar je het wilt plaatsen tussen de tabbladen van%1$sproductpagina%2$s. Nog een kans om de inhoud van je pagina te sorteren."
+
+#: templates/premium.php:393
+msgid "Tab position"
+msgstr "Tab positie"
+
+#: templates/premium.php:383
+msgid "Add your size charts easily into your e-commerce with the %1$sshortcodes%2$s available, using %1$sPHP code%2$s or using %1$stinyMCE editor%2$s."
+msgstr "Voeg eenvoudig je maattabellen toe aan je e-commerce met de%1$sshortcodes%2$s beschikbaar, met%1$sPHP-code%2$s of met%1$stinyMCE-editor%2$s."
+
+#: templates/premium.php:380
+msgid "Shortcodes, PHP code, tinyMCE"
+msgstr "Shortcodes, PHP code, tinyMCE"
+
+#: templates/premium.php:364
+msgid "A way to make all your tables created in your shop stand out.%3$sWith the widget %1$s\"YITH Product Size Charts\"%2$s, you'll be able to add a list with the tables created into the sidebars of your e-commerce, so that they can be highlighted for your users."
+msgstr "Een manier om al je tabellen in je winkel te laten opvallen.%3$sMet de%1$s \"YITH Product Size Charts\"%2$s kun je een lijst toevoegen met de tabellen die in de sidebars van je e-commerce, zodat ze kunnen worden gemarkeerd voor uw gebruikers."
+
+#: templates/premium.php:361
+msgid "Widget"
+msgstr "Widget"
+
+#: templates/premium.php:351
+msgid "Assigning one or more size charts to more products at the same time is easy: select your products and, then, assign them the table you want using %1$sWordPress bulk editing tool%2$s."
+msgstr "Het is eenvoudig om een ​​of meer maattabellen aan meerdere producten tegelijk toe te wijzen: selecteer je producten en wijs vervolgens de gewenste tabel toe met%1$sWordPress Bulk-bewerkingshulpprogramma%2$s."
+
+#: templates/premium.php:348
+msgid "Bulk Editing"
+msgstr "Bulkbewerking"
+
+#: templates/premium.php:332
+msgid "Do you want to assign one or more charts to all products belonging to the %1$ssame category%2$s or to %1$sall products in your store%2$s?%3$sThis feature has been added for you, then!%2$sAssigning a size chart to a specific category or to all products and it will be displayed on all the products you want."
+msgstr "Wil je een of meer diagrammen toewijzen aan alle producten die behoren tot de categorie%1$ssame%2$s of aan%1$salleproducten in je winkel%2$s?%3$sDeze functie is voor je toegevoegd, dan!%2$s Een maattabel toewijzen aan een specifieke categorie of aan alle producten en deze wordt weergegeven voor alle gewenste producten."
+
+#: templates/premium.php:329
+msgid "Advanced assign"
+msgstr "Geavanceerde toewijzing"
+
+#: templates/premium.php:319
+msgid "Give %1$syour own style to the charts%2$s.%3$sChange their colour and graphic style: choose among %1$s3 different premium templates%2$s, besides default one, which can be either used in combination with popup styles or regardless of them."
+msgstr "Geef%1$sje eigen stijl aan de diagrammen%2$s.%3$sWijzig hun kleur en grafische stijl: kies uit%1$s3 verschillende premiumsjablonen%2$s, naast de standaardsjablonen die kunnen worden gebruikt in combinatie met pop-upstijlen of wat dan ook."
+
+#: templates/premium.php:316
+msgid "Chart style"
+msgstr "Diagramstijl"
+
+#: templates/premium.php:300
+msgid "Change the %1$sstyle of your size charts%2$s. Set colour, opening effects and graphic layout of your popup: besides the default one available, you can choose among %1$s3 premium templates%2$s for your popup and you can also edit overlay colour and opacity."
+msgstr "Verander de%1$sstyle van je maattabel%2$s. Stel kleur, openingseffecten en grafische lay-out van uw pop-up in: naast de standaardversie die beschikbaar is, kun je kiezen uit%1$s3 premiumsjablonen%2$s voor je pop-up en je kunt ook de overlay-kleur en dekking bewerken."
+
+#: templates/premium.php:297
+msgid "Popup settings "
+msgstr "Popup-instellingen"
+
+#: templates/premium.php:287
+msgid "You can choose the position, in product page, for the %1$sbutton%2$s that will open the %1$schart popup%2$s.%3$sAnd what's more, you can also customise its colors and style as you prefer."
+msgstr "Je kunt de positie op de productpagina kiezen voor de%1$sknop%2$s die de%1$schart-pop-up%2$s.%3$s opent. Bovendien kun je de kleuren en stijl aanpassen zoals je verkiest."
+
+#: templates/premium.php:284
+msgid "Entirely customisable popup buttons"
+msgstr "Volledig aanpasbare pop-upknoppen"
+
+#: templates/premium.php:268
+msgid "For each new size chart you can select one of the three different display modes available. You can display your chart as a %1$sWooCommerce tab%2$s, or in a modal window opening through the specific button added in product page or, finally, as a tabbed popup with two tabs, one for the chart, one for the description."
+msgstr "Voor elk nieuw maattabel kun je een van de drie beschikbare beschikbare display selecteren. Je kunt je diagram weergeven als%1$sWooCommerce tabblad%2$s, of in een modaal venster openen via de specifieke knop toegevoegd op de productpagina of, ten slotte, als een tabbladen pop-up met twee tabbladen, één voor het diagram, één voor de omschrijving."
+
+#: templates/premium.php:265
+msgid "Display mode"
+msgstr "Weergavemodus"
+
+#: templates/premium.php:255
+msgid "Assign as many size charts as you wish to the same product: choose them directly from within the product, so that you can show your users several charts showing information in a tidy and customised way."
+msgstr "Wijs zoveel maattabellen toe aan hetzelfde product als je wilt: kies ze rechtstreeks uit het product, zodat je je gebruikers verschillende grafieken kunt tonen met informatie op een opgeruimde en aangepaste manier."
+
+#: templates/premium.php:252
+msgid "More than one size chart"
+msgstr "Meer dan een size chart"
+
+#: templates/premium.php:244
+msgid "Premium Features"
+msgstr "Premium Features"
+
+#: templates/premium.php:238 templates/premium.php:412
+msgid "to the premium version"
+msgstr "naar de premium versie"
+
+#: templates/premium.php:237 templates/premium.php:411
+msgid "UPGRADE"
+msgstr "UPGRADE"
+
+#: templates/premium.php:234 templates/premium.php:408
+msgid "Upgrade to %1$spremium version%2$s of %1$sYITH Product Size Charts for WooCommerce%2$s to benefit from all features!"
+msgstr "Upgrade naar de %1$spremium version%2$s of %1$sYITH WooCommerce Product Product Size Charts%2$s om te genieten van alle features!"
+
+#: plugin-fw/templates/panel/woocommerce/woocommerce-form.php:20
+msgid "Reset Defaults"
+msgstr "Reset Standaard instellingen"
+
+#: plugin-fw/templates/fields/upload.php:29
+msgid "Reset"
+msgstr "Resetten"
+
+#: plugin-fw/templates/fields/sidebars.php:52
+msgid "Right Sidebar"
+msgstr "Rechter sidebar"
+
+#: plugin-fw/templates/fields/sidebars.php:39
+msgid "Left Sidebar"
+msgstr "Linker sidebar"
+
+#: plugin-fw/templates/fields/sidebars.php:41
+#: plugin-fw/templates/fields/sidebars.php:54
+msgid "Choose a sidebar"
+msgstr "Kies een sidebar"
+
+#: plugin-fw/templates/fields/sidebars.php:25
+msgid "Right sidebar"
+msgstr "Rechter sidebar"
+
+#: plugin-fw/templates/fields/sidebars.php:28
+#: plugin-fw/templates/fields/sidebars.php:31
+msgid "No sidebar"
+msgstr "Geen sidebar"
+
+#: plugin-fw/templates/fields/sidebars.php:22
+msgid "Left sidebar"
+msgstr "Linker sidebar"
+
+#: plugin-fw/templates/fields/image-gallery.php:39
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: plugin-fw/templates/fields/image-gallery.php:39
+msgid "Add images"
+msgstr "Voeg images toe"
+
+#: plugin-fw/templates/fields/image-gallery.php:39
+msgid "Add to gallery"
+msgstr "Aan galerij toevoegen"
+
+#: plugin-fw/templates/fields/image-gallery.php:39
+msgid "Add Images to Gallery"
+msgstr "Afbeeldingen toevoegen aan galerij"
+
+#: plugin-fw/templates/fields/image-gallery.php:34
+#: plugin-fw/templates/fields/image-gallery.php:39
+msgid "Delete image"
+msgstr "Afbeelding verwijderen"
+
+#: plugin-fw/templates/metaboxes/types/icon-list.php:92
+msgid "(Default: <i %s></i> )"
+msgstr "(Default: <i %s></i> )"
+
+#: plugin-fw/templates/metaboxes/types/icon-list.php:90
+msgid "(Default: %s <img src=\"%s\"/>)"
+msgstr "(Default: %s <img src=\"%s\"/>)"
+
+#: plugin-fw/templates/fields/customtabs.php:106
+msgid "Do you want to remove the custom tab?"
+msgstr "Wil je dit aangepaste tabblad verwijderen?"
+
+#: plugin-fw/templates/fields/customtabs.php:65
+msgid "Add custom product tab"
+msgstr "Aangepaste product tabblad toevoegen"
+
+#: plugin-fw/templates/fields/customtabs.php:53
+#: plugin-fw/templates/fields/customtabs.php:95
+msgid "Content of the tab. (HTML is supported)"
+msgstr "Inhoud van het tabblad. (HTML wordt ondersteund)"
+
+#: plugin-fw/templates/fields/customtabs.php:52
+#: plugin-fw/templates/fields/customtabs.php:94
+msgid "Value"
+msgstr "Waarde"
+
+#: plugin-fw/templates/fields/customtabs.php:28
+msgid "Expand all"
+msgstr "Open allen"
+
+#: plugin-fw/templates/fields/customtabs.php:28
+msgid "Close all"
+msgstr "Sluit allen"
+
+#: plugin-fw/templates/metaboxes/types/icon-list.php:76
+msgid "Image preview"
+msgstr "Voorbeeld afbeelding"
+
+#: plugin-fw/templates/fields/upload.php:27
+#: plugin-fw/templates/panel/woocommerce/woocommerce-upload.php:40
+#: plugin-fw/templates/metaboxes/types/icon-list.php:70
+msgid "Upload"
+msgstr "Upload"
+
+#: plugin-fw/templates/fields/customtabs.php:37
+#: plugin-fw/templates/fields/customtabs.php:81
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: plugin-fw/lib/yit-pointers.php:85
+msgid ""
+"From now on, you can find the option panel of YITH plugins in YITH Plugins menu.\n"
+"                                    Every time one of our plugins is added, a new entry will be added to this menu.\n"
+"                                    For example, after the update, plugin options (such as for YITH WooCommerce Wishlist, YITH WooCommerce Ajax Search, etc.)\n"
+"                                    will be moved from previous location to YITH Plugins tab."
+msgstr ""
+"Vanaf nu kun je het optie paneel van YITH plugins vinden in het YITH plugins menu.\n"
+"                                   Telkens als er een nieuwe plugin is toegevoegd, zal een nieuwe toegang worden toegevoegd aan dit menu.\n"
+"                                   Voorbeeld, na een update, plugin opties (zoalsYITH WooCommerce Wishlist, YITH WooCommerce Ajax Search, etc.)\n"
+"                                    zullen worden verplaatst van de vorige locatie naar het YITH plugins tabblad."
+
+#: plugin-fw/lib/yit-pointers.php:84
+msgid "Plugins Upgraded"
+msgstr "Plugins Upgraded"
+
+#: plugin-fw/lib/yit-pointers.php:74 plugin-fw/lib/yit-pointers.php:90
+msgid "and"
+msgstr "en"
+
+#: plugin-fw/lib/yit-pointers.php:73 plugin-fw/lib/yit-pointers.php:89
+msgid "Discover all our plugins available on:"
+msgstr "Ontdek al onze beschikbare plugins op:"
+
+#: plugin-fw/lib/yit-pointers.php:71
+msgid ""
+"From now on, you can find all plugin options in YITH Plugins menu.\n"
+"                                     Plugin customization settings will be available as a new entry in YITH Plugins menu."
+msgstr ""
+"Vanaf nu kunt u alle plugin opties vinden onder het YITH Plugins menu.\n"
+"                                     Plugin aanpassing instellingen zullen beschikbaar zijn als een nieuwe toegang in YITH Plugins menu."
+
+#: plugin-fw/lib/yit-pointers.php:70
+msgid "Plugins Activated"
+msgstr "Plugins geactiveerd"
+
+#: plugin-fw/lib/yit-plugin-panel.php:817
+msgid "Sorting successful."
+msgstr "Succesvol gesorteerd."
+
+#: plugin-fw/lib/yit-plugin-panel.php:816
+msgid "Sorry, import is disabled."
+msgstr "Sorry, importeren is uitgeschakeld."
+
+#: plugin-fw/lib/yit-plugin-panel.php:815
+msgid "The added file is not valid."
+msgstr "Het toegevoegde bestand is niet geldig."
+
+#: plugin-fw/lib/yit-plugin-panel.php:814
+msgid "An error has occurred during import. Please try again."
+msgstr "Er is een fout opgetreden tijdens importeren. Probeer opnieuw."
+
+#: plugin-fw/lib/yit-plugin-panel.php:813
+msgid "Database imported correctly."
+msgstr "Database juist geïmporteerd."
+
+#: plugin-fw/lib/yit-plugin-panel.php:811
+#: plugin-fw/lib/yit-plugin-panel.php:812
+msgid "Element updated correctly."
+msgstr "Element juist geüpdatet."
+
+#: plugin-fw/lib/yit-plugin-panel.php:810
+msgid "Element deleted correctly."
+msgstr "Element juist verwijderd."
+
+#: plugin-fw/lib/yit-plugin-panel.php:809
+msgid "Settings reset"
+msgstr "Instellingen resetten"
+
+#: plugin-fw/lib/yit-plugin-panel.php:808
+msgid "Settings saved"
+msgstr "Instellingen opgeslagen"
+
+#: plugin-fw/lib/yit-plugin-panel.php:807
+msgid "The element you have entered already exists. Please, enter another name."
+msgstr "Het element dat je hebt ingevoerd bestaat al. Voer een andere naam in."
+
+#: plugin-fw/lib/yit-plugin-panel.php:609
+#: plugin-fw/lib/yit-plugin-subpanel.php:157
+#: plugin-fw/templates/panel/woocommerce/woocommerce-form.php:21
+msgid "Are you sure?"
+msgstr "Weet je het zeker?"
+
+#: plugin-fw/lib/yit-plugin-panel.php:608
+#: plugin-fw/lib/yit-plugin-subpanel.php:156
+msgid "Reset to default"
+msgstr "Resetten naar standaard"
+
+#: plugin-fw/lib/yit-plugin-panel.php:606
+#: plugin-fw/lib/yit-plugin-subpanel.php:154
+#: plugin-fw/templates/panel/woocommerce/woocommerce-form.php:17
+msgid "If you continue with this action, you will reset all options in this page."
+msgstr "Als je doorgaat met deze actie, zal je alle opties op deze pagina resetten."
+
+#: plugin-fw/lib/yit-plugin-panel.php:603
+#: plugin-fw/lib/yit-plugin-subpanel.php:151
+#: plugin-fw/templates/panel/woocommerce/woocommerce-form.php:14
+msgid "Save Changes"
+msgstr "Wijzigingen opslaan"
+
+#: plugin-fw/lib/yith-system-status.php:179
+msgid "YITH Plugins"
+msgstr "YITH Plugins"
+
+#: plugin-fw/lib/yit-plugin-panel.php:79
+msgid "Plugin Settings"
+msgstr "Plugin instellingen"
+
+#: plugin-fw/lib/yit-plugin-panel-wc.php:399
+msgid "The changes you have made will be lost if you leave this page."
+msgstr "Als je deze pagina verlaat zullen alle wijzigingen verloren gaan."
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1638
+msgid "Upload multiple files"
+msgstr "Upload meerdere bestanden"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1635
+msgid "Add %s from images"
+msgstr "Voeg %s toe van afbeeldingen"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1484
+#: plugin-fw/templates/fields/customtabs.php:46
+#: plugin-fw/templates/fields/customtabs.php:89
+msgid "Name"
+msgstr "Name"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1477
+msgid "Show frontend of the %s"
+msgstr "Toon frontend van de %s"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1224
+#: plugin-fw/lib/yit-cpt-unlimited.php:1237
+msgid "Quick links"
+msgstr "Snelle links"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1132
+msgid "layout settings"
+msgstr "lay-out instellingen"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1091
+msgid "Layout for single page of this portfolio"
+msgstr "Lay-out voor single pagina van dit portfolio"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1090
+msgid "Single layout"
+msgstr "Single lay-out"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1085
+msgid "Set univocal name for each category page URL."
+msgstr "Stel een unieke naam in voor elke categorie pagina URL."
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1084
+msgid "Taxonomy Rewrite"
+msgstr "Herschrijf taxonomie"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1079
+msgid "If you want to use categories in the portfolio, set a name for taxonomy. Name should be a slug (must not contain capital letters nor spaces) and must not be more than 32 characters long (database structure restriction)."
+msgstr "Wil je categorieën gebruiken in de portfolio, stel dan een naam voor taxonomie. Naam moet een ’slug’ zijn (mag geen hoofdletters of spaties bevatten) en mag niet meer zijn dan 32 tekens lang (database structuur beperking)."
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1078
+msgid "Taxonomy"
+msgstr "Taxonomie"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1073
+msgid "Set a label in plural (title of portfolio if empty)"
+msgstr "Zet een label op meervoud (titel van portfolio indien leeg)"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1072
+msgid "Label in Plural"
+msgstr "Label in meervoud"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1067
+msgid "Set a label in singular (title of portfolio if empty)"
+msgstr "Zet een label op enkelvoud (titel van portfolio indien leeg)"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1066
+msgid "Label in Singular"
+msgstr "Label in enkelvoud"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1061
+msgid "Univocal identification name in the URL for each product (slug from post if empty)"
+msgstr "Unieke identificatie naam in de URL voor ieder product (slug van post indien leeg)"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1060
+msgid "Rewrite"
+msgstr "Herschrijf"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1054
+msgid "Layout for this %s"
+msgstr "De lay-out hiervoor %s"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1053
+msgid "Type"
+msgstr "Type"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:1044
+msgid "%s Settings"
+msgstr "%s instellingen"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:726
+msgid "Categories"
+msgstr "Categorieën"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:637
+msgid "Category"
+msgstr "Categorie"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:636
+msgid "New Category Name"
+msgstr "Nieuwe categorie naam"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:635
+msgid "Add New Category"
+msgstr "Categorie toevoegen"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:634
+msgid "Update Category"
+msgstr "Update categorie"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:633
+msgid "Edit Category"
+msgstr "Categorie aanpassen"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:632
+msgid "Parent Category:"
+msgstr "Hoofdcategorie:"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:631
+msgid "Parent Category"
+msgstr "Hoofdcategorie"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:630
+msgid "All Categories"
+msgstr "Alle categorieën"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:629
+#: plugin-fw/templates/fields/ajax-terms.php:56
+msgid "Search Categories"
+msgstr "Zoek categorieën"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:628
+msgctxt "taxonomy singular name"
+msgid "Category"
+msgstr "Categorie"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:627
+msgctxt "taxonomy general name"
+msgid "%s Categories"
+msgstr "%s Categorieën"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:470
+#: plugin-fw/lib/yit-cpt-unlimited.php:584
+msgid "No %s found in Trash"
+msgstr "No %s gevonden in de prullenbak"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:469
+#: plugin-fw/lib/yit-cpt-unlimited.php:583
+msgid "No %s found"
+msgstr "Geen %s gevonden"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:468
+#: plugin-fw/lib/yit-cpt-unlimited.php:582
+msgid "Search %s"
+msgstr "Zoeken %s"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:467
+#: plugin-fw/lib/yit-cpt-unlimited.php:581
+#: plugin-fw/lib/yit-cpt-unlimited.php:1253
+#: plugin-fw/lib/yit-cpt-unlimited.php:1307
+msgid "View %s"
+msgstr "Bekijk %s"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:466
+#: plugin-fw/lib/yit-cpt-unlimited.php:580
+msgid "All %s"
+msgstr "Alle %s"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:465
+#: plugin-fw/lib/yit-cpt-unlimited.php:579
+msgid "New %s"
+msgstr "Nieuw %s"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:464
+#: plugin-fw/lib/yit-cpt-unlimited.php:578
+#: plugin-fw/lib/yit-cpt-unlimited.php:1269
+#: plugin-fw/lib/yit-cpt-unlimited.php:1306
+msgid "Edit %s"
+msgstr "Bewerk %s"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:463
+#: plugin-fw/lib/yit-cpt-unlimited.php:577
+msgid "Add New %s"
+msgstr "Nieuwe %s toevoegen"
+
+#: plugin-fw/lib/yit-cpt-unlimited.php:462
+#: plugin-fw/lib/yit-cpt-unlimited.php:576
+#: plugin-fw/lib/yit-cpt-unlimited.php:721
+#: plugin-fw/lib/yit-cpt-unlimited.php:1636
+msgid "Add %s"
+msgstr "%s toevoegen"
+
+#: init.php:56
+msgid "You can't activate the free version of YITH Product Size Charts for WooCommerce while you are using the premium one."
+msgstr "Je kunt de gratis versie van YITH Product Size Charts voor WooCommerce niet activeren terwijl je de premium-versie gebruikt."
+
+#: init.php:47
+msgid "YITH Product Size Charts for WooCommerce is enabled but not effective. It requires WooCommerce in order to work."
+msgstr "YITH Product Size Charts  voor WooCommerce is ingeschakeld maar niet effectief. Het vereist WooCommerce om te kunnen werken."
+
+#: includes/class.yith-wcpsc-admin.php:274
+msgid "Create your Size Chart"
+msgstr "Maak je maattabel"
+
+#: includes/class.yith-wcpsc-admin.php:212
+msgid "Product"
+msgstr "Product"
+
+#: plugin-fw/lib/yit-plugin-panel.php:80
+#: plugin-fw/lib/yit-cpt-unlimited.php:1050
+#: plugin-fw/lib/yit-cpt-unlimited.php:1198
+#: plugin-fw/lib/yit-cpt-unlimited.php:1204
+msgid "Settings"
+msgstr "Instellingen"
+
+#: includes/class.yith-wcpsc-admin.php:203
+#: includes/class.yith-wcpsc-admin.php:209
+msgid "Chart Options"
+msgstr "Grafiek opties"
+
+#: includes/class.yith-wcpsc-admin.php:181
+msgid "None"
+msgstr "Geen"
+
+#: includes/class.yith-wcpsc.php:78
+msgid "Size Chart not found in trash"
+msgstr "Maattabel niet gevonden in prullenbak"
+
+#: includes/class.yith-wcpsc.php:77
+msgid "Size Chart not found"
+msgstr "Maattabel niet gevonden"
+
+#: includes/class.yith-wcpsc.php:76
+msgid "View Size Chart"
+msgstr "Maattabel weergeven"
+
+#: includes/class.yith-wcpsc.php:75
+msgid "Edit Size Chart"
+msgstr "Bewerk de maattabel"
+
+#: includes/class.yith-wcpsc.php:74
+msgid "New Size Chart"
+msgstr "Nieuw maattabel"
+
+#: includes/class.yith-wcpsc.php:73
+msgid "Add Size Chart"
+msgstr "Voeg maattabel toe"
+
+#: includes/class.yith-wcpsc.php:72
+msgid "Size Chart"
+msgstr "Maattabel"
+
+#: includes/class.yith-wcpsc.php:71 includes/class.yith-wcpsc-admin.php:355
+msgid "Size Charts"
+msgstr "Maattabellen"
+
+#: includes/class.yith-wcpsc-admin.php:140
+msgid "Premium Version"
+msgstr "Premium Versie"
+
+#: includes/class.yith-wcpsc-admin.php:139
+msgid "Description"
+msgstr "Beschrijving"

@@ -1,0 +1,1158 @@
+# Translation of Plugins - YITH Frequently Bought Together for WooCommerce - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - YITH Frequently Bought Together for WooCommerce - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-11-28 10:40:32+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - YITH Frequently Bought Together for WooCommerce - Stable (latest release)\n"
+
+#: plugin-fw/templates/fields/ajax-terms.php:41
+msgid "Search for a category..."
+msgstr "Zoek naar een categorie..."
+
+#: plugin-fw/templates/fields/ajax-posts.php:41
+msgid "Search for a post..."
+msgstr "Zoek naar een bericht..."
+
+#: plugin-fw/templates/fields/ajax-customers.php:41
+msgid "Search for a customer..."
+msgstr "Zoek naar een klant..."
+
+#: plugin-fw/templates/panel/help-tab.php:142
+msgctxt "Help tab Watch video tutorials link"
+msgid "to see some helpful use cases."
+msgstr "om enkele nuttige use cases te zien."
+
+#: plugin-fw/templates/panel/help-tab.php:129
+msgctxt "Help tab Read Documentation link"
+msgid "to learn how the plugin works from the basics."
+msgstr "om te leren hoe de plugin werkt vanaf de basis."
+
+#: plugin-fw/templates/panel/premium-tab-content.php:102
+msgctxt "Premium Tab"
+msgid "Get the premium version"
+msgstr "Neem de premium versie"
+
+#: plugin-fw/templates/panel/premium-tab-content.php:62
+msgctxt "Premium Tab"
+msgid "Check the free vs premium features >"
+msgstr "Bekijk de gratis versus premium functies >"
+
+#: plugin-fw/templates/panel/premium-tab-content.php:59
+msgctxt "Premium Tab"
+msgid "...and so much more!"
+msgstr "…en nog veel meer!"
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:977
+msgctxt "Premium tab name"
+msgid "Get premium"
+msgstr "Kies premium"
+
+#. Translators: %1$f: Table size, %2$f: Index size, %3$f: Free size, %4$s
+#. Engine.
+#: plugin-fw/templates/sysinfo/tabs/db-info.php:57
+msgid "Data: %1$.2fMB | Index: %2$.2fMB | Free: %3$.2fMB | Engine: %4$s"
+msgstr "Gegevens: %1$.2fMB | Index: %2$.2fMB | Vrij: %3$.2fMB | Engine: %4$s"
+
+#: plugin-fw/templates/sysinfo/tabs/db-info.php:46
+msgid "Database Free Size"
+msgstr "Database vrije grootte"
+
+#: plugin-fw/templates/sysinfo/tabs/db-info.php:42
+msgid "Database Index Size"
+msgstr "Database index grootte"
+
+#: plugin-fw/templates/sysinfo/tabs/db-info.php:38
+msgid "Database Data Size"
+msgstr "Database gegevens grootte"
+
+#: plugin-fw/templates/sysinfo/tabs/db-info.php:34
+msgid "Total Database Size"
+msgstr "Totale database grootte"
+
+#. Translators: %s: Codex link.
+#: plugin-fw/templates/sysinfo/tabs/db-info.php:19
+msgid "WordPress requirements"
+msgstr "WordPress vereisten"
+
+#. Translators: %s: Codex link.
+#: plugin-fw/templates/sysinfo/tabs/db-info.php:19
+msgid "WordPress recommends a minimum MySQL version of 5.6. See: %s"
+msgstr "WordPress raadt een minimale MySQL versie aan van 5.6. Zie: %s"
+
+#: plugin-fw/templates/sysinfo/tabs/db-info.php:28
+msgid "MySQL version"
+msgstr "MySQL versie"
+
+#: plugin-fw/templates/sysinfo/tabs/db-info.php:24
+msgid "Database Info"
+msgstr "Database informatie"
+
+#. translators: %s is the name of the plugin that is loading the framework.
+#: plugin-fw/templates/sysinfo/tabs/main.php:66
+msgid "loaded by %s"
+msgstr "geladen door %s"
+
+#: plugin-fw/templates/sysinfo/tabs/main.php:61
+msgid "YITH Plugin Framework Version"
+msgstr "YITH plugin framework versie"
+
+#: plugin-fw/templates/panel/help-tab.php:204
+msgctxt "Help tab submit ticket button"
+msgid "Submit a ticket"
+msgstr "Verstuur een ticket"
+
+#: plugin-fw/templates/panel/help-tab.php:196
+msgctxt "Help tab submit ticket description"
+msgid "If you are experiencing any technical issues, ask for help from our developers. Submit a ticket through our support desk and we will help you as soon as possible."
+msgstr "Als je technische problemen ondervindt, vraag dan om hulp van onze ontwikkelaars. Dien een ticket in via onze ondersteuning desk en wij zullen je zo snel mogelijk helpen."
+
+#: plugin-fw/templates/panel/help-tab.php:193
+msgctxt "Help tab submit ticket title"
+msgid "Need help?"
+msgstr "Hulp nodig?"
+
+#: plugin-fw/templates/panel/help-tab.php:184
+msgctxt "Help tab FAQ link"
+msgid "View all FAQs >"
+msgstr "Bekijk alle FAQs >"
+
+#: plugin-fw/templates/panel/help-tab.php:170
+msgctxt "Help tab FAQ title"
+msgid "Last FAQs in our Help Center"
+msgstr "Laatste FAQs in ons Help Center"
+
+#: plugin-fw/templates/panel/help-tab.php:155
+msgctxt "Help tab view FAQs link"
+msgid "to find answers to your doubts."
+msgstr "om antwoorden te vinden op je twijfels."
+
+#: plugin-fw/templates/panel/help-tab.php:152
+msgctxt "Help tab view FAQs link"
+msgid "Check the FAQs"
+msgstr "Check de FAQs"
+
+#: plugin-fw/templates/panel/help-tab.php:139
+msgctxt "Help tab Watch video tutorials link"
+msgid "Watch our video tutorials"
+msgstr "Bekijk onze video tutorials"
+
+#: plugin-fw/templates/panel/help-tab.php:126
+msgctxt "Help tab Read Documentation link"
+msgid "Read the documentation"
+msgstr "Lees de documentatie"
+
+#: plugin-fw/templates/panel/help-tab.php:96
+msgctxt "Help tab Watch Videotutorials link"
+msgid "Videos are also available in:"
+msgstr "Videos zijn ook beschikbaar in:"
+
+#. translators: 1. Url to EN playlist.
+#: plugin-fw/templates/panel/help-tab.php:89
+msgctxt "Help tab view all video link"
+msgid "Check the full <a href=\"%s\" target=\"_blank\">Playlist on Youtube</a> to learn more >"
+msgstr "Bekijk de volledige <a href=\"%s\" target=\"_blank\">Playlist op Youtube</a> om meer te weten te komen >"
+
+#: plugin-fw/templates/fields/image-dimensions.php:23
+msgctxt "Image height field label"
+msgid "Height"
+msgstr "Hoogte"
+
+#: plugin-fw/templates/fields/image-dimensions.php:18
+msgctxt "Image width field label"
+msgid "Width"
+msgstr "Breedte"
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:929
+msgctxt "Help tab default description"
+msgid "We want to help you enjoy a wonderful experience with all of our products."
+msgstr "We willen je helpen om te genieten van de geweldige ervaringen met al onze producten."
+
+#. translators: 1. Plugin name.
+#: plugin-fw/includes/class-yit-plugin-panel.php:920
+msgctxt "Help tab default title"
+msgid "Thank you for purchasing %s!"
+msgstr "Bedankt voor het kopen van %s!"
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1007
+msgctxt "Help tab name"
+msgid "Help"
+msgstr "Help"
+
+#: plugin-fw/includes/class-yit-help-desk.php:148
+msgid "There was an error with your request; please try again later."
+msgstr "Er is een fout opgetreden met je verzoek, probeer het later opnieuw a.u.b."
+
+#: plugin-fw/includes/class-yit-assets.php:241
+msgid "Are you sure you want to delete the selected items?"
+msgstr "Weet je zeker dat je de geselecteerde items wilt verwijderen?"
+
+#: plugin-fw/includes/class-yit-assets.php:238 plugin-fw/yit-functions.php:1996
+msgctxt "Trash confirmation action"
+msgid "Yes, move to trash"
+msgstr "Ja, verplaatsen naar prullenbak"
+
+#: plugin-fw/includes/class-yit-assets.php:237
+msgid "Are you sure you want to trash the selected items?"
+msgstr "Weet je zeker dat je het geselecteerde item naar de prullenbak wilt verplaatsen?"
+
+#: plugin-fw/yit-functions.php:2131
+msgctxt "Term action"
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: plugin-fw/yit-functions.php:2118
+msgctxt "Term action"
+msgid "Duplicate"
+msgstr "Dupliceren"
+
+#: plugin-fw/yit-functions.php:2110
+msgctxt "Term action"
+msgid "Edit"
+msgstr "Bewerken"
+
+#: plugin-fw/yit-functions.php:2100
+msgctxt "Term action"
+msgid "View"
+msgstr "Bekijken"
+
+#: plugin-fw/yit-functions.php:2025 plugin-fw/yit-functions.php:2033
+#: plugin-fw/yit-functions.php:2149
+msgid "Further actions"
+msgstr "Verdere acties"
+
+#: plugin-fw/includes/class-yit-assets.php:242 plugin-fw/yit-functions.php:2014
+#: plugin-fw/yit-functions.php:2140
+msgctxt "Delete confirmation action"
+msgid "Yes, delete"
+msgstr "Ja, verwijderen"
+
+#: plugin-fw/includes/class-yit-assets.php:240 plugin-fw/yit-functions.php:2011
+#: plugin-fw/yit-functions.php:2138
+msgid "Confirm delete"
+msgstr "Verwijderen bevestigen"
+
+#: plugin-fw/yit-functions.php:2004
+msgctxt "Post action"
+msgid "Delete Permanently"
+msgstr "Permanent verwijderen"
+
+#: plugin-fw/includes/class-yit-assets.php:236 plugin-fw/yit-functions.php:1993
+msgid "Confirm trash"
+msgstr "Verplaatsen naar prullenbak bevestigen"
+
+#: plugin-fw/yit-functions.php:1987
+msgctxt "Post action"
+msgid "Trash"
+msgstr "Prullenbak"
+
+#: plugin-fw/yit-functions.php:1979
+msgctxt "Post action"
+msgid "Restore"
+msgstr "Herstellen"
+
+#: plugin-fw/yit-functions.php:1967
+msgctxt "Post action"
+msgid "Duplicate"
+msgstr "Dupliceren"
+
+#: plugin-fw/yit-functions.php:1959
+msgctxt "Post action"
+msgid "Edit"
+msgstr "Bewerken"
+
+#: plugin-fw/yit-functions.php:1948
+msgctxt "Post action"
+msgid "View"
+msgstr "Bekijken"
+
+#: plugin-fw/yit-functions.php:1939
+msgctxt "Post action"
+msgid "Preview"
+msgstr "Voorbeeld"
+
+#. translators: %s is the title of the post object.
+#: plugin-fw/includes/class-yit-assets.php:241 plugin-fw/yit-functions.php:1927
+#: plugin-fw/yit-functions.php:2086
+msgid "This action cannot be undone and you will not be able to recover this data."
+msgstr "Deze actie kan niet ongedaan gemaakt worden en je zult deze gegevens niet kunnen herstellen."
+
+#. translators: %s is the title of the post object.
+#: plugin-fw/yit-functions.php:1927 plugin-fw/yit-functions.php:2086
+msgid "Are you sure you want to delete \"%s\"?"
+msgstr "Weet je zeker dat je \"%s\" wilt verwijderen?"
+
+#. translators: %s is the title of the post object.
+#: plugin-fw/yit-functions.php:1925
+msgid "Are you sure you want to move \"%s\" to trash?"
+msgstr "Weet je zeker dat je \"%s\" naar de prullenbak wilt verplaatsen?"
+
+#. translators: %s is the name of the post type (example Back to "Membership
+#. Plans").
+#: plugin-fw/includes/class-yith-post-type-admin.php:294
+msgid "Back to the list"
+msgstr "Terug naar de lijst"
+
+#. translators: %s is the name of the post type (example Back to "Membership
+#. Plans").
+#: plugin-fw/includes/class-yith-post-type-admin.php:294
+msgid "Back to \"%s\""
+msgstr "Terug naar \"%s\""
+
+#: plugin-fw/includes/class-yit-assets.php:225
+msgctxt "Button text"
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: plugin-fw/includes/class-yit-assets.php:224
+msgctxt "Button text"
+msgid "Confirm"
+msgstr "Bevestigen"
+
+#: plugin-fw/templates/panel/woocommerce/woocommerce-form.php:31
+msgid "Options Saved"
+msgstr "Opties opgeslagen"
+
+#: plugin-fw/templates/panel/v2/panel-content-page.php:57
+#: plugin-fw/templates/panel/v2/woocommerce/woocommerce-form.php:69
+#: plugin-fw/templates/panel/woocommerce/woocommerce-form.php:27
+#: plugin-fw/templates/panel/woocommerce/woocommerce-form.php:31
+msgid "Save Options"
+msgstr "Opties opslaan"
+
+#: plugin-fw/templates/panel/panel-header.php:26
+#: plugin-fw/templates/panel/v2/panel-header.php:21
+msgid "help us by leaving a good review"
+msgstr "help ons door een goede beoordeling achter te laten"
+
+#: plugin-fw/templates/fields/copy-to-clipboard.php:45
+msgctxt "Copy-to-clipboard button text"
+msgid "Copy"
+msgstr "Kopieer"
+
+#: plugin-fw/templates/fields/copy-to-clipboard.php:41
+msgctxt "Copy-to-clipboard message"
+msgid "Copied!"
+msgstr "Gekopieerd!"
+
+#. translators: %s it the Elementor Widget title.
+#: plugin-fw/includes/builders/elementor/class-yith-elementor-widget.php:252
+msgctxt "Elementor Widget - section title"
+msgid "%s - Options"
+msgstr "%s - Opties"
+
+#: plugin-fw/includes/class-yit-pointers.php:97
+msgid "From now on, you can find the option panel of YITH plugins in YITH menu. Every time one of our plugins is added, a new entry will be added to this menu. For example, after the update, plugin options (such as for YITH WooCommerce Wishlist, YITH WooCommerce Ajax Search, etc.) will be moved from previous location to YITH menu."
+msgstr "Vanaf nu kun je het optiepaneel van YITH plugins vinden in het YITH menu. Elke keer dat een van onze plugins wordt toegevoegd, wordt er een nieuw item aan dit menu toegevoegd. Bijvoorbeeld na de update worden plugin opties (zoals voor YITH WooCommerce Wishlist, YITH WooCommerce Ajax Search, enz.) verplaatst van de vorige locatie naar het YITH menu."
+
+#. translators: 1. YITH site link; 2. WordPress site link.
+#: plugin-fw/includes/class-yit-pointers.php:84
+#: plugin-fw/includes/class-yit-pointers.php:100
+msgid "Discover all our plugins available on: %1$s and %2$s"
+msgstr "Ontdek al onze beschikbare plugins op: %1$s and %2$s"
+
+#: plugin-fw/includes/class-yit-pointers.php:81
+msgid "From now on, you can find all plugin options in YITH menu. Plugin customization settings will be available as a new entry in YITH menu."
+msgstr "Vanaf nu kun je alle plugin opties vinden in het YITH Plugins menu. Plugin aanpassingen instellingen zullen beschikbaar zijn als nieuwe toegang in het YITH menu."
+
+#: plugin-fw/templates/fields/date-format.php:70
+msgid "Preview:"
+msgstr "Voorbeeld:"
+
+#: plugin-fw/templates/sysinfo/tabs/error-log.php:95
+msgid "Copy Code"
+msgstr "Code kopiëren"
+
+#: plugin-fw/templates/sysinfo/tabs/error-log.php:95
+msgid "Copied!"
+msgstr "Gekopieerd!"
+
+#. translators: %s file name.
+#: plugin-fw/templates/sysinfo/tabs/error-log.php:86
+msgid "No Log file available. Enable the WordPress debug by adding this in the %s file of your installation"
+msgstr "Geen log bestand beschikbaar. WordPress debug inschakelen door dit bestand toe te voegen aan het %s bestand van je installatie "
+
+#: plugin-fw/templates/sysinfo/tabs/error-log.php:59
+msgid "The file size exceeds 8 megabytes so it must be downloaded"
+msgstr "De bestandsgrootte overschrijd 8 megabytes, dus het moet worden gedownload "
+
+#: plugin-fw/templates/sysinfo/tabs/error-log.php:48
+msgid "Download"
+msgstr "Download"
+
+#: plugin-fw/templates/sysinfo/tabs/main.php:72
+msgid "Plugins Requirements"
+msgstr "Plugin benodigdheden"
+
+#: plugin-fw/templates/sysinfo/tabs/main.php:41
+msgid "Site Info"
+msgstr "Site informatie"
+
+#: plugin-fw/includes/class-yith-system-status.php:199
+#: plugin-fw/templates/sysinfo/tabs/error-log.php:108
+msgid "Log Files"
+msgstr "Log bestanden"
+
+#: plugin-fw/includes/class-yith-system-status.php:191
+msgid "PHPInfo"
+msgstr "PHPInfo"
+
+#: plugin-fw/templates/sysinfo/tabs/main.php:57
+msgid "External object cache"
+msgstr "Externe object cache"
+
+#: plugin-fw/includes/class-yit-assets.php:239
+#: plugin-fw/includes/class-yit-assets.php:243
+#: plugin-fw/templates/sysinfo/tabs/main.php:54
+#: plugin-fw/templates/sysinfo/tabs/main.php:58
+#: plugin-fw/yit-functions.php:1995 plugin-fw/yit-functions.php:2013
+msgid "No"
+msgstr "Nee"
+
+#: plugin-fw/templates/sysinfo/tabs/main.php:54
+#: plugin-fw/templates/sysinfo/tabs/main.php:58
+msgid "Yes"
+msgstr "Ja"
+
+#: plugin-fw/templates/sysinfo/tabs/main.php:53
+msgid "Defined WP_CACHE"
+msgstr "Gedefinieerde WP_CACHE"
+
+#: plugin-fw/templates/sysinfo/tabs/error-log.php:18
+msgid "PHP error_log file"
+msgstr "PHP error_log bestand"
+
+#: plugin-fw/templates/sysinfo/tabs/error-log.php:13
+msgid "WP debug.log file"
+msgstr "WP debug.log bestand"
+
+#. translators: %1$s TLS label
+#: plugin-fw/includes/class-yith-system-status.php:624
+msgid "The system check cannot determine which %1$s version is installed due to a connection issue between your site and our server."
+msgstr "De systeemcontrole kan niet bepalen welke versie van %1$s is geïnstalleerd vanwege een verbindingsprobleem tussen je site en onze server."
+
+#. translators: %1$s TLS label, %2$s cURL label
+#: plugin-fw/includes/class-yith-system-status.php:621
+msgid "The system check cannot determine which %1$s version is installed because %2$s module is disabled. Ask your hosting company to enable it."
+msgstr "We kunnen niet bepalen welke %1$s versie is geïnstalleerd omdat %2$s de module is uitgeschakeld. Vraag je hostingmaatschappij om het in te schakelen."
+
+#: plugin-fw/includes/class-yith-system-status.php:563
+msgid "Contact your hosting company in order to install it."
+msgstr "Neem contact op met je hostingbedrijf om het te installeren."
+
+#: plugin-fw/includes/class-yit-assets.php:278
+msgid "Color value"
+msgstr "Kleurwaarde"
+
+#: plugin-fw/includes/class-yit-assets.php:277
+msgid "Select Color"
+msgstr "Kleur selecteren"
+
+#: plugin-fw/includes/class-yit-assets.php:276
+msgid "Select default color"
+msgstr "Standaardkleur selecteren"
+
+#: plugin-fw/includes/class-yit-assets.php:275
+msgid "Default"
+msgstr "Standaard"
+
+#: plugin-fw/includes/class-yit-assets.php:274
+msgid "Clear color"
+msgstr "Kleur wissen"
+
+#: plugin-fw/includes/class-yit-assets.php:273
+msgid "Clear"
+msgstr "Wissen"
+
+#: plugin-fw/templates/fields/dimensions.php:94
+msgctxt "Tooltip in the \"Dimensions\" field"
+msgid "Link values together"
+msgstr "Waarden aan elkaar koppelen"
+
+#: plugin-fw/templates/fields/dimensions.php:16
+msgctxt "Position in the \"Dimensions\" field"
+msgid "Left"
+msgstr "Links"
+
+#: plugin-fw/templates/fields/dimensions.php:15
+msgctxt "Position in the \"Dimensions\" field"
+msgid "Bottom"
+msgstr "Onder"
+
+#: plugin-fw/templates/fields/dimensions.php:14
+msgctxt "Position in the \"Dimensions\" field"
+msgid "Right"
+msgstr "Rechts"
+
+#: plugin-fw/templates/fields/dimensions.php:13
+msgctxt "Position in the \"Dimensions\" field"
+msgid "Top"
+msgstr "Boven"
+
+#: plugin-fw/templates/panel/panel-header.php:27
+#: plugin-fw/templates/panel/v2/panel-header.php:22
+msgid ":) Thanks!"
+msgstr ":) Bedankt!"
+
+#: plugin-fw/templates/panel/panel-header.php:24
+#: plugin-fw/templates/panel/v2/panel-header.php:19
+msgid "to keep updating and improving the plugin. Please,"
+msgstr "om de plugin te blijven updaten en verbeteren. Gelieve,"
+
+#: plugin-fw/templates/panel/panel-header.php:23
+#: plugin-fw/templates/panel/v2/panel-header.php:18
+msgid "We need your support"
+msgstr "We hebben je hulp nodig"
+
+#: plugin-fw/templates/sysinfo/tabs/main.php:49
+msgid "Output IP Address"
+msgstr "Output IP Adres"
+
+#: plugin-fw/templates/sysinfo/tabs/main.php:45
+msgid "Site URL"
+msgstr "Site URL"
+
+#: plugin-fw/includes/class-yith-system-status.php:522
+msgid "N/A"
+msgstr "N.v.t"
+
+#: plugin-fw/includes/class-yith-system-status.php:144
+msgid "Iconv Module"
+msgstr "Verzendmodule inschakelen"
+
+#. translators: %1$s open link tag, %2$s open link tag
+#: plugin-fw/includes/class-yith-system-status.php:372
+msgid "The system check has detected some compatibility issues on your installation.%1$sClick here%2$s to know more"
+msgstr "Het systeem heeft enkele compatibiliteitsproblemen gevonden op uw installatie.%1$sklik hier%2$s om meer te weten te komen"
+
+#: plugin-fw/includes/class-yith-system-status.php:368
+msgid "Warning!"
+msgstr "Waarschuwing!"
+
+#: plugin-fw/includes/class-yith-system-status.php:225
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: plugin-fw/includes/class-yith-system-status.php:146
+msgid "URL FOpen"
+msgstr "URL FOpen"
+
+#: plugin-fw/includes/class-yith-system-status.php:145
+msgid "OPCache Save Comments"
+msgstr "OPCache Opmerkingen opslaan"
+
+#: plugin-fw/includes/class-yith-system-status.php:143
+msgid "GD Library"
+msgstr "GD Library"
+
+#: plugin-fw/includes/class-yith-system-status.php:142
+msgid "ImageMagick Version"
+msgstr "ImageMagick Versie"
+
+#: plugin-fw/includes/class-yith-system-status.php:141
+msgid "MultiByte String"
+msgstr "MultiByte String"
+
+#: plugin-fw/includes/class-yith-system-status.php:140
+msgid "SimpleXML"
+msgstr "SimpleXML"
+
+#: plugin-fw/includes/class-yith-system-status.php:139
+msgid "WordPress Cron"
+msgstr "WordPress Cron"
+
+#: plugin-fw/includes/class-yith-system-status.php:138
+msgid "TLS Version"
+msgstr "TLS Versie"
+
+#: plugin-fw/includes/class-yith-system-status.php:137
+msgid "PHP Version"
+msgstr "PHP Versie"
+
+#: plugin-fw/includes/class-yith-system-status.php:136
+msgid "Available Memory"
+msgstr "Beschikbaar geheugen"
+
+#: plugin-fw/includes/class-yith-system-status.php:135
+msgid "WooCommerce Version"
+msgstr "WooCommerce versie"
+
+#: plugin-fw/includes/class-yith-system-status.php:134
+msgid "WordPress Version"
+msgstr "WordPress versie"
+
+#: plugin-fw/includes/class-yith-system-status.php:161
+#: plugin-fw/includes/class-yith-system-status.php:162
+#: plugin-fw/includes/class-yith-system-status.php:187
+msgid "System Status"
+msgstr "Systeem Status"
+
+#. translators: 1. user display name; 2. user ID; 3. user email.
+#: plugin-fw/templates/fields/ajax-customers.php:68
+#: plugin-fw/templates/fields/ajax-customers.php:79
+msgid "%1$s (#%2$s &ndash; %3$s)"
+msgstr "%1$s (#%2$s &ndash; %3$s)"
+
+#. translators: %1$s opening link tag, %2$s closing link tag
+#: plugin-fw/includes/class-yith-system-status.php:582
+#: plugin-fw/includes/class-yith-system-status.php:616
+msgid "Read more %1$shere%2$s or contact your hosting company in order to increase it."
+msgstr "Lees %1$s hier%2$s meer, of neem contact op met uw hostingmaatschappij om het te verhogen."
+
+#: plugin-fw/includes/class-yith-system-status.php:578
+msgid "Contact your hosting company in order to enable it."
+msgstr "Neem contact op met uw hosting provider om het in te schakelen."
+
+#. translators: %1$s code, %2$s file name
+#: plugin-fw/includes/class-yith-system-status.php:570
+msgid "Remove %1$s from %2$s file"
+msgstr "Verwijder %1$s uit %2$s bestand"
+
+#: plugin-fw/includes/class-yith-system-status.php:559
+#: plugin-fw/includes/class-yith-system-status.php:565
+msgid "Contact your hosting company in order to update it."
+msgstr "Neem contact op met je hosting provider om het te updaten."
+
+#: plugin-fw/includes/class-yith-system-status.php:555
+msgid "Update it to the latest version in order to benefit of all new features and security updates."
+msgstr "Update naar de nieuwste versie om te genieten van alle nieuwe functies en beveiligingsupdates."
+
+#. translators: %1$s plugin name, %2$s version number
+#: plugin-fw/includes/class-yith-system-status.php:549
+msgid "%1$s needs at least %2$s version"
+msgstr "%1$s heeft minstens %2$s versie nodig"
+
+#. translators: %s recommended memory amount
+#: plugin-fw/includes/class-yith-system-status.php:613
+msgid "For optimal functioning of our plugins, we suggest setting at least %s of available memory"
+msgstr "Om de plugins optimaal te laten functioneren, adviseren wij minstens %s beschikbaar geheugen"
+
+#. translators: %1$s plugin name, %2$s required memory amount
+#: plugin-fw/includes/class-yith-system-status.php:546
+msgid "%1$s needs at least %2$s of available memory"
+msgstr "%1$ss heeft ten minste %2$s beschikbaar geheugen nodig"
+
+#. translators: %1$s plugin name, %2$s requirement name
+#: plugin-fw/includes/class-yith-system-status.php:543
+msgid "%1$s needs %2$s enabled"
+msgstr "%1$s heeft nodig %2$s ingeschakeld"
+
+#: plugin-fw/includes/class-yith-system-status.php:518
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#: plugin-fw/includes/class-yith-system-status.php:518
+msgid "Enabled"
+msgstr "Ingeschakeld"
+
+#: plugin-fw/templates/sysinfo/system-information-panel.php:27
+msgid "YITH System Information"
+msgstr "YITH Systeem Informatie"
+
+#: plugin-fw/templates/fields/select-buttons.php:20
+msgid "Remove All"
+msgstr "Allen verwijderen"
+
+#: plugin-fw/templates/fields/select-buttons.php:19
+msgid "Add All"
+msgstr "Allen toevoegen"
+
+#: plugin-fw/templates/fields/date-format.php:65
+msgid "Custom:"
+msgstr "Aangepast:"
+
+#: plugin-fw/includes/class-yith-dashboard.php:137
+msgctxt "Button label"
+msgid "Close"
+msgstr "Sluiten"
+
+#: plugin-fw/includes/class-yith-dashboard.php:97
+msgctxt "Plugin FW"
+msgid "Latest update released on"
+msgstr "Laatste update uitgebracht op"
+
+#: plugin-fw/includes/class-yith-dashboard.php:96
+msgctxt "Plugin FW"
+msgid "View Changelog"
+msgstr "Bekijk wijzigingenlogboek"
+
+#: plugin-fw/includes/class-yith-dashboard.php:63
+msgid "An error has occurred, which probably means the feed is down. Try again later."
+msgstr "Er is een fout opgetreden, wat waarschijnlijk betekent dat de feed niet werkt. Probeer het later opnieuw."
+
+#: plugin-fw/includes/class-yith-dashboard.php:56
+msgid "RSS Error:"
+msgstr "RSS-fout:"
+
+#: plugin-fw/includes/class-yith-dashboard.php:36
+msgid "Latest news from YITH Blog"
+msgstr "Laatste nieuws van YITH Blog"
+
+#: plugin-fw/includes/class-yith-dashboard.php:35
+msgid "YITH Latest Updates"
+msgstr "YITH laatste updates"
+
+#: plugin-fw/includes/builders/gutenberg/class-yith-gutenberg.php:156
+msgctxt "[gutenberg]: Category Name"
+msgid "YITH"
+msgstr "YITH"
+
+#: includes/class.yith-wfbt.php:193
+msgctxt "[gutenberg]: attributes description"
+msgid "Add the product id (leave blank to get global product value)"
+msgstr "Voeg de product-ID toe (laat leeg om de globale productwaarde te krijgen)"
+
+#: includes/class.yith-wfbt.php:187
+msgctxt "[gutenberg]: block description"
+msgid "With this block you can print a product \"frequently bought together\" form."
+msgstr "Met dit blok kunt u een product \"vaak samen gekocht\" -formulier afdrukken."
+
+#: includes/class.yith-wfbt.php:186
+msgctxt "[gutenberg]: block name"
+msgid "Frequently Bought Form"
+msgstr "Veelgekochte producten formulier"
+
+#. Author of the plugin
+#: init.php
+msgid "YITH"
+msgstr "YITH"
+
+#. Description of the plugin
+#: init.php
+msgid "The <code><strong>YITH WooCommerce Frequently Bought Together</strong></code> allows increasing the average spent of your store by showing a box with the products purchased together more frequently. In this way, users are encouraged to add more products to their cart just like on Amazon. <a href=\"https://yithemes.com/\" target=\"_blank\">Get more plugins for your e-commerce shop on <strong>YITH</strong></a>."
+msgstr "De <code> <strong> YITH WooCommerce vaak samen gekocht </strong> </code> maakt het verhogen van de gemiddelde besteed van uw winkel door het tonen van een doos met de producten bij elkaar gekocht vaker. Op deze wijze, worden de gebruikers aangemoedigd om meer producten aan hun kar enkel als op Amazonië toe te voegen. <a href=\"https://yithemes.com/\" target=\"_blank\"> Vind nieuwe geweldige plugins op <strong> YITH </strong> </a>."
+
+#. translators: placeholders are used for add HTML tags.
+#: templates/admin/premium.php:430
+msgid "You can either choose to apply a percentage discount or a fixed amount. The discount will be shown highlighted in the frequently bought together box. The discount will only be applied if the required number of products are selected."
+msgstr "U kiezen of u een percentage korting of een vast bedrag wilt toepassen. De korting wordt aangegeven in het vak vaak gekochte samen. De korting wordt alleen toegepast als het gewenste aantal producten is geselecteerd."
+
+#: templates/admin/premium.php:426
+msgid "SET DISCOUNT FOR FREQUENTLY BOUGHT TOGETHER GROUP"
+msgstr "Korting instellen voor regelmatig aangekochte groep"
+
+#: plugin-fw/yit-plugin.php:243
+msgid "License"
+msgstr "Licentie"
+
+#: plugin-fw/yit-plugin.php:239
+msgctxt "Action links"
+msgid "Settings"
+msgstr "Instellingen"
+
+#: plugin-fw/yit-plugin.php:98
+msgctxt "Plugin Row Meta"
+msgid "Premium version"
+msgstr "Premium versie"
+
+#: plugin-fw/yit-plugin.php:94
+msgctxt "Plugin Row Meta"
+msgid "Support"
+msgstr "Ondersteuning"
+
+#: plugin-fw/yit-plugin.php:90
+msgctxt "Plugin Row Meta"
+msgid "Documentation"
+msgstr "Documentatie"
+
+#: plugin-fw/yit-plugin.php:86
+msgctxt "Plugin Row Meta"
+msgid "Live Demo"
+msgstr "Live Demo"
+
+#: plugin-fw/includes/privacy/class-yith-privacy.php:106
+msgctxt "Privacy Policy Content"
+msgid "Payments"
+msgstr "Betalingen"
+
+#: plugin-fw/includes/privacy/class-yith-privacy.php:103
+msgctxt "Privacy Policy Content"
+msgid "What we share with others"
+msgstr "Wat wij delen met anderen"
+
+#: plugin-fw/includes/privacy/class-yith-privacy.php:100
+msgctxt "Privacy Policy Content"
+msgid "Who on our team has access"
+msgstr "Wie van ons team heeft toegang"
+
+#: plugin-fw/includes/privacy/class-yith-privacy.php:97
+msgctxt "Privacy Policy Content"
+msgid "What we collect and store"
+msgstr "Wat we verzamelen en bewaren"
+
+#: plugin-fw/includes/privacy/class-yith-privacy.php:93
+msgctxt "Privacy Policy Content"
+msgid "This sample language includes the basics around what personal data your store may be collecting, storing and sharing, as well as who may have access to that data. Depending on what settings are enabled and which additional plugins are used, the specific information shared by your store will vary. We recommend consulting with a lawyer when deciding what information to disclose on your privacy policy."
+msgstr "Dit geschreven voorbeeld bevat de basis rondom welke persoonlijke gegevens je winkel mag verzamelen, bewaren en delen, en wie toegang heeft tot deze gegevens. Afhankelijk van welke instellingen zijn ingeschakeld en welke aanvullende plugins worden gebruikt, zal de informatie die wordt gedeeld door je winkel variëren. We raden aan om een advocaat te raadplegen wanneer je besluit je privacy beleid op te stellen."
+
+#: plugin-fw/includes/privacy/class-yith-privacy.php:61
+msgctxt "Privacy Policy Guide Title"
+msgid "YITH Plugins"
+msgstr "YITH Plugins"
+
+#: plugin-fw/templates/fields/icons.php:78
+msgid "Set Default"
+msgstr "Op standaard instellen"
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:559
+#: plugin-fw/includes/class-yit-plugin-panel.php:562
+msgid "How to install premium version"
+msgstr "Hoe installeer ik de premium versie"
+
+#. Author URI of the plugin
+#: init.php
+msgid "https://yithemes.com/"
+msgstr "https://yithemes.com/"
+
+#. Plugin URI of the plugin
+#: init.php
+msgid "https://yithemes.com/themes/plugins/yith-woocommerce-frequently-bought-together/"
+msgstr "https://yithemes.com/themes/plugins/yith-woocommerce-frequently-bought-together/"
+
+#. Plugin Name of the plugin
+#: init.php
+msgid "YITH WooCommerce Frequently Bought Together"
+msgstr "YITH WooCommerce Frequently Bought Together"
+
+#: templates/yith-wfbt-form.php:63
+msgid "This Product"
+msgstr "Dit product"
+
+#. translators: placeholders are used for add HTML tags.
+#: templates/admin/premium.php:416
+msgid "Among all suggested products, it can occur some are not in users' plans and they wouldn't show interest in adding them all to cart. The premium version of the plugin goes beyond this problem by giving users the possibility to %1$sadd to cart only the products they prefer%2$s."
+msgstr "Tussen alle voorgestelde producten,, kan het voorkomen dat sommige niet passen bij de interesses van de klant, en het toevoegen aan de winkelwagen. De premium versie van de plugin gaat verder, door klanten de mogelijkheid te geven %1$salleen producten met hun voorkeur toevoegen aan winkelwagen%2$s."
+
+#: templates/admin/premium.php:412
+msgid "Products to add to cart"
+msgstr "Producten om toe te voegen aan winkelwagen"
+
+#. translators: placeholders are used for add HTML tags.
+#: templates/admin/premium.php:395
+msgid "To make you fully enjoy all plugin functionalities we have also integrated it with %1$sYITH WooCommerce Wishlist%2$s.%3$sEnable both plugins, set their options appropriately and in each user will be able to see in his/her own Wishlist page a %1$sslider%2$s with all products associated at least at one of the items in wishlist."
+msgstr "Om je volledig te laten genieten van alle plugin functies hebben we het ook geïntegreerd met %1$sYITH WooCommerce Wishlist%2$s.%3$sBeide plugins inschakelen, bepaal de instellingen en elke gebruik zal in staat zijn om in zijn/haar wensenlijst pagina een  %1$sslider%2$s te zien met alle geassocieerde producen, voor minstens een van de items in de wensenlijst."
+
+#: templates/admin/premium.php:391
+msgid "Integration with Wishlist"
+msgstr "Integratie met Wishlist"
+
+#. translators: placeholders are used for add HTML tags.
+#: templates/admin/premium.php:381
+msgid "Keep track of the products you have set up with the plugin, do not get crazy to find them in the list of all products created.%3$sThe premium version of the plugin adds a %1$stable%2$s where all configured products have been added and for each of them a comprehensive list with associated products."
+msgstr "Houd bij welke producten je hebt ingesteld met de plugin, maak jezelf niet gek met het zoeken in de lijst met alle producten die zijn gemaakt..%3$sDe premium versie van de plugin voegt een %1$stabel%2$s toe waarin alle geconfigureerde producten zijn toegevoegd, en voor ieder van de producten is een uitvoerige lijst met geassocieerde producten."
+
+#: templates/admin/premium.php:377
+msgid "List of associated products"
+msgstr "Lijst met geassocieerde producten"
+
+#. translators: placeholders are used for add HTML tags.
+#: templates/admin/premium.php:361
+msgid "All items added by the plugin into product detail page will be shown with their image too.%3$sDo not be afraid of the quality, just care about choosing its final %1$ssize%2$s and crop it if you think it's better to do so."
+msgstr "Alle items die worden toegevoegd door de plugin aan de product detailpagina, worden getoond met hun eigen afbeelding.%3$sBen niet bang voor de kwaliteit, let vooral op het bepalen van de uiteindelijke %1$safmeting%2$s en kies voor bijsnijden als je denkt dat dat beter is."
+
+#: templates/admin/premium.php:357
+msgid "Image size"
+msgstr "Afbeeldingsgrootte"
+
+#. translators: placeholders are used for add HTML tags.
+#: templates/admin/premium.php:347
+msgid "Users sight is always very quick and it is often caught by a specific detail or by a combination of details that take their sight to a specific spot in the page. Choose %1$sstrategic spots%2$s for showing your combined products in the page and you'll find easily the best solution for you."
+msgstr "Het zicht van gebruikers is snel en vaak wordt het gepakt door een specifiek detail of een combinatie van details, die hun aandacht trekt naar een specifiek punt op de pagina. Kies %1$sstrategische punten%2$s voor het tonen van gecombineerde producten op de pagina en je vind snel de beste oplossing voor jou."
+
+#: templates/admin/premium.php:343
+msgid "Position"
+msgstr "Positie"
+
+#. translators: placeholders are used for add HTML tags.
+#: templates/admin/premium.php:327
+msgid "you can customise more and more labels so that you are able to enter the text that you want and that is %1$sinteresting%2$s and %1$scaptivating%2$s for your customers.%3$sFixity is never synonym of a good product and for this reason the plugin aims at being more and more flexible and suitable for your needs."
+msgstr "je kunt meer en meer labesl maken zodat je in staat bent om de tekst in te voeren die je wilt, die %1$sinteressant%2$s is en %1$spakkend%2$s voor je klanten. %3$sAanpassen is nooit een synoniem voor een goed product, en met deze reden richt de plugin op een meer en meer flexibele en passende oplossing voor je behoeften."
+
+#: templates/admin/premium.php:323
+msgid "Custom labels"
+msgstr "Aangepaste labels"
+
+#. translators: placeholders are used for add HTML tags.
+#: templates/admin/premium.php:313
+msgid "You might decide to suggest your customers to buy products in combination, but you do not want to weigh your shop page down. Do not be afraid, you can do that with %1$sYITH WooCommerce Frequently Bought Together%2$s.%3$sAssociate as many products as you want to a product of your shop, but then decide how many of them showing. They will be selected randomly and suggested to your customers."
+msgstr "Je kunt beslissen dat je klanten wilt aanraden een combinatie van producten te kopen, maar je wilt je winkel niet bezwaren. Ben niet bank, je kan dit doen met %1$sYITH WooCommerce Frequently Bought Together%2$s.%3$sAssocieer zo veel producten als je wil met een product uit je winkel, en bepaal vervolgens hoeveel er worden weergegeven. Ze worden willekeurig geselecteerd en voorgesteld aan je klanten."
+
+#: templates/admin/premium.php:309
+msgid "Number of products associated"
+msgstr "Aantal producten geassocieerd"
+
+#: templates/admin/premium.php:300
+msgid "Premium Features"
+msgstr "Premium functies"
+
+#: templates/admin/premium.php:294 templates/admin/premium.php:450
+msgid "to the premium version"
+msgstr "naar de premium versie"
+
+#: templates/admin/premium.php:293 templates/admin/premium.php:449
+msgid "UPGRADE"
+msgstr "UPGRADE"
+
+#. translators: placeholders are used for add HTML tags.
+#: templates/admin/premium.php:288 templates/admin/premium.php:444
+msgid "Upgrade to %1$spremium version%2$s of %1$sYITH WooCommerce Frequently Bought Together%2$s to benefit from all features!"
+msgstr "Upgrade naar %1$spremium versie%2$s van %1$sYITH WooCommerce Frequently Bought Together%2$s om te profiteren van alle functies!"
+
+#: plugin-options/general-options.php:44 templates/yith-wfbt-form.php:116
+msgid "Add all to Cart"
+msgstr "Alles toevoegen aan winkelwagen"
+
+#: plugin-options/general-options.php:41
+msgid "This is the label shown for \"Add to cart\" button."
+msgstr "Dit is het label dat wordt weergegeven voor \"Toevoegen aan winkelwagen\" knop."
+
+#: plugin-options/general-options.php:40
+msgid "Button label"
+msgstr "Knop label"
+
+#: plugin-options/general-options.php:35 templates/yith-wfbt-form.php:117
+msgid "Price for all"
+msgstr "Prijs voor allen"
+
+#: plugin-options/general-options.php:32
+msgid "This is the label shown for total price label."
+msgstr "Dit is het label dat wordt weergegeven voor totaal prijs label."
+
+#: plugin-options/general-options.php:31
+msgid "Total label"
+msgstr "Totaal label"
+
+#: plugin-options/general-options.php:26 templates/yith-wfbt-form.php:118
+msgid "Frequently Bought Together"
+msgstr "Frequently Bought Together"
+
+#: plugin-options/general-options.php:23
+msgid "Title shown on \"Frequently Bought Together\" box."
+msgstr "Titel getoond in \"vaak samen gekocht\" veld."
+
+#: plugin-options/general-options.php:22
+msgid "Box title"
+msgstr "Box titel"
+
+#: plugin-options/general-options.php:14
+msgid "General Options"
+msgstr "Algemene opties"
+
+#: plugin-fw/templates/panel/v2/panel-content-page.php:58
+#: plugin-fw/templates/panel/v2/woocommerce/woocommerce-form.php:70
+#: plugin-fw/templates/panel/woocommerce/woocommerce-form.php:41
+msgid "Reset Defaults"
+msgstr "Reset Standaard instellingen"
+
+#: plugin-fw/templates/fields/upload.php:39
+msgid "Reset"
+msgstr "Resetten"
+
+#: plugin-fw/templates/fields/sidebars.php:54
+msgid "Right Sidebar"
+msgstr "Zijbalk rechts"
+
+#: plugin-fw/templates/fields/sidebars.php:39
+msgid "Left Sidebar"
+msgstr "Zijbalk links"
+
+#: plugin-fw/templates/fields/sidebars.php:41
+#: plugin-fw/templates/fields/sidebars.php:56
+msgid "Choose a sidebar"
+msgstr "Kies een zijbalk"
+
+#: plugin-fw/templates/fields/sidebars.php:23
+msgid "Right sidebar"
+msgstr "Zijbalk rechts"
+
+#: plugin-fw/templates/fields/sidebars.php:26
+#: plugin-fw/templates/fields/sidebars.php:29
+msgid "No sidebar"
+msgstr "Geen zijbalk"
+
+#: plugin-fw/templates/fields/sidebars.php:20
+msgid "Left sidebar"
+msgstr "Zijbalk links"
+
+#: plugin-fw/templates/fields/image-gallery.php:26
+#: plugin-fw/templates/fields/image-gallery.php:37
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: plugin-fw/templates/fields/image-gallery.php:35
+msgid "Add images"
+msgstr "Afbeeldingen toevoegen"
+
+#: plugin-fw/templates/fields/image-gallery.php:34
+msgid "Add to gallery"
+msgstr "Aan galerij toevoegen"
+
+#: plugin-fw/templates/fields/image-gallery.php:33
+msgid "Add Images to Gallery"
+msgstr "Afbeeldingen toevoegen aan galerij"
+
+#: plugin-fw/templates/fields/image-gallery.php:36
+msgid "Delete image"
+msgstr "Afbeelding verwijderen"
+
+#: plugin-fw/templates/fields/customtabs.php:93
+msgid "Do you want to remove the custom tab?"
+msgstr "Wil je dit aangepaste tabblad verwijderen?"
+
+#: plugin-fw/templates/fields/customtabs.php:52
+msgid "Add custom product tab"
+msgstr "Aangepaste product tabblad toevoegen"
+
+#: plugin-fw/templates/fields/customtabs.php:41
+#: plugin-fw/templates/fields/customtabs.php:82
+msgid "Content of the tab. (HTML is supported)"
+msgstr "Inhoud van het tabblad. (HTML wordt ondersteund)"
+
+#: plugin-fw/templates/fields/customtabs.php:40
+#: plugin-fw/templates/fields/customtabs.php:81
+msgid "Value"
+msgstr "Waarde"
+
+#: plugin-fw/templates/fields/customtabs.php:17
+msgid "Expand all"
+msgstr "Open allen"
+
+#: plugin-fw/templates/fields/customtabs.php:17
+msgid "Close all"
+msgstr "Sluit allen"
+
+#: plugin-fw/templates/fields/upload.php:34
+#: plugin-fw/templates/panel/woocommerce/woocommerce-upload.php:37
+msgid "Upload"
+msgstr "Upload"
+
+#: plugin-fw/templates/fields/customtabs.php:25
+#: plugin-fw/templates/fields/customtabs.php:68
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: plugin-fw/templates/fields/ajax-products.php:16
+msgid "Search for a product..."
+msgstr "Zoek naar een product..."
+
+#: plugin-fw/includes/class-yit-pointers.php:96
+msgid "Plugins Upgraded"
+msgstr "Plugins geüpgraded"
+
+#: plugin-fw/includes/class-yit-pointers.php:80
+msgid "Plugins Activated"
+msgstr "Plugins geactiveerd"
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1567
+msgid "Sorting successful."
+msgstr "Succesvol gesorteerd."
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1566
+msgid "Sorry, import is disabled."
+msgstr "Sorry, importeren is uitgeschakeld."
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1565
+msgid "The added file is not valid."
+msgstr "Het toegevoegde bestand is niet geldig."
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1564
+msgid "An error has occurred during import. Please try again."
+msgstr "Er is een fout opgetreden tijdens importeren. Probeer opnieuw."
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1563
+msgid "Database imported correctly."
+msgstr "Database juist geïmporteerd."
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1561
+msgid "Element updated correctly."
+msgstr "Element juist geüpdatet."
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1560
+msgid "Element deleted correctly."
+msgstr "Element juist verwijderd."
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1559
+msgid "Settings reset"
+msgstr "Instellingen resetten"
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1558
+msgid "Settings saved"
+msgstr "Instellingen opgeslagen"
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:1557
+msgid "The element you have entered already exists. Please, enter another name."
+msgstr "Het element dat je hebt ingevoerd bestaat al. Voer een andere naam in."
+
+#: plugin-fw/includes/class-yit-assets.php:261
+#: plugin-fw/includes/class-yit-plugin-subpanel.php:134
+#: plugin-fw/templates/panel/panel-content-page.php:14
+msgid "Are you sure?"
+msgstr "Weet je het zeker?"
+
+#: plugin-fw/includes/class-yit-plugin-subpanel.php:137
+#: plugin-fw/templates/panel/panel-content-page.php:38
+msgid "Reset to default"
+msgstr "Resetten naar standaard"
+
+#: plugin-fw/includes/class-yit-assets.php:262
+#: plugin-fw/includes/class-yit-plugin-subpanel.php:134
+#: plugin-fw/templates/panel/panel-content-page.php:14
+msgid "If you continue with this action, you will reset all options in this page."
+msgstr "Als je doorgaat met deze actie, zal je alle opties op deze pagina resetten."
+
+#: plugin-fw/includes/class-yit-plugin-subpanel.php:127
+#: plugin-fw/templates/panel/panel-content-page.php:29
+msgid "Save Changes"
+msgstr "Wijzigingen opslaan"
+
+#: plugin-fw/includes/class-yith-system-status.php:217
+msgid "YITH Plugins"
+msgstr "YITH Plugins"
+
+#: plugin-fw/includes/class-yit-plugin-panel.php:89
+msgid "Plugin Settings"
+msgstr "Plugin instellingen"
+
+#: plugin-fw/includes/class-yit-plugin-panel-woocommerce.php:607
+msgid "The changes you have made will be lost if you leave this page."
+msgstr "Als je deze pagina verlaat zullen alle wijzigingen verloren gaan."
+
+#: plugin-fw/templates/fields/customtabs.php:34
+#: plugin-fw/templates/fields/customtabs.php:76
+msgid "Name"
+msgstr "Naam"
+
+#: init.php:69
+msgid "You can't activate the free version of YITH WooCommerce Frequently Bought Together while you are using the premium one."
+msgstr "Je kunt de gratis versie van YITH WooCommerce Frequently Bought Together niet activeren als je de premium versie gebruikt."
+
+#: init.php:54
+msgid "YITH WooCommerce Frequently Bought Together is enabled but not effective. It requires WooCommerce in order to work."
+msgstr "YITH WooCommerce Frequently Bought Together is ingeschakeld maar werkt nog niet. Het heeft WooCommerce nodig om te werken."
+
+#: includes/class.yith-wfbt-admin.php:345
+msgid "Select products for \"Frequently bought together\" group"
+msgstr "Selecteer producten voor de \"Frequently bought together\" groep"
+
+#: includes/class.yith-wfbt-admin.php:333
+msgid "Search for a product&hellip;"
+msgstr "Zoeken naar een product&hellip;"
+
+#: includes/class.yith-wfbt-admin.php:314
+msgid "Select products"
+msgstr "Selecteer producten"
+
+#: includes/class.yith-wfbt-admin.php:284
+msgctxt "tab in product data box"
+msgid "Frequently Bought Together"
+msgstr "Vaak samen gekocht"
+
+#: includes/class.yith-wfbt-admin.php:151
+#: plugin-fw/includes/class-yit-plugin-panel.php:90
+msgid "Settings"
+msgstr "Instellingen"

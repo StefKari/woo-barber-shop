@@ -1,0 +1,220 @@
+# Translation of Plugins - WooCommerce Google Analytics Integration - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - WooCommerce Google Analytics Integration - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-12-21 10:11:54+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - WooCommerce Google Analytics Integration - Stable (latest release)\n"
+
+#: includes/class-wc-google-analytics.php:165
+msgid "The Global Site Tag provides streamlined tagging across Google’s site measurement, conversion tracking, and remarketing products. This must be enabled to use a Google Analytics 4 Measurement ID (e.g., <code>G-XXXXX</code>). <a href=\"%s\" target=\"_blank\">See here for more information</a>."
+msgstr "De algemene site tag biedt gestroomlijnde tagging voor de producten voor site meting, conversie tracking en remarketing van Google. Dit moet zijn ingeschakeld om een meet ID van Google Analytics 4 te gebruiken (bijv. <code>G-XXXXX</code>). <a href=\"%s\" target=\"_blank\">Zie hier voor meer informatie</a>."
+
+#: includes/class-wc-google-analytics.php:164
+msgid "Use Global Site Tag"
+msgstr "Gebruik de globale site tag"
+
+#: includes/class-wc-google-analytics.php:149
+msgid "Log into your Google Analytics account to find your ID. e.g. <code>G-XXXXX</code> or <code>UA-XXXXX-X</code>"
+msgstr "Log in op je Google Analytics account om je ID te vinden. bijv. <code>G-XXXXX</code>of <code>UA-XXXXX-X</code>"
+
+#: includes/class-wc-google-analytics.php:148
+msgid "Google Analytics Tracking ID"
+msgstr "Google Analytics tracking ID"
+
+#. translators: 1: href link to GA pro
+#: woocommerce-google-analytics-integration.php:144
+msgid "Add advanced tracking for your sales funnel, coupons and more. [<a href=\"%s\" target=\"_blank\">Learn more</a> &gt;]"
+msgstr "Voeg geavanceerde tracking toe voor je verkoop kanaal, waardebonnen en meer. [<a href=\"%s\" target=\"_blank\"> Meer informatie </a> ']"
+
+#: woocommerce-google-analytics-integration.php:141
+msgid "Get detailed insights into your sales with Google Analytics Pro"
+msgstr "Krijg gedetailleerde inzichten in je verkopen met Google Analytics Pro"
+
+#: includes/class-wc-google-analytics.php:209
+msgid "Enable this to find broken or dead links. An \"Event\" with category \"Error\" and action \"404 Not Found\" will be created in Google Analytics for each incoming pageview to a non-existing page. By setting up a \"Custom Goal\" for these events within Google Analytics you can find out where broken links originated from (the referrer). %sRead how to set up a goal%s."
+msgstr "Schakel dit in om verbroken of dode links te vinden. Er wordt in Google Analytics een\"Evenement\" met categorie\"Fout\" en actie\"404 Niet gevonden\" gemaakt voor elke inkomende paginaweergave op een niet-bestaande pagina. Door een\"Aangepast doel\" in te stellen voor deze evenementen in Google Analytics, kan je achterhalen waar gebroken links vandaan komen (de verwijzer).  %sLees hoe je een doel %s instelt."
+
+#: includes/class-wc-google-analytics.php:208
+msgid "Track 404 (Not found) Errors"
+msgstr "Track 404 (niet gevonden) fouten"
+
+#. Author URI of the plugin
+msgid "https://woocommerce.com"
+msgstr "https://woocommerce.com"
+
+#: woocommerce-google-analytics-integration.php:76
+msgid "Support"
+msgstr "Ondersteuning"
+
+#: woocommerce-google-analytics-integration.php:75
+msgid "Settings"
+msgstr "Instellingen"
+
+#: includes/class-wc-google-analytics.php:446
+msgid "ID:"
+msgstr "ID KAART:"
+
+#: includes/class-wc-google-analytics.php:195
+msgid "Set the Google Analytics code to support Enhanced Link Attribution. %sRead more about Enhanced Link Attribution%s."
+msgstr "Stel de Google Analytics-code in om Enhanced Link Attribution te ondersteunen.  %sLees meer over Verbeterde linktoeschrijving %s."
+
+#: includes/class-wc-google-analytics.php:194
+msgid "Use Enhanced Link Attribution"
+msgstr "Verbeterde link toeschrijving gebruiken"
+
+#: includes/class-wc-google-analytics.php:289
+msgid "Please note, for transaction tracking to work properly, you will need to use a payment gateway that redirects the customer back to a WooCommerce order received/thank you page."
+msgstr "Houd er rekening mee dat je, om het bijhouden van transacties correct te laten werken, een betalingsgateway moet gebruiken die de klant terug leid naar een ontvangen/bedankpagina van WooCommerce."
+
+#: includes/class-wc-google-analytics.php:286
+msgid "Please allow Google Analytics 24 hours to start displaying results."
+msgstr "Geef Google Analytics 24 uur de tijd om resultaten weer te geven."
+
+#: includes/class-wc-google-analytics.php:273
+msgid "Checkout Process Initiated"
+msgstr "Afrekenproces gestart"
+
+#: includes/class-wc-google-analytics.php:265
+msgid "Product Detail Views"
+msgstr "Product detailweergaven"
+
+#: includes/class-wc-google-analytics.php:257
+msgid "Product Clicks from Listing Pages"
+msgstr "Productklikken van vermeldingspagina's"
+
+#: includes/class-wc-google-analytics.php:249
+msgid "Product Impressions from Listing Pages"
+msgstr "Productvertoningen van vermeldingspagina's"
+
+#: includes/class-wc-google-analytics.php:241
+msgid "Remove from Cart Events"
+msgstr "Uit winkelwagen gebeurtenissen verwijderen"
+
+#: includes/class-wc-google-analytics.php:231
+msgid "Enhanced eCommerce allows you to measure more user interactions with your store, including: product impressions, product detail views, starting the checkout process, adding cart items, and removing cart items. Universal Analytics or Global Site Tag must be enabled for Enhanced eCommerce to work. If using Universal Analytics, turn on Enhanced eCommerce in your Google Analytics dashboard before enabling this setting. <a href=\"%s\" target=\"_blank\">See here for more information</a>."
+msgstr "Verbeterde e-commerce stelt je in staat om meer gebruikersinteracties met je winkel te meten, waaronder: productimpressies, productdetails, het afrekenproces starten, winkelwagenitems toevoegen en winkelwagenitems verwijderen. Universal Analytics og de globale site tag moet zijn ingeschakeld om Enhanced eCommerce te laten werken. Voordat je deze instelling inschakelt, schakel je Enhanced eCommerce in je Google Analytics-dashboard in. <a href=\"%s\" target=\"_blank\"> Zie hier voor meer informatie </a>."
+
+#: includes/class-wc-google-analytics.php:230
+msgid "Enable Enhanced eCommerce "
+msgstr "Verbeterde e-commerce inschakelen"
+
+#: includes/class-wc-google-analytics.php:229
+msgid "Enhanced eCommerce"
+msgstr "Verbeterde e-commerce"
+
+#: includes/class-wc-google-analytics.php:222
+msgid "Add to Cart Events"
+msgstr "Toevoegen aan winkelwagen gebeurtenissen"
+
+#: includes/class-wc-google-analytics.php:216
+msgid "This requires a payment gateway that redirects to the thank you/order received page after payment. Orders paid with gateways which do not do this will not be tracked."
+msgstr "Dit vereist een betalingsgateway die na betaling doorverwijst naar de bedank-/order ontvangstpagina. Bestellingen die zijn betaald met gateways die dit niet doen, worden niet gevolgd."
+
+#: includes/class-wc-google-analytics.php:215
+msgid "Purchase Transactions"
+msgstr "Aankooptransacties"
+
+#: includes/class-wc-google-analytics.php:202
+msgid "Enabling this option is mandatory in certain countries due to national privacy laws. %sRead more about IP Anonymization%s."
+msgstr "Het inschakelen van deze optie is in bepaalde landen verplicht vanwege nationale privacywetten.  %sLees meer over IP-anonimisering %s."
+
+#: includes/class-wc-google-analytics.php:201
+msgid "Anonymize IP addresses"
+msgstr "IP-adressen anonimiseren"
+
+#: includes/class-wc-google-analytics.php:173
+msgid "Uses Universal Analytics instead of Classic Google Analytics. If you have <strong>not</strong> previously used Google Analytics on this site, check this box. Otherwise, %sfollow step 1 of the Universal Analytics upgrade guide.%s Enabling this setting will take care of step 2. %sRead more about Universal Analytics%s. Universal Analytics or Global Site Tag must be enabled to enable enhanced eCommerce."
+msgstr "Gebruikt Universal Analytics in plaats van klassiek Google Analytics. Vink dit vakje aan als je <strong> niet </strong> eerder Google Analytics op deze site hebt gebruikt. Anders %svolg stap 1 van de upgradehandleiding van Universal Analytics. %s Als je deze instelling inschakelt, wordt stap 2 uitgevoerd. %sLees meer over Universal Analytics%s. Universal Analytics of de globale site tag moet zijn ingeschakeld om verbeterde e-commerce mogelijk te maken."
+
+#: includes/class-wc-google-analytics.php:172
+msgid "Enable Universal Analytics"
+msgstr "Universal Analytics inschakelen"
+
+#: includes/class-wc-google-analytics.php:188
+msgid "Set the Google Analytics code to support Display Advertising. %sRead more about Display Advertising%s."
+msgstr "Stel de Google Analytics-code in om display-advertenties te ondersteunen.  %sLees meer over Display Advertising %s."
+
+#: includes/class-wc-google-analytics.php:187
+msgid "\"Display Advertising\" Support"
+msgstr "\"Display Advertising\" Ondersteuning"
+
+#: includes/class-wc-google-analytics.php:181
+msgid "This tracks session data such as demographics, system, etc. You don't need to enable this if you are using a 3rd party Google analytics plugin."
+msgstr "Dit houdt sessiegegevens bij zoals demografie, systeem, enz. Je hoeft dit niet in te schakelen als je een Google Analytics-plugin van derden gebruikt."
+
+#: includes/class-wc-google-analytics.php:180
+msgid "Enable Standard Tracking"
+msgstr "Standaardtracering inschakelen"
+
+#: includes/class-wc-google-analytics.php:163
+msgid "Tracking Options"
+msgstr "Trackingopties"
+
+#: includes/class-wc-google-analytics-info-banner.php:69
+msgid "(Dismiss)"
+msgstr "(Sluiten)"
+
+#: includes/class-wc-google-analytics-info-banner.php:69
+msgid "Dismiss this notice."
+msgstr "Verberg deze melding."
+
+#: includes/class-wc-google-analytics-info-banner.php:65
+msgid "<a href=\"%s\">Connect WooCommerce to Google Analytics</a> to finish setting up this integration."
+msgstr "<a href=\"%s\"> Koppel WooCommerce aan Google Analytics </a> om het instellen van deze integratie te voltooien."
+
+#: includes/class-wc-google-analytics-info-banner.php:64
+msgid "Google Analytics &amp; WooCommerce"
+msgstr "Google Analytics en WooCommerce"
+
+#. Description of the plugin
+msgid "Allows Google Analytics tracking code to be inserted into WooCommerce store pages."
+msgstr "Hiermee kan Google Analytics-trackingcode worden ingevoegd in WooCommerce-winkelpagina's."
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/woocommerce-google-analytics-integration/"
+msgstr "https://wordpress.org/plugins/woocommerce-google-analytics-integration/"
+
+#. Plugin Name of the plugin
+msgid "WooCommerce Google Analytics Integration"
+msgstr "WooCommerce Google Analytics Integration"
+
+#. Author of the plugin
+#: woocommerce-google-analytics-integration.php:110
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: woocommerce-google-analytics-integration.php:110
+msgid "WooCommerce Google Analytics depends on the last version of %s to work!"
+msgstr "WooCommerce Google Analytics is afhankelijk van de laatste versie van %s om te werken!"
+
+#: includes/class-wc-google-analytics.php:445
+#: includes/class-wc-google-analytics.php:513
+msgid "Add to Cart"
+msgstr "Toevoegen aan winkelwagen"
+
+#: includes/class-wc-google-analytics.php:444
+#: includes/class-wc-google-analytics.php:512
+msgid "Products"
+msgstr "Producten"
+
+#: includes/class-wc-google-analytics.php:156
+msgid "(Optional) Sets the <code>_setDomainName</code> variable. <a href=\"%s\" target=\"_blank\">See here for more information</a>."
+msgstr "(Optioneel) Stelt de variabele <code> _setDomainName </code> in. <a href=\"%s\" target=\"_blank\"> Zie hier voor meer informatie </a>."
+
+#: includes/class-wc-google-analytics.php:155
+msgid "Set Domain Name"
+msgstr "Domeinnaam instellen"
+
+#: includes/class-wc-google-analytics.php:55
+msgid "Google Analytics is a free service offered by Google that generates detailed statistics about the visitors to a website."
+msgstr "Google Analytics is een gratis dienst van Google die gedetailleerde statistieken over de bezoekers van een site genereert."
+
+#: includes/class-wc-google-analytics.php:54
+msgid "Google Analytics"
+msgstr "Google Analytics"

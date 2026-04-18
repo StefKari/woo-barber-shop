@@ -1,0 +1,177 @@
+# Translation of Plugins - HubSpot &#8211; CRM, Email Marketing, Live Chat, Forms &amp; Analytics - Stable (latest release) in Polish
+# This file is distributed under the same license as the Plugins - HubSpot &#8211; CRM, Email Marketing, Live Chat, Forms &amp; Analytics - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-07-05 07:33:32+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: pl\n"
+"Project-Id-Version: Plugins - HubSpot &#8211; CRM, Email Marketing, Live Chat, Forms &amp; Analytics - Stable (latest release)\n"
+
+#: public/admin/widgets/class-elementormeeting.php:84
+msgid "Meetings Scheduler"
+msgstr "Harmonogram spotkań"
+
+#: public/admin/widgets/class-elementorform.php:85
+msgid "Form"
+msgstr "Formularz"
+
+#: public/admin/class-reviewbanner.php:63
+msgid "Leave us a review | link opens in a new tab"
+msgstr "Oceń nas | odnośnik otwiera się w nowej karcie"
+
+#: public/admin/class-reviewbanner.php:39
+msgid "Thanks,"
+msgstr "Dziękuję,"
+
+#. translators: %1$s: Current user name or nickname
+#: public/admin/class-reviewbanner.php:31
+msgid "Hey %1$s,"
+msgstr "Cześć %1$s,"
+
+#: public/admin/class-leadinadmin.php:213
+#: public/admin/class-pluginactionsmanager.php:50
+msgid "Upgrade"
+msgstr "Aktualizuj"
+
+#: public/admin/class-leadinadmin.php:209
+msgid "Reporting"
+msgstr "Raportowanie"
+
+#: public/admin/class-leadinadmin.php:208
+msgid "Lists"
+msgstr "Listy"
+
+#: public/admin/class-leadinadmin.php:206
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: public/admin/class-leadinadmin.php:202
+msgid "User Guide"
+msgstr "Poradnik użytkownika"
+
+#: public/admin/class-leadinadmin.php:72 public/class-leadin.php:43
+msgid "Hubspot"
+msgstr "Hubspot"
+
+#: public/admin/class-deactivationform.php:91
+msgid "Skip & deactivate"
+msgstr "Pomiń i wyłącz"
+
+#: public/admin/class-deactivationform.php:86
+msgid "Submit & deactivate"
+msgstr "Wyślij i wyłącz"
+
+#: public/admin/class-deactivationform.php:59
+msgid "Other"
+msgstr "Inne"
+
+#: public/admin/class-deactivationform.php:58
+msgid "Temporarily disabling or troubleshooting"
+msgstr "Chwilowe wyłączenie lub rozwiązywanie problemów"
+
+#: public/admin/class-deactivationform.php:57
+msgid "The plugin isn't useful"
+msgstr "Wtyczka nie jest przydatna"
+
+#. Author URI of the plugin
+#: leadin.php
+msgid "http://hubspot.com/products/wordpress"
+msgstr "http://hubspot.com/products/wordpress"
+
+#: public/admin/class-leadinadmin.php:87 build/gutenberg.js:924
+#: build/gutenberg.js:361
+msgid "Landing Page"
+msgstr "Strona docelowa"
+
+#: public/admin/class-leadinadmin.php:86 build/gutenberg.js:921
+#: build/gutenberg.js:358
+msgid "Knowledge Article"
+msgstr "Artykuł wiedzy"
+
+#: public/admin/class-leadinadmin.php:84 build/gutenberg.js:915
+#: build/gutenberg.js:355
+msgid "Detect Automatically"
+msgstr "Wykryj automatycznie"
+
+#: public/admin/class-deactivationform.php:56
+msgid "The plugin isn't working"
+msgstr "Wtyczka nie działa"
+
+#: public/admin/class-deactivationform.php:54
+msgid "I can't sign up or log in"
+msgstr "Nie mogę się zarejestrować ani zalogować"
+
+#: public/admin/class-deactivationform.php:29
+msgid "We're sorry to see you go"
+msgstr "Przykro nam, że odchodzisz"
+
+#: public/admin/class-leadinadmin.php:88 build/gutenberg.js:927
+#: build/gutenberg.js:362
+msgid "Listing Page"
+msgstr "Strona ogłoszeń"
+
+#. translators: %1$s: HTML anchor opening tag %2$s: HTML anchor closing tag
+#: public/admin/class-reviewbanner.php:36
+msgid "Have you got 2 minutes to complete %1$sthis survey%2$s about the HubSpot for WordPress plugin?"
+msgstr "Masz może dwie minuty, aby wypełnić %1$sankietę%2$s na temat wtyczki HubSpot dla WordPressa?"
+
+#: public/admin/class-leadinadmin.php:89 build/gutenberg.js:930
+#: build/gutenberg.js:364
+msgid "Standard Page"
+msgstr "Standardowa strona"
+
+#: public/admin/class-leadinadmin.php:85 build/gutenberg.js:918
+#: build/gutenberg.js:356
+msgid "Blog Post"
+msgstr "Wpis blogowy"
+
+#: public/admin/class-deactivationform.php:55
+msgid "The plugin is impacting website performance"
+msgstr "Wtyczka wpływa na wydajność witryny internetowej"
+
+#: public/admin/class-reviewbanner.php:38
+msgid "HubSpot for WordPress Team"
+msgstr "HubSpot dla zespołu WordPressa"
+
+#: public/admin/class-leadinadmin.php:207
+msgid "Email"
+msgstr "E-mail"
+
+#: public/admin/class-leadinadmin.php:204
+msgid "Live Chat"
+msgstr "Czat na żywo"
+
+#. Author of the plugin
+#: leadin.php public/admin/class-gutenberg.php:36
+#: public/admin/class-leadinadmin.php:200
+#: public/admin/class-leadinadmin.php:218
+msgid "HubSpot"
+msgstr "HubSpot"
+
+#: public/admin/class-leadinadmin.php:211
+#: public/admin/class-pluginactionsmanager.php:35
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: public/admin/class-leadinadmin.php:203
+msgid "Forms"
+msgstr "Formularze"
+
+#. Plugin URI of the plugin
+#: leadin.php
+msgid "http://www.hubspot.com/integrations/wordpress"
+msgstr "https://www.hubspot.com/integrations/wordpress"
+
+#. Plugin Name of the plugin
+#: leadin.php
+msgid "HubSpot All-In-One Marketing - Forms, Popups, Live Chat"
+msgstr "HubSpot All-In-One Marketing — Formularze, Wyskakujące okienka, czat na żywo"
+
+#. Description of the plugin
+#: leadin.php
+msgid "HubSpot’s official WordPress plugin allows you to add forms, popups, and live chat to your website and integrate with the best WordPress CRM."
+msgstr "Oficjalna wtyczka WordPress firmy HubSpot umożliwia dodawanie formularzy, wyskakujących okienek i czatu na żywo do twojej witryny oraz integrację z najlepszym CRM WordPress."

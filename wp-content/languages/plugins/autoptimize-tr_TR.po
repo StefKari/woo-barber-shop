@@ -1,0 +1,531 @@
+# Translation of Plugins - Autoptimize - Stable (latest release) in Turkish
+# This file is distributed under the same license as the Plugins - Autoptimize - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-01-23 07:07:52+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: tr\n"
+"Project-Id-Version: Plugins - Autoptimize - Stable (latest release)\n"
+
+#: classes/critcss-inc/admin_settings_adv.php:63
+msgid "Queue processing time limit"
+msgstr "Kuyruk işleme süre sınırı"
+
+#: classes/critcss-inc/admin_settings_adv.php:126
+msgid "In rare cases the critical CSS needs to be removed once the full CSS loads, this option makes it so!"
+msgstr "Nadir durumlarda, tam CSS yüklendikten sonra kritik CSSin kaldırılması gerekir, bu seçenek bunu yapar!"
+
+#: classes/critcss-inc/admin_settings_adv.php:121
+msgid "Unload critical CSS after page load?"
+msgstr "Sayfa yüklendikten sonra kritik CSS kaldırılsın mı?"
+
+#: classes/autoptimizeCriticalCSSCore.php:431
+#: classes/autoptimizeCriticalCSSCore.php:449
+msgid "Invalid"
+msgstr "Geçersiz"
+
+#: classes/critcss-inc/admin_settings_rules.php:201
+msgid "Remove all rules"
+msgstr "Tüm kuralları kaldır"
+
+#: classes/critcss-inc/admin_settings_rules.php:198
+msgid "Add CSS To All Rules"
+msgstr "Tüm Kurallara CSS Ekle"
+
+#: classes/critcss-inc/admin_settings_rules.php:196
+msgid "Add New Rule"
+msgstr "Yeni Kural Ekle"
+
+#: classes/critcss-inc/admin_settings_rules.php:152
+msgid "Delete all Rules and Jobs"
+msgstr "Tüm Kuralları ve İşleri Sil"
+
+#: classes/critcss-inc/admin_settings_rules.php:147
+msgid "Delete Rule"
+msgstr "Kuralı Sil"
+
+#: classes/critcss-inc/admin_settings_rules.php:57
+msgid "Select from the list below..."
+msgstr "Aşağıdaki listeden seçin..."
+
+#: classes/autoptimizeConfig.php:477
+msgid "Also optimize for logged in editors/ administrators?"
+msgstr "Giriş yapan editör & yöneticiler için de optimize et?"
+
+#: classes/autoptimizeConfig.php:96
+msgid "Autoptimize is enabled and configured on a WordPress network level. Please contact your network administrator if you need Autoptimize settings changed."
+msgstr "Autoptimize, WordPress ağı seviyesinde aktifleştirilmiş ve ayarlanmış. Eğer Autoptimize ayarlarını değiştirmeniz gerekiyorsa lütfen ağ yöneticinize ulaşın."
+
+#. translators: "check the documentation here" will appear in a "a href".
+#: classes/autoptimizeImages.php:1480
+msgid "It seems ShortPixel image optimization is not able to fetch images from your site, %1$scheck the documentation here%2$s for more information"
+msgstr "Görünüşe bakılırsa ShortPixel görsellerinizi sitenizden çekemiyor; %1$sburadaki dokümantasyonu inceleyerek%2$s daha fazla bilgi edinebilirsiniz"
+
+#: classes/autoptimizeExtra.php:616
+msgid "Comma-separated list with full URL's of to to-be-preloaded resources. To be used sparingly!"
+msgstr "Önyüklenecek (preload) tam URL'lerin virgülle ayrılmış listesi. İdareli kullanın!"
+
+#. translators: "display:swap" should remain untranslated, will be shown in
+#. code tags.
+#: classes/autoptimizeExtra.php:573 classes/autoptimizeExtra.php:575
+msgid "includes %1$sdisplay:swap%2$s."
+msgstr "%1$sdisplay:swap%2$s parametresini içerir."
+
+#: classes/autoptimizeCriticalCSSSettings.php:59
+#: classes/autoptimizeCriticalCSSSettings.php:131
+#: classes/critcss-inc/admin_settings_explain.php:15
+msgid "Critical CSS"
+msgstr "Kritik CSS"
+
+#: classes/autoptimizeConfig.php:332
+msgid "Paste the above the fold CSS here. You can leave this empty when using the automated Critical CSS integration."
+msgstr "Ekranda ilk görünen (above the fold) CSS'i buraya yapıştırın. Critical CSS entegrasyonu aktifse bu alanı boş bırakabilirsiniz."
+
+#: classes/autoptimizeConfig.php:343
+msgid "Important: excluded non-minified files are still minified by Autoptimize unless that option under \"misc\" is disabled."
+msgstr "Önemli: Hariç tutulan toparlanmayacak dosyalar yine Autoptimize tarafından küçültülecektir, ama bu ayarı da \"Diğer\" başlıklı bölümden devre dışı bırakabilirsiniz."
+
+#: classes/autoptimizeConfig.php:212
+msgid "Enable Autoptimize configuration per site."
+msgstr "Her site için ayrı Autoptimize konfigürasyonunu etkinleştir."
+
+#: classes/autoptimizeConfig.php:210
+msgid "Enable site configuration?"
+msgstr "Site konfigürasyonunu etkinleştir?"
+
+#: classes/autoptimizeConfig.php:207
+msgid "Multisite Options"
+msgstr "Çoklu Site Seçenekleri"
+
+#: classes/autoptimizeConfig.php:465
+msgid "When aggregating JS or CSS, excluded files that are not minified (based on filename) are by default minified by Autoptimize despite being excluded. Uncheck this option if anything breaks despite excluding."
+msgstr "JS veya CSS dosyalarını toparlarken, hariç tutulan dosyalar (hariç tutulmalarına rağmen) Autoptimize tarafından oldukları yerde sıkıştırılacaktır. Hariç tutulmasına rağmen bir şeyler bozuluyorsa bu ayarı devre dışı bırakın."
+
+#: classes/autoptimizeImages.php:1414
+msgid "Image lazy-loading will delay the loading of non-visible images to allow the browser to optimally load all resources for the \"above the fold\"-page first."
+msgstr "Görsel tembel yükleme tekniği, görünürde olmayan görsellerin yüklenmesini geciktirerek, tarayıcının görünürdeki kaynakları daha hızlı yüklemesini sağlar."
+
+#. translators: "disable  Jetpack's site accelerator for images" will appear in
+#. a "a href" linking to the jetpack settings page.
+#: classes/autoptimizeImages.php:1297
+msgid "Please %1$sdisable Jetpack's site accelerator for images%2$s to be able to use Autoptomize's advanced image optimization features below."
+msgstr "Lütfen %1$sJetpack'in görsel hızlandırma ayarını devre dışı bırakın%2$s, bu sayede Autoptimize'ın aşağıdaki gelişmiş görsel optimizasyonu özelliklerini kullanabilirsiniz."
+
+#: classes/autoptimizeConfig.php:977
+msgid "JS, CSS  &amp; HTML"
+msgstr "JS, CSS  &amp; HTML"
+
+#: classes/autoptimizeConfig.php:463
+msgid "Minify excluded CSS and JS files?"
+msgstr "Hariç tutulan CSS ve JS'leri de sıkıştır?"
+
+#: classes/autoptimizeImages.php:1420
+msgid "Comma-separated list of to be excluded image classes or filenames."
+msgstr "Hariç tutulacak görsellerin sınıflarının veya dosya adlarının virgülle ayrılmış listesi."
+
+#: classes/autoptimizeImages.php:1418
+msgid "Lazy-load exclusions"
+msgstr "Lazy load hariç tutma kuralları"
+
+#: classes/autoptimizeImages.php:1412
+msgid "Lazy-load images?"
+msgstr "Görselleri lazy load ile yükle?"
+
+#: classes/autoptimizeImages.php:1303
+msgid "Image optimization"
+msgstr "Görsel optimizasyonu"
+
+#: classes/autoptimizeImages.php:1242 classes/autoptimizeImages.php:1267
+msgid "Images"
+msgstr "Görseller"
+
+#. Description of the plugin
+#: autoptimize.php
+msgid "Makes your site faster by optimizing CSS, JS, Images, Google fonts and more."
+msgstr "CSS, JS, görselleriniz, Google yazı tipleri ve daha fazlasını optimize ederek sitenizi hızlandırın."
+
+#: classes/autoptimizeImages.php:1497
+msgid "based on status at "
+msgstr "şu tarihteki duruma dayanarak: "
+
+#: classes/autoptimizeImages.php:1499
+msgid "based on previously fetched data"
+msgstr "daha önceden çekilen veriye dayanarak"
+
+#. translators: link points Async Javascript settings page.
+#: classes/autoptimizeExtra.php:625
+msgid "You have \"Async JavaScript\" installed, %1$sconfiguration of async javascript is best done there%2$s."
+msgstr "Sizde \"Async JavaScript\" eklentisi yüklü olduğu için, %1$sasenkron JavaScript yükleme ayarlarını en iyi buradan kontrol edebilirsiniz%2$s."
+
+#. translators: link points to shortpixel image test page.
+#: classes/autoptimizeImages.php:1379
+msgid "You can %1$stest compression levels here%2$s."
+msgstr "İsterseniz %1$sburadan sıkıştırma aşamalarını test edebilirsiniz%2$s."
+
+#. translators: links points to shortpixel TOS & Privacy Policy.
+#: classes/autoptimizeImages.php:1345
+msgid "Usage of this feature is subject to Shortpixel's %1$sTerms of Use%2$s and %3$sPrivacy policy%4$s."
+msgstr "Bu özelliğin kullanımı ShortPixel'in %1$sKullanım Koşulları%2$s ve %3$sGizlilik İlkeleri%4$s'ne bağlıdır."
+
+#. translators: "display:swap" should remain untranslated, will be shown in
+#. code tags.
+#: classes/autoptimizeExtra.php:573
+msgid "Combine and link in head (fonts load fast but are render-blocking)"
+msgstr "Birleştir ve &lt;head&gt; içinde yükle (yazı tipleri hızlı yüklenir ama render'ı engeller)"
+
+#: classes/autoptimizeImages.php:1289
+msgid "The image optimization service is launching, but not yet available for this domain, it should become available in the next couple of days."
+msgstr "Görsel optimizasyonu hizmeti başlatılıyor, ancak bu domain için henüz kullanılabilir durumda değil; önümüzdeki günlerde kullanıma açılacaktır."
+
+#. translators: "Autoptimize support forum" will appear in a "a href".
+#: classes/autoptimizeImages.php:1282
+msgid "The image optimization service is currently down, image optimization will be skipped until further notice. Check the %1$sAutoptimize support forum%2$s for more info."
+msgstr "Görsel optimizasyonu hizmeti şu an için çalışmıyor; görsel optimizasyonu ikinci bir bildirime kadar atlanacak. Daha fazla bilgi için %1$sAutoptimize destek forumunu%2$s ziyaret edebilirsiniz."
+
+#: classes/autoptimizeConfig.php:294
+msgid "Aggregate all linked CSS-files? If this option is off, the individual CSS-files will remain in place but will be minified."
+msgstr "Bulunan CSS dosyalarının hepsini toparla? Eğer bu ayar kapalıysa, her CSS dosyası yerinde kalır (tek dosyada birleştirilmez) ancak boyutları küçültülür."
+
+#: classes/autoptimizeConfig.php:292
+msgid "Aggregate CSS-files?"
+msgstr "CSS dosyalarını toparla?"
+
+#: classes/autoptimizeConfig.php:228
+msgid "Aggregate JS-files?"
+msgstr "JS dosyalarını toparla?"
+
+#: classes/autoptimizeImages.php:1357
+msgid "Image Optimization quality"
+msgstr "Görsel Optimizasyonu kalitesi"
+
+#: classes/autoptimizeImages.php:1329
+msgid "Shortpixel status: "
+msgstr "ShortPixel durumu: "
+
+#: classes/autoptimizeExtra.php:558
+msgid "Most of below Extra optimizations require at least one of HTML, JS, CSS or Image autoptimizations being active."
+msgstr "Aşağıdaki Ekstra optimizasyon seçeneklerinin çoğu, en az bir tane HTML, JS, CSS veya görsel optimizasyonu seçeneklerinin aktif olmasını gerektirir."
+
+#. translators: "log in to check your account" will appear in a "a href".
+#: classes/autoptimizeImages.php:1484
+msgid "Your ShortPixel image optimization and CDN quota are in good shape, %1$slog in to check your account%2$s."
+msgstr "ShortPixel görsel optimizasyonu ve CDN kotanız iyi görünüyor, %1$sgiriş yaparak hesabınızı kontrol edebilirsiniz%2$s."
+
+#: autoptimize.php:33
+msgid "Autoptimize requires PHP 5.6 (or higher) to function properly. Please upgrade PHP. The Plugin has been auto-deactivated."
+msgstr "Autoptimize, PHP 5.6 sürümü ve üzerinde çalışır. Lütfen PHP sürümünüzü yükseltin. Eklenti otomatik olarak devre dışı bırakılmıştır."
+
+#. translators: %s will be replaced by a link to "wp youtube lyte" plugin.
+#: classes/autoptimizeExtra.php:650
+msgid "%s allows you to “lazy load” your videos, by inserting responsive “Lite YouTube Embeds\". "
+msgstr "%s videolarınızı \"tembel yükleme\" (lazy load) tekniğiyle yüklemenize olanak tanır, \"Lite YouTube Embeds\" yöntemini kullanır. "
+
+#: classes/autoptimizeExtra.php:647
+msgid "Click here to configure it."
+msgstr "Ayarlamak için buraya tıklayın."
+
+#: classes/autoptimizeExtra.php:635 classes/autoptimizeExtra.php:652
+msgid "Click here to install and activate it."
+msgstr "Yükleyip etkinleştirmek için buraya tıklayın."
+
+#: classes/autoptimizePartners.php:84
+msgid "More info"
+msgstr "Daha fazla bilgi"
+
+#: classes/autoptimizeExtra.php:645
+msgid "Great, you have WP YouTube Lyte installed."
+msgstr "Harika, WP YouTube Lyte eklentisi yüklü."
+
+#: classes/autoptimizeExtra.php:641
+msgid "Optimize YouTube videos"
+msgstr "YouTube videolarını optimize et"
+
+#. translators: %s will be replaced by a link to the "async javascript" plugin.
+#: classes/autoptimizeExtra.php:633
+msgid "Configuration of async javascript is easier and more flexible using the %s plugin."
+msgstr "Asenkron JS yüklemelerinin daha kolay ve esnek konfigürasyonu için %s eklentisini kullanabilirsiniz."
+
+#: classes/autoptimizeExtra.php:530 classes/autoptimizeExtra.php:552
+msgid "Extra"
+msgstr "Ekstra"
+
+#: classes/autoptimizeExtra.php:570
+msgid "Leave as is"
+msgstr "Olduğu gibi bırak"
+
+#: classes/autoptimizeExtra.php:568
+msgid "Google Fonts"
+msgstr "Google Yazıtipleri"
+
+#: classes/autoptimizeExtra.php:586
+msgid "Remove query strings from static resources"
+msgstr "Statik kaynaklardan sorgu dizelerini kaldır"
+
+#: classes/autoptimizeExtra.php:582
+msgid "Removes WordPress' core emojis' inline CSS, inline JavaScript, and an otherwise un-autoptimized JavaScript file."
+msgstr "WordPress'in çekirdeğindeki emoji CSS'ini, JS kodlarını kaldırır."
+
+#: classes/autoptimizeExtra.php:580
+msgid "Remove emojis"
+msgstr "Emojileri kaldır"
+
+#: classes/autoptimizeExtra.php:565
+msgid "The following settings can improve your site's performance even more."
+msgstr "Aşağıdaki ayarlar sitenizin performansını daha da artırabilir."
+
+#: classes/autoptimizeExtra.php:564
+msgid "Extra Auto-Optimizations"
+msgstr "Ekstra Oto-Optimizasyonlar"
+
+#: classes/autoptimizeCLI.php:30
+msgid "Cache flushed."
+msgstr "Önbellek temizlendi."
+
+#: classes/autoptimizeCLI.php:28
+msgid "Flushing the cache..."
+msgstr "Önbellek temizleniyor..."
+
+#: classes/autoptimizeConfig.php:487
+msgid "By default Autoptimize is also active on your shop's cart/ checkout, uncheck not to optimize those."
+msgstr "Autoptimize varsayılan olarak mağazanızın sepet ve ödeme sayfalarında da aktiftir, o sayfaları devre dışı bırakmak için bu ayarın onay işaretini kaldırın."
+
+#: classes/autoptimizeConfig.php:485
+msgid "Also optimize shop cart/ checkout?"
+msgstr "Sepet ve ödeme sayfalarını da optimize et?"
+
+#: classes/autoptimizeConfig.php:449
+msgid "Misc Options"
+msgstr "Çeşitli Seçenekler"
+
+#: classes/autoptimizeConfig.php:262 classes/autoptimizeConfig.php:311
+#: classes/autoptimizeExtra.php:576
+msgid "(deprecated)"
+msgstr "(kullanım dışı)"
+
+#. Translators: %s is the cache directory location.
+#: classes/autoptimizeMain.php:753
+msgid "Autoptimize cannot write to the cache directory (%s), please fix to enable CSS/ JS optimization!"
+msgstr "Autoptimize önbellek dizinine (%s) yazma erişimine sahip değil, CSS/JS optimizasyonu için lütfen bunu düzeltin!"
+
+#: classes/autoptimizePartners.php:40 classes/autoptimizePartners.php:142
+msgid "Optimize More!"
+msgstr "Daha da Hızlandır!"
+
+#: classes/autoptimizeCacheChecker.php:67
+msgid "Autoptimize's cache size is getting big, consider purging the cache. Have a look at https://wordpress.org/plugins/autoptimize/faq/ to see how you can keep the cache size under control."
+msgstr "Autoptimize'ın önbelleği büyümeye başladı, önbelleği temizlemeyi düşünün. Önbellek boyutunun kontrol altında tutmak için https://wordpress.org/plugins/autoptimize/faq/ adresini inceleyebilirsiniz."
+
+#: classes/autoptimizeCacheChecker.php:66
+msgid "Autoptimize cache size warning"
+msgstr "Autoptimize önbellek boyutu uyarısı"
+
+#. translators: links to the Autoptimize settings page.
+#: classes/autoptimizeToolbar.php:153
+msgid "Dismiss this notice."
+msgstr "Bu uyarıyı göz ardı et."
+
+#: classes/autoptimizeToolbar.php:107
+msgid "Files"
+msgstr "Dosyalar"
+
+#: classes/autoptimizeToolbar.php:106
+msgid "Size"
+msgstr "Boyut"
+
+#: classes/autoptimizePartners.php:146
+msgid "These Autoptimize power-ups and related services will improve your site's performance even more!"
+msgstr "Bu Autoptimize eklentileri ve ilgili hizmetler, sitenizin hızını daha da artıracak!"
+
+#: classes/autoptimizeConfig.php:388
+msgid "Enable this if you want HTML comments to remain in the page."
+msgstr "HTML yorumlarının sayfa içinde kalmasını istiyorsanız bu seçeneği etkinleştirin."
+
+#: classes/autoptimizeConfig.php:957
+msgid "No items"
+msgstr "Eleman yok"
+
+#: classes/autoptimizeConfig.php:233
+msgid "Also aggregate inline JS?"
+msgstr "Satıriçi JS kodlarını toparla?"
+
+#: classes/autoptimizeConfig.php:297
+msgid "Also aggregate inline CSS?"
+msgstr "Satıriçi CSS'i toparla?"
+
+#: classes/autoptimizeConfig.php:299
+msgid "Check this option for Autoptimize to also aggregate CSS in the HTML."
+msgstr "Autoptimize'ın satıriçi CSS kodlarını tek bir yerde toparlamasını istiyorsanız bunu işaretleyin."
+
+#: classes/autoptimizeConfig.php:542
+msgid "Happy with Autoptimize?"
+msgstr "Autoptimize'dan memnun musunuz?"
+
+#: classes/autoptimizeConfig.php:542
+msgid "Try my other plugins!"
+msgstr "Diğer eklentilerimi deneyin!"
+
+#. translators: the variable contains a date.
+#: classes/autoptimizeConfig.php:963
+msgid "Posted %s"
+msgstr "Yollandı %s"
+
+#: classes/autoptimizeExtra.php:571
+msgid "Remove Google Fonts"
+msgstr "Google Yazıtipleri'ni kaldır"
+
+#: classes/autoptimizeConfig.php:94 classes/autoptimizeConfig.php:194
+#: classes/autoptimizeCriticalCSSSettings.php:135
+#: classes/autoptimizeExtra.php:554 classes/autoptimizeImages.php:1269
+#: classes/autoptimizePartners.php:144 classes/autoptimizeProTab.php:83
+msgid "Autoptimize Settings"
+msgstr "Autoptimize Ayarları"
+
+#: classes/autoptimizeConfig.php:374
+msgid "HTML Options"
+msgstr "HTML Seçenekleri"
+
+#: classes/autoptimizeConfig.php:221
+msgid "JavaScript Options"
+msgstr "JavaScript Seçenekleri"
+
+#: classes/autoptimizeConfig.php:266
+msgid "Mostly useful in combination with previous option when using jQuery-based templates, but might help keeping cache size under control."
+msgstr "Çoğunlukla, önceki seçenekle beraber jQuery ağırlıklı temalarında kullanıldığında işe yarar, ama önbellek boyutunu kontrol altında tutmanıza da yardımcı olur."
+
+#: classes/autoptimizeConfig.php:270
+msgid "Exclude scripts from Autoptimize:"
+msgstr "Autoptimize'dan hariç tutulacak script'ler:"
+
+#: classes/autoptimizeConfig.php:285
+msgid "CSS Options"
+msgstr "CSS Seçenekleri"
+
+#: classes/autoptimizeConfig.php:315
+msgid "Don't autoptimize CSS outside the head-section. If the cache gets big, you might want to enable this."
+msgstr "&lt;head&gt;'deki CSS'ler dışındaki stil dosyalarını hariç tutar. Önbellek dosyanız çok büyürse, bunu etkinleştirmeyi isteyebilirsiniz."
+
+#: classes/autoptimizeConfig.php:394
+msgid "CDN Options"
+msgstr "CDN Seçenekleri"
+
+#: classes/autoptimizeConfig.php:397
+msgid "CDN Base URL"
+msgstr "CDN URL Temeli"
+
+#: classes/autoptimizeConfig.php:418
+msgid "Cache Info"
+msgstr "Cache Bilgisi"
+
+#: classes/autoptimizeConfig.php:421
+msgid "Cache folder"
+msgstr "Önbellek dizini"
+
+#: classes/autoptimizeConfig.php:425
+msgid "Can we write?"
+msgstr "Yazılabilir durumda mı?"
+
+#: classes/autoptimizeConfig.php:426
+msgid "Yes"
+msgstr "Evet"
+
+#: classes/autoptimizeConfig.php:426
+msgid "No"
+msgstr "Hayır"
+
+#: classes/autoptimizeConfig.php:429
+msgid "Cached styles and scripts"
+msgstr "Önbelleklenen stil ve script'ler"
+
+#: classes/autoptimizeConfig.php:454
+msgid "By default files saved are static css/js, uncheck this option if your webserver doesn't properly handle the compression and expiry."
+msgstr "Stil ve script'ler varsayılan olarak statik dosyalar halinde kaydedilir. Eğer sunucunuz sıkıştırma ve expiry'leri düzgün şekilde işleyemiyorsa bunun işaretini kaldırın."
+
+#: classes/autoptimizeConfig.php:511
+#: classes/autoptimizeCriticalCSSSettings.php:346
+#: classes/autoptimizeExtra.php:658 classes/autoptimizeImages.php:1430
+msgid "Save Changes"
+msgstr "Değişiklikleri Kaydet"
+
+#: classes/autoptimizeConfig.php:512
+msgid "Save Changes and Empty Cache"
+msgstr "Değişiklikleri Kaydet ve Önbelleği Temizle"
+
+#. Plugin Name of the plugin
+#: autoptimize.php classes/autoptimizeCacheChecker.php:111
+#: classes/autoptimizeConfig.php:732 classes/autoptimizeToolbar.php:82
+msgid "Autoptimize"
+msgstr "Autoptimize"
+
+#: classes/autoptimizeConfig.php:741 classes/autoptimizeConfig.php:744
+#: classes/autoptimizeConfig.php:747
+msgid "Autoptimize Options"
+msgstr "Autoptimize Seçenekleri"
+
+#: classes/autoptimizeConfig.php:810 classes/autoptimizeConfig.php:816
+msgid "Settings"
+msgstr "Ayarlar"
+
+#. Author of the plugin
+#: autoptimize.php
+msgid "Frank Goossens (futtta)"
+msgstr "Frank Goossens (futtta)"
+
+#: classes/autoptimizeConfig.php:343
+msgid "A comma-separated list of CSS you want to exclude from being optimized."
+msgstr "Autoptimize'ın kullanmasını istemediğiniz CSS'i buraya koyarak onları hariç tutabilirsiniz."
+
+#: classes/autoptimizeConfig.php:557
+msgid "Do not donate for this plugin!"
+msgstr "Bu eklentiye bağış yapmayın!"
+
+#: classes/autoptimizeConfig.php:452
+msgid "Save aggregated script/css as static files?"
+msgstr "Çıktı script ve stilleri statik dosyalar olarak kaydet?"
+
+#: classes/autoptimizeConfig.php:340
+msgid "Exclude CSS from Autoptimize:"
+msgstr "Autoptimize'dan hariç tutulacak CSS:"
+
+#: classes/autoptimizeConfig.php:335
+msgid "Inline all CSS?"
+msgstr "Tüm CSS'i \"inline\" olarak düzenle?"
+
+#: classes/autoptimizeConfig.php:310
+msgid "Look for styles only in &lt;head&gt;?"
+msgstr "Yalnızca &lt;head&gt;'deki stil dosyalarıyla ilgilen?"
+
+#: classes/autoptimizeConfig.php:302
+msgid "Generate data: URIs for images?"
+msgstr "Görseller için data:URI'lar kullan?"
+
+#: classes/autoptimizeConfig.php:288
+msgid "Optimize CSS Code?"
+msgstr "CSS Kodunu Optimize Et?"
+
+#: classes/autoptimizeConfig.php:243
+msgid "Add try-catch wrapping?"
+msgstr "\"Try-catch\" sarma özelliğini ekle?"
+
+#: classes/autoptimizeConfig.php:261
+msgid "Look for scripts only in &lt;head&gt;?"
+msgstr "Yalnızca &lt;head&gt;'deki JavaScript dosyalarıyla ilgilen?"
+
+#: classes/autoptimizeConfig.php:238
+msgid "Force JavaScript in &lt;head&gt;?"
+msgstr "JavaScript'i zorla &lt;head&gt;'de yüklet?"
+
+#: classes/autoptimizeConfig.php:224
+msgid "Optimize JavaScript Code?"
+msgstr "JavaScript Kodunu Optimize Et?"
+
+#: classes/autoptimizeConfig.php:386
+msgid "Keep HTML comments?"
+msgstr "HTML yorumlarına dokunma?"
+
+#: classes/autoptimizeConfig.php:377
+msgid "Optimize HTML Code?"
+msgstr "HTML Kodunu Optimize Et?"

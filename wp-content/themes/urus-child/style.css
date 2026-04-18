@@ -1,0 +1,266 @@
+/*
+Theme Name: Urus Child
+Theme URI: https://urus.familab.net/
+Author: Familab Team
+Author URI: http://familab.net/
+Description: Urus - Multipurpose Responsive WooCommerce Theme
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: urus-child
+Template:urus
+Tags: Brown, Black, Gray, Orange, Tan, White, Yellow, Light, Fluid Layout, Responsive Layout, One Column, Two Columns, Custom Background, Custom Colors, Custom Header, custom-menu, Theme Options, threaded-comments, translation-ready
+*/
+
+.product-item .flashs > span::after{
+    border: none!important;
+}
+
+
+.product-item.default .price del {
+    color: #83868c;
+    margin-right: 10px;
+    width: 100%;
+    display: inline-block;
+}
+
+.product-item .flashs>span{
+    border-radius: 40px!important;
+}
+
+.pwb-single-product-brands.pwb-clearfix img {
+    display: none !important;
+}
+
+.pwb-single-product-brands-container img:first-child {
+    display: flex !important;
+}
+
+
+
+
+
+
+.pwb-single-product-brands-container {
+    margin-top: -50px;
+}
+
+.pwb-single-product-brands-container img {
+    width: 120px;
+    vertical-align: unset;
+    padding-right: 10px;
+}
+
+.pwb-single-product-brands-container .summary h1.product_title {
+    margin-bottom: 0;
+}
+
+
+
+.mobile-button-group {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: auto;
+    float: right;
+}
+
+a.header-icon.cart-link.js-drawer-open-cart {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.mobile-button-group .header-icon .icon{
+    position: initial;
+}
+
+.asl_w_container {
+    width: 36% !important;
+    margin: 0px 0px 0px 0px;
+    position: fixed;
+    z-index: 2;
+}
+
+.single-product li#tab-title-pwb_tab {
+    display: none;
+}
+
+span.price-dicount-single-product {
+    text-decoration: line-through;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+
+div#tab-pwb_tab {
+    display: none;
+}
+
+.yith-wfbt-form .block-right {
+    background-color: #5b5b5b;
+    max-width: 300px;
+}
+
+.yith-wfbt-form .block-right input.yith-wfbt-submit-button.button.border {
+    color: #FFFFFF;
+    background-color: #d0ad65;
+    border: 0 !important;
+}
+
+.yith-wfbt-form .block-right span.total_price_label {
+    color: #e7e7e7;
+    font-size: 1.3em;
+}
+
+.yith-wfbt-form .block-right span.total_price {
+    padding: 5px 0;
+}
+
+span.saving-cost {
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
+    color: #e7e7e7;
+    padding: 5px 0;
+    font-size: 15px;
+}
+
+/**/
+
+.overlay {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.overlay.hide {
+    display: none;
+}
+
+.overlay-mobile {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.overlay-mobile.hide {
+    display: none;
+}
+
+.search-btn-custom.hide {
+    display: none;
+}
+
+#search-btn-custom-mobile {
+    top: 8px;
+    position: relative;
+}
+
+.asl_w_container {
+    display: none;
+}
+
+.asl_w_container.hide {
+    display: block;
+}
+
+.results {
+    z-index: 2;
+    position: relative;
+}
+
+i.fa.fa-search {
+    font-size: 24px;
+    background-color: #d0ad65;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.asl_w_container.asl_w_container_1.hide {
+    max-width: 630px;
+}
+
+/**/
+
+div#hubspot-messages-iframe-container {
+    margin-bottom: 85px;
+    max-height: calc( 100% - 85px );
+}
+
+.promagnifier {
+    display: none;
+}
+
+/**/
+figure.main-thumb {
+    height: 250px;
+	display:flex;
+	align-items: center;
+}
+.product-item.default .product-info {
+    text-align: center;
+}
+/**/
+
+i#close-btn-custom {
+    cursor: pointer;
+    font-size: 30px;
+    z-index: 99;
+    position: relative;
+}
+
+.asl_w_container.asl_w_container_2.hide {
+    width: 100% !important;
+    top: 0;
+}
+
+#ajaxsearchlite2 .probox {
+    padding: 30px 40px 30px 0px !important;
+}
+
+i#close-btn-custom-mobile {
+    font-size: 30px;
+    margin-top: 9px;
+    cursor: pointer;
+    z-index: 999;
+}
+
+@media only screen and (max-width: 767px) {
+    .pwb-single-product-brands-container .pwb-single-product-brands.pwb-clearfix {
+        margin-left: 0px !important;
+    }
+    .pwb-single-product-brands-container {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    .summary h1.product_title {
+        margin-top: 9px;
+        margin-bottom: 0px;
+    }
+.asl_w_container.asl_w_container_1.hide {
+    width: 250px !important;
+}
+}
+
+@media only screen and (max-width: 1024px) {
+
+    a.header-icon.cart-link.js-drawer-open-cart {
+        margin-top: 14px;
+    }
+
+    .asl_w_container {
+        width: 350px !important;
+        margin: 0px 0px 0px 0px;
+        position: relative;
+        top: 4px;
+        z-index: 1;
+        right: 0px;
+    }
+}

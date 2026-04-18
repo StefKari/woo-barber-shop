@@ -1,0 +1,454 @@
+# Translation of Plugins - Meta Box - Stable (latest release) in Chinese (Taiwan)
+# This file is distributed under the same license as the Plugins - Meta Box - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-07-23 18:01:11+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: zh_TW\n"
+"Project-Id-Version: Plugins - Meta Box - Stable (latest release)\n"
+
+#: inc/fields/icon.php:226
+msgid "Select an icon"
+msgstr "選取圖示"
+
+#: src/Dashboard/content.php:171
+msgid "Tutorials"
+msgstr "教學課程"
+
+#: inc/fields/user.php:189
+msgid "Add New User"
+msgstr "新增使用者"
+
+#: src/Updater/Settings.php:76 src/Updater/Settings.php:77
+msgid "Your license key is <b style=\"color: #d63638\">invalid</b>."
+msgstr "這個授權金鑰<b style=\"color: #d63638\">無效</b>。"
+
+#: src/Updater/Settings.php:78
+msgid "Your license key is <b style=\"color: #d63638\">expired</b>."
+msgstr "這個授權金鑰<b style=\"color: #d63638\">已到期</b>。"
+
+#: src/Updater/Settings.php:79
+msgid "Your license key is <b style=\"color: #00a32a\">active</b>."
+msgstr "這個授權金鑰<b style=\"color: #00a32a\">使用中</b>。"
+
+#: inc/fields/post.php:140 inc/fields/taxonomy.php:134 inc/fields/user.php:135
+msgid "(No title)"
+msgstr "(無標題)"
+
+#: inc/meta-box.php:306
+msgid "Meta Box Title"
+msgstr "Meta Box 標題"
+
+#: inc/fields/background.php:73
+msgid "-- Repeat --"
+msgstr "-- 重複 --"
+
+#: inc/fields/background.php:89
+msgid "-- Position --"
+msgstr "-- 位置 --"
+
+#: inc/fields/background.php:109
+msgid "-- Attachment --"
+msgstr "-- 附件 --"
+
+#: inc/fields/background.php:123
+msgid "-- Size --"
+msgstr "-- 大小 --"
+
+#: inc/core.php:13
+msgid "Docs"
+msgstr "線上說明"
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:61 src/Updater/Notification.php:63
+msgid "Your license key for Meta Box is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one</a> to enable automatic updates."
+msgstr "這個 Meta Box 的授權金鑰<b>無效</b>。請<a href=\"%1$s\">更新授權金鑰</a>或<a href=\"%2$s\" target=\"_blank\">在這裡取得新的使用授權</a>以啟用自動更新。"
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:65
+msgid "Your license key for Meta Box is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a> to get automatic updates and premium support."
+msgstr "這個 Meta Box 的授權金鑰<b>已到期</b>。請<a href=\"%3$s\">續訂授權金鑰</a>以啟用自動更新及取得付費技術支援。"
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:89
+msgid "Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "請<a href=\"%1$s\">輸入授權金鑰</a>或<a href=\"%2$s\" target=\"_blank\">在這裡取得新的使用授權</a>。"
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:91 src/Updater/Notification.php:93
+msgid "Your license key is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "這個授權金鑰<b>無效</b>。請<a href=\"%1$s\">更新授權金鑰</a>或<a href=\"%2$s\" target=\"_blank\">在這裡取得新的使用授權</a>。"
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:95
+msgid "Your license key is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a>."
+msgstr "這個授權金鑰<b>已到期</b>。請<a href=\"%3$s\" target=\"_blank\">續訂使用授權</a>。"
+
+#: src/Updater/Notification.php:111
+msgid "Activate License"
+msgstr "啟用授權"
+
+#: src/Updater/Notification.php:111
+msgid "Update License"
+msgstr "更新授權"
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:60
+msgid "To get the license key, visit the <a href=\"%1$s\" target=\"_blank\">My Account</a> page on metabox.io website. If you have not purchased any extension yet, please <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "請前往 metabox.io 網站的 [<a href=\"%1$s\" target=\"_blank\">我的帳號</a>] 頁面以取得授權金鑰。如果尚未訂購任何擴充功能，請<a href=\"%2$s\" target=\"_blank\">在這裡取得新的使用授權</a>。"
+
+#: src/Updater/Settings.php:123
+msgid "Something wrong with the connection to metabox.io. Please try again later."
+msgstr "連線至 metabox.io 時發生錯誤，請稍後再試。"
+
+#: src/Updater/Settings.php:125
+msgid "Your license is activated."
+msgstr "這個授權金鑰已啟用。"
+
+#. Translators: %s - URL to the My Account page.
+#: src/Updater/Settings.php:128
+msgid "License expired. Please renew on the <a href=\"%s\" target=\"_blank\">My Account</a> page on metabox.io website."
+msgstr "使用授權已到期。請前往 metabox.io 網站的 [<a href=\"%s\" target=\"_blank\">我的帳號</a>] 頁面續訂。"
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:134
+msgid "Invalid license. Please <a href=\"%1$s\" target=\"_blank\">check again</a> or <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "無效的使用授權。請<a href=\"%1$s\" target=\"_blank\">再檢查一次</a>或<a href=\"%2$s\" target=\"_blank\">在這裡取得新的使用授權</a>。"
+
+#: src/Updater/Checker.php:124
+msgid "UPDATE UNAVAILABLE! Please enter a valid license key to enable automatic updates."
+msgstr "已有更新可供下載安裝。請輸入有效的授權金鑰以啟用自動更新。"
+
+#: src/Updater/Settings.php:39 src/Updater/Settings.php:54
+msgid "Meta Box License"
+msgstr "Meta Box 授權"
+
+#: src/Updater/Settings.php:39
+msgid "License"
+msgstr "使用授權"
+
+#: src/Updater/Settings.php:55
+msgid "Please enter your license key to enable automatic updates for Meta Box extensions."
+msgstr "請輸入授權金鑰以啟用 Meta Box 擴充功能的自動更新。"
+
+#: src/Updater/Settings.php:72
+msgid "License Key"
+msgstr "授權金鑰"
+
+#: src/Updater/Settings.php:92
+msgid "Save Changes"
+msgstr "儲存設定"
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:59
+msgid "You have not set your Meta Box license key yet, which means you are missing out on automatic updates and support! Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "這個網站尚未設定專屬 Meta Box 授權金鑰，這代表這個網站不會自動更新外掛及或獲得技術支援。請<a href=\"%1$s\">輸入授權金鑰</a>或<a href=\"%2$s\" target=\"_blank\">在這裡取得新的使用授權</a>。"
+
+#: inc/fields/input-list.php:83
+msgid "Toggle All"
+msgstr "選取全部"
+
+#: inc/fields/file.php:48
+msgid "Error: Invalid file"
+msgstr "錯誤: 無效的檔案。"
+
+#: inc/fields/map.php:29 inc/fields/osm.php:16
+msgid "No results found"
+msgstr "找不到符合條件的結果"
+
+#: src/Dashboard/Dashboard.php:53 src/Dashboard/Dashboard.php:78
+#: src/Dashboard/Dashboard.php:79
+msgid "Dashboard"
+msgstr "控制台"
+
+#: src/Dashboard/content.php:580
+msgid "And much more!"
+msgstr "以及更多功能！"
+
+#: inc/fields/background.php:61
+msgid "Background Image"
+msgstr "背景圖片"
+
+#: inc/fields/background.php:75
+msgid "No Repeat"
+msgstr "不重複"
+
+#: inc/fields/background.php:76
+msgid "Repeat All"
+msgstr "水平及垂直重複"
+
+#: inc/fields/background.php:77
+msgid "Repeat Horizontally"
+msgstr "水平重複"
+
+#: inc/fields/background.php:78
+msgid "Repeat Vertically"
+msgstr "垂直重複"
+
+#: inc/fields/background.php:79 inc/fields/background.php:113
+#: inc/fields/background.php:125
+msgid "Inherit"
+msgstr "繼承"
+
+#: inc/fields/background.php:91
+msgid "Top Left"
+msgstr "左上方"
+
+#: inc/fields/background.php:92
+msgid "Top Center"
+msgstr "正上方"
+
+#: inc/fields/background.php:93
+msgid "Top Right"
+msgstr "右上方"
+
+#: inc/fields/background.php:94
+msgid "Center Left"
+msgstr "中左方"
+
+#: inc/fields/background.php:95
+msgid "Center Center"
+msgstr "正中央"
+
+#: inc/fields/background.php:96
+msgid "Center Right"
+msgstr "中右方"
+
+#: inc/fields/background.php:97
+msgid "Bottom Left"
+msgstr "左下方"
+
+#: inc/fields/background.php:98
+msgid "Bottom Center"
+msgstr "正下方"
+
+#: inc/fields/background.php:99
+msgid "Bottom Right"
+msgstr "右下方"
+
+#: inc/fields/background.php:111
+msgid "Fixed"
+msgstr "捲動時固定位置"
+
+#: inc/fields/background.php:112
+msgid "Scroll"
+msgstr "捲動"
+
+#: inc/fields/background.php:126
+msgid "Cover"
+msgstr "覆蓋全區"
+
+#: inc/fields/background.php:127
+msgid "Contain"
+msgstr "完整放置"
+
+#: inc/fields/switch.php:84
+msgid "On"
+msgstr "開啟"
+
+#: inc/fields/switch.php:85
+msgid "Off"
+msgstr "關閉"
+
+#: src/Dashboard/content.php:99
+msgid "Getting Started"
+msgstr "開始使用"
+
+#: inc/fields/sidebar.php:10
+msgid "Select a sidebar"
+msgstr "選取資訊欄"
+
+#. Author of the plugin
+#: meta-box.php
+msgid "MetaBox.io"
+msgstr "MetaBox.io"
+
+#. Description of the plugin
+#: meta-box.php
+msgid "Create custom meta boxes and custom fields in WordPress."
+msgstr "為 WordPress 建立中繼資料區塊及自訂欄位。"
+
+#: inc/fields/media.php:30
+msgctxt "media"
+msgid "or"
+msgstr "或"
+
+#: inc/fields/select-advanced.php:44
+msgid "Select an item"
+msgstr "選取項目"
+
+#: inc/fields/media.php:29
+msgctxt "media"
+msgid "Select Files"
+msgstr "選取檔案"
+
+#: inc/fields/media.php:31
+msgctxt "media"
+msgid "Drop files here to upload"
+msgstr "請將檔案拖放至這裡上傳"
+
+#: inc/fields/taxonomy.php:84
+msgid "Select a term"
+msgstr "選取分類法詞彙"
+
+#: inc/fields/media.php:26
+msgctxt "media"
+msgid "No Title"
+msgstr "無標題"
+
+#: inc/fields/media.php:20
+msgctxt "media"
+msgid "+ Add Media"
+msgstr "+ 新增媒體"
+
+#: inc/fields/media.php:23
+msgctxt "media"
+msgid "Remove"
+msgstr "移除"
+
+#: inc/fields/media.php:24
+msgctxt "media"
+msgid "Edit"
+msgstr "編輯"
+
+#: inc/fields/media.php:25
+msgctxt "media"
+msgid "View"
+msgstr "檢視"
+
+#: inc/fields/media.php:21
+msgctxt "media"
+msgid " file"
+msgstr " 個檔案"
+
+#: inc/fields/media.php:22
+msgctxt "media"
+msgid " files"
+msgstr " 個檔案"
+
+#: inc/field.php:309
+msgid "+ Add more"
+msgstr "+ 新增更多項目"
+
+#. Plugin Name of the plugin
+#: meta-box.php src/Dashboard/Dashboard.php:65 src/Dashboard/Dashboard.php:66
+#: src/Integrations/Block.php:12 src/Integrations/Bricks.php:10
+#: src/Integrations/Elementor.php:13 src/Integrations/Oxygen.php:14
+msgid "Meta Box"
+msgstr "Meta Box"
+
+#: src/Dashboard/content.php:51
+msgid "Documentation"
+msgstr "使用說明"
+
+#: inc/fields/autocomplete.php:14 inc/fields/autocomplete.php:79
+#: inc/fields/autocomplete.php:91
+msgid "Delete"
+msgstr "刪除"
+
+#: inc/fields/button.php:28
+msgid "Click me"
+msgstr "點擊這裡"
+
+#: inc/fields/checkbox.php:43
+msgid "Yes"
+msgstr "是"
+
+#: inc/fields/checkbox.php:43
+msgid "No"
+msgstr "否"
+
+#: inc/fields/file-input.php:17
+msgid "Select File"
+msgstr "選取檔案"
+
+#: inc/fields/file-input.php:46 inc/fields/select.php:80
+msgid "Select"
+msgstr "選取"
+
+#: inc/fields/file-input.php:48
+msgid "Remove"
+msgstr "移除"
+
+#. Translators: %d is the number of files in singular form.
+#: inc/fields/file.php:15
+msgid "You may only upload maximum %d file"
+msgstr "使用者最多只能上傳 %d 個檔案。"
+
+#. Translators: %d is the number of files in plural form.
+#: inc/fields/file.php:17
+msgid "You may only upload maximum %d files"
+msgstr "使用者最多只能上傳 %d 個檔案。"
+
+#: inc/fields/file.php:61
+msgid "Error: Cannot delete file"
+msgstr "錯誤: 無法刪除檔案。"
+
+#: inc/fields/file.php:86
+msgctxt "file upload"
+msgid "+ Add new file"
+msgstr "+ 新增檔案"
+
+#: inc/fields/file.php:166
+msgctxt "file upload"
+msgid "Delete"
+msgstr "刪除"
+
+#: inc/fields/file.php:167
+msgctxt "file upload"
+msgid "Edit"
+msgstr "編輯"
+
+#: inc/fields/post.php:69
+msgid "Select a post"
+msgstr "選取文章"
+
+#. Translators: %s is the post singular label.
+#. Translators: %s is the taxonomy singular label.
+#: inc/fields/post.php:75 inc/fields/taxonomy.php:88
+msgid "Select a %s"
+msgstr "選取 [%s]"
+
+#: inc/fields/user.php:75
+msgid "Select a user"
+msgstr "選取使用者"
+
+#: inc/validation.php:66
+msgid "Please correct the errors highlighted below and try again."
+msgstr "請修正以下標示的錯誤並再試一次。"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: meta-box.php
+msgid "https://metabox.io"
+msgstr "https://metabox.io"
+
+#: inc/fields/key-value.php:79
+msgid "Key"
+msgstr "索引碼"
+
+#: inc/fields/key-value.php:80
+msgid "Value"
+msgstr "值"
+
+#: inc/fields/oembed.php:18
+msgid "Embed HTML not available."
+msgstr "嵌入 HTML 無法使用。"
+
+#: inc/fields/select.php:80
+msgid "All"
+msgstr "全部"
+
+#: inc/fields/select.php:80
+msgid "None"
+msgstr "無"

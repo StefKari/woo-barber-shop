@@ -1,0 +1,191 @@
+# Translation of Plugins - Product Addons for Woocommerce - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - Product Addons for Woocommerce - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-03-24 20:16:24+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-alpha.1\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - Product Addons for Woocommerce - Stable (latest release)\n"
+
+#: includes/class-wcpa-front-end.php:224
+msgid "WCPA fields will show only if product has set price"
+msgstr "WCPA velden worden alleen getoond als product een ingestelde prijs heeft"
+
+#: includes/class-wcpa-backend.php:271 includes/class-wcpa-front-end.php:172
+msgid "Add New Form"
+msgstr "Voeg nieuw formulier toe"
+
+#: includes/class-wcpa-migration.php:33
+msgid "<strong>Woocommerce Custom Product Addons</strong> found data from some old version, Please fix this by going <a href=\""
+msgstr "<strong>Woocommerce Custom Product Addons</strong> heeft gegevens gevonden van een oude versie, herstel dit door naar <a href=\""
+
+#: includes/class-wcpa-product-meta.php:75
+msgid "Configurations"
+msgstr "Configuraties"
+
+#: includes/views/settings-main.php:69
+msgid "Load form in recency order"
+msgstr "Laad formulier op volgorde van nieuwheid"
+
+#: includes/views/settings-main.php:78
+msgid "If a product has assigned multiple forms, it will be loaded based on form created date"
+msgstr "Als een product meerdere formulieren toegewezen heeft, wordt het laden gebaseerd op de datum waarop formulier gemaakt is"
+
+#: includes/class-wcpa-backend.php:247
+msgid "Duplicate Form"
+msgstr "Dupliceer formulier"
+
+#: includes/class-wcpa-backend.php:187 includes/translations.php:19
+msgid "Copy"
+msgstr "Kopieer"
+
+#: includes/class-wcpa-product-meta.php:57
+msgid "Select Form"
+msgstr "Selecteer formulier"
+
+#: includes/class-wcpa-product-meta.php:54
+msgid "You can manage form fields from base language only."
+msgstr "Je kunt formuliervelden alleen beheren vanuit de standaard taal."
+
+#: includes/views/form-edit.php:14
+msgid "You can't create new form in current language (%s). Please switch to your default language (%s) and try again"
+msgstr "Je kunt geen formulier maken in huidige taal (%s). Schakel om naar je standaard taal (%s) en probeer opnieuw"
+
+#: includes/views/form-edit.php:27
+msgid "You can use this editor only for translating Labels, Values, Help Text, Placeholder and Conditional logic value. All the other configurations and parameters will be populating from the original form."
+msgstr "Je kunt deze editor alleen gebruiken voor het vertalen van labels, waarden, helptekst, placeholder en conditionele logische waarden. Alle andere configuraties en parameters worden ingevuld vanuit het originele formulier."
+
+#. Author of the plugin
+msgid "Acowebs"
+msgstr "Acowebs"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://acowebs.com"
+msgstr "https://acowebs.com"
+
+#. Plugin Name of the plugin
+msgid "WooCommerce Custom Product Addons (Free)"
+msgstr "WooCommerce Custom Product Addons (Gratis)"
+
+#: includes/views/settings-migration.php:34
+msgid "Migrate Now"
+msgstr "Migreer nu"
+
+#: includes/views/order-meta-line-item.php:37
+#: includes/views/order-meta-line-item.php:71
+msgid "Delete item"
+msgstr "Verwijder item"
+
+#: includes/translations.php:58 includes/translations.php:64
+#: includes/translations.php:110 includes/translations.php:124
+#: includes/views/order-meta-line-item.php:7
+msgid "Value"
+msgstr "Waarde"
+
+#: includes/class-wcpa-settings.php:87
+msgid "Premium version"
+msgstr "Premium versie"
+
+#: includes/class-wcpa-settings.php:85
+msgid "Settings"
+msgstr "Instellingen"
+
+#: includes/class-wcpa-form.php:205
+msgid "Field %s is required"
+msgstr "Veld %s is verplicht"
+
+#: includes/class-wcpa-backend.php:280 includes/class-wcpa-front-end.php:181
+msgid "Parent %s"
+msgstr "Hoofd %s"
+
+#: includes/class-wcpa-backend.php:279 includes/class-wcpa-front-end.php:180
+msgid "No %s Found In Trash"
+msgstr "Geen %s in prullenbak gevonden"
+
+#: includes/class-wcpa-backend.php:278 includes/class-wcpa-front-end.php:179
+msgid "No %s Found"
+msgstr "Geen %s gevonden"
+
+#: includes/class-wcpa-backend.php:277 includes/class-wcpa-front-end.php:178
+msgid "Search %s"
+msgstr "Zoek %s"
+
+#: includes/class-wcpa-backend.php:276 includes/class-wcpa-front-end.php:177
+msgid "View %s"
+msgstr "Bekijk %s"
+
+#: includes/class-wcpa-backend.php:274 includes/class-wcpa-front-end.php:175
+msgid "New %s"
+msgstr "Nieuw %s"
+
+#: includes/class-wcpa-backend.php:273 includes/class-wcpa-front-end.php:174
+msgid "Edit %s"
+msgstr "Bewerk %s"
+
+#: includes/class-wcpa-backend.php:272 includes/class-wcpa-front-end.php:173
+msgid "Add New %s"
+msgstr "Voeg nieuw %s toe"
+
+#: includes/class-wcpa-settings.php:86
+msgid "Create Forms"
+msgstr "Maak formulieren"
+
+#: includes/views/settings-main.php:32
+msgid "Display custom fields data in "
+msgstr "Toon gegevens van aangepaste velden in"
+
+#. Description of the plugin
+msgid "WooCommerce Product add-on plugin. Add custom fields to your WooCommerce product page. With an easy-to-use Custom Form Builder, now you can add extra product options quickly."
+msgstr "WooCommerce Product add-on plugin. Voeg aangepaste velden toe aan je WooCommerce product pagina. Met de eenvoudig te gebruiken formulier bouwer kun je snel extra velden toevoegen."
+
+#: includes/views/settings-migration.php:30
+msgid "Found some data from old version of this plugin, You can migrate the old data to compatible with new plugin by clicking the migrate now button below "
+msgstr "Gegevens van een oude versie van deze plugin gevonden. Je kunt deze gegevens naar de nieuwe versie migreren door op de migreer nu knop te klikken."
+
+#: includes/views/settings-main.php:19
+msgid "Add to cart button text"
+msgstr "In winkelmand knop tekst"
+
+#: includes/views/settings-main.php:25
+msgid "Add to cart button text in archive/product listing page in case product has additional fields"
+msgstr "In winkelmand knop tekst op archief/product-pagina als product extra velden heeft"
+
+#: includes/class-wcpa-backend.php:275 includes/class-wcpa-front-end.php:176
+msgid "Custom Product Addons"
+msgstr "Aangepaste product add-ons"
+
+#: includes/views/settings-main.php:57
+msgid "Show in Order"
+msgstr "Toon in bestelling"
+
+#: includes/views/settings-main.php:49
+msgid "Show in Checkout"
+msgstr "Toon bij afrekenen"
+
+#: includes/views/settings-main.php:41
+msgid "Show in cart"
+msgstr "Toon in winkelmand"
+
+#: includes/views/settings-migration.php:13
+msgid "Custom Product Addons Migration"
+msgstr "Aangepaste product add-ons migratie"
+
+#: includes/class-wcpa-product-meta.php:18
+msgid "Custom Product Options"
+msgstr "Aangepaste product opties"
+
+#: includes/class-wcpa-backend.php:355
+msgid "Product Forms"
+msgstr "Product formulieren"
+
+#: includes/class-wcpa-backend.php:456 includes/class-wcpa-backend.php:466
+#: includes/class-wcpa-customer.php:52 includes/class-wcpa-customer.php:61
+#: includes/class-wcpa-ml.php:343 includes/class-wcpa-ml.php:352
+#: includes/class-wcpa-settings.php:175 includes/class-wcpa-settings.php:185
+msgid "Cheatin&#8217; huh?"
+msgstr "Valsspelen, hé?"

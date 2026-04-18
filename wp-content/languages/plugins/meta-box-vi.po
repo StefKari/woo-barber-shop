@@ -1,0 +1,883 @@
+# Translation of Plugins - Meta Box - Stable (latest release) in Vietnamese
+# This file is distributed under the same license as the Plugins - Meta Box - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-03-29 08:15:18+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: vi_VN\n"
+"Project-Id-Version: Plugins - Meta Box - Stable (latest release)\n"
+
+#: src/Dashboard/Dashboard.php:264
+msgid "Error installing plugin. Please try again."
+msgstr "Lỗi khi cài đặt plugin. Vui lòng thử lại."
+
+#: src/Dashboard/Dashboard.php:185
+msgid "Activating..."
+msgstr "Đang kích hoạt..."
+
+#: src/Dashboard/Dashboard.php:184
+msgid "Activate"
+msgstr "Kích hoạt"
+
+#: src/Dashboard/Dashboard.php:177 src/Dashboard/Dashboard.php:186
+#: src/Dashboard/Dashboard.php:192
+msgid "Active"
+msgstr "Đã kích hoạt"
+
+#: src/Dashboard/Dashboard.php:176
+msgid "Installing..."
+msgstr "Đang cài đặt..."
+
+#: src/Dashboard/Dashboard.php:175
+msgid "Install"
+msgstr "Cài đặt"
+
+#: src/Dashboard/content.php:664
+msgid "Gettings news..."
+msgstr "Đang tải tin tức..."
+
+#: src/Dashboard/content.php:663 src/Dashboard/Dashboard.php:291
+msgid "No items available"
+msgstr "Không có mục nào khả dụng"
+
+#: src/Dashboard/content.php:652
+msgid "Submit a review"
+msgstr "Gửi đánh giá"
+
+#: src/Dashboard/content.php:650
+msgid "Are you are enjoying Meta Box? We would love to hear your feedback."
+msgstr "Bạn có hài lòng với Meta Box không? Chúng tôi rất muốn nghe phản hồi của bạn."
+
+#: src/Dashboard/content.php:648
+msgid "Leave us a review"
+msgstr "Để lại đánh giá của bạn"
+
+#: src/Dashboard/content.php:641
+msgid "Join our Facebook Group"
+msgstr "Tham gia nhóm Facebook của chúng tôi"
+
+#: src/Dashboard/content.php:639
+msgid "Share opinions, ask questions and help each other on our Meta Box community!"
+msgstr "Chia sẻ ý kiến, đặt câu hỏi và giúp đỡ lẫn nhau trong cộng đồng Meta Box của chúng tôi!"
+
+#: src/Dashboard/content.php:637
+msgid "Join the community"
+msgstr "Tham gia cộng đồng"
+
+#: src/Dashboard/content.php:614
+msgid "WordPress Optimizations & Tweaks"
+msgstr "Tối ưu hóa & tinh chỉnh WordPress"
+
+#: src/Dashboard/content.php:608
+msgid "Fast & Automated WordPress SEO Plugin"
+msgstr "Plugin SEO WordPress nhanh chóng & tự động"
+
+#: src/Dashboard/content.php:600
+msgid "Recommended plugins"
+msgstr "Plugin được đề xuất"
+
+#: src/Dashboard/content.php:590
+msgid "If you have any questions, need a hand with a technical issue, or just want to say hi, we've got you covered. Get in touch with us and we'll be happy to assist you!"
+msgstr "Nếu bạn có bất kỳ câu hỏi nào, cần trợ giúp về vấn đề kỹ thuật, hoặc chỉ muốn chào hỏi, chúng tôi luôn sẵn sàng hỗ trợ bạn. Hãy liên hệ với chúng tôi và chúng tôi sẽ rất vui được giúp đỡ bạn!"
+
+#: src/Dashboard/content.php:582
+msgid "Upgrade Now"
+msgstr "Nâng cấp ngay"
+
+#: src/Dashboard/content.php:579
+msgid "Priority support"
+msgstr "Hỗ trợ ưu tiên"
+
+#: src/Dashboard/content.php:578
+msgid "Submit & manage posts on the frontend"
+msgstr "Gửi và quản lý bài viết trên giao diện người dùng"
+
+#: src/Dashboard/content.php:577
+msgid "Create login, register & edit profile pages"
+msgstr "Tạo trang đăng nhập, đăng ký & chỉnh sửa hồ sơ"
+
+#: src/Dashboard/content.php:576
+msgid "Create custom blocks with low code"
+msgstr "Tạo các khối tùy chỉnh với mã hóa thấp"
+
+#: src/Dashboard/content.php:575
+msgid "Custom tables to boost performance"
+msgstr "Bảng tùy chỉnh để tăng hiệu suất"
+
+#: src/Dashboard/content.php:574
+msgid "More location rules & conditional logic"
+msgstr "Thêm nhiều quy tắc vị trí & logic điều kiện"
+
+#: src/Dashboard/content.php:573
+msgid "Organize fields into groups (repeater)"
+msgstr "Sắp xếp các trường thành nhóm (lặp lại)"
+
+#: src/Dashboard/content.php:570
+msgid "Wanna advanced features?"
+msgstr "Muốn các tính năng nâng cao?"
+
+#: src/Dashboard/content.php:558
+msgid "Get access to the all-in-one version of Meta Box with full of top-notch features for building robust and dynamic websites."
+msgstr "Truy cập vào phiên bản tất cả trong một của Meta Box với đầy đủ các tính năng hàng đầu để xây dựng các trang web mạnh mẽ và năng động."
+
+#. Translators: %s - Meta Box AIO.
+#: src/Dashboard/content.php:555
+msgid "Do more with %s"
+msgstr "Làm nhiều hơn với %s"
+
+#: src/Dashboard/content.php:527
+msgid "Licensing management system, including sub-licensing"
+msgstr "Hệ thống quản lý giấy phép, bao gồm cấp phép con"
+
+#: src/Dashboard/content.php:517
+msgid "UI features: columns, tooltips, tabs"
+msgstr "Tính năng giao diện người dùng: cột, chú giải công cụ, tab"
+
+#: src/Dashboard/content.php:512
+msgid "Display fields in admin columns"
+msgstr "Hiển thị các trường trong cột quản trị"
+
+#: src/Dashboard/content.php:507
+msgid "Create custom Gutenberg blocks"
+msgstr "Tạo khối Gutenberg tùy chỉnh"
+
+#: src/Dashboard/content.php:502
+msgid "Save post/term meta to custom tables"
+msgstr "Lưu meta bài viết/thuật ngữ vào bảng tùy chỉnh"
+
+#: src/Dashboard/content.php:497
+msgid "Create templates and displaying fields with views"
+msgstr "Tạo mẫu và hiển thị trường với chế độ xem"
+
+#: src/Dashboard/content.php:492
+msgid "Frontend submission forms and dashboard"
+msgstr "Mẫu gửi trên đầu trang và bảng điều khiển"
+
+#: src/Dashboard/content.php:487
+msgid "Toogle fields or field groups with conditional logic"
+msgstr "Bật/tắt trường hoặc nhóm trường với logic điều kiện"
+
+#: src/Dashboard/content.php:482
+msgid "Advanced location rules for field groups"
+msgstr "Quy tắc vị trí nâng cao cho nhóm trường"
+
+#: src/Dashboard/content.php:472
+msgid "Create custom content models and save their data to custom tables"
+msgstr "Tạo mô hình nội dung tùy chỉnh và lưu dữ liệu của chúng vào bảng tùy chỉnh"
+
+#: src/Dashboard/content.php:467
+msgid "Create user profile"
+msgstr "Tạo hồ sơ người dùng"
+
+#: src/Dashboard/content.php:462
+msgid "Create Customizer sections & panels"
+msgstr "Tạo các mục & bảng điều khiển tùy chỉnh"
+
+#: src/Dashboard/content.php:452
+msgid "Create custom fields for users"
+msgstr "Tạo các trường tùy chỉnh cho người dùng"
+
+#: src/Dashboard/content.php:447
+msgid "Create custom fields for taxonomies"
+msgstr "Tạo các trường tùy chỉnh cho phân loại"
+
+#: src/Dashboard/content.php:442
+msgid "Auto update"
+msgstr "Tự động cập nhật"
+
+#: src/Dashboard/content.php:437
+msgid "Add custom fields to comments in WordPress"
+msgstr "Thêm các trường tùy chỉnh vào bình luận trong WordPress"
+
+#: src/Dashboard/content.php:432
+msgid "Limit text length"
+msgstr "Giới hạn độ dài văn bản"
+
+#: src/Dashboard/content.php:427
+msgid "Get/set meta values with REST API"
+msgstr "Lấy/đặt giá trị meta bằng REST API"
+
+#: src/Dashboard/content.php:422
+msgid "Relationships"
+msgstr "Mối quan hệ"
+
+#: src/Dashboard/content.php:417
+msgid "Intergrations with Elementor, Divi, FacetWP, Yoast SEO,..."
+msgstr "Tích hợp với Elementor, Divi, FacetWP, Yoast SEO, ..."
+
+#: src/Dashboard/content.php:412
+msgid "Migration from ACF, Pods, Toolset"
+msgstr "Di chuyển từ ACF, Pods, Toolset"
+
+#: src/Dashboard/content.php:407
+msgid "Create custom fields with UI"
+msgstr "Tạo các trường tùy chỉnh với giao diện người dùng"
+
+#: src/Dashboard/content.php:402
+msgid "Create custom post types & taxonomies"
+msgstr "Tạo các kiểu bài viết & phân loại tùy chỉnh"
+
+#: src/Dashboard/content.php:397
+msgid "The Meta Box framework"
+msgstr "Khung Meta Box"
+
+#: src/Dashboard/content.php:394
+msgid "Paid"
+msgstr "Trả phí"
+
+#: src/Dashboard/content.php:393
+msgid "Free"
+msgstr "Miễn phí"
+
+#: src/Dashboard/content.php:392
+msgid "Pricing"
+msgstr "Giá cả"
+
+#: src/Dashboard/content.php:385
+msgid "Feature"
+msgstr "Tính năng"
+
+#: src/Dashboard/content.php:379 src/Dashboard/content.php:560
+msgid "Upgrade now"
+msgstr "Nâng cấp ngay"
+
+#: src/Dashboard/content.php:376
+msgid "An all-in-one plugin that provides all free & pro Meta Box extensions for building powerful and dynamic WordPress websites!"
+msgstr "Một plugin tất cả trong một cung cấp tất cả các tiện ích mở rộng Meta Box miễn phí & chuyên nghiệp để xây dựng các trang web WordPress mạnh mẽ và năng động!"
+
+#. Translators: %s - Meta Box AIO.
+#: src/Dashboard/content.php:373
+msgid "Get access to %s"
+msgstr "Truy cập %s"
+
+#: src/Dashboard/content.php:361
+msgid "View all tutorials"
+msgstr "Xem tất cả hướng dẫn"
+
+#: src/Dashboard/content.php:354
+msgid "How to create listings and use Elementor to show and filter them."
+msgstr "Cách tạo danh sách và sử dụng Elementor để hiển thị và lọc chúng."
+
+#: src/Dashboard/content.php:349 src/Dashboard/content.php:352
+msgid "Creating a listing site with Meta Box and Elementor"
+msgstr "Tạo trang web danh sách với Meta Box và Elementor"
+
+#: src/Dashboard/content.php:332
+msgid "How to export custom fields settings and data and import them into another site."
+msgstr "Cách xuất cài đặt và dữ liệu trường tùy chỉnh và nhập chúng vào một trang web khác."
+
+#: src/Dashboard/content.php:327 src/Dashboard/content.php:330
+msgid "Export and import custom fields"
+msgstr "Xuất và nhập trường tùy chỉnh"
+
+#: src/Dashboard/content.php:310
+msgid "How to create a post type with custom fields and show them with Bricks."
+msgstr "Cách tạo kiểu bài viết với các trường tùy chỉnh và hiển thị chúng bằng Bricks."
+
+#: src/Dashboard/content.php:305 src/Dashboard/content.php:308
+msgid "Creating a recipe with Meta Box and Bricks"
+msgstr "Tạo công thức nấu ăn với Meta Box và Bricks"
+
+#: src/Dashboard/content.php:288
+msgid "How to query, filter and show posts by taxonomies and by custom fields."
+msgstr "Cách truy vấn, lọc và hiển thị bài viết theo phân loại và theo trường tùy chỉnh."
+
+#: src/Dashboard/content.php:283 src/Dashboard/content.php:286
+msgid "Filtering posts by custom fields and taxonomies"
+msgstr "Lọc bài viết theo trường tùy chỉnh và phân loại"
+
+#: src/Dashboard/content.php:266
+msgid "How to create featured images for categories and show them on the frontend."
+msgstr "Cách tạo hình ảnh nổi bật cho các danh mục và hiển thị chúng trên giao diện."
+
+#: src/Dashboard/content.php:261 src/Dashboard/content.php:264
+msgid "Creating category thumbnails"
+msgstr "Tạo hình thu nhỏ danh mục"
+
+#: src/Dashboard/content.php:244
+msgid "Understanding custom fields and how to create them with Meta Box."
+msgstr "Hiểu về trường tùy chỉnh và cách tạo chúng với Meta Box."
+
+#: src/Dashboard/content.php:239 src/Dashboard/content.php:242
+msgid "Creating and configure custom fields"
+msgstr "Tạo và cấu hình trường tùy chỉnh"
+
+#: src/Dashboard/content.php:222
+msgid "If you want to change a field ID after entering data, here is the guide."
+msgstr "Nếu bạn muốn thay đổi ID trường sau khi nhập dữ liệu, đây là hướng dẫn."
+
+#: src/Dashboard/content.php:217 src/Dashboard/content.php:220
+msgid "Changing the ID of a field"
+msgstr "Thay đổi ID của trường"
+
+#: src/Dashboard/content.php:200
+msgid "Step-by-step guide to create custom post types and custom taxonomies."
+msgstr "Hướng dẫn từng bước để tạo kiểu bài viết tùy chỉnh và phân loại tùy chỉnh."
+
+#: src/Dashboard/content.php:195 src/Dashboard/content.php:198
+msgid "Creating post types and taxonomies"
+msgstr "Tạo kiểu bài viết và phân loại"
+
+#: src/Dashboard/content.php:192 src/Dashboard/content.php:214
+#: src/Dashboard/content.php:236 src/Dashboard/content.php:258
+#: src/Dashboard/content.php:280 src/Dashboard/content.php:302
+#: src/Dashboard/content.php:324 src/Dashboard/content.php:346
+msgid "Click to view the video version"
+msgstr "Nhấp để xem phiên bản video"
+
+#: src/Dashboard/content.php:177
+msgid "Cool"
+msgstr "Tuyệt vời"
+
+#: src/Dashboard/content.php:176 src/Dashboard/Dashboard.php:55
+msgid "Upgrade"
+msgstr "Nâng cấp"
+
+#: src/Dashboard/content.php:160
+msgid "For global settings of your website"
+msgstr "Đối với cài đặt toàn cục của trang web của bạn"
+
+#: src/Dashboard/content.php:159
+msgid "Create a settings page"
+msgstr "Tạo trang cài đặt"
+
+#: src/Dashboard/content.php:149
+msgid "To output fields on the frontend"
+msgstr "Để xuất các trường trên giao diện"
+
+#: src/Dashboard/content.php:148
+msgid "Create a view"
+msgstr "Tạo chế độ xem"
+
+#: src/Dashboard/content.php:137
+msgid "To establish connections between posts"
+msgstr "Để thiết lập kết nối giữa các bài viết"
+
+#: src/Dashboard/content.php:136
+msgid "Create a relationship"
+msgstr "Tạo mối quan hệ"
+
+#: src/Dashboard/content.php:128
+msgid "To add custom fields to your posts"
+msgstr "Để thêm trường tùy chỉnh vào bài viết của bạn"
+
+#: src/Dashboard/content.php:127
+msgid "Create a field group"
+msgstr "Tạo nhóm trường"
+
+#: src/Dashboard/content.php:118
+msgid "To group or categorize your posts"
+msgstr "Để nhóm hoặc phân loại bài viết của bạn"
+
+#: src/Dashboard/content.php:117
+msgid "Create a taxonomy"
+msgstr "Tạo phân loại"
+
+#: src/Dashboard/content.php:109
+msgid "For a new type of content on your website"
+msgstr "Đối với một loại nội dung mới trên trang web của bạn"
+
+#: src/Dashboard/content.php:108
+msgid "Create a post type"
+msgstr "Tạo kiểu bài viết"
+
+#: src/Dashboard/content.php:91
+msgid "Get started"
+msgstr "Bắt đầu"
+
+#. Translators: %s - Meta Box (plugin name).
+#: src/Dashboard/content.php:85
+msgid "%s is a powerful, lightweight WordPress plugin for creating custom post types, fields, relationships, and more. With a user-friendly interface and flexible options, it simplifies dynamic content creation without complex coding. Free and reliable, it's perfect for beginners and experts alike."
+msgstr "%s là một plugin WordPress mạnh mẽ, nhẹ nhàng để tạo kiểu bài viết tùy chỉnh, trường, mối quan hệ và hơn thế nữa. Với giao diện thân thiện với người dùng và các tùy chọn linh hoạt, nó đơn giản hóa việc tạo nội dung động mà không cần mã hóa phức tạp. Miễn phí và đáng tin cậy, nó hoàn hảo cho cả người mới bắt đầu và chuyên gia."
+
+#. Translators: %s - current user display name.
+#: src/Dashboard/content.php:73
+msgid "Hello %s,"
+msgstr "Chào %s,"
+
+#: src/Dashboard/content.php:56 src/Dashboard/content.php:667
+msgid "What's new?"
+msgstr "Có gì mới?"
+
+#: src/Dashboard/content.php:19
+msgid "No results found."
+msgstr "Không tìm thấy kết quả."
+
+#: src/Dashboard/content.php:18
+msgid "Searching..."
+msgstr "Đang tìm kiếm..."
+
+#: src/Dashboard/content.php:14
+msgid "Need some help? Search here..."
+msgstr "Cần giúp đỡ? Tìm kiếm ở đây..."
+
+#: inc/fields/icon.php:226
+msgid "Select an icon"
+msgstr "Chọn một biểu tượng"
+
+#: inc/fields/user.php:189
+msgid "Add New User"
+msgstr "Thêm thành viên mới"
+
+#: src/Dashboard/content.php:171
+msgid "Tutorials"
+msgstr "Hướng dẫn"
+
+#: src/Updater/Settings.php:79
+msgid "Your license key is <b style=\"color: #00a32a\">active</b>."
+msgstr "Giấy phép của bạn đang <b style=\"color: #00a32a\">hoạt động</b>."
+
+#: src/Updater/Settings.php:78
+msgid "Your license key is <b style=\"color: #d63638\">expired</b>."
+msgstr "Giấy phép của bạn đã <b style=\"color: #d63638\">hết hạn</b>."
+
+#: src/Updater/Settings.php:76 src/Updater/Settings.php:77
+msgid "Your license key is <b style=\"color: #d63638\">invalid</b>."
+msgstr "Giấy phép của bạn <b style=\"color: #d63638\">không hợp lệ</b>."
+
+#: inc/fields/post.php:140 inc/fields/taxonomy.php:134 inc/fields/user.php:135
+msgid "(No title)"
+msgstr "(Không tiêu đề)"
+
+#: inc/meta-box.php:306
+msgid "Meta Box Title"
+msgstr "Tiêu đề Meta Box"
+
+#: inc/fields/background.php:123
+msgid "-- Size --"
+msgstr "-- Kích thước --"
+
+#: inc/fields/background.php:109
+msgid "-- Attachment --"
+msgstr "-- Đính kèm --"
+
+#: inc/fields/background.php:89
+msgid "-- Position --"
+msgstr "-- Vị trí --"
+
+#: inc/fields/background.php:73
+msgid "-- Repeat --"
+msgstr "-- Lặp lại --"
+
+#: src/Dashboard/content.php:477
+msgid "Organize custom fields into repeatable groups"
+msgstr "Sắp xếp các trường tùy chỉnh thành các nhóm có thể lặp lại"
+
+#: inc/core.php:13
+msgid "Docs"
+msgstr "Tài liệu hướng dẫn"
+
+#: src/Updater/Notification.php:111
+msgid "Update License"
+msgstr "Cập nhật giấy phép"
+
+#: src/Updater/Notification.php:111
+msgid "Activate License"
+msgstr "Kích hoạt giấy phép"
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:95
+msgid "Your license key is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a>."
+msgstr "Giấy phép của bạn <b>đã hết hạn</b>. Vui lòng <a href=\"%3$s\" target=\"_blank\">gia hạn giấy phép của bạn</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:91 src/Updater/Notification.php:93
+msgid "Your license key is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Giấy phép của bạn <b>không hợp lệ</b>. Vui lòng <a href=\"%1$s\">cập nhật giấy phép của bạn</a> hoặc <a href=\"%2$s\" target=\"_blank\">lấy một giấy phép mới tại đây</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:89
+msgid "Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Vui lòng <a href=\"%1$s\">nhập giấy phép của bạn</a> hoặc <a href=\"%2$s\" target=\"_blank\">lấy một giấy phép mới ở đây</a>."
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:65
+msgid "Your license key for Meta Box is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a> to get automatic updates and premium support."
+msgstr "Giấy phép của bạn cho Meta Box đã <b>hết hạn</b>. Vui lòng <a href=\"%3$s\" target=\"_blank\">gia hạn giấy phép của bạn</a> để nhận cập nhật tự động và hỗ trợ cao cấp."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:61 src/Updater/Notification.php:63
+msgid "Your license key for Meta Box is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one</a> to enable automatic updates."
+msgstr "Giấy phép của bạn cho Meta Box <b>không hợp lệ</b>. Vui lòng <a href=\"%1$s\">cập nhật giấy phép của bạn</a> hoặc <a href=\"%2$s\" target=\"_blank\">lấy một cái mới</a> để bật cập nhật tự động."
+
+#: src/Updater/Checker.php:124
+msgid "UPDATE UNAVAILABLE! Please enter a valid license key to enable automatic updates."
+msgstr "CẬP NHẬT KHÔNG CÓ SẴN! Vui lòng nhập một giấy phép hợp lệ để bật cập nhật tự động."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:134
+msgid "Invalid license. Please <a href=\"%1$s\" target=\"_blank\">check again</a> or <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "Giấy phép không hợp lệ. Vui lòng <a href=\"%1$s\" target=\"_blank\">kiểm tra lại</a> hoặc <a href=\"%2$s\" target=\"_blank\">lấy giấy phép mới tại đây</a>."
+
+#. Translators: %s - URL to the My Account page.
+#: src/Updater/Settings.php:128
+msgid "License expired. Please renew on the <a href=\"%s\" target=\"_blank\">My Account</a> page on metabox.io website."
+msgstr "Giấy phép đã hết hạn. Vui lòng gia hạn trên trang <a href=\"%s\" target=\"_blank\">Tài khoản của tôi</a> trên trang web metabox.io."
+
+#: src/Updater/Settings.php:125
+msgid "Your license is activated."
+msgstr "Giấy phép của bạn đã được kích hoạt."
+
+#: src/Updater/Settings.php:123
+msgid "Something wrong with the connection to metabox.io. Please try again later."
+msgstr "Có vấn đề với kết nối đến metabox.io. Vui lòng thử lại sau."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:60
+msgid "To get the license key, visit the <a href=\"%1$s\" target=\"_blank\">My Account</a> page on metabox.io website. If you have not purchased any extension yet, please <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "Để nhận giấy phép, hãy truy cập trang <a href=\"%1$s\" target=\"_blank\">Tài khoản của tôi</a> trên trang web metabox.io. Nếu bạn chưa mua bất kỳ tiện ích mở rộng nào, vui lòng <a href=\"%2$s\" target=\"_blank\">lấy giấy phép mới ở đây</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:59
+msgid "You have not set your Meta Box license key yet, which means you are missing out on automatic updates and support! Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Bạn chưa có giấy phép của Meta Box, điều đó khiến bạn không được cập nhật tự động và có sự hỗ trợ. Vui lòng <a href=\"%1$s\">điền giấy phép của bạn</a> hoặc <a href=\"%2$s\" target=\"_blank\">lấy một giấy phép mới tại đây</a>."
+
+#: src/Updater/Settings.php:92
+msgid "Save Changes"
+msgstr "Lưu thay đổi"
+
+#: src/Updater/Settings.php:72
+msgid "License Key"
+msgstr "Mã giấy phép"
+
+#: src/Updater/Settings.php:55
+msgid "Please enter your license key to enable automatic updates for Meta Box extensions."
+msgstr "Hãy nhập mã giấy phép để được tự động cập nhật cho các tiện ích của Meta Box."
+
+#: src/Updater/Settings.php:39 src/Updater/Settings.php:54
+msgid "Meta Box License"
+msgstr "Giấy phép Meta Box"
+
+#: src/Updater/Settings.php:39
+msgid "License"
+msgstr "Giấy phép"
+
+#: inc/fields/input-list.php:83
+msgid "Toggle All"
+msgstr "Chuyển đổi tất cả"
+
+#: inc/fields/file.php:48
+msgid "Error: Invalid file"
+msgstr "Lỗi: Tệp không hợp lệ"
+
+#: inc/fields/map.php:29 inc/fields/osm.php:16
+msgid "No results found"
+msgstr "Không thấy kết quả nào"
+
+#. Translators: %s - Meta Box (plugin name).
+#: src/Dashboard/content.php:79
+msgid "Welcome to %s,"
+msgstr "Chào mừng đến với %s,"
+
+#: src/Dashboard/Dashboard.php:53 src/Dashboard/Dashboard.php:78
+#: src/Dashboard/Dashboard.php:79
+msgid "Dashboard"
+msgstr "Bảng điều khiển"
+
+#: src/Dashboard/content.php:580
+msgid "And much more!"
+msgstr "Và nhiều hơn nữa"
+
+#: src/Dashboard/content.php:457
+msgid "Create custom settings pages"
+msgstr "Tạo trang cài đặt tuỳ chỉnh"
+
+#: src/Dashboard/content.php:592
+msgid "Go to the support forum"
+msgstr "Truy cập diễn đàn hỗ trợ"
+
+#: src/Dashboard/content.php:522 src/Dashboard/content.php:588
+msgid "Premium support"
+msgstr "Hỗ trợ cao cấp"
+
+#: inc/fields/switch.php:85
+msgid "Off"
+msgstr "Tắt"
+
+#: inc/fields/switch.php:84
+msgid "On"
+msgstr "Bật"
+
+#: inc/fields/background.php:127
+msgid "Contain"
+msgstr "Chứa"
+
+#: inc/fields/background.php:126
+msgid "Cover"
+msgstr "Phủ"
+
+#: inc/fields/background.php:112
+msgid "Scroll"
+msgstr "Cuộn"
+
+#: inc/fields/background.php:111
+msgid "Fixed"
+msgstr "Cố định"
+
+#: inc/fields/background.php:99
+msgid "Bottom Right"
+msgstr "Góc dưới bên phải"
+
+#: inc/fields/background.php:98
+msgid "Bottom Center"
+msgstr "Ở giữa bên dưới"
+
+#: inc/fields/background.php:97
+msgid "Bottom Left"
+msgstr "Góc dưới bên trái"
+
+#: inc/fields/background.php:96
+msgid "Center Right"
+msgstr "Ở giữa bên phải"
+
+#: inc/fields/background.php:95
+msgid "Center Center"
+msgstr "Chính giữa"
+
+#: inc/fields/background.php:94
+msgid "Center Left"
+msgstr "Ở giữa bên trái"
+
+#: inc/fields/background.php:93
+msgid "Top Right"
+msgstr "Góc trên bên phải"
+
+#: inc/fields/background.php:92
+msgid "Top Center"
+msgstr "Ở giữa bên trên"
+
+#: inc/fields/background.php:91
+msgid "Top Left"
+msgstr "Góc trên bên trái"
+
+#: inc/fields/background.php:79 inc/fields/background.php:113
+#: inc/fields/background.php:125
+msgid "Inherit"
+msgstr "Kế thừa"
+
+#: inc/fields/background.php:78
+msgid "Repeat Vertically"
+msgstr "Lặp theo chiều dọc"
+
+#: inc/fields/background.php:77
+msgid "Repeat Horizontally"
+msgstr "Lặp theo chiều ngang"
+
+#: inc/fields/background.php:76
+msgid "Repeat All"
+msgstr "Lặp cả 2 chiều"
+
+#: inc/fields/background.php:75
+msgid "No Repeat"
+msgstr "Không lặp"
+
+#: inc/fields/background.php:61
+msgid "Background Image"
+msgstr "Ảnh nền"
+
+#: inc/fields/sidebar.php:10
+msgid "Select a sidebar"
+msgstr "Chọn một thanh bên"
+
+#: src/Dashboard/content.php:99
+msgid "Getting Started"
+msgstr "Bắt đầu"
+
+#: src/Dashboard/content.php:534
+msgid "Learn more"
+msgstr "Xem thêm"
+
+#. Author of the plugin
+#: meta-box.php
+msgid "MetaBox.io"
+msgstr "MetaBox.io"
+
+#. Description of the plugin
+#: meta-box.php
+msgid "Create custom meta boxes and custom fields in WordPress."
+msgstr "Tạo các trường tùy biến trong WordPress."
+
+#: inc/fields/media.php:30
+msgctxt "media"
+msgid "or"
+msgstr "hoặc"
+
+#: inc/fields/select-advanced.php:44
+msgid "Select an item"
+msgstr "Chọn một mục"
+
+#: inc/fields/media.php:31
+msgctxt "media"
+msgid "Drop files here to upload"
+msgstr "Kéo thả tệp tin vào đây để tải lên"
+
+#: inc/fields/media.php:29
+msgctxt "media"
+msgid "Select Files"
+msgstr "Chọn tệp tin"
+
+#: inc/fields/taxonomy.php:84
+msgid "Select a term"
+msgstr "Chọn một mục"
+
+#: inc/fields/media.php:26
+msgctxt "media"
+msgid "No Title"
+msgstr "Không tiêu đề"
+
+#: inc/fields/media.php:22
+msgctxt "media"
+msgid " files"
+msgstr "file"
+
+#: inc/fields/media.php:21
+msgctxt "media"
+msgid " file"
+msgstr "file"
+
+#: inc/fields/media.php:25
+msgctxt "media"
+msgid "View"
+msgstr "Xem"
+
+#: inc/fields/media.php:24
+msgctxt "media"
+msgid "Edit"
+msgstr "Sửa"
+
+#: inc/fields/media.php:23
+msgctxt "media"
+msgid "Remove"
+msgstr "Xóa"
+
+#: inc/fields/media.php:20
+msgctxt "media"
+msgid "+ Add Media"
+msgstr "+ Thêm file"
+
+#: inc/field.php:309
+msgid "+ Add more"
+msgstr "+ Thêm"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: meta-box.php
+msgid "https://metabox.io"
+msgstr "http://metabox.io"
+
+#. Plugin Name of the plugin
+#: meta-box.php src/Dashboard/Dashboard.php:65 src/Dashboard/Dashboard.php:66
+#: src/Integrations/Block.php:12 src/Integrations/Bricks.php:10
+#: src/Integrations/Elementor.php:13 src/Integrations/Oxygen.php:14
+msgid "Meta Box"
+msgstr "Meta Box"
+
+#: inc/validation.php:66
+msgid "Please correct the errors highlighted below and try again."
+msgstr "Vui lòng sửa các lỗi dưới đây và thử lại"
+
+#: inc/fields/user.php:75
+msgid "Select a user"
+msgstr "Chọn một người dùng"
+
+#: inc/fields/select.php:80
+msgid "None"
+msgstr "Không mục nào"
+
+#: inc/fields/select.php:80
+msgid "All"
+msgstr "Tất cả"
+
+#. Translators: %s is the post singular label.
+#. Translators: %s is the taxonomy singular label.
+#: inc/fields/post.php:75 inc/fields/taxonomy.php:88
+msgid "Select a %s"
+msgstr "Chọn %s"
+
+#: inc/fields/post.php:69
+msgid "Select a post"
+msgstr "Chọn 1 bài viết"
+
+#: inc/fields/oembed.php:18
+msgid "Embed HTML not available."
+msgstr "Mã HTML nhúng đa phương tiện không khả dụng."
+
+#: inc/fields/key-value.php:80
+msgid "Value"
+msgstr "Giá trị"
+
+#: inc/fields/key-value.php:79
+msgid "Key"
+msgstr "Tên"
+
+#: inc/fields/file.php:86
+msgctxt "file upload"
+msgid "+ Add new file"
+msgstr "+ Thêm file mới"
+
+#: inc/fields/file.php:61
+msgid "Error: Cannot delete file"
+msgstr "Lỗi: Không xóa được file"
+
+#. Translators: %d is the number of files in plural form.
+#: inc/fields/file.php:17
+msgid "You may only upload maximum %d files"
+msgstr "Bạn chỉ được phép upload tối đa %d file"
+
+#. Translators: %d is the number of files in singular form.
+#: inc/fields/file.php:15
+msgid "You may only upload maximum %d file"
+msgstr "Bạn chỉ được phép upload tối đa %d file"
+
+#: inc/fields/file-input.php:48
+msgid "Remove"
+msgstr "Xóa"
+
+#: inc/fields/file-input.php:46 inc/fields/select.php:80
+msgid "Select"
+msgstr "Chọn"
+
+#: inc/fields/file-input.php:17
+msgid "Select File"
+msgstr "Chọn file"
+
+#: inc/fields/file.php:167
+msgctxt "file upload"
+msgid "Edit"
+msgstr "Sửa"
+
+#: inc/fields/file.php:166
+msgctxt "file upload"
+msgid "Delete"
+msgstr "Xóa"
+
+#: inc/fields/checkbox.php:43
+msgid "No"
+msgstr "Không"
+
+#: inc/fields/checkbox.php:43
+msgid "Yes"
+msgstr "Có"
+
+#: inc/fields/button.php:28
+msgid "Click me"
+msgstr "Nhấn ngay"
+
+#: inc/fields/autocomplete.php:14 inc/fields/autocomplete.php:79
+#: inc/fields/autocomplete.php:91
+msgid "Delete"
+msgstr "Xóa"
+
+#: src/Dashboard/content.php:51
+msgid "Documentation"
+msgstr "Tài liệu hướng dẫn"

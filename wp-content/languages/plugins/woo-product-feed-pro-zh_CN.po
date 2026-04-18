@@ -1,0 +1,1247 @@
+# Translation of Plugins - Product Feed PRO for WooCommerce - Stable (latest release) in Chinese (China)
+# This file is distributed under the same license as the Plugins - Product Feed PRO for WooCommerce - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2021-03-03 13:08:15+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: zh_CN\n"
+"Project-Id-Version: Plugins - Product Feed PRO for WooCommerce - Stable (latest release)\n"
+
+#: pages/admin/woosea-manage-feed.php:142
+#: pages/admin/woosea-manage-settings.php:114
+msgid "WARNING: Your WP-Cron is disabled"
+msgstr "警告： 您的 WP-Cron 已禁用"
+
+#: pages/admin/woosea-generate-feed-step-1.php:230
+#: pages/admin/woosea-manage-feed.php:328
+msgid "We have got you covered!"
+msgstr "我么罩着你！"
+
+#: pages/admin/woosea-generate-feed-step-0.php:497
+msgid "Refresh only when products changed"
+msgstr "仅在产品更改时刷新"
+
+#: pages/admin/woosea-generate-feed-step-0.php:589
+#: pages/admin/woosea-generate-feed-step-1.php:262
+#: pages/admin/woosea-manage-feed.php:362
+#: pages/admin/woosea-manage-settings.php:774
+msgid "How to use the Polylang feature"
+msgstr "如何使用Polylang功能"
+
+#: pages/admin/woosea-generate-feed-step-0.php:98
+#: pages/admin/woosea-generate-feed-step-0.php:546
+#: pages/admin/woosea-generate-feed-step-1.php:216
+#: pages/admin/woosea-manage-feed.php:128
+#: pages/admin/woosea-manage-feed.php:317
+#: pages/admin/woosea-manage-settings.php:729
+msgid "Polylang support"
+msgstr "Polylang支持"
+
+#: pages/admin/woosea-manage-settings.php:416
+msgid "Content IDS variable products Facebook Pixel:"
+msgstr "内容 IDS 可变产品 Facebook 像素："
+
+#: woocommerce-sea.php:3259
+msgid "Enter the MPN here."
+msgstr "在此处输入 MPN。"
+
+#: pages/admin/woosea-manage-settings.php:295
+msgid "Remove all other shipping classes when free shipping criteria are met (Google Shopping / Facebook only)"
+msgstr "在符合免运费标准时删除其他送货类别（仅限谷歌购物/Facebook）"
+
+#: pages/admin/woosea-generate-feed-step-5.php:110
+msgid "Remove products that did not have sales in the last days"
+msgstr "删除过去几天没有销售的产品"
+
+#: pages/admin/woosea-generate-feed-step-5.php:48
+#: pages/admin/woosea-manage-feed.php:259
+msgid "Conversion & Google Analytics settings"
+msgstr "转换 – 谷歌分析设置"
+
+#: pages/admin/woosea-generate-feed-step-0.php:100
+#: pages/admin/woosea-generate-feed-step-0.php:545
+#: pages/admin/woosea-generate-feed-step-1.php:215
+#: pages/admin/woosea-manage-feed.php:129
+#: pages/admin/woosea-manage-feed.php:316
+#: pages/admin/woosea-manage-settings.php:728
+msgid "Facebook pixel feature"
+msgstr "Facebook 像素功能"
+
+#: pages/admin/woosea-manage-settings.php:462
+msgid "Add Google Dynamic Remarketing Pixel:"
+msgstr "添加谷歌动态再营销代码："
+
+#: pages/admin/woosea-manage-settings.php:386
+msgid "Add Facebook Pixel:"
+msgstr "添加 Facebook 像素："
+
+#: pages/admin/woosea-manage-settings.php:488
+msgid "Change products per batch number (Enable only on advice of our support-team):"
+msgstr "更改每个批号的产品（仅根据我们的支持团队的建议启用）："
+
+#: pages/admin/woosea-manage-settings.php:91
+msgid "Add extra fields to your product (edit) pages so you can add Brands, GTINs, Size, Color and many more fields to your product feeds.<br/><br/>This plugin, by default, only shows a limit amount of the extra fields in the configuration, product edit pages ond filter/rule drop-downs. We have done so for performance reasons and usability. You can however add missing extra fields by enabling them below. After enabling an extra field it shows on the product edit pages and the drop-downs during configuration so you can use them for your product feeds."
+msgstr "在产品（编辑）页面上添加其他字段，以便您可以在商品源中添加品牌，GTIN，尺寸，颜色和更多字段。<br/><br/>默认情况下，此插件仅在配置，过滤器/规则下拉菜单中的产品编辑页面中显示有限数量的额外字段。我们这样做是出于性能原因和可用性。但是，您可以通过在下面启用它们来添加缺少的额外字段。启用额外的字段后，它会显示在产品编辑页面和配置期间的下拉列表中，以便您将其用于产品源。"
+
+#: pages/admin/woosea-manage-settings.php:349
+msgid "Enable logging (Enable only on advice of our support-team):"
+msgstr "启用日志（仅根据支持团队的建议启用）："
+
+#: woocommerce-sea.php:4875
+msgid "Latest Product Feed Pro Tutorials"
+msgstr "最新产品源专业教程"
+
+#: woocommerce-sea.php:3370
+msgid "Enter the product Pattern here."
+msgstr "在此处输入产品模式。"
+
+#: woocommerce-sea.php:3367
+msgid "<br>Pattern"
+msgstr "<br>模式"
+
+#: woocommerce-sea.php:3355
+msgid "Enter the product Material here."
+msgstr "在此处输入产品材料。"
+
+#: woocommerce-sea.php:3352
+msgid "<br>Material"
+msgstr "<br>材料"
+
+#: woocommerce-sea.php:3334
+msgid "Select the gender."
+msgstr "选择您的性别."
+
+#: woocommerce-sea.php:3319
+msgid "Enter the product Size here."
+msgstr "在此处输入产品尺寸。"
+
+#: woocommerce-sea.php:3316
+msgid "<br>Size"
+msgstr "<br>大小"
+
+#: woocommerce-sea.php:3304
+msgid "Enter the product Color here."
+msgstr "在此处输入产品颜色。"
+
+#: woocommerce-sea.php:3301
+msgid "<br>Color"
+msgstr "<br>颜色"
+
+#: woocommerce-sea.php:2803
+msgid "Enter a pattern."
+msgstr "输入模式。"
+
+#: woocommerce-sea.php:2801
+msgid "Pattern"
+msgstr "模式"
+
+#: woocommerce-sea.php:2791
+msgid "Enter a material."
+msgstr "输入材料。"
+
+#: woocommerce-sea.php:2789
+msgid "Material"
+msgstr "材料"
+
+#: woocommerce-sea.php:2778 woocommerce-sea.php:3341
+msgid "unisex"
+msgstr "保密"
+
+#: woocommerce-sea.php:2777 woocommerce-sea.php:3340
+msgid "male"
+msgstr "男"
+
+#: woocommerce-sea.php:2776 woocommerce-sea.php:3339
+msgid "female"
+msgstr "女"
+
+#: woocommerce-sea.php:2773
+msgid "Select gender."
+msgstr "选择性别."
+
+#: woocommerce-sea.php:2771 woocommerce-sea.php:3331
+msgid "Gender"
+msgstr "性别"
+
+#: woocommerce-sea.php:2761
+msgid "Insert a size."
+msgstr "插入大小。"
+
+#: woocommerce-sea.php:2759
+msgid "Size"
+msgstr "大小"
+
+#: woocommerce-sea.php:2749
+msgid "Insert a color."
+msgstr "插入颜色。"
+
+#: woocommerce-sea.php:2747
+msgid "Color"
+msgstr "颜色"
+
+#: pages/admin/woosea-generate-feed-step-9.php:56
+msgid "Becomes"
+msgstr "成为"
+
+#: pages/admin/woosea-generate-feed-step-9.php:55
+msgid "Field"
+msgstr "字段"
+
+#: pages/admin/woosea-generate-feed-step-9.php:54
+msgid "Product type"
+msgstr "产品类型"
+
+#: pages/admin/woosea-generate-feed-step-4.php:214
+msgid "Rule"
+msgstr "规则"
+
+#: pages/admin/woosea-generate-feed-step-4.php:82
+msgid "Filter"
+msgstr "过滤器"
+
+#: pages/admin/woosea-generate-feed-step-4.php:64
+msgid "IS"
+msgstr "是"
+
+#: pages/admin/woosea-generate-feed-step-4.php:63
+msgid "Then"
+msgstr "然后"
+
+#: pages/admin/woosea-generate-feed-step-4.php:62
+msgid "CS"
+msgstr "CS"
+
+#: pages/admin/woosea-generate-feed-step-4.php:60
+msgid "Condition"
+msgstr "条件"
+
+#: pages/admin/woosea-generate-feed-step-4.php:59
+msgid "IF"
+msgstr "如果"
+
+#: pages/admin/woosea-generate-feed-step-4.php:58
+msgid "Type"
+msgstr "类型"
+
+#: pages/admin/woosea-generate-feed-step-1.php:144
+msgid "category"
+msgstr "类别"
+
+#: pages/admin/woosea-generate-feed-step-1.php:143
+msgid "Number of products"
+msgstr "产品数量"
+
+#: pages/admin/woosea-generate-feed-step-1.php:143
+msgid "Your category"
+msgstr "您的类别"
+
+#: pages/admin/woosea-generate-feed-step-5.php:106
+msgid "Google Analytics campaign content (utm_content)"
+msgstr "谷歌分析广告系列内容（utm_content）"
+
+#: pages/admin/woosea-generate-feed-step-5.php:103
+msgid "dynamically added Product ID"
+msgstr "动态添加的产品 ID"
+
+#: pages/admin/woosea-generate-feed-step-5.php:102
+msgid "Google Analytics campaign term (utm_term)"
+msgstr "谷歌分析活动术语（utm_term）"
+
+#: pages/admin/woosea-generate-feed-step-5.php:98
+msgid "Google Analytics campaign name (utm_campaign)"
+msgstr "谷歌分析活动名称（utm_campaign）"
+
+#: pages/admin/woosea-generate-feed-step-5.php:94
+msgid "Google Analytics campaign medium (utm_medium)"
+msgstr "谷歌分析活动媒体（utm_medium）"
+
+#: pages/admin/woosea-generate-feed-step-5.php:90
+msgid "Google Analytics campaign source (utm_source)"
+msgstr "谷歌分析活动源（utm_source）"
+
+#: pages/admin/woosea-generate-feed-step-5.php:75
+msgid "Enable Google Analytics tracking"
+msgstr "启用 Google Analytics tracking"
+
+#: pages/admin/woosea-statistics-feed.php:46
+msgid "Feed statistics"
+msgstr "Feed 统计"
+
+#: pages/admin/woosea-generate-feed-step-7.php:131
+msgid "Suffix"
+msgstr "后缀"
+
+#: pages/admin/woosea-generate-feed-step-4.php:61
+#: pages/admin/woosea-generate-feed-step-7.php:130
+msgid "Value"
+msgstr "数值"
+
+#: pages/admin/woosea-generate-feed-step-7.php:129
+msgid "Prefix"
+msgstr "前缀"
+
+#: pages/admin/woosea-generate-feed-step-0.php:461
+msgid "Delimiter"
+msgstr "分隔符"
+
+#: pages/admin/woosea-generate-feed-step-0.php:443
+msgid "File format"
+msgstr "文件格式"
+
+#: pages/admin/woosea-generate-feed-step-0.php:296
+msgid "Channel"
+msgstr "频道"
+
+#: pages/admin/woosea-generate-feed-step-0.php:282
+msgid "Select a country"
+msgstr "选择一个国家"
+
+#: pages/admin/woosea-generate-feed-step-0.php:272
+msgid "Country"
+msgstr "国家"
+
+#: pages/admin/woosea-generate-feed-step-0.php:118
+msgid "Project name"
+msgstr "项目名称"
+
+#: pages/admin/woosea-manage-settings.php:744
+msgid "Need assistance? Check out our"
+msgstr "需要帮助？查看我们的"
+
+#: pages/admin/woosea-manage-settings.php:238
+msgid "Enable Aelia Currency Switcher support:"
+msgstr "支持 Aelia 货币切换器："
+
+#: pages/admin/woosea-manage-settings.php:219
+msgid "Enable WPML support:"
+msgstr "启用WPML支持："
+
+#: pages/admin/woosea-manage-settings.php:164
+msgid "Exclude TAX from structured data prices"
+msgstr "Exclude TAX from structured data prices"
+
+#: pages/admin/woosea-manage-settings.php:146
+#: pages/admin/woosea-manage-settings.php:182
+#: pages/admin/woosea-manage-settings.php:200
+#: pages/admin/woosea-manage-settings.php:219
+#: pages/admin/woosea-manage-settings.php:238
+#: pages/admin/woosea-manage-settings.php:386
+#: pages/admin/woosea-manage-settings.php:435
+#: pages/admin/woosea-manage-settings.php:488
+msgid "Read more about this"
+msgstr "更多信息"
+
+#: pages/admin/woosea-manage-settings.php:146
+msgid "This option will fix WooCommerce's (JSON-LD) structured data bug and add extra structured data elements to your pages."
+msgstr "此选项将修复 WooCommerce 的 （JSON-LD） 结构化数据错误，并在您的页面中添加额外的结构化数据元素。"
+
+#: pages/admin/woosea-manage-settings.php:145
+msgid "Increase the number of products that will be approved in Google's Merchant Center:"
+msgstr "增加将在 Google 商城中心批准的产品数量："
+
+#: pages/admin/woosea-manage-settings.php:137
+msgid "Off / On"
+msgstr "开/关"
+
+#: pages/admin/woosea-manage-settings.php:137
+msgid "Plugin setting"
+msgstr "插件设置"
+
+#: pages/admin/woosea-manage-settings.php:90
+msgid "Attribute settings"
+msgstr "属性设置"
+
+#: pages/admin/woosea-manage-settings.php:87
+#: pages/admin/woosea-manage-settings.php:127
+msgid "Plugin systems check"
+msgstr "插件系统检查"
+
+#: pages/admin/woosea-manage-settings.php:80
+#: pages/admin/woosea-manage-settings.php:84
+#: pages/admin/woosea-manage-settings.php:126
+msgid "Plugin settings"
+msgstr "插件设置"
+
+#: pages/admin/woosea-generate-feed-step-0.php:588
+#: pages/admin/woosea-generate-feed-step-1.php:261
+#: pages/admin/woosea-manage-feed.php:361
+#: pages/admin/woosea-manage-settings.php:773
+msgid "Help, my feed has no or too few products!"
+msgstr "求助，我的源中有没有商品或很少产品！"
+
+#: pages/admin/woosea-generate-feed-step-0.php:587
+#: pages/admin/woosea-generate-feed-step-1.php:260
+#: pages/admin/woosea-manage-feed.php:360
+#: pages/admin/woosea-manage-settings.php:772
+msgid "Help, my feed is stuck!"
+msgstr "求助，我的Feed卡住了！"
+
+#: pages/admin/woosea-generate-feed-step-0.php:586
+#: pages/admin/woosea-generate-feed-step-1.php:259
+#: pages/admin/woosea-manage-feed.php:359
+#: pages/admin/woosea-manage-settings.php:771
+msgid "Enable Aelia currency switcher support"
+msgstr "支持 Aelia 货币切换器"
+
+#: pages/admin/woosea-generate-feed-step-0.php:585
+#: pages/admin/woosea-generate-feed-step-1.php:258
+#: pages/admin/woosea-manage-feed.php:358
+#: pages/admin/woosea-manage-settings.php:770
+msgid "Enable WPML support"
+msgstr "启用WPML支持"
+
+#: pages/admin/woosea-generate-feed-step-0.php:584
+#: pages/admin/woosea-generate-feed-step-1.php:257
+#: pages/admin/woosea-manage-feed.php:357
+#: pages/admin/woosea-manage-settings.php:769
+msgid "WooCommerce structured data markup bug"
+msgstr "WooCommerce 结构化数据标记错误"
+
+#: pages/admin/woosea-generate-feed-step-0.php:583
+#: pages/admin/woosea-generate-feed-step-1.php:256
+#: pages/admin/woosea-manage-feed.php:356
+#: pages/admin/woosea-manage-settings.php:768
+msgid "Adding GTIN, Brand, MPN and more"
+msgstr "添加 GTIN、品牌、MPN 等"
+
+#: pages/admin/woosea-generate-feed-step-0.php:582
+#: pages/admin/woosea-generate-feed-step-1.php:255
+#: pages/admin/woosea-manage-feed.php:355
+#: pages/admin/woosea-manage-settings.php:767
+msgid "How to set rules for your product feed"
+msgstr "如何为产品源设置规则"
+
+#: pages/admin/woosea-generate-feed-step-0.php:581
+#: pages/admin/woosea-generate-feed-step-1.php:254
+#: pages/admin/woosea-manage-feed.php:354
+#: pages/admin/woosea-manage-settings.php:766
+msgid "How to create filters for your product feed"
+msgstr "如何为您的产品源创建筛选器"
+
+#: pages/admin/woosea-generate-feed-step-0.php:579
+#: pages/admin/woosea-generate-feed-step-1.php:252
+#: pages/admin/woosea-manage-feed.php:350
+#: pages/admin/woosea-manage-settings.php:762
+msgid "Create a Google Shopping feed"
+msgstr "创建谷歌购物源"
+
+#: pages/admin/woosea-generate-feed-step-0.php:574
+#: pages/admin/woosea-generate-feed-step-1.php:247
+#: pages/admin/woosea-manage-feed.php:345
+#: pages/admin/woosea-manage-settings.php:757
+msgid "Our latest tutorials"
+msgstr "我们的最新教程"
+
+#: pages/admin/woosea-generate-feed-step-0.php:567
+#: pages/admin/woosea-generate-feed-step-1.php:240
+#: pages/admin/woosea-manage-feed.php:338
+#: pages/admin/woosea-manage-settings.php:750
+msgid "and we will make sure your product feeds will be up-and-running within no-time."
+msgstr "我们将确保您的产品订阅源在任何时间内都能正常运行。"
+
+#: pages/admin/woosea-generate-feed-step-0.php:567
+#: pages/admin/woosea-generate-feed-step-1.php:240
+#: pages/admin/woosea-manage-feed.php:338
+#: pages/admin/woosea-manage-settings.php:750
+msgid "our Wordpress forum"
+msgstr "我们的 WordPress 论坛"
+
+#: pages/admin/woosea-generate-feed-step-0.php:567
+#: pages/admin/woosea-generate-feed-step-1.php:240
+#: pages/admin/woosea-manage-feed.php:338
+#: pages/admin/woosea-manage-settings.php:750
+msgid "Or just reach out to us at"
+msgstr "或联系我们"
+
+#: pages/admin/woosea-generate-feed-step-0.php:565
+#: pages/admin/woosea-generate-feed-step-1.php:238
+#: pages/admin/woosea-manage-feed.php:336
+#: pages/admin/woosea-manage-settings.php:748
+msgid "Tutorials"
+msgstr "教程"
+
+#: pages/admin/woosea-generate-feed-step-0.php:564
+#: pages/admin/woosea-generate-feed-step-1.php:237
+#: pages/admin/woosea-manage-feed.php:335
+#: pages/admin/woosea-manage-settings.php:747
+msgid "YouTube tutorials"
+msgstr "Youtube 教程"
+
+#: pages/admin/woosea-generate-feed-step-0.php:563
+#: pages/admin/woosea-generate-feed-step-1.php:236
+#: pages/admin/woosea-manage-feed.php:334
+#: pages/admin/woosea-manage-settings.php:746
+msgid "Frequently Asked Questions"
+msgstr "常见问题"
+
+#: pages/admin/woosea-generate-feed-step-0.php:561
+#: pages/admin/woosea-generate-feed-step-1.php:234
+#: pages/admin/woosea-manage-feed.php:332
+msgid "Need assistance? Check out our:"
+msgstr "需要帮助？查看我们的："
+
+#: pages/admin/woosea-generate-feed-step-0.php:557
+#: pages/admin/woosea-manage-settings.php:740
+msgid "We’ve got you covered!"
+msgstr "我么罩着你！"
+
+#: pages/admin/woosea-generate-feed-step-0.php:549
+#: pages/admin/woosea-generate-feed-step-1.php:219
+#: pages/admin/woosea-manage-feed.php:320
+#: pages/admin/woosea-manage-settings.php:732
+msgid "Upgrade to Elite here!"
+msgstr "在这里升级到精英版!"
+
+#: pages/admin/woosea-generate-feed-step-0.php:543
+#: pages/admin/woosea-generate-feed-step-1.php:213
+#: pages/admin/woosea-manage-feed.php:314
+#: pages/admin/woosea-manage-settings.php:726
+msgid "WPML support"
+msgstr "WPML 支持"
+
+#: pages/admin/woosea-generate-feed-step-0.php:542
+#: pages/admin/woosea-generate-feed-step-1.php:212
+#: pages/admin/woosea-manage-feed.php:313
+#: pages/admin/woosea-manage-settings.php:725
+msgid "Exclude individual products from your feeds"
+msgstr "从源中排除单个产品"
+
+#: pages/admin/woosea-generate-feed-step-0.php:541
+#: pages/admin/woosea-generate-feed-step-1.php:211
+#: pages/admin/woosea-manage-feed.php:312
+#: pages/admin/woosea-manage-settings.php:724
+msgid "Add GTIN, brand and more fields to your store"
+msgstr "为您的商店添加 GTIN、品牌和更多字段"
+
+#: pages/admin/woosea-generate-feed-step-0.php:540
+#: pages/admin/woosea-generate-feed-step-1.php:210
+#: pages/admin/woosea-manage-feed.php:311
+#: pages/admin/woosea-manage-settings.php:723
+msgid "More products approved by Google"
+msgstr "更多经谷歌批准的产品"
+
+#: pages/admin/woosea-generate-feed-step-0.php:539
+#: pages/admin/woosea-generate-feed-step-1.php:209
+#: pages/admin/woosea-manage-feed.php:310
+#: pages/admin/woosea-manage-settings.php:722
+msgid "Priority support: get your feeds live faster"
+msgstr "优先支持：让您产品源更快上线"
+
+#: pages/admin/woosea-generate-feed-step-0.php:537
+#: pages/admin/woosea-generate-feed-step-1.php:207
+#: pages/admin/woosea-manage-feed.php:308
+#: pages/admin/woosea-manage-settings.php:720
+msgid "Enjoy all priviliges of our Elite features and priority support and upgrade to the Elite version of our plugin now!"
+msgstr "升级到精英版，享受精英版功能和优先支持特权！"
+
+#: pages/admin/woosea-generate-feed-step-0.php:533
+#: pages/admin/woosea-generate-feed-step-1.php:203
+#: pages/admin/woosea-manage-feed.php:304
+#: pages/admin/woosea-manage-settings.php:716
+msgid "Why upgrade to Elite?"
+msgstr "为什么要升级到精英？"
+
+#: pages/admin/woosea-manage-feed.php:294
+msgid "how to set up your very first Google Shopping product feed"
+msgstr "如何设置您的第一个谷歌购物产品Feed"
+
+#: pages/admin/woosea-manage-feed.php:294
+msgid "please create one first</a> or read our tutorial on"
+msgstr "请先创建一个</a>或阅读我们的教程"
+
+#: pages/admin/woosea-manage-feed.php:294
+msgid "You didn't configured a product feed yet"
+msgstr "您尚未配置产品源"
+
+#: pages/admin/woosea-manage-feed.php:267
+msgid "Feed URL"
+msgstr "产品源 URL"
+
+#: pages/admin/woosea-generate-feed-step-4.php:47
+#: pages/admin/woosea-manage-feed.php:258
+msgid "Feed filters and rules"
+msgstr "产品源过滤器和规则"
+
+#: pages/admin/woosea-generate-feed-step-0.php:580
+#: pages/admin/woosea-generate-feed-step-1.php:253
+#: pages/admin/woosea-generate-feed-step-9.php:43
+#: pages/admin/woosea-manage-feed.php:254
+#: pages/admin/woosea-manage-feed.php:352
+#: pages/admin/woosea-manage-settings.php:764
+msgid "Product data manipulation"
+msgstr "产品数据操作"
+
+#: pages/admin/woosea-generate-feed-step-1.php:131
+#: pages/admin/woosea-manage-feed.php:247
+msgid "Category mapping"
+msgstr "类别映射"
+
+#: pages/admin/woosea-generate-feed-step-7.php:113
+#: pages/admin/woosea-manage-feed.php:243
+msgid "Field mapping"
+msgstr "字段映射"
+
+#: pages/admin/woosea-manage-feed.php:241
+msgid "Attribute selection"
+msgstr "属性选择"
+
+#: pages/admin/woosea-generate-feed-step-0.php:107
+#: pages/admin/woosea-manage-feed.php:238
+msgid "General feed settings"
+msgstr "常规源设置"
+
+#: pages/admin/woosea-manage-feed.php:237
+msgid "Change settings"
+msgstr "更改设置"
+
+#: pages/admin/woosea-manage-feed.php:160
+msgid "Status"
+msgstr "状态"
+
+#: pages/admin/woosea-generate-feed-step-0.php:478
+#: pages/admin/woosea-manage-feed.php:159
+msgid "Refresh interval"
+msgstr "刷新间隔"
+
+#: pages/admin/woosea-manage-feed.php:158
+msgid "Format"
+msgstr "格式"
+
+#: pages/admin/woosea-manage-feed.php:157
+msgid "Project name and channel"
+msgstr "项目名称和渠道"
+
+#: pages/admin/woosea-manage-feed.php:156
+msgid "Active"
+msgstr "启用"
+
+#: pages/admin/woosea-generate-feed-step-0.php:101
+#: pages/admin/woosea-manage-feed.php:130
+msgid "Upgrade to the"
+msgstr "升级到"
+
+#: pages/admin/woosea-generate-feed-step-0.php:544
+#: pages/admin/woosea-generate-feed-step-1.php:214
+#: pages/admin/woosea-manage-feed.php:127
+#: pages/admin/woosea-manage-feed.php:315
+#: pages/admin/woosea-manage-settings.php:727
+msgid "Aelia currency switcher support"
+msgstr "支持 Aelia 货币切换器"
+
+#: pages/admin/woosea-generate-feed-step-0.php:97
+#: pages/admin/woosea-manage-feed.php:126
+msgid "WPML support - including their currency switcher"
+msgstr "WPML 支持 - 包括他们的货币切换器"
+
+#: pages/admin/woosea-generate-feed-step-0.php:96
+#: pages/admin/woosea-manage-feed.php:125
+msgid "Advanced product data manipulation"
+msgstr "高级产品数据操作"
+
+#: pages/admin/woosea-generate-feed-step-0.php:95
+#: pages/admin/woosea-manage-feed.php:124
+msgid "Enhanched structured data on your product pages: more products approved in your Google Merchant Center"
+msgstr "在您的产品页面上收集结构化数据：在您的 Google 商城中心批准更多产品"
+
+#: pages/admin/woosea-generate-feed-step-0.php:94
+#: pages/admin/woosea-generate-feed-step-0.php:95
+#: pages/admin/woosea-generate-feed-step-0.php:96
+#: pages/admin/woosea-generate-feed-step-0.php:97
+#: pages/admin/woosea-generate-feed-step-0.php:98
+#: pages/admin/woosea-generate-feed-step-0.php:100
+#: pages/admin/woosea-manage-feed.php:123
+#: pages/admin/woosea-manage-feed.php:124
+#: pages/admin/woosea-manage-feed.php:125
+#: pages/admin/woosea-manage-feed.php:126
+#: pages/admin/woosea-manage-feed.php:127
+#: pages/admin/woosea-manage-feed.php:128
+#: pages/admin/woosea-manage-feed.php:129
+msgid "Read more"
+msgstr "查看更多"
+
+#: pages/admin/woosea-generate-feed-step-0.php:94
+#: pages/admin/woosea-manage-feed.php:123
+msgid "GTIN, Brand, MPN, EAN, Condition and more fields for your product feeds"
+msgstr "GTIN、品牌、MPN、EAN、条件以及产品源的更多字段"
+
+#: pages/admin/woosea-generate-feed-step-0.php:93
+#: pages/admin/woosea-manage-feed.php:122
+msgid "Priority support - we will help you to get your product feed(s) up-and-running;"
+msgstr "优先支持 - 我们将帮助您获得产品反馈并正常运行;"
+
+#: pages/admin/woosea-generate-feed-step-0.php:92
+#: pages/admin/woosea-manage-feed.php:121
+msgid "Would you like to get more out of your product feeds? Upgrade to the Elite version of the plugin and you will get:"
+msgstr "您想从产品源中获得更多吗？升级到插件的精英版，你会得到："
+
+#: pages/admin/woosea-manage-feed.php:84
+msgid "Debugging mode"
+msgstr "调试模式"
+
+#: pages/admin/woosea-manage-feed.php:87
+msgid "Thank you for taking the time to help us find bugs in our plugin. It is greatly appreciated by us and your feedback will help all current and future users of this plugin. Could you please copy / paste the debug URL in the box below and send it to <a href=\"mailto:support@adtribes.io\">support@adtribes.io</a> so we can analyse how your feed projects are configured and discover potential problems."
+msgstr "感谢您花时间帮助我们在我们的插件中查找错误。非常感谢我们，您的反馈将帮助这个插件的所有当前和未来的用户。您能否在下面的框中复制/粘贴调试 URL 并将其发送到 <a href=\"mailto:support@adtribes.io\">support@adtribes.io</a> 以便我们分析您的源项目是如何配置的并发现潜在的问题。"
+
+#: pages/admin/woosea-generate-feed-step-0.php:10
+#: pages/admin/woosea-generate-feed-step-1.php:6
+#: pages/admin/woosea-generate-feed-step-4.php:6
+#: pages/admin/woosea-generate-feed-step-5.php:6
+#: pages/admin/woosea-generate-feed-step-7.php:6
+#: pages/admin/woosea-generate-feed-step-9.php:6
+#: pages/admin/woosea-manage-feed.php:37
+#: pages/admin/woosea-manage-settings.php:68
+#: pages/admin/woosea-statistics-feed.php:6
+msgid "If you like our <strong>WooCommerce Product Feed PRO</strong> plugin please leave us a <a href=\"https://wordpress.org/support/plugin/woo-product-feed-pro/reviews?rate=5#new-post\" target=\"_blank\" class=\"woo-product-feed-pro-ratingRequest\">&#9733;&#9733;&#9733;&#9733;&#9733;</a> rating. Thanks in advance!"
+msgstr "如果你喜欢我们的 WooCommerce <strong>产品饲料 PRO</strong> 插件， 请给我们留下一 <a href=\"https://wordpress.org/support/plugin/woo-product-feed-pro/reviews?rate=5#new-post\" target=\"_blank\" class=\"woo-product-feed-pro-ratingRequest\">个★★★★★</a> 评级。提前谢谢！"
+
+#: pages/admin/woosea-generate-feed-step-0.php:101
+#: pages/admin/woosea-manage-feed.php:130
+msgid "Elite version of our plugin</a></strong> to get all these features."
+msgstr "精英版</a></strong>来获得这些功能。"
+
+#: woocommerce-sea.php:4936
+msgid "ago"
+msgstr "之前"
+
+#: woocommerce-sea.php:4928
+msgid "No item"
+msgstr "没有项目"
+
+#: woocommerce-sea.php:3725
+msgid "&nbsp;Exclude from feeds"
+msgstr "从源中排除"
+
+#: woocommerce-sea.php:3711
+msgid "<br>Custom field 4"
+msgstr "<br>自定义字段 4"
+
+#: woocommerce-sea.php:3696
+msgid "<br>Custom field 3"
+msgstr "<br>自定义字段 3"
+
+#: woocommerce-sea.php:3681
+msgid "<br>Custom field 2"
+msgstr "<br>自定义字段 2"
+
+#: woocommerce-sea.php:3666
+msgid "<br>Custom field 1"
+msgstr "<br>自定义字段 1"
+
+#: woocommerce-sea.php:3651
+msgid "<br>Custom field 0"
+msgstr "<br>自定义字段 0"
+
+#: woocommerce-sea.php:3639
+msgid "Enter your promotion ID"
+msgstr "输入您的促销 ID"
+
+#: woocommerce-sea.php:3636
+msgid "<br>Is promotion"
+msgstr "<br>促销"
+
+#: woocommerce-sea.php:3611
+msgid "Select the maximum energy efficiency class."
+msgstr "选择最大能效等级。"
+
+#: woocommerce-sea.php:3583
+msgid "Select the minimum energy efficiency class."
+msgstr "选择最低能效等级。"
+
+#: woocommerce-sea.php:3555
+msgid "Select the energy efficiency class."
+msgstr "选择能源效率类别。"
+
+#: woocommerce-sea.php:3520
+msgid "Enter the multipack amount here."
+msgstr "在此处输入多包金额。"
+
+#: woocommerce-sea.php:3517
+msgid "<br>Multipack"
+msgstr "<br>多包"
+
+#: woocommerce-sea.php:3505
+msgid "Enter the cost of good sold."
+msgstr "输入销售成本。"
+
+#: woocommerce-sea.php:3502
+msgid "<br>Cost of good sold"
+msgstr "<br>销售成本"
+
+#: woocommerce-sea.php:3479
+msgid "Product age group"
+msgstr "产品年龄组"
+
+#: woocommerce-sea.php:3445
+msgid "Enter the installment amount here."
+msgstr "在此处输入分期付款金额。"
+
+#: woocommerce-sea.php:3442
+msgid "<br>Installment amount"
+msgstr "<br>安装金额"
+
+#: woocommerce-sea.php:3430
+msgid "Enter the number of montly installments for the buyer here."
+msgstr "在此输入购买者的每月分期付款金额。"
+
+#: woocommerce-sea.php:3427
+msgid "<br>Installment months"
+msgstr "<br>安装月份"
+
+#: woocommerce-sea.php:3415
+msgid "Enter a optimized product title here."
+msgstr "请在此处输入优化的产品标题。"
+
+#: woocommerce-sea.php:3412
+msgid "<br>Optimized title"
+msgstr "<br>优化标题"
+
+#: woocommerce-sea.php:3400
+msgid "Enter the product Unit pricing base measure here."
+msgstr "请在此处输入产品单位定价基础度量值。"
+
+#: woocommerce-sea.php:3397
+msgid "<br>Unit pricing base measure"
+msgstr "<br>单位定价基础衡量标准"
+
+#: woocommerce-sea.php:3385
+msgid "Enter the product Unit pricing measure here."
+msgstr "在此处输入产品单位定价度量值。"
+
+#: woocommerce-sea.php:3382
+msgid "<br>Unit pricing measure"
+msgstr "<br>单位定价计量"
+
+#: woocommerce-sea.php:3289
+msgid "Enter the product EAN here."
+msgstr "在此处输入产品 EAN。"
+
+#: woocommerce-sea.php:3286
+msgid "<br>EAN"
+msgstr "<br>EAN"
+
+#: woocommerce-sea.php:3271
+msgid "<br>UPC"
+msgstr "<br>UPC"
+
+#: woocommerce-sea.php:3274
+msgid "Enter the product UPC here."
+msgstr "请在此处输入产品 UPC。"
+
+#: woocommerce-sea.php:3256
+msgid "<br>MPN"
+msgstr "<br>MPN"
+
+#: woocommerce-sea.php:3244
+msgid "Enter the product GTIN here."
+msgstr "在此处输入产品GTIN。"
+
+#: woocommerce-sea.php:3241
+msgid "<br>GTIN"
+msgstr "<br>GTIN"
+
+#: woocommerce-sea.php:3226
+msgid "<br>Brand"
+msgstr "<br>品牌"
+
+#: woocommerce-sea.php:3070 woocommerce-sea.php:3728
+msgid "Check this box if you want this product to be excluded from product feeds."
+msgstr "如果您希望从产品源中排除此产品，请选中此框。"
+
+#: woocommerce-sea.php:3068
+msgid "Exclude from feeds"
+msgstr "从源中排除"
+
+#: woocommerce-sea.php:3059 woocommerce-sea.php:3714
+msgid "Enter your custom field 4"
+msgstr "输入自定义字段 4"
+
+#: woocommerce-sea.php:3057
+msgid "Custom field 4"
+msgstr "自定义字段 4"
+
+#: woocommerce-sea.php:3047 woocommerce-sea.php:3699
+msgid "Enter your custom field 3"
+msgstr "输入自定义字段 3"
+
+#: woocommerce-sea.php:3045
+msgid "Custom field 3"
+msgstr "自定义字段 3"
+
+#: woocommerce-sea.php:3035 woocommerce-sea.php:3684
+msgid "Enter your custom field 2"
+msgstr "输入自定义字段 2"
+
+#: woocommerce-sea.php:3033
+msgid "Custom field 2"
+msgstr "自定义字段 2"
+
+#: woocommerce-sea.php:3023 woocommerce-sea.php:3669
+msgid "Enter your custom field 1"
+msgstr "输入自定义字段 1"
+
+#: woocommerce-sea.php:3021
+msgid "Custom field 1"
+msgstr "自定义字段1"
+
+#: woocommerce-sea.php:3011 woocommerce-sea.php:3654
+msgid "Enter your custom field 0"
+msgstr "输入自定义字段 0"
+
+#: woocommerce-sea.php:3009
+msgid "Custom field 0"
+msgstr "自定义字段 0"
+
+#: woocommerce-sea.php:2999
+msgid "Enter your promotion ID."
+msgstr "输入您的促销 ID。"
+
+#: woocommerce-sea.php:2997
+msgid "Is promotion"
+msgstr "促销"
+
+#: woocommerce-sea.php:2974
+msgid "Select the maximum product energy efficiency class."
+msgstr "选择最大产品能效等级。"
+
+#: woocommerce-sea.php:2972 woocommerce-sea.php:3608
+msgid "Maximum energy efficiency class"
+msgstr "最大能效等级"
+
+#: woocommerce-sea.php:2949
+msgid "Select the minimum product energy efficiency class."
+msgstr "选择最低产品能效类别。"
+
+#: woocommerce-sea.php:2947 woocommerce-sea.php:3580
+msgid "Minimum energy efficiency class"
+msgstr "最低能效等级"
+
+#: woocommerce-sea.php:2936 woocommerce-sea.php:2961 woocommerce-sea.php:2986
+#: woocommerce-sea.php:3569 woocommerce-sea.php:3597 woocommerce-sea.php:3625
+msgid "G"
+msgstr "G"
+
+#: woocommerce-sea.php:2935 woocommerce-sea.php:2960 woocommerce-sea.php:2985
+#: woocommerce-sea.php:3568 woocommerce-sea.php:3596 woocommerce-sea.php:3624
+msgid "F"
+msgstr "F"
+
+#: woocommerce-sea.php:2934 woocommerce-sea.php:2959 woocommerce-sea.php:2984
+#: woocommerce-sea.php:3567 woocommerce-sea.php:3595 woocommerce-sea.php:3623
+msgid "E"
+msgstr "E"
+
+#: woocommerce-sea.php:2933 woocommerce-sea.php:2958 woocommerce-sea.php:2983
+#: woocommerce-sea.php:3566 woocommerce-sea.php:3594 woocommerce-sea.php:3622
+msgid "D"
+msgstr "D"
+
+#: woocommerce-sea.php:2932 woocommerce-sea.php:2957 woocommerce-sea.php:2982
+#: woocommerce-sea.php:3565 woocommerce-sea.php:3593 woocommerce-sea.php:3621
+msgid "C"
+msgstr "C"
+
+#: woocommerce-sea.php:2931 woocommerce-sea.php:2956 woocommerce-sea.php:2981
+#: woocommerce-sea.php:3564 woocommerce-sea.php:3592 woocommerce-sea.php:3620
+msgid "B"
+msgstr "B"
+
+#: woocommerce-sea.php:2930 woocommerce-sea.php:2955 woocommerce-sea.php:2980
+#: woocommerce-sea.php:3563 woocommerce-sea.php:3591 woocommerce-sea.php:3619
+msgid "A"
+msgstr "A"
+
+#: woocommerce-sea.php:2929 woocommerce-sea.php:2954 woocommerce-sea.php:2979
+#: woocommerce-sea.php:3562 woocommerce-sea.php:3590 woocommerce-sea.php:3618
+msgid "A+"
+msgstr "A+"
+
+#: woocommerce-sea.php:2928 woocommerce-sea.php:2953 woocommerce-sea.php:2978
+#: woocommerce-sea.php:3561 woocommerce-sea.php:3589 woocommerce-sea.php:3617
+msgid "A++"
+msgstr "A"
+
+#: woocommerce-sea.php:2927 woocommerce-sea.php:2952 woocommerce-sea.php:2977
+#: woocommerce-sea.php:3560 woocommerce-sea.php:3588 woocommerce-sea.php:3616
+msgid "A+++"
+msgstr "A+"
+
+#: woocommerce-sea.php:2924
+msgid "Select the product energy efficiency class."
+msgstr "选择产品能效等级。"
+
+#: woocommerce-sea.php:2922 woocommerce-sea.php:3552
+msgid "Energy efficiency class"
+msgstr "能效等级"
+
+#: woocommerce-sea.php:2911 woocommerce-sea.php:3541
+msgid "no"
+msgstr "否"
+
+#: woocommerce-sea.php:2910 woocommerce-sea.php:3540
+msgid "yes"
+msgstr "是"
+
+#: woocommerce-sea.php:2907 woocommerce-sea.php:3535
+msgid "Select the is bundle value."
+msgstr "选择捆绑值。"
+
+#: woocommerce-sea.php:2905 woocommerce-sea.php:3532
+msgid "Is bundle"
+msgstr "捆绑"
+
+#: woocommerce-sea.php:2895
+msgid "Enter the multipack amount."
+msgstr "输入多包金额。"
+
+#: woocommerce-sea.php:2893
+msgid "Multipack"
+msgstr "多件装"
+
+#: woocommerce-sea.php:2883
+msgid "Enter the cost of good you are selling."
+msgstr "输入您的销售成本。"
+
+#: woocommerce-sea.php:2881
+msgid "Cost of goods sold"
+msgstr "销售成本"
+
+#: woocommerce-sea.php:2871
+msgid "Enter the amount the bbuyer has to pay per month."
+msgstr "输入买方每月须支付的金额。"
+
+#: woocommerce-sea.php:2869
+msgid "Installment amount"
+msgstr "安装费用"
+
+#: woocommerce-sea.php:2859
+msgid "Enter the number of monthly installments the buyer has to pay."
+msgstr "输入买方必须支付的每月分期付款金额。"
+
+#: woocommerce-sea.php:2857
+msgid "Installment months"
+msgstr "安装月份"
+
+#: woocommerce-sea.php:2847
+msgid "Enter an unit pricing base measure."
+msgstr "输入单位定价基础量度。"
+
+#: woocommerce-sea.php:2845
+msgid "Unit pricing base measure"
+msgstr "单位定价基础衡量标准"
+
+#: woocommerce-sea.php:2835
+msgid "Enter an unit pricing measure."
+msgstr "输入单位定价度量值。"
+
+#: woocommerce-sea.php:2833
+msgid "Unit pricing measure"
+msgstr "单位定价措施"
+
+#: woocommerce-sea.php:2822 woocommerce-sea.php:3491
+msgid "adult"
+msgstr "成人"
+
+#: woocommerce-sea.php:2821 woocommerce-sea.php:3490
+msgid "kids"
+msgstr "孩子"
+
+#: woocommerce-sea.php:2820 woocommerce-sea.php:3489
+msgid "toddler"
+msgstr "幼儿"
+
+#: woocommerce-sea.php:2819 woocommerce-sea.php:3488
+msgid "infant"
+msgstr "婴儿"
+
+#: woocommerce-sea.php:2818 woocommerce-sea.php:3487
+msgid "newborn"
+msgstr "新生儿"
+
+#: woocommerce-sea.php:2815 woocommerce-sea.php:3482
+msgid "Select the product age group."
+msgstr "选择产品年龄组。"
+
+#: woocommerce-sea.php:2813
+msgid "Age group"
+msgstr "年龄组"
+
+#: woocommerce-sea.php:2736 woocommerce-sea.php:3468
+msgid "damaged"
+msgstr "损坏"
+
+#: woocommerce-sea.php:2735 woocommerce-sea.php:3467
+msgid "used"
+msgstr "已使用"
+
+#: woocommerce-sea.php:2734 woocommerce-sea.php:3466
+msgid "refurbished"
+msgstr "翻新"
+
+#: woocommerce-sea.php:2733 woocommerce-sea.php:3465
+msgid "new"
+msgstr "新建"
+
+#: woocommerce-sea.php:2730 woocommerce-sea.php:3460
+msgid "Select the product condition."
+msgstr "选择产品条件。"
+
+#: woocommerce-sea.php:2728 woocommerce-sea.php:3457
+msgid "Product condition"
+msgstr "产品状况"
+
+#: woocommerce-sea.php:2718
+msgid "Enter a optimized product title."
+msgstr "输入优化的产品标题。"
+
+#: woocommerce-sea.php:2716
+msgid "Optimized title"
+msgstr "优化标题"
+
+#: woocommerce-sea.php:2706
+msgid "Enter the International Article Number (EAN) here."
+msgstr "请在此处输入国际文章编号 （EAN）。"
+
+#: woocommerce-sea.php:2704
+msgid "EAN"
+msgstr "EAN"
+
+#: woocommerce-sea.php:2694
+msgid "Enter the Universal Product Code (UPC) here."
+msgstr "在此处输入通用产品代码 （UPC）。"
+
+#: woocommerce-sea.php:2692
+msgid "UPC"
+msgstr "UPC"
+
+#: woocommerce-sea.php:2682
+msgid "Enter the manufacturer product number"
+msgstr "输入制造商产品编号"
+
+#: woocommerce-sea.php:2680
+msgid "MPN"
+msgstr "MPN"
+
+#: woocommerce-sea.php:2670
+msgid "Enter the product Global Trade Item Number (GTIN) here."
+msgstr "在此处输入产品全球贸易项目编号 （GTIN）。"
+
+#: woocommerce-sea.php:2668
+msgid "GTIN"
+msgstr "GTIN"
+
+#: woocommerce-sea.php:2655 woocommerce-sea.php:3229
+msgid "Enter the product Brand here."
+msgstr "请在此处输入产品品牌。"
+
+#: woocommerce-sea.php:2652
+msgid "Brand"
+msgstr "品牌"
+
+#: woocommerce-sea.php:1045
+msgid "Settings"
+msgstr "设置"
+
+#: classes/class-admin-notifications.php:117
+msgid "Manipulate your product data to improve the quality of your product feeds and online marketing campaigns. Manipulating your product data is an extremely powerfull feature. Check out an example we have created in our blog post: <b><u><a href=\"https://adtribes.io/feature-product-data-manipulation/\" target=\"_blank\">Manipulating product data</a></u></b>"
+msgstr "操纵您的产品数据，以提高产品源和在线营销活动的质量。操作产品数据是一项极其强大的功能。查看我们在博客文章中创建的示例：操作 <b><u><a href=\"https://adtribes.io/feature-product-data-manipulation/\" target=\"_blank\">产品数据</a></u></b>"
+
+#: classes/class-admin-notifications.php:113
+msgid "Add important attributes, such as Brand, GTIN, condition and many more to create a perfect Google Shopping feed or fix the WooCommerce structured data bug so less products get disapproved in Google's Merchant Center."
+msgstr "添加重要的属性，如品牌，GTIN，条件等等，以创建一个完美的谷歌购物饲料或修复WooCommerce结构化数据错误，使更少的产品在谷歌的商家中心被否决。"
+
+#: classes/class-admin-notifications.php:109
+msgid "We are sorry but it seems you are running an old version of WooCommerce. This plugin requires WooCommerce version 3.0 at least. Please upgrade to the latest version of WooCommerce before creating a product feed."
+msgstr "很抱歉， 但您似乎正在运行一个旧版本的 WooCommerce 。这个插件至少需要 WooCommerce 版本 3.0。在创建产品源之前，请升级到最新版本的 WooCommerce。"
+
+#: classes/class-admin-notifications.php:105
+msgid "We are sorry but it seems you have disabled your WP CRON. This plugin creates product feeds in batches and needs the WP CRON to be active for doing so. Please enable the WP CRON in your wp-config.php file and re-activate this plugin before creating a product feed."
+msgstr "很抱歉， 但您似乎禁用了您的 WP CRON 。此插件分批创建产品源，需要 WP CRON 才能激活。请在 wp 配置中启用 WP CRON .php，并在创建产品源之前重新激活此插件。"
+
+#: classes/class-admin-notifications.php:101
+msgid "You are running an old PHP version. This plugin might not work or be really slow. Please upgrade to PHP version 7.0 or newer."
+msgstr "您正在运行旧的 PHP 版本。这个插件可能不起作用或真的很慢。请升级到 PHP 版本 7.0 或更高版本。"
+
+#: classes/class-admin-notifications.php:93
+msgid "You cannot create product feeds yet, please install WooCommerce first."
+msgstr "您还不能创建产品源，请先安装 WooCommerce。"
+
+#: classes/class-admin-notifications.php:89
+msgid "Manage your projects, such as the mappings and filter rules, below. Hit the refresh icon for the project to run with its new settings or just to refresh the product feed. When a project is being processed it is not possible to make changes to its configuration."
+msgstr "管理下面的项目，如映射和筛选规则。点击项目的新设置或只是为了刷新产品源的刷新图标。处理项目时，无法更改其配置。"
+
+#: classes/class-admin-notifications.php:85
+msgid "For the selected channel the attributes shown below are mandatory, please map them to your product attributes. We've already pre-filled a lot of mappings so all you have to do is check those and map the ones that are left blank or add new ones by hitting the 'Add field mapping' button.<br/><br/>[<strong><i><a href=\"https://adtribes.io/how-to-use-static-values-and-create-fake-content-for-your-product-feed/\" target=\"_blank\">Learn how to use static values</a></i></strong>]"
+msgstr "对于所选通道，下面显示的属性是必填项，请将它们映射到您的产品属性。我们已经预先填充了很多映射，因此您只需检查这些映射，然后通过点击\"添加字段映射\"按钮映射留空映射或添加新映射。<br/><br/>[<strong><i><a href=\"https://adtribes.io/how-to-use-static-values-and-create-fake-content-for-your-product-feed/\" target=\"_blank\">了解如何使用静态值</a></i></strong>]"
+
+#: classes/class-admin-notifications.php:69
+msgid "Mapping your product categories to the channel categories will increase changes of getting all your products listed correctly, thus increase your conversion rates."
+msgstr "将产品类别映射到渠道类别将增加正确列出所有产品的更改，从而提高转化率。"
+
+#: classes/class-admin-notifications.php:65
+msgid "Please drag and drop the attributes you want to be in your product feed from left to right."
+msgstr "请从左到右拖放要在产品源中的属性。"
+
+#: classes/class-admin-notifications.php:61
+msgid "Map your products or categories to the categories of your selected channel. For some channels adding their categorisation in the product feed is mandatory. Even when category mappings are not mandatory it is likely your products will get better visibility and higher conversions when mappings have been added."
+msgstr "将产品或类别映射到所选频道的类别。对于某些渠道，在产品源中添加其分类是必需的。即使类别映射不是强制性的，在添加映射后，您的产品也可能获得更好的可见性和更高的转化率。"
+
+#: classes/class-admin-notifications.php:57
+msgid "Please select the country and channel for which you would like to create a new product feed. The channel drop-down will populate with relevant country channels once you selected a country. Filling in a project name is mandatory."
+msgstr "请选择您要为之创建新产品源的国家/地区和渠道。选择国家/地区后，频道下拉列表将填充相关国家/地区频道。必须填写项目名称。"
+
+#: classes/class-admin-notifications.php:77
+msgid "<strong>Google Analytics UTM codes:</strong><br/>Adding Google Analytics UTM codes is not mandatory, it will however enable you to get detailed insights into how your products are performing in Google Analytics reporting and allow you to tweak and tune your campaign making it more profitable. We strongly advise you to add the Google Analytics tracking. When enabled the plugin will append the Google Analytics UTM parameters to your landingpage URL's."
+msgstr "<strong>谷歌分析 UTM 代码：</strong><br/>添加 Google Analytics UTM 代码不是强制性的，但它使您能够详细了解您的产品在 Google Analytics（分析）中的表现，并允许您调整和调整广告系列，使其更有利可图。我们强烈建议您添加 Google 分析跟踪。启用后，插件会将 Google 分析 UTM 参数追加到您的着陆页 URL 中。"
+
+#: classes/class-admin-notifications.php:73
+msgid "Create filter and rules so exactly the right products end up in your product feed. These filters and rules are only eligable for the current product feed you are configuring and will not be used for other feeds.<br/><br/><strong>Filters:</strong> Exclude or include products that meet certain conditions. [<strong><i><a href=\"https://adtribes.io/how-to-create-filters-for-your-product-feed/\" target=\"_blank\">Detailed information and filter examples</a></i></strong>] or [<strong><i><a href=\"https://adtribes.io/create-a-product-feed-for-one-specific-category/\" target=\"_blank\">Create a product feed for just 1 category</a></i></strong>]<br/><strong>Rules:</strong> Change attribute values based on other attribute values or conditions.[<strong><i><a href=\"https://adtribes.io/how-to-create-rules/\" target=\"_blank\">Detailed information about rules and some examples</a></i></strong>]<br/><br/>Order of execution: the filters and rules will be executed in the order of creation."
+msgstr "创建过滤器和规则，使正确的产品最终出现在您的产品源中。这些筛选器和规则仅适用于您配置的当前产品源，不会用于其他源。<br/><br/><strong>过滤器：</strong> 排除或包括满足特定条件的产品。[<strong><i><a href=\"https://adtribes.io/how-to-create-filters-for-your-product-feed/\" target=\"_blank\">详细信息和筛选示例</a></i></strong>] 或 [<strong><i><a href=\"https://adtribes.io/create-a-product-feed-for-one-specific-category/\" target=\"_blank\">只为 1 类创建产品源</a></i></strong>]<br/><strong>规则：</strong> 根据其他属性值或条件更改属性值。[<strong><i><a href=\"https://adtribes.io/how-to-create-rules/\" target=\"_blank\">有关规则和一些示例的详细资料</a></i></strong>]<br/><br/>执行顺序：筛选器和规则将按创建顺序执行。"
+
+#. Plugin URI of the plugin
+msgid "https://www.adtribes.io/support/?utm_source=wpadmin&utm_medium=plugin&utm_campaign=woosea_product_feed_pro"
+msgstr "https://www.adtribes.io/support/?utm_source=wpadmin&utm_medium=plugin&utm_campaign=woosea_product_feed_pro"
+
+#. Plugin Name of the plugin
+#: woocommerce-sea.php:1042
+msgid "Product Feed PRO for WooCommerce"
+msgstr "Product Feed PRO for WooCommerce"
+
+#: classes/class-admin-notifications.php:97
+msgid "The graph shows the amount of products in this product feed, measured after every scheduled and/or manually triggered refresh."
+msgstr "该图显示了此产品源中的产品数量，该数量是在每次安排的计划刷新和/或手动触发的刷新之后测得的。"
+
+#: classes/class-admin-notifications.php:81
+msgid "Your product feed is now being created, please be patient. Your feed details will be displayed when generation of the product feed has been finished."
+msgstr "系统正在创建产品源，请耐心等待，生成完成后，将在这里显示产品源的详细信息。"
+
+#: woocommerce-sea.php:1043
+msgid "Create feed"
+msgstr "创建源"
+
+#: woocommerce-sea.php:1043
+msgid "Feed configuration"
+msgstr "产品源配置"
+
+#. Author URI of the plugin
+msgid "https://www.adtribes.io"
+msgstr "https://www.adtribes.io"
+
+#. Author of the plugin
+msgid "AdTribes.io"
+msgstr "AdTribes.io"
+
+#: pages/admin/woosea-manage-feed.php:150 woocommerce-sea.php:1044
+msgid "Manage feeds"
+msgstr "管理源"
+
+#: woocommerce-sea.php:1042
+msgid "Product Feed Pro"
+msgstr "Product Feed Pro"
+
+#. Description of the plugin
+msgid "Configure and maintain your WooCommerce product feeds for Google Shopping, Facebook, Remarketing, Bing, Yandex, Comparison shopping websites and over a 100 channels more."
+msgstr "为Google Shopping，Facebook，Remarketing，Bing，Yandex，对比购物网站和100多个渠道配置和维护您的WooCommerce产品源。"

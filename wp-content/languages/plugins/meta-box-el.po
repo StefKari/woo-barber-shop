@@ -1,0 +1,197 @@
+# Translation of Plugins - Meta Box - Stable (latest release) in Greek
+# This file is distributed under the same license as the Plugins - Meta Box - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-03-08 02:11:28+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: el_GR\n"
+"Project-Id-Version: Plugins - Meta Box - Stable (latest release)\n"
+
+#. Author of the plugin
+#: meta-box.php
+msgid "MetaBox.io"
+msgstr "MetaBox.io"
+
+#. Description of the plugin
+#: meta-box.php
+msgid "Create custom meta boxes and custom fields in WordPress."
+msgstr "Δημιουργήστε προσαρμοσμένα meta boxes και προσαρμοσμένα πεδία στο WordPress."
+
+#: inc/fields/media.php:30
+msgctxt "media"
+msgid "or"
+msgstr "ή"
+
+#: inc/fields/select-advanced.php:44
+msgid "Select an item"
+msgstr "Επιλέξτε"
+
+#: inc/fields/media.php:31
+msgctxt "media"
+msgid "Drop files here to upload"
+msgstr "Σύρετε τα αρχεία εδώ για μεταφόρτωση"
+
+#: inc/fields/media.php:29
+msgctxt "media"
+msgid "Select Files"
+msgstr "Επιλέξτε αρχεία"
+
+#: inc/fields/taxonomy.php:84
+msgid "Select a term"
+msgstr "Επιλέξτε έναν όρο"
+
+#: inc/fields/media.php:26
+msgctxt "media"
+msgid "No Title"
+msgstr "Χωρίς Τίτλο"
+
+#: inc/fields/media.php:22
+msgctxt "media"
+msgid " files"
+msgstr "αρχεία"
+
+#: inc/fields/media.php:21
+msgctxt "media"
+msgid " file"
+msgstr "αρχείο"
+
+#: inc/fields/media.php:25
+msgctxt "media"
+msgid "View"
+msgstr "Προβολή"
+
+#: inc/fields/media.php:24
+msgctxt "media"
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#: inc/fields/media.php:23
+msgctxt "media"
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: inc/fields/media.php:20
+msgctxt "media"
+msgid "+ Add Media"
+msgstr "+ Προσθέστε Πολυμέσα"
+
+#: inc/field.php:309
+msgid "+ Add more"
+msgstr "+ Προσθέστε περισσότερα"
+
+#: inc/fields/select.php:80
+msgid "None"
+msgstr "Όχι"
+
+#: inc/fields/checkbox.php:43
+msgid "No"
+msgstr "Όχι"
+
+#: inc/fields/checkbox.php:43
+msgid "Yes"
+msgstr "Ναι"
+
+#: inc/fields/file-input.php:48
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: inc/fields/autocomplete.php:14 inc/fields/autocomplete.php:79
+#: inc/fields/autocomplete.php:91
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: inc/validation.php:66
+msgid "Please correct the errors highlighted below and try again."
+msgstr "Παρακαλούμε διορθώστε τα σφάλματα που επισημαίνονται παρακάτω και δοκιμάστε ξανά."
+
+#: inc/fields/user.php:75
+msgid "Select a user"
+msgstr "Επιλέξτε χρήστη"
+
+#: inc/fields/select.php:80
+msgid "All"
+msgstr "Όλα"
+
+#. Translators: %s is the post singular label.
+#. Translators: %s is the taxonomy singular label.
+#: inc/fields/post.php:75 inc/fields/taxonomy.php:88
+msgid "Select a %s"
+msgstr "Επιλέξτε %s"
+
+#: inc/fields/post.php:69
+msgid "Select a post"
+msgstr "Επιλέξτε ένα άρθρο"
+
+#: inc/fields/oembed.php:18
+msgid "Embed HTML not available."
+msgstr "Ένθεση HTML μη διαθέσιμη."
+
+#: inc/fields/file.php:61
+msgid "Error: Cannot delete file"
+msgstr "Πρόβλημα: Το αρχείο δεν διεγράφη"
+
+#. Translators: %d is the number of files in plural form.
+#: inc/fields/file.php:17
+msgid "You may only upload maximum %d files"
+msgstr "Μπορείτε να μεταφορτώσετε μόνο %d αρχεία"
+
+#. Translators: %d is the number of files in singular form.
+#: inc/fields/file.php:15
+msgid "You may only upload maximum %d file"
+msgstr "Μπορείτε να μεταφορτώσετε μόνο %d αρχείο"
+
+#: inc/fields/file-input.php:46 inc/fields/select.php:80
+msgid "Select"
+msgstr "Επιλογή"
+
+#: inc/fields/file-input.php:17
+msgid "Select File"
+msgstr "Επιλογή Αρχείου"
+
+#: inc/fields/file.php:167
+msgctxt "file upload"
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#: inc/fields/file.php:166
+msgctxt "file upload"
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: inc/fields/button.php:28
+msgid "Click me"
+msgstr "Πάτησε με"
+
+#: src/Dashboard/content.php:51
+msgid "Documentation"
+msgstr "Οδηγίες Χρήσης"
+
+#: inc/fields/file.php:86
+msgctxt "file upload"
+msgid "+ Add new file"
+msgstr "+ Προσθήκη νέου αρχείου"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: meta-box.php
+msgid "https://metabox.io"
+msgstr "https://metabox.io"
+
+#. Plugin Name of the plugin
+#: meta-box.php src/Dashboard/Dashboard.php:65 src/Dashboard/Dashboard.php:66
+#: src/Integrations/Block.php:12 src/Integrations/Bricks.php:10
+#: src/Integrations/Elementor.php:13 src/Integrations/Oxygen.php:14
+msgid "Meta Box"
+msgstr "Meta Box"
+
+#: inc/fields/key-value.php:80
+msgid "Value"
+msgstr "Τιμή"
+
+#: inc/fields/key-value.php:79
+msgid "Key"
+msgstr "Κλειδί"

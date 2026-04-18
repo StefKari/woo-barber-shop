@@ -1,0 +1,777 @@
+# Translation of Plugins - AI ChatBot for WordPress &#8211; WPBot - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - AI ChatBot for WordPress &#8211; WPBot - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-05-17 21:04:26+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - AI ChatBot for WordPress &#8211; WPBot - Stable (latest release)\n"
+
+#: admin_ui.php:331 admin_ui2.php:55 admin_ui2.php:81 admin_ui2.php:139
+#: admin_ui2.php:141 admin_ui2.php:196 admin_ui2.php:277 admin_ui2.php:305
+#: admin_ui2.php:334 admin_ui2.php:363 admin_ui2.php:391 admin_ui2.php:420
+#: admin_ui2.php:448 admin_ui2.php:476
+#: class-qc-free-plugin-upgrade-notice.php:100
+#: includes/openai/admin/img_generator.php:154 qcld-wpwbot.php:2811
+msgid "Settings"
+msgstr "Instellingen"
+
+#: admin_ui.php:1628
+msgid "Buttons Background Color."
+msgstr "Achtergrondkleur knoppen."
+
+#: admin_ui.php:1640
+msgid "Buttons Hover Background Color."
+msgstr "Knoppen hoveren achtergrondkleur."
+
+#: admin_ui.php:1652
+msgid "Buttons Text Color."
+msgstr "Knoppen tekstkleur."
+
+#: admin_ui.php:1712
+msgid "Font size"
+msgstr "Lettertype grootte"
+
+#: admin_ui.php:1230
+msgid "Icons & Themes"
+msgstr "Pictogrammen & thema's"
+
+#: admin_ui.php:1231 admin_ui.php:1529
+msgid "Custom Style Options"
+msgstr "Aangepaste stijlopties"
+
+#: admin_ui.php:1544
+msgid "Text Color."
+msgstr "Tekstkleur."
+
+#: admin_ui.php:1556
+msgid "Link Color."
+msgstr "Link kleur."
+
+#: admin_ui.php:1568
+msgid "Link Hover Color."
+msgstr "Link hoveren kleur."
+
+#: admin_ui.php:1535
+msgid "Enable Style Colors "
+msgstr "Schakel stijlkleuren in "
+
+#: admin_ui.php:2254
+msgid "You can paste or write your custom css here."
+msgstr "Je kan hier je aangepaste css schrijven of plakken."
+
+#: admin_ui.php:1396
+msgid "WPBot Icon Background Color."
+msgstr "WPBot pictogram achtergrondkleur."
+
+#: qc-rating-feature/qc-rating-class.php:197
+msgid "Maybe Later"
+msgstr "Misschien later"
+
+#: qc-rating-feature/qc-rating-class.php:198
+msgid "Never show this again"
+msgstr "Niet meer tonen"
+
+#: qc-rating-feature/qc-rating-class.php:196
+msgid "I've already left a review"
+msgstr "Ik heb al een beoordeling achtergelaten"
+
+#: qc-rating-feature/qc-rating-class.php:195
+msgid "Leave A Review"
+msgstr "Laat een beoordeling achter"
+
+#: qc-rating-feature/qc-rating-class.php:128
+#: qc-rating-feature/qc-rating-class.php:187
+msgid "Hello! Thank you for using our ChatBot."
+msgstr "Dank je voor het gebruiken van onze ChatBot."
+
+#: qc-rating-feature/qc-rating-class.php:130
+msgid "If you have any feedback or need help, please <a href=\"https://www.wpbot.pro/free-support/\" target=\"_blank\">contact us</a>. We take all user feedback seriously and resolve all issues."
+msgstr "Als je feedback heeft of hulp nodig hebt, neem dan <a href=\"https://www.wpbot.pro/free-support/\" target=\"_blank\">contact met ons op</a>. We nemen alle gebruikersfeedback serieus en lossen alle problemen op."
+
+#: qcld-openai-bot.php:78 templates/template-00/template.php:77
+#: templates/template-01/template.php:59 templates/template-02/template.php:59
+#: templates/template-03/template.php:60
+#: templates/template-horizontal/template.php:83
+msgid "Chat"
+msgstr "Chat"
+
+#: class-qc-free-plugin-upgrade-notice.php:106
+#: templates/template-00/template.php:78 templates/template-01/template.php:60
+#: templates/template-02/template.php:60 templates/template-03/template.php:61
+#: templates/template-horizontal/template.php:84
+msgid "Support"
+msgstr "Ondersteuning"
+
+#: class-qc-free-plugin-upgrade-notice.php:103
+#: includes/openai/admin/admin_ui2.php:42 templates/template-00/template.php:75
+#: templates/template-01/template.php:57 templates/template-02/template.php:57
+#: templates/template-03/template.php:58
+#: templates/template-horizontal/template.php:81
+msgid "Help"
+msgstr "Hulp"
+
+#: admin_ui.php:480
+msgid "From Email Address"
+msgstr "Van e-mail adres"
+
+#: admin_ui.php:608 admin_ui.php:617
+msgid "Bot Response Delay"
+msgstr "Bot reactie vertraging"
+
+#: admin_ui.php:484
+msgid "All emails will be sent from this email address. If you change the From Email Address then please make sure the domain remains the same as where WordPress is installed. Otherwise, the emails may not be received."
+msgstr "Alle e-mails worden verzonden vanaf dit e-mailadres. Als je het Van e-mailadres wijzigt, zorg er dan voor dat het domein hetzelfde blijft als waar WordPress is geïnstalleerd. Anders kunnen de e-mails mogelijk niet worden ontvangen."
+
+#: admin_ui.php:2222
+msgid "*You must have owner permission for the service account your are using in Dialogflow agent."
+msgstr "*Je moet toestemming van de eigenaar hebben voor het dienst account dat je gebruikt in Dialogflow-agent."
+
+#: includes/class-response-list.php:186 includes/class-response-list.php:196
+msgid "Intent"
+msgstr "Intentie"
+
+#: includes/class-response-list.php:187
+msgid "Category"
+msgstr "Categorie"
+
+#: admin_ui.php:2221
+msgid "*Save settings before pressing Test Dialogflow Connection"
+msgstr "* Sla de instellingen op voordat je op Test Dialogflow Connection drukt"
+
+#: includes/class-response-list.php:89
+msgid "No responses avaliable."
+msgstr "Geen reacties beschikbaar."
+
+#: includes/class-response-list.php:15
+msgid "Responses"
+msgstr "Reacties"
+
+#: includes/class-response-list.php:14 includes/class-response-list.php:185
+#: includes/class-response-list.php:195 includes/simple_text_response.php:321
+#: includes/simple_text_response.php:439
+msgid "Response"
+msgstr "Reactie"
+
+#: includes/class-response-list.php:183 includes/class-response-list.php:193
+#: includes/simple_text_response.php:312
+msgid "Query"
+msgstr "Query"
+
+#: admin_ui.php:1504
+msgid "Theme One"
+msgstr "Thema een"
+
+#: admin_ui.php:800
+msgid "ChatBot Keywords"
+msgstr "ChatBot keywords"
+
+#: admin_ui.php:2220
+msgid "Please Click the Button Below to Test Dialogflow Connection."
+msgstr "Klik op de onderstaande knop om de Dialogflow verbinding te testen."
+
+#: admin_ui.php:1940 admin_ui.php:1962 admin_ui.php:1984 admin_ui.php:2014
+msgid "Button Label"
+msgstr "Knop label"
+
+#: admin_ui.php:1927
+msgid "Call Me"
+msgstr "Bel me"
+
+#: class-plugin-deactivate-feedback.php:218
+msgid "Please provide email so we can contact with bug fixes"
+msgstr "Geef een e-mailadres op zodat we contact kunnen opnemen met bugfixes"
+
+#: admin_ui.php:521 admin_ui.php:527
+msgid "Show Start Menu After Greetings"
+msgstr "Toon startmenu na begroeting"
+
+#: admin_ui.php:2212
+msgid "Private Key"
+msgstr "Privésleutel"
+
+#: admin_ui.php:2189
+msgid "DialogFlow Project ID"
+msgstr "DialogFlow project-ID"
+
+#: admin_ui.php:2153
+msgid "Dialogflow API V2"
+msgstr "Dialogflow API V2"
+
+#: admin_ui.php:83
+msgid "Dialogflow"
+msgstr "Dialogflow"
+
+#: admin_ui.php:2146
+msgid "with your gmail account."
+msgstr "met je gmail account."
+
+#: admin_ui.php:2147
+msgid "DialogFlow API Version"
+msgstr "DialogFlow API versie"
+
+#: admin_ui.php:2182
+msgid "Google Client Package is Installed on Your Website."
+msgstr "Google Client Package is op je site geïnstalleerd."
+
+#: admin_ui.php:2142
+msgid "Log in to DialogFlow Console from"
+msgstr "Log in op DialogFlow Console vanuit"
+
+#: admin_ui.php:2160
+msgid "For Interacting with Dialogflow V2 the Google Client Package is Required!"
+msgstr "Voor interactie met Dialogflow V2 is het Google Client pakket vereist!"
+
+#: admin_ui.php:2146
+msgid "the agent training data and import from DialogFlow->Settings->Export and Import tab. You can add your own intents in that agent but do not modify our following training intents which are"
+msgstr "de trainingsgegevens van de agent en import vanuit DialogFlow-> Instellingen-> Export en import tab. Je kunt je eigen intenties in die agent toevoegen, maar verander onze volgende trainingsintenties niet"
+
+#: admin_ui.php:79 admin_ui.php:317 qcld-wpwbot.php:2797
+msgid "Start Menu"
+msgstr "Startmenu"
+
+#: admin_ui.php:571
+msgid "Enable RTL (Right to Left language) Support for Chat"
+msgstr "Schakel RTL (Rechts naar links taal) ondersteuning in voor chat."
+
+#: admin_ui.php:565
+msgid "Enable RTL"
+msgstr "Activeer RTL"
+
+#: admin_ui.php:1977
+msgid "Disable FAQ feature and button on Start Menu"
+msgstr "Schakel FAQ functie en knop uit op het startmenu"
+
+#: admin_ui.php:1955
+msgid "Disable Email feature and button on Start Menu"
+msgstr "Schakel e-mail functie en knop uit op het startmenu"
+
+#: admin_ui.php:1933
+msgid "Disable Call Me feature and button on Start Menu"
+msgstr "Schakel bel me functie en knop uit op het startmenu"
+
+#: admin_ui.php:1451
+msgid "Custom Agent"
+msgstr "Aangepaste agent"
+
+#: admin_ui.php:469
+msgid "Support and Call Back requests will be sent to this address"
+msgstr "Ondersteuning en terugbellen aanvragen worden verzonden naar dit adres"
+
+#: admin_ui.php:2241
+msgid "DialogFlow Agent Language"
+msgstr "DialogFlow medewerkerstaal"
+
+#: admin_ui.php:2238
+msgid "DialogFlow Agent Language (Ex: en)"
+msgstr "DialogFlow medewerkerstaal (bijv.: en)"
+
+#. Plugin URI of the plugin
+#: qcld-wpwbot.php
+msgid "https://wordpress.org/plugins/chatbot/"
+msgstr "https://wordpress.org/plugins/chatbot/"
+
+#: templates/app-templates/app-order-thankyou.php:39
+msgid "Total:"
+msgstr "Totaal:"
+
+#: functions.php:65
+msgid "Skype"
+msgstr "Skype"
+
+#: templates/template-00/template.php:70
+msgid "Send"
+msgstr "Verzend"
+
+#: templates/template-00/shortcode.php:50
+#: templates/template-01/shortcode.php:51 templates/template-01/template.php:51
+#: templates/template-02/shortcode.php:65 templates/template-02/template.php:51
+#: templates/template-03/shortcode.php:49 templates/template-03/template.php:52
+msgid "send"
+msgstr "verzend"
+
+#: templates/app-templates/app-order-thankyou.php:23
+msgid "My account"
+msgstr "Mijn account"
+
+#: templates/app-templates/app-order-thankyou.php:35
+msgid "Date:"
+msgstr "Datum:"
+
+#: admin_ui.php:1022
+msgid "WPBot Support Mail Subject"
+msgstr "WPBot ondersteuning e-mail onderwerp"
+
+#: admin_ui.php:1038
+msgid "Your email was sent successfully.Thanks!"
+msgstr "Je e-mail werd met succes verzonden. Bedankt!"
+
+#: admin_ui.php:2279
+msgid "Save Settings"
+msgstr "Instellingen opslaan"
+
+#: functions.php:70
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#: templates/app-templates/app-order-thankyou.php:44
+msgid "Payment method:"
+msgstr "Betaalmethode:"
+
+#: templates/app-templates/app-order-thankyou.php:31
+msgid "Order number:"
+msgstr "Bestelnummer:"
+
+#: templates/app-templates/app-order-thankyou.php:28
+#: templates/app-templates/app-order-thankyou.php:54
+msgid "Thank you. Your order has been received."
+msgstr "Bedankt. Je bestelling is ontvangen."
+
+#: templates/app-templates/app-order-thankyou.php:20
+msgid "Pay"
+msgstr "Betaal"
+
+#: functions.php:108 qcld-wpwbot.php:859
+msgid "X"
+msgstr "X"
+
+#: functions.php:982 functions.php:1030
+msgid "Name"
+msgstr "Naam"
+
+#: functions.php:981 functions.php:1029
+msgid "Support Request Details"
+msgstr "Details ondersteuningsaanvraag"
+
+#: functions.php:842
+msgid "SKU"
+msgstr "SKU"
+
+#: functions.php:99
+msgid "No wpWBot Theme Found!"
+msgstr "Geen wpWBot thema gevonden!"
+
+#: functions.php:84
+msgid "Web Link"
+msgstr "Weblink"
+
+#: functions.php:80 functions.php:1031
+msgid "Phone"
+msgstr "Telefoon"
+
+#: functions.php:75
+msgid "Viber"
+msgstr "Viber"
+
+#: admin_ui.php:2145
+msgid "Here"
+msgstr "Hier"
+
+#: admin_ui.php:2235
+msgid "DialogFlow default reply"
+msgstr "DialogFlow standaard antwoord"
+
+#: admin_ui.php:1165 admin_ui.php:1175 includes/class-response-list.php:184
+#: includes/class-response-list.php:194 includes/simple_text_response.php:436
+msgid "Keyword"
+msgstr "Keyword"
+
+#: admin_ui.php:1155
+msgid "Start Keyword"
+msgstr "Start keyword"
+
+#: admin_ui.php:1173
+msgid "Converstion History Clear"
+msgstr "Gespreksgeschiedenis wissen"
+
+#: admin_ui.php:861
+msgid "Sorry"
+msgstr "Sorry"
+
+#: admin_ui.php:871
+msgid "has joined the conversation"
+msgstr "heeft zich aan het gesprek toegevoegd"
+
+#: admin_ui.php:853
+msgid "OR"
+msgstr "OF"
+
+#: admin_ui.php:821
+msgid "Agent name"
+msgstr "Medewerker naam"
+
+#: admin_ui.php:813
+msgid "Your Company or Website Name"
+msgstr "Je bedrijfs- of sitenaam"
+
+#: admin_ui.php:127 admin_ui.php:797 admin_ui.php:1163 admin_ui.php:1971
+msgid "FAQ"
+msgstr "FAQ"
+
+#: admin_ui.php:794
+msgid "General"
+msgstr "Algemeen"
+
+#: admin_ui.php:1874
+msgid "Support answer"
+msgstr "Ondersteundingsvraag"
+
+#: admin_ui.php:1871
+msgid "Support query "
+msgstr "Ondersteuningsquery "
+
+#: admin_ui.php:1868
+msgid "Support query"
+msgstr "Ondersteuningsquery"
+
+#: admin_ui.php:1901
+msgid "Add More Questions and Answers"
+msgstr "Voeg meer antwoorden en vragen toe"
+
+#: functions.php:985 functions.php:1033
+msgid "Message"
+msgstr "Bericht"
+
+#: functions.php:984 functions.php:1032
+msgid "Subject"
+msgstr "Onderwerp"
+
+#: admin_ui.php:1949 functions.php:983
+msgid "Email"
+msgstr "E-mail"
+
+#: class-plugin-deactivate-feedback.php:212
+msgid "Found a Bug"
+msgstr "Een bug gevonden"
+
+#: class-plugin-deactivate-feedback.php:214
+msgid "Deactivating Temporarily"
+msgstr "Tijdelijk deactiveren"
+
+#: class-plugin-deactivate-feedback.php:215
+msgid "Upgrading to Pro"
+msgstr "Upgraden naar Pro"
+
+#: class-plugin-deactivate-feedback.php:219
+msgid "Please provide some details so we can improve the plugin"
+msgstr "Geef enkele details op zodat we de plugin kunnen verbeteren"
+
+#: class-plugin-deactivate-feedback.php:263
+msgid "Submitting form"
+msgstr "Formulier verzenden"
+
+#: class-plugin-deactivate-feedback.php:130
+msgid "We can't detect any plugin information. This is most probably because you have not included the code in the plugin main file."
+msgstr "We kunnen geen plugin informatie detecteren. Dit komt waarschijnlijk doordat je de code niet in het hoofdbestand van de plugin hebt opgenomen."
+
+#: functions.php:1115 includes/openai/admin/files.php:37
+msgid "Status"
+msgstr "Status"
+
+#: functions.php:1114
+msgid "Items"
+msgstr "Artikelen"
+
+#: functions.php:1113
+msgid "Date"
+msgstr "Datum"
+
+#: functions.php:1112
+msgid "ID"
+msgstr "ID"
+
+#: functions.php:1033
+msgid " Call me at "
+msgstr "Bel me op "
+
+#: functions.php:986 functions.php:1034
+msgid "Mail Generated on"
+msgstr "E-mail gegenereerd op"
+
+#: admin_ui.php:879
+msgid " Message setting for Greetings: "
+msgstr "Berichtinstelling voor begroeting: "
+
+#: admin_ui.php:101
+msgid "Reset all options to Default"
+msgstr "Reset alle opties naar de standaardinstellingen"
+
+#: admin_ui.php:1413
+msgid "Upload Icon"
+msgstr "Pictogram uploaden"
+
+#: admin_ui.php:1384
+msgid "Custom Icon"
+msgstr "Aangepast pictogram"
+
+#: admin_ui.php:1368
+msgid "Icon - 13"
+msgstr "Pictogram - 13"
+
+#: admin_ui.php:1358
+msgid "Icon - 12"
+msgstr "Pictogram - 12"
+
+#: admin_ui.php:1349
+msgid "Icon - 11"
+msgstr "Pictogram - 11"
+
+#: admin_ui.php:1340
+msgid "Icon - 10"
+msgstr "Pictogram - 10"
+
+#: admin_ui.php:1331
+msgid "Icon - 9"
+msgstr "Pictogram - 9"
+
+#: admin_ui.php:1322
+msgid "Icon - 8"
+msgstr "Pictogram - 8"
+
+#: admin_ui.php:1313
+msgid "Icon - 7"
+msgstr "Pictogram - 7"
+
+#: admin_ui.php:1304
+msgid "Icon - 6"
+msgstr "Pictogram - 6"
+
+#: admin_ui.php:1295
+msgid "Icon - 5"
+msgstr "Pictogram - 5"
+
+#: admin_ui.php:1286
+msgid "Icon - 4"
+msgstr "Pictogram - 4"
+
+#: admin_ui.php:1277
+msgid "Icon - 3"
+msgstr "Pictogram - 3"
+
+#: admin_ui.php:630 admin_ui.php:634
+msgid "120"
+msgstr "120"
+
+#: admin_ui.php:1268
+msgid "Icon - 2"
+msgstr "Pictogram - 2"
+
+#: admin_ui.php:1259
+msgid "Icon - 1"
+msgstr "Pictogram - 1"
+
+#: admin_ui.php:1250
+msgid "Icon - 0"
+msgstr "Pictogram - 0"
+
+#: admin_ui.php:1240
+msgid "WPBot Icon"
+msgstr "WPBot pictogram"
+
+#: admin_ui.php:719
+msgid "Selected Pages Only "
+msgstr "Alleen geselecteerde pagina's"
+
+#: admin_ui.php:77
+msgid "FAQ Builder"
+msgstr "FAQ bouwer"
+
+#: admin_ui.php:74
+msgid "ICONS & THEMES"
+msgstr "PICTOGRAMMEN & THEMA'S"
+
+#: admin_ui.php:68
+msgid "GENERAL SETTINGS"
+msgstr "ALGEMENE INSTELLINGEN"
+
+#: admin_ui.php:45
+msgid "WPBot Control Panel"
+msgstr "WPBot controlepaneel"
+
+#: admin_ui.php:11 admin_ui.php:659
+msgid "WPBot"
+msgstr "WPBot"
+
+#: admin_ui.php:91
+msgid "Custom CSS"
+msgstr "Aangepaste CSS"
+
+#: admin_ui.php:1836
+msgid "FAQ answer"
+msgstr "FAQ antwoord"
+
+#: admin_ui.php:1830 admin_ui.php:1833
+msgid "FAQ query "
+msgstr "FAQ query "
+
+#: admin_ui.php:1434
+msgid "Default Agent"
+msgstr "Standaard medewerker"
+
+#: admin_ui.php:679 admin_ui.php:699 admin_ui.php:845
+msgid "NO"
+msgstr "NEE"
+
+#: admin_ui.php:673 admin_ui.php:693 admin_ui.php:837
+msgid "YES"
+msgstr "JA"
+
+#: admin_ui.php:713
+msgid "All Pages"
+msgstr "Alle pagina's"
+
+#: admin_ui.php:1482
+msgid "WPBot Themes"
+msgstr "WPBot thema's"
+
+#: admin_ui.php:465
+msgid "Emails Will be Sent to"
+msgstr "E-mails zullen verzonden worden naar"
+
+#: admin_ui.php:535
+msgid "Disable WPBot"
+msgstr "WPBot uitschakelen"
+
+#: admin_ui.php:541
+msgid "Disable WPBot to Load"
+msgstr "WPBot uitschakelen voor laden"
+
+#: admin_ui.php:550
+msgid "Disable WPbot on Mobile Device"
+msgstr "WPBot uitschakelen op mobiele apparaten"
+
+#: admin_ui.php:556
+msgid "Disable WpBot to Load on Mobile Device"
+msgstr "WPBot uitschakelen voor laden op mobiele apparaten"
+
+#: admin_ui.php:1813
+msgid "Build FAQ Query and Answers"
+msgstr "Bouw FAQ query en antwoorden"
+
+#: admin_ui.php:970
+msgid "Message setting for Editor Box "
+msgstr "Berichtinstelling voor editorbox"
+
+#: admin_ui.php:649
+msgid "From Bottom In px"
+msgstr "Vanaf bodem in px"
+
+#: admin_ui.php:647
+msgid "From Bottom In Px"
+msgstr "Vanaf bodem in px"
+
+#: admin_ui.php:640 admin_ui.php:642
+msgid "From Right In px"
+msgstr "Vanaf rechts in px"
+
+#: admin_ui.php:686
+msgid "Show on blog posts"
+msgstr "Toon op blogberichten"
+
+#: admin_ui.php:666
+msgid "Show on Home Page"
+msgstr "Toon op homepagina"
+
+#: admin_ui.php:624
+msgid "Override WPBot Icon's Position"
+msgstr "Overschijf WPBot pictogrampositie"
+
+#: admin_ui.php:706
+msgid "Show on  pages"
+msgstr "Toon op pagina's"
+
+#: admin_ui.php:1080
+msgid "Thanks for your phone number. We will call you ASAP!"
+msgstr "Bedankt voor je telefoonnummer. We zullen je zo snel mogelijk opbellen!"
+
+#: admin_ui.php:2135
+msgid "Enable DialogFlow AI Engine to process Natural Language commands from users."
+msgstr "Schakel de DialogFlow AI Engine in om natuurlijke taal commando's te verwerken van gebruikers."
+
+#: templates/app-templates/app-order-thankyou.php:56
+msgid "Tap on logo to go home"
+msgstr "Tik op het logo om naar home te gaan"
+
+#: admin_ui.php:1046
+msgid "Sorry! I could not send your mail! Please contact the webmaster."
+msgstr "Ik kon je geen e-mail sturen! Neem contact op met de webmaster."
+
+#: templates/app-templates/app-order-thankyou.php:17
+msgid "Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction. Please attempt your purchase again."
+msgstr "Helaas kan je bestelling niet worden verwerkt omdat de oorspronkelijke bank/handelaar je transactie heeft geweigerd. Probeer je aankoop opnieuw."
+
+#: admin_ui.php:2146 includes/openai/admin/data_post_converter.php:78
+msgid "Download"
+msgstr "Download"
+
+#: admin_ui.php:1088
+msgid "Sorry! I could not collect phone number! Please contact the webmaster."
+msgstr "Ik kon geen telefoonnummer verzamelen! Neem contact op met de webmaster."
+
+#: admin_ui.php:829
+msgid "User demo name"
+msgstr "Naam van de demo gebruiker"
+
+#: class-plugin-deactivate-feedback.php:213
+msgid "Need More Features"
+msgstr "Heb meer functies nodig"
+
+#: class-plugin-deactivate-feedback.php:209
+msgid "Sorry to see you go"
+msgstr "Sorry dat je weggaat"
+
+#: functions.php:1313
+msgid "You have no products"
+msgstr "Je hebt geen producten"
+
+#: admin_ui.php:1424
+msgid " WPBot Agent Image"
+msgstr " WPBot Agent afbeelding"
+
+#: admin_ui.php:1406
+msgid " Upload custom Icon "
+msgstr " Upload aangepast pictogram "
+
+#: admin_ui.php:53
+msgid "The Lite Version"
+msgstr "De Lite versie"
+
+#: qcld-wpwbot.php:1730
+msgid "Re-Index Products"
+msgstr "Producten opnieuw indexeren"
+
+#: admin_ui.php:661
+msgid "Loading Control Options"
+msgstr "Laad controle opties"
+
+#: admin_ui.php:1494
+msgid "Theme Basic"
+msgstr "Thema basis"
+
+#: admin_ui.php:1465
+msgid "Custom Agent Icon"
+msgstr "Aangepast agent pictogram"
+
+#: admin_ui.php:1472
+msgid "Upload Agent Icon"
+msgstr "Upload agent pictogram"
+
+#: admin_ui.php:2127
+msgid "Enable DialogFlow as AI Engine to Detect Intent"
+msgstr "Schakel DialogFlow in als AI engine om intentie te detecteren"
+
+#: admin_ui.php:2120
+msgid "DialogFlow as Artificial Intelligences Engine for wpwBot"
+msgstr "DialogFlow als kunstmatige intelligentie engine voor wpwBot"
+
+#: qcld-wpwbot.php:1730
+msgid "WPBot Pro : To Enable Title, Content, Excerpt, Categories, Tag and SKU Search Re-Index Products is required. %s"
+msgstr "WPBot Pro: om Titel, Inhoud, Samenvatting, Categorieën, Tag en SKU zoeken in te schakelen, is opnieuw indexeren van producten vereist. %s"
+
+#: admin_ui.php:2231
+msgid "DialogFlow Default reply"
+msgstr "DialogFlow standaard antwoord"

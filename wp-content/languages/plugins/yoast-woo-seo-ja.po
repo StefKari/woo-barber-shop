@@ -1,0 +1,190 @@
+# Translation of Yoast - WooCommerce SEO in Japanese
+# This file is distributed under the same license as the Yoast - WooCommerce SEO package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-09-02 21:54:54+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.0-rc.1\n"
+"Language: ja_JP\n"
+"Project-Id-Version: Yoast - WooCommerce SEO\n"
+
+#: classes/woocommerce-seo.php:549
+msgid "Size"
+msgstr "サイズ"
+
+#: classes/woocommerce-seo.php:564
+msgid "Return policy page"
+msgstr "返品ポリシーページ"
+
+#: classes/woocommerce-seo.php:552
+msgid "If you have a general return policy for your business, please select it here."
+msgstr "一般的な返品ポリシーがある場合は、ここで選択してください。"
+
+#. translators: %1$s: WordPress
+#. translators: %1$s: Yoast SEO
+#: classes/woocommerce-dependencies.php:146
+#: classes/woocommerce-dependencies.php:174
+msgid "Update %1$s"
+msgstr "%1$s を更新"
+
+#. translators: %1$s: WooCommerce
+#. translators: %1$s: Yoast SEO
+#: classes/woocommerce-dependencies.php:84
+#: classes/woocommerce-dependencies.php:115
+msgid "Install %1$s"
+msgstr "%1$s をインストール"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:580
+msgid "Note that %1$s breadcrumbs will not be replaced if you’re using a block-based template for single products."
+msgstr "個別の商品にブロックベースのテンプレートを使用している場合、%1$s パンくずリストは置き換えられないことに注意してください。"
+
+#. Author URI of the plugin
+#: wpseo-woocommerce.php
+msgid "https://yoa.st/team-yoast-woocommerce"
+msgstr "https://yoa.st/team-yoast-woocommerce"
+
+#: classes/woocommerce-seo.php:548
+msgid "Material"
+msgstr "素材"
+
+#: classes/woocommerce-seo.php:547
+msgid "Pattern"
+msgstr "パターン"
+
+#: classes/woocommerce-yoast-ids.php:45
+msgid "If this product variation has unique identifiers, you can enter them here"
+msgstr "この商品バリエーションに一意の識別子がある場合は、ここに入力できます。"
+
+#: classes/woocommerce-yoast-ids.php:44
+msgid "Yoast SEO options"
+msgstr "Yoast SEO オプション"
+
+#. Plugin URI of the plugin
+#: wpseo-woocommerce.php
+msgid "https://yoa.st/4fu"
+msgstr "https://yoa.st/4fu"
+
+#: classes/woocommerce-seo.php:541
+msgid "Schema & OpenGraph additions"
+msgstr "スキーマと OpenGraph の追加"
+
+#: classes/woocommerce-seo.php:542
+msgid "If you have product attributes for the following types, select them here, the plugin will make sure they're used for the appropriate Schema.org and OpenGraph markup."
+msgstr "以下のタイプの商品属性がある場合、ここで選択すると適切な Schema.org および OpenGraph マークアップに使用します。"
+
+#: classes/woocommerce-seo.php:545
+msgid "Brand"
+msgstr "ブランド"
+
+#: classes/woocommerce-seo.php:544
+msgid "Manufacturer"
+msgstr "メーカー"
+
+#: classes/woocommerce-seo.php:567
+msgid "Breadcrumbs"
+msgstr "パンくずリスト"
+
+#. translators: %1$s resolves to internal links options page, %2$s resolves to
+#. closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:571
+msgid "Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sBreadcrumbs settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced."
+msgstr "%4$s と %3$s の両方にパンくずリスト機能があります。%3$s のパンくずリストのほうが、検索エンジンに拾われる確率が若干高く、%1$sパンくずリスト設定ページ%2$sに追加設定があります。この機能を有効にするには、以下のボックスにチェックを入れて、WooCommerce のパンくずから置き換えます。"
+
+#: classes/woocommerce-seo.php:595
+msgid "Admin"
+msgstr "管理"
+
+#: classes/woocommerce-slack.php:46
+msgid "In stock"
+msgstr "在庫あり"
+
+#: classes/woocommerce-slack.php:63
+msgid "Price"
+msgstr "価格"
+
+#. translators: %1$s resolves to Yoast WooCommerce SEO
+#: classes/woocommerce-dependencies.php:154
+msgid "Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly."
+msgstr "WordPress と %1$s モジュールが正しく機能するよう、WordPress を最新バージョンにアップグレードしてください。"
+
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to Yoast WooCommerce
+#. SEO
+#: classes/woocommerce-dependencies.php:182
+msgid "Please upgrade the %1$s plugin to the latest version to allow the %2$s module to work."
+msgstr "%2$s モジュールを使用するには、%1$s プラグインを最新版に更新してください。"
+
+#. Description of the plugin
+#: wpseo-woocommerce.php
+msgid "This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins."
+msgstr "WooCommerce と Yoast SEO の拡張機能です。2つのプラグイン間で完全な連携が可能になります。"
+
+#. Author of the plugin
+#: wpseo-woocommerce.php
+msgid "Team Yoast"
+msgstr "Team Yoast"
+
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:599
+msgid "Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s to be above %1$s, check the box."
+msgstr "%2$s と %1$s の両方が、商品編集ページにメタボックスを追加します。%2$s を %1$s より上にするには、チェックボックスをオンにします。"
+
+#. Plugin Name of the plugin
+#: wpseo-woocommerce.php
+msgid "Yoast SEO: WooCommerce"
+msgstr "Yoast SEO: WooCommerce"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:589
+msgid "Replace %1$s Breadcrumbs"
+msgstr "%1$s のパンくずリストを置き換える"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:609
+msgid "Move %1$s up"
+msgstr "%1$s を上に移動"
+
+#. translators: %1$s resolves to WooCommerce SEO
+#: classes/woocommerce-seo.php:483
+msgid "%1$s Settings"
+msgstr "%1$s 設定"
+
+#. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
+#. to the closing tag, %3$s resolves to WooCommerce, %4$s resolves to Yoast
+#. WooCommerce SEO
+#. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
+#. to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to Yoast
+#. WooCommerce SEO
+#: classes/woocommerce-dependencies.php:92
+#: classes/woocommerce-dependencies.php:123
+msgid "Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work."
+msgstr "%4$s モジュールが機能するようには、%1$s%3$sをインストールして有効化して%2$sください。"
+
+#: classes/woocommerce-yoast-tab.php:63
+#: js/src/initializers/registerAssessments.js:280
+msgid "Product identifiers"
+msgstr "製品識別子"
+
+#. translators: %1$s resolves to Yoast SEO
+#: classes/woocommerce-yoast-tab.php:66
+msgid "If you have any of these unique identifiers for your products, please add them here. %1$s will use them in your Schema and OpenGraph output."
+msgstr "製品にこれらの一意の識別子がある場合は、ここに追加してください。%1$s は、スキーマと OpenGraph の出力でそれらを使用します。"
+
+#: classes/woocommerce-seo.php:546
+msgid "Color"
+msgstr "色"
+
+#: classes/woocommerce-slack.php:42
+msgid "Out of stock"
+msgstr "在庫切れ"
+
+#: classes/woocommerce-slack.php:50
+msgid "On backorder"
+msgstr "入荷待ち"
+
+#: classes/woocommerce-slack.php:65
+msgid "Availability"
+msgstr "在庫"

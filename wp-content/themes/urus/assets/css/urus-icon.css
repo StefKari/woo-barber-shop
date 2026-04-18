@@ -1,0 +1,262 @@
+@font-face {
+  font-family: 'Urus';
+  font-display: auto;
+  src:  url('../fonts/Urus.eot?5fdq4q');
+  src:  url('../fonts/Urus.eot?5fdq4q#iefix') format('embedded-opentype'),
+    url('../fonts/Urus.ttf?5fdq4q') format('truetype'),
+    url('../fonts/Urus.woff?5fdq4q') format('woff'),
+    url('../fonts/Urus.svg?5fdq4q#Urus') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="urus-icon-"], [class*="urus-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'Urus' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.urus-icon-prev:before {
+  content: "\e93c";
+}
+.urus-icon-next:before {
+  content: "\e919";
+}
+.urus-icon-down:before {
+  content: "\e938";
+}
+.urus-icon-up:before {
+  content: "\e930";
+}
+.urus-icon-prev-1:before {
+  content: "\e921";
+}
+.urus-icon-next-1:before {
+  content: "\e91a";
+}
+.urus-icon-search:before {
+  content: "\e92a";
+}
+.urus-icon-heart:before {
+  content: "\e915";
+}
+.urus-icon-envelope-1:before {
+  content: "\e910";
+}
+.urus-icon-box:before {
+  content: "\e901";
+}
+.urus-icon-return-1:before {
+  content: "\e928";
+}
+.urus-icon-shield-1:before {
+  content: "\e93d";
+}
+.urus-icon-instagam:before {
+  content: "\e939";
+}
+.urus-icon-close:before {
+  content: "\e904";
+}
+.urus-icon-plus:before {
+  content: "\e93b";
+}
+.urus-icon-minus:before {
+  content: "\e918";
+}
+.urus-icon-play:before {
+  content: "\e920";
+}
+.urus-icon-360:before {
+  content: "\e900";
+}
+.urus-icon-ruler:before {
+  content: "\e929";
+}
+.urus-icon-full-screen:before {
+  content: "\e912";
+}
+.urus-icon-compare:before {
+  content: "\e906";
+}
+.urus-icon-check:before {
+  content: "\e903";
+}
+.urus-icon-up-4:before {
+  content: "\e934";
+}
+.urus-icon-down-4:before {
+  content: "\e90e";
+}
+.urus-icon-prev-3:before {
+  content: "\e923";
+}
+.urus-icon-next-3:before {
+  content: "\e91c";
+}
+.urus-icon-up-3:before {
+  content: "\e933";
+}
+.urus-icon-down-3:before {
+  content: "\e90d";
+}
+.urus-icon-cart:before {
+  content: "\e902";
+}
+.urus-icon-envelope:before {
+  content: "\e90f";
+}
+.urus-icon-user:before {
+  content: "\e935";
+}
+.urus-icon-reload:before {
+  content: "\e926";
+}
+.urus-icon-grid:before {
+  content: "\e914";
+}
+.urus-icon-filter:before {
+  content: "\e911";
+}
+.urus-icon-list:before {
+  content: "\e916";
+}
+.urus-icon-customer-1:before {
+  content: "\e908";
+}
+.urus-icon-lock:before {
+  content: "\e917";
+}
+.urus-icon-truck:before {
+  content: "\e92e";
+}
+.urus-icon-percentage:before {
+  content: "\e91f";
+}
+.urus-icon-pause:before {
+  content: "\e91e";
+}
+.urus-icon-customer:before {
+  content: "\e907";
+}
+.urus-icon-shield-1-1:before {
+  content: "\e93e";
+}
+.urus-icon-return:before {
+  content: "\e927";
+}
+.urus-icon-prev-4:before {
+  content: "\e924";
+}
+.urus-icon-next-4:before {
+  content: "\e91d";
+}
+.urus-icon-table:before {
+  content: "\e92d";
+}
+.urus-icon-diamon:before {
+  content: "\e909";
+}
+.urus-icon-user-1:before {
+  content: "\e936";
+}
+.urus-icon-down-2:before {
+  content: "\e90c";
+}
+.urus-icon-up-2:before {
+  content: "\e932";
+}
+.urus-icon-prev-2:before {
+  content: "\e922";
+}
+.urus-icon-next-2:before {
+  content: "\e91b";
+}
+.urus-icon-up-1:before {
+  content: "\e931";
+}
+.urus-icon-down-1:before {
+  content: "\e90b";
+}
+.urus-icon-close-1:before {
+  content: "\e905";
+}
+.urus-icon-diamon-2:before {
+  content: "\e90a";
+}
+.urus-icon-diamond-1:before {
+  content: "\e937";
+}
+.urus-icon-gift:before {
+  content: "\e913";
+}
+.urus-icon-instagram-1:before {
+  content: "\e93a";
+}
+.urus-icon-refund:before {
+  content: "\e925";
+}
+.urus-icon-shield:before {
+  content: "\e92b";
+}
+.urus-icon-shirt:before {
+  content: "\e92c";
+}
+.urus-icon-truck-1:before {
+  content: "\e92f";
+}
+.urus-icon-up-5:before {
+  content: "\e93f";
+}
+.urus-icon-down-5:before {
+  content: "\e940";
+}
+.urus-icon-prev-5:before {
+  content: "\e941";
+}
+.urus-icon-next-5:before {
+  content: "\e942";
+}
+.urus-icon-air:before {
+  content: "\e943";
+}
+.urus-icon-clock:before {
+  content: "\e944";
+}
+.urus-icon-envelope-2:before {
+  content: "\e945";
+}
+.urus-icon-phone:before {
+  content: "\e946";
+}
+.urus-icon-point:before {
+  content: "\e947";
+}
+.urus-icon-truck-2:before {
+  content: "\e948";
+}
+.urus-icon-garantia:before {
+  content: "\e949";
+}
+.urus-icon-quote:before {
+  content: "\e94a";
+}
+.urus-icon-filter-1:before {
+  content: "\e94b";
+}
+.urus-icon-exit:before {
+  content: "\e94c";
+}
+.urus-icon-line:before {
+  content: "\e94d";
+}

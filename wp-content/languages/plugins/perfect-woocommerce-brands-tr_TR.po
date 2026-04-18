@@ -1,0 +1,725 @@
+# Translation of Plugins - Perfect Brands for WooCommerce - Stable (latest release) in Turkish
+# This file is distributed under the same license as the Plugins - Perfect Brands for WooCommerce - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-06-12 11:56:18+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: tr\n"
+"Project-Id-Version: Plugins - Perfect Brands for WooCommerce - Stable (latest release)\n"
+
+#: classes/class-pwb-suggestions-list-table.php:117
+msgctxt "Plugin Installer"
+msgid "Favorites"
+msgstr "Favoriler"
+
+#: classes/class-pwb-suggestions-list-table.php:116
+msgctxt "Plugin Installer"
+msgid "Recommended"
+msgstr "Önerilen"
+
+#: classes/class-pwb-suggestions-list-table.php:115
+msgctxt "Plugin Installer"
+msgid "Popular"
+msgstr "Popüler"
+
+#: classes/class-pwb-suggestions-list-table.php:114
+msgctxt "Plugin Installer"
+msgid "Featured"
+msgstr "Öne çıkan"
+
+#: classes/class-pwb-suggestions-list-table.php:112
+msgctxt "Plugin Installer"
+msgid "Beta Testing"
+msgstr "Beta Testi"
+
+#: classes/class-pwb-suggestions-list-table.php:109
+msgid "Search Results"
+msgstr "Arama sonuçları"
+
+#: classes/admin/class-pwb-suggestions.php:42
+msgid "Purchase"
+msgstr "Satın Al"
+
+#: classes/admin/class-pwb-admin-tab.php:57
+#: classes/admin/class-pwb-suggestions.php:37
+#: classes/admin/class-pwb-suggestions.php:85
+msgid "Suggestions"
+msgstr "Öneriler"
+
+#: classes/admin/class-pwb-admin-tab.php:90
+msgid "Products tab"
+msgstr "Ürünler sekmesi"
+
+#: classes/admin/class-pwb-admin-tab.php:58
+#: classes/admin/class-pwb-suggestions.php:43
+#: classes/class-perfect-woocommerce-brands.php:79
+msgid "Documentation"
+msgstr "Belgeler"
+
+#: classes/admin/class-pwb-admin-tab.php:29
+#: classes/admin/class-pwb-admin-tab.php:138
+msgid "Archives"
+msgstr "Arşivler"
+
+#: classes/admin/class-pwb-notices.php:50
+msgid "Report a bug"
+msgstr "Hata bildirin"
+
+#: classes/admin/class-pwb-notices.php:47
+msgid "Yes, of course!"
+msgstr "Evet tabi ki!"
+
+#. Author URI of the plugin
+msgid "https://quadlayers.com"
+msgstr "https://quadlayers.com"
+
+#. Author of the plugin
+#: classes/admin/class-pwb-suggestions.php:63 includes/quadlayers/widget.php:79
+msgid "QuadLayers"
+msgstr "QuadLayers"
+
+#: classes/admin/class-pwb-admin-tab.php:239
+msgid "brand-name"
+msgstr "marka-ismi"
+
+#: classes/admin/class-pwb-admin-tab.php:239
+msgid "brands"
+msgstr "markalar"
+
+#: classes/admin/class-pwb-admin-tab.php:28
+#: classes/admin/class-pwb-admin-tab.php:245
+msgid "General"
+msgstr "Genel"
+
+#: classes/class-perfect-woocommerce-brands.php:636
+msgid "Yes"
+msgstr "Evet"
+
+#: classes/class-perfect-woocommerce-brands.php:631
+msgid "Only parent brands"
+msgstr "Yalnızca ana markalar"
+
+#: classes/admin/class-edit-brands-page.php:93
+msgid "Featured"
+msgstr "Öne çıkan"
+
+#: classes/admin/class-pwb-admin-tab.php:272
+msgid "Brands page"
+msgstr "Markalar sayfası"
+
+#: classes/class-pwb-term.php:20
+msgid "Only WP_Term objects are allowed"
+msgstr "Sadece WP_Term nesnelerine izin veriliyor"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:35
+msgid "Max number of brands"
+msgstr "Azami marka adedi"
+
+#: classes/widgets/class-pwb-dropdown-widget.php:60
+#: classes/widgets/class-pwb-list-widget.php:88
+msgid "Only favorite brands"
+msgstr "Sadece favori markalar"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:43
+msgid "Hide filter button"
+msgstr "Filtre düğmesini gizle"
+
+#: classes/widgets/class-pwb-list-widget.php:98
+msgid "Randomize"
+msgstr "Rastgele"
+
+#: classes/admin/class-brands-custom-fields.php:21
+#: classes/admin/class-brands-custom-fields.php:63
+msgid "Description"
+msgstr "Açıklama"
+
+#: classes/admin/class-pwb-admin-tab.php:153
+msgid "No, hide description"
+msgstr "Hayır, açıklamayı gizle"
+
+#: classes/admin/class-pwb-admin-tab.php:151
+#: classes/admin/class-pwb-admin-tab.php:164
+msgid "Yes, before product loop"
+msgstr "Evet, ürünlerden önce"
+
+#: classes/admin/class-pwb-admin-tab.php:152
+#: classes/admin/class-pwb-admin-tab.php:165
+msgid "Yes, after product loop"
+msgstr "Evet, ürünlerden sonra"
+
+#: classes/admin/class-brands-custom-fields.php:23
+#: classes/admin/class-brands-custom-fields.php:67
+msgid "Brand description for the archive pages. You can include some html markup and shortcodes."
+msgstr "Arşiv sayfaları için marka açıklaması. Bazı html biçimlendirme ve kısa kodları ekleyebilirsiniz."
+
+#: templates/shortcodes/product-carousel.php:26
+msgid "Nothing found"
+msgstr "Hiçbirşey bulunamadı"
+
+#: templates/shortcodes/carousel.php:20
+#: templates/shortcodes/product-carousel.php:23
+msgid "Loading"
+msgstr "Yükleniyor"
+
+#: classes/admin/class-edit-brands-page.php:148
+msgid "Error!"
+msgstr "Hata!"
+
+#: classes/admin/class-edit-brands-page.php:167
+msgid "Show featured brands first"
+msgstr "İlk önce öne çıkan markaları göster"
+
+#: classes/admin/class-edit-brands-page.php:109
+msgid "Set as featured"
+msgstr "Öne çıkan olarak ayarla"
+
+#: classes/admin/class-edit-brands-page.php:56
+msgid "featured"
+msgstr "öne çıkan"
+
+#: classes/class-perfect-woocommerce-brands.php:507
+msgid "Number of items to load (or 'featured')"
+msgstr "Yüklenecek öğe sayısı (veya 'öne çıkan')"
+
+#: classes/class-perfect-woocommerce-brands.php:606
+msgid "Hide"
+msgstr "Gizle"
+
+#: classes/admin/class-pwb-admin-tab.php:211
+msgid "Offical WooCommerce Brands"
+msgstr "Offical WooCommerce Brands"
+
+#: classes/admin/class-pwb-admin-tab.php:93
+msgid "Show brand tab in single product page"
+msgstr "Tek ürün sayfasında marka sekmesini göster"
+
+#: classes/class-perfect-woocommerce-brands.php:178
+msgid "We know that you´re in love with Perfect WooCommerce Brands, you can help us making it a bit better. Thanks a lot!"
+msgstr "Perfect WooCommerce Brands'a aşık olduğunuzu biliyoruz, bunu biraz daha iyi hale getirmemize yardımcı olabilirsiniz. Çok teşekkürler!"
+
+#: classes/class-pwb-api-support.php:112
+msgid "Product brands"
+msgstr "Ürün markaları"
+
+#: classes/class-perfect-woocommerce-brands.php:600
+msgid "Title position"
+msgstr "Başlık konumu"
+
+#: classes/admin/class-pwb-coupon.php:28
+msgid "Any brand"
+msgstr "Herhangi bir marka"
+
+#: classes/admin/class-pwb-admin-tab.php:228
+msgid "Show system status"
+msgstr "Sistem durumunu göster"
+
+#: classes/admin/class-pwb-admin-tab.php:226
+msgid "System status"
+msgstr "Sistem durumu"
+
+#: classes/class-perfect-woocommerce-brands.php:590
+msgid "Order"
+msgstr "Sıra"
+
+#: classes/class-perfect-woocommerce-brands.php:576
+msgid "Order by"
+msgstr "Sırala"
+
+#: classes/class-perfect-woocommerce-brands.php:906
+msgid "All"
+msgstr "Tümü"
+
+#: classes/admin/class-pwb-admin-tab.php:210
+msgid "Ultimate WooCommerce Brands"
+msgstr "Ultimate WooCommerce Brands"
+
+#: classes/admin/class-pwb-coupon.php:27
+msgid "Brands restriction"
+msgstr "Marka kısıtlaması"
+
+#: classes/admin/class-pwb-coupon.php:40
+msgid "Coupon will be valid if there are at least one product of this brands in the cart"
+msgstr "Sepette bu markaya ait en az bir ürün varsa kupon geçerli olur"
+
+#: classes/admin/class-pwb-admin-tab.php:218
+msgid "Import generic brands and assign it to products randomly"
+msgstr "Bilinen markaları içe aktarır ve rastgele ürünlere atar"
+
+#: classes/admin/class-pwb-admin-tab.php:222
+msgid "Start import"
+msgstr "İçe aktarmayı başlat"
+
+#: classes/admin/class-pwb-admin-tab.php:203
+msgid "Import brands from other brand plugin. <a href=\"%s\" target=\"_blank\">Click here for more details</a>"
+msgstr "Başka bir marka eklentisinden markaları içe aktar. <a href=\"%s\" target=\"_blank\">Detaylar için tıklayın</a>"
+
+#: classes/class-perfect-woocommerce-brands.php:604
+msgid "Before image"
+msgstr "Görselden önce"
+
+#: classes/class-perfect-woocommerce-brands.php:605
+msgid "After image"
+msgstr "Görselden sonra"
+
+#: classes/class-perfect-woocommerce-brands.php:784
+msgid "¿Start loading dummy data?"
+msgstr "Sahte verileri yükleme başlasın mı?"
+
+#: classes/class-perfect-woocommerce-brands.php:785
+msgid "We are importing the dummy data. ¡Don´t close this window until the process is finished!"
+msgstr "Sahte verileri içe aktarıyoruz. İşlem bitene kadar bu pencereyi kapatmayın!"
+
+#: classes/admin/class-pwb-admin-tab.php:215
+msgid "Dummy data"
+msgstr "Sahte veri"
+
+#: classes/widgets/class-pwb-list-widget.php:58
+msgid "Columns:"
+msgstr "Sütunlar:"
+
+#: classes/widgets/class-pwb-list-widget.php:53
+msgid "Brand name"
+msgstr "Marka adı"
+
+#: classes/admin/class-pwb-admin-tab.php:97
+msgid "Show brands in single product"
+msgstr "Ürün sayfasında markaları göster"
+
+#: classes/admin/class-pwb-admin-tab.php:100
+msgid "Show brand logo (or name) in single product"
+msgstr "Ürün sayfasında marka logosunu (veya adını) göster"
+
+#: classes/class-perfect-woocommerce-brands.php:614
+msgid "Hide brands that have not been assigned to any product"
+msgstr "Herhangi bir ürüne atanmamış markaları gizle"
+
+#: classes/class-perfect-woocommerce-brands.php:612
+#: classes/widgets/class-pwb-dropdown-widget.php:49
+#: classes/widgets/class-pwb-list-widget.php:78
+msgid "Hide empty"
+msgstr "Boş olanları gizle"
+
+#: classes/class-perfect-woocommerce-brands.php:486
+#: classes/class-perfect-woocommerce-brands.php:537
+msgid "Display prev and next arrows"
+msgstr "İleri ve geri oklarını göster"
+
+#: classes/class-perfect-woocommerce-brands.php:484
+#: classes/class-perfect-woocommerce-brands.php:535
+msgid "Arrows"
+msgstr "Oklar"
+
+#: classes/admin/class-pwb-notices.php:86
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: classes/widgets/class-pwb-list-widget.php:48
+msgid "Display as:"
+msgstr "Bu şekilde göster:"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:29
+#: classes/widgets/class-pwb-list-widget.php:33
+msgid "Title:"
+msgstr "Başlık:"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:14
+msgid "Filter products by brand"
+msgstr "Ürünleri markaya göre filtrele"
+
+#: classes/admin/class-pwb-admin-tab.php:209
+msgid "YITH WooCommerce Brands Add-On"
+msgstr "YITH WooCommerce Brands Add-On"
+
+#: classes/admin/class-pwb-admin-tab.php:31
+#: classes/admin/class-pwb-admin-tab.php:193
+msgid "Tools"
+msgstr "Araçlar"
+
+#: classes/admin/class-pwb-admin-tab.php:104
+#: classes/admin/class-pwb-admin-tab.php:176
+#: classes/class-perfect-woocommerce-brands.php:635
+msgid "No"
+msgstr "Hayır"
+
+#: classes/admin/class-pwb-admin-tab.php:105
+#: classes/admin/class-pwb-admin-tab.php:177
+msgid "Show brand link"
+msgstr "Marka bağlantısını göster"
+
+#: classes/admin/class-pwb-admin-tab.php:106
+#: classes/admin/class-pwb-admin-tab.php:178
+msgid "Show brand image (if is set)"
+msgstr "Marka görselini göster (eğer ayarlandıysa)"
+
+#: classes/admin/class-pwb-admin-tab.php:208
+#: classes/admin/class-pwb-admin-tab.php:221
+msgid "-"
+msgstr "- "
+
+#: classes/admin/class-pwb-admin-tab.php:173
+msgid "Show brand logo (or name) in product loop"
+msgstr "Ürün döngüsünde marka logosunu (veya ismini) göster"
+
+#: classes/admin/class-pwb-admin-tab.php:170
+msgid "Show brands in loop"
+msgstr "Markaları döngüde göster"
+
+#: templates/widgets/filter-by-brand.php:28
+msgid "Apply filter"
+msgstr "Filitre uygula"
+
+#: classes/admin/class-pwb-admin-tab.php:199
+#: templates/admin/brands-exporter.php:13
+msgid "Import brands"
+msgstr "Markları içe aktar"
+
+#: classes/class-perfect-woocommerce-brands.php:782
+msgid "¿Start migration?"
+msgstr "İç aktarma başlasın mı?"
+
+#: classes/class-perfect-woocommerce-brands.php:783
+msgid "We are migrating the product brands. ¡Don´t close this window until the process is finished!"
+msgstr "Ürün markalarını taşıyoruz. İşlem bitene kadar bu pencereyi kapatmayın!"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:13
+msgid "Recommended for product categories or shop page"
+msgstr "Mağaza sayfası yada ürün kategorileri için tavsiye edilir"
+
+#: classes/admin/class-pwb-admin-tab.php:144
+msgid "Show brand description"
+msgstr "Marka açıklamasını göster"
+
+#: classes/admin/class-pwb-admin-tab.php:148
+msgid "Show brand description (if is set) on brand archive page"
+msgstr "Marka arşiv sayfasında, eğer ayarlanmışsa, marka açıklamasını göster"
+
+#: classes/admin/class-pwb-admin-tab.php:30
+#: classes/admin/class-pwb-admin-tab.php:84
+#: classes/class-perfect-woocommerce-brands.php:453
+msgid "Products"
+msgstr "Ürünler"
+
+#: classes/class-perfect-woocommerce-brands.php:456
+msgid "Number of products to load"
+msgstr "Yüklenecek ürün sayısı"
+
+#: classes/class-perfect-woocommerce-brands.php:461
+msgid "Products to show"
+msgstr "Gösterilecek ürünler"
+
+#: classes/class-perfect-woocommerce-brands.php:464
+msgid "Number of products to show"
+msgstr "Gösterilecek ürün sayısı"
+
+#: classes/class-perfect-woocommerce-brands.php:436
+msgid "PWB Product carousel"
+msgstr "PWB ürün karuseli"
+
+#: classes/class-perfect-woocommerce-brands.php:437
+msgid "Product carousel by brand or by category"
+msgstr "Marka ve kategori ile ürün karuseli"
+
+#: classes/class-perfect-woocommerce-brands.php:472
+msgid "Number of products to scroll"
+msgstr "Kaydırılacak ürün sayısı"
+
+#: classes/class-perfect-woocommerce-brands.php:469
+msgid "Products to scroll"
+msgstr "Kaydırılacak ürünler"
+
+#: classes/admin/class-pwb-admin-tab.php:118
+msgid "After price"
+msgstr "Fiyattan sonra"
+
+#: classes/admin/class-pwb-admin-tab.php:117
+msgid "After title"
+msgstr "Başlıktan sonra"
+
+#: classes/admin/class-pwb-admin-tab.php:116
+msgid "Before title"
+msgstr "Başlıktan önce"
+
+#: classes/admin/class-pwb-admin-tab.php:113
+msgid "For single product"
+msgstr "Tek ürün için"
+
+#: classes/admin/class-pwb-admin-tab.php:110
+msgid "Brand position"
+msgstr "Marka konumu"
+
+#: classes/admin/class-pwb-admin-tab.php:119
+msgid "After excerpt"
+msgstr "Özetten sonra"
+
+#: classes/admin/class-pwb-admin-tab.php:122
+msgid "After meta"
+msgstr "Metadan sonra"
+
+#: classes/admin/class-pwb-admin-tab.php:123
+msgid "After sharing"
+msgstr "Paylaşımdan sonra"
+
+#: classes/admin/class-pwb-admin-tab.php:120
+msgid "After add to cart"
+msgstr "Sepete ekleden sonra"
+
+#: classes/admin/class-brands-custom-fields.php:36
+msgid "This image will be shown on brand page"
+msgstr "Bu görsel marka sayfasında gösterilecek"
+
+#: classes/admin/class-brands-custom-fields.php:40
+#: classes/admin/class-brands-custom-fields.php:112
+msgid "Brand banner link"
+msgstr "Marka afiş bağlantısı"
+
+#: classes/admin/class-brands-custom-fields.php:42
+#: classes/admin/class-brands-custom-fields.php:116
+msgid "This link should be relative to site url. Example: product/product-name"
+msgstr "Bu bağlantı site adresine uygun olmalı. Örnek: ürünler/ürün-adı"
+
+#: classes/admin/class-brands-custom-fields.php:33
+#: classes/admin/class-brands-custom-fields.php:92
+msgid "Brand banner"
+msgstr "Marka afişi"
+
+#: classes/class-perfect-woocommerce-brands.php:553
+msgid "Show all brands"
+msgstr "Tüm markaları göster"
+
+#: classes/admin/class-pwb-admin-tab.php:263
+#: classes/class-perfect-woocommerce-brands.php:541
+#: classes/class-perfect-woocommerce-brands.php:569
+#: classes/class-perfect-woocommerce-brands.php:662
+msgid "Brand logo size"
+msgstr "Marka logo boyu"
+
+#: classes/class-perfect-woocommerce-brands.php:562
+msgid "Brands per page"
+msgstr "Sayfa başı marka sayısı"
+
+#: classes/admin/class-pwb-exporter-support.php:22
+#: classes/admin/class-pwb-importer-support.php:22
+#: classes/admin/class-pwb-importer-support.php:33
+#: classes/class-perfect-woocommerce-brands.php:445
+#: classes/class-perfect-woocommerce-brands.php:805
+#: classes/class-pwb-product-tab.php:23 classes/class-pwb-product-tab.php:41
+msgid "Brand"
+msgstr "Marka"
+
+#: classes/admin/class-edit-brands-page.php:164
+#: classes/admin/class-pwb-admin-tab.php:13
+#: classes/admin/class-pwb-admin-tab.php:56
+#: classes/class-perfect-woocommerce-brands.php:689
+#: classes/class-perfect-woocommerce-brands.php:804
+#: classes/class-perfect-woocommerce-brands.php:806
+#: classes/widgets/class-pwb-dropdown-widget.php:20
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:22
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:89
+#: classes/widgets/class-pwb-list-widget.php:20
+#: templates/widgets/dropdown.php:14
+msgid "Brands"
+msgstr "Markalar"
+
+#: classes/class-perfect-woocommerce-brands.php:709
+#: templates/shortcodes/brand.php:18
+msgid "View brand"
+msgstr "Marka görüntüle"
+
+#: classes/class-perfect-woocommerce-brands.php:655
+msgid "Product id"
+msgstr "Ürün id"
+
+#: classes/class-perfect-woocommerce-brands.php:565
+msgid "Show x brands per page"
+msgstr "Sayfa başı x marka göster"
+
+#: classes/shortcodes/class-pwb-all-brands.php:153
+msgid "First page"
+msgstr "İlk sayfa"
+
+#: classes/admin/class-edit-brands-page.php:92
+msgid "Logo"
+msgstr "Logo"
+
+#: classes/admin/class-brands-custom-fields.php:29
+#: classes/admin/class-brands-custom-fields.php:35
+#: classes/admin/class-brands-custom-fields.php:76
+#: classes/admin/class-brands-custom-fields.php:96
+msgid "Select image"
+msgstr "Görsel seç"
+
+#: classes/admin/class-brands-custom-fields.php:27
+#: classes/admin/class-brands-custom-fields.php:72
+#: classes/widgets/class-pwb-list-widget.php:54
+msgid "Brand logo"
+msgstr "Marka logosu"
+
+#: classes/class-perfect-woocommerce-brands.php:820
+msgid "No brands found"
+msgstr "Marka bulunamadı"
+
+#: classes/class-perfect-woocommerce-brands.php:819
+msgid "Choose from the most used brands"
+msgstr "Sık kullanılan markalardan seç"
+
+#: classes/class-perfect-woocommerce-brands.php:817
+msgid "Separate brands with commas"
+msgstr "Markaları virgül kullanarak ayırın"
+
+#: classes/widgets/class-pwb-list-widget.php:145
+msgid "Go to"
+msgstr "Git"
+
+#: classes/widgets/class-pwb-list-widget.php:12
+msgid "Brands list"
+msgstr "Marka listesi"
+
+#: classes/widgets/class-pwb-dropdown-widget.php:27
+msgid "Title"
+msgstr "Başlık"
+
+#: classes/shortcodes/class-pwb-all-brands.php:167
+msgid "No results"
+msgstr "Sonuç yok"
+
+#: classes/shortcodes/class-pwb-all-brands.php:163
+msgid "Last page"
+msgstr "Son sayfa"
+
+#: classes/shortcodes/class-pwb-all-brands.php:160
+msgid "Next page"
+msgstr "Sonraki sayfa"
+
+#: classes/shortcodes/class-pwb-all-brands.php:156
+msgid "Previous page"
+msgstr "Önceki sayfa"
+
+#: classes/class-perfect-woocommerce-brands.php:477
+#: classes/class-perfect-woocommerce-brands.php:528
+msgid "Autoplay"
+msgstr "Otomatik oynat"
+
+#: classes/class-perfect-woocommerce-brands.php:504
+msgid "Items"
+msgstr "Öğeler"
+
+#: classes/class-perfect-woocommerce-brands.php:512
+msgid "Items to show"
+msgstr "Gösterilecek öğeler"
+
+#: classes/class-perfect-woocommerce-brands.php:515
+msgid "Number of items to show"
+msgstr "Gösterilecek öğe sayısı"
+
+#: classes/admin/class-pwb-admin-tab.php:251
+msgid "Slug"
+msgstr "Kısa ad"
+
+#: classes/class-perfect-woocommerce-brands.php:552
+msgid "PWB All brands"
+msgstr "PWB All brands"
+
+#: classes/class-perfect-woocommerce-brands.php:645
+msgid "PWB brand"
+msgstr "PWB brand"
+
+#: classes/class-perfect-woocommerce-brands.php:658
+msgid "Product id (post id)"
+msgstr "Ürün id (yazı id)"
+
+#: classes/class-perfect-woocommerce-brands.php:807
+msgid "All Brands"
+msgstr "Tüm markalar"
+
+#: classes/class-perfect-woocommerce-brands.php:808
+msgid "Edit Brand"
+msgstr "Marka düzenle"
+
+#: classes/class-perfect-woocommerce-brands.php:809
+msgid "View Brand"
+msgstr "Marka görüntüle"
+
+#: classes/class-perfect-woocommerce-brands.php:810
+msgid "Update Brand"
+msgstr "Marka güncelle"
+
+#: classes/class-perfect-woocommerce-brands.php:811
+msgid "Add New Brand"
+msgstr "Yeni marka ekle"
+
+#: classes/class-perfect-woocommerce-brands.php:812
+msgid "New Brand Name"
+msgstr "Yeni marka adı"
+
+#: classes/class-perfect-woocommerce-brands.php:813
+msgid "Parent Brand"
+msgstr "Ana marka:"
+
+#: classes/class-perfect-woocommerce-brands.php:814
+msgid "Parent Brand:"
+msgstr "Ana marka:"
+
+#: classes/class-perfect-woocommerce-brands.php:815
+msgid "Search Brands"
+msgstr "Marka ara"
+
+#: classes/class-perfect-woocommerce-brands.php:816
+msgid "Popular Brands"
+msgstr "Popüler markalar"
+
+#: classes/class-perfect-woocommerce-brands.php:818
+msgid "Add or remove brands"
+msgstr "Marka ekle veya kaldır"
+
+#: classes/widgets/class-pwb-list-widget.php:11
+msgid "Adds a brands list to your site"
+msgstr "Sitenize marka listesi ekler"
+
+#: perfect-woocommerce-brands.php:132
+msgid "Perfect WooCommerce Brands needs WooCommerce to run. Please, install and active WooCommerce plugin."
+msgstr "Perfect WooCommerce Brands'in çalışabilmesi için WooCommerce çalışır olmalıdır. Lütfen WooCommerce eklentisini yükleyin ve etkinleştirin."
+
+#: classes/class-perfect-woocommerce-brands.php:494
+msgid "PWB Brands carousel"
+msgstr "PWB Brands carousel"
+
+#: classes/class-perfect-woocommerce-brands.php:495
+msgid "Brands carousel"
+msgstr "Marka karuseli"
+
+#: classes/admin/class-pwb-admin-tab.php:254
+msgid "Brands taxonomy slug"
+msgstr "Marka sınıflandırma kısa adı"
+
+#: classes/widgets/class-pwb-dropdown-widget.php:11
+msgid "Adds a brands dropdown to your site"
+msgstr "Sitenize marka açılır menüsü ekler"
+
+#: classes/widgets/class-pwb-dropdown-widget.php:12
+msgid "Brands dropdown"
+msgstr "Marka açılır menüsü"
+
+#: classes/class-perfect-woocommerce-brands.php:646
+msgid "Show brand for a specific product"
+msgstr "Belirli ürün için marka göster"
+
+#. Description of the plugin
+msgid "Perfect WooCommerce Brands allows you to show product brands in your WooCommerce based store."
+msgstr "Perfect WooCommerce Brands, WooCommerce tabanlı mağazanızda ürün markalarını göstermenizi sağlar."
+
+#: classes/class-perfect-woocommerce-brands.php:479
+#: classes/class-perfect-woocommerce-brands.php:530
+msgid "Autoplay carousel"
+msgstr "Karuseli otomatik oynat"
+
+#: classes/class-perfect-woocommerce-brands.php:523
+msgid "Number of items to scroll"
+msgstr "Kaydırılacak öğe sayısı"
+
+#: classes/class-perfect-woocommerce-brands.php:520
+msgid "Items to scroll"
+msgstr "Kaydırılacak öğeler"

@@ -1,0 +1,214 @@
+# Translation of Plugins - HubSpot &#8211; CRM, Email Marketing, Live Chat, Forms &amp; Analytics - Development (trunk) in Ukrainian
+# This file is distributed under the same license as the Plugins - HubSpot &#8211; CRM, Email Marketing, Live Chat, Forms &amp; Analytics - Development (trunk) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-01-10 11:04:02+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: uk_UA\n"
+"Project-Id-Version: Plugins - HubSpot &#8211; CRM, Email Marketing, Live Chat, Forms &amp; Analytics - Development (trunk)\n"
+
+#. translators: %1$s: Plugin current version %2$s: WordPress required version
+#: public/admin/class-leadinadmin.php:266
+msgid "HubSpot All-In-One Marketing %1$s requires WordPress %2$s or higher Please upgrade WordPress first"
+msgstr "HubSpot All-In-One Marketing %1$s потребує WordPress %2$s або новішої версії, спочатку оновіть WordPress"
+
+#: public/admin/class-deactivationform.php:81
+msgid "Feedback"
+msgstr "Зворотній зв’язок"
+
+#. translators: %1$s: HTML anchor opening tag %2$s: HTML anchor closing tag
+#: public/admin/class-reviewbanner.php:36
+msgid "Have you got 2 minutes to complete %1$sthis survey%2$s about the HubSpot for WordPress plugin?"
+msgstr "У вас є 2 хвилини, щоб пройти %1$sопитування%2$s про плагін HubSpot для WordPress?"
+
+#: public/admin/class-reviewbanner.php:37
+msgid "We read every response Your feedback helps our team make the improvements that you need the most"
+msgstr "Ми читаємо кожен відгук Ваші відгуки допомагають нашій команді вносити покращення, яких ви потребуєте найбільше"
+
+#: public/admin/class-leadinadmin.php:72 public/class-leadin.php:43
+msgid "Hubspot"
+msgstr "Hubspot"
+
+#: public/admin/widgets/class-elementorform.php:85
+msgid "Form"
+msgstr "Форма"
+
+#: public/admin/widgets/class-elementormeeting.php:84
+msgid "Meetings Scheduler"
+msgstr "Планувальник зустрічей"
+
+#: public/admin/class-leadinadmin.php:89 build/gutenberg.js:930
+#: build/gutenberg.js:364
+msgid "Standard Page"
+msgstr "Стандартна сторінка"
+
+#: public/admin/class-leadinadmin.php:85 build/gutenberg.js:918
+#: build/gutenberg.js:356
+msgid "Blog Post"
+msgstr "Запис блогу"
+
+#: public/admin/class-leadinadmin.php:87 build/gutenberg.js:924
+#: build/gutenberg.js:361
+msgid "Landing Page"
+msgstr "Цільова сторінка"
+
+#: public/admin/class-leadinadmin.php:80 build/gutenberg.js:894
+#: build/gutenberg.js:352
+msgid "Select the content type HubSpot Analytics uses to track this page"
+msgstr "Виберіть тип вмісту, який HubSpot Analytics використовує для відстеження цієї сторінки"
+
+#: public/admin/class-leadinadmin.php:84 build/gutenberg.js:915
+#: build/gutenberg.js:355
+msgid "Detect Automatically"
+msgstr "Визначити автоматично"
+
+#: public/admin/class-leadinadmin.php:86 build/gutenberg.js:921
+#: build/gutenberg.js:358
+msgid "Knowledge Article"
+msgstr "Стаття знань"
+
+#: public/admin/class-leadinadmin.php:88 build/gutenberg.js:927
+#: build/gutenberg.js:362
+msgid "Listing Page"
+msgstr "Сторінка переліку"
+
+#. translators: %1$s: Current user name or nickname
+#: public/admin/class-reviewbanner.php:31
+msgid "Hey %1$s,"
+msgstr "Привіт %1$s,"
+
+#: public/admin/class-reviewbanner.php:27
+msgid "Dismiss this notice"
+msgstr "Відхилити це сповіщення"
+
+#: public/admin/class-reviewbanner.php:63
+msgid "Leave us a review | link opens in a new tab"
+msgstr "Залиште відгук | посилання відкриється в новій вкладці"
+
+#: public/admin/class-deactivationform.php:55
+msgid "The plugin is impacting website performance"
+msgstr "Плагін впливає на продуктивність веб-сайту"
+
+#: public/admin/class-leadinadmin.php:202
+msgid "User Guide"
+msgstr "Посібник користувача"
+
+#: public/admin/class-leadinadmin.php:213
+#: public/admin/class-pluginactionsmanager.php:50
+msgid "Upgrade"
+msgstr "Оновлення"
+
+#: public/admin/class-leadinadmin.php:209
+msgid "Reporting"
+msgstr "Звітування"
+
+#: public/admin/class-reviewbanner.php:38
+msgid "HubSpot for WordPress Team"
+msgstr "Команда HubSpot for WordPress"
+
+#: public/admin/class-reviewbanner.php:39
+msgid "Thanks,"
+msgstr "Дякую,"
+
+#. Author URI of the plugin
+#: leadin.php
+msgid "http://hubspot.com/products/wordpress"
+msgstr "http://hubspot.com/products/wordpress"
+
+#: public/admin/class-deactivationform.php:54
+msgid "I can't sign up or log in"
+msgstr "Я не можу зареєструватися або увійти"
+
+#: public/admin/class-deactivationform.php:58
+msgid "Temporarily disabling or troubleshooting"
+msgstr "Тимчасове відключення або усунення несправностей"
+
+#: public/admin/class-leadinadmin.php:206
+msgid "Contacts"
+msgstr "Контакти"
+
+#: public/admin/class-leadinadmin.php:208
+msgid "Lists"
+msgstr "Переліки"
+
+#: public/admin/class-deactivationform.php:91
+msgid "Skip & deactivate"
+msgstr "Пропустити та деактивувати"
+
+#: public/admin/class-deactivationform.php:86
+msgid "Submit & deactivate"
+msgstr "Відправити та вимкнути"
+
+#: public/admin/class-deactivationform.php:59
+msgid "Other"
+msgstr "Інші"
+
+#: public/admin/class-deactivationform.php:29
+msgid "We're sorry to see you go"
+msgstr "Нам шкода, що ти йдеш"
+
+#: public/admin/class-deactivationform.php:39
+msgid "If you have a moment, please let us know why you're deactivating the plugin"
+msgstr "Якщо у вас є хвилинка, будь ласка, повідомте нам, чому ви деактивуєте плагін"
+
+#: public/admin/class-deactivationform.php:56
+msgid "The plugin isn't working"
+msgstr "Плагін не працює"
+
+#: public/admin/class-deactivationform.php:57
+msgid "The plugin isn't useful"
+msgstr "Плагін не є корисним"
+
+#. translators: %1$s: HTML anchor opening tag %2$s: HTML anchor closing tag
+#: public/admin/class-noticemanager.php:36 build/elementor.js:220
+#: build/elementor.js:61
+msgid "The HubSpot plugin is not connected right now To use HubSpot tools on your WordPress site, %1$sconnect the plugin now%2$s"
+msgstr "Плагін HubSpot зараз не підключено Щоб використовувати інструменти HubSpot на вашому сайті WordPress, %1$sпідключіть плагін зараз%2$s"
+
+#: public/admin/class-leadinadmin.php:207
+msgid "Email"
+msgstr "Email"
+
+#: public/admin/class-leadinadmin.php:204
+msgid "Live Chat"
+msgstr "Живий чат"
+
+#: public/admin/class-leadinadmin.php:203
+msgid "Forms"
+msgstr "Форми"
+
+#. Plugin URI of the plugin
+#: leadin.php
+msgid "http://www.hubspot.com/integrations/wordpress"
+msgstr "http://www.hubspot.com/integrations/wordpress"
+
+#. translators: %1$s: Plugin current version %2$s: PHP required version
+#: public/admin/class-leadinadmin.php:259
+msgid "HubSpot All-In-One Marketing %1$s requires PHP %2$s or higher Please upgrade WordPress first"
+msgstr "HubSpot All-In-One Marketing %1$s потребує PHP %2$s або новішої версії, спочатку оновіть WordPress"
+
+#. Author of the plugin
+#: leadin.php public/admin/class-gutenberg.php:36
+#: public/admin/class-leadinadmin.php:200
+#: public/admin/class-leadinadmin.php:218
+msgid "HubSpot"
+msgstr "HubSpot"
+
+#: public/admin/class-leadinadmin.php:211
+#: public/admin/class-pluginactionsmanager.php:35
+msgid "Settings"
+msgstr "Налаштування"
+
+#. Plugin Name of the plugin
+#: leadin.php
+msgid "HubSpot All-In-One Marketing - Forms, Popups, Live Chat"
+msgstr "HubSpot All-In-One Marketing - форми, спливаючі вікна, живий чат"
+
+#. Description of the plugin
+#: leadin.php
+msgid "HubSpot’s official WordPress plugin allows you to add forms, popups, and live chat to your website and integrate with the best WordPress CRM."
+msgstr "Офіційний плагін HubSpot для WordPress дозволяє додавати форми, спливаючі вікна та чат на ваш сайт, а також інтегруватися з найкращими CRM WordPress."

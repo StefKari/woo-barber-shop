@@ -1,0 +1,15 @@
+<li class="{{ css_classes }} menu-item menu-item-has-children" >
+
+    {% for currency in currencies %}
+    {% if( currency == selected_currency) %}
+    <a href="#" rel="{{ currency }}">{{ get_formatted_price( currency, format )|raw }}</a>
+    {% endif %}
+    {% endfor %}
+    <ul class="sub-menu">
+        {% for currency in currencies %}
+            <li {% if( currency == selected_currency) %} class="wcml-cs-active-currency" {% endif %} >
+                <a href="#" rel="{{ currency }}">{{ get_formatted_price( currency, format )|raw }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</li>

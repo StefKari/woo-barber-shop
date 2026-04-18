@@ -1,0 +1,234 @@
+# Translation of Plugins - Disable Emails - Stable (latest release) in Chinese (Taiwan)
+# This file is distributed under the same license as the Plugins - Disable Emails - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2021-04-19 22:04:23+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: zh_TW\n"
+"Project-Id-Version: Plugins - Disable Emails - Stable (latest release)\n"
+
+#: views/requires-plugin-notice.php:11
+msgid "This plugin is not fully active."
+msgstr "這個外掛並未完整啟用。"
+
+#: views/requires-admin-notice.php:8
+msgid "Disable Emails is not fully active."
+msgstr "Disable Emails 並未完整啟用。"
+
+#: includes/functions.php:64
+msgid "Unable to create folder for Disable Emails must-use plugin."
+msgstr "無法建立讓 Disable Emails 成為 [強制使用] 外掛狀態的資料夾。"
+
+#: includes/class.Plugin.php:153
+msgctxt "admin indicator setting"
+msgid "notice and Toolbar indicator"
+msgstr "通知及工具列指示器"
+
+#: views/settings-form.php:28
+msgid "Select how you would like to indicate in the WordPress admin that emails are disabled."
+msgstr "選取要在 WordPress 管理後台顯示電子郵件傳送功能已停用的方式。"
+
+#: views/settings-form.php:21
+msgid "Indicator"
+msgstr "指示器"
+
+#: views/indicator-notice.php:8
+msgid "Emails are disabled by the Disable Emails plugin."
+msgstr "電子郵件傳送功能已由 Disable Emails 外掛停用。"
+
+#: includes/class.Plugin.php:170
+msgctxt "settings error"
+msgid "Indicator is invalid"
+msgstr "無效的指示器。"
+
+#: includes/class.Plugin.php:154
+msgctxt "admin indicator setting"
+msgid "no indicator"
+msgstr "無指示器"
+
+#: includes/class.Plugin.php:152
+msgctxt "admin indicator setting"
+msgid "notice on all admin pages"
+msgstr "全部管理頁面的通知"
+
+#: includes/class.Plugin.php:151
+msgctxt "admin indicator setting"
+msgid "Toolbar indicator"
+msgstr "工具列指示器"
+
+#. translators: %s: minimum recommended version number
+#: includes/functions-global.php:26
+msgid "Please upgrade your website hosting. At least PHP %s is recommended."
+msgstr "請升級網站主機。建議的 PHP 最低版本需求為 %s。"
+
+#. translators: %1$s: minimum required version number, %2$s: installed version
+#. number
+#: includes/functions-global.php:19
+msgid "It requires PHP %1$s or higher; your website has PHP %2$s which is {{a}}old, obsolete, and unsupported{{/a}}."
+msgstr "這個外掛需要 PHP %1$s 或更新版本，而這個網站執行的是 PHP %2$s，這個版本{{a}}過於老舊、已過時且不再提供技術支援{{/a}}。"
+
+#: includes/class.Plugin.php:232
+msgid "Try enabling the must-use plugin from the settings page."
+msgstr "請在外掛設定頁面嘗試啟用 [強制使用] 外掛狀態。"
+
+#: views/settings-form.php:98
+msgid "To activate or deactivate the must-use plugin, please {{a}}enable JavaScript in your browser{{/a}}."
+msgstr "如需啟用或停用 [強制使用] 外掛狀態，請{{a}}啟用目前使用的瀏覽器的 JavaScript 功能{{/a}}。"
+
+#: views/settings-form.php:90
+msgid "Activate must-use plugin"
+msgstr "啟用 [強制使用] 外掛狀態"
+
+#: views/settings-form.php:87
+msgid "This website is in a multisite network. Enabling the must-use plugin will disable emails for all sites."
+msgstr "這個網站屬於多站網路的一部份。啟用 [強制使用] 外掛狀態便會停用全部網站的電子郵件傳送功能。"
+
+#: views/settings-form.php:84
+msgid "The must-use plugin is currently disabled."
+msgstr "[強制使用] 外掛狀態已停用。"
+
+#: views/settings-form.php:80
+msgid "Deactivate must-use plugin"
+msgstr "停用 [強制使用] 外掛狀態"
+
+#: views/settings-form.php:77
+msgid "This website is in a multisite network. Disabling the must-use plugin will enable emails for all sites that have not activated the plugin separately."
+msgstr "這個網站屬於多站網路的一部份。停用 [強制使用] 外掛狀態便會啟用全部尚未個別啟用這個外掛的網站的電子郵件傳送功能。"
+
+#: views/settings-form.php:74
+msgid "The must-use plugin is currently enabled."
+msgstr "[強制使用] 外掛狀態已啟用。"
+
+#: views/settings-form.php:69
+msgid "When enabled as a must-use plugin, also known as mu-plugin, Disable Emails is always activated. This is recommended for development websites, in which plugins might be deactivated when refreshing the database from a source website. It can also help when another plugin has already declared wp_mail(), preventing Disable Emails from functioning correctly."
+msgstr "啟用為 [強制使用] 外掛狀態後 (也就是 mu-plugin)，Disable Emails 會維持始終啟用的狀態。建議在開發用網站啟用這項功能，因為重新整理來源網站的資料庫後，可能會導致 Disable Emails 遭到停用。對已有其他外掛宣告使用 wp_mail() 函式而導致 Disable Emails 無法正確執行的網站來說，這項功能會相當有幫助。"
+
+#: views/settings-form.php:67
+msgctxt "settings"
+msgid "Must-use plugin"
+msgstr "強制使用的外掛"
+
+#: includes/functions.php:89
+msgid "Invalid action for Disable Emails must-use plugin."
+msgstr "Disable Emails [強制使用] 外掛狀態的無效動作。"
+
+#: includes/functions.php:83
+msgid "Unable to uninstall Disable Emails must-use plugin."
+msgstr "無法解除安裝 Disable Emails 的 [強制使用] 外掛狀態。"
+
+#: includes/functions.php:76
+msgid "Unable to install Disable Emails must-use plugin."
+msgstr "無法將 Disable Emails 安裝為 [強制使用] 外掛狀態。"
+
+#: includes/functions.php:54
+msgid "No permission to manage Disable Emails must-use plugin."
+msgstr "目前的登入身分沒有將 Disable Emails 設定為 [強制使用] 外掛狀態的權限。"
+
+#. translators: shown when emails are disabled for all sites in a multisite
+#. network, by network-activating the plugin
+#: includes/functions.php:109
+msgid "Emails are disabled on this network."
+msgstr "這個多站網路的電子郵件傳送功能已停用。"
+
+#. translators: shown when emails are disabled for all sites in all networks in
+#. a multisite, with the must-use plugin
+#: includes/functions.php:105
+msgid "Emails are disabled for all sites."
+msgstr "全部網站的電子郵件傳送功能已停用。"
+
+#: includes/class.Plugin.php:199
+msgctxt "plugin details links"
+msgid "Settings"
+msgstr "設定"
+
+#: includes/class.Plugin.php:131
+msgctxt "settings"
+msgid "Deactivate the must-use plugin?"
+msgstr "是否停用 [強制使用] 外掛狀態？"
+
+#: includes/class.Plugin.php:130
+msgctxt "settings"
+msgid "Activate the must-use plugin?"
+msgstr "是否啟用 [強制使用] 外掛狀態？"
+
+#: views/settings-form.php:57
+msgid "force Events Manager to use WordPress emails so that they can be blocked"
+msgstr "強制 Events Manager 使用 WordPress 電子郵件傳送功能，將其納入外掛管理"
+
+#: views/settings-form.php:54
+msgid "Events Manager"
+msgstr "Events Manager"
+
+#. Author URI of the plugin
+msgid "https://shop.webaware.com.au/"
+msgstr "https://shop.webaware.com.au/"
+
+#: views/settings-form.php:49
+msgid "force BuddyPress to use WordPress emails so that they can be blocked"
+msgstr "強制 BuddyPress 使用 WordPress 電子郵件傳送功能，將其納入外掛管理"
+
+#: views/settings-form.php:46
+msgid "BuddyPress"
+msgstr "BuddyPress"
+
+#. Author of the plugin
+msgid "WebAware"
+msgstr "WebAware"
+
+#. Description of the plugin
+msgid "Stop WordPress from sending any emails. ANY!"
+msgstr "停用 WordPress 的電子郵件傳送功能。"
+
+#. Plugin URI of the plugin
+msgid "https://shop.webaware.com.au/downloads/disable-emails/"
+msgstr "https://shop.webaware.com.au/downloads/disable-emails/"
+
+#. Plugin Name of the plugin
+#: includes/class.Plugin.php:254
+msgid "Disable Emails"
+msgstr "Disable Emails"
+
+#: includes/class.Plugin.php:227
+msgid "Emails are not disabled! Something else has already declared wp_mail(), so Disable Emails cannot stop emails being sent!"
+msgstr "電子郵件傳送功能無法停用。其他程式碼已宣告使用 wp_mail() 函式，因此 Disable Emails 無法停用電子郵件傳送功能。"
+
+#: views/settings-form.php:41
+msgid "call WordPress hooks so that listeners can act, e.g. log emails"
+msgstr "呼叫 WordPress 勾點以便讓接聽程式得以執行，例如電子郵件傳送記錄。"
+
+#: views/settings-form.php:33
+msgid "Call WordPress hooks"
+msgstr "呼叫 WordPress 勾點"
+
+#: views/settings-form.php:13
+msgid "Disable Emails settings"
+msgstr "Disable Emails 設定"
+
+#. translators: shown when emails are disabled for the current site
+#: includes/functions.php:113
+msgid "Emails are disabled."
+msgstr "電子郵件傳送功能已停用。"
+
+#: includes/class.Plugin.php:214
+msgctxt "plugin details links"
+msgid "Donate"
+msgstr "贊助外掛開發"
+
+#: includes/class.Plugin.php:213
+msgctxt "plugin details links"
+msgid "Translate"
+msgstr "本地化"
+
+#: includes/class.Plugin.php:212
+msgctxt "plugin details links"
+msgid "Rating"
+msgstr "評分"
+
+#: includes/class.Plugin.php:211
+msgctxt "plugin details links"
+msgid "Get help"
+msgstr "取得技術支援"

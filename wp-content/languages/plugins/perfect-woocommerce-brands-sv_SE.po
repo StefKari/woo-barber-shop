@@ -1,0 +1,829 @@
+# Translation of Plugins - Perfect Brands for WooCommerce - Stable (latest release) in Swedish
+# This file is distributed under the same license as the Plugins - Perfect Brands for WooCommerce - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2021-12-26 21:06:05+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: sv_SE\n"
+"Project-Id-Version: Plugins - Perfect Brands for WooCommerce - Stable (latest release)\n"
+
+#: includes/quadlayers/widget.php:78
+msgid "Read more like this on our blog"
+msgstr "Läs mer som detta på vår blogg"
+
+#: includes/quadlayers/widget.php:53
+msgid "Untitled"
+msgstr "Utan rubrik"
+
+#: includes/quadlayers/widget.php:32
+msgid "More products"
+msgstr "Fler produkter"
+
+#: templates/widgets/filter-by-brand.php:31
+msgid "Remove filter"
+msgstr "Ta bort filter"
+
+#: classes/class-perfect-woocommerce-brands.php:182
+msgid "View on GitHub"
+msgstr "Visa på GitHub"
+
+#: classes/class-perfect-woocommerce-brands.php:181
+msgid "Translate the plugin"
+msgstr "Översätt tillägget"
+
+#: classes/class-perfect-woocommerce-brands.php:180
+msgid "Leave a review"
+msgstr "Lämna en recension"
+
+#. Plugin URI of the plugin
+msgid "https://quadlayers.com/portfolio/perfect-woocommerce-brands/"
+msgstr "https://quadlayers.com/portfolio/perfect-woocommerce-brands/"
+
+#. Plugin Name of the plugin
+msgid "Perfect Brands for WooCommerce"
+msgstr "Perfect Brands for WooCommerce"
+
+#: classes/class-pwb-suggestions-list-table.php:117
+msgctxt "Plugin Installer"
+msgid "Favorites"
+msgstr "Favoriter"
+
+#: classes/class-pwb-suggestions-list-table.php:116
+msgctxt "Plugin Installer"
+msgid "Recommended"
+msgstr "Rekommenderad"
+
+#: classes/class-pwb-suggestions-list-table.php:115
+msgctxt "Plugin Installer"
+msgid "Popular"
+msgstr "Populär"
+
+#: classes/class-pwb-suggestions-list-table.php:114
+msgctxt "Plugin Installer"
+msgid "Featured"
+msgstr "Utvald"
+
+#: classes/class-pwb-suggestions-list-table.php:112
+msgctxt "Plugin Installer"
+msgid "Beta Testing"
+msgstr "Beta-provning"
+
+#: classes/class-pwb-suggestions-list-table.php:109
+msgid "Search Results"
+msgstr "Sökresultat"
+
+#: classes/admin/class-pwb-suggestions.php:42
+msgid "Purchase"
+msgstr "Köp"
+
+#: classes/admin/class-pwb-suggestions.php:39
+msgid "Thanks for using our product! We recommend these extensions that will add new features to stand out your business and improve your sales."
+msgstr "Tack för att du använder vår produkt! Vi rekommenderar följande utökningar som ger dig nya funktioner för att ditt företag ska märkas mer och din försäljning förbättras."
+
+#: classes/admin/class-pwb-admin-tab.php:57
+#: classes/admin/class-pwb-suggestions.php:37
+#: classes/admin/class-pwb-suggestions.php:85
+msgid "Suggestions"
+msgstr "Förslag"
+
+#: classes/admin/class-pwb-admin-tab.php:90
+msgid "Products tab"
+msgstr "Fliken ”Produkter”"
+
+#: classes/admin/class-pwb-admin-tab.php:58
+#: classes/admin/class-pwb-suggestions.php:43
+#: classes/class-perfect-woocommerce-brands.php:79
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: classes/admin/class-pwb-admin-tab.php:29
+#: classes/admin/class-pwb-admin-tab.php:138
+msgid "Archives"
+msgstr "Arkiv"
+
+#: classes/admin/class-pwb-notices.php:50
+msgid "Report a bug"
+msgstr "Rapportera ett fel"
+
+#: classes/admin/class-pwb-notices.php:47
+msgid "Yes, of course!"
+msgstr "Självklart!"
+
+#: classes/admin/class-pwb-notices.php:44
+msgid "Could you please give it a 5-star rating on WordPress? We know its a big favor, but we've worked very much and very hard to release this great product. Your feedback will boost our motivation and help us promote and continue to improve this product."
+msgstr "Skulle du kunna ge det betyget 5 stjärnor på WordPress? Vi vet att vi ber om mycket, men vi har arbetat hårt för att skapa denna fantastiska produkt. Din återkoppling gör oss motiverade och hjälper oss att popularisera och förbättra produkten."
+
+#: classes/admin/class-pwb-notices.php:42
+msgid "Hello! Thank you for choosing the %s plugin!"
+msgstr "Hej! Tack för att du valt tillägget %s!"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:50
+msgid "Show only first level brands"
+msgstr "Visa endast varumärken på översta nivån"
+
+#. Author URI of the plugin
+msgid "https://quadlayers.com"
+msgstr "https://quadlayers.com"
+
+#. Author of the plugin
+#: classes/admin/class-pwb-suggestions.php:63 includes/quadlayers/widget.php:79
+msgid "QuadLayers"
+msgstr "QuadLayers"
+
+#: classes/admin/class-pwb-admin-tab.php:276
+msgid "Select your \"Brands\" page (if you have one), it will be linked in the breadcrumbs."
+msgstr "Välj din sida för ”Varumärken” (om du har någon), den kommer att länkas in i dina synliga sökvägar (breadcrumbs)."
+
+#: classes/admin/class-pwb-admin-tab.php:267
+msgid "The default image sizes can be configured under \"Settings > Media\". You can also define your own image sizes"
+msgstr "Standardstorlekarna för bilder kan konfigureras under ”Inställningar > Media”. Du kan också ange egna bildstorlekar"
+
+#: classes/admin/class-pwb-admin-tab.php:266
+msgid "Select the size for the brand logo image around the site"
+msgstr "Välj storlek för varumärkets logga på olika platser på webbplatsen"
+
+#: classes/admin/class-pwb-admin-tab.php:256
+msgid "Your brands URLs will look like \"%s\""
+msgstr "Dina URL:er kommer att se ut så här: ”%s”"
+
+#: classes/admin/class-pwb-admin-tab.php:239
+msgid "brand-name"
+msgstr "varumarkesnamn"
+
+#: classes/admin/class-pwb-admin-tab.php:239
+msgid "brands"
+msgstr "varumärken"
+
+#: classes/admin/class-pwb-admin-tab.php:121
+msgid "In meta"
+msgstr "I meta"
+
+#: classes/admin/class-pwb-admin-tab.php:28
+#: classes/admin/class-pwb-admin-tab.php:245
+msgid "General"
+msgstr "Allmänt"
+
+#: classes/class-perfect-woocommerce-brands.php:636
+msgid "Yes"
+msgstr "Ja"
+
+#: classes/class-perfect-woocommerce-brands.php:631
+msgid "Only parent brands"
+msgstr "Endast överordnade varumärken"
+
+#: classes/admin/class-edit-brands-page.php:93
+msgid "Featured"
+msgstr "Utvald"
+
+#: classes/admin/class-pwb-admin-tab.php:272
+msgid "Brands page"
+msgstr "Sida för varumärket"
+
+#: classes/admin/class-pwb-admin-tab.php:166
+msgid "No, hide banner"
+msgstr "Nej, dölj banner"
+
+#: classes/admin/class-pwb-admin-tab.php:161
+msgid "Show brand banner (if is set) on brand archive page"
+msgstr "Visa varumärkesbanner (om det är valt) på varumärkets arkivsida"
+
+#: classes/admin/class-pwb-admin-tab.php:157
+msgid "Show brand banner"
+msgstr "Visa varumärkesbanner"
+
+#: classes/admin/class-pwb-admin-tab.php:275
+msgid "For linking breadcrumbs"
+msgstr "För länkning av synliga sökvägar (breadcrumbs)"
+
+#: classes/class-perfect-woocommerce-brands.php:623
+msgid "AZ Listing for brands"
+msgstr "Alfabetisk lista över varumärken"
+
+#: classes/class-perfect-woocommerce-brands.php:622
+msgid "PWB AZ Listing"
+msgstr "Alfabetisk lista PWB"
+
+#: templates/admin/brands-exporter.php:15
+msgid "This tool allows you to export and import the brands between different sites using PWB."
+msgstr "Med det här verktyget kan du exportera och importera varumärkena mellan olika webbplatser med hjälp av PWB."
+
+#: templates/admin/brands-exporter.php:12
+msgid "Export brands"
+msgstr "Exportera varumärken"
+
+#: classes/widgets/class-pwb-list-widget.php:98
+msgid "Randomize"
+msgstr "Slumpmässig ordning"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:43
+msgid "Hide filter button"
+msgstr "Dölj filterknapp"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:35
+msgid "Max number of brands"
+msgstr "Max antal varumärken"
+
+#: classes/widgets/class-pwb-dropdown-widget.php:60
+#: classes/widgets/class-pwb-list-widget.php:88
+msgid "Only favorite brands"
+msgstr "Endast utvalda varumärken"
+
+#: classes/class-pwb-term.php:20
+msgid "Only WP_Term objects are allowed"
+msgstr "Endast objekt i WP_Term är tillåtna"
+
+#: classes/admin/class-pwb-admin-tab.php:153
+msgid "No, hide description"
+msgstr "Nej, dölj beskrivning"
+
+#: classes/admin/class-pwb-admin-tab.php:152
+#: classes/admin/class-pwb-admin-tab.php:165
+msgid "Yes, after product loop"
+msgstr "Ja, efter loopen med produkter"
+
+#: classes/admin/class-pwb-admin-tab.php:151
+#: classes/admin/class-pwb-admin-tab.php:164
+msgid "Yes, before product loop"
+msgstr "Ja, före loopen med produkter"
+
+#: classes/admin/class-brands-custom-fields.php:23
+#: classes/admin/class-brands-custom-fields.php:67
+msgid "Brand description for the archive pages. You can include some html markup and shortcodes."
+msgstr "Varumärkesbeskrivning för arkivsidor. Du kan inkludera vissa html-taggar och kortkoder."
+
+#: classes/admin/class-brands-custom-fields.php:21
+#: classes/admin/class-brands-custom-fields.php:63
+msgid "Description"
+msgstr "Beskrivning"
+
+#: templates/shortcodes/product-carousel.php:26
+msgid "Nothing found"
+msgstr "Inget hittat"
+
+#: templates/shortcodes/carousel.php:20
+#: templates/shortcodes/product-carousel.php:23
+msgid "Loading"
+msgstr "Laddar in"
+
+#: classes/class-perfect-woocommerce-brands.php:507
+msgid "Number of items to load (or 'featured')"
+msgstr "Antal objekt som ska laddas (eller ”utvalda)"
+
+#: classes/admin/class-edit-brands-page.php:167
+msgid "Show featured brands first"
+msgstr "Visa utvalda varumärken först"
+
+#: classes/admin/class-edit-brands-page.php:148
+msgid "Error!"
+msgstr "Fel!"
+
+#: classes/admin/class-edit-brands-page.php:109
+msgid "Set as featured"
+msgstr "Ange som utvald post"
+
+#: classes/admin/class-edit-brands-page.php:56
+msgid "featured"
+msgstr "utvald"
+
+#: classes/class-perfect-woocommerce-brands.php:606
+msgid "Hide"
+msgstr "Dölj"
+
+#: classes/admin/class-pwb-admin-tab.php:211
+msgid "Offical WooCommerce Brands"
+msgstr "Offical WooCommerce Brands"
+
+#: classes/admin/class-pwb-admin-tab.php:93
+msgid "Show brand tab in single product page"
+msgstr "Visa flik för varumärket på sida för enataka produkt"
+
+#: classes/class-perfect-woocommerce-brands.php:178
+msgid "We know that you´re in love with Perfect WooCommerce Brands, you can help us making it a bit better. Thanks a lot!"
+msgstr "Vi vet att du älskar Perfect WooCommerce Brands och du kan hjälpa oss att göra det ännu bättre. Tack!"
+
+#: classes/class-pwb-api-support.php:112
+msgid "Product brands"
+msgstr "Produktmärken"
+
+#: classes/class-perfect-woocommerce-brands.php:906
+msgid "All"
+msgstr "Allt"
+
+#: classes/class-perfect-woocommerce-brands.php:785
+msgid "We are importing the dummy data. ¡Don´t close this window until the process is finished!"
+msgstr "Vi hämtar exempeldatan. Stäng inte fönstret innan processen är klar!"
+
+#: classes/class-perfect-woocommerce-brands.php:784
+msgid "¿Start loading dummy data?"
+msgstr "Börja import av exempeldata?"
+
+#: classes/class-perfect-woocommerce-brands.php:605
+msgid "After image"
+msgstr "Efter bild"
+
+#: classes/class-perfect-woocommerce-brands.php:604
+msgid "Before image"
+msgstr "Före bild"
+
+#: classes/class-perfect-woocommerce-brands.php:600
+msgid "Title position"
+msgstr "Titelposition"
+
+#: classes/class-perfect-woocommerce-brands.php:590
+msgid "Order"
+msgstr "Sortera"
+
+#: classes/class-perfect-woocommerce-brands.php:576
+msgid "Order by"
+msgstr "Sortera efter"
+
+#: classes/admin/class-pwb-coupon.php:40
+msgid "Coupon will be valid if there are at least one product of this brands in the cart"
+msgstr "Kupong är giltig om det finns minst en produkt av detta varumärken i kundvagnen"
+
+#: classes/admin/class-pwb-coupon.php:28
+msgid "Any brand"
+msgstr "Vilket varumärke som helst"
+
+#: classes/admin/class-pwb-coupon.php:27
+msgid "Brands restriction"
+msgstr "Varumärkesbegränsning"
+
+#: classes/admin/class-pwb-admin-tab.php:228
+msgid "Show system status"
+msgstr "Visa systemstatus"
+
+#: classes/admin/class-pwb-admin-tab.php:226
+msgid "System status"
+msgstr "Systemstatus"
+
+#: classes/admin/class-pwb-admin-tab.php:222
+msgid "Start import"
+msgstr "Starta import"
+
+#: classes/admin/class-pwb-admin-tab.php:218
+msgid "Import generic brands and assign it to products randomly"
+msgstr "Importera generiska varumärken och koppla dem slumpmässigt till olika produkter"
+
+#: classes/admin/class-pwb-admin-tab.php:215
+msgid "Dummy data"
+msgstr "Demodata"
+
+#: classes/admin/class-pwb-admin-tab.php:210
+msgid "Ultimate WooCommerce Brands"
+msgstr "Ultimate WooCommerce Brands"
+
+#: classes/admin/class-pwb-admin-tab.php:203
+msgid "Import brands from other brand plugin. <a href=\"%s\" target=\"_blank\">Click here for more details</a>"
+msgstr "Importera varumärken från annat tillägg för hantering av varumärken. <a href=\"%s\" target=\"_blank\">Klicka här för mer information</a>"
+
+#: classes/widgets/class-pwb-list-widget.php:58
+msgid "Columns:"
+msgstr "Kolumner:"
+
+#: classes/widgets/class-pwb-list-widget.php:53
+msgid "Brand name"
+msgstr "Varumärkesnamn"
+
+#: classes/widgets/class-pwb-list-widget.php:48
+msgid "Display as:"
+msgstr "Visa som:"
+
+#: classes/admin/class-pwb-admin-tab.php:100
+msgid "Show brand logo (or name) in single product"
+msgstr "Visa logga (eller namn) för varumärke med enstaka produkt"
+
+#: classes/admin/class-pwb-admin-tab.php:97
+msgid "Show brands in single product"
+msgstr "Visa varumärken för enstaka produkt"
+
+#: classes/class-perfect-woocommerce-brands.php:614
+msgid "Hide brands that have not been assigned to any product"
+msgstr "Dölja varumärken som inte är kopplade till någon produkt"
+
+#: classes/class-perfect-woocommerce-brands.php:612
+#: classes/widgets/class-pwb-dropdown-widget.php:49
+#: classes/widgets/class-pwb-list-widget.php:78
+msgid "Hide empty"
+msgstr "Dölj tomma"
+
+#: classes/class-perfect-woocommerce-brands.php:486
+#: classes/class-perfect-woocommerce-brands.php:537
+msgid "Display prev and next arrows"
+msgstr "Visa pilar till föregående och nästa objekt"
+
+#: classes/class-perfect-woocommerce-brands.php:484
+#: classes/class-perfect-woocommerce-brands.php:535
+msgid "Arrows"
+msgstr "Pilar"
+
+#: classes/admin/class-pwb-notices.php:86
+msgid "Settings"
+msgstr "Inställningar"
+
+#: templates/widgets/filter-by-brand.php:28
+msgid "Apply filter"
+msgstr "Tillämpa filter"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:29
+#: classes/widgets/class-pwb-list-widget.php:33
+msgid "Title:"
+msgstr "Rubrik:"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:14
+msgid "Filter products by brand"
+msgstr "Filtrera produkter efter varumärke"
+
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:13
+msgid "Recommended for product categories or shop page"
+msgstr "Rekommenderas för produktkategorier eller butiken sida"
+
+#: classes/admin/class-pwb-admin-tab.php:209
+msgid "YITH WooCommerce Brands Add-On"
+msgstr "Utökningen YITH för WooCommerce Brands"
+
+#: classes/admin/class-pwb-admin-tab.php:208
+#: classes/admin/class-pwb-admin-tab.php:221
+msgid "-"
+msgstr "-"
+
+#: classes/admin/class-pwb-admin-tab.php:199
+#: templates/admin/brands-exporter.php:13
+msgid "Import brands"
+msgstr "Importera varumärken"
+
+#: classes/admin/class-pwb-admin-tab.php:31
+#: classes/admin/class-pwb-admin-tab.php:193
+msgid "Tools"
+msgstr "Verktyg"
+
+#: classes/admin/class-pwb-admin-tab.php:106
+#: classes/admin/class-pwb-admin-tab.php:178
+msgid "Show brand image (if is set)"
+msgstr "Visa varumärkets bild (om den är angiven)"
+
+#: classes/admin/class-pwb-admin-tab.php:105
+#: classes/admin/class-pwb-admin-tab.php:177
+msgid "Show brand link"
+msgstr "Visa länk för varumärket"
+
+#: classes/admin/class-pwb-admin-tab.php:104
+#: classes/admin/class-pwb-admin-tab.php:176
+#: classes/class-perfect-woocommerce-brands.php:635
+msgid "No"
+msgstr "Nej"
+
+#: classes/admin/class-pwb-admin-tab.php:173
+msgid "Show brand logo (or name) in product loop"
+msgstr "Visa logga (eller namn) för varumärket i produkt-loopen"
+
+#: classes/admin/class-pwb-admin-tab.php:170
+msgid "Show brands in loop"
+msgstr "Visa varumärken i loopen"
+
+#: classes/class-perfect-woocommerce-brands.php:783
+msgid "We are migrating the product brands. ¡Don´t close this window until the process is finished!"
+msgstr "Vi migrerar produkternas varumärken. Stäng inte detta fönster förrän processen är avslutad!"
+
+#: classes/class-perfect-woocommerce-brands.php:782
+msgid "¿Start migration?"
+msgstr "¿Starta migrering?"
+
+#: classes/admin/class-pwb-admin-tab.php:148
+msgid "Show brand description (if is set) on brand archive page"
+msgstr "Visa varumärkesbeskrivning (om någon är angiven) på varumärkets arkivsida"
+
+#: classes/admin/class-pwb-admin-tab.php:144
+msgid "Show brand description"
+msgstr "Visa varumärkesbeskrivning"
+
+#: classes/class-perfect-woocommerce-brands.php:472
+msgid "Number of products to scroll"
+msgstr "Antal produkter att rulla"
+
+#: classes/class-perfect-woocommerce-brands.php:469
+msgid "Products to scroll"
+msgstr "Produkter att rulla"
+
+#: classes/class-perfect-woocommerce-brands.php:464
+msgid "Number of products to show"
+msgstr "Antal produkter att visa"
+
+#: classes/class-perfect-woocommerce-brands.php:461
+msgid "Products to show"
+msgstr "Produkter att visa"
+
+#: classes/class-perfect-woocommerce-brands.php:456
+msgid "Number of products to load"
+msgstr "Antal produkter att ladda"
+
+#: classes/admin/class-pwb-admin-tab.php:30
+#: classes/admin/class-pwb-admin-tab.php:84
+#: classes/class-perfect-woocommerce-brands.php:453
+msgid "Products"
+msgstr "Produkter"
+
+#: classes/class-perfect-woocommerce-brands.php:437
+msgid "Product carousel by brand or by category"
+msgstr "Produktkarusell efter varumärke eller kategori"
+
+#: classes/class-perfect-woocommerce-brands.php:436
+msgid "PWB Product carousel"
+msgstr "PWB produktkarusell"
+
+#: classes/admin/class-pwb-admin-tab.php:123
+msgid "After sharing"
+msgstr "Efter delning"
+
+#: classes/admin/class-pwb-admin-tab.php:122
+msgid "After meta"
+msgstr "Efter meta"
+
+#: classes/admin/class-pwb-admin-tab.php:120
+msgid "After add to cart"
+msgstr "Efter ”Lägg i varukorg”"
+
+#: classes/admin/class-pwb-admin-tab.php:119
+msgid "After excerpt"
+msgstr "Efter utdrag"
+
+#: classes/admin/class-pwb-admin-tab.php:118
+msgid "After price"
+msgstr "Efter pris"
+
+#: classes/admin/class-pwb-admin-tab.php:117
+msgid "After title"
+msgstr "Efter titel"
+
+#: classes/admin/class-pwb-admin-tab.php:116
+msgid "Before title"
+msgstr "Före titel"
+
+#: classes/admin/class-pwb-admin-tab.php:113
+msgid "For single product"
+msgstr "För enskild produkt"
+
+#: classes/admin/class-pwb-admin-tab.php:110
+msgid "Brand position"
+msgstr "Position för varumärket"
+
+#: classes/admin/class-brands-custom-fields.php:42
+#: classes/admin/class-brands-custom-fields.php:116
+msgid "This link should be relative to site url. Example: product/product-name"
+msgstr "Denna länk bör vara relativ i förhållande till webbplatsen url. Exempel: \"/produkt/produktnamn\""
+
+#: classes/admin/class-brands-custom-fields.php:40
+#: classes/admin/class-brands-custom-fields.php:112
+msgid "Brand banner link"
+msgstr "Länk i varumärkesbanner"
+
+#: classes/admin/class-brands-custom-fields.php:36
+msgid "This image will be shown on brand page"
+msgstr "Denna bild kommer att visas på varumärkets sida"
+
+#: classes/admin/class-brands-custom-fields.php:33
+#: classes/admin/class-brands-custom-fields.php:92
+msgid "Brand banner"
+msgstr "Varumärkesbanner"
+
+#. Description of the plugin
+msgid "Perfect WooCommerce Brands allows you to show product brands in your WooCommerce based store."
+msgstr "Perfect WooCommerce Brands låter dig visa produktvarumärken i din WooCommerce-baserade butik."
+
+#: perfect-woocommerce-brands.php:132
+msgid "Perfect WooCommerce Brands needs WooCommerce to run. Please, install and active WooCommerce plugin."
+msgstr "Perfect WooCommerce Brands behöver WooCommerce för att kunna köras. Du behöver installera och aktivera tillägget WooCommerce."
+
+#: classes/widgets/class-pwb-list-widget.php:145
+msgid "Go to"
+msgstr "Gå till"
+
+#: classes/widgets/class-pwb-list-widget.php:12
+msgid "Brands list"
+msgstr "Varumärkeslista"
+
+#: classes/widgets/class-pwb-list-widget.php:11
+msgid "Adds a brands list to your site"
+msgstr "Lägger till en lista med varumärken på din webbplats"
+
+#: classes/widgets/class-pwb-dropdown-widget.php:27
+msgid "Title"
+msgstr "Rubrik"
+
+#: classes/widgets/class-pwb-dropdown-widget.php:12
+msgid "Brands dropdown"
+msgstr "Listruta med varumärken"
+
+#: classes/widgets/class-pwb-dropdown-widget.php:11
+msgid "Adds a brands dropdown to your site"
+msgstr "Lägger till en listruta för varumärken på din webbplats"
+
+#: classes/shortcodes/class-pwb-all-brands.php:167
+msgid "No results"
+msgstr "Inga resultat"
+
+#: classes/shortcodes/class-pwb-all-brands.php:163
+msgid "Last page"
+msgstr "Sista sidan"
+
+#: classes/shortcodes/class-pwb-all-brands.php:160
+msgid "Next page"
+msgstr "Nästa sida"
+
+#: classes/shortcodes/class-pwb-all-brands.php:156
+msgid "Previous page"
+msgstr "Föregående sida"
+
+#: classes/shortcodes/class-pwb-all-brands.php:153
+msgid "First page"
+msgstr "Första sidan"
+
+#: classes/admin/class-pwb-admin-tab.php:254
+msgid "Brands taxonomy slug"
+msgstr "Taxonomi-slugg för varumärken"
+
+#: classes/admin/class-pwb-admin-tab.php:251
+msgid "Slug"
+msgstr "Slug"
+
+#: classes/admin/class-edit-brands-page.php:92
+msgid "Logo"
+msgstr "Logga"
+
+#: classes/admin/class-brands-custom-fields.php:29
+#: classes/admin/class-brands-custom-fields.php:35
+#: classes/admin/class-brands-custom-fields.php:76
+#: classes/admin/class-brands-custom-fields.php:96
+msgid "Select image"
+msgstr "Välj bild"
+
+#: classes/admin/class-brands-custom-fields.php:27
+#: classes/admin/class-brands-custom-fields.php:72
+#: classes/widgets/class-pwb-list-widget.php:54
+msgid "Brand logo"
+msgstr "Varumärkeslogga"
+
+#: classes/class-perfect-woocommerce-brands.php:820
+msgid "No brands found"
+msgstr "Inga varumärken hittades"
+
+#: classes/class-perfect-woocommerce-brands.php:819
+msgid "Choose from the most used brands"
+msgstr "Välj från de mest använda varumärkena"
+
+#: classes/class-perfect-woocommerce-brands.php:818
+msgid "Add or remove brands"
+msgstr "Lägg till eller ta bort varumärken"
+
+#: classes/class-perfect-woocommerce-brands.php:817
+msgid "Separate brands with commas"
+msgstr "Separata varumärken med komma"
+
+#: classes/class-perfect-woocommerce-brands.php:816
+msgid "Popular Brands"
+msgstr "Populära varumärken"
+
+#: classes/class-perfect-woocommerce-brands.php:815
+msgid "Search Brands"
+msgstr "Sök varumärken"
+
+#: classes/class-perfect-woocommerce-brands.php:814
+msgid "Parent Brand:"
+msgstr "Överordnat varumärke:"
+
+#: classes/class-perfect-woocommerce-brands.php:813
+msgid "Parent Brand"
+msgstr "Överordnat varumärke"
+
+#: classes/class-perfect-woocommerce-brands.php:812
+msgid "New Brand Name"
+msgstr "Nytt varumärkesnamn"
+
+#: classes/class-perfect-woocommerce-brands.php:811
+msgid "Add New Brand"
+msgstr "Lägg till nytt varumärke"
+
+#: classes/class-perfect-woocommerce-brands.php:810
+msgid "Update Brand"
+msgstr "Uppdatera varumärke"
+
+#: classes/class-perfect-woocommerce-brands.php:809
+msgid "View Brand"
+msgstr "Visa varumärke"
+
+#: classes/class-perfect-woocommerce-brands.php:808
+msgid "Edit Brand"
+msgstr "Redigera varumärke"
+
+#: classes/class-perfect-woocommerce-brands.php:807
+msgid "All Brands"
+msgstr "Alla varumärken"
+
+#: classes/admin/class-pwb-exporter-support.php:22
+#: classes/admin/class-pwb-importer-support.php:22
+#: classes/admin/class-pwb-importer-support.php:33
+#: classes/class-perfect-woocommerce-brands.php:445
+#: classes/class-perfect-woocommerce-brands.php:805
+#: classes/class-pwb-product-tab.php:23 classes/class-pwb-product-tab.php:41
+msgid "Brand"
+msgstr "Varumärke"
+
+#: classes/admin/class-edit-brands-page.php:164
+#: classes/admin/class-pwb-admin-tab.php:13
+#: classes/admin/class-pwb-admin-tab.php:56
+#: classes/class-perfect-woocommerce-brands.php:689
+#: classes/class-perfect-woocommerce-brands.php:804
+#: classes/class-perfect-woocommerce-brands.php:806
+#: classes/widgets/class-pwb-dropdown-widget.php:20
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:22
+#: classes/widgets/class-pwb-filter-by-brand-widget.php:89
+#: classes/widgets/class-pwb-list-widget.php:20
+#: templates/widgets/dropdown.php:14
+msgid "Brands"
+msgstr "Varumärken"
+
+#: classes/class-perfect-woocommerce-brands.php:709
+#: templates/shortcodes/brand.php:18
+msgid "View brand"
+msgstr "Visa varumärke"
+
+#: classes/class-perfect-woocommerce-brands.php:658
+msgid "Product id (post id)"
+msgstr "Produkt-ID (inläggs-ID)"
+
+#: classes/class-perfect-woocommerce-brands.php:655
+msgid "Product id"
+msgstr "Produkt-ID"
+
+#: classes/class-perfect-woocommerce-brands.php:646
+msgid "Show brand for a specific product"
+msgstr "Visa varumärke för en viss produkt"
+
+#: classes/class-perfect-woocommerce-brands.php:645
+msgid "PWB brand"
+msgstr "PWB brand"
+
+#: classes/class-perfect-woocommerce-brands.php:565
+msgid "Show x brands per page"
+msgstr "Visa x varumärken per sida"
+
+#: classes/class-perfect-woocommerce-brands.php:562
+msgid "Brands per page"
+msgstr "Varumärken per sida"
+
+#: classes/class-perfect-woocommerce-brands.php:553
+msgid "Show all brands"
+msgstr "Visa alla varumärken"
+
+#: classes/class-perfect-woocommerce-brands.php:552
+msgid "PWB All brands"
+msgstr "PWB All brands"
+
+#: classes/admin/class-pwb-admin-tab.php:263
+#: classes/class-perfect-woocommerce-brands.php:541
+#: classes/class-perfect-woocommerce-brands.php:569
+#: classes/class-perfect-woocommerce-brands.php:662
+msgid "Brand logo size"
+msgstr "Varumärkesloggans storlek"
+
+#: classes/class-perfect-woocommerce-brands.php:479
+#: classes/class-perfect-woocommerce-brands.php:530
+msgid "Autoplay carousel"
+msgstr "Starta karusellen automatiskt"
+
+#: classes/class-perfect-woocommerce-brands.php:477
+#: classes/class-perfect-woocommerce-brands.php:528
+msgid "Autoplay"
+msgstr "Starta automatiskt"
+
+#: classes/class-perfect-woocommerce-brands.php:523
+msgid "Number of items to scroll"
+msgstr "Antal objekt att rulla"
+
+#: classes/class-perfect-woocommerce-brands.php:520
+msgid "Items to scroll"
+msgstr "Objekt att rulla"
+
+#: classes/class-perfect-woocommerce-brands.php:515
+msgid "Number of items to show"
+msgstr "Antal objekt att visa"
+
+#: classes/class-perfect-woocommerce-brands.php:512
+msgid "Items to show"
+msgstr "Objekt att visa"
+
+#: classes/class-perfect-woocommerce-brands.php:504
+msgid "Items"
+msgstr "Objekt"
+
+#: classes/class-perfect-woocommerce-brands.php:495
+msgid "Brands carousel"
+msgstr "Varumärkeskarusell"
+
+#: classes/class-perfect-woocommerce-brands.php:494
+msgid "PWB Brands carousel"
+msgstr "PWB varumärkeskarusell"

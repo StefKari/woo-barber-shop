@@ -1,0 +1,66 @@
+# Translation of Plugins - Disable Emails - Stable (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - Disable Emails - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2016-12-15 01:09:51+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: ja_JP\n"
+"Project-Id-Version: Plugins - Disable Emails - Stable (latest release)\n"
+
+#: views/settings-form.php:46
+msgid "BuddyPress"
+msgstr "BuddyPress"
+
+#: views/settings-form.php:49
+msgid "force BuddyPress to use WordPress emails so that they can be blocked"
+msgstr "WordPress のメールを BuddyPress で強制的にブロックできるようにする"
+
+#: includes/class.Plugin.php:214
+msgctxt "plugin details links"
+msgid "Donate"
+msgstr "寄付する"
+
+#: views/settings-form.php:13
+msgid "Disable Emails settings"
+msgstr "Disable Emails 設定"
+
+#: views/settings-form.php:41
+msgid "call WordPress hooks so that listeners can act, e.g. log emails"
+msgstr "call WordPress hooks で listeners は色々ことができる。例えば log emails。"
+
+#: includes/class.Plugin.php:227
+msgid "Emails are not disabled! Something else has already declared wp_mail(), so Disable Emails cannot stop emails being sent!"
+msgstr "誰かがwp_mail()を使ったの故、 Disable Emailsの効果を不全です。そしてWordPressシステムからのメールの送信を完全に止めるのことができない！"
+
+#. Plugin Name of the plugin
+#: includes/class.Plugin.php:254
+msgid "Disable Emails"
+msgstr "Disable Emails"
+
+#. translators: shown when emails are disabled for the current site
+#: includes/functions.php:113
+msgid "Emails are disabled."
+msgstr "メールは無効になっています。"
+
+#: views/settings-form.php:33
+msgid "Call WordPress hooks"
+msgstr "WordPress フックを呼び出す"
+
+#: includes/class.Plugin.php:211
+msgctxt "plugin details links"
+msgid "Get help"
+msgstr "ヘルプを探す"
+
+#: includes/class.Plugin.php:212
+msgctxt "plugin details links"
+msgid "Rating"
+msgstr "レーティング"
+
+#: includes/class.Plugin.php:213
+msgctxt "plugin details links"
+msgid "Translate"
+msgstr "翻訳する"

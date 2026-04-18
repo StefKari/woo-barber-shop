@@ -1,0 +1,1341 @@
+# Translation of Yoast - Yoast SEO Premium (for WordPress) in Indonesian
+# This file is distributed under the same license as the Yoast - Yoast SEO Premium (for WordPress) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-04-03 13:22:11+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: GlotPress/4.0.0-rc.1\n"
+"Language: id\n"
+"Project-Id-Version: Yoast - Yoast SEO Premium (for WordPress)\n"
+
+#. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
+#. to a closing p tag
+#: src/task-list/application/tasks/set-social-sharing-images.php:108
+msgid "%1$sUnstyled preview images can lower engagement when shared on social media. Keep every post on brand. %2$s%3$sOpen the post, go to Yoast SEO Analysis tab, click on Social, and add a relevant image to your preview.%4$s"
+msgstr "%1$sGambar pratinjau tanpa gaya dapat menurunkan engagement saat dibagikan di media sosial. Pastikan setiap pos tetap sesuai merek. %2$s%3$sBuka pos, buka tab Analisis Yoast SEO, klik Sosial, dan tambahkan gambar yang relevan ke pratinjau Anda.%4$s"
+
+#. translators: %1$s expands to the post type label this task is about.
+#: src/task-list/application/tasks/set-social-sharing-images.php:105
+msgid "Set social sharing images in your recent content: %1$s"
+msgstr "Atur gambar berbagi sosial di konten terbaru Anda: %1$s"
+
+#: src/task-list/application/tasks/child-tasks/set-social-sharing-images-child.php:89
+msgid "Open editor"
+msgstr "Buka editor"
+
+#. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
+#. to a closing p tag
+#: src/task-list/application/tasks/set-social-appearance-templates.php:148
+msgid "%1$sUnstyled previews and general descriptions can lower engagement when shared on social media. Templates keep every post on brand and share-ready automatically.%2$s%3$sOpen Social settings, choose your content type, and set a default image, title, and description.%4$s"
+msgstr "%1$sPratinjau tanpa gaya dan deskripsi umum dapat menurunkan engagement saat dibagikan di media sosial. Template menjaga agar setiap pos tetap sesuai merek dan siap dibagikan secara otomatis.%2$s%3$sBuka pengaturan Sosial, pilih tipe konten Anda, dan atur gambar, judul, serta deskripsi default.%4$s"
+
+#. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
+#. to a closing p tag
+#: src/task-list/application/tasks/organization-schema.php:119
+msgid "%1$sMissing organization details makes it harder for search engines to recognize your brand. Completing this helps your business appear correctly in search results.%2$s%3$sGo to Site representation, open Additional organization info, and fill in the information.%4$s"
+msgstr "%1$sDetail organisasi yang hilang mempersulit mesin pencari untuk mengenali merek Anda. Melengkapi ini membantu bisnis Anda muncul dengan benar di hasil pencarian.%2$s%3$sBuka Representasi situs, buka Info organisasi tambahan, dan isi informasinya.%4$s"
+
+#. translators: %1$s expands to the post type label this task is about
+#: src/task-list/application/tasks/set-social-appearance-templates.php:145
+msgid "Set social media appearance templates for your content type: %1$s"
+msgstr "Atur template tampilan media sosial untuk jenis konten Anda: %1$s"
+
+#: classes/redirect/redirect-ajax.php:226
+msgid "You don't have permission to update the redirect."
+msgstr "Anda tidak memiliki izin untuk memperbarui redirect."
+
+#: classes/redirect/redirect-ajax.php:206
+msgid "You don't have permission to add the redirect."
+msgstr "Anda tidak memiliki izin untuk menambahkan redirect."
+
+#: src/task-list/application/tasks/set-social-appearance-templates.php:129
+msgid "Set social templates"
+msgstr "Atur template media sosial"
+
+#: src/task-list/application/tasks/orphaned-workout.php:106
+msgid "Pages without internal links are hard to find by users and search engines. Linking them up improves discoverability for both users and search engines."
+msgstr "Halaman tanpa tautan internal sulit ditemukan pengguna dan mesin pencari. Menautkannya meningkatkan kemudahan ditemukan oleh pengguna dan mesin pencari."
+
+#: src/task-list/application/tasks/orphaned-workout.php:105
+msgid "Do the Orphaned Content workout"
+msgstr "Lakukan latihan Konten Terbengkalai"
+
+#: src/task-list/application/tasks/organization-schema.php:116
+msgid "Fill in Organization Schema"
+msgstr "Isi Organization Schema"
+
+#: src/task-list/application/tasks/organization-schema.php:103
+msgid "Take me there"
+msgstr "Bawa saya ke sana"
+
+#: src/task-list/application/tasks/cornerstone-workout.php:106
+msgid "When important pages aren't well-linked, search engines can't tell they matter most. Strengthening cornerstone content helps your main topics rank better."
+msgstr "Saat halaman penting tidak saling terhubung dengan baik, mesin pencari tidak dapat mengetahui bahwa halaman tersebut paling penting. Memperkuat konten cornerstone membantu topik utama Anda mendapatkan peringkat yang lebih baik."
+
+#: src/task-list/application/tasks/cornerstone-workout.php:105
+msgid "Do the Cornerstone Approach workout"
+msgstr "Lakukan latihan Pendekatan Cornerstone"
+
+#: src/task-list/application/tasks/cornerstone-workout.php:92
+#: src/task-list/application/tasks/orphaned-workout.php:92
+msgid "Start the workout"
+msgstr "Mulai latihan"
+
+#: classes/redirect/validation/redirect-self-wp-json-redirect-validation.php:35
+msgid "You cannot create a redirect to the WordPress REST API endpoint (/wp-json). Please choose a different URL to redirect to."
+msgstr "Anda tidak dapat membuat pengalihan ke endpoint WordPress REST API (/wp-json). Mohon pilih URL tujuan yang berbeda."
+
+#: classes/redirect/validation/redirect-self-wp-json-redirect-validation.php:28
+msgid "You cannot create a redirect from the WordPress REST API endpoint (/wp-json). Please choose a different origin URL."
+msgstr "Anda tidak dapat membuat pengalihan dari endpoint WordPress REST API (/wp-json). Mohon pilih URL sumber yang berbeda."
+
+#. translators: %1$s expands to Yoast.
+#: src/ai/summarize/user-interface/ai-summarize-integration.php:149
+msgid "%1$s AI Blocks"
+msgstr "Blok AI %1$s"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block keyword"
+msgid "key takeaways"
+msgstr "poin utama"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block keyword"
+msgid "tldr"
+msgstr "tldr"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block keyword"
+msgid "summary"
+msgstr "ringkasan"
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block description"
+msgid "Adds a short AI summary of your content."
+msgstr "Menambahkan ringkasan AI singkat dari konten Anda."
+
+#: assets/blocks/ai-blocks/summary/block.json
+msgctxt "block title"
+msgid "Yoast AI Summarize"
+msgstr "Yoast AI Summarize"
+
+#: classes/premium-redirect-service.php:163
+#: classes/premium-redirect-service.php:330
+msgid "Something went wrong while updating this redirect."
+msgstr "Terjadi kendala saat memperbarui pengalihan ini."
+
+#: classes/premium-redirect-service.php:162
+msgid "Redirect not updated."
+msgstr "Pengalihan tidak diperbarui."
+
+#: classes/premium-redirect-service.php:51
+msgid "The redirect was created successfully."
+msgstr "Pengalihan berhasil dibuat."
+
+#: classes/premium-redirect-service.php:50
+msgid "Redirect created."
+msgstr "Pengalihan dibuat."
+
+#: classes/premium-redirect-service.php:35
+#: classes/premium-redirect-service.php:59
+msgid "Redirect not created."
+msgstr "Pengalihan tidak dibuat."
+
+#: classes/premium-redirect-endpoint.php:251
+msgid "Whether to write redirects into a separate file instead of .htaccess."
+msgstr "Tulis pengalihan ke file terpisah, bukan ke .htaccess."
+
+#: classes/premium-redirect-endpoint.php:245
+msgid "Whether to disable PHP-based redirects and use .htaccess instead."
+msgstr "Nonaktifkan pengalihan berbasis PHP. Gunakan .htaccess sebagai gantinya."
+
+#: classes/premium-redirect-endpoint.php:137
+#: classes/premium-redirect-endpoint.php:201
+msgid "The format of the redirects to retrieve."
+msgstr "Format pengalihan yang akan diambil."
+
+#: classes/premium-redirect-endpoint.php:76
+msgid "The format of the redirect to create."
+msgstr "Format pengalihan yang akan dibuat."
+
+#: assets/js/src/new-redirects/helpers/submit-utils.js:45
+#: classes/premium-redirect-service.php:60
+msgid "Something went wrong when creating this redirect."
+msgstr "Terjadi kesalahan saat membuat pengalihan ini."
+
+#. translators: The text to show when a paragraph break is suggested through AI
+#. Optimize.
+#: src/ai/optimize/suggestions-postprocessor/application/suggestion-processor.php:141
+msgid "Paragraph break"
+msgstr "Pemisah paragraf"
+
+#. translators: %1$s: Yoast SEO
+#: src/addon-installer.php:144
+msgid "Install latest %1$s"
+msgstr "Instal %1$s terbaru"
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "toc"
+msgstr "toc"
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "links"
+msgstr "tautan"
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block description"
+msgid "Adds a table of contents to this page."
+msgstr "Tambahkan tabel daftar isi pada halaman ini."
+
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block title"
+msgid "Yoast Table of Contents"
+msgstr "Yoast Table of Contents"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block keyword"
+msgid "related pages"
+msgstr "halaman terkait"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block keyword"
+msgid "related posts"
+msgstr "pos terkait"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block description"
+msgid "Adds a list of links related to this page."
+msgstr "Tambahkan daftar tautan terkait ke halaman ini."
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+msgctxt "block title"
+msgid "Yoast Related Links"
+msgstr "Tautan Terkait Yoast"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block keyword"
+msgid "content length"
+msgstr "panjang konten"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block keyword"
+msgid "reading time"
+msgstr "waktu baca"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block description"
+msgid "Shows an estimated reading time based on the content length."
+msgstr "Tampilkan estimasi waktu baca berdasarkan panjang konten."
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+msgctxt "block title"
+msgid "Yoast Estimated Reading Time"
+msgstr "Estimasi Waktu Baca Yoast"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "children"
+msgstr "turunan"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "childpages"
+msgstr "halaman turunan"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "subpages"
+msgstr "sub halaman"
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block description"
+msgid "Adds a list of internal links to subpages of this page."
+msgstr "Tambahkan daftar tautan internal ke sub halaman dari halaman ini."
+
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block title"
+msgid "Yoast Subpages"
+msgstr "Subhalaman Yoast"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+#: assets/blocks/dynamic-blocks/siblings/block.json
+#: assets/blocks/dynamic-blocks/subpages/block.json
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "site structure"
+msgstr "struktur situs"
+
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+#: assets/blocks/dynamic-blocks/siblings/block.json
+#: assets/blocks/dynamic-blocks/subpages/block.json
+msgctxt "block keyword"
+msgid "internal linking"
+msgstr "internal linking"
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block keyword"
+msgid "siblings pages"
+msgstr "halaman sibling"
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block keyword"
+msgid "siblings"
+msgstr "sibling"
+
+#: assets/blocks/dynamic-blocks/estimated-reading-time/block.json
+#: assets/blocks/dynamic-blocks/related-links-block/block.json
+#: assets/blocks/dynamic-blocks/siblings/block.json
+#: assets/blocks/dynamic-blocks/subpages/block.json
+#: assets/blocks/dynamic-blocks/table-of-contents/block.json
+msgctxt "block keyword"
+msgid "SEO"
+msgstr "SEO"
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block description"
+msgid "Adds a list of internal links to sibling pages which share the same parent."
+msgstr "Tambahkan daftar tautan internal ke halaman terkait (sibling) dengan induk yang sama."
+
+#: assets/blocks/dynamic-blocks/siblings/block.json
+msgctxt "block title"
+msgid "Yoast Siblings"
+msgstr "Yoast Siblings"
+
+#: src/deprecated/integrations/admin/ai-consent-integration.php:137
+msgid "AI features"
+msgstr "Fitur AI"
+
+#. translators: 1: Yoast SEO Premium
+#: src/integrations/admin/update-premium-notification.php:129
+msgid "Update to the latest version of %1$s!"
+msgstr "Perbarui ke versi terbaru dari %1$s!"
+
+#. translators: 1: Yoast SEO Premium, 2 and 3: opening and closing anchor tag.
+#: src/integrations/admin/update-premium-notification.php:121
+msgid "Please %2$supdate %1$s to the latest version%3$s to ensure you can fully use all Premium settings and features."
+msgstr "Mohon %2$sperbarui %1$s ke versi terbaru%3$s untuk memastikan Anda dapat sepenuhnya menggunakan semua pengaturan dan fitur Premium."
+
+#: src/integrations/admin/inclusive-language-filter-integration.php:65
+msgid "All Inclusive Language Scores"
+msgstr "Semua Skor Bahasa Inklusif"
+
+#. translators: Hidden accessibility text.
+#: src/integrations/admin/inclusive-language-filter-integration.php:60
+msgid "Filter by Inclusive Language Score"
+msgstr "Saring Berdasarkan Skor Bahasa Inklusif"
+
+#: src/integrations/admin/inclusive-language-column-integration.php:155
+#: src/integrations/admin/inclusive-language-column-integration.php:156
+#: src/integrations/admin/inclusive-language-taxonomy-column-integration.php:116
+#: src/integrations/admin/inclusive-language-taxonomy-column-integration.php:117
+msgid "Inclusive language score"
+msgstr "Skor bahasa inklusif"
+
+#. translators: Hidden accessibility text.
+#: src/integrations/admin/cornerstone-column-integration.php:138
+#: src/integrations/admin/cornerstone-taxonomy-column-integration.php:110
+msgid "Cornerstone content"
+msgstr "Konten landasan"
+
+#: src/integrations/admin/cornerstone-column-integration.php:136
+#: src/integrations/admin/cornerstone-taxonomy-column-integration.php:108
+msgid "Is this cornerstone content?"
+msgstr "Apakah ini merupakan konten landasan?"
+
+#. Author URI of the plugin
+#: wp-seo-premium.php
+msgid "https://yoa.st/team-yoast-premium"
+msgstr "https://yoa.st/team-yoast-premium"
+
+#: src/integrations/third-party/mastodon.php:147
+#: src/user-meta/framework/additional-contactmethods/mastodon.php:28
+msgid "Mastodon profile URL"
+msgstr "URL profil Mastodon"
+
+#: assets/js/src/frontend-inspector/components/frontend-inspector.js:29
+#: src/integrations/frontend-inspector.php:92
+msgid "Front-end SEO inspector"
+msgstr "Inspector Front-end SEO"
+
+#: classes/redirect/views/redirects-tab-settings.php:84
+msgid "Read more about why web server redirect methods have been disabled on a multisite."
+msgstr "Baca selengkapnya tentang mengapa metode pengalihan server web dinonaktifkan di multisitus."
+
+#: classes/redirect/views/redirects-tab-settings.php:82
+msgid "Since this site is a multisite, web server redirect methods have been disabled to prevent issues."
+msgstr "Karena situs ini adalah multisitus, metode pengalihan server web telah dinonaktifkan untuk mencegah masalah."
+
+#: src/integrations/admin/thank-you-page-integration.php:84
+msgid "Installation Successful"
+msgstr "Instalasi Sukses"
+
+#: classes/views/thank-you.php:104
+msgid "Browse our courses"
+msgstr "Cari kursus kami"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: <strong>, %3$s: Yoast SEO, %4$s:
+#. </strong>
+#: classes/views/thank-you.php:91
+msgid "%1$s grants you direct access to %2$sall premium %3$s academy courses%4$s. Learn all the ins and outs of holistic SEO from industry experts."
+msgstr "%1$s memberi akses langsung ke  %2$semua %3$s akademi kursus%4$s premium. Pelajari apa saja tentang SEO holistik dari pihak yang mumpuni."
+
+#: classes/views/thank-you.php:84
+msgid "Master vital SEO skills with our online courses"
+msgstr "Kuasai skil SEO yang vital dengan kursus online kami"
+
+#: classes/views/thank-you.php:79
+msgid "Check out the Redirect Manager"
+msgstr "Kunjungi Redirect Manager"
+
+#. translators: %1$s: Yoast SEO, %2$s: <strong>, %3$s: </strong>
+#: classes/views/thank-you.php:68
+msgid "The %1$s %2$sRedirect Manager%3$s automatically prevents visitors from reaching a dead end whenever you move or delete content. It also makes managing your existing redirects easy."
+msgstr "%1$s %2$sRedirect Manager%3$s secara otomatis menghindarkan pengunjung dari halaman kosong jika konten dipindah atau dihapus. Serta memudahkan dalam mengelola pengarahan."
+
+#: classes/views/thank-you.php:61
+msgid "Keep your site well-organised so people won't get lost"
+msgstr "Menjadikan situs Anda terorganisir dengan baik supaya tidak membingungkan pengunjung"
+
+#: classes/views/thank-you.php:56
+msgid "Score some more green bullets"
+msgstr "Dapatkan lebih banyak skor hijau"
+
+#. translators: %1$s: <strong>, %2$s: </strong>
+#: classes/views/thank-you.php:46
+msgid "Different people search with different search terms. With our %1$spremium analysis%2$s, you are free to use variations and synonyms of your keywords in your content, which will make your writing style far more natural."
+msgstr "Tiap orang melakukan pencarian dengan kata kunci yang berbeda. Fitur %1$sanalisis premium%2$s kami memungkinkan Anda memilih dan menggunakan variasi dan sinonim kata kunci dalam konten Anda, yang akan menjadikan gaya menulis Anda jauh lebih natural."
+
+#: classes/views/thank-you.php:39
+msgid "Optimize your content further with our smart analysis"
+msgstr "Optimalkan konten Anda lebih lanjut dengan analisis pintar kami"
+
+#: classes/views/thank-you.php:34
+msgid "Do the cornerstone workout!"
+msgstr "Lakukan latihan landasan!"
+
+#. translators: %1$s: <strong>, %2$s: </strong>
+#: classes/views/thank-you.php:24
+msgid "%1$sCornerstone content%2$s is the content on your site that’s most important. You want to rank highest in Google with these articles. Make sure your internal linking structure reflects what pages are most important. Want to know how?"
+msgstr "%1$sKonten landasan%2$s adalah konten yang paling penting di situs Anda. Anda ingin memperoleh peringkat tertinggi di Google dengan artikel tersebut. Pastikan struktur internal linking Anda menunjukkan halaman-halaman yang paling penting. Ingin tahu caranya?"
+
+#: assets/js/src/workouts/components/CornerstoneWorkout.js:107
+#: classes/views/thank-you.php:17
+msgid "Rank with articles you want to rank with"
+msgstr "Peringkatkan dengan artikel yang Anda inginkan"
+
+#: classes/views/thank-you.php:12
+msgid "So, what's next?"
+msgstr "Lalu, apa lagi?"
+
+#: classes/views/thank-you.php:10
+msgid "Installation successful!"
+msgstr "Instalasi sukses!"
+
+#: src/integrations/admin/user-profile-integration.php:146
+msgid "The info you add below is added to the data Yoast SEO outputs in its schema.org output, for instance when you're the author of a page. Please only add the info you feel good sharing publicly."
+msgstr "Informasi berikut ditambahkan ke output data Yoast SEO berupa output schema.org, contohnya jika Anda penulis sebuah halaman. Mohon isi dengan info yang Anda rasa layak untuk dibagikan ke publik."
+
+#: src/integrations/admin/user-profile-integration.php:145
+msgid "Yoast SEO Schema enhancements"
+msgstr "Peningkatan Schema Yoast SEO"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:129
+msgid "E.g. %1$sAcme inc%2$s"
+msgstr "Mis. %1$sAcme inc%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:127
+msgid "Employer name"
+msgstr "Nama atasan (pemilik perusahaan)"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:123
+msgid "E.g. %1$ssoftware engineer%2$s"
+msgstr "Mis. %1$ssoftware engineer%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:117
+msgid "Employer information"
+msgstr "Informasi atasan"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:113
+msgid "Comma separated, e.g. %1$sEnglish, French, Dutch%2$s"
+msgstr "Pisah dengan koma, mis. %1$sInggris, Perancis, Belanda%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:111
+msgid "Language(s) spoken"
+msgstr "Bahasa lisan"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:107
+msgid "Comma separated, e.g. %1$sPHP, JavaScript, 90's rock music%2$s"
+msgstr "Pisah dengan koma, mis. %1$sPHP, JavaScript, musik rock 90-an%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:105
+msgid "Expertise in"
+msgstr "Berpengalaman dalam"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:101
+msgid "Comma separated, e.g. %1$sMost likely to succeed - 1991, Smartest in class - 1990%2$s"
+msgstr "Pisah dengan koma, mis. %1$sSangat ingin sukses - 1991, Paling pandai di kelas - 1990%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:99
+msgid "Awards"
+msgstr "Penghargaan"
+
+#: src/integrations/admin/user-profile-integration.php:95
+msgid "Extra information"
+msgstr "Informasi tambahan"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:91
+msgid "E.g. %1$sfemale%2$s, %1$smale%2$s, %1$snon-binary%2$s"
+msgstr "Mis. %1$sperempuan%2$s, %1$slaki-laki%2$s, %1$snon-biner%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:89
+msgid "Gender"
+msgstr "Jenis Kelamin"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:85
+msgid "Use format: %1$sYYYY-MM-DD%2$s"
+msgstr "Gunakan format: %1$sDD-MM-YYYY%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:83
+msgid "Birth date"
+msgstr "Tanggal lahir"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:79
+msgid "E.g. %1$sMD%2$s, %1$sPhD%2$s"
+msgstr "Mis. %1$sMD%2$s, %1$sPhD%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:77
+msgid "Honorific suffix"
+msgstr "Akhiran gelar kehormatan"
+
+#. translators: %1$s is replaced by `<code>`, %2$s by `</code>`.
+#: src/integrations/admin/user-profile-integration.php:73
+msgid "E.g. %1$sDr%2$s, %1$sMs%2$s, %1$sMr%2$s"
+msgstr "Mis. %1$sDr%2$s, %1$sMs%2$s, %1$sMr%2$s"
+
+#: src/integrations/admin/user-profile-integration.php:71
+msgid "Honorific prefix"
+msgstr "Awalan gelar kehormatan"
+
+#: src/integrations/admin/user-profile-integration.php:67
+msgid "Basic information"
+msgstr "Informasi dasar"
+
+#: premium.php:318
+msgid "Custom fields to include in page analysis"
+msgstr "Ruas isian khusus untuk disertakan dalam analisis halaman"
+
+#: premium.php:311
+msgid "Learn more about including custom fields in the page analysis"
+msgstr "Pelajari lebih lanjut tentang penyertaan ruas isian khusus di analisis halaman"
+
+#: src/integrations/admin/user-profile-integration.php:121
+msgid "Job title"
+msgstr "Judul pekerjaan"
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:202
+msgid "%2$sActivate %1$s now%3$s"
+msgstr "%2$sAktifkan %1$s sekarang%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:209
+msgid "%2$sUpgrade %1$s now%3$s"
+msgstr "%2$sUpgrade %1$s sekarang%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:214
+msgid "%2$sInstall %1$s now%3$s"
+msgstr "%2$sInstal %1$s sekarang%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required,
+#. %3$s: Yoast SEO Premium.
+#: src/addon-installer.php:152
+msgid "%1$s %2$s must be installed and activated in order to use %3$s."
+msgstr "%1$s %2$s harus diinstal dan diaktifkan supaya Anda dapat menggunakan %3$s."
+
+#. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
+#: src/addon-installer.php:197
+msgid "%2$sNetwork Activate %1$s now%3$s"
+msgstr "%2$sAktifkan Jaringan %1$s sekarang%3$s"
+
+#. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required.
+#: src/addon-installer.php:227
+msgid "Please contact a network administrator to install %1$s %2$s."
+msgstr "Mohon hubungi administrator jaringan untuk menginstal %1$s %2$s."
+
+#. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required.
+#: src/addon-installer.php:231
+msgid "Please contact an administrator to install %1$s %2$s."
+msgstr "Mohon hubungi administrator untuk menginstal %1$s %2$s."
+
+#: assets/js/src/blocks/estimated-reading-time/block.js:69
+#: assets/js/src/blocks/estimated-reading-time/legacy/15.6.js:58
+#: assets/js/src/blocks/estimated-reading-time/legacy/15.6.non-admin.js:28
+#: assets/js/src/blocks/estimated-reading-time/legacy/15.8.js:22
+#: assets/js/src/blocks/estimated-reading-time/legacy/22.9.js:21
+#: src/integrations/blocks/estimated-reading-time-block.php:54
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "menit"
+msgstr[1] "menit"
+
+#: classes/redirect/redirect-table.php:125
+msgid "Filter"
+msgstr "Saring"
+
+#: assets/js/src/new-redirects/components/table-rows.js:135
+#: classes/premium-javascript-strings.php:63
+#: classes/redirect/redirect-table.php:434
+msgid "Edit"
+msgstr "Sunting"
+
+#: assets/js/src/components/RedirectNotification.js:128
+#: assets/js/src/elementor/components/RedirectNotification.js:101
+#: assets/js/src/frontend-inspector/components/frontend-inspector.js:87
+#: classes/premium-javascript-strings.php:55
+msgid "OK"
+msgstr "OK"
+
+#: classes/export/export-keywords-csv.php:70
+msgid "title"
+msgstr "Judul"
+
+#: classes/export/export-keywords-csv.php:76
+msgid "meta description"
+msgstr "Deskripsi Meta"
+
+#: premium.php:276
+msgid "Create Redirect"
+msgstr "Buat Pengalihan"
+
+#: assets/js/src/new-redirects/components/menu.js:52
+#: assets/js/src/new-redirects/routes/redirects.js:72
+#: classes/redirect/redirect-formats.php:23 premium.php:337
+msgid "Redirects"
+msgstr "Pengalihan"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:36
+#: classes/redirect/views/redirects-form.php:59
+msgid "URL"
+msgstr "URL"
+
+#: classes/premium-import-manager.php:238
+msgid "Redirect import failed: the Redirection plugin is not installed or activated."
+msgstr "Impor pengalihan gagal: Plugin pengalihan tidak terpasang atau diaktifkan."
+
+#: classes/premium-import-manager.php:314
+msgid "Redirect import failed: no redirects found."
+msgstr "Impor pengalihan gagal: Pengalihan tidak ditemukan."
+
+#: classes/premium-javascript-strings.php:33
+msgid "You have unsaved redirects, are you sure you want to leave?"
+msgstr "Anda mempunyai pengalihan yang tidak tersimpan, apakah Anda yakin Anda ingin meninggalkannya?"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:36
+#: classes/redirect/redirect-table.php:140
+msgid "New URL"
+msgstr "URL Baru"
+
+#: assets/js/src/new-redirects/components/table-rows.js:141
+#: assets/js/src/new-redirects/constants/index.js:29
+#: classes/premium-javascript-strings.php:64
+#: classes/redirect/redirect-table.php:316
+#: classes/redirect/redirect-table.php:435
+msgid "Delete"
+msgstr "Hapus"
+
+#: classes/redirect/views/redirects-tab-plain.php:61
+#: classes/redirect/views/redirects-tab-regex.php:72
+msgid "Search"
+msgstr "Pencarian"
+
+#: classes/redirect/views/redirects-tab-settings.php:122
+msgid "Save Changes"
+msgstr "Simpan perubahan"
+
+#: classes/redirect/redirect-formats.php:24
+msgid "Regex Redirects"
+msgstr "Pengalihan Regex"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:27
+#: classes/redirect/presenters/redirect-table-presenter.php:71
+msgid "Old URL"
+msgstr "URL Lama"
+
+#: classes/redirect/views/redirects-tab-plain.php:41
+#: classes/redirect/views/redirects-tab-regex.php:52
+msgid "Add Redirect"
+msgstr "Tambah Pengalihan"
+
+#: classes/redirect/views/redirects-tab-settings.php:50
+msgid "As you're on Nginx, you should add the following include to the Nginx config file:"
+msgstr "Karena Anda berada di Nginx, Anda seharusnya menambahkan berikut ke berkas konfigurasi Nginx:"
+
+#: classes/redirect/views/redirects-tab-settings.php:24
+msgid "As you're on Apache, you should add the following include to the website httpd config file:"
+msgstr "Karena Anda berada di Apache, Anda seharusnya menambahkan berikut ke berkas konfigurasi httpd situs web:"
+
+#. Description of the plugin
+#: wp-seo-premium.php
+msgid "The first true all-in-one SEO solution for WordPress, including on-page content analysis, XML sitemaps and much more."
+msgstr "Plugin pertama yang benar-benar memberikan semua solusi SEO untuk WordPress, termasuk analisis konten pada halaman, Peta Situs XML, dan masih banyak lagi."
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:18
+#: assets/js/src/new-redirects/components/table-header.js:42
+#: assets/js/src/workouts/components/CornerstoneWorkout/MostLinked.js:98
+#: classes/redirect/exporters/redirect-csv-exporter.php:76
+msgid "Type"
+msgstr "Tipe"
+
+#. translators: %s: '.htaccess' file name.
+#: classes/redirect/views/redirects-tab-settings.php:37
+msgid "We're unable to save the redirects to your %s file. Please make the file writable."
+msgstr "Kami tidak dapat menyimpan pengalihan %s ke berkas Anda. Pastikan berkas dapat ditulis."
+
+#: assets/js/src/new-redirects/components/apache-settings.js:17
+#: classes/redirect/views/redirects-tab-settings.php:111
+msgid "Generate a separate redirect file"
+msgstr "Hasilkan sebuah berkas pengalihan terpisah"
+
+#: classes/views/import-redirects.php:79
+msgid "Import .htaccess"
+msgstr "Impor .htaccess"
+
+#: classes/premium-javascript-strings.php:28
+msgid "The old URL field can't be empty."
+msgstr "Kolom URL lama tidak boleh kosong."
+
+#: classes/premium-javascript-strings.php:30
+msgid "The new URL field can't be empty."
+msgstr "Kolom URL baru tidak boleh kosong."
+
+#: assets/js/src/new-redirects/components/redirect-warning-modal.js:33
+#: classes/premium-javascript-strings.php:31
+msgid "Error while saving this redirect"
+msgstr "Eror saat menyimpan pengalihan ini"
+
+#: classes/premium-javascript-strings.php:32
+msgid "New type can't be empty."
+msgstr "Tipe baru tidak boleh kosong."
+
+#. Author of the plugin
+#: wp-seo-premium.php
+msgid "Team Yoast"
+msgstr "Tim Yoast"
+
+#: classes/premium-javascript-strings.php:27
+msgid "You can't redirect a URL to itself."
+msgstr "Anda tidak dapat mengalihkan URL ke URL itu sendiri."
+
+#. translators: %s: '.htaccess' file name
+#: classes/redirect/views/redirects-tab-settings.php:114
+msgid "By default we write the redirects to your %s file, check this if you want the redirects written to a separate file. Only check this option if you know what you are doing!"
+msgstr "Secara default kami menulis pengalihan pada berkas %s Anda, centang ini apabila Anda ingin pengalihan ditulis pada berkas terpisah. Centang opsi ini apabila Anda tahu apa yang Anda lakukan!"
+
+#: assets/js/src/new-redirects/components/form-add-redirect.js:27
+#: classes/redirect/presenters/redirect-table-presenter.php:68
+msgid "Regular Expression"
+msgstr "Ekspresi Reguler"
+
+#. translators: 1: '.htaccess' file name
+#: classes/redirect/views/redirects-tab-settings.php:109
+msgid "Write redirects to the %1$s file. Make sure the %1$s file is writable."
+msgstr "Tulis pengalihan-pengalihan ke berkas %1$s. Pastikan berkas %1$s dapat ditulis."
+
+#. translators: %s: '.htaccess' file name
+#: classes/views/import-redirects.php:12
+msgid "Import redirects from %s"
+msgstr "Impor pengalihan dari %s"
+
+#: classes/premium-javascript-strings.php:29
+msgid "The Regular Expression field can't be empty."
+msgstr "Kolom Ekspresi Reguler tidak boleh kosong."
+
+#. translators: %s is replaced with the URL that will be deleted.
+#: classes/premium-javascript-strings.php:36
+msgid "Please enter the new URL for %s"
+msgstr "Harap masukkan URL baru untuk %s"
+
+#. translators: variables will be replaced with from and to URLs.
+#: classes/premium-javascript-strings.php:38
+msgid "Redirect created from %1$s to %2$s!"
+msgstr "Pengalihan dibuat dari %1$s ke %2$s!"
+
+#: classes/redirect/redirect-table.php:138
+#: classes/redirect/views/redirects-form.php:22
+msgctxt "noun"
+msgid "Type"
+msgstr "Tipe"
+
+#. translators: %1$s: '.htaccess' file name, %2$s: plugin name
+#: classes/views/import-redirects.php:18
+msgid "You can copy the contents of any %1$s file in here, and it will import the redirects into %2$s."
+msgstr "Anda dapat menyalin konten dari berkas %1$s di sini, dan hal tersebut akan mengimpor pengalihan ke %2$s."
+
+#: classes/premium-javascript-strings.php:43
+msgid "Redirect added."
+msgstr "Pengalihan telah ditambahkan."
+
+#: classes/premium-javascript-strings.php:44
+msgid "The redirect was added successfully."
+msgstr "Pengalihan telah berhasil ditambahkan."
+
+#: classes/premium-javascript-strings.php:47
+#: classes/premium-redirect-service.php:153
+msgid "Redirect updated."
+msgstr "Pengalihan telah diperbarui."
+
+#: classes/premium-javascript-strings.php:48
+#: classes/premium-redirect-service.php:154
+msgid "The redirect was updated successfully."
+msgstr "Pengalihan telah berhasil diperbarui."
+
+#: classes/premium-javascript-strings.php:51
+#: classes/premium-redirect-service.php:86
+#: classes/redirect-undo-endpoint.php:98
+msgid "Redirect deleted."
+msgstr "Pengalihan telah dihapus."
+
+#: classes/premium-javascript-strings.php:52
+#: classes/premium-redirect-service.php:87
+#: classes/redirect-undo-endpoint.php:99
+msgid "The redirect was deleted successfully."
+msgstr "Pengalihan berhasil dihapus."
+
+#: assets/js/src/new-redirects/components/delete-modal.js:50
+#: assets/js/src/new-redirects/components/edit-redirect-row.js:104
+#: assets/js/src/new-redirects/components/redirect-warning-modal.js:42
+#: classes/premium-javascript-strings.php:56
+#: classes/redirect/views/redirects-quick-edit.php:43
+msgid "Cancel"
+msgstr "Batalkan"
+
+#: assets/js/src/new-redirects/components/edit-redirect-row.js:97
+#: classes/premium-javascript-strings.php:57
+msgid "Save"
+msgstr "Simpan"
+
+#: assets/js/src/new-redirects/components/redirect-warning-modal.js:45
+#: classes/premium-javascript-strings.php:58
+msgid "Save anyway"
+msgstr "Tetap simpan"
+
+#: classes/premium-javascript-strings.php:60
+#: classes/redirect/views/redirects-quick-edit.php:22
+msgid "Edit redirect"
+msgstr "Sunting pengalihan"
+
+#: classes/premium-javascript-strings.php:61
+msgid "You are already editing a redirect, please finish this one first"
+msgstr "Anda telah menyunting pengalihan, mohon menyelesaikannya terlebih dahulu"
+
+#: classes/redirect/validation/redirect-accessible-validation.php:29
+msgid "The URL you entered could not be resolved."
+msgstr "URL yang Anda masukan tidak dapat diselesaikan."
+
+#. translators: %1$s expands to the returned http code
+#: classes/redirect/validation/redirect-accessible-validation.php:40
+msgid "The URL you are redirecting to seems to return a %1$s status. You might want to check if the target can be reached manually before saving."
+msgstr "URL yang Anda alihkan tampaknya kembali ke sebuah status %1$s. Mungkin Anda ingin memeriksa apakah tujuan tersebut bisa dijangkau secara manual sebelum disimpan."
+
+#: classes/redirect/validation/redirect-accessible-validation.php:49
+msgid "You're redirecting to a target that returns a 301 HTTP code (permanently moved). Make sure the target you specify is directly reachable."
+msgstr "Anda sedang mengalihkan ke tujuan yang menghasilkan kode HTTP 301 (dipindahkan secara permanen). Pastikan tujuan yang Anda tentukan dapat dijangkau langsung."
+
+#. translators: %1$s expands to the returned http code
+#: classes/redirect/validation/redirect-accessible-validation.php:57
+msgid "The URL you entered returned a HTTP code different than 200(OK). The received HTTP code is %1$s."
+msgstr "URL yang Anda masukkan menghasilkan sebuah kode HTTP yang berbeda dari 200(OK). Kode HTTP yang diterima adalah %1$s."
+
+#: classes/redirect/redirect-ajax.php:69
+msgid "Unknown error. Failed to create redirect."
+msgstr "Eror tidak diketahui. Gagal membuat pengalihan."
+
+#: classes/redirect/redirect-ajax.php:106
+msgid "Unknown error. Failed to update redirect."
+msgstr "Galat yang tidak diketahui. Gagal memperbarui pengalihan."
+
+#: classes/redirect/validation/redirect-endpoint-validation.php:40
+msgid "The redirect you are trying to save will create a redirect loop. This means there probably already exists a redirect that points to the origin of the redirect you are trying to save"
+msgstr "Pengalihan yang Anda coba simpan akan menciptakan loop pengalihan. Hal ini berarti kemungkinan sudah ada pengalihan yang mengacu pada asal pengalihan yang Anda coba simpan."
+
+#. translators: %1$s: will be the target, %2$s: will be the found endpoint.
+#: classes/redirect/validation/redirect-endpoint-validation.php:48
+msgid "%1$s will be redirected to %2$s. Maybe it's worth considering to create a direct redirect to %2$s."
+msgstr "%1$s akan dialihkan ke %2$s. Mungkin ada baiknya mempertimbangkan untuk membuat pengalihan langsung ke %2$s."
+
+#. translators: %s expands to the file path that we tried to write to
+#: classes/redirect/redirect-file-util.php:88
+msgid "We're unable to write data to the file %s"
+msgstr "Kami tidak dapat menulis data ke berkas %s"
+
+#: assets/js/src/new-redirects/constants/index.js:12
+#: classes/redirect/redirect-types.php:26
+msgid "301 Moved Permanently"
+msgstr "301 Dialihkan Secara Permanen"
+
+#: assets/js/src/new-redirects/constants/index.js:13
+#: classes/redirect/redirect-types.php:27
+msgid "302 Found"
+msgstr "302 Ditemukan"
+
+#: assets/js/src/new-redirects/constants/index.js:14
+#: classes/redirect/redirect-types.php:28
+msgid "307 Temporary Redirect"
+msgstr "307 Pengalihan Sementara"
+
+#: assets/js/src/new-redirects/constants/index.js:15
+#: classes/redirect/redirect-types.php:29
+msgid "410 Content Deleted"
+msgstr "410 Konten Telah Dihapus"
+
+#: assets/js/src/new-redirects/constants/index.js:16
+#: classes/redirect/redirect-types.php:30
+msgid "451 Unavailable For Legal Reasons"
+msgstr "451 Tidak tersedia Untuk Alasan Hukum"
+
+#: classes/redirect/validation/redirect-presence-validation.php:34
+msgid "Not all the required fields are filled."
+msgstr "Tidak semua kolom yang diperlukan telah diisi."
+
+#: classes/redirect/validation/redirect-uniqueness-validation.php:32
+msgid "The old URL already exists as a redirect."
+msgstr "URL lama telah tersedia sebagai pengalihan"
+
+#: classes/redirect/views/redirects-quick-edit.php:42
+msgid "Update Redirect"
+msgstr "Perbarui Pengalihan"
+
+#. translators: %s expands to the folder location where the redirects fill will
+#. be saved.
+#: classes/redirect/views/redirects-tab-settings.php:63
+msgid "We're unable to save the redirect file to %s"
+msgstr "Kami tidak dapat menyimpan berkas pengalihan ke %s"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
+#. href=''>, %4$s: </a>, %5$s: Slug to post
+#: classes/post-watcher.php:286
+msgid "%1$s detected that you moved a post (%5$s) to the trash. You can either: %2$s Don't know what to do? %3$sRead this post%4$s."
+msgstr "%1$s terdeteksi bahwa Anda memindahkan pos (%5$s) ke tempat sampah. Anda dapat: %2$s Tidak tahu apa yang harus Anda lakukan? %3$sBaca artikel ini%4$s."
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
+#. href='{post_with_explaination.}'>, %4$s: </a>, %5%s: The removed url.
+#: classes/post-watcher.php:493
+msgid "%1$s detected that you deleted a post (%5$s). You can either: %2$s Don't know what to do? %3$sRead this post %4$s."
+msgstr "%1$s terdeteksi bahwa Anda menghapus sebuah artikel (%5$s). Anda dapat: %2$s Tidak tahu apa yang harus Anda lakukan? %3$sBaca artikel ini %4$s."
+
+#. translators: %1$s will be replaced with the from URL.
+#: classes/premium-javascript-strings.php:40
+msgid "410 Redirect created from %1$s!"
+msgstr "Pengalihan 410 dibuat dari %1$s!"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
+#. href='{post_with_explaination.}'>, %4$s: </a>, %5%s: The removed url.
+#: classes/term-watcher.php:309
+msgid "%1$s detected that you deleted a term (%5$s). You can either: %2$s Don't know what to do? %3$sRead this post %4$s."
+msgstr "%1$s terdeteksi bahwa Anda menghapus sebuah istilah (%5$s). Anda dapat: %2$s Tidak tahu apa yang harus Anda lakukan? %3$sBaca artikel ini %4$s."
+
+#: classes/watcher.php:267
+msgid "Redirect it to another URL"
+msgstr "Alihkan ke URL lain"
+
+#: classes/watcher.php:268
+msgid "Make it serve a 410 Content Deleted header"
+msgstr "Membuatnya melayani 410 Konten Header yang Dihapus"
+
+#: classes/redirect/views/redirects-tab-settings.php:101
+msgid "Web server"
+msgstr "Server web"
+
+#: assets/js/src/new-redirects/components/menu.js:68
+#: assets/js/src/new-redirects/routes/redirect-method.js:91
+#: assets/js/src/new-redirects/routes/redirect-method.js:104
+#: classes/redirect/views/redirects-tab-settings.php:103
+msgid "Redirect method"
+msgstr "Metode pengalihan"
+
+#. translators: %s: 'Yoast SEO Premium'
+#: classes/redirect/views/redirects-tab-settings.php:118
+msgid "%s can generate redirect files that can be included in your website web server configuration. If you choose this option the PHP redirects will be disabled. Only check this option if you know what you are doing!"
+msgstr "%s dapat membuat pengalihan berkas yang dapat dimasukkan dalam konfigurasi server situs web anda. Jika Anda memilih opsi ini pengalihan PHP akan dinonaktifkan. Centang opsi ini jika Anda tahu apa yang Anda lakukan!"
+
+#. translators: %s expands to the file path that we tried to write to
+#: classes/redirect/redirect-file-util.php:46
+msgid "We're unable to create the directory %s"
+msgstr "Kami tidak dapat membuat direktori %s"
+
+#: classes/redirect/validation/redirect-self-redirect-validation.php:25
+msgid "You are attempting to redirect to the same URL as the origin. Please choose a different URL to redirect to."
+msgstr "Anda sedang berusaha untuk mengalihkan ke URL yang sama dengan aslinya. Harap pilih URL lain untuk pengalihan."
+
+#. translators: 1: opens a link to a related help center article. 2: closes the
+#. link.
+#: classes/redirect/views/redirects-form.php:42
+msgid "The redirect type is the HTTP response code sent to the browser telling the browser what type of redirect is served. %1$sLearn more about redirect types%2$s."
+msgstr "Tipe pengalihan adalah kode respon HTTP yang dikirim ke browser yang memberitahu browser tipe pengalihan apa yang dilayani. %1$sPelajari lebih lanjut tentang tipe pengalihan%2$s."
+
+#. translators: 1: opens a link to a related help center article. 2: closes the
+#. link.
+#: classes/redirect/views/redirects-tab-regex.php:30
+msgid "Regular Expression (regex) Redirects are extremely powerful redirects. You should only use them if you know what you are doing. %1$sRead more about regex redirects on our help center%2$s."
+msgstr "Pengalihan Ekspresi Regular (regex) merupakan pengalihan yang sangat canggih. Hanya gunakan  mereka jika Anda tahu apa yang Anda lakukan. %1$sBaca lebih lanjut tentang pengalihan regex pada basis pengetahuan kami%2$s."
+
+#: assets/js/src/new-redirects/components/apache-settings.js:41 premium.php:373
+msgid "Enabled"
+msgstr "Aktif"
+
+#. translators: Hidden accessibility text.
+#: classes/views/import-redirects.php:75
+msgid "Enter redirects to import"
+msgstr "Masukkan pengalihan untuk diimpor"
+
+#. translators: %1$s expands to the subdirectory WordPress is installed.
+#: classes/redirect/validation/redirect-subdirectory-validation.php:37
+msgid "Your redirect is missing the subdirectory where WordPress is installed in. This will result in a redirect that won't work. Make sure the redirect starts with %1$s"
+msgstr "Subdirektori dimana WordPress terinstal tidak ada untuk pengalihan Anda. Hasilnya, pengalihan tidak akan bekerja. Pastikan pengalihan diawali dengan %1$s"
+
+#. translators: Hidden accessibility text.
+#: classes/redirect/redirect-table.php:248
+msgid "Select this redirect"
+msgstr "Pilih pengalihan ini"
+
+#. translators: %s expands to Yoast
+#: classes/metabox-link-suggestions.php:103
+msgid "%s internal linking"
+msgstr "%s penautan internal"
+
+#. translators: %s: '.htaccess' file name
+#: classes/premium-import-manager.php:67 classes/views/import-redirects.php:45
+msgid "Import redirects"
+msgstr "Impor pengalihan"
+
+#: classes/views/import-redirects.php:25
+msgid "Redirection"
+msgstr "Pengalihan"
+
+#: classes/views/import-redirects.php:26
+msgid "Safe Redirect Manager"
+msgstr "Manajer Pengalihan Aman"
+
+#: classes/views/import-redirects.php:27
+msgid "Simple 301 Redirects"
+msgstr "Pengalihan 301 Sederhana"
+
+#: classes/views/import-redirects.php:38
+msgid "Import from other redirect plugins"
+msgstr "Impor dari plugin pengalihan lainnya"
+
+#: classes/views/import-redirects.php:42
+msgid "Import from:"
+msgstr "Impor dari:"
+
+#: classes/watcher.php:238
+msgid "New URL:"
+msgstr "URL Baru:"
+
+#: classes/watcher.php:236
+msgid "Old URL:"
+msgstr "URL lama:"
+
+#: classes/premium-redirect-export-manager.php:35
+#: classes/views/export-redirects.php:15
+msgid "Export redirects"
+msgstr "Ekspor pengalihan"
+
+#: classes/redirect/exporters/redirect-csv-exporter.php:74
+msgid "Origin"
+msgstr "Sumber"
+
+#: classes/redirect/exporters/redirect-csv-exporter.php:75
+msgid "Target"
+msgstr "Sasaran"
+
+#: classes/redirect/exporters/redirect-csv-exporter.php:77
+msgid "Format"
+msgstr "Format"
+
+#: classes/views/export-redirects.php:10
+msgid "Export redirects to a CSV file"
+msgstr "Ekspor pengalihan ke file CSV"
+
+#: classes/views/export-redirects.php:11
+msgid "If you need to have a list of all redirects, you can generate a CSV file using the button below."
+msgstr "Jika Anda perlu memiliki daftar semua pengalihan, Anda dapat menghasilkan file CSV menggunakan tombol di bawah ini."
+
+#: classes/views/export-redirects.php:12
+msgid "Please note that the first row in this file is a header. This row should be ignored when parsing or importing the data from the export."
+msgstr "Harap perhatikan bahwa baris pertama dalam file ini adalah sebuah header. Baris ini harus diabaikan saat mengurai atau mengimpor data."
+
+#: classes/premium-import-manager.php:272
+msgid "CSV import failed: the provided file could not be parsed using a CSV parser."
+msgstr "Impor CSV gagal: file yang disediakan tidak dapat diuraikan menggunakan parser CSV."
+
+#: classes/views/import-redirects.php:52
+msgid "Import from a CSV file"
+msgstr "Impor dari file CSV"
+
+#: classes/views/import-redirects.php:59
+msgid "Import CSV file"
+msgstr "Impor file CSV"
+
+#. translators: %1$s: Yoast SEO Premium, %2$s: <a href='{undo_redirect_url}'>,
+#. %3$s: </a>, %4$s: Slug to post
+#: classes/post-watcher.php:312
+msgid "%1$s detected that you restored a post (%4$s) from the trash, for which a redirect was created. %2$sClick here to remove the redirect%3$s"
+msgstr "%1$s terdeteksi Anda telah memulihkan sebuah artikel (%4$s) dari tong sampah, sehingga sebuah pengalihan telah dibuat. %2$sKlik di sini untuk membatalkan pengalihan%3$s"
+
+#. translators: %1$s expands to the link to an article to read more about
+#. orphaned content, %2$s expands to </a>
+#: classes/premium-orphaned-post-filter.php:77
+msgid "%1$sLearn more about orphaned content%2$s."
+msgstr "%1$sPelajari lebih lanjut tentang orphaned content%2$s."
+
+#. translators: %1$s: plural form of the current post type, %2$s: a Learn more
+#. about link
+#: classes/premium-orphaned-post-filter.php:85
+msgid "Ask your SEO Manager or Site Administrator to count links in all texts, so we can identify orphaned %1$s. %2$s"
+msgstr "Minta SEO Manager atau Site Administrator Anda untuk menghitung tautan dalam semua teks, sehingga kami dapat mengidentifikasi orphaned %1$s. %2$s"
+
+#. translators: %1$s expands to link to the recalculation option, %2$s: anchor
+#. closing, %3$s: plural form of the current post type, %4$s: a Learn more
+#. about link
+#: classes/premium-orphaned-post-filter.php:94
+msgid "%1$sClick here%2$s to index your links, so we can identify orphaned %3$s. %4$s"
+msgstr "%1$sKlik di sini%2$s untuk mengindeks semua tautan Anda, sehingga kami dapat mengidentifikasi orphaned %3$s. %4$s"
+
+#. translators: %1$s: plural form of the current post type, %2$s: a Learn more
+#. about link
+#: classes/premium-orphaned-post-filter.php:104
+msgid "'Orphaned content' refers to %1$s that have no inbound links, consider adding links towards these %1$s. %2$s"
+msgstr "'Orphaned content' mengacu pada %1$s yang tidak memiliki tautan masuk, pertimbangkan untuk menambahkan tautan ke %1$s. %2$s"
+
+#: assets/js/src/workouts/components/OrphanedWorkout.js:89
+#: classes/premium-orphaned-post-filter.php:163
+msgid "Orphaned content"
+msgstr "Orphaned content"
+
+#: classes/export/export-keywords-csv.php:71
+msgid "url"
+msgstr "url"
+
+#: classes/export/export-keywords-csv.php:72
+msgid "readability score"
+msgstr "nilai keterbacaan"
+
+#: classes/export/export-keywords-csv.php:79
+msgid "ID"
+msgstr "ID"
+
+#. translators: Hidden accessibility text.
+#: classes/redirect/redirect-table.php:109
+msgid "Filter by redirect type"
+msgstr "Saring berdasarkan jenis pengalihan"
+
+#: classes/redirect/redirect-table.php:113
+msgid "All redirect types"
+msgstr "Semua jenis pengalihan"
+
+#. translators: %s resolves to the button label translation.
+#: classes/views/export-keywords.php:12
+msgid "If you need a list of all public posts, terms and related keyphrases, you can generate a CSV file using the %s button below."
+msgstr "Jika Anda memerlukan daftar dari semua pos publik, istilah, dan kata kunci terkait, Anda dapat membuat file CSV menggunakan tombol %s di bawah."
+
+#: classes/views/export-keywords.php:21
+msgid "Export keyphrases to a CSV file"
+msgstr "Ekspor frasa kunci ke dalam file CSV"
+
+#: classes/views/export-keywords.php:23
+msgid "You can add or remove columns to be included in the export using the checkboxes below."
+msgstr "Anda dapat menambah atau menghapus kolom untuk dimasukan kedalam ekspor menggunakan pilihan centang dibawah ini."
+
+#: classes/views/export-keywords.php:31
+msgid "Export URL"
+msgstr "Ekspor URL"
+
+#: classes/views/export-keywords.php:32
+msgid "Export title"
+msgstr "Ekspor title"
+
+#: classes/views/export-keywords.php:35
+msgid "Export readability score"
+msgstr "Ekspor nilai keterbacaan"
+
+#: classes/views/export-keywords.php:49
+msgid "Please note:"
+msgstr "Harap dicatat:"
+
+#: classes/views/export-keywords.php:51
+msgid "The first row in this file is the header row. This row should be ignored when parsing or importing the data from the export."
+msgstr "Baris pertama dalam file ini adalah baris header. Baris ini harus diabaikan saat mengurai atau mengimpor data dari ekspor."
+
+#: classes/views/export-keywords.php:52
+msgid "Exporting data can take a long time when there are many posts, pages, public custom post types or terms."
+msgstr "Mengekspor data dapat memakan waktu lama ketika ada banyak pos, halaman, jenis pos khusus publik atau istilah."
+
+#: assets/js/src/new-redirects/routes/redirects.js:83
+#: classes/redirect/views/redirects-tab-plain.php:25
+msgid "Plain redirects"
+msgstr "Pengalihan sederhana"
+
+#: classes/redirect/views/redirects-tab-regex.php:25
+msgid "Regular Expression redirects"
+msgstr "Pengalihan Ekspresi Reguler"
+
+#: classes/redirect/views/redirects-tab-settings.php:76
+msgid "Redirects settings"
+msgstr "Pengaturan pengalihan"
+
+#: classes/export/export-keywords-csv.php:80
+msgctxt "post_type of a post or the taxonomy of a term"
+msgid "type"
+msgstr "tipe"
+
+#: classes/export/export-keywords-csv.php:75
+msgid "seo title"
+msgstr "judul seo"
+
+#: classes/views/export-keywords.php:33
+msgid "Export SEO title"
+msgstr "Ekspor SEO title"
+
+#: classes/views/export-keywords.php:34
+msgid "Export meta description"
+msgstr "Ekspor meta deskripsi"
+
+#: classes/export/export-keywords-csv.php:73
+msgid "keyphrase"
+msgstr "Frasa kunci"
+
+#: classes/export/export-keywords-csv.php:74
+msgid "keyphrase score"
+msgstr "Skor frasa kunci"
+
+#: classes/premium-keyword-export-manager.php:37
+#: classes/views/export-keywords.php:8
+msgid "Export keyphrases"
+msgstr "Ekspor frasa kunci"
+
+#: classes/views/export-keywords.php:30
+msgid "Export keyphrase scores"
+msgstr "Ekspor skor frasa kunci"
+
+#. Plugin URI of the plugin
+#: wp-seo-premium.php
+msgid "https://yoa.st/2jc"
+msgstr "https://yoa.st/2jc"
+
+#. Plugin Name of the plugin
+#: wp-seo-premium.php
+msgid "Yoast SEO Premium"
+msgstr "Yoast SEO Premium"
+
+#. translators: 1: link to redirects overview, 2: closing link tag
+#: classes/premium-import-manager.php:189
+msgid "All redirects have been imported successfully. Go to the %1$sredirects overview%2$s to see the imported redirects."
+msgstr "Semua pengalihan telah diimpor dengan sukses. Pergi ke %1$stinjauan pengalihan%2$s untuk melihat pengalihan-pengalihan yang telah diimpor."
+
+#. translators: 1: link to redirects overview, 2: closing link tag
+#: classes/premium-import-manager.php:198
+msgid "No redirects have been imported. Probably they already exist as a redirect. Go to the %1$sredirects overview%2$s to see the existing redirects."
+msgstr "Tidak ada pengalihan yang diimpor. Mungkin pengalihan tersebut sudah ada. Pergi ke %1$stinjauan pengalihan%2$s untuk melihat pengalihan yang sudah ada."
+
+#. translators: 1: amount of imported redirects, 2: total amount of redirects,
+#. 3: link to redirects overview, 4: closing link tag
+#: classes/premium-import-manager.php:206
+msgid "Imported %1$s/%2$s redirects successfully. Go to the %3$sredirects overview%4$s to see the imported redirect."
+msgid_plural "Imported %1$s/%2$s redirects successfully. Go to the %3$sredirects overview%4$s to see the imported redirects."
+msgstr[0] "Mengimpor %1$s/%2$s pengalihan dengan sukses. Pergi ke %3$stinjauan pengalihan%4$s untuk melihat pengalihan yang telah diimpor."
+msgstr[1] "Mengimpor %1$s/%2$s pengalihan dengan sukses. Pergi ke %3$stinjauan pengalihan%4$s untuk melihat pengalihan-pengalihan yang telah diimpor."
+
+#: classes/premium-import-manager.php:248
+msgid "Redirect import failed: the selected redirect plugin is not installed or activated."
+msgstr "Impor pengalihan gagal: plugin pengalihan yang dipilih tidak diinstal atau diaktifkan."
+
+#: classes/premium-import-manager.php:266
+msgid "CSV import failed: No file selected."
+msgstr "Impor CSV gagal: Tidak ada file yang dipilih."
+
+#. translators: 1: The maximum file size
+#: classes/premium-import-manager.php:280
+msgid "CSV import failed: the provided file is larger than %1$s."
+msgstr "Impor CSV gagal: file yang disediakan lebih besar dari %1$s."
+
+#: classes/premium-import-manager.php:287
+msgid "CSV import failed: the provided file is not a CSV file."
+msgstr "Impor CSV gagal: file yang disediakan bukan file CSV."
+
+#: classes/premium-import-manager.php:306
+msgid "Redirect import failed: we can't recognize this type of import."
+msgstr "Pengalihan impor gagal: kami tidak dapat mengenali jenis impor ini."
+
+#: classes/premium-stale-cornerstone-content-filter.php:51
+msgid "Stale cornerstone content"
+msgstr "Konten landasan usang"
+
+#. translators: %1$s expands to dynamic post type label, %2$s expands anchor to
+#. blog post about cornerstone content, %3$s expands to </a>
+#: classes/premium-stale-cornerstone-content-filter.php:68
+msgid "Stale cornerstone content refers to cornerstone content that hasn’t been updated in the last 6 months. Make sure to keep these %1$s up-to-date. %2$sLearn more about cornerstone content%3$s."
+msgstr "Konten landasan usang mengacu pada konten landasan yang belum diperbarui dalam 6 bulan terakhir. Pastikan untuk selalu memperbarui %1$s ini. %2$sPelajari lebih lanjut tentang konten landasan%3$s."
+
+#: classes/views/import-redirects.php:56
+msgid "Choose a CSV file from your computer:"
+msgstr "Pilih file CSV dari komputer Anda:"
+
+#: node_modules/@yoast/ai-frontend/dist/build.js:26
+#: assets/js/src/ai/ai-fix-assessments/components/fix-assessments-notification.js:351
+#: assets/js/src/components/RedirectNotification.js:138
+#: assets/js/src/elementor/components/RedirectNotification.js:107
+#: classes/watcher.php:249
+msgid "Undo"
+msgstr "Batalkan"
+
+#: classes/premium-redirect-service.php:95
+#: classes/premium-redirect-service.php:140
+#: classes/redirect-undo-endpoint.php:87 classes/redirect-undo-endpoint.php:107
+msgid "Redirect not deleted."
+msgstr "Pengalihan tidak dihapus."
+
+#: classes/premium-redirect-service.php:96
+#: classes/redirect-undo-endpoint.php:88 classes/redirect-undo-endpoint.php:108
+msgid "Something went wrong when deleting this redirect."
+msgstr "Terjadi kesalahan saat menghapus pengalihan ini. "
+
+#: classes/redirect/validation/redirect-relative-origin-validation.php:27
+msgid "The old URL for your redirect is not relative. Only the new URL is allowed to be absolute. Make sure to provide a relative old URL."
+msgstr "URL lama untuk pengalihan Anda tidak relatif. Hanya URL baru yang mutlak. Pastikan untuk memberikan URL lama."
+
+#. translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the
+#. admin page.
+#: classes/post-watcher.php:480
+msgid "%1$s created a %2$sredirect%3$s from the old post URL to the new post URL."
+msgstr "%1$s buat %2$spengalihan%3$s dari URL pos lama ke URL pos baru."
+
+#. translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the
+#. admin page.
+#: classes/term-watcher.php:296
+msgid "%1$s created a %2$sredirect%3$s from the old term URL to the new term URL."
+msgstr "%1$s buat %2$spengalihan%3$s dari URL jangka lama ke URL jangka baru."
+
+#: classes/watcher.php:243
+msgid "Ok"
+msgstr "Ok"
+
+#: assets/js/src/blocks/table-of-contents-block.js:322
+#: assets/js/src/blocks/table-of-contents-block.js:407
+#: src/integrations/admin/extension-importer/content-processor.php:336
+msgid "Table of contents"
+msgstr "Daftar isi"

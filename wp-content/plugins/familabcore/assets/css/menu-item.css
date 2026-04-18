@@ -1,0 +1,330 @@
+.familabcore-mega-menu-item-setting-tabs {
+    width: 250px;
+    float: left;
+    margin: 0;
+    background-color: #fafafa;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 10;
+    height: 100%;
+    border-right: 1px solid #ccc;
+}
+.wpb_switch-to-composer {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.wpb_switch-to-front-composer {
+    display: none !important;
+}
+#wpb_visual_composer {
+    position: relative;
+}
+.familabcore-mega-menu-item-setting-tabs li {
+    margin: 0;
+    cursor: pointer;
+}
+.familabcore-mega-menu-item-setting-tabs li a {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    padding: 20px 20px;
+    line-height: 20px;
+}
+.familabcore-mega-menu-item-setting-tabs li:hover,
+.familabcore-mega-menu-item-setting-tabs li.active-item-setting-tab {
+    background-color: #fff;
+}
+#wpb_visual_composer .ui-sortable-handle {
+    display: none;
+}
+.postbox, #side-sortables {
+    display: none;
+}
+.post-type-familab_menu .wp-heading-inline,
+.post-type-familab_menu .wp-header-end,
+.post-type-familab_menu .notice,
+.wrap h1.wp-heading-inline {
+    display: none;
+}
+.post-type-familab_menu #wpb_visual_composer {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border: 0 !important;
+    box-shadow: none;
+    margin: 0;
+    overflow: auto;
+}
+#post #poststuff #post-body.columns-2 {
+    margin-right: 0;
+}
+#screen-meta,
+#screen-meta-links,
+#wpadminbar,
+#adminmenumain {
+    display: none;
+}
+#wpbody-content {
+    padding: 0;
+}
+.wrap {
+    margin: 0;
+}
+#wpcontent, #wpfooter {
+    margin: 0;
+    padding: 0;
+}
+#poststuff {
+    padding: 0;
+}
+#wpfooter {
+    display: none;
+}
+html.wp-toolbar {
+    padding: 0;
+}
+#familabcore-mega-menu-item-header-bar {
+    background-color: #fafafa;
+    border-bottom: 1px solid #ccc;
+}
+.familabcore-mega-menu-item-controls {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.familabcore-mega-menu-item-controls li {
+    float: right;
+    margin: 0;
+}
+.familabcore-mega-menu-item-controls .button-save {
+    color: #fff;
+    border-radius: 3px;
+    padding: 8px 13px;
+    background-color: #00aeee;
+    display: inline-block;
+    text-decoration: none;
+    margin: 10px 0;
+}
+#familabcore-mega-menu-close-vc-box {
+    margin-left: 10px;
+    width: 54px;
+    line-height: 54px;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    color: #9f9e9e;
+    font-size: 24px;
+}
+#poststuff .postbox-container {
+    width: 100%;
+    height: 100%;
+}
+.familabcore-mega-menu-loading {
+    position: fixed;
+    z-index: 998;
+    background-color: #fff;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+}
+.familabcore-mega-menu-loading .vc-mdl {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    width: 50px;
+    height: 50px;
+    margin-top: -25px;
+    margin-left: -25px;
+}
+.familabcore-mega-menu-loading .spinner {
+    visibility: visible;
+}
+#message,
+.hidden.notice {
+    display: none !important;
+}
+.page-title-action {
+    display: none;
+}
+#vc_navbar {
+    position: static;
+    padding-left: 20px;
+}
+#vc_fullscreen-button,
+.vc_navbar .vc_navbar-nav > li.vc_save-backend,
+.vc_navbar .vc_navbar-nav > li.vc_show-mobile {
+    display: none;
+}
+.js .postbox .handlediv {
+    display: none;
+}
+.vc_navbar-header {
+    display: none;
+}
+div.vc_navbar ul.vc_navbar-nav > li {
+    float: right;
+}
+div.vc_navbar ul.vc_navbar-nav > li.onoffswitch {
+    float: left;
+    line-height: 56px;
+    color: #fff;
+}
+div.vc_navbar ul.vc_navbar-nav > li .onoffswitch-checkbox {
+    margin: 0;
+    margin-top: 2px;
+}
+.familabcore-tab-content {
+    display: none;
+    padding-left: 270px;
+    overflow: hidden;
+    min-height: 500px;
+    max-height: 100%;
+    width: calc(100% - 290px);
+}
+.familabcore-tab-content.active {
+    display: block;
+}
+.familabcore-tab-content .vc_column {
+    margin-bottom: 35px;
+    padding: 0;
+}
+.familabcore-tab-content .wpb_element_label {
+    margin-top: 30px;
+    margin-bottom: 18px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+.familabcore-tab-content .edit_form_line label {
+    display: block;
+    margin: 10px 0;
+}
+.familabcore-tab-content .edit_form_line label span {
+    width: 22%;
+    display: inline-block;
+}
+.familabcore-tab-content .edit_form_line label .image-preview {
+    margin-top: 15px;
+    position: relative;
+}
+.familabcore-tab-content .edit_form_line label .image-preview .remove-menu-bg {
+    text-decoration: none;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10;
+}
+.familabcore-tab-content .edit_form_line label .image-preview img {
+    max-width: 200px;
+    border: 1px solid #F5F5F5;
+    padding: 10px;
+
+}
+.familabcore-tab-content .edit_form_line label span.description {
+    width: calc(75% - 20px);
+    color: #999;
+}
+.edit_form_line.icon-settings {
+    border: 1px solid #ccc;
+}
+.edit_form_line.icon-settings .selector {
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+}
+.edit_form_line.icon-settings .selector > span {
+    width: 50px;
+    height: 50px;
+    display: block;
+    line-height: 50px;
+    float: left;
+    border-right: 1px solid #ccc;
+    cursor: pointer;
+    text-align: center;
+}
+.edit_form_line.icon-settings .selector .dashicons,
+.edit_form_line.icon-settings .selector .dashicons-before::before {
+    font-size: 30px;
+    color: #333;
+    width: 100%;
+    height: 100%;
+    line-height: inherit;
+}
+.edit_form_line.icon-settings .selector-popup {
+    padding: 10px;
+}
+.edit_form_line.icon-settings .selector-search {
+    margin-bottom: 10px;
+}
+.edit_form_line.icon-settings .icons-search-input {
+    width: 100%;
+    box-shadow: none;
+    padding: 10px 20px;
+}
+.fip-icons-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.fip-icons-container .icon {
+    width: 40px;
+    height: 40px;
+    line-height: 38px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+.fip-icons-container .icon.selected {
+    background-color: #00a0d2;
+    color: #fff;
+    border-color: #00a0d2;
+}
+.fip-icons-container .icon i {
+    line-height: inherit;
+    display: inline-block;
+}
+.fip-icons-container .icon.hide {
+    display: none;
+}
+.vc_license-activation-notice{
+    display: none;
+}
+
+#titlediv{
+    display: none;
+}
+body .composer-switch{
+    margin-top: 10px;
+}
+.composer-switch .logo-icon{
+    display: none!important;
+}
+body .composer-switch .wpb_switch-to-composer{
+    border-radius: 0;
+    padding: 5px 13px;
+    box-shadow: none;
+    font-size: 0;
+}
+body .composer-switch .wpb_switch-to-composer:before{
+    content: 'Builder Editor';
+    font-size: 14px;
+}
+.composer-switch.vc_backend-status .wpb_switch-to-composer:before{
+    content: 'Classic Editor';
+}
+#poststuff{
+    padding: 15px;
+}
+.post-type-familab_menu #wpb_visual_composer{
+    overflow-x: hidden;
+}
+#setting-error-tgmpa{
+    display: none;
+}

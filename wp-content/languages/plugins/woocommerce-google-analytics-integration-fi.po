@@ -1,0 +1,199 @@
+# Translation of Plugins - WooCommerce Google Analytics Integration - Stable (latest release) in Finnish
+# This file is distributed under the same license as the Plugins - WooCommerce Google Analytics Integration - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2018-04-26 21:07:40+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha\n"
+"Language: fi\n"
+"Project-Id-Version: Plugins - WooCommerce Google Analytics Integration - Stable (latest release)\n"
+
+#: includes/class-wc-google-analytics.php:154
+msgid "Enable this to find broken or dead links. An \"Event\" with category \"Error\" and action \"404 Not Found\" will be created in Google Analytics for each incoming pageview to a non-existing page. By setting up a \"Custom Goal\" for these events within Google Analytics you can find out where broken links originated from (the referrer). %sRead how to set up a goal%s."
+msgstr "Ota tämä käyttöön kun haluat löytää rikkoutuneet tai kuolleet linkit. Google Analyticsiin luodaan \"Tapahtuma\" (Event), siihen \"Virhe\" (Error) kategoria ja \"404 Ei löytynyt\" (404 Not Found) toimi jokaiselle yritykselle katsoa puuttuvaa sivua. Kun asetat Google Analyticsissa näille tapahtumille \"Mukautetun kohteen\" (Custom Goal) saat selville mistä kutsu rikkinäiseen linkkiin saapui (viittaaja, referer). %sLue kuinka kohde asetetaan%s."
+
+#: includes/class-wc-google-analytics.php:153
+msgid "Track 404 (Not found) Errors."
+msgstr "Seuraa 404 (Ei löytynyt) virheitä."
+
+#. Author URI of the plugin
+msgid "https://woocommerce.com"
+msgstr "https://woocommerce.com"
+
+#: woocommerce-google-analytics-integration.php:73
+msgid "Support"
+msgstr "Tuki"
+
+#: woocommerce-google-analytics-integration.php:72
+msgid "Settings"
+msgstr "Asetukset"
+
+#: includes/class-wc-google-analytics.php:377
+msgid "ID:"
+msgstr "Tunnus/ID:"
+
+#: includes/class-wc-google-analytics.php:133
+msgid "Set the Google Analytics code to support Enhanced Link Attribution. %sRead more about Enhanced Link Attribution%s."
+msgstr "Aseta Google Analytics koodi tukemaan Enhanced Link Attribution -ominaisuutta.  %sLue lisää aiheesta Enhanced Link Attribution%s."
+
+#: includes/class-wc-google-analytics.php:132
+msgid "Use Enhanced Link Attribution"
+msgstr "Käytä Enhanced Link Attribution"
+
+#: includes/class-wc-google-analytics.php:139
+msgid "Enable Universal Analytics"
+msgstr "Ota käyttöön Universal Analytics (yleinen tutkiminen)"
+
+#: includes/class-wc-google-analytics.php:146
+msgid "Anonymize IP addresses."
+msgstr "Tee IP-osoitteet tunnistamattomiksi."
+
+#: includes/class-wc-google-analytics.php:147
+msgid "Enabling this option is mandatory in certain countries due to national privacy laws. %sRead more about IP Anonymization%s."
+msgstr "Kansalliset yksityisyydensuoja lait edellyttävät tämän valinnan käyttämistä tietyissä maissa. %sLue lisää IP-osoitteiden tekemisestä tunnistamattomaksi%s."
+
+#: includes/class-wc-google-analytics.php:160
+msgid "Purchase Transactions"
+msgstr "Ostotapahtumat"
+
+#: includes/class-wc-google-analytics.php:161
+msgid "This requires a payment gateway that redirects to the thank you/order received page after payment. Orders paid with gateways which do not do this will not be tracked."
+msgstr "Tämä edellyttää maksukäytävää joka edelleenohjaa kiitos-/tilaus vastaanotettu sivulle maksamisen jälkeen. Tilaukset jotka on tehty sellaisilla maksukäytävillä jotka eivät tarjoa tätä mahdollisuutta, ei seurata."
+
+#: includes/class-wc-google-analytics.php:167
+msgid "Add to Cart Events"
+msgstr "Lisää ostoskorin tapahtumiin"
+
+#: includes/class-wc-google-analytics.php:174
+msgid "Enhanced eCommerce"
+msgstr "Tehostettu verkkokauppa (Enhanced eCommerce)"
+
+#: includes/class-wc-google-analytics.php:175
+msgid "Enable Enhanced eCommerce "
+msgstr "Ota käyttöön Tehostettu verkkokauppa (Enhanced eCommerce)"
+
+#: includes/class-wc-google-analytics.php:185
+msgid "Remove from Cart Events"
+msgstr "Poista ostoskorin tapahtumista"
+
+#: includes/class-wc-google-analytics.php:193
+msgid "Product Impressions from Listing Pages"
+msgstr "Tuotteiden näyttäminen luettelosivuilta"
+
+#: includes/class-wc-google-analytics.php:201
+msgid "Product Clicks from Listing Pages"
+msgstr "Tuotteiden klikkaaminen luettelosivuilta"
+
+#: includes/class-wc-google-analytics.php:209
+msgid "Product Detail Views"
+msgstr "Tuotetietojen näyttäminen"
+
+#: includes/class-wc-google-analytics.php:217
+msgid "Checkout Process Initiated"
+msgstr "Kassan tapahtumaketju aloitettu"
+
+#: includes/class-wc-google-analytics.php:230
+msgid "Please allow Google Analytics 24 hours to start displaying results."
+msgstr "Odota 24 tuntia jotta Google Analytics alkaa näyttää tuloksia."
+
+#: includes/class-wc-google-analytics.php:125
+msgid "\"Display Advertising\" Support"
+msgstr "Tuki \"Kuvamainonnalle\" (Display Advertising)"
+
+#: includes/class-wc-google-analytics.php:126
+msgid "Set the Google Analytics code to support Display Advertising. %sRead more about Display Advertising%s."
+msgstr "Aseta Google Analytics -seurantakoodi tukemaan Kuvamainontaa. %sLue lisää kuvamainonnasta%s."
+
+#: includes/class-wc-google-analytics.php:140
+msgid "Uses Universal Analytics instead of Classic Google Analytics. If you have <strong>not</strong> previously used Google Analytics on this site, check this box. Otherwise, %sfollow step 1 of the Universal Analytics upgrade guide.%s Enabling this setting will take care of step 2. %sRead more about Universal Analytics%s. Universal Analytics must be enabled to enable enhanced eCommerce."
+msgstr "Käytetään \"Universal Analytics\" -palvelua eikä \"Classic Google Analytics\" -palvelua. Jos <strong>et</strong> ole aiemmin käyttänyt Google Analytics -palvelua tällä sivustolla, valitse tämä ruutu. Muussa tapauksessa, %snoudata Universal Analytics -päivitysoppaan 1. askelta.%s Tämän valinnan ottaminen käyttöön vastaa oppaan 2. askelta. %sLue lisää Universal Analytics -palvelusta%s. Universal Analytics -palvelu on oltava käytössä kun halutaan käyttää Tehostettu verkkokauppa (enhanced eCommerce)-ominaisuutta."
+
+#: includes/class-wc-google-analytics.php:176
+msgid "Enhanced eCommerce allows you to measure more user interactions with your store, including: product impressions, product detail views, starting the checkout process, adding cart items, and removing cart items. Universal Analytics must be enabled for Enhanced eCommerce to work. Before enabling this setting, turn on Enhanced eCommerce in your Google Analytics dashboard. <a href=\"%s\">See here for more information</a>."
+msgstr "Tehostettu verkkokauppa (Enhanced eCommerce)-ominaisuudella voit mitata enemmän käyttäjien tekemisiä kaupassa, mukaan lukien tuotteiden katsominen, tuotetietojen katsominen, kassalle siirtymisen tapahtumaketju, tuotteiden lisääminen ostoskoriin ja niiden poistaminen ostoskorista. Universal Analytics on oltava käytössä jotta Tehostettu verkkokauppa toimisi. Ennen kuin otat käyttöön tämän valinnan, ota käyttöön Tehostettu verkkokauppa (Enhanced eCommerce)-ominaisuus  Google Analytics -hallintapaneelissa. <a href=\"%s\">Tutustu lisätietoihin täällä</a>."
+
+#: includes/class-wc-google-analytics.php:233
+msgid "Please note, for transaction tracking to work properly, you will need to use a payment gateway that redirects the customer back to a WooCommerce order received/thank you page."
+msgstr "Huomaa, jotta [osto]tapahtuman seuraaminen toimii oikein, on käytettävä maksukäytävää joka edelleenohjaa kävijän joka tilaus vastaanotettu- tai kiitos sivulle."
+
+#: includes/class-wc-google-analytics-info-banner.php:62
+msgid "(Dismiss)"
+msgstr "(Piilota)"
+
+#: includes/class-wc-google-analytics.php:117
+msgid "Tracking Options"
+msgstr "Seurannan valinnat"
+
+#: includes/class-wc-google-analytics.php:119
+msgid "This tracks session data such as demographics, system, etc. You don't need to enable this if you are using a 3rd party Google analytics plugin."
+msgstr "Tämä seuraa istunnon tietoja kuten vierailijan paikka, järjestelmä jne. Jos käytössä on kolmannen osapuolen Google analyysilisäosa niin tätä ei tarvitse ottaa käyttöön."
+
+#: includes/class-wc-google-analytics.php:118
+msgid "Enable Standard Tracking"
+msgstr "Ota käyttöön Standard Tracking (tavallinen seuranta) "
+
+#: includes/class-wc-google-analytics-info-banner.php:62
+msgid "Dismiss this notice."
+msgstr "Piilota tämä huomautus."
+
+#: includes/class-wc-google-analytics-info-banner.php:57
+msgid "Google Analytics &amp; WooCommerce"
+msgstr "Google Analytics &amp; WooCommerce"
+
+#: includes/class-wc-google-analytics-info-banner.php:58
+msgid "<a href=\"%s\">Connect WooCommerce to Google Analytics</a> to finish setting up this integration."
+msgstr "<a href=\"%s\">Yhdistä WooCommerce-lisäosa Google Analytics -palveluun</a> jotta liitos on valmis."
+
+#. Author of the plugin
+#: woocommerce-google-analytics-integration.php:111
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: includes/class-wc-google-analytics.php:375
+#: includes/class-wc-google-analytics.php:445
+msgid "Products"
+msgstr "Tuotteet"
+
+#: includes/class-wc-google-analytics.php:376
+#: includes/class-wc-google-analytics.php:446
+msgid "Add to Cart"
+msgstr "Lisää ostoskoriin"
+
+#: woocommerce-google-analytics-integration.php:111
+msgid "WooCommerce Google Analytics depends on the last version of %s to work!"
+msgstr "%s lisäosan uusin versio on oltava asennettuna jotta WooCommerce Google Analytics toimii oikein!"
+
+#: includes/class-wc-google-analytics.php:111
+msgid "Set Domain Name"
+msgstr "Aseta verkko-osoite"
+
+#. Plugin Name of the plugin
+msgid "WooCommerce Google Analytics Integration"
+msgstr "WooCommerce Google Analytics -liitos"
+
+#. Plugin URI of the plugin
+msgid "http://wordpress.org/plugins/woocommerce-google-analytics-integration/"
+msgstr "http://wordpress.org/plugins/woocommerce-google-analytics-integration/"
+
+#: includes/class-wc-google-analytics.php:23
+msgid "Google Analytics"
+msgstr "Google Analytics"
+
+#: includes/class-wc-google-analytics.php:104
+msgid "Google Analytics ID"
+msgstr "Google Analytics -tunnus/ID"
+
+#: includes/class-wc-google-analytics.php:105
+msgid "Log into your Google Analytics account to find your ID. e.g. <code>UA-XXXXX-X</code>"
+msgstr "Kirjaudu Google Analytics -tiliin josta löydät tunnuksesi/ID. Esim. <code>UA-XXXXX-X</code>"
+
+#: includes/class-wc-google-analytics.php:24
+msgid "Google Analytics is a free service offered by Google that generates detailed statistics about the visitors to a website."
+msgstr "Google Analytics on Googlen tarjoama maksuton palvelu joka luo yksityiskohtaista tilastotietoa sivuston vierailijoista."
+
+#. Description of the plugin
+msgid "Allows Google Analytics tracking code to be inserted into WooCommerce store pages."
+msgstr "Mahdollistaa Google Analytics -seurantakoodin sijoittamisen WooCommerce kauppasivuille."

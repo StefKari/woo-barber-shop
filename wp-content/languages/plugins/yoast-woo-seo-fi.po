@@ -1,0 +1,141 @@
+# Translation of Yoast - WooCommerce SEO in Finnish
+# This file is distributed under the same license as the Yoast - WooCommerce SEO package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-09-02 21:54:54+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-rc.1\n"
+"Language: fi\n"
+"Project-Id-Version: Yoast - WooCommerce SEO\n"
+
+#: classes/woocommerce-seo.php:549
+msgid "Size"
+msgstr "Koko"
+
+#: classes/woocommerce-seo.php:547
+msgid "Pattern"
+msgstr "Lohkomalli"
+
+#: classes/woocommerce-seo.php:541
+msgid "Schema & OpenGraph additions"
+msgstr "Schema- ja OpenGraph-lisäykset"
+
+#: classes/woocommerce-seo.php:542
+msgid "If you have product attributes for the following types, select them here, the plugin will make sure they're used for the appropriate Schema.org and OpenGraph markup."
+msgstr "Jos sinulla on seuraavien tyyppien tuotemääritteitä, valitse ne täältä, laajennus varmistaa, että niitä käytetään asianmukaisissa Schema.org- ja OpenGraph-merkinnöissä."
+
+#: classes/woocommerce-seo.php:545
+msgid "Brand"
+msgstr "Tuotemerkki"
+
+#: classes/woocommerce-seo.php:544
+msgid "Manufacturer"
+msgstr "Valmistaja"
+
+#: classes/woocommerce-seo.php:567
+msgid "Breadcrumbs"
+msgstr "Murupolku"
+
+#. translators: %1$s resolves to internal links options page, %2$s resolves to
+#. closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:571
+msgid "Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sBreadcrumbs settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced."
+msgstr "Sekä %4$s että %3$s tarjoaa murupolkutoiminnon. %3$s:n murupoluilla on hieman suurempi mahdolllisuus tulla hakukoneiden havaitsemaksi ja niitä sinun on mahdollista muokata hieman enemmän, %1$smurupolkujen asetuksista%2$s. Käytä alta löytyvää valintaruutua ottaaksesi ne käyttöön, jolloin se korvaa WooCommercen murupolut."
+
+#: classes/woocommerce-seo.php:595
+msgid "Admin"
+msgstr "Pääkäyttäjä"
+
+#: classes/woocommerce-slack.php:46
+msgid "In stock"
+msgstr "Varastossa"
+
+#: classes/woocommerce-slack.php:63
+msgid "Price"
+msgstr "Hinta"
+
+#. translators: %1$s resolves to Yoast WooCommerce SEO
+#: classes/woocommerce-dependencies.php:154
+msgid "Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly."
+msgstr "Ole hyvä ja päivitä WordPress viimeisimpään versioon, jotta WordPress ja %1$s -moduuli voivat toimia oikein."
+
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to Yoast WooCommerce
+#. SEO
+#: classes/woocommerce-dependencies.php:182
+msgid "Please upgrade the %1$s plugin to the latest version to allow the %2$s module to work."
+msgstr "Ole hyvä ja päivitä %1$s -lisäosa uusimpaan versioon varmistaaksesi, saadaksesi %2$s -moduulin toimimaan."
+
+#. Description of the plugin
+#: wpseo-woocommerce.php
+msgid "This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins."
+msgstr "WooCommerce ja WordPress SEO by Yoast laajennus varmistaa, että näillä lisä-osilla on täydellinen toimintavalmius"
+
+#. Author of the plugin
+#: wpseo-woocommerce.php
+msgid "Team Yoast"
+msgstr "Team Yoast"
+
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:599
+msgid "Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s to be above %1$s, check the box."
+msgstr "Sekä %2$s että %1$s käyttävät metalaatikoita muokkamaan tuotesivuja. Mikäli tahdot, että %2$s on %1$s:n yläpuolella, käytä valintaruutua."
+
+#. Plugin Name of the plugin
+#: wpseo-woocommerce.php
+msgid "Yoast SEO: WooCommerce"
+msgstr "Yoast SEO: WooCommerce"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:589
+msgid "Replace %1$s Breadcrumbs"
+msgstr "Korvaa %1$s-murupolut"
+
+#. translators: %1$s resolves to WooCommerce
+#: classes/woocommerce-seo.php:609
+msgid "Move %1$s up"
+msgstr "Siirrä %1$s ylös"
+
+#. translators: %1$s resolves to WooCommerce SEO
+#: classes/woocommerce-seo.php:483
+msgid "%1$s Settings"
+msgstr "%1$s:n asetukset"
+
+#. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
+#. to the closing tag, %3$s resolves to WooCommerce, %4$s resolves to Yoast
+#. WooCommerce SEO
+#. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
+#. to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to Yoast
+#. WooCommerce SEO
+#: classes/woocommerce-dependencies.php:92
+#: classes/woocommerce-dependencies.php:123
+msgid "Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work."
+msgstr "Ole hyvä, %1$sasenna ja aktivoi %3$s%2$s jotta %4$s-moduuli voi toimia."
+
+#: classes/woocommerce-yoast-tab.php:63
+#: js/src/initializers/registerAssessments.js:280
+msgid "Product identifiers"
+msgstr "Tuotteen tunnisteet"
+
+#. translators: %1$s resolves to Yoast SEO
+#: classes/woocommerce-yoast-tab.php:66
+msgid "If you have any of these unique identifiers for your products, please add them here. %1$s will use them in your Schema and OpenGraph output."
+msgstr "Jos sinulla on käytössä näitä yksilöllisiä tunnisteita tuotteillesi, ole hyvä ja lisää ne täällä. %1$s käyttää niitä Schema- ja OpenGraph-tulosteissa."
+
+#: classes/woocommerce-seo.php:546
+msgid "Color"
+msgstr "Väri"
+
+#: classes/woocommerce-slack.php:42
+msgid "Out of stock"
+msgstr "Loppu varastosta"
+
+#: classes/woocommerce-slack.php:50
+msgid "On backorder"
+msgstr "Jälkitoimituksessa"
+
+#: classes/woocommerce-slack.php:65
+msgid "Availability"
+msgstr "Saatavuus"
