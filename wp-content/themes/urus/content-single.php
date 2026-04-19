@@ -10,13 +10,12 @@ $post_class ='post-item single-post';
 
         <h1 class="post-title"><?php the_title();?></h1>
 
-        <div class="metas">
-
-            <span class="author"><?php esc_html_e('By : ','urus'); ?><span class="name"><?php the_author();?></span></span>
-            <span class="comment-count">
-                <?php printf( _nx( '1 Comment', '%1$s Comments', get_comments_number(), 'comments title', 'urus' ), number_format_i18n( get_comments_number() ) );?>
-            </span>
-        </div>
+<!--        <div class="metas">-->
+<!--            <span class="author">--><?php //esc_html_e('By : ','urus'); ?><!--<span class="name">--><?php //the_author();?><!--</span></span>-->
+<!--            <span class="comment-count">-->
+<!--                --><?php //printf( _nx( '1 Comment', '%1$s Comments', get_comments_number(), 'comments title', 'urus' ), number_format_i18n( get_comments_number() ) );?>
+<!--            </span>-->
+<!--        </div>-->
 
     </div>
 
