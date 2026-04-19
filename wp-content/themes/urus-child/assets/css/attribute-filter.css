@@ -160,4 +160,7 @@
     .mobile-shop-content .barbers-attr-filter__link {
         padding: 14px 16px;
     }
+    .barbers-attr-filter {
+        padding-bottom: 20px;
+    }
 }
