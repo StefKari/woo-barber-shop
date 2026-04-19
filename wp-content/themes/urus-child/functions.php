@@ -18,16 +18,16 @@ if( !function_exists('urus_child_enqueue_styles')){
 }
 
 function urus_related_products_carousel_settings($atts,$woo_single_layout) {
-  if( $woo_single_layout == 'full'){
-      $atts['md_items'] = 4;
-      $atts['lg_items'] = 6;
+    if( $woo_single_layout == 'full'){
+        $atts['md_items'] = 4;
+        $atts['lg_items'] = 6;
 
-  }else{
-      $atts['md_items'] = 3;
-      $atts['lg_items'] = 4;
+    }else{
+        $atts['md_items'] = 3;
+        $atts['lg_items'] = 4;
 
-  }
-  return $atts;
+    }
+    return $atts;
 }
 add_filter('urus_related_products_carousel_settings','urus_related_products_carousel_settings',10,2);
 
@@ -58,57 +58,66 @@ function remove_draft_widget(){
 // End remove post type
 
 function so_38878702_remove_hook(){
-   remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
 }
-add_action( 'woocommerce_single_product_summary', 'so_38878702_remove_hook', 1 );  
+add_action( 'woocommerce_single_product_summary', 'so_38878702_remove_hook', 1 );
 
 function so_38878702_add_hook(){
-    $brands = wp_get_post_terms( get_the_ID(), 'pwb-brand' );
+    $product_id = get_the_ID();
+    $cache_key  = 'barbers_brands_' . $product_id;
+    $cached     = get_transient( $cache_key );
 
-	if ( ! is_wp_error( $brands ) ) {
+    if ( $cached !== false ) {
+        echo $cached; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        return;
+    }
 
-		if ( sizeof( $brands ) > 0 ) {
+    $brands = wp_get_post_terms( $product_id, 'pwb-brand' );
 
-			$show_as = get_option( 'wc_pwb_admin_tab_brands_in_single' );
+    if ( ! is_wp_error( $brands ) ) {
 
-			if ( $show_as != 'no' ) {
+        if ( sizeof( $brands ) > 0 ) {
 
+            $show_as         = get_option( 'wc_pwb_admin_tab_brands_in_single' );
+            $image_size_selected = get_option( 'wc_pwb_admin_tab_brand_logo_size', 'thumbnail' );
+            $image_size      = $image_size_selected ?: 'thumbnail';
+
+            if ( $show_as != 'no' ) {
+
+                ob_start();
                 echo '<div class="pwb-single-product-brands-container">';
-				    echo '<div class="pwb-single-product-brands pwb-clearfix">';
+                echo '<div class="pwb-single-product-brands pwb-clearfix">';
 
-				    if ( $show_as == 'brand_link' ) {
-				    	$before_brands_links  = '<span class="pwb-text-before-brands-links">';
-				    	$before_brands_links .= apply_filters( 'pwb_text_before_brands_links', esc_html__( 'Brands', 'perfect-woocommerce-brands' ) );
-				    	$before_brands_links .= ':</span>';
-				    	echo wp_kses_post( apply_filters( 'pwb_html_before_brands_links', $before_brands_links ) );
-				    }
+                if ( $show_as == 'brand_link' ) {
+                    $before_brands_links  = '<span class="pwb-text-before-brands-links">';
+                    $before_brands_links .= apply_filters( 'pwb_text_before_brands_links', esc_html__( 'Brands', 'perfect-woocommerce-brands' ) );
+                    $before_brands_links .= ':</span>';
+                    echo wp_kses_post( apply_filters( 'pwb_html_before_brands_links', $before_brands_links ) );
+                }
 
-				    foreach ( $brands as $brand ) {
-				    	$brand_link    = get_term_link( $brand->term_id, 'pwb-brand' );
-				    	$attachment_id = get_term_meta( $brand->term_id, 'pwb_brand_image', 1 );
+                foreach ( $brands as $brand ) {
+                    $brand_link      = get_term_link( $brand->term_id, 'pwb-brand' );
+                    $attachment_id   = get_term_meta( $brand->term_id, 'pwb_brand_image', 1 );
+                    $attachment_html = wp_get_attachment_image( $attachment_id, $image_size );
 
-				    	$image_size          = 'thumbnail';
-				    	$image_size_selected = get_option( 'wc_pwb_admin_tab_brand_logo_size', 'thumbnail' );
-				    	if ( $image_size_selected != false ) {
-				    		$image_size = $image_size_selected;
-				    	}
+                    if ( ! empty( $attachment_html ) && $show_as == 'brand_image' || ! empty( $attachment_html ) && ! $show_as ) {
+                        echo '<a href="' . esc_url( $brand_link ) . '" title="' . esc_attr( $brand->name ) . '">' . $attachment_html . '</a>';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    } else {
+                        echo '<a href="' . esc_url( $brand_link ) . '" title="' . esc_html__( 'View brand', 'perfect-woocommerce-brands' ) . '">' . esc_html( $brand->name ) . '</a>';
+                    }
+                }
+                echo '</div>';
 
-				    	$attachment_html = wp_get_attachment_image( $attachment_id, $image_size );
-
-				    	if ( ! empty( $attachment_html ) && $show_as == 'brand_image' || ! empty( $attachment_html ) && ! $show_as ) {
-				    		echo '<a href="' . esc_url( $brand_link ) . '" title="' . esc_attr( $brand->name ) . '">' . $attachment_html . '</a>';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				    	} else {
-				    		echo '<a href="' . esc_url( $brand_link ) . '" title="' . esc_html__( 'View brand', 'perfect-woocommerce-brands' ) . '">' . esc_html( $brand->name ) . '</a>';
-				    	}
-				    }
-				    echo '</div>';
-
-				    the_title( '<h1 class="product_title entry-title">', '</h1>' );
+                the_title( '<h1 class="product_title entry-title">', '</h1>' );
 
                 echo '</div>';
-			}
-		}
-	}
+                $html = ob_get_clean();
+
+                set_transient( $cache_key, $html, HOUR_IN_SECONDS * 12 );
+                echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            }
+        }
+    }
 }
 add_action( 'woocommerce_single_product_summary', 'so_38878702_add_hook', 5 );
 

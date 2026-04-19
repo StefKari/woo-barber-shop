@@ -122,19 +122,28 @@ class Barbers_Attribute_Filter_Frontend {
     }
 
     private function get_product_ids_in_category( int $term_id ): array {
+        $cache_key = 'barbers_product_ids_cat_' . $term_id;
+        $cached    = get_transient( $cache_key );
+        if ( $cached !== false ) {
+            return $cached;
+        }
+
         $query = new WP_Query( [
             'post_type'      => 'product',
             'post_status'    => 'publish',
             'posts_per_page' => -1,
             'fields'         => 'ids',
             'tax_query'      => [ [
-                'taxonomy' => 'product_cat',
-                'field'    => 'term_id',
-                'terms'    => $term_id,
+                'taxonomy'         => 'product_cat',
+                'field'            => 'term_id',
+                'terms'            => $term_id,
                 'include_children' => true,
             ] ],
         ] );
-        return $query->posts ?: [];
+
+        $ids = $query->posts ?: [];
+        set_transient( $cache_key, $ids, HOUR_IN_SECONDS * 6 );
+        return $ids;
     }
 
     private function get_active_slug(): string {
