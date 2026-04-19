@@ -17,6 +17,7 @@ $post_class ='post-item single-post';
 <!--            </span>-->
 <!--        </div>-->
 
+
     </div>
 
     <?php get_template_part('template-parts/post-format');?>
