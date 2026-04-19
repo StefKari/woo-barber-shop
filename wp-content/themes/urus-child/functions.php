@@ -1,4 +1,8 @@
 <?php
+
+add_action('after_setup_theme', function() {
+    require_once get_stylesheet_directory() . '/inc/attribute-filter/loader.php';
+});
 add_action( 'wp_enqueue_scripts', 'urus_child_enqueue_styles' );
 
 if( !function_exists('urus_child_enqueue_styles')){
