@@ -1,9 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\Translation\Domain\Settings;
-
-use WPML\PHP\Exception\Exception;
-
-class SettingsException extends Exception {
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/Translation/Domain/Settings/SettingsException.php';

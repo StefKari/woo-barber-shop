@@ -1,16 +1,2 @@
 <?php
-namespace WPML\UserInterface\Web\Core\Component\Dashboard\Application\Hook;
-
-use WPML\Core\Component\Post\Application\Query\Dto\PublicationStatusDto;
-
-interface DashboardPublicationStatusFilterInterface {
-
-
-  /**
-   * @param PublicationStatusDto[] $publicationStatusDtos
-   * @return PublicationStatusDto[]
-   */
-  public function filterByDto( array $publicationStatusDtos );
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../../../wpml/src/UserInterface/Web/Core/Component/Dashboard/Application/Hook/DashboardPublicationStatusFilterInterface.php';

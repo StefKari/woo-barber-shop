@@ -12,11 +12,13 @@ defined('ABSPATH') or exit;
 ?>
 
 <div class="wdp-column wdp-condition-subfield wdp-condition-field-measure">
-    <select name="rule[conditions][{c}][options][<?php echo ProductAll::PRODUCT_MEASURE_KEY ?>]">
+    <select name="rule[conditions][{c}][options][<?php echo esc_attr(ProductAll::PRODUCT_MEASURE_KEY) ?>]">
         <?php foreach ($condition->getMeasures() as $measureKey => $measureTitle): ?>
-            <option value="<?php echo $measureKey ?>"
+            <option value="<?php echo esc_attr($measureKey) ?>"
                 <?php if ($measureKey === ProductMeasure::MEASURE_QTY()->getValue()) echo 'selected' ?>>
-                <?php echo $measureTitle ?>
+                <?php
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                echo $measureTitle ?>
             </option>
         <?php endforeach; ?>
     </select>

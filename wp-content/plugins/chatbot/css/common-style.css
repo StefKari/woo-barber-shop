@@ -233,6 +233,15 @@
     vertical-align: top;
 }
 
+/* Hide slimScroll when message content fits (slimScroll otherwise shows a ghost bar) */
+.slimScrollDiv.wpbot-no-scroll > .slimScrollBar,
+.slimScrollDiv.wpbot-no-scroll > .slimScrollRail {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
 .wp-chatbot-header {
     border-radius: 5px 5px 0 0;
     margin: 0;
@@ -248,11 +257,9 @@
 }
 
 .wp-chatbot-content {
-    height: calc(100vh - 277px);
     position: relative;
     padding: 15px;
     box-sizing: border-box;
-    max-height: 564px;
 }
 
 .wp-chatbot-product-reload.wp-chatbot-product-loading {
@@ -374,8 +381,9 @@ ul.wp-chatbot-messages-container > li .wp-chatbot-agent, .wp-chatbot-agent-profi
 }
 
 #wp-chatbot-messages-container .wp-chatbot-avatar img, .wp-chatbot-agent-profile .wp-chatbot-widget-avatar img {
-    width: 40px !important;
-    height: 40px !important;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
 }
 
 /*********************************************************************************
@@ -531,31 +539,6 @@ ul.wp-chatbot-messages-container > li .wp-chatbot-agent, .wp-chatbot-agent-profi
     border: none;
     box-shadow: none;
     background: none;
-}
-
-.wp-chatbot-editor-container button {
-    display: inline-block;
-    height: 40px;
-    background: transparent url("../images/send-button.png") no-repeat right !important;
-    color: transparent !important;
-    width: 20%;
-    cursor: pointer;
-    margin: 0 0 0 -8px;
-    padding: 0;
-    border: none;
-    outline: none;
-}
-
-.wp-chatbot-editor-container button:hover {
-    background: transparent url("../images/send-button.png") no-repeat center;
-    color: transparent;
-}
-
-.wp-chatbot-editor-container button:focus {
-    outline: none;
-    border: none;
-    box-shadow: none;
-    background: transparent url("../images/send-button.png") no-repeat center;
 }
 
 /*****************************************************************************************
@@ -1590,9 +1573,6 @@ ul.wp-chatbot-messages-container > li > .wp-chatbot-paragraph{
 	.wp-chatbot-board-container{
         width: 310px;
     }
-    .wp-chatbot-mobile-full-screen .wp-chatbot-board-container {
-        width: 100%;
-    }
 	
     #wp-chatbot-mobile-close {
         position: absolute;
@@ -1742,3 +1722,433 @@ wp-chatbot-editor-container input::placeholder {
 }
 
 
+.wp-chatbot-textanimation ul {
+    margin: 12px 0 8px 20px !important;
+}
+.wp-chatbot-textanimation ul li {
+  list-style-type: "✓";
+  padding-left: 6px;
+}
+
+.wp-chatbot-textanimation ul li::marker {
+  color: #1d73b4;
+      font-weight: bold;
+}
+
+/** like dislike thumbs icons**/
+
+
+
+.qcld-like-dislike-icon {
+    display: none;
+}
+
+.qcld-like-dislike-icon a {
+    padding: 0 5px;
+}
+
+.qcld-like-dislike-icon i {
+    color: #1d73b4;
+}
+
+ul.wp-chatbot-messages-container>li>.wp-chatbot-paragraph,
+.wp-chatbot-agent-profile .wp-chatbot-bubble {
+    padding: 8px 15px 15px 15px;
+}
+
+/* ul.wp-chatbot-messages-container>li.wp-chatbot-msg:hover .qcld-like-dislike-icon {
+	opacity: 1;
+} */
+.qcld-share {
+    position: relative;
+    display: inline-block;
+}
+
+.qcld-share .share-menu {
+    position: absolute;
+    bottom: 100%;
+    left: -6px;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 5px;
+    display: flex;
+    gap: 8px;
+    border-radius: 5px;
+}
+
+.qcld-share .share-menu a {
+    color: #333;
+    font-size: 16px;
+}
+
+/**Modal style**/
+#wpbot-report-modal>div {
+    box-shadow: inset 1px 1px 0 rgb(255 255 255 / 75%), inset 0 0 5px rgb(255 255 255 / 76%) !important;
+    background: #1d73b4 !important;
+    backdrop-filter: blur(0px);
+    isolation: isolate;
+}
+
+#wpbot-report-modal input#wpbot-report-email {
+    box-shadow: inset 1px 1px 0 rgb(255 255 255 / 75%), inset 0 0 5px rgb(255 255 255 / 76%);
+    background: #ffffff61;
+    backdrop-filter: blur(0px);
+    isolation: isolate;
+    margin: 0 0;
+    border-radius: 6PX;
+    padding: 10px 10px;
+    border: none;
+    width: 96% !important;
+    color: #fff;
+}
+
+#wpbot-report-modal textarea#wpbot-report-text {
+    box-shadow: inset 1px 1px 0 rgb(255 255 255 / 75%), inset 0 0 5px rgb(255 255 255 / 76%);
+    background: #ffffff61;
+    backdrop-filter: blur(0px);
+    isolation: isolate;
+    margin: 0 0;
+    border-radius: 6PX;
+    padding: 10px 10px;
+    border: none;
+    width: 96% !important;
+    color: #fff;
+}
+
+#wpbot-report-modal textarea#wpbot-report-text:focus-visible {
+    box-shadow: none;
+    outline: none;
+}
+
+#wpbot-report-modal input#wpbot-report-email:focus-visible {
+    box-shadow: none;
+    outline: none;
+}
+
+#wpbot-report-modal>div h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+
+#wpbot-report-modal>div label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+#wpbot-report-modal>div button {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+    box-shadow: inset 1px 1px 0 rgb(255 255 255 / 75%), inset 0 0 5px rgb(255 255 255 / 76%);
+    background: rgb(255 255 255 / 25%);
+    backdrop-filter: none;
+    isolation: isolate;
+    color: rgb(29 115 180) !important;
+    margin: 2px 2px;
+    border: 1px solid #fff !important;
+    padding: 8px 15px;
+    border-radius: 8px;
+    color: #ffffff !important;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#wpbot-report-modal>div button:hover {
+    transform: scale(0.95);
+}
+
+.qcld-like-dislike-icon a .liked {
+    color: green;
+    cursor: default;
+    pointer-events: none;
+}
+
+.qcld-like-dislike-icon a .disliked {
+    color: red;
+    cursor: default;
+    pointer-events: none;
+}
+
+ul.wp-chatbot-messages-container>li.wp-chatbot-msg .chat-container .wp-chatbot-paragraph {
+    box-shadow: none;
+    background: transparent;
+    backdrop-filter: none;
+    isolation: inherit;
+}
+
+
+
+ul.wp-chatbot-messages-container>li.wp-chatbot-msg .chat-container {
+    box-shadow: inset 1px 1px 0 rgb(255 255 255 / 75%), inset 0 0 5px rgb(255 255 255 / 76%);
+    background: rgb(255 255 255 / 30%);
+    backdrop-filter: blur(0px);
+    isolation: isolate;
+    border-radius: 10px;
+    padding: 8px 15px;
+}
+
+.qcld-like-dislike-icon {
+    padding: 6px 0 0 0;
+    margin-top: 20px;
+}
+
+
+
+.qcld-like-dislike-icon i.fa.fa-thumbs-o-up.liked {
+    position: relative;
+    font-size: 0px !important;
+}
+
+.qcld-like-dislike-icon i.fa.fa-thumbs-o-up.liked:before {
+    content: "\f164" !important;
+    left: 0px;
+    bottom: 0;
+    font-size: 16px !important;
+}
+
+.qcld-like-dislike-icon i.fa.fa-thumbs-o-down.disliked {
+    position: relative;
+    font-size: 0px !important;
+}
+
+.qcld-like-dislike-icon i.fa.fa-thumbs-o-down.disliked:before {
+    content: "\f165" !important;
+    left: 0px;
+    bottom: 0;
+    font-size: 16px !important;
+}
+
+.qcld-like-dislike-icon a {
+    padding: 0 0px;
+}
+
+.qcld-like-dislike-icon a i {
+    transition: all 0.2s ease-in-out;
+}
+
+.qcld-like-dislike-icon a i:hover {
+    transform: scale(1.5);
+}
+
+.qcld-like-dislike-icon i.fa.fa-thumbs-o-up.liked:before {
+    transition: all 0.2s ease-in-out;
+}
+
+.qcld-like-dislike-icon i.fa.fa-thumbs-o-down.disliked:before:hover {
+    transform: scale(1.5);
+}
+
+.qcld-like-dislike-icon a {
+    outline: none !important;
+}
+
+
+.qcld-like-dislike-icon a {
+    padding: 0 10px 0 0;
+}
+
+.qcld-like-dislike-icon .share-menu a {
+    padding: 0 0 0 0 !important;
+}
+
+.qcld-like-dislike-icon i {
+    color: #ffffff;
+}
+
+.wp-chatbot-textanimation ul {
+    margin: 12px 0 8px 20px !important;
+    padding: 0;
+}
+.qcld-like-dislike-icon i {
+    color: #1e74b3;
+}
+.qcld-like-dislike-icon a i {
+    font-size: 16px;
+    padding: 0;
+    height: auto;
+}
+.qcld-like-dislike-icon a {
+    padding: 0 5px 0 0;
+        height: 15px;
+}
+
+
+/* Icon video / YouTube inside the floating ball */
+#wp-chatbot-ball .wp-chatbot-ball .wpbot-icon-video,
+.wp-chatbot-ball .wpbot-icon-video {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+	height: 100% !important;
+	border-radius: 50%;
+	object-fit: cover;
+	pointer-events: none;
+	box-sizing: border-box;
+	z-index: 0;
+}
+
+/*
+ * YouTube iframes ignore object-fit and letterbox in a square ball.
+ * Size as 16:9 cover, then scale up so title / logo / chrome are cropped by the circle.
+ */
+#wp-chatbot-ball .wp-chatbot-ball iframe.wpbot-icon-video,
+.wp-chatbot-ball iframe.wpbot-icon-video {
+	top: 50%;
+	left: 50%;
+	width: 100% !important; /* 16 / 9 */
+	height: 100% !important;
+	min-height: 100%;
+	border: 0;
+	transform: translate(-50%, -50%) scale(1);
+	transform-origin: center center;
+	object-fit: unset;
+	pointer-events: none;
+}
+
+.wp-chatbot-ball-animator {
+	position: relative;
+	border-radius: 50%;
+	z-index: 1;
+}
+
+.wp-chatbot-animation-active .wp-chatbot-ball-animation-switch {
+	opacity: 1;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	animation: spin 2s linear infinite;
+	border: 3px solid transparent;
+	border-top-color: #9370DB;
+}
+
+.wp-chatbot-animation-active .wp-chatbot-ball-animation-switch:before {
+	content: "";
+	position: absolute;
+	top: -9px;
+	left: -9px;
+	right: -9px;
+	bottom: -9px;
+	border-radius: 50%;
+	border: 3px solid transparent;
+	border-top-color: #BA55D3;
+	animation: spin 3s linear infinite;
+}
+
+.wp-chatbot-animation-active .wp-chatbot-ball-animation-switch:after {
+	content: "";
+	position: absolute;
+	top: -15px;
+	left: -15px;
+	right: -15px;
+	bottom: -15px;
+	border-radius: 50%;
+	border: 3px solid transparent;
+	border-top-color: #FF00FF;
+	animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes spinHide {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+span.qcld-chatbot-wildcard.qcld_back_to_start {
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    max-width: 160px;
+}
+.chat-container.wp-chatbot-msg-flat:has(.qcld_back_to_start) {
+    box-shadow: none !important;
+    background: rgb(255 255 255 / 0%) !important;
+}
+
+.qcld-like-dislike-icon a {
+    text-decoration: none !important;
+}
+
+@media screen and (min-height: 1081px) {
+        div#wp-chatbot-chat-container .slimScrollDiv {
+            height: 100vh !important;
+            max-height: 580px !important;
+        }
+        div#wp-chatbot-chat-container div#wp-chatbot-board-container {
+                    height: 100vh !important;
+                    max-height: 760px !important;
+        }
+}
+
+@media screen and (max-width: 1024px) {
+    div#wp-chatbot-chat-container {
+        right: 30px !important;
+        bottom: 30px !important;
+        left: auto !important;
+    }
+    div#wp-chatbot-mobile-close {
+        display: none;
+    }
+}
+@media screen and (max-width: 767px) {
+    body div#wp-chatbot-ball-container {
+        max-width: 100%;
+        margin: 0 auto 3px auto;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    div#wp-chatbot-chat-container {
+        right: 0px !important;
+        bottom: 0px !important;
+        left: auto !important;
+    }
+    /* Full width only below 480px while open (incl. after reset/reload) */
+    div#wp-chatbot-chat-container.wp-chatbot-mobile-fs-open {
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    div#wp-chatbot-chat-container.wp-chatbot-mobile-fs-open #wp-chatbot-board-container,
+    div#wp-chatbot-chat-container.wp-chatbot-mobile-fs-open .wp-chatbot-board-container,
+    .wp-chatbot-template-01 div#wp-chatbot-chat-container.wp-chatbot-mobile-fs-open #wp-chatbot-board-container,
+    .wp-chatbot-mobile-full-screen.wp-chatbot-mobile-fs-open #wp-chatbot-board-container,
+    .wp-chatbot-template-01 .wp-chatbot-mobile-full-screen.wp-chatbot-mobile-fs-open #wp-chatbot-board-container,
+    div#wp-chatbot-chat-container.wp-chatbot-mobile-fs-open .slimScrollDiv,
+    div#wp-chatbot-chat-container.wp-chatbot-mobile-fs-open .wp-chatbot-ball-inner {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    div#wp-chatbot-ball {
+        right: 30px;
+        bottom: 30px;
+        position: relative;
+}
+}
+@media screen and (min-height: 1081px) { 
+    body .wp-chatbot-ball-inner.wp-chatbot-content { 
+        height: 580px !important; max-height: 580px !important; 
+    } 
+}

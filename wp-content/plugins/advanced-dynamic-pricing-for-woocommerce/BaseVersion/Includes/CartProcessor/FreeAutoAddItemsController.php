@@ -72,11 +72,11 @@ class FreeAutoAddItemsController
         if ( ! $this->cart) {
             return;
         }
-
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if ( ! isset($_REQUEST[self::RESTORE_DELETED_FREE_ITEMS_BY_HASH_REQUEST_KEY])) {
             return;
         }
-
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
         $hash = $_REQUEST[self::RESTORE_DELETED_FREE_ITEMS_BY_HASH_REQUEST_KEY];
 
         /** @var CartCustomer $customer */
@@ -90,8 +90,8 @@ class FreeAutoAddItemsController
             $wcSessionFacade->push();
         }
 
-        wp_redirect(wc_get_page_permalink('cart'));
-        die();
+        wp_safe_redirect(wc_get_page_permalink('cart'));
+        exit();
     }
 
 
@@ -101,12 +101,7 @@ class FreeAutoAddItemsController
             return;
         }
 
-        $existingHashes = array();
-        foreach ($this->cart->getFreeItems() as $freeCartItem) {
-            if ( ! $freeCartItem->isSelected()) {
-                $existingHashes[] = $freeCartItem->getAssociatedGiftHash();
-            }
-        }
+        $existingHashes = $this->calculateExistingHashesForItemStubs();
 
         foreach ($this->cart->getContext()->getCustomer()->getRemovedFreeItemsList() as $removedFreeItems) {
             $qty  = $removedFreeItems->getTotalQty();
@@ -122,20 +117,35 @@ class FreeAutoAddItemsController
 
             $cartUrl = add_query_arg(array(self::RESTORE_DELETED_FREE_ITEMS_BY_HASH_REQUEST_KEY => $hash),
                 wc_get_page_permalink('cart'));
-
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
             echo TemplateLoader::wdpGetTemplate("removed-free-cart-item-stub.php", array(
                 'hash'    => $hash,
                 'cartUrl' => $cartUrl,
                 'qty'     => $qty,
                 'options' => $this->context->getSettings()->getOptions(),
             ));
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
 
             <?php
         }
     }
 
+    /**
+     * @return array<int, string>
+     */
+    protected function calculateExistingHashesForItemStubs(): array
+    {
+        $existingHashes = [];
 
+        foreach ($this->cart->getFreeItems() as $freeCartItem) {
+            if (!$freeCartItem->isSelected()) {
+                $existingHashes[] = $freeCartItem->getAssociatedGiftHash();
+            }
+        }
+
+        return $existingHashes;
+    }
 
 
     /**
@@ -153,8 +163,12 @@ class FreeAutoAddItemsController
         if ($facade->isFreeItem() && ! $facade->isSelectedFreeCartItem()) {
             /** @var CartCustomer $customer */
             $customer         = $this->cart->getContext()->getCustomer();
-            $removedFreeItems = $customer->getRemovedFreeItems($facade->getAssociatedHash());
-            $removedFreeItems->add($facade->getFreeCartItemHash(), $facade->getQty());
+
+            $this->recalculateStoredFreeItemsAfterQtyUpdate(
+                $facade,
+                $facade->getQty(),
+                0
+            );
 
             $wcSessionFacade = $this->cart->getContext()->getSession();
             if ($wcSessionFacade->isValid()) {
@@ -164,6 +178,22 @@ class FreeAutoAddItemsController
         }
     }
 
+    protected function recalculateStoredFreeItemsAfterQtyUpdate(
+        WcCartItemFacade $facade,
+        float $oldQuantity,
+        float $quantity
+    ) {
+        $customer = $this->cart->getContext()->getCustomer();
+        $removedFreeItems = $customer->getRemovedFreeItems($facade->getAssociatedHash());
+        $deletedQty = $removedFreeItems->get($facade->getFreeCartItemHash());
+        $deletedQty = max(floatval(0), $deletedQty + $oldQuantity - $quantity);
+
+        if ( $deletedQty !== 0.0 ) {
+            $removedFreeItems->set($facade->getFreeCartItemHash(), $deletedQty);
+        } else {
+            $removedFreeItems->remove($facade->getFreeCartItemHash());
+        }
+    }
 
     /**
      * @param string $cartItemKey
@@ -191,11 +221,14 @@ class FreeAutoAddItemsController
         $itemFacade = new WcCartItemFacade($this->context, $wcCart->cart_contents[$cartItemKey], $cartItemKey);
 
         if ($itemFacade->isFreeItem() && ! $itemFacade->isSelectedFreeCartItem()) {
+            /** @var CartCustomer $customer */
             $customer         = $this->cart->getContext()->getCustomer();
-            $removedFreeItems = $customer->getRemovedFreeItems($itemFacade->getAssociatedHash());
-            $deletedQty       = $removedFreeItems->get($itemFacade->getFreeCartItemHash());
-            $deletedQty       = max(floatval(0), $deletedQty + $oldQuantity - $quantity);
-            $removedFreeItems->set($itemFacade->getFreeCartItemHash(), $deletedQty);
+
+            $this->recalculateStoredFreeItemsAfterQtyUpdate(
+                $itemFacade,
+                $oldQuantity,
+                $quantity
+            );
 
             $wcSessionFacade = $this->cart->getContext()->getSession();
             if ($wcSessionFacade->isValid()) {
@@ -245,12 +278,14 @@ class FreeAutoAddItemsController
             $cartUrl = add_query_arg(array(self::RESTORE_DELETED_FREE_ITEMS_BY_HASH_REQUEST_KEY => $hash),
                 wc_get_page_permalink('cart'));
 
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
             echo \ADP\BaseVersion\Includes\TemplateLoader::wdpGetTemplate("removed-free-mini-cart-item-stub.php", array(
                 'hash'    => $hash,
                 'cartUrl' => $cartUrl,
                 'qty'     => $qty,
                 'options' => $this->context->getSettings()->getOptions(),
             ));
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
 
             <?php

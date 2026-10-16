@@ -4,6 +4,7 @@ namespace ADP\BaseVersion\Includes\Core\Rule\CartCondition\Impl;
 
 use ADP\BaseVersion\Includes\Core\Rule\CartCondition\RuleCondition;
 use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Comparison;
+use ADP\BaseVersion\Includes\Core\Rule\Internationalization\IObjectInternationalization;
 
 defined('ABSPATH') or exit;
 
@@ -34,6 +35,8 @@ abstract class AbstractCondition implements RuleCondition
         return false;
     }
 
+    static function isEnabled()  {  return true;}
+
     public function getInvolvedCartItems()
     {
         return null;
@@ -57,8 +60,21 @@ abstract class AbstractCondition implements RuleCondition
         return array();
     }
 
-    public function translate($languageCode)
+    public function translate(IObjectInternationalization $oi)
     {
         return;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCartComparisonValue($cart)
+    {
+        return false;
+    }
+
+    public static function getIndex()
+    {
+        return PHP_INT_MAX;
     }
 }

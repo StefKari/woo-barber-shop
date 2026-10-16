@@ -1,8 +1,2 @@
 <?php
-
-namespace WPML\Core\Port\Persistence\Exception;
-
-use WPML\PHP\Exception\Exception;
-
-class EmptyQueryResultException extends Exception {
-}
+require_once __DIR__ . '/../../../../../../../../wpml/src/Core/Port/Persistence/Exception/EmptyQueryResultException.php';

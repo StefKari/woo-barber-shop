@@ -43,8 +43,9 @@ class WoocsCmp
     public function loadRequirements()
     {
         if ( ! did_action('plugins_loaded')) {
-            _doing_it_wrong(__FUNCTION__, sprintf(__('%1$s should not be called earlier the %2$s action.',
-                'advanced-dynamic-pricing-for-woocommerce'), 'load_requirements', 'plugins_loaded'), WC_ADP_VERSION);
+            /* translators: Message about the load order*/
+            _doing_it_wrong(__FUNCTION__, sprintf(esc_html__('%1$s should not be called earlier the %2$s action.',
+                'advanced-dynamic-pricing-for-woocommerce'), 'load_requirements', 'plugins_loaded'), esc_html(WC_ADP_VERSION));
         }
 
         $this->woocs = isset($GLOBALS['WOOCS']) ? $GLOBALS['WOOCS'] : null;
@@ -54,6 +55,27 @@ class WoocsCmp
     {
         if ($this->isActive()) {
             remove_action('woocommerce_package_rates', array($this->woocs, 'woocommerce_package_rates'), 9999);
+            $hooks = array(
+                'woocommerce_product_get_price',
+                'woocommerce_product_variation_get_price',
+                'woocommerce_product_variation_get_regular_price',
+                'woocommerce_product_get_regular_price',
+                'woocommerce_product_get_sale_price',
+                'woocommerce_get_variation_regular_price',
+                'woocommerce_get_variation_sale_price'
+            );
+            foreach ($hooks as $hook) {
+                add_filter($hook, function ($price, $product) {
+                    if ($product AND $product->get_meta('adp_price_converted')) {
+                        $_REQUEST['woocs_block_price_hook'] = true;
+                    }
+                    return $price;
+                }, 10, 2);
+                add_filter($hook, function ($price) {
+                    unset($_REQUEST['woocs_block_price_hook']);
+                    return $price;
+                }, PHP_INT_MAX);
+            }
         }
     }
 

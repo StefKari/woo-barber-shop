@@ -7,7 +7,11 @@
  */
 
 use Automattic\Jetpack\Constants;
+use Automattic\WooCommerce\Enums\ProductStockStatus;
+use Automattic\WooCommerce\Enums\ProductType;
+use Automattic\WooCommerce\Internal\CostOfGoodsSold\CostOfGoodsSoldController;
 use Automattic\WooCommerce\Utilities\NumberUtil;
+use Automattic\WooCommerce\Utilities\TimeUtil;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +45,14 @@ class WC_Admin_Post_Types {
 
 		// Admin notices.
 		add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
+		add_filter( 'woocommerce_order_updated_messages', array( $this, 'order_updated_messages' ) );
 		add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ), 10, 2 );
+		add_action(
+			'admin_notices',
+			function () {
+				$this->maybe_display_warning_for_password_protected_coupon();
+			}
+		);
 
 		// Disable Auto Save.
 		add_action( 'admin_print_scripts', array( $this, 'disable_autosave' ) );
@@ -51,12 +62,9 @@ class WC_Admin_Post_Types {
 		add_filter( 'enter_title_here', array( $this, 'enter_title_here' ), 1, 2 );
 		add_action( 'edit_form_after_title', array( $this, 'edit_form_after_title' ) );
 		add_filter( 'default_hidden_meta_boxes', array( $this, 'hidden_meta_boxes' ), 10, 2 );
-		add_action( 'post_submitbox_misc_actions', array( $this, 'product_data_visibility' ) );
+		add_action( 'post_submitbox_misc_actions', array( $this, 'product_data_visibility' ), 5 );
 
-		// Uploads.
-		add_filter( 'upload_dir', array( $this, 'upload_dir' ) );
-		add_filter( 'wp_unique_filename', array( $this, 'update_filename' ), 10, 3 );
-		add_action( 'media_upload_downloadable_product', array( $this, 'media_upload_downloadable_product' ) );
+		include_once __DIR__ . '/class-wc-admin-upload-downloadable-product.php';
 
 		// Hide template for CPT archive.
 		add_filter( 'theme_page_templates', array( $this, 'hide_cpt_archive_templates' ), 10, 3 );
@@ -124,14 +132,14 @@ class WC_Admin_Post_Types {
 
 		$messages['product'] = array(
 			0  => '', // Unused. Messages start at index 1.
-			/* translators: %s: Product view URL. */
-			1  => sprintf( __( 'Product updated. <a href="%s">View Product</a>', 'woocommerce' ), esc_url( get_permalink( $post->ID ) ) ),
+			/* translators: %1$s: Product link opening tag. %2$s: Product link closing tag.*/
+			1  => sprintf( __( 'Product updated. %1$sView Product%2$s', 'woocommerce' ), '<a id="woocommerce-product-updated-message-view-product__link" href="' . esc_url( get_permalink( $post->ID ) ) . '">', '</a>' ),
 			2  => __( 'Custom field updated.', 'woocommerce' ),
 			3  => __( 'Custom field deleted.', 'woocommerce' ),
 			4  => __( 'Product updated.', 'woocommerce' ),
 			5  => __( 'Revision restored.', 'woocommerce' ),
-			/* translators: %s: product url */
-			6  => sprintf( __( 'Product published. <a href="%s">View Product</a>', 'woocommerce' ), esc_url( get_permalink( $post->ID ) ) ),
+			/* translators: %1$s: Product link opening tag. %2$s: Product link closing tag.*/
+			6  => sprintf( __( 'Product published. %1$sView Product%2$s', 'woocommerce' ), '<a id="woocommerce-product-updated-message-view-product__link" href="' . esc_url( get_permalink( $post->ID ) ) . '">', '</a>' ),
 			7  => __( 'Product saved.', 'woocommerce' ),
 			/* translators: %s: product url */
 			8  => sprintf( __( 'Product submitted. <a target="_blank" href="%s">Preview product</a>', 'woocommerce' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post->ID ) ) ) ),
@@ -145,24 +153,7 @@ class WC_Admin_Post_Types {
 			10 => sprintf( __( 'Product draft updated. <a target="_blank" href="%s">Preview product</a>', 'woocommerce' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post->ID ) ) ) ),
 		);
 
-		$messages['shop_order'] = array(
-			0  => '', // Unused. Messages start at index 1.
-			1  => __( 'Order updated.', 'woocommerce' ),
-			2  => __( 'Custom field updated.', 'woocommerce' ),
-			3  => __( 'Custom field deleted.', 'woocommerce' ),
-			4  => __( 'Order updated.', 'woocommerce' ),
-			5  => __( 'Revision restored.', 'woocommerce' ),
-			6  => __( 'Order updated.', 'woocommerce' ),
-			7  => __( 'Order saved.', 'woocommerce' ),
-			8  => __( 'Order submitted.', 'woocommerce' ),
-			9  => sprintf(
-				/* translators: %s: date */
-				__( 'Order scheduled for: %s.', 'woocommerce' ),
-				'<strong>' . date_i18n( __( 'M j, Y @ G:i', 'woocommerce' ), strtotime( $post->post_date ) ) . '</strong>'
-			),
-			10 => __( 'Order draft updated.', 'woocommerce' ),
-			11 => __( 'Order updated and sent.', 'woocommerce' ),
-		);
+		$messages = $this->order_updated_messages( $messages );
 
 		$messages['shop_coupon'] = array(
 			0  => '', // Unused. Messages start at index 1.
@@ -180,6 +171,46 @@ class WC_Admin_Post_Types {
 				'<strong>' . date_i18n( __( 'M j, Y @ G:i', 'woocommerce' ), strtotime( $post->post_date ) ) . '</strong>'
 			),
 			10 => __( 'Coupon draft updated.', 'woocommerce' ),
+		);
+
+		return $messages;
+	}
+
+	/**
+	 * Add messages when an order is updated.
+	 *
+	 * @param array $messages Array of messages.
+	 *
+	 * @return array
+	 */
+	public function order_updated_messages( array $messages ) {
+		global $post, $theorder;
+
+		if ( ! isset( $theorder ) || ! $theorder instanceof WC_Abstract_Order ) {
+			if ( ! isset( $post ) || 'shop_order' !== $post->post_type ) {
+				return $messages;
+			} else {
+				\Automattic\WooCommerce\Utilities\OrderUtil::init_theorder_object( $post );
+			}
+		}
+
+		$messages['shop_order'] = array(
+			0  => '', // Unused. Messages start at index 1.
+			1  => __( 'Order updated.', 'woocommerce' ),
+			2  => __( 'Custom field updated.', 'woocommerce' ),
+			3  => __( 'Custom field deleted.', 'woocommerce' ),
+			4  => __( 'Order updated.', 'woocommerce' ),
+			5  => __( 'Revision restored.', 'woocommerce' ),
+			6  => __( 'Order updated.', 'woocommerce' ),
+			7  => __( 'Order saved.', 'woocommerce' ),
+			8  => __( 'Order submitted.', 'woocommerce' ),
+			9  => sprintf(
+			/* translators: %s: date */
+				__( 'Order scheduled for: %s.', 'woocommerce' ),
+				'<strong>' . date_i18n( __( 'M j, Y @ G:i', 'woocommerce' ), strtotime( $theorder->get_date_created() ?? $post->post_date ) ) . '</strong>'
+			),
+			10 => __( 'Order draft updated.', 'woocommerce' ),
+			11 => __( 'Order updated and sent.', 'woocommerce' ),
 		);
 
 		return $messages;
@@ -233,6 +264,33 @@ class WC_Admin_Post_Types {
 		);
 
 		return $bulk_messages;
+	}
+
+	/**
+	 * Shows a warning when editing a password-protected coupon.
+	 *
+	 * @since 9.2.0
+	 */
+	private function maybe_display_warning_for_password_protected_coupon() {
+		if ( ! function_exists( 'get_current_screen' ) || 'shop_coupon' !== get_current_screen()->id ) {
+			return;
+		}
+
+		if ( ! isset( $GLOBALS['post'] ) || 'shop_coupon' !== $GLOBALS['post']->post_type ) {
+			return;
+		}
+
+		wp_admin_notice(
+			__(
+				'This coupon is password protected. WooCommerce does not support password protection for coupons. You can temporarily hide a coupon by making it private. Alternatively, usage limits and restrictions can be configured below.',
+				'woocommerce'
+			),
+			array(
+				'type'               => 'warning',
+				'id'                 => 'wc-password-protected-coupon-warning',
+				'additional_classes' => empty( $GLOBALS['post']->post_password ) ? array( 'hidden' ) : array(),
+			)
+		);
 	}
 
 	/**
@@ -320,7 +378,7 @@ class WC_Admin_Post_Types {
 		// Get the product and save.
 		$product = wc_get_product( $post );
 
-		if ( ! empty( $request_data['woocommerce_quick_edit'] ) ) { // WPCS: input var ok.
+		if ( ! empty( $request_data['woocommerce_quick_edit'] ) ) {
 			$this->quick_edit_save( $post_id, $product );
 		} else {
 			$this->bulk_edit_save( $post_id, $product );
@@ -338,10 +396,8 @@ class WC_Admin_Post_Types {
 	private function quick_edit_save( $post_id, $product ) {
 		$request_data = $this->request_data();
 
-		$data_store        = $product->get_data_store();
-		$old_regular_price = $product->get_regular_price();
-		$old_sale_price    = $product->get_sale_price();
-		$input_to_props    = array(
+		$data_store     = $product->get_data_store();
+		$input_to_props = array(
 			'_weight'     => 'weight',
 			'_length'     => 'length',
 			'_width'      => 'width',
@@ -384,56 +440,100 @@ class WC_Admin_Post_Types {
 			}
 		}
 
+		if ( ! empty( $request_data['_tax_class'] ) ) {
+			$tax_class = sanitize_title( wp_unslash( $request_data['_tax_class'] ) );
+			if ( 'standard' === $tax_class ) {
+				$tax_class = '';
+			}
+			$product->set_tax_class( $tax_class );
+		}
+
 		$product->set_featured( isset( $request_data['_featured'] ) );
 
-		if ( $product->is_type( 'simple' ) || $product->is_type( 'external' ) ) {
+		if ( $product->is_type( ProductType::SIMPLE ) || $product->is_type( ProductType::EXTERNAL ) ) {
 
 			if ( isset( $request_data['_regular_price'] ) ) {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-				$new_regular_price = ( '' === $request_data['_regular_price'] ) ? '' : wc_format_decimal( $request_data['_regular_price'] );
-				$product->set_regular_price( $new_regular_price );
-			} else {
-				$new_regular_price = null;
+				$regular_price = ( '' === $request_data['_regular_price'] ) ? '' : wc_format_decimal( $request_data['_regular_price'] );
+				$product->set_regular_price( $regular_price );
 			}
+
 			if ( isset( $request_data['_sale_price'] ) ) {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-				$new_sale_price = ( '' === $request_data['_sale_price'] ) ? '' : wc_format_decimal( $request_data['_sale_price'] );
-				$product->set_sale_price( $new_sale_price );
-			} else {
-				$new_sale_price = null;
+				$sale_price = ( '' === $request_data['_sale_price'] ) ? '' : wc_format_decimal( $request_data['_sale_price'] );
+				$product->set_sale_price( $sale_price );
 			}
 
-			// Handle price - remove dates and set to lowest.
-			$price_changed = false;
+			// Parse valid dates using the full product editor's site-timezone behavior.
+			$submitted_sale_date_from = $request_data['_sale_price_dates_from'] ?? null;
+			if ( is_string( $submitted_sale_date_from ) ) {
+				/**
+				 * Submitted sale start date.
+				 *
+				 * @var string $date_on_sale_from
+				 */
+				$date_on_sale_from = wp_unslash( $submitted_sale_date_from );
 
-			if ( ! is_null( $new_regular_price ) && $new_regular_price !== $old_regular_price ) {
-				$price_changed = true;
-			} elseif ( ! is_null( $new_sale_price ) && $new_sale_price !== $old_sale_price ) {
-				$price_changed = true;
+				if ( '' === $date_on_sale_from ) {
+					$product->set_date_on_sale_from( '' );
+				} elseif ( TimeUtil::is_valid_date( $date_on_sale_from, 'Y-m-d' ) ) {
+					$timestamp = strtotime( $date_on_sale_from );
+					if ( false !== $timestamp ) {
+						$product->set_date_on_sale_from( date( 'Y-m-d 00:00:00', $timestamp ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+					}
+				}
 			}
 
-			if ( $price_changed ) {
-				$product->set_date_on_sale_to( '' );
-				$product->set_date_on_sale_from( '' );
+			$submitted_sale_date_to = $request_data['_sale_price_dates_to'] ?? null;
+			if ( is_string( $submitted_sale_date_to ) ) {
+				/**
+				 * Submitted sale end date.
+				 *
+				 * @var string $date_on_sale_to
+				 */
+				$date_on_sale_to = wp_unslash( $submitted_sale_date_to );
+
+				if ( '' === $date_on_sale_to ) {
+					$product->set_date_on_sale_to( '' );
+				} elseif ( TimeUtil::is_valid_date( $date_on_sale_to, 'Y-m-d' ) ) {
+					$timestamp = strtotime( $date_on_sale_to );
+					if ( false !== $timestamp ) {
+						$product->set_date_on_sale_to( date( 'Y-m-d 23:59:59', $timestamp ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+					}
+				}
 			}
+		}
+
+		if ( wc_get_container()->get( CostOfGoodsSoldController::class )->feature_is_enabled() && isset( $request_data['_cogs_value'] ) ) {
+			$cogs_value = $request_data['_cogs_value'];
+			$cogs_value = '' === $cogs_value ? null : (float) wc_format_decimal( $cogs_value );
+			$product->set_cogs_value( $cogs_value );
 		}
 
 		// Handle Stock Data.
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$manage_stock = ! empty( $request_data['_manage_stock'] ) && 'grouped' !== $product->get_type() ? 'yes' : 'no';
+		$manage_stock = ! empty( $request_data['_manage_stock'] ) && ProductType::GROUPED !== $product->get_type() ? 'yes' : 'no';
 		$backorders   = ! empty( $request_data['_backorders'] ) ? wc_clean( $request_data['_backorders'] ) : 'no';
 		if ( ! empty( $request_data['_stock_status'] ) ) {
 			$stock_status = wc_clean( $request_data['_stock_status'] );
 		} else {
-			$stock_status = $product->is_type( 'variable' ) ? null : 'instock';
+			$stock_status = $product->is_type( ProductType::VARIABLE ) ? null : ProductStockStatus::IN_STOCK;
 		}
 		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		$product->set_manage_stock( $manage_stock );
-		$product->set_backorders( $backorders );
+
+		if ( ProductType::EXTERNAL !== $product->get_type() ) {
+			$product->set_backorders( $backorders );
+		}
 
 		if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) {
-			$stock_amount = 'yes' === $manage_stock && isset( $request_data['_stock'] ) && is_numeric( wp_unslash( $request_data['_stock'] ) ) ? wc_stock_amount( wp_unslash( $request_data['_stock'] ) ) : '';
+			if ( 'yes' === $manage_stock && isset( $request_data['_stock'] ) ) {
+				$stock_value  = wp_unslash( $request_data['_stock'] );
+				$stock_amount = is_numeric( $stock_value ) ? wc_stock_amount( $stock_value ) : 0;
+			} else {
+				$stock_amount = '';
+			}
 			$product->set_stock_quantity( $stock_amount );
 		}
 
@@ -478,7 +578,7 @@ class WC_Admin_Post_Types {
 		}
 
 		if ( ! empty( $request_data['_tax_class'] ) ) {
-			$tax_class = wc_clean( wp_unslash( $request_data['_tax_class'] ) );
+			$tax_class = sanitize_title( wp_unslash( $request_data['_tax_class'] ) );
 			if ( 'standard' === $tax_class ) {
 				$tax_class = '';
 			}
@@ -512,8 +612,14 @@ class WC_Admin_Post_Types {
 			}
 		}
 
-		// Handle price - remove dates and set to lowest.
-		$change_price_product_types    = apply_filters( 'woocommerce_bulk_edit_save_price_product_types', array( 'simple', 'external' ) );
+		/**
+		 * Handle price - remove dates and set to lowest.
+		 *
+		 * @param array $product_types Array of product types that can change price.
+		 *
+		 * @since 3.0.0
+		 */
+		$change_price_product_types    = apply_filters( 'woocommerce_bulk_edit_save_price_product_types', array( ProductType::SIMPLE, ProductType::EXTERNAL ) );
 		$can_product_type_change_price = false;
 		foreach ( $change_price_product_types as $product_type ) {
 			if ( $product->is_type( $product_type ) ) {
@@ -542,7 +648,7 @@ class WC_Admin_Post_Types {
 		$backorders         = ! empty( $request_data['_backorders'] ) ? wc_clean( $request_data['_backorders'] ) : $backorders;
 
 		if ( ! empty( $request_data['_manage_stock'] ) ) {
-			$manage_stock = 'yes' === wc_clean( $request_data['_manage_stock'] ) && 'grouped' !== $product->get_type() ? 'yes' : 'no';
+			$manage_stock = 'yes' === wc_clean( $request_data['_manage_stock'] ) && ProductType::GROUPED !== $product->get_type() ? 'yes' : 'no';
 		} else {
 			$manage_stock = $was_managing_stock;
 		}
@@ -550,7 +656,10 @@ class WC_Admin_Post_Types {
 		$stock_amount = 'yes' === $manage_stock && ! empty( $request_data['change_stock'] ) && isset( $request_data['_stock'] ) ? wc_stock_amount( $request_data['_stock'] ) : $product->get_stock_quantity();
 
 		$product->set_manage_stock( $manage_stock );
-		$product->set_backorders( $backorders );
+
+		if ( ProductType::EXTERNAL !== $product->get_type() ) {
+			$product->set_backorders( $backorders );
+		}
 
 		if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) {
 			$change_stock = absint( $request_data['change_stock'] );
@@ -574,6 +683,10 @@ class WC_Admin_Post_Types {
 		$stock_status = empty( $request_data['_stock_status'] ) ? null : wc_clean( $request_data['_stock_status'] );
 		$product      = $this->maybe_update_stock_status( $product, $stock_status );
 
+		if ( wc_get_container()->get( CostOfGoodsSoldController::class )->feature_is_enabled() ) {
+			$this->maybe_update_cogs_value( $product, $request_data );
+		}
+
 		$product->save();
 
 		do_action( 'woocommerce_product_bulk_edit_save', $product );
@@ -587,7 +700,7 @@ class WC_Admin_Post_Types {
 	public function disable_autosave() {
 		global $post;
 
-		if ( $post && in_array( get_post_type( $post->ID ), wc_get_order_types( 'order-meta-boxes' ), true ) ) {
+		if ( $post instanceof WP_Post && in_array( get_post_type( $post->ID ), wc_get_order_types( 'order-meta-boxes' ), true ) ) {
 			wp_dequeue_script( 'autosave' );
 		}
 	}
@@ -638,13 +751,18 @@ class WC_Admin_Post_Types {
 	/**
 	 * Hidden default Meta-Boxes.
 	 *
-	 * @param  array  $hidden Hidden boxes.
-	 * @param  object $screen Current screen.
+	 * @param  array     $hidden Hidden boxes.
+	 * @param  WP_Screen $screen Current screen.
 	 * @return array
 	 */
 	public function hidden_meta_boxes( $hidden, $screen ) {
 		if ( 'product' === $screen->post_type && 'post' === $screen->base ) {
 			$hidden = array_merge( $hidden, array( 'postcustom' ) );
+		}
+
+		// Download permissions are granted automatically, so hide the box by default on order screens (HPOS and legacy CPT). Merchants can re-enable it via Screen Options.
+		if ( wc_get_page_screen_id( 'shop-order' ) === $screen->id ) {
+			$hidden = array_merge( $hidden, array( 'woocommerce-order-downloads' ) );
 		}
 
 		return $hidden;
@@ -666,7 +784,7 @@ class WC_Admin_Post_Types {
 		$current_featured   = wc_bool_to_string( $product_object->get_featured() );
 		$visibility_options = wc_get_product_visibility_options();
 		?>
-		<div class="misc-pub-section" id="catalog-visibility">
+		<div class="misc-pub-section misc-pub-catalog-visibility" id="catalog-visibility">
 			<?php esc_html_e( 'Catalog visibility:', 'woocommerce' ); ?>
 			<strong id="catalog-visibility-display">
 				<?php
@@ -693,7 +811,7 @@ class WC_Admin_Post_Types {
 					echo '<input type="radio" name="_visibility" id="_visibility_' . esc_attr( $name ) . '" value="' . esc_attr( $name ) . '" ' . checked( $current_visibility, $name, false ) . ' data-label="' . esc_attr( $label ) . '" /> <label for="_visibility_' . esc_attr( $name ) . '" class="selectit">' . esc_html( $label ) . '</label><br />';
 				}
 
-				echo '<br /><input type="checkbox" name="_featured" id="_featured" ' . checked( $current_featured, 'yes', false ) . ' /> <label for="_featured">' . esc_html__( 'This is a featured product', 'woocommerce' ) . '</label><br />';
+				echo '<input type="checkbox" name="_featured" id="_featured" ' . checked( $current_featured, 'yes', false ) . ' /> <label for="_featured">' . esc_html__( 'This is a featured product', 'woocommerce' ) . '</label><br />';
 				?>
 				<p>
 					<a href="#catalog-visibility" class="save-post-visibility hide-if-no-js button"><?php esc_html_e( 'OK', 'woocommerce' ); ?></a>
@@ -702,100 +820,6 @@ class WC_Admin_Post_Types {
 			</div>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Change upload dir for downloadable files.
-	 *
-	 * @param array $pathdata Array of paths.
-	 * @return array
-	 */
-	public function upload_dir( $pathdata ) {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
-		if ( isset( $_POST['type'] ) && 'downloadable_product' === $_POST['type'] ) {
-
-			if ( empty( $pathdata['subdir'] ) ) {
-				$pathdata['path']   = $pathdata['path'] . '/woocommerce_uploads';
-				$pathdata['url']    = $pathdata['url'] . '/woocommerce_uploads';
-				$pathdata['subdir'] = '/woocommerce_uploads';
-			} else {
-				$new_subdir = '/woocommerce_uploads' . $pathdata['subdir'];
-
-				$pathdata['path']   = str_replace( $pathdata['subdir'], $new_subdir, $pathdata['path'] );
-				$pathdata['url']    = str_replace( $pathdata['subdir'], $new_subdir, $pathdata['url'] );
-				$pathdata['subdir'] = str_replace( $pathdata['subdir'], $new_subdir, $pathdata['subdir'] );
-			}
-		}
-		return $pathdata;
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
-	}
-
-	/**
-	 * Change filename for WooCommerce uploads and prepend unique chars for security.
-	 *
-	 * @param string $full_filename Original filename.
-	 * @param string $ext           Extension of file.
-	 * @param string $dir           Directory path.
-	 *
-	 * @return string New filename with unique hash.
-	 * @since 4.0
-	 */
-	public function update_filename( $full_filename, $ext, $dir ) {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['type'] ) || ! 'downloadable_product' === $_POST['type'] ) {
-			return $full_filename;
-		}
-
-		if ( ! strpos( $dir, 'woocommerce_uploads' ) ) {
-			return $full_filename;
-		}
-
-		if ( 'no' === get_option( 'woocommerce_downloads_add_hash_to_filename' ) ) {
-			return $full_filename;
-		}
-
-		return $this->unique_filename( $full_filename, $ext );
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
-	}
-
-	/**
-	 * Change filename to append random text.
-	 *
-	 * @param string $full_filename Original filename with extension.
-	 * @param string $ext           Extension.
-	 *
-	 * @return string Modified filename.
-	 */
-	public function unique_filename( $full_filename, $ext ) {
-		$ideal_random_char_length = 6;   // Not going with a larger length because then downloaded filename will not be pretty.
-		$max_filename_length      = 255; // Max file name length for most file systems.
-		$length_to_prepend        = min( $ideal_random_char_length, $max_filename_length - strlen( $full_filename ) - 1 );
-
-		if ( 1 > $length_to_prepend ) {
-			return $full_filename;
-		}
-
-		$suffix   = strtolower( wp_generate_password( $length_to_prepend, false, false ) );
-		$filename = $full_filename;
-
-		if ( strlen( $ext ) > 0 ) {
-			$filename = substr( $filename, 0, strlen( $filename ) - strlen( $ext ) );
-		}
-
-		$full_filename = str_replace(
-			$filename,
-			"$filename-$suffix",
-			$full_filename
-		);
-
-		return $full_filename;
-	}
-
-	/**
-	 * Run a filter when uploading a downloadable product.
-	 */
-	public function woocommerce_media_upload_downloadable_product() {
-		do_action( 'media_upload_file' );
 	}
 
 	/**
@@ -841,7 +865,7 @@ class WC_Admin_Post_Types {
 		if ( $post && absint( $post->ID ) === $shop_page_id ) {
 			echo '<div class="notice notice-info">';
 			/* translators: %s: URL to read more about the shop page. */
-			echo '<p>' . sprintf( wp_kses_post( __( 'This is the WooCommerce shop page. The shop page is a special archive that lists your products. <a href="%s">You can read more about this here</a>.', 'woocommerce' ) ), 'https://docs.woocommerce.com/document/woocommerce-pages/#section-4' ) . '</p>';
+			echo '<p>' . sprintf( wp_kses_post( __( 'This is the WooCommerce shop page. The shop page is a special archive that lists your products. <a href="%s">You can read more about this here</a>.', 'woocommerce' ) ), 'https://woocommerce.com/document/woocommerce-pages/#section-4' ) . '</p>';
 			echo '</div>';
 		}
 	}
@@ -884,11 +908,11 @@ class WC_Admin_Post_Types {
 	 * @return WC_Product The supplied product, or the synced product if it was a variable product.
 	 */
 	private function maybe_update_stock_status( $product, $stock_status ) {
-		if ( $product->is_type( 'external' ) ) {
+		if ( $product->is_type( ProductType::EXTERNAL ) ) {
 			// External products are always in stock.
-			$product->set_stock_status( 'instock' );
+			$product->set_stock_status( ProductStockStatus::IN_STOCK );
 		} elseif ( isset( $stock_status ) ) {
-			if ( $product->is_type( 'variable' ) && ! $product->get_manage_stock() ) {
+			if ( $product->is_type( ProductType::VARIABLE ) && ! $product->get_manage_stock() ) {
 				// Stock status is determined by children.
 				foreach ( $product->get_children() as $child_id ) {
 					$child = wc_get_product( $child_id );
@@ -923,6 +947,7 @@ class WC_Admin_Post_Types {
 		}
 
 		$old_price     = $product->{"get_{$price_type}_price"}();
+		$old_price     = '' === $old_price ? (float) $product->get_regular_price() : (float) $old_price;
 		$price_changed = false;
 
 		$change_price  = absint( $request_data[ "change_{$price_type}_price" ] );
@@ -932,13 +957,17 @@ class WC_Admin_Post_Types {
 
 		switch ( $change_price ) {
 			case 1:
-				$new_price = $price;
+				if ( empty( $price ) ) {
+					$new_price = $product->get_regular_price();
+				} else {
+					$new_price = $price;
+				}
 				break;
 			case 2:
 				if ( $is_percentage ) {
 					$percent   = $price / 100;
 					$new_price = $old_price + ( $old_price * $percent );
-				} else {
+				} elseif ( ! empty( $price ) ) {
 					$new_price = $old_price + $price;
 				}
 				break;
@@ -946,7 +975,7 @@ class WC_Admin_Post_Types {
 				if ( $is_percentage ) {
 					$percent   = $price / 100;
 					$new_price = max( 0, $old_price - ( $old_price * $percent ) );
-				} else {
+				} elseif ( ! empty( $price ) ) {
 					$new_price = max( 0, $old_price - $price );
 				}
 				break;
@@ -955,11 +984,11 @@ class WC_Admin_Post_Types {
 					break;
 				}
 				$regular_price = $product->get_regular_price();
-				if ( $is_percentage ) {
+				if ( $is_percentage && is_numeric( $regular_price ) ) {
 					$percent   = $price / 100;
 					$new_price = max( 0, $regular_price - ( NumberUtil::round( $regular_price * $percent, wc_get_price_decimals() ) ) );
 				} else {
-					$new_price = max( 0, $regular_price - $price );
+					$new_price = max( 0, (float) $regular_price - (float) $price );
 				}
 				break;
 
@@ -986,6 +1015,22 @@ class WC_Admin_Post_Types {
 	 */
 	protected function request_data() {
 		return $_REQUEST;
+	}
+
+	/**
+	 * Update the Cost of Goods Sold value coming from a bulk edit for a product.
+	 *
+	 * @param WC_Product $product The product to update.
+	 * @param array      $request_data The current request data.
+	 */
+	private function maybe_update_cogs_value( WC_Product $product, array $request_data ) {
+		$change_cogs_value = absint( $request_data['change_cogs_value'] );
+		if ( 1 !== $change_cogs_value ) {
+			return;
+		}
+
+		$cogs_value = wc_clean( wp_unslash( $request_data['_cogs_value'] ?? '' ) );
+		$product->set_cogs_value( '' === $cogs_value ? null : (float) wc_format_decimal( $cogs_value ) );
 	}
 }
 

@@ -146,6 +146,7 @@ class RWMB_Sanitizer {
 		$options = RWMB_Choice_Field::transform_options( $field['options'] );
 		$options = wp_list_pluck( $options, 'value' );
 		$value   = wp_unslash( $value );
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return is_array( $value ) ? array_intersect( $value, $options ) : ( in_array( $value, $options ) ? $value : '' );
 	}
 
@@ -203,7 +204,14 @@ class RWMB_Sanitizer {
 	 * @return array
 	 */
 	private function sanitize_file( $value, $field ) {
-		return $field['upload_dir'] ? array_map( 'esc_url_raw', $value ) : $this->sanitize_object( $value );
+		if ( ! $field['upload_dir'] ) {
+			return $this->sanitize_object( $value );
+		}
+
+		// Security: sanitize URLs and reject path traversal sequences.
+		return array_filter( array_map( function ( $url ) {
+			return str_contains( $url, '..' ) ? '' : esc_url_raw( $url );
+		}, $value ) );
 	}
 
 	/**

@@ -51,7 +51,11 @@ class DiscountRangeFormatter
 
     protected function getFormatterTemplate()
     {
-        return $this->context->getOption('replace_price_with_min_bulk_price_category_template');
+        //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+        return _x( $this->context->getOption('replace_price_with_min_bulk_price_category_template'),
+            "Replace price with lowest bulk price on the category page|Output template",
+            "advanced-dynamic-pricing-for-woocommerce"
+        );
     }
 
     /**
@@ -70,8 +74,16 @@ class DiscountRangeFormatter
         }
 
         $isHavingMinDiscountRangePrice = (
-            ($processedProduct instanceof ProcessedProductSimple && $processedProduct->getMinDiscountRangePrice() !== null)
-            || ($processedProduct instanceof ProcessedVariableProduct && $processedProduct->getLowestRangeDiscountPriceProduct() !== null)
+            (
+                $processedProduct instanceof ProcessedProductSimple
+                && $processedProduct->getMinDiscountRangePrice() !== null
+                // && $processedProduct->getMinDiscountRangePrice() > $processedProduct->getProduct()->get_sale_price()
+            )
+            ||
+            (
+                $processedProduct instanceof ProcessedVariableProduct
+                && $processedProduct->getLowestRangeDiscountPriceProduct() !== null
+            )
         );
 
         return $this->context->isCatalog() && $isHavingMinDiscountRangePrice;
@@ -87,10 +99,14 @@ class DiscountRangeFormatter
         $product = $processedProduct->getProduct();
 
         $minDiscountRangePriceForDisplay = null;
+        $maxDiscountRangePriceForDisplay = null;
         $initialPriceForDisplay          = null;
         $minDiscountRangePrice          = null;
+        $maxDiscountRangePrice          = null;
         $regularPrice          = null;
         $pos                   = null;
+        $minMaxRange = '';
+
         if ($processedProduct instanceof ProcessedVariableProduct) {
             if ($discountRangeProcessed = $processedProduct->getLowestRangeDiscountPriceProduct()) {
                 $minDiscountRangePrice = $discountRangeProcessed->getMinDiscountRangePrice();
@@ -107,7 +123,17 @@ class DiscountRangeFormatter
                     )
                 );
                 $pos                   = $discountRangeProcessed->getPos();
-                $regularPrice          = $processedProduct->getLowestRangeDiscountPriceProduct()->getProduct()->get_regular_price();
+                $regularPrice          = $discountRangeProcessed->getProduct()->get_regular_price();
+            }
+
+            if ($discountRangeProcessed = $processedProduct->getHighestRangeDiscountPriceProduct()) {
+                $maxDiscountRangePrice = $discountRangeProcessed->getMaxDiscountRangePrice();
+                $maxDiscountRangePriceForDisplay = $this->priceFunctions->getPriceToDisplay(
+                    $product,
+                    array(
+                        'price' => $maxDiscountRangePrice,
+                    )
+                );
             }
         } else {
             $minDiscountRangePrice = $processedProduct->getMinDiscountRangePrice();
@@ -125,7 +151,24 @@ class DiscountRangeFormatter
             );
             $pos                   = $processedProduct->getPos();
             $regularPrice          = $product->get_regular_price();
+
+            $maxDiscountRangePrice = $processedProduct->getMaxDiscountRangePrice();
+            $maxDiscountRangePriceForDisplay = $this->priceFunctions->getPriceToDisplay(
+                $product,
+                array(
+                    'price' => $maxDiscountRangePrice,
+                )
+            );
         }
+
+        if (!is_null($minDiscountRangePriceForDisplay)) {
+            $minMaxRange = $this->priceFunctions->format($minDiscountRangePriceForDisplay);
+
+            if(!is_null($maxDiscountRangePriceForDisplay) && $minDiscountRangePriceForDisplay != $maxDiscountRangePriceForDisplay) {
+                $minMaxRange .= " - " . $this->priceFunctions->format($maxDiscountRangePriceForDisplay);
+            }
+        }
+        
 
         $replacements = array(
             'price'                 => ! is_null($minDiscountRangePriceForDisplay) ? $this->priceFunctions->format($minDiscountRangePriceForDisplay) : "",
@@ -136,6 +179,11 @@ class DiscountRangeFormatter
             'regular_price_striked' => '<del>' . $this->priceFunctions->format(
                     $this->priceFunctions->getPriceToDisplay($product, array("price" => $regularPrice))
                 ) . '</del>',
+            'min_variation_price'         => $this->priceFunctions->format($minDiscountRangePrice),
+            'min_variation_price_initial' => ($minDiscountRangePriceForDisplay !== $initialPriceForDisplay)
+                ? '<del>' . $this->priceFunctions->format($minDiscountRangePriceForDisplay) . '</del>'
+                : "",
+            'min_max_range' => $minMaxRange,
         );
 
         $replacements = apply_filters(

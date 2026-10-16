@@ -278,6 +278,39 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 			}
 		}
 
+		// Add sync button for library snippets with updates
+		$markup .= $this->maybe_add_sync_button( $snippet_id );
+
+		return $markup;
+	}
+
+	/**
+	 * Maybe add a sync button for snippets that have updates.
+	 * This is separated into its own method so it can be overridden by child classes.
+	 *
+	 * @param int $snippet_id The snippet ID.
+	 *
+	 * @return string
+	 */
+	public function maybe_add_sync_button( $snippet_id ) {
+		$markup = '';
+
+		// Add sync button if snippet is from library and has updates
+		$library_id = wpcode()->library->get_snippet_library_id( $snippet_id );
+        $has_auth = wpcode()->library_auth->has_auth() ? 1 : 0;
+
+		// Check if snippet has updates
+		$snippets_with_updates = wpcode()->library->get_snippets_with_updates();
+		if ( in_array( $snippet_id, $snippets_with_updates, true ) && $library_id ) {
+			// If it's a library snippet
+			$update_info = wpcode()->library->check_snippet_update( $snippet_id, $library_id );
+			$current_version = isset( $update_info['current_version'] ) ? $update_info['current_version'] : '';
+			$latest_version = isset( $update_info['latest_version'] ) ? $update_info['latest_version'] : '';
+
+			$markup .= ' <button class="wpcode-sync-button wpcode-sync-snippet-lite" data-has-auth="' . $has_auth . '" data-id="' . absint( $snippet_id ) . '" data-library-id="' . absint( $library_id ) . '" data-current-version="' . esc_attr( $current_version ) . '" data-latest-version="' . esc_attr( $latest_version ) . '">'. esc_html__( 'Update Available', 'insert-headers-and-footers' );
+			$markup .= '</button>';
+		}
+
 		return $markup;
 	}
 
@@ -307,9 +340,10 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 			'<span><strong>%s</strong></span>',
 			esc_html( $title )
 		);
+		$badge = $this->get_library_badge_markup( $snippet->ID );
 
 		if ( 'trash' === $this->view ) {
-			return $name;
+			return $badge . $name;
 		}
 
 		if ( current_user_can( 'edit_post', $snippet->ID ) ) {
@@ -327,6 +361,8 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 			);
 		}
 
+		$result = $badge . $name;
+
 		// Check if snippet is locked for editing.
 		$post_lock = wp_check_post_lock( $snippet );
 		if ( $post_lock ) {
@@ -338,10 +374,55 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 				esc_html( $user->display_name )
 			);
 
-			$name = '<div class="wpcode-locked-snippet">' . $currently_editing . '</div>' . $name;
+			$result = '<div class="wpcode-locked-snippet">' . $currently_editing . '</div>' . $result;
 		}
 
-		return $name;
+		return $result;
+	}
+
+	/**
+	 * Build the cloud-badge markup that identifies the snippet's library author.
+	 * Returns an empty string for snippets that did not come from the library.
+	 *
+	 * @param int $snippet_id The snippet ID.
+	 *
+	 * @return string
+	 */
+	protected function get_library_badge_markup( $snippet_id ) {
+		$library_id = wpcode()->library->get_snippet_library_id( $snippet_id );
+
+		if ( $library_id ) {
+			$author = wpcode()->library->get_snippet_author( $snippet_id );
+			if ( 'wpcode' === $author ) {
+				$tooltip_raw = __( 'Imported from the WPCode Library', 'insert-headers-and-footers' );
+			} else {
+				$tooltip_raw = sprintf(
+					/* translators: %s - third-party library author name like "WPForms" */
+					__( 'Imported from the WPCode Library (by %s)', 'insert-headers-and-footers' ),
+					wpcode()->library->get_author_label( $author )
+				);
+			}
+		} elseif ( get_post_meta( $snippet_id, '_wpcode_cloud_id', true ) ) {
+			// No live-auth fallback — the connected account may differ from the importing one.
+			$author = get_post_meta( $snippet_id, '_wpcode_library_author', true );
+			if ( ! empty( $author ) ) {
+				$tooltip_raw = sprintf(
+					/* translators: %s - the user's WPCode.com account username */
+					__( 'Imported from your private library (%s)', 'insert-headers-and-footers' ),
+					$author
+				);
+			} else {
+				$tooltip_raw = __( 'Imported from your private library', 'insert-headers-and-footers' );
+			}
+		} else {
+			return '';
+		}
+
+		return sprintf(
+			'<span class="wpcode-library-badge wpcode-help-tooltip">%1$s<span class="wpcode-help-tooltip-text">%2$s</span></span>',
+			get_wpcode_icon( 'cloud', 16, 12, '0 0 16 12' ),
+			esc_html( $tooltip_raw )
+		);
 	}
 
 	/**
@@ -492,7 +573,7 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 			$hidden = array(
 				'note',
 				'shortcode',
-				'updated'
+				'updated',
 			);
 
 			// Save default preferences
@@ -577,14 +658,15 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 		$is_filtered = false;
 
 		$args = array(
-			'orderby'        => $order_by,
-			'order'          => $order,
-			'nopaging'       => false,
-			'posts_per_page' => $per_page,
-			'paged'          => $page,
-			'no_found_rows'  => false,
-			'post_status'    => array( 'publish', 'draft' ),
-			'post_type'      => $this->get_post_type(),
+			'orderby'          => $order_by,
+			'order'            => $order,
+			'nopaging'         => false,
+			'posts_per_page'   => $per_page,
+			'paged'            => $page,
+			'no_found_rows'    => false,
+			'post_status'      => array( 'publish', 'draft' ),
+			'post_type'        => $this->get_post_type(),
+			'suppress_filters' => true,
 		);
 
 		if ( 'priority' === $order_by ) {
@@ -654,6 +736,17 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 					'compare' => 'EXISTS',
 				),
 			);
+		}
+
+		if ( 'outdated' === $this->view ) {
+			// Get snippets with updates
+			$snippets_with_updates = wpcode()->library->get_snippets_with_updates();
+			if ( ! empty( $snippets_with_updates ) ) {
+				$args['post__in'] = $snippets_with_updates;
+			} else {
+				// If no snippets have updates, return no results
+				$args['post__in'] = array( 0 );
+			}
 		}
 
 		/**
@@ -800,6 +893,7 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 			'all'      => 0,
 			'active'   => 0,
 			'inactive' => 0,
+			'outdated' => 0,
 			'trash'    => 0,
 		);
 
@@ -819,6 +913,10 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 				$this->count['all'] += $count_query->found_posts;
 			}
 		}
+
+		// Get count of outdated snippets
+		$snippets_with_updates = wpcode()->library->get_snippets_with_updates();
+		$this->count['outdated'] = count( $snippets_with_updates );
 
 		$this->count = (array) apply_filters( 'wpcode_code_snippets_table_update_count_all', $this->count, $args );
 	}
@@ -1012,11 +1110,22 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 
 			submit_button( __( 'Filter', 'insert-headers-and-footers' ), '', 'filter_action', false, array( 'id' => 'wpcode-filter-submit' ) );
 
-			if ( isset( $_GET['filter_action'] ) || isset( $_GET['tag'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				echo '&nbsp;';
-				submit_button( __( 'Clear', 'insert-headers-and-footers' ), '', 'filter_clear', false, array( 'id' => 'wpcode-filter-clear' ) );
-			}
-			echo '</div>';
+            if ( isset( $_GET['filter_action'] ) || isset( $_GET['tag'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                echo '&nbsp;';
+                submit_button( __( 'Clear', 'insert-headers-and-footers' ), '', 'filter_clear', false, array( 'id' => 'wpcode-filter-clear' ) );
+            }
+            echo '</div>';
+
+            // Add a div for the right side actions
+            echo '<div class="actions alignright">';
+            /**
+             * Action that fires on the right side of the table navigation.
+             * Used to add additional buttons or controls on the right side.
+             *
+             * @param string $which The location of the table navigation: 'top' or 'bottom'.
+             */
+            do_action( 'wpcode_code_snippets_table_right_actions', $which );
+            echo '</div>';
 		}
 	}
 
@@ -1078,6 +1187,9 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 		if ( $this->count['inactive'] ) {
 			$views['inactive'] = $this->view_markup( 'inactive', __( 'Inactive', 'insert-headers-and-footers' ) );
 		}
+		if ( $this->count['outdated'] ) {
+			$views['outdated'] = $this->view_markup( 'outdated', __( 'Outdated', 'insert-headers-and-footers' ) );
+		}
 		if ( $this->count['trash'] && ! wpcode_testing_mode_enabled() ) {
 			$views['trash'] = $this->view_markup( 'trash', __( 'Trash', 'insert-headers-and-footers' ) );
 		}
@@ -1123,7 +1235,7 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 			'deleted',
 			'enabled',
 			'disabled',
-			's'
+			's',
 		);
 		foreach ( $params_to_remove as $param ) {
 			unset( $current_params[ $param ] );

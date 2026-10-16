@@ -1,0 +1,2605 @@
+# Translation of Plugins - Custom Post Type UI - Stable (latest release) in Serbian
+# This file is distributed under the same license as the Plugins - Custom Post Type UI - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-10-14 02:20:05+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: sr_RS\n"
+"Project-Id-Version: Plugins - Custom Post Type UI - Stable (latest release)\n"
+
+#: external/wpml.php:81 external/wpml.php:109
+msgid "Singular name"
+msgstr "Назив у једнини"
+
+#: external/wpml.php:78 external/wpml.php:106
+msgid "Name (plural)"
+msgstr "Назив (множина)"
+
+#: external/wpml.php:61
+msgid "CPT UI Taxonomy"
+msgstr "CPT UI таксономија"
+
+#: external/wpml.php:60
+msgid "CPT UI Post Type"
+msgstr "CPT UI врста чланка"
+
+#. translators: placeholder holds content name.
+#: external/wpml.php:44
+msgid "Taxonomy: %s"
+msgstr "Таксономија: %s"
+
+#. translators: placeholder holds content name.
+#: external/wpml.php:22
+msgid "Post Type: %s"
+msgstr "Врста чланка: %s"
+
+#. translators: Placeholder will hold the name of the plugin, a link to
+#. Pluginize, and a dismiss link.
+#: inc/utility.php:1223
+msgid "%1$s lets you display this post type anywhere with a visual Shortcode Builder and a dedicated Gutenberg block. Display with %2$s &mdash; %3$s"
+msgstr "%1$s вам омогућава да ову врсту чланка прикажете било где помоћу визуелног градитеља кратких кодова и посебног Gutenberg блока. Прикажите помоћу %2$s &mdash; %3$s"
+
+#. translators: Placeholder will hold the name of the plugin and a link to
+#. Pluginize.
+#: inc/utility.php:1205
+msgid "%1$s adds a Column Builder and Advanced Filters to every post type list screen — visually customize columns and filters without writing code. Explore %2$s"
+msgstr "%1$s додаје градитељ колона и напредне филтере на сваки екран списка врсте чланака — визуелно прилагодите колоне и филтере без писања кода. Истражите %2$s"
+
+#: inc/utility.php:591
+msgid "Pro"
+msgstr "Pro"
+
+#: inc/utility.php:549
+msgid "Connect your YouTube channel and import videos as native WordPress posts — titles, descriptions, featured images, and embed-ready, with daily auto-sync or manual triggers."
+msgstr "Повежите свој YouTube канал и увезите видео снимке као изворне Вордпрес чланке — наслове, описе, издвојене слике, спремне за уградњу, уз дневно аутоматско усклађивање или ручно покретање."
+
+#: inc/utility.php:541
+msgid "AI-powered, lightning-fast search for WordPress. Full WooCommerce support — indexes product SKU and pricing data for both simple and variable products."
+msgstr "Муњевито брза претрага за Вордпрес покретана ВИ. Потпуна WooCommerce подршка — индексира SKU и податке о ценама и за једноставне и за променљиве производе."
+
+#: inc/utility.php:535 inc/utility.php:543 inc/utility.php:551
+#: inc/utility.php:588 inc/utility.php:650
+msgid "Learn more"
+msgstr "Сазнај више"
+
+#: inc/utility.php:533
+msgid "Run multiple themes on one WordPress site. Start creating new content with the Gutenberg block editor on your legacy WordPress site without replacing your active theme."
+msgstr "Користите више тема на једном Вордпрес сајту. Почните да правите нови садржај помоћу Gutenberg уређивача блокова на свом старом Вордпрес сајту без замене активне теме."
+
+#: inc/utility.php:525
+msgid "30-day money-back guarantee"
+msgstr "Гаранција поврата новца у року од 30 дана"
+
+#: inc/utility.php:522
+msgid "Multisite & Network admin support"
+msgstr "Подршка за мрежу више сајтова и администрацију мреже"
+
+#: inc/utility.php:519
+msgid "Advanced Filters: taxonomy, meta, date, author, status"
+msgstr "Напредни филтери: таксономија, мета, датум, аутор, стање"
+
+#: inc/utility.php:516
+msgid "Column Builder with drag-and-drop admin tables"
+msgstr "Градитељ колона са администраторским табелама уз превлачење"
+
+#: inc/utility.php:513
+msgid "Query Loop, Taxonomy Filter, Single Post templates, Shortcode Builder"
+msgstr "Query Loop, Taxonomy Filter, шаблони појединачног чланка, градитељ кратких кодова"
+
+#: inc/utility.php:512
+msgid "Gutenberg blocks for displaying CPT content"
+msgstr "Gutenberg блокови за приказ CPT садржаја"
+
+#: inc/utility.php:364
+msgid "More from WebDevStudios"
+msgstr "Још од WebDevStudios-а"
+
+#: inc/support.php:128
+msgid "No it does not. Pro works on single-site installations as well. Multisite/Network support is included as an additional feature for those who run a network of sites."
+msgstr "Не. Pro ради и на поставкама са једним сајтом. Подршка за мрежу више сајтова укључена је као додатна функција за оне који воде мрежу сајтова."
+
+#: inc/support.php:123
+msgid "Yes you will. Custom Post Type UI Pro is not a replacement of the free version. It acts on the post types and taxonomies you register through Custom Post Type UI to add display tools, list table controls, integrations, and more."
+msgstr "Да, биће. Custom Post Type UI Pro није замена за бесплатно издање. Он делује на врсте чланака и таксономије које региструјете преко Custom Post Type UI и додаје алате за приказ, контроле табела списка, интеграције и још много тога."
+
+#: inc/support.php:74
+msgid "View our features page"
+msgstr "Погледајте нашу страницу функција"
+
+#: inc/support.php:73
+msgid "CPT UI Pro"
+msgstr "CPT UI Pro"
+
+#: inc/about.php:170 inc/utility.php:527 build/cptui-editor.js:105
+#: build/cptui-editor.js:87
+msgid "Get CPT UI Pro"
+msgstr "Набави CPT UI Pro"
+
+#: inc/about.php:166
+msgid "Unlock the full potential of your custom post types and taxonomies — display content anywhere, control list table columns and filters, and integrate with the tools you already use."
+msgstr "Откључајте пун потенцијал својих произвољних врста чланака и таксономија — приказујте садржај било где, управљајте колонама и филтерима табела списка и повежите се са алатима које већ користите."
+
+#: inc/about.php:163
+msgid "Upgrade to Custom Post Type UI Pro"
+msgstr "Надоградите на Custom Post Type UI Pro"
+
+#: inc/about.php:155
+msgid "License-based updates delivered directly from Pluginize, plus access to priority support."
+msgstr "Ажурирања заснована на лиценци која стижу директно од Pluginize-а, уз приступ предности у подршци."
+
+#: inc/about.php:154
+msgid "Automatic Updates & Priority Support"
+msgstr "Аутоматска ажурирања и предност у подршци"
+
+#: inc/about.php:151
+msgid "Copy shortcode templates into your theme to fully customize the HTML output."
+msgstr "Умножите шаблоне кратких кодова у своју тему да бисте потпуно прилагодили HTML излаз."
+
+#: inc/about.php:150
+msgid "Theme Template Overrides"
+msgstr "Заобилажење шаблона теме"
+
+#: inc/about.php:147
+msgid "ACF fields native in the column builder, dedicated WooCommerce product and Easy Digital Downloads layouts, and Customizer-based styling for shortcode output."
+msgstr "ACF поља изворно у градитељу колона, посебни распореди за WooCommerce производе и Easy Digital Downloads и обликовање излаза кратких кодова засновано на прилагођавачу."
+
+#: inc/about.php:146
+msgid "Third-Party Integrations"
+msgstr "Интеграције трећих страна"
+
+#: inc/about.php:143
+msgid "Full network admin UI for managing CPT UI settings across a multisite installation."
+msgstr "Потпуно администраторско сучеље мреже за управљање CPT UI подешавањима на мрежи више сајтова."
+
+#: inc/about.php:142
+msgid "Multisite / Network Support"
+msgstr "Подршка за мрежу више сајтова"
+
+#: inc/about.php:139
+msgid "A dedicated block for pulling and displaying custom post type content inside the block editor."
+msgstr "Посебан блок за добављање и приказ садржаја произвољних врста чланака унутар уређивача блокова."
+
+#: inc/about.php:138
+msgid "Gutenberg Display Block"
+msgstr "Gutenberg блок за приказ"
+
+#: inc/about.php:134
+msgid "Shortcode Builder"
+msgstr "Градитељ кратких кодова"
+
+#: inc/about.php:135
+msgid "Display custom post type content anywhere with a visual shortcode builder. Layouts include list, grid, grid with overlay, slider, post cards, featured plus, single post, single page, single post type, and taxonomy list."
+msgstr "Приказујте садржај произвољних врста чланака било где помоћу визуелног градитеља кратких кодова. Распореди обухватају списак, мрежу, мрежу са преклопом, клизач, картице чланака, featured plus, појединачни чланак, појединачну страницу, појединачну врсту чланка и списак таксономије."
+
+#: inc/about.php:131
+msgid "Extend the column builder and filter system to taxonomy term list screens, not just post types."
+msgstr "Проширите градитељ колона и систем филтера на екране списка израза таксономије, а не само на врсте чланака."
+
+#: inc/about.php:130
+msgid "Taxonomy List Table Controls"
+msgstr "Контроле табела списка таксономија"
+
+#: inc/about.php:127
+msgid "Add dropdown filters to any post type list screen — filter by taxonomy, meta field, or custom data without writing code."
+msgstr "Додајте падајуће филтере на било који екран списка врсте чланака — филтрирајте по таксономији, мета пољу или произвољним подацима без писања кода."
+
+#: inc/about.php:126
+msgid "Advanced Filters"
+msgstr "Напредни филтери"
+
+#: inc/about.php:123
+msgid "Add, remove, and reorder columns on any post type list screen — core fields, custom meta, ACF fields, and taxonomy terms. Includes per-user visibility controls."
+msgstr "Додајте, уклоните и поређајте колоне на било ком екрану списка врсте чланака — основна поља, произвољни мета подаци, ACF поља и изрази таксономије. Укључује контроле видљивости по кориснику."
+
+#: inc/about.php:122
+msgid "Column Builder"
+msgstr "Градитељ колона"
+
+#. translators: Used for autofill
+#: inc/taxonomies.php:745
+msgid "Filter by %s"
+msgstr "Филтрирај по: %s"
+
+#: inc/taxonomies.php:742
+msgid "This label is only used for hierarchical taxonomies."
+msgstr "Овај натпис се користи само за хијерархијске таксономије."
+
+#: inc/taxonomies.php:741
+msgid "Filter by Category"
+msgstr "Филтрирај по категорији"
+
+#: inc/taxonomies.php:740
+msgid "(e.g. Filter by actor)"
+msgstr "(нпр. Филтрирај по глумцу)"
+
+#. translators: Used for autofill
+#: inc/post-types.php:760
+msgid "Filter %s by date"
+msgstr "Филтрирај %s по датуму"
+
+#: inc/post-types.php:757
+msgid "(e.g. Filter movies by date)"
+msgstr "(нпр. Филтрирај филмове по датуму)"
+
+#: inc/post-types.php:752
+msgid "Label for the date filter in list tables."
+msgstr "Натпис за филтер датума у табелама списка."
+
+#: inc/post-types.php:751
+msgid "Filter Items By Date"
+msgstr "Филтрирај ставке по датуму"
+
+#: custom-post-type-ui.php:253
+msgid "Save"
+msgstr "Сачувај"
+
+#: custom-post-type-ui.php:252
+msgid "Loading &hellip;"
+msgstr "Учитавање &hellip;"
+
+#: custom-post-type-ui.php:251
+msgid "No results found &hellip;"
+msgstr "Нема резултата &hellip;"
+
+#: custom-post-type-ui.php:250
+msgid "Select icon"
+msgstr "Изаберите иконицу"
+
+#: custom-post-type-ui.php:249
+msgid "Search icon &hellip;"
+msgstr "Претражи иконице &hellip;"
+
+#: custom-post-type-ui.php:138
+msgid "Registered types & taxonomies"
+msgstr "Регистроване врсте и таксономије"
+
+#: custom-post-type-ui.php:138
+msgid "Custom Post Type UI content types"
+msgstr "Врсте садржаја Custom Post Type UI"
+
+#: custom-post-type-ui.php:137
+msgid "Add/edit taxonomies"
+msgstr "Додај/уреди таксономије"
+
+#: custom-post-type-ui.php:136
+msgid "Add/edit post types"
+msgstr "Додај/уреди врсте чланака"
+
+#: inc/utility.php:1229 build/cptui-editor.js:110 build/cptui-editor.js:94
+msgid "Dismiss"
+msgstr "Одбаци"
+
+#: inc/utility.php:700
+msgid "No filter replacement. Deprecated"
+msgstr "Нема филтера за замену. Застарело"
+
+#: inc/utility.php:136
+msgid "Follow on X:"
+msgstr "Пратите на X-у:"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:261
+msgid "We recommend the %1$sPosts 2 Posts%2$s plugin."
+msgstr "Препоручујемо додатак %1$sPosts 2 Posts%2$s."
+
+#: inc/taxonomies.php:869
+msgid "(e.g. \"Category Archives\")"
+msgstr "(нпр. „Архиве категорија“)"
+
+#: inc/post-types.php:951
+msgid "(e.g. \"Single item: Movie\")"
+msgstr "(нпр. „Појединачна ставка: филм“)"
+
+#: inc/post-types.php:946 inc/taxonomies.php:871
+msgid "Use by the site editor to display on the templates/add new template screens."
+msgstr "Користи га уређивач сајта за приказ на екранима шаблона/додавања новог шаблона."
+
+#: inc/post-types.php:945 inc/taxonomies.php:870
+msgid "Template name"
+msgstr "Назив шаблона"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1155 inc/taxonomies.php:874
+msgid "%s Archives"
+msgstr "Архиве: %s"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1125 inc/post-types.php:954
+msgid "Single item: %s"
+msgstr "Појединачна ставка: %s"
+
+#: inc/utility.php:1187
+msgid "Cancel"
+msgstr "Одустани"
+
+#: inc/utility.php:1175 inc/utility.php:1186
+msgid "OK"
+msgstr "У реду"
+
+#: inc/post-types.php:1250
+msgid "\"False\" behaves like posts, \"True\" behaves like pages."
+msgstr "„False“ се понаша као чланци, „True“ се понаша као странице."
+
+#. translators: Used for autofill
+#: inc/post-types.php:889
+msgid "%s trashed."
+msgstr "%s је премештен на отпад."
+
+#: inc/post-types.php:886
+msgid "(e.g. Movie trashed.)"
+msgstr "(нпр. Филм је премештен на отпад.)"
+
+#: inc/post-types.php:881
+msgid "Used when an item is moved to Trash. Default \"Post trashed.\" / \"Page trashed.\""
+msgstr "Користи се када се ставка премести на отпад. Подразумевано „Чланак је премештен на отпад.“ / „Страница је премештена на отпад.“"
+
+#: inc/post-types.php:880
+msgid "Item Trashed"
+msgstr "Ставка премештена на отпад"
+
+#: inc/post-types.php:331
+msgid "I'm trying to migrate things in to CPTUI, let me save this"
+msgstr "Покушавам да преселим ствари у CPTUI, пустите ме да сачувам ово"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:198
+msgid "You will need to add your newly created post type to the types that the category and tag archives query for. You can see a tutorial on how to do that at %1$s. You can also get this functionality via UI with a purchase of %2$s."
+msgstr "Мораћете да додате своју новонаправљену врсту чланка у врсте које захтевају архиве категорија и ознака. Упутство о томе како то да урадите можете видети на %1$s. Ову функционалност можете добити и преко сучеља куповином %2$s."
+
+#: inc/post-types.php:269 inc/taxonomies.php:275
+msgid "Slugs may only contain lowercase alphanumeric characters, dashes, and underscores."
+msgstr "Подложке могу садржати само мала слова, бројеве, цртице и подвлаке."
+
+#: custom-post-type-ui.php:1183
+msgid "Back to top"
+msgstr "Назад на врх"
+
+#: custom-post-type-ui.php:850
+msgid "Secondary menu"
+msgstr "Секундарни изборник"
+
+#. translators: Placeholder will hold the name of the plugin, version of the
+#. plugin and a link to WebdevStudios.
+#: inc/utility.php:112
+msgid "%1$s version %2$s by %3$s"
+msgstr "%1$s, издање %2$s, аутор %3$s"
+
+#. translators: Link text for WordPress Developer site.
+#: inc/post-types.php:1550
+msgid "Theme support for post formats"
+msgstr "Подршка теме за облике чланака"
+
+#. translators: Link text for WordPress Developer site.
+#: inc/post-types.php:1547
+msgid "Theme support for featured images"
+msgstr "Подршка теме за издвојене слике"
+
+#: inc/post-types.php:1540
+msgid "Featured images and Post Formats need theme support added, to be used."
+msgstr "Да би се издвојене слике и облици чланака могли користити, потребно је додати подршку теме."
+
+#: inc/post-types.php:1530
+msgid "Provide a callback function that sets up the meta boxes for the edit form. Do `remove_meta_box()` and `add_meta_box()` calls in the callback. Default null."
+msgstr "Наведите функцију повратног позива која поставља мета кутије за образац за уређивање. Позиве `remove_meta_box()` и `add_meta_box()` обавите у функцији повратног позива. Подразумевано null."
+
+#: inc/post-types.php:1162 inc/taxonomies.php:1248
+msgid "(default: wp/v2) To change the namespace URL of REST API route."
+msgstr "(подразумевано: wp/v2) За промену URL-а именског простора REST API руте."
+
+#: inc/post-types.php:1161 inc/taxonomies.php:1247
+msgid "REST API namespace"
+msgstr "Именски простор REST API-ја"
+
+#: inc/taxonomies.php:1323
+msgid "Whether terms in this taxonomy should be sorted in the order they are provided to wp_set_object_terms()"
+msgstr "Да ли изрази у овој таксономији треба да се поређају редоследом којим су прослеђени функцији wp_set_object_terms()"
+
+#: inc/taxonomies.php:1322
+msgid "Sort"
+msgstr "Поређај"
+
+#: inc/taxonomies.php:971
+msgid "(default: false) Whether the taxonomy can have parent-child relationships. \"True\" gives checkboxes, \"False\" gives text input."
+msgstr "(подразумевано: false) Да ли таксономија може имати односе надређени-подређени. „True“ даје кућице за потврду, „False“ даје поље за унос текста."
+
+#. translators: Used for autofill
+#: inc/taxonomies.php:857
+msgid "The description is not prominent by default; however, some themes may show it."
+msgstr "Опис није подразумевано истакнут; ипак, неке теме га могу приказати."
+
+#: inc/taxonomies.php:854
+msgid "Description for the Description field on Edit Tags screen."
+msgstr "Опис за поље „Опис“ на екрану за уређивање ознака."
+
+#: inc/taxonomies.php:853
+msgid "Term Description Field Description"
+msgstr "Опис поља за опис израза"
+
+#: inc/taxonomies.php:852
+msgid "(e.g. \"The description is not prominent by default; however, some themes may show it.\""
+msgstr "(нпр. „Опис подразумевано није истакнут; међутим, неке теме га могу приказивати.“"
+
+#. translators: Used for autofill
+#: inc/taxonomies.php:841
+msgid "The \"slug\" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens."
+msgstr "„Подложка“ је облик назива прилагођен URL-у. Обично је написана малим словима и садржи само слова, бројеве и цртице."
+
+#: inc/taxonomies.php:838
+msgid "Description for the Slug field on Edit Tags screen. "
+msgstr "Опис за поље „Подложка“ на екрану за уређивање ознака. "
+
+#: inc/taxonomies.php:837
+msgid "Term Slug Field Description"
+msgstr "Опис поља за подложку израза"
+
+#: inc/taxonomies.php:836
+msgid "(e.g. \"The « slug » is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.\""
+msgstr "(нпр. „« Подложка » је облик назива прилагођен URL-у. Обично је написана малим словима и садржи само слова, бројеве и цртице.“"
+
+#. translators: Used for autofill
+#: inc/taxonomies.php:825
+msgid "Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop and Big Band."
+msgstr "Доделите надређеног члана да бисте направили хијерархију. Члан Џез, на пример, био би надређен Би-бапу и Биг бенду."
+
+#: inc/taxonomies.php:822
+msgid "Description for the Parent field on Edit Tags screen."
+msgstr "Опис за поље „Надређени“ на екрану за уређивање ознака."
+
+#: inc/taxonomies.php:821
+msgid "Term Parent Field Description"
+msgstr "Опис поља за надређени израз"
+
+#: inc/taxonomies.php:820
+msgid "(e.g. \"Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop and Big Band.\""
+msgstr "(нпр. „Доделите надређени израз да бисте направили хијерархију. Израз Џез, на пример, био би надређен изразима Бибап и Биг бенд.“"
+
+#. translators: Used for autofill
+#: inc/taxonomies.php:809
+msgid "The name is how it appears on your site."
+msgstr "Назив је облик у ком се појављује на вашем сајту."
+
+#: inc/taxonomies.php:806
+msgid "Description for the Name field on Edit Tags screen."
+msgstr "Опис за поље „Назив“ на екрану за уређивање ознака."
+
+#: inc/taxonomies.php:805
+msgid "Term Name Field Description"
+msgstr "Опис поља за назив израза"
+
+#: inc/taxonomies.php:804
+msgid "(e.g. \"The name is how it appears on your site.\""
+msgstr "(нпр. „Назив је облик у ком се појављује на вашем сајту.“"
+
+#: inc/support.php:222
+msgid "If you have set \"exclude from search\" to True for the pot type, this would be why. If you need the post types in the archives, but still want to exclude them from search, it is recommended to use the \"pre_get_posts\" hook to unset the post type from considered types."
+msgstr "Ако сте за врсту чланка поставили „exclude from search“ на True, то би био разлог. Ако су вам врсте чланака потребне у архивама, али и даље желите да их изузмете из претраге, препоручује се да помоћу куке „pre_get_posts“ уклоните врсту чланка из разматраних врста."
+
+#: inc/support.php:219
+msgid "Why are my post types not showing in taxonomy term archives?"
+msgstr "Зашто се моје врсте чланака не приказују у архивама израза таксономије?"
+
+#: inc/post-types.php:1302
+msgid "(default: false) Can this post_type be exported."
+msgstr "(подразумевано: false) Да ли се ова post_type може извозити."
+
+#: inc/post-types.php:1301
+msgid "Can Export"
+msgstr "Може се извозити"
+
+#: inc/post-types.php:1233
+msgid "(default: false) Whether or not to exclude posts with this post type from front end search results. This also excludes from taxonomy term archives."
+msgstr "(подразумевано: false) Да ли искључити чланке ове врсте из резултата претраге на предњем крају. Ово их искључује и из архива израза таксономије."
+
+#. translators: Used for autofill
+#: inc/post-types.php:937
+msgid "Add %s"
+msgstr "Додај: %s"
+
+#: inc/post-types.php:934
+msgid "(e.g. Add Movie)"
+msgstr "(нпр. Додај филм)"
+
+#: inc/post-types.php:930
+msgid "Placeholder text in the \"title\" input when creating a post. Not exportable."
+msgstr "Текст чувара места у пољу за унос „наслов“ при прављењу чланка. Не може се извозити."
+
+#: inc/post-types.php:929
+msgid "Add Title"
+msgstr "Додај наслов"
+
+#: inc/taxonomies.php:1273
+msgid "(default: inherited from \"show_ui\") Whether to list the taxonomy in the Tag Cloud Widget controls."
+msgstr "(подразумевано: наслеђено од „show_ui“) Да ли приказати таксономију у контролама виџета облака ознака."
+
+#: inc/taxonomies.php:1272
+msgid "Show in tag cloud."
+msgstr "Прикажи у облаку ознака."
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:237
+msgid "We recommend checking out %s, the latest iteration of \"CMB2\". Both are supported by WebDevStudios."
+msgstr "Препоручујемо да погледате %s, најновије издање „CMB2“. Оба подржава WebDevStudios."
+
+#: inc/post-types.php:1508
+msgid "Choose dashicon"
+msgstr "Изаберите dashicon"
+
+#: inc/post-types.php:327 inc/taxonomies.php:333
+msgid "Clear labels"
+msgstr "Очисти натписе"
+
+#: inc/taxonomies.php:709
+msgid "Used when indicating that there are no terms in the given taxonomy within the meta box and taxonomy list table."
+msgstr "Користи се када се показује да у датој таксономији нема израза у мета кутији и табели списка таксономије."
+
+#: inc/post-types.php:1274
+msgid "(default: false) Whether or not the post type can have parent-child relationships. At least one published content item is needed in order to select a parent."
+msgstr "(подразумевано: false) Да ли врста чланка може имати односе надређени-подређени. Потребна је бар једна објављена ставка садржаја да би се изабрао надређени."
+
+#: external/wpgraphql.php:340
+msgid "Custom Post Type UI has native support for WPGraphQL. Please <a href=\"%s\">de-activate</a> the \"WPGraphQL for Custom Post Type UI\" extension to proceed."
+msgstr "Custom Post Type UI има изворну подршку за WPGraphQL. <a href=\"%s\">Искључите</a> проширење „WPGraphQL for Custom Post Type UI“ да бисте наставили."
+
+#: external/wpgraphql.php:249
+msgid "Plural name for reference in the GraphQL API."
+msgstr "Назив у множини за упућивање у GraphQL API-ју."
+
+#: external/wpgraphql.php:248
+msgid "GraphQL Plural Name"
+msgstr "GraphQL назив у множини"
+
+#: external/wpgraphql.php:238
+msgid "Singular name for reference in the GraphQL API."
+msgstr "Назив у једнини за упућивање у GraphQL API-ју."
+
+#: external/wpgraphql.php:237
+msgid "GraphQL Single Name"
+msgstr "GraphQL назив у једнини"
+
+#: external/wpgraphql.php:226
+msgid "Whether or not to show data of this type in the WPGraphQL. Default: false"
+msgstr "Да ли приказати податке ове врсте у WPGraphQL-у. Подразумевано: false"
+
+#: external/wpgraphql.php:225
+msgid "Show in GraphQL"
+msgstr "Прикажи у GraphQL-у"
+
+#: external/wpgraphql.php:195
+msgid "Toggle panel: GraphQL Settings"
+msgstr "Укључи/искључи панел: GraphQL подешавања"
+
+#: external/wpgraphql.php:191
+msgid "WPGraphQL"
+msgstr "WPGraphQL"
+
+#: external/wpgraphql.php:83
+msgid "The graphql_single_name is empty for the \"%s\" Post Type or Taxonomy registered by Custom Post Type UI."
+msgstr "graphql_single_name је празан за врсту чланка или таксономију „%s“ коју је регистровао Custom Post Type UI."
+
+#: external/wpgraphql.php:69
+msgid "The graphql_plural_name is empty for the \"%s\" Post Type or Taxonomy registered by Custom Post Type UI."
+msgstr "graphql_plural_name је празан за врсту чланка или таксономију „%s“ коју је регистровао Custom Post Type UI."
+
+#. translators: Used for autofill
+#: inc/taxonomies.php:793
+msgid "Back to %s"
+msgstr "Назад на %s"
+
+#: inc/taxonomies.php:790
+msgid "The text displayed after a term has been updated for a link back to main index."
+msgstr "Текст који се приказује након ажурирања израза за везу назад на главни попис."
+
+#: inc/taxonomies.php:789
+msgid "Back to Items"
+msgstr "Назад на ставке"
+
+#: inc/taxonomies.php:788
+msgid "(e.g. &larr; Back to actors"
+msgstr "(нпр. &larr; Назад на глумце"
+
+#: inc/taxonomies.php:693
+msgid "The text displayed via clicking ‘Choose from the most used items’ in the taxonomy meta box when no items are available."
+msgstr "Текст који се приказује притиском на „Изаберите међу најкоришћенијим ставкама“ у мета кутији таксономије када нема доступних ставки."
+
+#: inc/taxonomies.php:1344
+msgid "Set a default term for the taxonomy. Able to set a name, slug, and description. Only a name is required if setting a default, others are optional. Set values in the following order, separated by comma. Example: name, slug, description"
+msgstr "Поставите подразумевани израз за таксономију. Могу се поставити назив, подложка и опис. Ако постављате подразумевани, обавезан је само назив, остало је необавезно. Поставите вредности следећим редоследом, раздвојене запетом. Пример: назив, подложка, опис"
+
+#: inc/taxonomies.php:1343
+msgid "Default Term"
+msgstr "Подразумевани израз"
+
+#: inc/utility.php:868
+msgid "Nonce failed verification"
+msgstr "Провера nonce-а није успела"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:211
+msgid "Please visit the %1$sPost Type Templates in 4.7%2$s post on the Make WordPress Core blog for details about setting templates for multiple post types."
+msgstr "Посетите чланак %1$sPost Type Templates in 4.7%2$s на блогу Make WordPress Core за детаље о постављању шаблона за више врста чланака."
+
+#: inc/support.php:206
+msgid "How do I add custom post type support for custom templates selection like pages have?"
+msgstr "Како да додам подршку за произвољну врсту чланка за избор произвољних шаблона, као што имају странице?"
+
+#: inc/post-types.php:1749
+msgid "Taxonomy options"
+msgstr "Могућности таксономије"
+
+#: inc/post-types.php:1106
+msgid "(CPTUI default: false) Whether to delete posts of this type when deleting a user."
+msgstr "(CPTUI подразумевано: false) Да ли избрисати чланке ове врсте при брисању корисника."
+
+#: inc/post-types.php:1105
+msgid "Delete with user"
+msgstr "Избриши са корисником"
+
+#. translators: Used for autofill
+#: inc/post-types.php:921
+msgid "%s updated."
+msgstr "%s је ажуриран."
+
+#: inc/post-types.php:918
+msgid "(e.g. Movie updated)"
+msgstr "(нпр. Филм је ажуриран)"
+
+#: inc/post-types.php:914
+msgid "Used in the editor notice after updating a post. Default \"Post updated.\" / \"Page updated.\""
+msgstr "Користи се у обавештењу уређивача након ажурирања чланка. Подразумевано „Чланак је ажуриран.“ / „Страница је ажурирана.“"
+
+#: inc/post-types.php:913
+msgid "Item Updated"
+msgstr "Ставка је ажурирана"
+
+#. translators: Used for autofill
+#: inc/post-types.php:905
+msgid "%s scheduled"
+msgstr "%s је заказан"
+
+#: inc/post-types.php:902
+msgid "(e.g. Movie scheduled)"
+msgstr "(нпр. Филм је заказан)"
+
+#: inc/post-types.php:898
+msgid "Used in the editor notice after scheduling a post to be published at a later date. Default \"Post scheduled.\" / \"Page scheduled.\""
+msgstr "Користи се у обавештењу уређивача након заказивања чланка за објављивање касније. Подразумевано „Чланак је заказан.“ / „Страница је заказана.“"
+
+#: inc/post-types.php:897
+msgid "Item Scheduled"
+msgstr "Ставка је заказана"
+
+#. translators: Used for autofill
+#: inc/post-types.php:872
+msgid "%s reverted to draft."
+msgstr "%s је враћен у нацрт."
+
+#: inc/post-types.php:869
+msgid "(e.g. Movie reverted to draft)"
+msgstr "(нпр. Филм је враћен у нацрт)"
+
+#: inc/post-types.php:865
+msgid "Used in the editor notice after reverting a post to draft. Default \"Post reverted to draft.\" / \"Page reverted to draft.\""
+msgstr "Користи се у обавештењу уређивача након враћања чланка у нацрт. Подразумевано „Чланак је враћен у нацрт.“ / „Страница је враћена у нацрт.“"
+
+#: inc/post-types.php:864
+msgid "Item Reverted To Draft"
+msgstr "Ставка је враћена у нацрт"
+
+#. translators: Used for autofill
+#: inc/post-types.php:856
+msgid "%s published privately."
+msgstr "%s је приватно објављен."
+
+#: inc/post-types.php:853
+msgid "(e.g. Movie published privately.)"
+msgstr "(нпр. Филм је приватно објављен.)"
+
+#: inc/post-types.php:849
+msgid "Used in the editor notice after publishing a private post. Default \"Post published privately.\" / \"Page published privately.\""
+msgstr "Користи се у обавештењу уређивача након објављивања приватног чланка. Подразумевано „Чланак је приватно објављен.“ / „Страница је приватно објављена.“"
+
+#: inc/post-types.php:848
+msgid "Item Published Privately"
+msgstr "Ставка је приватно објављена"
+
+#. translators: Used for autofill
+#: inc/post-types.php:840
+msgid "%s published"
+msgstr "%s је објављен"
+
+#: inc/post-types.php:837
+msgid "(e.g. Movie published)"
+msgstr "(нпр. Филм је објављен)"
+
+#: inc/post-types.php:833
+msgid "Used in the editor notice after publishing a post. Default \"Post published.\" / \"Page published.\""
+msgstr "Користи се у обавештењу уређивача након објављивања чланка. Подразумевано „Чланак је објављен.“ / „Страница је објављена.“"
+
+#: inc/post-types.php:832
+msgid "Item Published"
+msgstr "Ставка је објављена"
+
+#. translators: Used for autofill
+#: inc/post-types.php:808
+msgid "%s attributes"
+msgstr "Атрибути: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:743
+msgid "Filter %s list"
+msgstr "Филтрирај списак: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:727
+msgid "Upload to this %s"
+msgstr "Отпреми у: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:711
+msgid "Insert into %s"
+msgstr "Уметни у: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:695
+msgid "%s archives"
+msgstr "Архиве: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:679
+msgid "Use as featured image for this %s"
+msgstr "Користи као издвојену слику за: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:663
+msgid "Remove featured image for this %s"
+msgstr "Уклони издвојену слику за: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:647
+msgid "Set featured image for this %s"
+msgstr "Постави издвојену слику за: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:631
+msgid "Featured image for this %s"
+msgstr "Издвојена слика за: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:598
+msgid "No %s found in trash"
+msgstr "Није пронађено у отпаду: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:470
+msgid "Add new"
+msgstr "Додај нови"
+
+#. translators: Used for autofill
+#: inc/post-types.php:438
+msgid "My %s"
+msgstr "Моје: %s"
+
+#. translators: %s: Post type slug
+#. translators: %s: Taxonomy slug
+#: inc/listings.php:158 inc/listings.php:372
+msgid "Edit %1$s (%2$s)"
+msgstr "Уреди %1$s (%2$s)"
+
+#. translators: Used for autofill
+#: inc/post-types.php:792 inc/taxonomies.php:777
+msgid "%s list"
+msgstr "Списак: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:776 inc/taxonomies.php:761
+msgid "%s list navigation"
+msgstr "Кретање списка: %s"
+
+#. translators: Used for autofill
+#: inc/taxonomies.php:728
+msgid "No %s"
+msgstr "Нема: %s"
+
+#. translators: Used for autofill
+#: inc/post-types.php:582 inc/taxonomies.php:712
+msgid "No %s found"
+msgstr "Нису пронађени %s"
+
+#. translators: Used for autofill
+#: inc/taxonomies.php:552
+msgid "Update %s name"
+msgstr "Ажурирај назив: %s"
+
+#: inc/post-types.php:1556 inc/taxonomies.php:342
+msgid "Post type options"
+msgstr "Могућности врсте чланка"
+
+#: inc/post-types.php:323 inc/taxonomies.php:328
+msgid "Auto-populate labels"
+msgstr "Аутоматски попуни натписе"
+
+#: inc/post-types.php:321 inc/taxonomies.php:326
+msgid "Populate missing labels based on chosen labels"
+msgstr "Попуни недостајуће натписе на основу изабраних натписа"
+
+#: inc/post-types.php:320 inc/taxonomies.php:325
+msgid "Populate additional labels based on chosen labels"
+msgstr "Попуни додатне натписе на основу изабраних натписа"
+
+#: inc/taxonomies.php:64 inc/utility.php:1174
+msgid "Please select a post type to associate with."
+msgstr "Изаберите врсту чланка са којом ће се повезати."
+
+#: inc/taxonomies.php:1334
+msgid "Sets a callback function name for the meta box display. Hierarchical default: post_categories_meta_box, non-hierarchical default: post_tags_meta_box. To remove the metabox completely, use \"false\"."
+msgstr "Поставља назив функције повратног позива за приказ мета кутије. Хијерархијско подразумевано: post_categories_meta_box, нехијерархијско подразумевано: post_tags_meta_box. Да бисте потпуно уклонили мета кутију, користите „false“."
+
+#: inc/taxonomies.php:1218
+msgid "(Custom Post Type UI default: true) Whether to show this taxonomy data in the WP REST API."
+msgstr "(Custom Post Type UI подразумевано: true) Да ли приказати податке ове таксономије у WP REST API-ју."
+
+#: inc/wp-cli.php:121
+msgid "Successfully saved data to file."
+msgstr "Подаци су успешно сачувани у датотеку."
+
+#: inc/wp-cli.php:118
+msgid "Error saving data."
+msgstr "Грешка при чувању података."
+
+#: inc/wp-cli.php:101
+msgid "Please provide a path to export your data to."
+msgstr "Наведите путању на коју ће се извести подаци."
+
+#: inc/wp-cli.php:97
+msgid "Please provide whether you are exporting your post types or taxonomies"
+msgstr "Наведите да ли извозите врсте чланака или таксономије"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/wp-cli.php:74
+msgid "Imported %s successfully"
+msgstr "Успешно увезено: %s"
+
+#: inc/wp-cli.php:69
+msgid "An error on import occurred"
+msgstr "Дошло је до грешке при увозу"
+
+#: inc/wp-cli.php:55
+msgid "No JSON data found"
+msgstr "Нису пронађени JSON подаци"
+
+#: inc/wp-cli.php:47
+msgid "Please provide a path to the file holding your CPTUI JSON data."
+msgstr "Наведите путању до датотеке са CPTUI JSON подацима."
+
+#: inc/wp-cli.php:43
+msgid "Please provide whether you are importing post types or taxonomies"
+msgstr "Наведите да ли увозите врсте чланака или таксономије"
+
+#. translators: Placeholder will hold `<abbr>` tag for CPTUI.
+#: inc/utility.php:127
+msgid "Review %s"
+msgstr "Прегледај %s"
+
+#: inc/tools-sections/tools-get-code.php:45
+msgid "All Custom Post Type UI Taxonomies"
+msgstr "Све Custom Post Type UI таксономије"
+
+#: inc/tools-sections/tools-get-code.php:17
+msgid "All Custom Post Type UI Post Types"
+msgstr "Све Custom Post Type UI врсте чланака"
+
+#: inc/tools.php:455
+msgid "Export Taxonomies settings"
+msgstr "Извези подешавања таксономија"
+
+#: inc/tools.php:411
+msgid "Export Post Types settings"
+msgstr "Извези подешавања врста чланака"
+
+#: inc/post-types.php:1529 inc/taxonomies.php:1333
+msgid "Metabox callback"
+msgstr "Повратни позив мета кутије"
+
+#: inc/taxonomies.php:1238
+msgid "(default: WP_REST_Terms_Controller) Custom controller to use instead of WP_REST_Terms_Controller."
+msgstr "(подразумевано: WP_REST_Terms_Controller) Произвољни контролер који се користи уместо WP_REST_Terms_Controller."
+
+#: inc/taxonomies.php:946
+msgid "(default: value of \"public\" setting) Whether or not the taxonomy should be publicly queryable."
+msgstr "(подразумевано: вредност подешавања „public“) Да ли таксономија треба да буде јавно доступна за упите."
+
+#: inc/taxonomies.php:945
+msgid "Public Queryable"
+msgstr "Јавно доступно за упите"
+
+#: inc/taxonomies.php:921
+msgid "(default: true) Whether a taxonomy is intended for use publicly either via the admin interface or by front-end users."
+msgstr "(подразумевано: true) Да ли је таксономија намењена јавној употреби, било преко администраторског сучеља или од стране корисника на предњем крају."
+
+#: inc/taxonomies.php:339
+msgid "Add support for available registered post types. At least one is required. Only public post types listed by default."
+msgstr "Додајте подршку за доступне регистроване врсте чланака. Потребна је бар једна. Подразумевано су наведене само јавне врсте чланака."
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:287
+msgid "We recommend %s for some extended customization and addition of extra fields regarding roles and capabilities."
+msgstr "Препоручујемо %s за шире прилагођавање и додавање додатних поља у вези са улогама и могућностима."
+
+#: inc/support.php:281
+msgid "Any help with customizing capabilities?"
+msgstr "Имате ли помоћ за прилагођавање могућности?"
+
+#: inc/post-types.php:1365
+msgid "(default: true) Should the permalink structure be prepended with the front base. (example: if your permalink structure is /blog/, then your links will be: false->/news/, true->/blog/news/)."
+msgstr "(подразумевано: true) Да ли структури трајних веза треба додати предњу основу. (пример: ако је ваша структура трајних веза /blog/, ваше везе ће бити: false->/news/, true->/blog/news/)."
+
+#: inc/post-types.php:1244
+msgid "The post type to use for checking read, edit, and delete capabilities. A comma-separated second value can be used for plural version."
+msgstr "Врста чланка која се користи за проверу могућности читања, уређивања и брисања. Друга вредност раздвојена запетом може се користити за облик у множини."
+
+#: inc/post-types.php:1152
+msgid "(default: WP_REST_Posts_Controller) Custom controller to use instead of WP_REST_Posts_Controller."
+msgstr "(подразумевано: WP_REST_Posts_Controller) Произвољни контролер који се користи уместо WP_REST_Posts_Controller."
+
+#: inc/post-types.php:1151 inc/taxonomies.php:1237
+msgid "REST API controller class"
+msgstr "Класа REST API контролера"
+
+#: inc/post-types.php:1132
+msgid "(Custom Post Type UI default: true) Whether or not to show this post type data in the WP REST API."
+msgstr "(Custom Post Type UI подразумевано: true) Да ли приказати податке ове врсте чланка у WP REST API-ју."
+
+#: inc/post-types.php:817
+msgid "Used in New in Admin menu bar. Default \"singular name\" label."
+msgstr "Користи се у ставци „Ново“ у администраторској траци. Подразумевано натпис „назив у једнини“."
+
+#: inc/post-types.php:816
+msgid "\"New\" menu in admin bar"
+msgstr "Изборник „Ново“ у администраторској траци"
+
+#: inc/post-types.php:252 inc/taxonomies.php:257
+msgid "Slug already exists"
+msgstr "Подложка већ постоји"
+
+#. translators: %s: Total count of CPTUI registered taxonomies
+#: inc/listings.php:297
+msgid "Custom Post Type UI registered taxonomies count total: %d"
+msgstr "Укупан број таксономија које је регистровао Custom Post Type UI: %d"
+
+#. translators: %s: Total count of registered CPTUI post types
+#: inc/listings.php:76
+msgid "Custom Post Type UI registered post types count total: %d"
+msgstr "Укупан број врста чланака које је регистровао Custom Post Type UI: %d"
+
+#. translators: Placeholder will hold site home_url.
+#: classes/class.cptui_debug_info.php:236
+msgid "Custom Post Type UI debug information for %s"
+msgstr "Подаци за отклањање грешака Custom Post Type UI за %s"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:70
+msgid "Please note that %1$s this plugin will not handle display %2$s of registered post types or taxonomies in your current theme. It simply registers them for you. To display your data, check out %3$s for shortcodes, blocks, layouts, and more. %4$s to see what is available with CPT UI Pro. If all else fails, visit us on the %5$s"
+msgstr "Имајте на уму да %1$s овај додатак неће обављати приказ %2$s регистрованих врста чланака или таксономија у вашој тренутној теми. Он их само региструје уместо вас. Да бисте приказали своје податке, погледајте %3$s за кратке кодове, блокове, распореде и још много тога. %4$s да видите шта је доступно уз CPT UI Pro. Ако ништа друго не успе, посетите нас на %5$s"
+
+#: inc/tools-sections/tools-get-code.php:19
+msgid "All of the selectable code snippets below are useful if you wish to migrate away from Custom Post Type UI and retain your existing registered post types or taxonomies."
+msgstr "Сви исечци кода испод који се могу изабрати корисни су ако желите да пређете са Custom Post Type UI и задржите постојеће регистроване врсте чланака или таксономије."
+
+#: inc/utility.php:856
+msgid "Invalid data provided"
+msgstr "Наведени су неисправни подаци"
+
+#: inc/utility.php:845
+msgid "Successfully imported data."
+msgstr "Подаци су успешно увезени."
+
+#: inc/post-types.php:1536
+msgid "Add support for various available post editor features on the right. A checked value means the post type feature is supported."
+msgstr "Додајте подршку за разне доступне функције уређивача чланака десно. Означена вредност значи да је функција врсте чланка подржана."
+
+#: inc/post-types.php:805
+msgid "(e.g. Movies Attributes)"
+msgstr "(нпр. Атрибути филмова)"
+
+#: inc/post-types.php:801
+msgid "Used for the title of the post attributes meta box."
+msgstr "Користи се за наслов мета кутије атрибута чланка."
+
+#: inc/post-types.php:800
+msgid "Attributes"
+msgstr "Особине"
+
+#: inc/post-types.php:547
+msgid "(e.g. View Movies)"
+msgstr "(нпр. Погледај филмове)"
+
+#: inc/post-types.php:542
+msgid "View Items"
+msgstr "Погледај ставке"
+
+#: inc/listings.php:200
+msgid "No associated taxonomies"
+msgstr "Нема повезаних таксономија"
+
+#: custom-post-type-ui.php:139
+msgid "Tools"
+msgstr "Алатке"
+
+#: custom-post-type-ui.php:139
+msgid "Custom Post Type UI tools"
+msgstr "Custom Post Type UI алати"
+
+#: inc/utility.php:742
+msgid "Object"
+msgstr "Објекат"
+
+#: inc/utility.php:380
+msgid "Remove these ads?"
+msgstr "Уклонити ове огласе?"
+
+#: inc/taxonomies.php:1298
+msgid "(default: false) Whether to show the taxonomy in the quick/bulk edit panel."
+msgstr "(подразумевано: false) Да ли приказати таксономију у панелу за брзо/групно уређивање."
+
+#: inc/taxonomies.php:1168
+msgid "(default: false) Should the permastruct allow hierarchical urls."
+msgstr "(подразумевано: false) Да ли permastruct треба да дозволи хијерархијске url-ове."
+
+#: inc/taxonomies.php:1107
+msgid "(default: true) Whether or not WordPress should use rewrites for this taxonomy."
+msgstr "(подразумевано: true) Да ли Вордпрес треба да користи преписивања за ову таксономију."
+
+#: inc/taxonomies.php:1071
+msgid "(default: true) Sets the query_var key for this taxonomy."
+msgstr "(подразумевано: true) Поставља кључ query_var за ову таксономију."
+
+#: inc/taxonomies.php:1046
+msgid "(default: value of public) Whether to make the taxonomy available for selection in navigation menus."
+msgstr "(подразумевано: вредност public) Да ли учинити таксономију доступном за избор у изборницима за кретање."
+
+#: inc/taxonomies.php:1045
+msgid "Show in nav menus"
+msgstr "Прикажи у изборницима за кретање"
+
+#: inc/taxonomies.php:1021
+msgid "(default: value of show_ui) Whether to show the taxonomy in the admin menu."
+msgstr "(подразумевано: вредност show_ui) Да ли приказати таксономију у администраторском изборнику."
+
+#: inc/taxonomies.php:1020
+msgid "Show in menu"
+msgstr "Прикажи у изборнику"
+
+#: inc/taxonomies.php:996
+msgid "(default: true) Whether to generate a default UI for managing this custom taxonomy."
+msgstr "(подразумевано: true) Да ли направити подразумевано сучеље за управљање овом произвољном таксономијом."
+
+#: inc/taxonomies.php:123
+msgid "Import/Export Taxonomies"
+msgstr "Увоз/извоз таксономија"
+
+#: inc/post-types.php:1745
+msgid "Add support for available registered taxonomies."
+msgstr "Додајте подршку за доступне регистроване таксономије."
+
+#: inc/post-types.php:1729
+msgid "Use this input to register custom \"supports\" values, separated by commas. Learn about this at %s"
+msgstr "Користите ово поље да региструјете произвољне вредности „supports“, раздвојене запетама. Сазнајте више о томе на %s"
+
+#: inc/post-types.php:1473
+msgid "The top-level admin menu page file name for which the post type should be in the sub menu of."
+msgstr "Назив датотеке странице администраторског изборника највишег нивоа у чијем подизборнику треба да буде врста чланка."
+
+#: inc/post-types.php:1460
+msgid "(default: true) Whether or not to show the post type in the admin menu and where to show that menu."
+msgstr "(подразумевано: true) Да ли приказати врсту чланка у администраторском изборнику и где приказати тај изборник."
+
+#: inc/post-types.php:1418
+msgid "Available options"
+msgstr "Доступне могућности"
+
+#: inc/post-types.php:1412
+msgid "See %s in the \"menu_position\" section. Range of 5-100"
+msgstr "Погледајте %s у одељку „menu_position“. Опсег 5-100"
+
+#: inc/post-types.php:1391
+msgid "(default: true) Sets the query_var key for this post type."
+msgstr "(подразумевано: true) Поставља кључ query_var за ову врсту чланка."
+
+#: inc/taxonomies.php:1143
+msgid "(default: true) Should the permastruct be prepended with the front base."
+msgstr "(подразумевано: true) Да ли permastruct-у треба додати предњу основу."
+
+#: inc/post-types.php:1328
+msgid "(default: true) Whether or not WordPress should use rewrites for this post type."
+msgstr "(подразумевано: true) Да ли Вордпрес треба да користи преписивања за ову врсту чланка."
+
+#: inc/post-types.php:1192
+msgid "(default: false) Whether or not the post type will have a post type archive URL."
+msgstr "(подразумевано: false) Да ли ће врста чланка имати URL архиве врсте чланка."
+
+#: inc/post-types.php:1080
+msgid "(Custom Post Type UI default: true) Whether or not this post type is available for selection in navigation menus."
+msgstr "(Custom Post Type UI подразумевано: true) Да ли је ова врста чланка доступна за избор у изборницима за кретање."
+
+#: inc/post-types.php:1054
+msgid "(default: true) Whether or not to generate a default UI for managing this post type."
+msgstr "(подразумевано: true) Да ли направити подразумевано сучеље за управљање овом врстом чланка."
+
+#: inc/post-types.php:1028
+msgid "(default: true) Whether or not queries can be performed on the front end as part of parse_request()"
+msgstr "(подразумевано: true) Да ли се упити могу извршавати на предњем крају као део parse_request()"
+
+#: inc/post-types.php:1027
+msgid "Publicly Queryable"
+msgstr "Јавно доступно за упите"
+
+#: inc/post-types.php:1002
+msgid "(Custom Post Type UI default: true) Whether or not posts of this type should be shown in the admin UI and is publicly queryable."
+msgstr "(Custom Post Type UI подразумевано: true) Да ли чланке ове врсте треба приказивати у администраторском сучељу и да ли су јавно доступни за упите."
+
+#: inc/taxonomies.php:891
+msgid "Toggle panel: Settings"
+msgstr "Укључи/искључи панел: подешавања"
+
+#: inc/post-types.php:608
+msgid "Used for hierarchical types that need a colon."
+msgstr "Користи се за хијерархијске врсте којима је потребна двотачка."
+
+#: inc/taxonomies.php:454
+msgid "Toggle panel: Additional labels"
+msgstr "Укључи/искључи панел: додатни натписи"
+
+#: inc/post-types.php:250 inc/taxonomies.php:255
+msgid "Slug has changed"
+msgstr "Подложка је промењена"
+
+#: inc/post-types.php:236 inc/post-types.php:402 inc/post-types.php:972
+#: inc/taxonomies.php:242
+msgid "Toggle panel: Basic settings"
+msgstr "Укључи/искључи панел: основна подешавања"
+
+#: inc/post-types.php:119
+msgid "Import/Export Post Types"
+msgstr "Увоз/извоз врста чланака"
+
+#: inc/listings.php:243
+msgid "*Replace \"post_slug\" with the slug of the actual post."
+msgstr "*Замените „post_slug“ подложком стварног чланка."
+
+#: inc/listings.php:163 inc/listings.php:377 inc/tools.php:68 inc/tools.php:91
+msgid "Get code"
+msgstr "Добави кôд"
+
+#. translators: Placeholder will hold the name of the author of the plugin.
+#: inc/about.php:207
+msgid "More from %s"
+msgstr "Још од %s"
+
+#: inc/about.php:76
+msgid "Thank you for choosing Custom Post Type UI! We hope that your experience with our plugin makes creating post types and taxonomies and organizing your content quick and easy."
+msgstr "Хвала што сте изабрали Custom Post Type UI! Надамо се да ће вам искуство са нашим додатком учинити прављење врста чланака и таксономија и организовање садржаја брзим и лаким."
+
+#: inc/utility.php:433
+msgid "Subscribe"
+msgstr "Претплати се"
+
+#: inc/utility.php:416
+msgid "Email address"
+msgstr "Адреса е-поште"
+
+#: inc/utility.php:403
+msgid "Get email updates from pluginize.com about Custom Post Type UI"
+msgstr "Добијајте новости е-поштом са pluginize.com о Custom Post Type UI"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:181
+msgid "We encourage checking out %1$s for easily displaying post type content with a visual Shortcode Builder, a Gutenberg display block, and theme template overrides. If you prefer to handle on your own, you will need to utilize the %2$s class to handle display in custom locations. If you have set the post type to have archives, the archive url should be something like \"http://www.mysite.com/post-type-slug\""
+msgstr "Препоручујемо да погледате %1$s за лак приказ садржаја врсте чланка помоћу визуелног градитеља кратких кодова, Gutenberg блока за приказ и заобилажења шаблона теме. Ако више волите да то обавите сами, мораћете да користите класу %2$s за приказ на произвољним местима. Ако сте врсти чланка поставили архиве, url архиве треба да буде нешто као \"http://www.mysite.com/post-type-slug\""
+
+#: inc/support.php:127
+msgid "Does Custom Post Type UI Pro require multisite?"
+msgstr "Да ли Custom Post Type UI Pro захтева мрежу више сајтова?"
+
+#: inc/support.php:122
+msgid "Do I still need Custom Post Type UI if I purchase and install Custom Post Type UI Pro?"
+msgstr "Да ли ми је и даље потребан Custom Post Type UI ако купим и поставим Custom Post Type UI Pro?"
+
+#: inc/support.php:118
+msgid "No, there is no data being sent out from your site with these. The only way anything is tracked is via UTM parameters for WebDevStudios's analytics so we can get an idea of where traffic is coming from. Those are only tracked if you actually click on an ad spot."
+msgstr "Не, овим се никакви подаци не шаљу са вашег сајта. Једино што се прати јесу UTM параметри за аналитику WebDevStudios-а, како бисмо знали одакле долази саобраћај. Они се прате само ако заиста притиснете рекламни простор."
+
+#: inc/support.php:117
+msgid "Are these ad spots tracking my personal information in any way?"
+msgstr "Да ли ови рекламни простори на било који начин прате моје личне податке?"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:106
+msgid "You can have them automatically removed from display via a purchased copy of %s."
+msgstr "Можете их аутоматски уклонити из приказа помоћу купљеног примерка %s."
+
+#: inc/support.php:101
+msgid "How can I remove the ads that suddenly started showing up?"
+msgstr "Како да уклоним огласе који су се изненада појавили?"
+
+#: inc/support.php:97
+msgid "No. These spots are intended for and will only be used for other available WebDevStudios products and services."
+msgstr "Не. Ови простори намењени су и користиће се само за друге доступне производе и услуге WebDevStudios-а."
+
+#: inc/support.php:96
+msgid "Will these ad spots ever show third-party data?"
+msgstr "Да ли ће ови рекламни простори икада приказивати податке трећих страна?"
+
+#: inc/support.php:92
+msgid "Pluginize offers both free and paid WordPress plugins."
+msgstr "Pluginize нуди и бесплатне и плаћене Вордпрес додатке."
+
+#: inc/support.php:91
+msgid "What does Pluginize offer?"
+msgstr "Шта нуди Pluginize?"
+
+#: inc/support.php:87
+msgid "Pluginize is a marketplace of plugins by WebDevStudios."
+msgstr "Pluginize је продавница додатака од WebDevStudios-а."
+
+#: inc/support.php:86
+msgid "What is Pluginize?"
+msgstr "Шта је Pluginize?"
+
+#: inc/support.php:83
+msgid "Pluginize"
+msgstr "Pluginize"
+
+#: inc/utility.php:120
+msgid "Support forums"
+msgstr "Форуми подршке"
+
+#: inc/utility.php:911
+msgid "Please provide a post type to attach to."
+msgstr "Наведите врсту чланка за повезивање."
+
+#: inc/taxonomies.php:1297
+msgid "Show in quick/bulk edit panel."
+msgstr "Прикажи у панелу за брзо/групно уређивање."
+
+#: inc/taxonomies.php:774
+msgid "Screen reader text for the items list heading on the term listing screen."
+msgstr "Текст за читаче екрана за наслов списка ставки на екрану пописа израза."
+
+#: inc/taxonomies.php:772
+msgid "(e.g. Actors list)"
+msgstr "(нпр. Списак глумаца)"
+
+#: inc/taxonomies.php:758
+msgid "Screen reader text for the pagination heading on the term listing screen."
+msgstr "Текст за читаче екрана за наслов страничења на екрану пописа израза."
+
+#: inc/taxonomies.php:756
+msgid "(e.g. Actors list navigation)"
+msgstr "(нпр. Кретање кроз списак глумаца)"
+
+#: inc/taxonomies.php:725
+msgid "Used when indicating that there are no terms in the given taxonomy associated with an object."
+msgstr "Користи се када се показује да у датој таксономији нема израза повезаних са објектом."
+
+#: inc/taxonomies.php:723
+msgid "(e.g. No actors)"
+msgstr "(нпр. Нема глумаца)"
+
+#: inc/taxonomies.php:565
+msgid "Used at the top of the term editor screen and button text for a new taxonomy term."
+msgstr "Користи се на врху екрана уређивача израза и као текст дугмета за нови израз таксономије."
+
+#: inc/taxonomies.php:533
+msgid "Used in the admin bar when viewing editor screen for an existing taxonomy term."
+msgstr "Користи се у администраторској траци при прегледу екрана уређивача за постојећи израз таксономије."
+
+#: inc/taxonomies.php:517
+msgid "Used at the top of the term editor screen for an existing taxonomy term."
+msgstr "Користи се на врху екрана уређивача израза за постојећи израз таксономије."
+
+#: inc/taxonomies.php:501
+msgid "Used as tab text when showing all terms for hierarchical taxonomy while editing post."
+msgstr "Користи се као текст језичка при приказу свих израза хијерархијске таксономије током уређивања чланка."
+
+#: inc/taxonomies.php:486
+msgid "Custom admin menu name for your taxonomy."
+msgstr "Произвољни назив администраторског изборника за вашу таксономију."
+
+#: inc/taxonomies.php:475
+msgid "Describe what your taxonomy is used for."
+msgstr "Опишите за шта се користи ваша таксономија."
+
+#: inc/taxonomies.php:306
+msgid "Used for the taxonomy admin menu item."
+msgstr "Користи се за ставку администраторског изборника таксономије."
+
+#: inc/taxonomies.php:290
+msgid "Migrate terms to newly renamed taxonomy?"
+msgstr "Преселити изразе у новопреименовану таксономију?"
+
+#: inc/taxonomies.php:280
+msgid "DO NOT EDIT the taxonomy slug unless also planning to migrate terms. Changing the slug registers a new taxonomy entry."
+msgstr "НЕ УРЕЂУЈТЕ подложку таксономије осим ако не планирате и пресељење израза. Промена подложке региструје нови унос таксономије."
+
+#: inc/taxonomies.php:267
+msgid "The taxonomy name/slug. Used for various queries for taxonomy content."
+msgstr "Назив/подложка таксономије. Користи се за разне упите за садржај таксономије."
+
+#: inc/taxonomies.php:116
+msgid "View Taxonomies"
+msgstr "Погледај таксономије"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/utility.php:937
+msgid "Please choose a different post type name. %s matches an existing page slug, which can cause conflicts."
+msgstr "Изаберите други назив врсте чланка. %s се поклапа са постојећом подложком странице, што може изазвати сукобе."
+
+#: inc/post-types.php:1779 inc/taxonomies.php:379
+msgid "(WP Core)"
+msgstr "(WP основа)"
+
+#: inc/post-types.php:1517
+msgid "Choose image icon"
+msgstr "Изаберите иконицу слике"
+
+#: inc/post-types.php:1494
+msgid "Image URL or %sDashicon class name%s to use for icon. Custom image should be 20px by 20px."
+msgstr "URL слике или %sназив Dashicon класе%s који се користи за иконицу. Произвољна слика треба да буде 20px са 20px."
+
+#: inc/taxonomies.php:724
+msgid "No terms"
+msgstr "Нема израза"
+
+#: inc/utility.php:39
+msgid "About"
+msgstr "О нама"
+
+#: inc/post-types.php:789
+msgid "(e.g. Movies list)"
+msgstr "(нпр. Списак филмова)"
+
+#: inc/post-types.php:785
+msgid "Screen reader text for the items list heading on the post type listing screen."
+msgstr "Текст за читаче екрана за наслов списка ставки на екрану пописа врсте чланака."
+
+#: inc/post-types.php:784 inc/taxonomies.php:773
+msgid "Items List"
+msgstr "Списак ставки"
+
+#: inc/post-types.php:773
+msgid "(e.g. Movies list navigation)"
+msgstr "(нпр. Кретање кроз списак филмова)"
+
+#: inc/post-types.php:769
+msgid "Screen reader text for the pagination heading on the post type listing screen."
+msgstr "Текст за читаче екрана за наслов страничења на екрану пописа врсте чланака."
+
+#: inc/post-types.php:768 inc/taxonomies.php:757
+msgid "Items List Navigation"
+msgstr "Кретање кроз списак ставки"
+
+#: inc/post-types.php:740
+msgid "(e.g. Filter movies list)"
+msgstr "(нпр. Филтрирај списак филмова)"
+
+#: inc/post-types.php:736
+msgid "Screen reader text for the filter links heading on the post type listing screen."
+msgstr "Текст за читаче екрана за наслов веза филтера на екрану пописа врсте чланака."
+
+#: inc/post-types.php:735
+msgid "Filter Items List"
+msgstr "Филтрирај списак ставки"
+
+#: inc/post-types.php:724
+msgid "(e.g. Uploaded to this movie)"
+msgstr "(нпр. Отпремљено у овај филм)"
+
+#: inc/post-types.php:720
+msgid "Used as the \"Uploaded to this post\" or \"Uploaded to this page\" phrase for the post type."
+msgstr "Користи се као израз „Отпремљено у овај чланак“ или „Отпремљено у ову страницу“ за врсту чланка."
+
+#: inc/post-types.php:719
+msgid "Uploaded to this Item"
+msgstr "Отпремљено у ову ставку"
+
+#: inc/post-types.php:708
+msgid "(e.g. Insert into movie)"
+msgstr "(нпр. Убаци у филм)"
+
+#: inc/post-types.php:704
+msgid "Used as the \"Insert into post\" or \"Insert into page\" phrase for the post type."
+msgstr "Користи се као израз „Убаци у чланак“ или „Убаци у страницу“ за врсту чланка."
+
+#: inc/post-types.php:703
+msgid "Insert into item"
+msgstr "Уметни у ставку"
+
+#: inc/post-types.php:692
+msgid "(e.g. Movie archives)"
+msgstr "(нпр. Архиве филмова)"
+
+#: inc/post-types.php:688
+msgid "Post type archive label used in nav menus."
+msgstr "Натпис архиве врсте чланка који се користи у изборницима за кретање."
+
+#: inc/post-types.php:676
+msgid "(e.g. Use as featured image for this movie)"
+msgstr "(нпр. Користи као издвојену слику за овај филм)"
+
+#: inc/post-types.php:672
+msgid "Used as the \"Use as featured image\" phrase for the post type."
+msgstr "Користи се као израз „Користи као издвојену слику“ за врсту чланка."
+
+#: inc/post-types.php:660
+msgid "(e.g. Remove featured image for this movie)"
+msgstr "(нпр. Уклони издвојену слику за овај филм)"
+
+#: inc/post-types.php:656
+msgid "Used as the \"Remove featured image\" phrase for the post type."
+msgstr "Користи се као израз „Уклони издвојену слику“ за врсту чланка."
+
+#: inc/post-types.php:655
+msgid "Remove Featured Image"
+msgstr "Уклони издвојену слику"
+
+#: inc/post-types.php:644
+msgid "(e.g. Set featured image for this movie)"
+msgstr "(нпр. Постави издвојену слику за овај филм)"
+
+#: inc/post-types.php:640
+msgid "Used as the \"Set featured image\" phrase for the post type."
+msgstr "Користи се као израз „Постави издвојену слику“ за врсту чланка."
+
+#: inc/post-types.php:671
+msgid "Use Featured Image"
+msgstr "Користи издвојену слику"
+
+#: inc/post-types.php:628
+msgid "(e.g. Featured image for this movie)"
+msgstr "(нпр. Издвојена слика за овај филм)"
+
+#: inc/post-types.php:624
+msgid "Used as the \"Featured Image\" phrase for the post type."
+msgstr "Користи се као израз „Издвојена слика“ за врсту чланка."
+
+#: inc/post-types.php:591
+msgid "Used when there are no posts to display on the post type list trash screen."
+msgstr "Користи се када нема чланака за приказ на екрану отпада списка врсте чланака."
+
+#: inc/post-types.php:575
+msgid "Used when there are no posts to display on the post type list screen."
+msgstr "Користи се када нема чланака за приказ на екрану списка врсте чланака."
+
+#: inc/post-types.php:559
+msgid "Used as the text for the search button on post type list screen."
+msgstr "Користи се као текст дугмета за претрагу на екрану списка врсте чланака."
+
+#: inc/post-types.php:527 inc/post-types.php:543
+msgid "Used in the admin bar when viewing editor screen for a published post in the post type."
+msgstr "Користи се у администраторској траци при прегледу екрана уређивача за објављени чланак ове врсте."
+
+#: inc/post-types.php:495
+msgid "Used at the top of the post editor screen for an existing post type post."
+msgstr "Користи се на врху екрана уређивача чланака за постојећи чланак ове врсте."
+
+#: inc/post-types.php:479
+msgid "Used at the top of the post editor screen for a new post type post."
+msgstr "Користи се на врху екрана уређивача чланака за нови чланак ове врсте."
+
+#: inc/post-types.php:447 inc/post-types.php:463
+msgid "Used in the post type admin submenu."
+msgstr "Користи се у администраторском подизборнику врсте чланка."
+
+#: inc/post-types.php:424
+msgid "Perhaps describe what your custom post type is used for?"
+msgstr "Можда описати за шта се користи ваша произвољна врста чланка?"
+
+#: inc/post-types.php:423
+msgid "Post Type Description"
+msgstr "Опис врсте чланка"
+
+#: inc/post-types.php:398 inc/taxonomies.php:450
+msgid "Additional labels"
+msgstr "Додатни натписи"
+
+#: inc/post-types.php:314 inc/taxonomies.php:318
+msgid "Used when a singular label is needed."
+msgstr "Користи се када је потребан натпис у једнини."
+
+#: inc/post-types.php:302
+msgid "Used for the post type admin menu item."
+msgstr "Користи се за ставку администраторског изборника врсте чланка."
+
+#: inc/post-types.php:274
+msgid "DO NOT EDIT the post type slug unless also planning to migrate posts. Changing the slug registers a new post type entry."
+msgstr "НЕ УРЕЂУЈТЕ подложку врсте чланка осим ако не планирате и пресељење чланака. Промена подложке региструје нови унос врсте чланка."
+
+#: inc/post-types.php:639
+msgid "Set Featured Image"
+msgstr "Постави издвојену слику"
+
+#: inc/post-types.php:262
+msgid "The post type name/slug. Used for various queries for post type content."
+msgstr "Назив/подложка врсте чланка. Користи се за разне упите за садржај врсте чланка."
+
+#: inc/post-types.php:232 inc/taxonomies.php:238
+msgid "Basic settings"
+msgstr "Основна подешавања"
+
+#: inc/post-types.php:112
+msgid "View Post Types"
+msgstr "Погледај врсте чланака"
+
+#: inc/post-types.php:59 inc/taxonomies.php:63 inc/utility.php:1184
+msgid "Are you sure you want to delete this? Deleting will NOT remove created content."
+msgstr "Да ли сигурно желите да ово избришете? Брисање НЕЋЕ уклонити направљени садржај."
+
+#: inc/taxonomies.php:1081
+msgid "(default: taxonomy slug). Query var needs to be true to use."
+msgstr "(подразумевано: подложка таксономије). Query var мора бити true да би се користило."
+
+#: inc/support.php:138
+msgid "Visit the Import/Export page and copy the export code into the import side on the left. Replace the space with an underscore and then click \"Import\". You should be able to delete the individual post types afterwards."
+msgstr "Посетите страницу увоза/извоза и умножите кôд за извоз у део за увоз са леве стране. Замените размак подвлаком, а затим притисните „Увези“. Након тога би требало да можете да избришете појединачне врсте чланака."
+
+#: inc/support.php:137
+msgid "I have post types with spaces in their slug and can not successfully delete them. How can I fix that?"
+msgstr "Имам врсте чланака са размацима у подложци и не могу успешно да их избришем. Како то да исправим?"
+
+#: inc/post-types.php:1403
+msgid "Custom query var slug to use instead of the default."
+msgstr "Произвољна подложка query var која се користи уместо подразумеване."
+
+#: inc/post-types.php:1402
+msgid "(default: post type slug) Query var needs to be true to use."
+msgstr "(подразумевано: подложка врсте чланка) Query var мора бити true да би се користило."
+
+#: inc/post-types.php:1401
+msgid "Custom Query Var Slug"
+msgstr "Произвољна подложка query var"
+
+#: inc/post-types.php:1142 inc/taxonomies.php:1228
+msgid "Slug to use in REST API URLs."
+msgstr "Подложка која се користи у URL-овима REST API-ја."
+
+#: inc/post-types.php:1141 inc/taxonomies.php:1227
+msgid "REST API base slug"
+msgstr "Основна подложка REST API-ја"
+
+#: inc/post-types.php:1131 inc/taxonomies.php:1217
+msgid "Show in REST API"
+msgstr "Прикажи у REST API-ју"
+
+#. translators: %s: Link to manage taxonomies section
+#: inc/listings.php:517
+msgid "No taxonomies registered for display. Visit %s to get started."
+msgstr "Нису регистроване таксономије за приказ. Посетите %s да бисте почели."
+
+#: inc/listings.php:432
+msgid "*Replace \"term_slug\" with the slug of the actual taxonomy term."
+msgstr "*Замените „term_slug“ подложком стварног израза таксономије."
+
+#: inc/post-types.php:1079
+msgid "Show in Nav Menus"
+msgstr "Прикажи у изборницима за кретање"
+
+#: inc/post-types.php:687
+msgid "Archives"
+msgstr "Архиве"
+
+#. translators: 1st %s: Link to manage post types section 2nd %s Link text
+#: inc/listings.php:495
+msgid "No post types registered for display. Visit %s to get started."
+msgstr "Нису регистроване врсте чланака за приказ. Посетите %s да бисте почели."
+
+#: inc/listings.php:250 inc/listings.php:438
+msgid "Template hierarchy Theme Handbook"
+msgstr "Приручник за теме о хијерархији шаблона"
+
+#: inc/listings.php:234
+msgid "Single Posts file name examples."
+msgstr "Примери назива датотека за појединачне чланке."
+
+#: inc/listings.php:228 inc/listings.php:423
+msgid "Archives file name examples."
+msgstr "Примери назива датотека за архиве."
+
+#: inc/listings.php:90 inc/listings.php:310
+msgid "Template Hierarchy"
+msgstr "Хијерархија шаблона"
+
+#: inc/tools-sections/tools-debug.php:39
+msgid "Send debug info"
+msgstr "Пошаљи податке за отклањање грешака"
+
+#: inc/tools-sections/tools-debug.php:30
+msgid "Please provide an email address to send debug information to: "
+msgstr "Наведите е-адресу на коју ће бити послати подаци за отклањање грешака: "
+
+#. translators: placeholder will hold taxonomy name.
+#: inc/tools-sections/tools-get-code.php:61
+msgid "%s Taxonomy"
+msgstr "Таксономија %s"
+
+#. translators: placeholder will hold post type name.
+#: inc/tools-sections/tools-get-code.php:35
+msgid "%s Post Type"
+msgstr "Врста чланка %s"
+
+#: inc/tools.php:383
+msgid "This will not export the associated posts or taxonomy terms, just the settings."
+msgstr "Ово неће извести повезане чланке или изразе таксономије, само подешавања."
+
+#: inc/tools.php:72 inc/tools.php:98
+msgid "Debug info"
+msgstr "Подаци за отклањање грешака"
+
+#: classes/class.cptui_debug_info.php:24
+msgid "If you have sought support for Custom Post Type UI on the forums, you may be requested to send the information below to the plugin developer. Simply insert the email they provided in the input field at the bottom and click the \"Send debug info\" button. Only the data below will be sent to them."
+msgstr "Ако сте тражили подршку за Custom Post Type UI на форумима, можда ће од вас бити затражено да градитељу додатка пошаљете податке испод. Само унесите е-адресу коју су навели у поље за унос на дну и притисните дугме „Пошаљи податке за отклањање грешака“. Биће им послати само подаци испод."
+
+#: inc/post-types.php:1616
+msgid "Excerpt"
+msgstr "Одломак"
+
+#: inc/post-types.php:1569
+msgid "Title"
+msgstr "Наслов"
+
+#: inc/post-types.php:462
+msgid "Add New"
+msgstr "Додај нови"
+
+#: inc/post-types.php:1720
+msgid "None"
+msgstr "Ниједан"
+
+#: inc/post-types.php:1681
+msgid "Author"
+msgstr "Аутор"
+
+#: inc/post-types.php:1586
+msgid "Editor"
+msgstr "Уређивач"
+
+#. Author URI of the plugin
+#: custom-post-type-ui.php
+msgid "https://webdevstudios.com/"
+msgstr "https://webdevstudios.com/"
+
+#. Description of the plugin
+#: custom-post-type-ui.php
+msgid "Admin UI panel for registering custom post types and taxonomies"
+msgstr "Администраторски панел за регистровање произвољних врста чланака и таксономија"
+
+#. Author of the plugin
+#: custom-post-type-ui.php
+msgid "WebDevStudios"
+msgstr "WebDevStudios"
+
+#. Plugin URI of the plugin
+#: custom-post-type-ui.php
+msgid "https://github.com/WebDevStudios/custom-post-type-ui/"
+msgstr "https://github.com/WebDevStudios/custom-post-type-ui/"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/utility.php:898
+msgid "Please choose a different taxonomy name. %s is already registered."
+msgstr "Изаберите други назив таксономије. %s је већ регистрован."
+
+#: inc/taxonomies.php:1611
+msgid "Please provide a taxonomy name"
+msgstr "Наведите назив таксономије"
+
+#: inc/taxonomies.php:1537
+msgid "Please provide a taxonomy to delete"
+msgstr "Наведите таксономију за брисање"
+
+#: inc/taxonomies.php:1192
+msgid "Show Admin Column"
+msgstr "Прикажи администраторску колону"
+
+#: inc/taxonomies.php:1193
+msgid "(default: false) Whether to allow automatic creation of taxonomy columns on associated post-types."
+msgstr "(подразумевано: false) Да ли дозволити аутоматско прављење колона таксономије на повезаним врстама чланака."
+
+#: inc/taxonomies.php:1167
+msgid "Rewrite Hierarchical"
+msgstr "Хијерархијско преписивање"
+
+#: inc/taxonomies.php:1142
+msgid "Rewrite With Front"
+msgstr "Преписивање са предњом основом"
+
+#: inc/taxonomies.php:1119
+msgid "Custom taxonomy rewrite slug."
+msgstr "Произвољна подложка за преписивање таксономије."
+
+#: inc/taxonomies.php:1117
+msgid "(default: taxonomy name)"
+msgstr "(подразумевано: назив таксономије)"
+
+#: inc/taxonomies.php:1083
+msgid "Sets a custom query_var slug for this taxonomy."
+msgstr "Поставља произвољну подложку query_var за ову таксономију."
+
+#: inc/taxonomies.php:1082
+msgid "Custom Query Var String"
+msgstr "Произвољна ниска query var"
+
+#: inc/taxonomies.php:707
+msgid "(e.g. No Actors found)"
+msgstr "(нпр. Нису пронађени глумци)"
+
+#: inc/taxonomies.php:708
+msgid "Not found"
+msgstr "Није пронађено"
+
+#: inc/taxonomies.php:692
+msgid "Choose From Most Used"
+msgstr "Изаберите међу најкоришћенијим"
+
+#: inc/taxonomies.php:691
+msgid "(e.g. Choose from the most used Actors)"
+msgstr "(нпр. Изаберите међу најкоришћенијим глумцима)"
+
+#: inc/taxonomies.php:676
+msgid "Add or Remove Items"
+msgstr "Додај или уклони ставке"
+
+#: inc/taxonomies.php:675
+msgid "(e.g. Add or remove Actors)"
+msgstr "(нпр. Додај или уклони глумце)"
+
+#: inc/taxonomies.php:660
+msgid "Separate Items with Commas"
+msgstr "Раздвојите ставке запетама"
+
+#: inc/taxonomies.php:659
+msgid "(e.g. Separate Actors with commas)"
+msgstr "(нпр. Раздвојите глумце запетама)"
+
+#: inc/taxonomies.php:644
+msgid "Popular Items"
+msgstr "Популарне ставке"
+
+#: inc/taxonomies.php:643
+msgid "(e.g. Popular Actors)"
+msgstr "(нпр. Популарни глумци)"
+
+#: inc/taxonomies.php:628
+msgid "Search Items"
+msgstr "Претражи ставке"
+
+#: inc/taxonomies.php:627
+msgid "(e.g. Search Actors)"
+msgstr "(нпр. Претражи глумце)"
+
+#: inc/taxonomies.php:612
+msgid "Parent Item Colon"
+msgstr "Двотачка надређене ставке"
+
+#: inc/taxonomies.php:611
+msgid "(e.g. Parent Actor:)"
+msgstr "(нпр. Надређени глумац:)"
+
+#: inc/taxonomies.php:596
+msgid "Parent Item"
+msgstr "Надређена ставка"
+
+#: inc/taxonomies.php:595
+msgid "(e.g. Parent Actor)"
+msgstr "(нпр. Надређени глумац)"
+
+#: inc/taxonomies.php:580
+msgid "New Item Name"
+msgstr "Назив нове ставке"
+
+#: inc/taxonomies.php:579
+msgid "(e.g. New Actor Name)"
+msgstr "(нпр. Име новог глумца)"
+
+#: inc/taxonomies.php:563
+msgid "(e.g. Add New Actor)"
+msgstr "(нпр. Додај новог глумца)"
+
+#: inc/taxonomies.php:548
+msgid "Update Item Name"
+msgstr "Ажурирај назив ставке"
+
+#: inc/taxonomies.php:547
+msgid "(e.g. Update Actor Name)"
+msgstr "(нпр. Ажурирај име глумца)"
+
+#: inc/taxonomies.php:531
+msgid "(e.g. View Actor)"
+msgstr "(нпр. Погледај глумца)"
+
+#: inc/taxonomies.php:515
+msgid "(e.g. Edit Actor)"
+msgstr "(нпр. Уреди глумца)"
+
+#: inc/taxonomies.php:499
+msgid "(e.g. All Actors)"
+msgstr "(нпр. Сви глумци)"
+
+#: inc/taxonomies.php:549 inc/taxonomies.php:581 inc/taxonomies.php:597
+#: inc/taxonomies.php:613 inc/taxonomies.php:629 inc/taxonomies.php:645
+#: inc/taxonomies.php:661 inc/taxonomies.php:677
+msgid "Custom taxonomy label. Used in the admin menu for displaying taxonomies."
+msgstr "Натпис произвољне таксономије. Користи се у администраторском изборнику за приказ таксономија."
+
+#: inc/taxonomies.php:420 inc/taxonomies.php:1387
+msgid "Delete Taxonomy"
+msgstr "Избриши таксономију"
+
+#: inc/taxonomies.php:432 inc/taxonomies.php:1399
+msgid "Add Taxonomy"
+msgstr "Додај таксономију"
+
+#: inc/taxonomies.php:409 inc/taxonomies.php:1376
+msgid "Save Taxonomy"
+msgstr "Сачувај таксономију"
+
+#: inc/taxonomies.php:338
+msgid "Attach to Post Type"
+msgstr "Повежи са врстом чланка"
+
+#: inc/taxonomies.php:316
+msgid "(e.g. Actor)"
+msgstr "(нпр. Глумац)"
+
+#: inc/taxonomies.php:304 inc/taxonomies.php:484
+msgid "(e.g. Actors)"
+msgstr "(нпр. Глумци)"
+
+#: inc/support.php:270
+msgid "Change text inside the post/page editor title field. Should be able to adapt as necessary."
+msgstr "Промените текст у пољу за наслов уређивача чланака/страница. Требало би да се по потреби прилагођава."
+
+#: inc/taxonomies.php:252
+msgid "Taxonomy Slug"
+msgstr "Подложка таксономије"
+
+#: inc/support.php:269
+msgid "How do I filter the \"enter title here\" text in the post editor screen?"
+msgstr "Како да филтрирам текст „enter title here“ на екрану уређивача чланака?"
+
+#: inc/support.php:256
+msgid "Post relationships?"
+msgstr "Односи чланака?"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:249
+msgid "Check out the %s function for documentation and usage examples."
+msgstr "Погледајте функцију %s за документацију и примере коришћења."
+
+#: inc/support.php:244
+msgid "How do I add a newly registered taxonomy to a post type that already exists?"
+msgstr "Како да додам новорегистровану таксономију врсти чланка која већ постоји?"
+
+#: inc/support.php:232
+msgid "How do I add custom metaboxes to my post type?"
+msgstr "Како да додам произвољне мета кутије својој врсти чланка?"
+
+#: inc/support.php:176
+msgid "How do I display my custom post type on my site?"
+msgstr "Како да прикажем своју произвољну врсту чланка на сајту?"
+
+#: inc/support.php:193
+msgid "I have added categories and tags to my custom post type, but they do not appear in the archives."
+msgstr "Категорије и ознаке су додате мојој произвољној врсти чланка, али се не појављују у архивама."
+
+#: inc/support.php:229
+msgid "Advanced"
+msgstr "Напредно"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/support.php:168
+msgid "Please visit the %1$sTemplate Hierarchy%2$s page on the WordPress codex for details about available templates."
+msgstr "Посетите страницу %1$sTemplate Hierarchy%2$s у Вордпресовом кодексу за детаље о доступним шаблонима."
+
+#: inc/support.php:163
+msgid "What template files should I edit to alter my post type display?"
+msgstr "Које датотеке шаблона треба уредити да би се изменио приказ врсте чланка?"
+
+#: inc/support.php:160
+msgid "Front-end Display"
+msgstr "Приказ на предњем крају"
+
+#: inc/support.php:152
+msgid "I have added post thumbnail and/or post format support to my post type, but those do not appear when adding a post type post."
+msgstr "Додата је подршка за сличице чланака и/или облике чланака мојој врсти чланка, али се не појављују при додавању чланка те врсте."
+
+#: inc/support.php:153
+msgid "Make sure your theme has post \"post-thumbnails\" theme support enabled."
+msgstr "Проверите да ли ваша тема има омогућену подршку за „post-thumbnails“."
+
+#: inc/support.php:148
+msgid "I changed my custom post type or taxonomy slug and now I have duplicates shown. How do I remove the duplicate?"
+msgstr "Промењена је подложка произвољне врсте чланка или таксономије и сада се приказују дупликати. Како да уклоним дупликат?"
+
+#: inc/support.php:142
+msgid "I changed my custom post type name and now I can not get to my posts. How do I get them back?"
+msgstr "Промењен је назив произвољне врсте чланка и сада не могу да приступим чланцима. Како да их вратим?"
+
+#: inc/support.php:143
+msgid "You can either change the custom post type name back to the original name or try the Post Type Switcher plugin"
+msgstr "Можете вратити назив произвољне врсте чланка на првобитни или испробати додатак Post Type Switcher"
+
+#: inc/support.php:134
+msgid "General"
+msgstr "Опште"
+
+#: inc/support.php:149
+msgid "Renaming the slug for a post type or taxonomy creates a new entry in our saved option which gets registered as its own post type or taxonomy. Since the settings will be mirrored from the previous slug, you will just need to delete the previous version's entry."
+msgstr "Преименовање подложке врсте чланка или таксономије прави нови унос у нашој сачуваној могућности, који се региструје као засебна врста чланка или таксономија. Пошто ће подешавања бити пресликана са претходне подложке, само треба да избришете унос претходног издања."
+
+#: inc/support.php:75
+msgid "Support Forums"
+msgstr "Форуми подршке"
+
+#: inc/support.php:64
+msgid "Custom Post Type UI Support"
+msgstr "Подршка за Custom Post Type UI"
+
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: inc/utility.php:883
+msgid "Please choose a different post type name. %s is already registered."
+msgstr "Изаберите други назив врсте чланка. %s је већ регистрован."
+
+#: inc/utility.php:951
+msgid "Please do not use quotes in post type/taxonomy names or rewrite slugs"
+msgstr "Не користите наводнике у називима врста чланака/таксономија нити у подложкама за преписивање"
+
+#: inc/post-types.php:2054
+msgid "Please provide a post type name"
+msgstr "Наведите назив врсте чланка"
+
+#: inc/post-types.php:1981
+msgid "Please provide a post type to delete"
+msgstr "Наведите врсту чланка за брисање"
+
+#: inc/post-types.php:1790
+msgid "Adds %s support"
+msgstr "Додаје подршку за: %s"
+
+#: inc/post-types.php:1736
+msgid "Provide custom support slugs here."
+msgstr "Овде наведите произвољне подложке подршке."
+
+#: inc/post-types.php:1728 inc/post-types.php:1729
+msgid "Custom \"Supports\""
+msgstr "Произвољно „Supports“"
+
+#: inc/post-types.php:1538
+msgid "Use the \"None\" option to explicitly set \"supports\" to false."
+msgstr "Користите могућност „Ниједно“ да изричито поставите „supports“ на false."
+
+#: inc/post-types.php:1707
+msgid "Post Formats"
+msgstr "Облици чланка"
+
+#: inc/post-types.php:1694
+msgid "Page Attributes"
+msgstr "Особине стране"
+
+#: inc/post-types.php:623 inc/post-types.php:1603
+msgid "Featured Image"
+msgstr "Издвојена слика"
+
+#: inc/post-types.php:1668
+msgid "Revisions"
+msgstr "Ревизије"
+
+#: inc/post-types.php:1629
+msgid "Trackbacks"
+msgstr "Праћења"
+
+#: inc/post-types.php:1655
+msgid "Comments"
+msgstr "Коментари"
+
+#: inc/post-types.php:1642
+msgid "Custom Fields"
+msgstr "Прилагођена поља"
+
+#: inc/post-types.php:1492
+msgid "(Full URL for icon or Dashicon class)"
+msgstr "(пун URL иконице или Dashicon класа)"
+
+#: inc/post-types.php:1485
+msgid "Menu Icon"
+msgstr "Иконица изборника"
+
+#: inc/post-types.php:1437
+msgid "\"Show UI\" must be \"true\". If an existing top level page such as \"tools.php\" is indicated for second input, post type will be sub menu of that."
+msgstr "„Show UI“ мора бити „true“. Ако је као други унос наведена постојећа страница највишег нивоа, као што је „tools.php“, врста чланка биће подизборник те странице."
+
+#: inc/post-types.php:1436
+msgid "Show in Menu"
+msgstr "Прикажи у изборнику"
+
+#: inc/post-types.php:1429
+msgid "The position in the menu order the post type should appear. show_in_menu must be true."
+msgstr "Положај у редоследу изборника у ком врста чланка треба да се појави. show_in_menu мора бити true."
+
+#: inc/post-types.php:1408
+msgid "Menu Position"
+msgstr "Положај у изборнику"
+
+#: inc/post-types.php:1390 inc/taxonomies.php:1070
+msgid "Query Var"
+msgstr "Query Var"
+
+#: inc/post-types.php:1364
+msgid "With Front"
+msgstr "Са предњом основом"
+
+#: inc/post-types.php:1340
+msgid "Custom post type slug to use instead of the default."
+msgstr "Произвољна подложка врсте чланка која се користи уместо подразумеване."
+
+#: inc/post-types.php:1339
+msgid "(default: post type slug)"
+msgstr "(подразумевано: подложка врсте чланка)"
+
+#: inc/post-types.php:1338 inc/taxonomies.php:1118
+msgid "Custom Rewrite Slug"
+msgstr "Произвољна подложка за преписивање"
+
+#: inc/post-types.php:1327 inc/taxonomies.php:1106
+msgid "Rewrite"
+msgstr "Преписивање"
+
+#: inc/post-types.php:1249 inc/post-types.php:1273 inc/taxonomies.php:970
+msgid "Hierarchical"
+msgstr "Хијерархијско"
+
+#: inc/post-types.php:1232
+msgid "Exclude From Search"
+msgstr "Изузми из претраге"
+
+#: inc/post-types.php:1243
+msgid "Capability Type"
+msgstr "Врста могућности"
+
+#: inc/post-types.php:1169
+msgid "If left blank, the archive slug will default to the post type slug."
+msgstr "Ако остане празно, подложка архиве биће подразумевано подложка врсте чланка."
+
+#: inc/post-types.php:1168
+msgid "Has Archive"
+msgstr "Има архиву"
+
+#: inc/post-types.php:1205
+msgid "Slug to be used for archive URL."
+msgstr "Подложка која се користи за URL архиве."
+
+#: inc/post-types.php:1053 inc/taxonomies.php:995
+msgid "Show UI"
+msgstr "Прикажи сучеље"
+
+#: inc/post-types.php:1001 inc/taxonomies.php:920
+msgid "Public"
+msgstr "Јавно"
+
+#: inc/post-types.php:612
+msgid "(e.g. Parent Movie:)"
+msgstr "(нпр. Надређени филм:)"
+
+#: external/wpgraphql.php:213 inc/post-types.php:989 inc/post-types.php:1015
+#: inc/post-types.php:1041 inc/post-types.php:1067 inc/post-types.php:1094
+#: inc/post-types.php:1119 inc/post-types.php:1181 inc/post-types.php:1221
+#: inc/post-types.php:1262 inc/post-types.php:1290 inc/post-types.php:1315
+#: inc/post-types.php:1352 inc/post-types.php:1378 inc/post-types.php:1448
+#: inc/taxonomies.php:909 inc/taxonomies.php:934 inc/taxonomies.php:960
+#: inc/taxonomies.php:984 inc/taxonomies.php:1009 inc/taxonomies.php:1034
+#: inc/taxonomies.php:1059 inc/taxonomies.php:1095 inc/taxonomies.php:1131
+#: inc/taxonomies.php:1157 inc/taxonomies.php:1182 inc/taxonomies.php:1206
+#: inc/taxonomies.php:1262 inc/taxonomies.php:1287 inc/taxonomies.php:1312
+msgid "True"
+msgstr "Тачно"
+
+#: external/wpgraphql.php:209 inc/post-types.php:985 inc/post-types.php:1011
+#: inc/post-types.php:1037 inc/post-types.php:1063 inc/post-types.php:1089
+#: inc/post-types.php:1115 inc/post-types.php:1176 inc/post-types.php:1216
+#: inc/post-types.php:1257 inc/post-types.php:1285 inc/post-types.php:1311
+#: inc/post-types.php:1348 inc/post-types.php:1374 inc/post-types.php:1444
+#: inc/taxonomies.php:905 inc/taxonomies.php:930 inc/taxonomies.php:955
+#: inc/taxonomies.php:980 inc/taxonomies.php:1005 inc/taxonomies.php:1030
+#: inc/taxonomies.php:1055 inc/taxonomies.php:1091 inc/taxonomies.php:1127
+#: inc/taxonomies.php:1152 inc/taxonomies.php:1177 inc/taxonomies.php:1202
+#: inc/taxonomies.php:1257 inc/taxonomies.php:1282 inc/taxonomies.php:1307
+msgid "False"
+msgstr "Нетачно"
+
+#: inc/post-types.php:595
+msgid "(e.g. No Movies found in Trash)"
+msgstr "(нпр. Нису пронађени филмови у отпаду)"
+
+#: inc/post-types.php:590
+msgid "Not Found in Trash"
+msgstr "Није пронађено у отпаду"
+
+#: inc/post-types.php:579
+msgid "(e.g. No Movies found)"
+msgstr "(нпр. Нису пронађени филмови)"
+
+#: inc/post-types.php:574
+msgid "Not Found"
+msgstr "Није пронађено"
+
+#: inc/post-types.php:563
+msgid "(e.g. Search Movies)"
+msgstr "(нпр. Претражи филмове)"
+
+#: inc/post-types.php:558
+msgid "Search Item"
+msgstr "Претражи ставку"
+
+#: inc/post-types.php:531
+msgid "(e.g. View Movie)"
+msgstr "(нпр. Погледај филм)"
+
+#: inc/post-types.php:526 inc/taxonomies.php:532
+msgid "View Item"
+msgstr "Погледај ставку"
+
+#: inc/post-types.php:515
+msgid "(e.g. New Movie)"
+msgstr "(нпр. Нови филм)"
+
+#: inc/post-types.php:510
+msgid "New Item"
+msgstr "Нова ставка"
+
+#: inc/post-types.php:499
+msgid "(e.g. Edit Movie)"
+msgstr "(нпр. Уреди филм)"
+
+#: inc/post-types.php:483
+msgid "(e.g. Add New Movie)"
+msgstr "(нпр. Додај нови филм)"
+
+#: inc/post-types.php:494 inc/taxonomies.php:516
+msgid "Edit Item"
+msgstr "Уреди ставку"
+
+#: inc/post-types.php:467
+msgid "(e.g. Add New)"
+msgstr "(нпр. Додај нови)"
+
+#: inc/post-types.php:478 inc/taxonomies.php:564
+msgid "Add New Item"
+msgstr "Додај нову ставку"
+
+#: inc/post-types.php:451
+msgid "(e.g. All Movies)"
+msgstr "(нпр. Сви филмови)"
+
+#: inc/post-types.php:446 inc/taxonomies.php:500
+msgid "All Items"
+msgstr "Све ставке"
+
+#: inc/post-types.php:435
+msgid "(e.g. My Movies)"
+msgstr "(нпр. Моји филмови)"
+
+#: inc/post-types.php:431
+msgid "Custom admin menu name for your custom post type."
+msgstr "Произвољни назив администраторског изборника за вашу произвољну врсту чланка."
+
+#: inc/post-types.php:607
+msgid "Parent"
+msgstr "Надређен"
+
+#: inc/taxonomies.php:474
+msgid "Description"
+msgstr "Опис"
+
+#: inc/post-types.php:430 inc/taxonomies.php:485
+msgid "Menu Name"
+msgstr "Име изборника"
+
+#: inc/post-types.php:378 inc/post-types.php:1849
+msgid "Add Post Type"
+msgstr "Додај врсту чланка"
+
+#: inc/post-types.php:366 inc/post-types.php:1837
+msgid "Delete Post Type"
+msgstr "Избриши врсту чланка"
+
+#: inc/post-types.php:355 inc/post-types.php:1826
+msgid "Save Post Type"
+msgstr "Сачувај врсту чланка"
+
+#: inc/post-types.php:284
+msgid "Migrate posts to newly renamed post type?"
+msgstr "Преселити чланке у новопреименовану врсту чланка?"
+
+#: inc/post-types.php:313 inc/post-types.php:821
+msgid "(e.g. Movie)"
+msgstr "(нпр. Филм)"
+
+#: inc/post-types.php:312 inc/taxonomies.php:317
+msgid "Singular Label"
+msgstr "Натпис у једнини"
+
+#: inc/post-types.php:511
+msgid "Post type label. Used in the admin menu for displaying post types."
+msgstr "Натпис врсте чланка. Користи се у администраторском изборнику за приказ врста чланака."
+
+#: inc/post-types.php:301
+msgid "(e.g. Movies)"
+msgstr "(нпр. Филмови)"
+
+#: inc/post-types.php:300 inc/taxonomies.php:305
+msgid "Plural Label"
+msgstr "Натпис у множини"
+
+#: inc/post-types.php:246
+msgid "Post Type Slug"
+msgstr "Подложка врсте чланка"
+
+#: inc/post-types.php:211 inc/taxonomies.php:217
+msgid "Select"
+msgstr "Изабери"
+
+#: inc/post-types.php:197 inc/taxonomies.php:203
+msgid "Select: "
+msgstr "Изаберите: "
+
+#: inc/listings.php:306
+msgid "Taxonomy"
+msgstr "Таксономија"
+
+#: inc/listings.php:222 inc/listings.php:417
+msgid "No custom labels to display"
+msgstr "Нема произвољних натписа за приказ"
+
+#: inc/listings.php:168
+msgid "View frontend archive"
+msgstr "Погледај архиву на предњем крају"
+
+#: inc/listings.php:89 inc/listings.php:309
+msgid "Labels"
+msgstr "Натписи"
+
+#: inc/listings.php:87 inc/post-types.php:1534
+msgid "Supports"
+msgstr "Подршка"
+
+#: inc/tools.php:60 inc/tools.php:77
+msgid "Post types"
+msgstr "Врсте чланака"
+
+#: inc/tools-sections/tools-post-types.php:49
+msgid "No post types to display at this time"
+msgstr "Тренутно нема врста чланака за приказ"
+
+#: inc/tools-sections/tools-get-code.php:23
+#: inc/tools-sections/tools-get-code.php:37
+#: inc/tools-sections/tools-get-code.php:49
+#: inc/tools-sections/tools-get-code.php:65
+msgid "Copy/paste the code below into your functions.php file."
+msgstr "Умножите/убаците кôд испод у своју датотеку functions.php."
+
+#: inc/tools-sections/tools-taxonomies.php:47
+msgid "No taxonomies to display at this time"
+msgstr "Тренутно нема таксономија за приказ"
+
+#: inc/tools-sections/tools-get-code.php:15
+msgid "Get Post Type and Taxonomy Code"
+msgstr "Добави кôд врсте чланка и таксономије"
+
+#: inc/tools.php:472
+msgid "Use the content above to import current taxonomies into a different WordPress site. You can also use this to simply back up your taxonomy settings."
+msgstr "Користите садржај изнад да увезете тренутне таксономије на други Вордпрес сајт. Можете га користити и само за резерву подешавања таксономија."
+
+#: inc/tools.php:466
+msgid "No taxonomies registered yet."
+msgstr "Још нису регистроване таксономије."
+
+#: inc/tools.php:445
+msgid "To import taxonomies from a different WordPress site, paste the exported content from that site and click the \"Import\" button."
+msgstr "Да бисте увезли таксономије са другог Вордпрес сајта, убаците извезени садржај са тог сајта и притисните дугме „Увези“."
+
+#: inc/tools.php:435
+msgid "Import Taxonomies"
+msgstr "Увези таксономије"
+
+#: inc/tools.php:428
+msgid "Use the content above to import current post types into a different WordPress site. You can also use this to simply back up your post type settings."
+msgstr "Користите садржај изнад да увезете тренутне врсте чланака на други Вордпрес сајт. Можете га користити и само за резерву подешавања врста чланака."
+
+#: inc/tools.php:425 inc/tools.php:469
+msgid "To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac)."
+msgstr "Да бисте умножили податке о систему, притисните испод, а затим Ctrl + C (PC) или Cmd + C (Mac)."
+
+#: inc/tools.php:422
+msgid "No post types registered yet."
+msgstr "Још нису регистроване врсте чланака."
+
+#: inc/tools.php:401
+msgid "To import post types from a different WordPress site, paste the exported content from that site and click the \"Import\" button."
+msgstr "Да бисте увезли врсте чланака са другог Вордпрес сајта, убаците извезени садржај са тог сајта и притисните дугме „Увези“."
+
+#: inc/tools.php:397 inc/tools.php:441
+msgid "Importing will overwrite previous registered settings."
+msgstr "Увоз ће преписати раније регистрована подешавања."
+
+#: inc/tools.php:397 inc/tools.php:441
+msgid "Note:"
+msgstr "Белешка:"
+
+#: inc/tools.php:391
+msgid "Import Post Types"
+msgstr "Увези врсте чланака"
+
+#: inc/tools.php:394 inc/tools.php:438
+msgid "Paste content here."
+msgstr "Овде убаците садржај."
+
+#: inc/tools.php:376
+msgid "If you are wanting to migrate registered post types or taxonomies from this site to another, that will also use Custom Post Type UI, use the import and export functionality. If you are moving away from Custom Post Type UI, use the information in the \"Get Code\" tab."
+msgstr "Ако желите да преселите регистроване врсте чланака или таксономије са овог сајта на други који ће такође користити Custom Post Type UI, користите функционалност увоза и извоза. Ако прелазите са Custom Post Type UI, користите податке у језичку „Добави кôд“."
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1096 custom-post-type-ui.php:1169
+#: inc/taxonomies.php:696
+msgid "Choose from the most used %s"
+msgstr "Изабери из најкоришћенијих: %s"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1094 custom-post-type-ui.php:1167
+#: inc/taxonomies.php:680
+msgid "Add or remove %s"
+msgstr "Додај или уклони: %s"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1092 custom-post-type-ui.php:1165
+#: inc/taxonomies.php:664
+msgid "Separate %s with commas"
+msgstr "Одвојите %s запетама"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1090 custom-post-type-ui.php:1153
+#: inc/taxonomies.php:584
+msgid "New %s name"
+msgstr "Нови назив: %s"
+
+#. translators: placeholder holds content label.
+#: custom-post-type-ui.php:1086 custom-post-type-ui.php:1149
+msgid "Update %s"
+msgstr "Ажурирај %s"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1082 custom-post-type-ui.php:1145
+#: inc/post-types.php:615 inc/taxonomies.php:616
+msgid "Parent %s:"
+msgstr "Надређено (%s):"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1080 custom-post-type-ui.php:1143
+#: inc/taxonomies.php:600
+msgid "Parent %s"
+msgstr "Надређено: %s"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1076 custom-post-type-ui.php:1161
+#: inc/taxonomies.php:648
+msgid "Popular %s"
+msgstr "Популарно: %s"
+
+#. translators: placeholder holds content label.
+#: custom-post-type-ui.php:1070 custom-post-type-ui.php:1137
+msgid "No %s found in trash."
+msgstr "Није пронађено у отпаду: %s."
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1066 custom-post-type-ui.php:1074
+#: custom-post-type-ui.php:1133 custom-post-type-ui.php:1159
+#: inc/post-types.php:566 inc/taxonomies.php:632
+msgid "Search %s"
+msgstr "Претражи %s"
+
+#. translators: placeholder holds content label.
+#: custom-post-type-ui.php:1068 custom-post-type-ui.php:1135
+msgid "No %s found."
+msgstr "Није пронађено: %s."
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1064 custom-post-type-ui.php:1078
+#: custom-post-type-ui.php:1131 custom-post-type-ui.php:1163
+#: inc/post-types.php:454 inc/taxonomies.php:504
+msgid "All %s"
+msgstr "Све: %s"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1060 custom-post-type-ui.php:1062
+#: custom-post-type-ui.php:1123 custom-post-type-ui.php:1129
+#: inc/post-types.php:534 inc/post-types.php:550 inc/taxonomies.php:536
+msgid "View %s"
+msgstr "Погледај: %s"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1058 custom-post-type-ui.php:1121
+#: inc/post-types.php:518
+msgid "New %s"
+msgstr "Ново: %s"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1056 custom-post-type-ui.php:1084
+#: custom-post-type-ui.php:1119 custom-post-type-ui.php:1147
+#: inc/post-types.php:502 inc/taxonomies.php:520
+msgid "Edit %s"
+msgstr "Уреди %s"
+
+#. translators: placeholder holds content label.
+#. translators: Used for autofill
+#: custom-post-type-ui.php:1054 custom-post-type-ui.php:1088
+#: custom-post-type-ui.php:1117 custom-post-type-ui.php:1151
+#: inc/post-types.php:486 inc/taxonomies.php:568
+msgid "Add new %s"
+msgstr "Додај нови %s"
+
+#. translators: placeholder holds content name.
+#: custom-post-type-ui.php:969
+msgid "%s has failed to be imported"
+msgstr "%s није увезено"
+
+#. translators: placeholder holds content name.
+#: custom-post-type-ui.php:966
+msgid "%s has been successfully imported"
+msgstr "%s је успешно увезено"
+
+#. translators: placeholder holds content name.
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: custom-post-type-ui.php:961 inc/utility.php:831
+msgid "%s has failed to be deleted"
+msgstr "%s није избрисано"
+
+#. translators: placeholder holds content name.
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: custom-post-type-ui.php:958 inc/utility.php:816
+msgid "%s has been successfully deleted"
+msgstr "%s је успешно избрисано"
+
+#. translators: placeholder holds content name.
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: custom-post-type-ui.php:953 inc/utility.php:800
+msgid "%s has failed to be updated"
+msgstr "%s није ажурирано"
+
+#. translators: placeholder holds content name.
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: custom-post-type-ui.php:950 inc/utility.php:785
+msgid "%s has been successfully updated"
+msgstr "%s је успешно ажурирано"
+
+#. translators: placeholder holds content name.
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: custom-post-type-ui.php:945 inc/utility.php:769
+msgid "%s has failed to be added"
+msgstr "%s није додато"
+
+#. translators: placeholder holds content name.
+#. translators: Placeholders are just for HTML markup that doesn't need
+#. translated
+#: custom-post-type-ui.php:942 inc/utility.php:754
+msgid "%s has been successfully added"
+msgstr "%s је успешно додато"
+
+#: inc/taxonomies.php:109
+msgid "Edit Taxonomies"
+msgstr "Уреди таксономије"
+
+#: inc/listings.php:66 inc/taxonomies.php:91
+msgid "Add New Taxonomy"
+msgstr "Додај нову таксономију"
+
+#: inc/listings.php:69 inc/listings.php:308
+msgid "Post Types"
+msgstr "Врсте чланака"
+
+#: inc/post-types.php:105
+msgid "Edit Post Types"
+msgstr "Уреди врсте чланака"
+
+#: inc/listings.php:65 inc/post-types.php:87
+msgid "Add New Post Type"
+msgstr "Додај нову врсту чланка"
+
+#: custom-post-type-ui.php:154
+msgid "About CPT UI"
+msgstr "О CPT UI"
+
+#. Plugin Name of the plugin
+#: custom-post-type-ui.php inc/about.php:63 inc/utility.php:113
+#: inc/utility.php:131
+msgid "Custom Post Type UI"
+msgstr "Custom Post Type UI"
+
+#: inc/listings.php:521
+msgid "Add/Edit Taxonomies"
+msgstr "Додај/уреди таксономије"
+
+#: custom-post-type-ui.php:140
+msgid "Help/support"
+msgstr "Помоћ/подршка"
+
+#: inc/listings.php:499
+msgid "Add/Edit Post Types"
+msgstr "Додај/уреди врсте чланака"
+
+#: custom-post-type-ui.php:135
+msgid "CPT UI"
+msgstr "CPT UI"
+
+#: custom-post-type-ui.php:135
+msgid "Custom post types"
+msgstr "Произвољне врсте чланака"
+
+#: inc/utility.php:40
+msgid "Help"
+msgstr "Помоћ"
+
+#: inc/listings.php:88 inc/listings.php:290 inc/post-types.php:1743
+#: inc/tools.php:64 inc/tools.php:84
+msgid "Taxonomies"
+msgstr "Таксономије"
+
+#: inc/listings.php:86 inc/listings.php:307 inc/post-types.php:968
+#: inc/taxonomies.php:887
+msgid "Settings"
+msgstr "Подешавања"
+
+#: inc/tools.php:405 inc/tools.php:449
+msgid "Import"
+msgstr "Увези"
+
+#: inc/listings.php:85
+msgid "Post Type"
+msgstr "Врста чланка"
+
+#: inc/tools.php:382
+msgid "NOTE"
+msgstr "БЕЛЕШКА"

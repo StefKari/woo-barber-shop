@@ -1,5 +1,4 @@
 <?php
-// phpcs:ignoreFile
 /**
  * The tools
  *
@@ -34,11 +33,11 @@ class Tool extends Root {
 	public function check_ip() {
 		self::debug( '✅ check_ip' );
 
-		$response = wp_safe_remote_get( 'https://cyberpanel.sh/?ip', array(
-			'headers' => array(
+		$response = wp_safe_remote_get( 'https://cyberpanel.sh/?ip', [
+			'headers' => [
 				'User-Agent' => 'curl/8.7.1',
-			),
-		) );
+			],
+		] );
 
 		if ( is_wp_error( $response ) ) {
 			return esc_html__( 'Failed to detect IP', 'litespeed-cache' );
@@ -64,9 +63,22 @@ class Tool extends Root {
 	 * @access public
 	 */
 	public function heartbeat() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'heartbeat_frontend' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'heartbeat_backend' ) );
-		add_filter( 'heartbeat_settings', array( $this, 'heartbeat_settings' ) );
+		add_action( 'wp_enqueue_scripts', [ $this, 'heartbeat_frontend' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'heartbeat_backend' ] );
+		add_filter( 'heartbeat_settings', [ $this, 'heartbeat_settings' ] );
+	}
+
+	/**
+	 * Disable heartbeat by deregistering it together with its dependents (wp-auth-check, autosave), which are inert without it. Leaving them enqueued triggers the WP 6.9.1+ unregistered-dependency notice.
+	 *
+	 * @since  7.9
+	 * @access private
+	 */
+	private function _disable_heartbeat() {
+		foreach ( [ 'heartbeat', 'wp-auth-check', 'autosave' ] as $handle ) {
+			wp_dequeue_script( $handle );
+			wp_deregister_script( $handle );
+		}
 	}
 
 	/**
@@ -83,7 +95,7 @@ class Tool extends Root {
 		}
 
 		if ( ! $this->conf( Base::O_MISC_HEARTBEAT_FRONT_TTL ) ) {
-			wp_deregister_script( 'heartbeat' );
+			$this->_disable_heartbeat();
 			Debug2::debug( '[Tool] Deregistered frontend heartbeat' );
 		}
 	}
@@ -103,7 +115,7 @@ class Tool extends Root {
 			}
 
 			if ( ! $this->conf( Base::O_MISC_HEARTBEAT_EDITOR_TTL ) ) {
-				wp_deregister_script( 'heartbeat' );
+				$this->_disable_heartbeat();
 				Debug2::debug( '[Tool] Deregistered editor heartbeat' );
 			}
 		} else {
@@ -112,7 +124,7 @@ class Tool extends Root {
 			}
 
 			if ( ! $this->conf( Base::O_MISC_HEARTBEAT_BACK_TTL ) ) {
-				wp_deregister_script( 'heartbeat' );
+				$this->_disable_heartbeat();
 				Debug2::debug( '[Tool] Deregistered backend heartbeat' );
 			}
 		}
@@ -158,7 +170,7 @@ class Tool extends Root {
 	 */
 	public function is_editor() {
 		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-		$res         = is_admin() && Utility::str_hit_array( $request_uri, array( 'post.php', 'post-new.php' ) );
+		$res         = is_admin() && Utility::str_hit_array( $request_uri, [ 'post.php', 'post-new.php' ] );
 
 		return apply_filters( 'litespeed_is_editor', $res );
 	}

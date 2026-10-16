@@ -1,34 +1,29 @@
 ﻿=== Perfect Brands for WooCommerce ===
 Contributors: quadlayers, titodevera
-Donate link: https://quadlayers.com
+Donate link: https://quadlayers.com/products/perfect-woocommerce-brands/
 Tags: woocommerce, woocommerce brands, woocommerce product, woocommerce manufacturer, woocommerce supplier, e-commerce
 Requires at least: 4.7
-Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 2.0.7
-WC requires at least: 3.0
-WC tested up to: 6.1
+Tested up to: 7.1
+Stable tag: 3.6.16
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
+WC requires at least: 4.0
+WC tested up to: 11.1
 
 Perfect Brands for WooCommerce allows you to show product brands in your WooCommerce based store
 
 == Description ==
 
+[Premium](https://quadlayers.com/products/perfect-woocommerce-brands/) | [Demo](https://quadlayers.com/perfect-woocommerce-brands/) | [Documentation](https://quadlayers.com/documentation/perfect-woocommerce-brands/) | [Community](https://www.facebook.com/groups/quadlayers/)
+
 Perfect WooCommerce Brands is a perfect tool to organize your site, highlight the brands you have, and also helps as a filter for your customers at UX exploration. PWB extendes the product's description and presentation at your e-commerce site.
 
-== PRESENTATION ==
-
-[About Us](https://quadlayers.com/) | [Community](https://www.facebook.com/groups/quadlayers/) | [Documentation](https://quadlayers.com/documentation/perfect-woocommerce-brands/)
+== Presentation ==
 
 Whether we like to admit it or not, we are all influenced by brands. Brands are a guarantee for quality, they assure product recognition in customers.
 Is essential to work with product brands for increase sales and generate reliability on your e-commerce site.
 With this extension you can add product brands to your WooCommerce site.
-
-= Requirements =
-> * PHP 5.6 or higher (PHP7 recommended)
-> * WordPress 4.7 or higher
-> * WooCommerce 3.1.0 or higher
 
 = Features =
 > * Very easy to use, 100% free, no ads, no premium version exists
@@ -58,15 +53,24 @@ With this extension you can add product brands to your WooCommerce site.
 > * Brand structured data
 > * And much more!
 
-
 == Installation ==
 1. Upload the plugin to the '/wp-content/plugins/' directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 
+== Perfect WooCommerce Brands Premium ==
+
+The premium version of Perfect WooCommerce Brands plugin offer you a wide range of extra features that allows a full controll of the brands pages.
+
+> * Improve brand search experience by redirecting users to brand page
+> * Include brands separator in brands pages
+> * Change columns in the brands pages
+> * Change the place of your brands list in brands pages and shop
+> * Include brands separator in products pages
+> * Include breadcrumbs in products pages
 
 == Frequently Asked Questions ==
 = Is Perfect WooCommerce Brands free? =
-Yes, of course. This plugin is 100% free. No ads, no premium version exists.
+Yes, of course. This plugin is 100% free.
 
 = Where are the plugin settings? =
 Go to `WooCommerce/Settings/` and click on `Brands` tab
@@ -90,6 +94,224 @@ You can also contribute [translating the plugin](https://translate.wordpress.org
 
 
 == Changelog ==
+
+= 3.6.16 =
+* WooCommerce 11.1 compatibility
+
+= 3.6.15 =
+* fix: WooCommerce and WordPress compatibility
+
+= 3.6.14 =
+* fix: WooCommerce compatibility
+
+= 3.6.13 =
+* WordPress 7.0 compatibility
+
+= 3.6.12 =
+* fix: WooCommerce compatibility
+
+= 3.6.11 =
+* Fix: textdomain php error
+
+= 3.6.10 =
+* fix: woocommerce compatibility
+= 3.6.9 =
+* WooCommerce compatibility
+= 3.6.8 =
+* WooCommerce compatibility
+= 3.6.7 =
+* WordPress compatibility
+= 3.6.6 =
+* WooCommerce compatibility
+= 3.6.5 =
+* Fix: Premium compatibility
+= 3.6.4 =
+* WooCommerce compatibility
+= 3.6.3 =
+* Fix security issue
+= 3.6.2 =
+* WooCommerce compatibility
+= 3.6.1 =
+* WooCommerce compatibility
+= 3.6.0 =
+* WooCommerce compatibility
+= 3.5.9 =
+* Update dependencies
+= 3.5.8 =
+* Update dependencies
+= 3.5.7 =
+* WooCommerce compatibility
+= 3.5.6 =
+* Fix blocksy theme duplicated brand description
+= 3.5.5 =
+* Fix download link
+= 3.5.4 =
+* WooCommerce compatibility
+= 3.5.3 =
+* Fix update dependencies
+= 3.5.2 =
+* Fix textdomain issue
+= 3.5.1 =
+* WooCommerce compatibility
+= 3.5.0 =
+* WooCommerce compatibility
+* Fix textdomain error
+= 3.4.9 =
+* WooCommerce compatibility
+= 3.4.8 =
+* Fix brand name in tab issue
+= 3.4.7 =
+* WooCommerce compatibility
+= 3.4.5 =
+* WooCommerce compatibility
+= 3.4.4 =
+* WooCommerce compatibility
+= 3.4.3 =
+* WooCommerce compatibility
+= 3.4.2 =
+* Update dependencies
+= 3.4.1 =
+* WooCommerce compatibility
+= 3.4.0 =
+* WooCommerce compatibility
+= 3.3.9 =
+* WooCommerce compatibility
+= 3.3.8 =
+* WooCommerce compatibility
+= 3.3.7 =
+* WooCommerce compatibility
+= 3.3.6 =
+* i18 strings
+= 3.3.5 =
+* WooCommerce brands carousel
+= 3.3.4 =
+* WooCommerce compatibility
+= 3.3.3 =
+* Include missing long brand description
+= 3.3.2 =
+* WooCommerce compatibility
+= 3.3.1 =
+* Fix CSS issues
+= 3.3.0 =
+* WooCommerce compatibility
+= 3.2.9 =
+* WooCommerce compatibility
+= 3.2.8 =
+* WooCommerce compatibility
+= 3.2.7 =
+* WooCommerce compatibility
+= 3.2.6 =
+* Update portfolio link
+= 3.2.5 =
+* Count brands products performance issue
+= 3.2.3 =
+* WooCommerce compatibility
+= 3.2.2 =
+* WooCommerce compatibility
+* WordPress compatibility
+= 3.2.1 =
+* WooCommerce compatibility
+= 3.2.0 =
+* New: WooCommerce HPOS compatibility
+* New: WooCommerce COT compatibility
+= 3.1.1 =
+* Fix: Translation strings
+= 3.1.0 =
+* Fix: WooCommerce compatibility
+= 3.0.9 =
+* Fix: WooCommerce compatibility
+= 3.0.8 =
+* Fix: Fix curly shortcode quotes
+= 3.0.7 =
+* Fix: Fix curly shortcode quotes
+= 3.0.6 =
+* Fix: Premium compatibility
+= 3.0.5 =
+* Fix: All brands shortcode flexbox
+= 3.0.4 =
+* Fix: Composer packages update
+= 3.0.3 =
+* Fix: Composer packages update
+* New: WooCommerce compatibility
+= 3.0.2 =
+* Fix: Composer packages update
+= 3.0.1 =
+* Fix: PHP error
+= 3.0.0 =
+* Fix: Refactor
+= 2.5.6 =
+* New: WooCommerce compatibility
+= 2.5.5 =
+* Fix: AZ listing shortcode hide empty
+* Fix:Remove duplicated documentation link
+= 2.5.4 =
+* Fix: Readme update
+= 2.5.3 =
+* Fix: PHP error
+= 2.5.2 =
+* Fix: WooCommerce brands loop order
+= 2.5.1 =
+* New: PHP error
+= 2.5.0 =
+* New: Premium compatibility
+= 2.4.5 =
+* Fix: Allow video embeds in brand description
+= 2.4.4 =
+* Fix: Align rest api to WC standard functionality
+= 2.4.3 =
+* Fix: Product tab brand link
+= 2.4.2 =
+* Fix: Carousel shortcode
+= 2.4.1 =
+* New: Load scrips & styles from build folder
+= 2.4.0 =
+* New: Align rest api to WC standard functionality
+* Fix: Rollback separate brands by comma
+= 2.3.0 =
+* Fix: i18n az listing shortcode cache transient
+* Fix: Shortcode brand description attribute
+= 2.2.9 =
+* Fix: Separate brands by comma
+* Fix: Add span to brands filter
+= 2.2.8 =
+* Fix: Settings link
+= 2.2.7 =
+* Fix: WooCommerce compatibility
+= 2.2.5 =
+* Fix: WooCommerce compatibility
+* Fix: brand description
+= 2.2.4 =
+* Fix: rating notification
+= 2.2.3 =
+* Fix: PHP error
+= 2.2.2 =
+* Fix: WooCommerce compatibility
+= 2.2.1 =
+* Fix: WooCommerce compatibility
+= 2.2.0 =
+* Fix: WooCommerce compatibility
+= 2.1.9 =
+* Fix: WooCommerce compatibility
+= 2.1.8 =
+* Fix: WooCommerce compatibility
+= 2.1.7 =
+* Fix: small css issues
+= 2.1.6 =
+* Fix: WooCommerce compatibility
+= 2.1.5 =
+* Fix: WooCommerce Product Brands translation plural
+= 2.1.4 =
+* Fix: QuadLayers widget image
+= 2.1.3 =
+* Fix: Disable search brands in products
+= 2.1.2 =
+* Fix: QuadLayers widget cache
+= 2.1.1 =
+* Fix: WooCommerce Brands carousel 
+= 2.1.0 =
+* Fix: Brand description in product tab
+= 2.0.9 =
+* Fix: Exclude coupons from brands
 = 2.0.7 =
 * Fix: Brand image output sanitization
 = 2.0.6 =
@@ -120,15 +342,15 @@ You can also contribute [translating the plugin](https://translate.wordpress.org
 = 1.9.4 =
 * New. Telegram add to suggestions tab
 = 1.9.3 =
-* Fix: php error
+* Fix: PHP error
 = 1.9.2 =
 * Add: QuadLayers dashboard widget
 = 1.9.1 =
 * Fix: WordPress compatibility
 = 1.9.0 =
-* Fix: php 8 compatibility
+* Fix: PHP 8 compatibility
 = 1.8.9 =
-* Fix: php 8 compatibility
+* Fix: PHP 8 compatibility
 = 1.8.8 =
 * Fix: WooCommerce compatibility
 = 1.8.7 =
@@ -190,7 +412,7 @@ You can also contribute [translating the plugin](https://translate.wordpress.org
 = 1.7.2 =
 * Feature: Now is possible to use %pwb-brand% in the product URLs
 * Fix: Fatal error in some themes (like Salient)
-* Fix: Some php notices and warnings fixed
+* Fix: Some PHP notices and warnings fixed
 * Fix: Don't show brand description/banner in paged
 = 1.7.1 =
 * Feature: Extends the [products] shortcode to allow 'brands' attribute

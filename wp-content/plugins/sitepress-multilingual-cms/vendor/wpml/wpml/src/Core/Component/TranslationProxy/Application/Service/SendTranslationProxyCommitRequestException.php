@@ -1,9 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\TranslationProxy\Application\Service;
-
-use WPML\PHP\Exception\Exception;
-
-class SendTranslationProxyCommitRequestException extends Exception {
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/TranslationProxy/Application/Service/SendTranslationProxyCommitRequestException.php';

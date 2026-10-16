@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\User_Interface\Configuration;
 
@@ -6,7 +7,7 @@ use Exception;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use Yoast\WP\SEO\Conditionals\No_Conditionals;
+use Yoast\WP\SEO\Conditionals\Third_Party\Site_Kit_Conditional;
 use Yoast\WP\SEO\Dashboard\Infrastructure\Configuration\Site_Kit_Consent_Repository_Interface;
 use Yoast\WP\SEO\Helpers\Capability_Helper;
 use Yoast\WP\SEO\Main;
@@ -20,8 +21,6 @@ use Yoast\WP\SEO\Routes\Route_Interface;
  * @phpcs:disable Yoast.NamingConventions.ObjectNameDepth.MaxExceeded
  */
 class Site_Kit_Consent_Management_Route implements Route_Interface {
-
-	use No_Conditionals;
 
 	/**
 	 *  The namespace for this route.
@@ -50,6 +49,16 @@ class Site_Kit_Consent_Management_Route implements Route_Interface {
 	 * @var Capability_Helper
 	 */
 	private $capability_helper;
+
+	/**
+	 * The needed conditionals.
+	 *
+	 * @return array<string>
+	 */
+	public static function get_conditionals() {
+		// This cannot have the Admin Conditional since it also needs to run in Rest requests.
+		return [ Site_Kit_Conditional::class ];
+	}
 
 	/**
 	 * Constructs the class.
@@ -85,10 +94,9 @@ class Site_Kit_Consent_Management_Route implements Route_Interface {
 							'type'              => 'bool',
 							'sanitize_callback' => 'rest_sanitize_boolean',
 						],
-
 					],
 				],
-			]
+			],
 		);
 	}
 
@@ -108,7 +116,7 @@ class Site_Kit_Consent_Management_Route implements Route_Interface {
 			return new WP_Error(
 				'wpseo_set_site_kit_consent_error',
 				$exception->getMessage(),
-				(object) []
+				(object) [],
 			);
 		}
 
@@ -116,7 +124,7 @@ class Site_Kit_Consent_Management_Route implements Route_Interface {
 			[
 				'success' => $result,
 			],
-			( $result ) ? 200 : 400
+			( $result ) ? 200 : 400,
 		);
 	}
 

@@ -1,14 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\TranslationProxy\Application\Service;
-
-interface LastPickedUpDateServiceInterface {
-
-
-  /**
-   * @return int|null
-   */
-  public function get();
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/TranslationProxy/Application/Service/LastPickedUpDateServiceInterface.php';

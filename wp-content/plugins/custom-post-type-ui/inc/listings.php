@@ -21,10 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6.0
  */
-function cptui_listings_assets() {
-	$current_screen = get_current_screen();
+function cptui_listings_assets( $hook ) {
 
-	if ( ! is_object( $current_screen ) || 'cpt-ui_page_cptui_listings' !== $current_screen->base ) {
+	if ( 'cpt-ui_page_cptui_listings' !== $hook ) {
 		return;
 	}
 
@@ -37,16 +36,23 @@ function cptui_listings_assets() {
 add_action( 'admin_enqueue_scripts', 'cptui_listings_assets' );
 
 /**
- * Output the content for the "Registered Types/Taxes" page.
+ * Output the content for the "Registered types/taxonomies" page.
  *
  * @since 1.1.0
  *
  * @internal
  */
 function cptui_listings() {
-		?>
+	?>
 		<div class="wrap cptui-listings">
 			<?php
+			/**
+			 * Fires immediately after wrap div started on all of the cptui admin pages.
+			 *
+			 * @since 1.14.0
+			 */
+			do_action( 'cptui_inside_wrap' );
+
 			/**
 			 * Fires right inside the wrap div for the listings screen.
 			 *
@@ -55,42 +61,42 @@ function cptui_listings() {
 			do_action( 'cptui_inside_listings_wrap' );
 			?>
 
-			<h1 class="wp-heading-inline"><?php esc_html_e( 'Content types registered with Custom Post Type UI.', 'custom-post-type-ui' ); ?></h1>
+			<h1 class="wp-heading-inline"><?php echo get_admin_page_title(); ?></h1>
 			<a href="<?php echo esc_url( cptui_get_add_new_link( 'post_types' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New Post Type', 'custom-post-type-ui' ); ?></a>
 			<a href="<?php echo esc_url( cptui_get_add_new_link( 'taxonomies' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New Taxonomy', 'custom-post-type-ui' ); ?></a>
 			<?php
 			$post_types = cptui_get_post_type_data();
 			echo '<h2 id="post-types">' . esc_html__( 'Post Types', 'custom-post-type-ui' ) . '</h2>';
 			if ( ! empty( $post_types ) ) {
-			?>
+				?>
 			<p>
-			<?php
-			printf(
+				<?php
+				printf(
 				/* translators: %s: Total count of registered CPTUI post types */
-				esc_html__( 'Custom Post Type UI registered post types count total: %d', 'custom-post-type-ui' ),
-				count( $post_types )
-			);
-			?>
+					esc_html__( 'Custom Post Type UI registered post types count total: %d', 'custom-post-type-ui' ),
+					count( $post_types )
+				);
+				?>
 			</p>
 
-			<?php
+				<?php
 
-			$post_type_table_heads = [
-				esc_html__( 'Post Type', 'custom-post-type-ui' ),
-				esc_html__( 'Settings', 'custom-post-type-ui' ),
-				esc_html__( 'Supports', 'custom-post-type-ui' ),
-				esc_html__( 'Taxonomies', 'custom-post-type-ui' ),
-				esc_html__( 'Labels', 'custom-post-type-ui' ),
-				esc_html__( 'Template Hierarchy', 'custom-post-type-ui' ),
-			];
+				$post_type_table_heads = [
+					esc_html__( 'Post Type', 'custom-post-type-ui' ),
+					esc_html__( 'Settings', 'custom-post-type-ui' ),
+					esc_html__( 'Supports', 'custom-post-type-ui' ),
+					esc_html__( 'Taxonomies', 'custom-post-type-ui' ),
+					esc_html__( 'Labels', 'custom-post-type-ui' ),
+					esc_html__( 'Template Hierarchy', 'custom-post-type-ui' ),
+				];
 
-			/**
-			 * Fires before the listing of registered post type data.
-			 *
-			 * @since 1.1.0
-			 */
-			do_action( 'cptui_before_post_type_listing' );
-			?>
+				/**
+				 * Fires before the listing of registered post type data.
+				 *
+				 * @since 1.1.0
+				 */
+				do_action( 'cptui_before_post_type_listing' );
+				?>
 			<table class="wp-list-table widefat post-type-listing">
 				<thead>
 				<tr>
@@ -158,7 +164,7 @@ function cptui_listings() {
 								);
 
 								if ( $archive ) {
-								?>
+									?>
 								<a href="<?php echo esc_attr( get_post_type_archive_link( $post_type ) ); ?>"><?php esc_html_e( 'View frontend archive', 'custom-post-type-ui' ); ?></a>
 								<?php } ?>
 							</td>
@@ -240,7 +246,7 @@ function cptui_listings() {
 								<p>
 									<?php
 									printf(
-										'<a href="https://developer.wordpress.org/themes/basics/template-hierarchy/">%s</a>',
+										'<a href="https://developer.wordpress.org/themes/classic-themes/basics/template-hierarchy/">%s</a>',
 										esc_html__( 'Template hierarchy Theme Handbook', 'custom-post-type-ui' )
 									);
 									?>
@@ -263,7 +269,7 @@ function cptui_listings() {
 				</tr>
 				</tfoot>
 			</table>
-			<?php
+				<?php
 				/**
 				 * Fires after the listing of registered post type data.
 				 *
@@ -428,7 +434,7 @@ function cptui_listings() {
 									<p>
 										<?php
 										printf(
-											'<a href="https://developer.wordpress.org/themes/basics/template-hierarchy/">%s</a>',
+											'<a href="https://developer.wordpress.org/themes/classic-themes/basics/template-hierarchy/">%s</a>',
 											esc_html__( 'Template hierarchy Theme Handbook', 'custom-post-type-ui' )
 										);
 										?>
@@ -451,7 +457,7 @@ function cptui_listings() {
 					</tr>
 					</tfoot>
 				</table>
-			<?php
+				<?php
 				/**
 				 * Fires after the listing of registered taxonomy data.
 				 *
@@ -487,7 +493,8 @@ function cptui_no_post_types_to_list() {
 	echo '<p>' . sprintf(
 		/* translators: 1st %s: Link to manage post types section 2nd %s Link text */
 		esc_html__( 'No post types registered for display. Visit %s to get started.', 'custom-post-type-ui' ),
-		sprintf( '<a href="%s">%s</a>',
+		sprintf(
+			'<a href="%s">%s</a>',
 			esc_attr( admin_url( 'admin.php?page=cptui_manage_post_types' ) ),
 			esc_html__( 'Add/Edit Post Types', 'custom-post-type-ui' )
 		)
@@ -508,7 +515,8 @@ function cptui_no_taxonomies_to_list() {
 	echo '<p>' . sprintf(
 		/* translators: %s: Link to manage taxonomies section */
 		esc_html__( 'No taxonomies registered for display. Visit %s to get started.', 'custom-post-type-ui' ),
-		sprintf( '<a href="%s">%s</a>',
+		sprintf(
+			'<a href="%s">%s</a>',
 			esc_attr( admin_url( 'admin.php?page=cptui_manage_taxonomies' ) ),
 			esc_html__( 'Add/Edit Taxonomies', 'custom-post-type-ui' )
 		)

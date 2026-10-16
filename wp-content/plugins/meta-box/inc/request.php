@@ -26,7 +26,7 @@ class RWMB_Request {
 	}
 
 	public function set_post_data( array $data ) {
-		$this->post_data = array_merge( $this->post_data, $data );
+		$this->post_data = array_merge( $this->post_data, $this->cleanup( $data ) );
 	}
 
 	public function get( string $name, $default = null ) {
@@ -42,7 +42,7 @@ class RWMB_Request {
 		if ( empty( $cleanups ) || ! is_array( $cleanups ) ) {
 			return $data;
 		}
-		
+
 		// Decode the JSON string for each cleanup item
 		foreach ( $cleanups as $cleanup ) {
 			$cleanup = json_decode( stripslashes( $cleanup ) );

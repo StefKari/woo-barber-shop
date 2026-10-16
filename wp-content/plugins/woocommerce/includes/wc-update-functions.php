@@ -2,13 +2,54 @@
 /**
  * WooCommerce Updates
  *
- * Functions for updating data, used by the background updater.
+ * Functions for updating data, used by the background updater. These functions must be included
+ * in the list returned by WC_Install::get_db_update_callbacks.
+ *
+ * Please note that these functions are invoked when WooCommerce is updated from a previous version,
+ * but NOT when WooCommerce is newly installed.
+ *
+ * Database schema changes must be incorporated to the SQL returned by WC_Install::get_schema, which is applied
+ * via dbDelta at both install and update time. If any other kind of database change is required
+ * at install time (e.g. populating tables), use the 'woocommerce_installed' hook.
  *
  * @package WooCommerce\Functions
  * @version 3.3.0
  */
 
 defined( 'ABSPATH' ) || exit;
+
+use Automattic\Jetpack\Constants;
+use Automattic\WooCommerce\Admin\Notes\Note;
+use Automattic\WooCommerce\Admin\Notes\Notes;
+use Automattic\WooCommerce\Database\Migrations\MigrationHelper;
+use Automattic\WooCommerce\Enums\DefaultCustomerAddress;
+use Automattic\WooCommerce\Enums\ProductStockStatus;
+use Automattic\WooCommerce\Enums\ProductType;
+use Automattic\WooCommerce\Internal\Admin\Marketing\MarketingSpecs;
+use Automattic\WooCommerce\Internal\Admin\Notes\WooSubscriptionsNotes;
+use Automattic\WooCommerce\Internal\AssignDefaultCategory;
+use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
+use Automattic\WooCommerce\Internal\DataStores\Orders\DataSynchronizer;
+use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableDataStore;
+use Automattic\WooCommerce\Internal\EmailEditor\WCTransactionalEmails\WCEmailPostsCleanup;
+use Automattic\WooCommerce\Internal\EmailEditor\WCTransactionalEmails\WCEmailTemplateSyncBackfill;
+use Automattic\WooCommerce\Internal\Features\FeaturesController;
+use Automattic\WooCommerce\Internal\ProductAttributesLookup\DataRegenerator;
+use Automattic\WooCommerce\Internal\ProductAttributesLookup\LookupDataStore;
+use Automattic\WooCommerce\Internal\ProductDownloads\ApprovedDirectories\Register as Download_Directories;
+use Automattic\WooCommerce\Internal\ProductDownloads\ApprovedDirectories\Synchronize as Download_Directories_Sync;
+use Automattic\WooCommerce\Internal\StockNotifications\StockNotifications;
+use Automattic\WooCommerce\Internal\StockNotifications\Utilities\EmailNormalizer;
+use Automattic\WooCommerce\Internal\Utilities\DatabaseUtil;
+use Automattic\WooCommerce\Internal\VariationGallery\Telemetry as VariationGalleryTelemetry;
+use Automattic\WooCommerce\Internal\Utilities\FilesystemUtil;
+use Automattic\WooCommerce\Internal\Utilities\ProductUtil;
+use Automattic\WooCommerce\Internal\VariationGallery\Package as VariationGalleryPackage;
+use Automattic\WooCommerce\Utilities\OrderUtil;
+use Automattic\WooCommerce\Utilities\StringUtil;
+use Automattic\WooCommerce\Blocks\InboxNotifications;
+use Automattic\WooCommerce\Blocks\Options as BlockOptions;
+use Automattic\WooCommerce\Blocks\Utils\BlockTemplateUtils;
 
 /**
  * Update file paths for 2.0
@@ -148,7 +189,7 @@ function wc_update_200_taxrates() {
 						)
 					);
 
-					$loop++;
+					++$loop;
 				}
 			}
 		}
@@ -197,7 +238,7 @@ function wc_update_200_taxrates() {
 				}
 			}
 
-			$loop++;
+			++$loop;
 		}
 	}
 
@@ -342,8 +383,6 @@ function wc_update_200_line_items() {
 						$order_tax_row->post_id
 					)
 				);
-
-				unset( $tax_amount );
 			}
 		}
 	}
@@ -396,7 +435,7 @@ function wc_update_209_brazillian_state() {
 
 	// phpcs:disable WordPress.DB.SlowDBQuery
 
-	// Update brazillian state codes.
+	// Update Brazilian state codes.
 	$wpdb->update(
 		$wpdb->postmeta,
 		array(
@@ -535,6 +574,8 @@ function wc_update_220_shipping() {
 
 /**
  * Update order statuses for 2.2
+ *
+ * Keeping the internal statuses names as strings to avoid regression issues (not referencing Automattic\WooCommerce\Enums\OrderInternalStatus class).
  *
  * @return void
  */
@@ -704,8 +745,8 @@ function wc_update_230_options() {
 	delete_metadata( 'user', 0, '_last_order', '', true );
 
 	// To prevent taxes being hidden when using a default 'no address' in a store with tax inc prices, set the woocommerce_default_customer_address to use the store base address by default.
-	if ( '' === get_option( 'woocommerce_default_customer_address', false ) && wc_prices_include_tax() ) {
-		update_option( 'woocommerce_default_customer_address', 'base' );
+	if ( DefaultCustomerAddress::NO_DEFAULT === get_option( 'woocommerce_default_customer_address', false ) && wc_prices_include_tax() ) {
+		update_option( 'woocommerce_default_customer_address', DefaultCustomerAddress::BASE );
 	}
 }
 
@@ -971,7 +1012,7 @@ function wc_update_241_variations() {
 		$parent_stock_status = get_post_meta( $variation->variation_parent, '_stock_status', true );
 
 		// Set the _stock_status.
-		add_post_meta( $variation->variation_id, '_stock_status', $parent_stock_status ? $parent_stock_status : 'instock', true );
+		add_post_meta( $variation->variation_id, '_stock_status', $parent_stock_status ? $parent_stock_status : ProductStockStatus::IN_STOCK, true );
 
 		// Delete old product children array.
 		delete_transient( 'wc_product_children_' . $variation->variation_parent );
@@ -1040,8 +1081,6 @@ function wc_update_260_options() {
 	if ( 'no' === get_option( 'woocommerce_calc_shipping' ) ) {
 		update_option( 'woocommerce_ship_to_countries', 'disabled' );
 	}
-
-	WC_Admin_Notices::add_notice( 'legacy_shipping' );
 }
 
 /**
@@ -1223,6 +1262,8 @@ function wc_update_300_webhooks() {
 /**
  * Add an index to the field comment_type to improve the response time of the query
  * used by WC_Comments::wp_count_comments() to get the number of comments by type.
+ *
+ * @return void
  */
 function wc_update_300_comment_type_index() {
 	global $wpdb;
@@ -1246,7 +1287,7 @@ function wc_update_300_grouped_products() {
 	$parents = $wpdb->get_col( "SELECT DISTINCT( post_parent ) FROM {$wpdb->posts} WHERE post_parent > 0 AND post_type = 'product';" );
 	foreach ( $parents as $parent_id ) {
 		$parent = wc_get_product( $parent_id );
-		if ( $parent && $parent->is_type( 'grouped' ) ) {
+		if ( $parent && $parent->is_type( ProductType::GROUPED ) ) {
 			$children_ids = get_posts(
 				array(
 					'post_parent'    => $parent_id,
@@ -1287,6 +1328,8 @@ function wc_update_300_settings() {
 
 /**
  * Convert meta values into term for product visibility.
+ *
+ * @return void
  */
 function wc_update_300_product_visibility() {
 	global $wpdb;
@@ -1311,7 +1354,7 @@ function wc_update_300_product_visibility() {
 		$wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO {$wpdb->term_relationships} SELECT post_id, %d, 0 FROM {$wpdb->postmeta} WHERE meta_key = '_visibility' AND meta_value IN ('hidden', 'search');", $exclude_catalog_term->term_taxonomy_id ) );
 	}
 
-	$outofstock_term = get_term_by( 'name', 'outofstock', 'product_visibility' );
+	$outofstock_term = get_term_by( 'name', ProductStockStatus::OUT_OF_STOCK, 'product_visibility' );
 
 	if ( $outofstock_term ) {
 		$wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO {$wpdb->term_relationships} SELECT post_id, %d, 0 FROM {$wpdb->postmeta} WHERE meta_key = '_stock_status' AND meta_value = 'outofstock';", $outofstock_term->term_taxonomy_id ) );
@@ -1350,6 +1393,8 @@ function wc_update_300_product_visibility() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_300_db_version() {
 	WC_Install::update_db_version( '3.0.0' );
@@ -1357,6 +1402,8 @@ function wc_update_300_db_version() {
 
 /**
  * Add an index to the downloadable product permissions table to improve performance of update_user_by_order_id.
+ *
+ * @return void
  */
 function wc_update_310_downloadable_products() {
 	global $wpdb;
@@ -1370,6 +1417,8 @@ function wc_update_310_downloadable_products() {
 
 /**
  * Find old order notes and ensure they have the correct type for exclusion.
+ *
+ * @return void
  */
 function wc_update_310_old_comments() {
 	global $wpdb;
@@ -1379,6 +1428,8 @@ function wc_update_310_old_comments() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_310_db_version() {
 	WC_Install::update_db_version( '3.1.0' );
@@ -1386,6 +1437,8 @@ function wc_update_310_db_version() {
 
 /**
  * Update shop_manager capabilities.
+ *
+ * @return void
  */
 function wc_update_312_shop_manager_capabilities() {
 	$role = get_role( 'shop_manager' );
@@ -1394,6 +1447,8 @@ function wc_update_312_shop_manager_capabilities() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_312_db_version() {
 	WC_Install::update_db_version( '3.1.2' );
@@ -1401,6 +1456,8 @@ function wc_update_312_db_version() {
 
 /**
  * Update state codes for Mexico.
+ *
+ * @return void
  */
 function wc_update_320_mexican_states() {
 	global $wpdb;
@@ -1474,6 +1531,8 @@ function wc_update_320_mexican_states() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_320_db_version() {
 	WC_Install::update_db_version( '3.2.0' );
@@ -1481,6 +1540,8 @@ function wc_update_320_db_version() {
 
 /**
  * Update image settings to use new aspect ratios and widths.
+ *
+ * @return void
  */
 function wc_update_330_image_options() {
 	$old_thumbnail_size = get_option( 'shop_catalog_image_size', array() );
@@ -1526,6 +1587,8 @@ function wc_update_330_image_options() {
 
 /**
  * Migrate webhooks from post type to CRUD.
+ *
+ * @return void
  */
 function wc_update_330_webhooks() {
 	register_post_type( 'shop_webhook' );
@@ -1565,37 +1628,22 @@ function wc_update_330_webhooks() {
 
 /**
  * Assign default cat to all products with no cats.
+ *
+ * @return void
  */
 function wc_update_330_set_default_product_cat() {
-	global $wpdb;
-
-	$default_category = get_option( 'default_product_cat', 0 );
-
-	if ( $default_category ) {
-		$wpdb->query(
-			$wpdb->prepare(
-				"INSERT INTO {$wpdb->term_relationships} (object_id, term_taxonomy_id)
-				SELECT DISTINCT posts.ID, %s FROM {$wpdb->posts} posts
-				LEFT JOIN
-					(
-						SELECT object_id FROM {$wpdb->term_relationships} term_relationships
-						LEFT JOIN {$wpdb->term_taxonomy} term_taxonomy ON term_relationships.term_taxonomy_id = term_taxonomy.term_taxonomy_id
-						WHERE term_taxonomy.taxonomy = 'product_cat'
-					) AS tax_query
-				ON posts.ID = tax_query.object_id
-				WHERE posts.post_type = 'product'
-				AND tax_query.object_id IS NULL",
-				$default_category
-			)
-		);
-		wp_cache_flush();
-		delete_transient( 'wc_term_counts' );
-		wp_update_term_count_now( array( $default_category ), 'product_cat' );
-	}
+	/*
+	 * When a product category is deleted, we need to check
+	 * if the product has no categories assigned. Then assign
+	 * it a default category.
+	 */
+	wc_get_container()->get( AssignDefaultCategory::class )->maybe_assign_default_product_cat();
 }
 
 /**
  * Update product stock status to use the new onbackorder status.
+ *
+ * @return void
  */
 function wc_update_330_product_stock_status() {
 	global $wpdb;
@@ -1639,6 +1687,8 @@ function wc_update_330_product_stock_status() {
 
 /**
  * Clear addons page transients
+ *
+ * @return void
  */
 function wc_update_330_clear_transients() {
 	delete_transient( 'wc_addons_sections' );
@@ -1647,6 +1697,8 @@ function wc_update_330_clear_transients() {
 
 /**
  * Set PayPal's sandbox credentials.
+ *
+ * @return void
  */
 function wc_update_330_set_paypal_sandbox_credentials() {
 
@@ -1665,6 +1717,8 @@ function wc_update_330_set_paypal_sandbox_credentials() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_330_db_version() {
 	WC_Install::update_db_version( '3.3.0' );
@@ -1672,6 +1726,8 @@ function wc_update_330_db_version() {
 
 /**
  * Update state codes for Ireland and BD.
+ *
+ * @return void
  */
 function wc_update_340_states() {
 	$country_states = array(
@@ -1815,6 +1871,8 @@ function wc_update_340_state() {
 
 /**
  * Set last active prop for users.
+ *
+ * @return void
  */
 function wc_update_340_last_active() {
 	global $wpdb;
@@ -1835,6 +1893,8 @@ function wc_update_340_last_active() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_340_db_version() {
 	WC_Install::update_db_version( '3.4.0' );
@@ -1848,18 +1908,14 @@ function wc_update_340_db_version() {
 function wc_update_343_cleanup_foreign_keys() {
 	global $wpdb;
 
-	$results = $wpdb->get_results(
-		"SELECT CONSTRAINT_NAME
-		FROM information_schema.TABLE_CONSTRAINTS
-		WHERE CONSTRAINT_SCHEMA = '{$wpdb->dbname}'
-		AND CONSTRAINT_NAME LIKE '%wc_download_log_ib%'
-		AND CONSTRAINT_TYPE = 'FOREIGN KEY'
-		AND TABLE_NAME = '{$wpdb->prefix}wc_download_log'"
-	);
+	$create_table_sql = $wpdb->get_var( "SHOW CREATE TABLE {$wpdb->prefix}wc_download_log", 1 );
 
-	if ( $results ) {
-		foreach ( $results as $fk ) {
-			$wpdb->query( "ALTER TABLE {$wpdb->prefix}wc_download_log DROP FOREIGN KEY {$fk->CONSTRAINT_NAME}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	if ( ! empty( $create_table_sql ) ) {
+		// Extract and remove the foreign key constraints matching %wc_download_log_ib%.
+		if ( preg_match_all( '/CONSTRAINT `([^`]*wc_download_log_ib[^`]*)` FOREIGN KEY/', $create_table_sql, $matches ) && ! empty( $matches[1] ) ) {
+			foreach ( $matches[1] as $foreign_key_name ) {
+				$wpdb->query( "ALTER TABLE {$wpdb->prefix}wc_download_log DROP FOREIGN KEY `{$foreign_key_name}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			}
 		}
 	}
 }
@@ -1894,6 +1950,8 @@ function wc_update_344_db_version() {
 
 /**
  * Set the comment type to 'review' for product reviews that don't have a comment type.
+ *
+ * @return void
  */
 function wc_update_350_reviews_comment_type() {
 	global $wpdb;
@@ -1905,36 +1963,35 @@ function wc_update_350_reviews_comment_type() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_350_db_version() {
 	WC_Install::update_db_version( '3.5.0' );
 }
 
 /**
- * Drop the fk_wc_download_log_permission_id FK as we use a new one with the table and blog prefix for MS compatability.
+ * Drop the fk_wc_download_log_permission_id FK as we use a new one with the table and blog prefix for MS compatibility.
  *
  * @return void
  */
 function wc_update_352_drop_download_log_fk() {
 	global $wpdb;
-	$results = $wpdb->get_results(
-		"SELECT CONSTRAINT_NAME
-		FROM information_schema.TABLE_CONSTRAINTS
-		WHERE CONSTRAINT_SCHEMA = '{$wpdb->dbname}'
-		AND CONSTRAINT_NAME = 'fk_wc_download_log_permission_id'
-		AND CONSTRAINT_TYPE = 'FOREIGN KEY'
-		AND TABLE_NAME = '{$wpdb->prefix}wc_download_log'"
-	);
 
-	// We only need to drop the old key as WC_Install::create_tables() takes care of creating the new FK.
-	if ( $results ) {
-		$wpdb->query( "ALTER TABLE {$wpdb->prefix}wc_download_log DROP FOREIGN KEY fk_wc_download_log_permission_id" ); // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
+	$create_table_sql = $wpdb->get_var( "SHOW CREATE TABLE {$wpdb->prefix}wc_download_log", 1 );
+
+	if ( ! empty( $create_table_sql ) ) {
+		if ( strpos( $create_table_sql, 'CONSTRAINT `fk_wc_download_log_permission_id` FOREIGN KEY' ) !== false ) {
+			$wpdb->query( "ALTER TABLE {$wpdb->prefix}wc_download_log DROP FOREIGN KEY fk_wc_download_log_permission_id" ); // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
+		}
 	}
 }
 
 /**
  * Remove edit_user capabilities from shop managers and use "translated" capabilities instead.
  * See wc_shop_manager_has_capability function.
+ *
+ * @return void
  */
 function wc_update_354_modify_shop_manager_caps() {
 	global $wp_roles;
@@ -1952,6 +2009,8 @@ function wc_update_354_modify_shop_manager_caps() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_354_db_version() {
 	WC_Install::update_db_version( '3.5.4' );
@@ -1959,6 +2018,8 @@ function wc_update_354_db_version() {
 
 /**
  * Update product lookup tables in bulk.
+ *
+ * @return void
  */
 function wc_update_360_product_lookup_tables() {
 	wc_update_product_lookup_tables();
@@ -1966,6 +2027,8 @@ function wc_update_360_product_lookup_tables() {
 
 /**
  * Renames ordering meta to be consistent across taxonomies.
+ *
+ * @return void
  */
 function wc_update_360_term_meta() {
 	global $wpdb;
@@ -1990,6 +2053,8 @@ function wc_update_360_downloadable_product_permissions_index() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_360_db_version() {
 	WC_Install::update_db_version( '3.6.0' );
@@ -2062,6 +2127,8 @@ function wc_update_370_mro_std_currency() {
 
 /**
  * Update DB Version.
+ *
+ * @return void
  */
 function wc_update_370_db_version() {
 	WC_Install::update_db_version( '3.7.0' );
@@ -2070,6 +2137,8 @@ function wc_update_370_db_version() {
 /**
  * We've moved the MaxMind database to a new location, as per the TOS' requirement that the database not
  * be publicly accessible.
+ *
+ * @return void
  */
 function wc_update_390_move_maxmind_database() {
 	// Make sure to use all of the correct filters to pull the local database path.
@@ -2091,6 +2160,8 @@ function wc_update_390_move_maxmind_database() {
 
 /**
  * So that we can best meet MaxMind's TOS, the geolocation database update cron should run once per 15 days.
+ *
+ * @return void
  */
 function wc_update_390_change_geolocation_database_update_cron() {
 	wp_clear_scheduled_hook( 'woocommerce_geoip_updater' );
@@ -2099,6 +2170,8 @@ function wc_update_390_change_geolocation_database_update_cron() {
 
 /**
  * Update DB version.
+ *
+ * @return void
  */
 function wc_update_390_db_version() {
 	WC_Install::update_db_version( '3.9.0' );
@@ -2106,6 +2179,8 @@ function wc_update_390_db_version() {
 
 /**
  * Increase column size
+ *
+ * @return void
  */
 function wc_update_400_increase_size_of_column() {
 	global $wpdb;
@@ -2115,11 +2190,13 @@ function wc_update_400_increase_size_of_column() {
 
 /**
  * Reset ActionScheduler migration status. Needs AS >= 3.0 shipped with WC >= 4.0.
+ *
+ * @return void
  */
 function wc_update_400_reset_action_scheduler_migration_status() {
 	if (
 		class_exists( 'ActionScheduler_DataController' ) &&
-		method_exists( 'ActionScheduler_DataController', 'mark_migration_incomplete' )
+		method_exists( 'ActionScheduler_DataController', 'mark_migration_incomplete' ) // @phpstan-ignore function.alreadyNarrowedType
 	) {
 		\ActionScheduler_DataController::mark_migration_incomplete();
 	}
@@ -2127,6 +2204,8 @@ function wc_update_400_reset_action_scheduler_migration_status() {
 
 /**
  * Update DB version.
+ *
+ * @return void
  */
 function wc_update_400_db_version() {
 	WC_Install::update_db_version( '4.0.0' );
@@ -2148,6 +2227,8 @@ function wc_update_440_insert_attribute_terms_for_variable_products() {
 
 /**
  * Update DB version.
+ *
+ * @return void
  */
 function wc_update_440_db_version() {
 	WC_Install::update_db_version( '4.4.0' );
@@ -2155,6 +2236,8 @@ function wc_update_440_db_version() {
 
 /**
  * Update DB version to 4.5.0.
+ *
+ * @return void
  */
 function wc_update_450_db_version() {
 	WC_Install::update_db_version( '4.5.0' );
@@ -2224,6 +2307,8 @@ function wc_update_450_sanitize_coupons_code() {
  * Fixes product review count that might have been incorrect.
  *
  * See @link https://github.com/woocommerce/woocommerce/issues/27688.
+ *
+ * @return bool True to run again, false if completed.
  */
 function wc_update_500_fix_product_review_count() {
 	global $wpdb;
@@ -2279,7 +2364,1633 @@ function wc_update_500_fix_product_review_count() {
 
 /**
  * Update DB version to 5.0.0.
+ *
+ * @return void
  */
 function wc_update_500_db_version() {
 	WC_Install::update_db_version( '5.0.0' );
+}
+
+// phpcs:disable Squiz.Commenting.FunctionComment.InvalidReturnVoid -- return statement is in a nested function, not this one.
+/**
+ * Creates the refund and returns policy page.
+ *
+ * See @link https://github.com/woocommerce/woocommerce/issues/29235.
+ *
+ * @return void
+ */
+function wc_update_560_create_refund_returns_page() {
+// phpcs:enable Squiz.Commenting.FunctionComment.InvalidReturnVoid
+	/**
+	 * Filter on the pages created to return what we expect.
+	 *
+	 * @param array $pages The default WC pages.
+	 * @return array
+	 */
+	function filter_created_pages( $pages ) {
+		$page_to_create = array( 'refund_returns' );
+
+		return array_intersect_key( $pages, array_flip( $page_to_create ) );
+	}
+
+	add_filter( 'woocommerce_create_pages', 'filter_created_pages' );
+
+	WC_Install::create_pages();
+
+	remove_filter( 'woocommerce_create_pages', 'filter_created_pages' );
+}
+
+/**
+ * Update DB version to 5.6.0.
+ *
+ * @return void
+ */
+function wc_update_560_db_version() {
+	WC_Install::update_db_version( '5.6.0' );
+}
+
+/**
+ * Migrate rate limit options to the new table.
+ *
+ * See @link https://github.com/woocommerce/woocommerce/issues/27103.
+ *
+ * @return void
+ */
+function wc_update_600_migrate_rate_limit_options() {
+	global $wpdb;
+
+	$rate_limits   = $wpdb->get_results(
+		"
+			SELECT option_name, option_value
+			FROM $wpdb->options
+			WHERE option_name LIKE 'woocommerce_rate_limit_add_payment_method_%'
+		",
+		ARRAY_A
+	);
+	$prefix_length = strlen( 'woocommerce_rate_limit_' );
+
+	foreach ( $rate_limits as $rate_limit ) {
+		$new_delay = (int) $rate_limit['option_value'] - time();
+
+		// Migrate the limit if it hasn't expired yet.
+		if ( 0 < $new_delay ) {
+			$action_id = substr( $rate_limit['option_name'], $prefix_length );
+			WC_Rate_Limiter::set_rate_limit( $action_id, $new_delay );
+		}
+
+		delete_option( $rate_limit['option_name'] );
+	}
+}
+
+/**
+ * Update DB version to 6.0.0.
+ *
+ * @return void
+ */
+function wc_update_600_db_version() {
+	WC_Install::update_db_version( '6.0.0' );
+}
+
+/**
+ * Create the product attributes lookup table and initiate its filling,
+ * unless the table had been already created manually (via the tools page).
+ *
+ * @return false Always false, since the LookupDataStore class handles all the data filling process.
+ */
+function wc_update_630_create_product_attributes_lookup_table() {
+	$data_store       = wc_get_container()->get( LookupDataStore::class );
+	$data_regenerator = wc_get_container()->get( DataRegenerator::class );
+
+	/**
+	 * If the table exists and contains data, it was manually created by user before the migration ran.
+	 * If the table exists but is empty, it was likely created right now via dbDelta, so a table regenerations is needed (unless one is in progress already).
+	 */
+	if ( ! $data_store->check_lookup_table_exists() || ( ! $data_store->lookup_table_has_data() && ! $data_store->regeneration_is_in_progress() ) ) {
+		$data_regenerator->initiate_regeneration();
+	}
+
+	return false;
+}
+
+/**
+ *
+ * Update DB version to 6.3.0.
+ *
+ * @return void
+ */
+function wc_update_630_db_version() {
+	WC_Install::update_db_version( '6.3.0' );
+}
+
+/**
+ * Create the primary key for the product attributes lookup table if it doesn't exist already.
+ *
+ * @return bool Always false.
+ */
+function wc_update_640_add_primary_key_to_product_attributes_lookup_table() {
+	wc_get_container()->get( DataRegenerator::class )->create_table_primary_index();
+
+	return false;
+}
+
+/**
+ *
+ * Update DB version to 6.4.0.
+ *
+ * @return void
+ */
+function wc_update_640_db_version() {
+	WC_Install::update_db_version( '6.4.0' );
+}
+
+/**
+ * Add the standard WooCommerce upload directories to the Approved Product Download Directories list
+ * and start populating it based on existing product download URLs, but do not enable the feature
+ * (for existing installations, a site admin should review and make a conscious decision to enable).
+ *
+ * @return void
+ */
+function wc_update_650_approved_download_directories() {
+	$directory_sync = wc_get_container()->get( Download_Directories_Sync::class );
+	$directory_sync->init_hooks();
+	$directory_sync->init_feature( true, false );
+}
+
+/**
+ * In some cases, the approved download directories table may not have been successfully created during the update to
+ * 6.5.0. If this was the case we will need to re-initialize the feature.
+ *
+ * @return void
+ */
+function wc_update_651_approved_download_directories() {
+	global $wpdb;
+
+	$download_directories = wc_get_container()->get( Download_Directories::class );
+	$directory_sync       = wc_get_container()->get( Download_Directories_Sync::class );
+
+	// Check if at least 1 row exists, without scanning the entire table.
+	$is_populated = (bool) $wpdb->get_var(
+		'SELECT 1 FROM ' . $download_directories->get_table() . ' LIMIT 1'
+	);
+
+	// If the table contains rules (or does not yet, but a sync is in-progress) we should do nothing else at this point.
+	if ( $is_populated || $directory_sync->in_progress() ) {
+		return;
+	}
+
+	// Otherwise, it seems reasonable to assume that the feature was not initialized as expected during the update to
+	// 6.5.0. Let's give that another try.
+	$directory_sync->init_hooks();
+	$directory_sync->init_feature( true, false );
+}
+
+/**
+ * Purges the comments count cache after 6.7.0 split reviews from the comments page.
+ *
+ * @return void
+ */
+function wc_update_670_purge_comments_count_cache() {
+	if ( ! is_callable( 'WC_Comments::delete_comments_count_cache' ) ) {
+		return;
+	}
+
+	WC_Comments::delete_comments_count_cache();
+}
+/**
+ * Remove unnecessary foreign keys.
+ *
+ * @return void
+ */
+function wc_update_700_remove_download_log_fk() {
+	global $wpdb;
+
+	$create_table_sql = $wpdb->get_var( "SHOW CREATE TABLE {$wpdb->prefix}wc_download_log", 1 );
+
+	if ( ! empty( $create_table_sql ) ) {
+		if ( preg_match_all( '/CONSTRAINT `([^`]*)` FOREIGN KEY/', $create_table_sql, $matches ) && ! empty( $matches[1] ) ) {
+			foreach ( $matches[1] as $foreign_key_name ) {
+				$wpdb->query( "ALTER TABLE {$wpdb->prefix}wc_download_log DROP FOREIGN KEY `{$foreign_key_name}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			}
+		}
+	}
+}
+
+/**
+ * Remove the transient data for recommended marketing extensions.
+ *
+ * @return void
+ */
+function wc_update_700_remove_recommended_marketing_plugins_transient() {
+	delete_transient( 'wc_marketing_recommended_plugins' );
+}
+
+/**
+ * Update the New Zealand state codes in the database
+ * after they were updated in code to the CLDR standard.
+ *
+ * @return bool True if there are more records that need to be migrated, false otherwise.
+ */
+function wc_update_721_adjust_new_zealand_states() {
+	return MigrationHelper::migrate_country_states(
+		'NZ',
+		array(
+			'NL' => 'NTL',
+			'AK' => 'AUK',
+			'WA' => 'WKO',
+			'BP' => 'BOP',
+			'TK' => 'TKI',
+			'GI' => 'GIS',
+			'HB' => 'HKB',
+			'MW' => 'MWT',
+			'WE' => 'WGN',
+			'NS' => 'NSN',
+			'MB' => 'MBH',
+			'TM' => 'TAS',
+			'WC' => 'WTC',
+			'CT' => 'CAN',
+			'OT' => 'OTA',
+			'SL' => 'STL',
+		)
+	);
+}
+
+/**
+ * Update the Ukraine state codes in the database
+ * after they were updated in code to the CLDR standard.
+ *
+ * @return bool True if there are more records that need to be migrated, false otherwise.
+ */
+function wc_update_721_adjust_ukraine_states() {
+	return MigrationHelper::migrate_country_states(
+		'UA',
+		array(
+			'VN' => 'UA05',
+			'LH' => 'UA09',
+			'VL' => 'UA07',
+			'DP' => 'UA12',
+			'DT' => 'UA14',
+			'ZT' => 'UA18',
+			'ZK' => 'UA21',
+			'ZP' => 'UA23',
+			'IF' => 'UA26',
+			'KV' => 'UA32',
+			'KH' => 'UA35',
+			'LV' => 'UA46',
+			'MY' => 'UA48',
+			'OD' => 'UA51',
+			'PL' => 'UA53',
+			'RV' => 'UA56',
+			'SM' => 'UA59',
+			'TP' => 'UA61',
+			'KK' => 'UA63',
+			'KS' => 'UA65',
+			'KM' => 'UA68',
+			'CK' => 'UA71',
+			'CH' => 'UA74',
+			'CV' => 'UA77',
+		)
+	);
+}
+
+/**
+ * Update the New Zealand state codes in the database after they were updated in code to the CLDR standard.
+ *
+ * This is a simple wrapper for the corresponding 7.2.1 update function. The reason we do this (instead of
+ * reusing the original function directly) is for better traceability in the Action Scheduler log, in case
+ * of problems.
+ *
+ * @return bool True if there are more records that need to be migrated, false otherwise.
+ */
+function wc_update_722_adjust_new_zealand_states() {
+	return wc_update_721_adjust_new_zealand_states();
+}
+
+/**
+ * Update the Ukraine state codes in the database after they were updated in code to the CLDR standard.
+ *
+ * This is a simple wrapper for the corresponding 7.2.1 update function. The reason we do this (instead of
+ * reusing the original function directly) is for better traceability in the Action Scheduler log, in case
+ * of problems.
+ *
+ * @return bool True if there are more records that need to be migrated, false otherwise.
+ */
+function wc_update_722_adjust_ukraine_states() {
+	return wc_update_721_adjust_ukraine_states();
+}
+
+/**
+ * Add new columns date_paid and date_completed to wp_wc_order_stats table in order to provide the option
+ * of using the dates in the reports
+ *
+ * @return void
+ */
+function wc_update_750_add_columns_to_order_stats_table() {
+	global $wpdb;
+
+	$wpdb->query(
+		"UPDATE {$wpdb->prefix}wc_order_stats AS order_stats
+		INNER JOIN {$wpdb->postmeta} AS postmeta
+			ON postmeta.post_id = order_stats.order_id
+			and postmeta.meta_key = '_date_paid'
+		SET order_stats.date_paid = IFNULL(FROM_UNIXTIME(postmeta.meta_value), '0000-00-00 00:00:00');"
+	);
+
+	$wpdb->query(
+		"UPDATE {$wpdb->prefix}wc_order_stats AS order_stats
+		INNER JOIN {$wpdb->postmeta} AS postmeta
+			ON postmeta.post_id = order_stats.order_id
+			and postmeta.meta_key = '_date_completed'
+		SET order_stats.date_completed = IFNULL(FROM_UNIXTIME(postmeta.meta_value), '0000-00-00 00:00:00');"
+	);
+}
+
+/**
+ * Disable the experimental product management experience.
+ *
+ * @return void
+ */
+function wc_update_750_disable_new_product_management_experience() {
+	if ( 'yes' === get_option( 'woocommerce_new_product_management_enabled' ) ) {
+		update_option( 'woocommerce_new_product_management_enabled', 'no' );
+	}
+}
+
+/**
+ * Remove the multichannel marketing feature flag and options. This feature is now enabled by default.
+ *
+ * @return void
+ */
+function wc_update_770_remove_multichannel_marketing_feature_options() {
+	delete_option( 'woocommerce_multichannel_marketing_enabled' );
+	delete_option( 'woocommerce_marketing_overview_welcome_hidden' );
+}
+
+/**
+ * Set a flag to indicate whether the blockified Product Grid Block should be used as a template.
+ *
+ * @return void
+ */
+function wc_update_790_blockified_product_grid_block() {
+	update_option( BlockOptions::WC_BLOCK_USE_BLOCKIFIED_PRODUCT_GRID_BLOCK_AS_TEMPLATE, wc_bool_to_string( false ) );
+}
+
+/**
+ * Migrate transaction data which was being incorrectly stored in the postmeta table to HPOS tables.
+ *
+ * @return bool Whether there are pending migration records.
+ */
+function wc_update_810_migrate_transactional_metadata_for_hpos() {
+	global $wpdb;
+
+	$data_synchronizer = wc_get_container()->get( DataSynchronizer::class );
+	if ( ! $data_synchronizer->get_table_exists() ) {
+		return false;
+	}
+
+	$orders_table      = OrdersTableDataStore::get_orders_table_name();
+	$orders_meta_table = OrdersTableDataStore::get_meta_table_name();
+
+	/**
+	 * We are migrating payment_tokens meta that is stored in wp_postmeta table to the HPOS table. To do this with minimum db ops:
+	 * 1. We join postmeta table with wc_orders table directly, this filters out orders that are yet to be migrated and any post with non-order post type.
+	 * 2. A combination of filter on wc_orders_meta.meta_key = _payment_tokens in the join condition itself, along with a null check in a WHERE condition, allows us to only get the orders where the meta is not yet migrated.
+	 */
+	$select_query = "
+SELECT post_id, '_payment_tokens', {$wpdb->postmeta}.meta_value
+FROM {$wpdb->postmeta}
+JOIN $orders_table ON {$wpdb->postmeta}.post_id = $orders_table.id
+LEFT JOIN $orders_meta_table ON $orders_meta_table.order_id = $orders_table.id AND $orders_meta_table.meta_key = '_payment_tokens'
+WHERE
+	{$wpdb->postmeta}.meta_key = '_payment_tokens'
+	AND $orders_meta_table.order_id IS NULL
+	";
+
+	// No need to get the data in application, we can insert directly. Sync setting does not matter as this data already exist in the post table. Limit the batch size to 250.
+	$query =
+		"
+INSERT INTO $orders_meta_table (order_id, meta_key, meta_value)
+$select_query
+LIMIT 250
+";
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- No user input in the query, everything hardcoded.
+	$wpdb->query( $query );
+
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- No user input in the query, everything hardcoded.
+	$has_pending = $wpdb->query( "$select_query LIMIT 1;" );
+
+	return ! empty( $has_pending );
+}
+
+/**
+ * Rename the checkout template to page-checkout.
+ *
+ * @return void
+ */
+function wc_update_830_rename_checkout_template() {
+	$template = get_block_template( BlockTemplateUtils::PLUGIN_SLUG . '//checkout', 'wp_template' );
+
+	if ( $template && ! empty( $template->wp_id ) ) {
+		if ( ! defined( 'WP_POST_REVISIONS' ) ) {
+			define( 'WP_POST_REVISIONS', false );
+		}
+		wp_update_post(
+			array(
+				'ID'        => $template->wp_id,
+				'post_name' => 'page-checkout',
+			)
+		);
+	}
+}
+
+/**
+ * Rename the cart template to page-cart.
+ *
+ * @return void
+ */
+function wc_update_830_rename_cart_template() {
+	$template = get_block_template( BlockTemplateUtils::PLUGIN_SLUG . '//cart', 'wp_template' );
+
+	if ( $template && ! empty( $template->wp_id ) ) {
+		if ( ! defined( 'WP_POST_REVISIONS' ) ) {
+			define( 'WP_POST_REVISIONS', false );
+		}
+		wp_update_post(
+			array(
+				'ID'        => $template->wp_id,
+				'post_name' => 'page-cart',
+			)
+		);
+	}
+}
+
+/**
+ * Remove the transient data for recommended marketing extensions.
+ *
+ * This is removed because it is not used anymore.
+ * It is replaced by `woocommerce_admin_marketing_recommendations_specs` transient that is created by `MarketingRecommendationsDataSourcePoller`.
+ *
+ * @return void
+ */
+function wc_update_860_remove_recommended_marketing_plugins_transient() {
+	delete_transient( 'wc_marketing_recommended_plugins' );
+}
+
+/**
+ * Create an .htaccess file and an empty index.html file to prevent listing of the default transient files directory,
+ * if the directory exists.
+ *
+ * @return void
+ */
+function wc_update_870_prevent_listing_of_transient_files_directory() {
+	$default_transient_files_dir = untrailingslashit( wp_upload_dir()['basedir'] ) . '/woocommerce_transient_files';
+	if ( ! is_dir( $default_transient_files_dir ) ) {
+		return;
+	}
+
+	// Use a direct filesystem: the transient files directory is inside wp-content/uploads and is
+	// web-server writable, so honoring FS_METHOD is unnecessary and breaks on FTP-without-credentials setups.
+	try {
+		$wp_filesystem = FilesystemUtil::get_wp_filesystem_direct();
+		$wp_filesystem->put_contents( $default_transient_files_dir . '/.htaccess', 'deny from all' );
+		$wp_filesystem->put_contents( $default_transient_files_dir . '/index.html', '' );
+	} catch ( \Exception $exception ) {
+		// Best-effort: the directory remains usable without the no-listing files, but log so the failure leaves a trace.
+		error_log( 'WooCommerce: wc_update_870 could not write transient files directory protection files: ' . $exception->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+	}
+}
+
+/**
+ * If it exists, remove the inbox note that asks users to connect to `Woo.com`.
+ *
+ * @return void
+ */
+function wc_update_890_update_connect_to_woocommerce_note() {
+	$note = Notes::get_note_by_name( WooSubscriptionsNotes::CONNECTION_NOTE_NAME );
+	if ( ! is_a( $note, 'Automattic\WooCommerce\Admin\Notes\Note' ) ) {
+		return;
+	}
+	if ( ! str_contains( $note->get_title(), 'Woo.com' ) ) {
+		return;
+	}
+	if ( $note->get_status() !== Note::E_WC_ADMIN_NOTE_SNOOZED && $note->get_status() !== Note::E_WC_ADMIN_NOTE_UNACTIONED ) {
+		return;
+	}
+	Notes::delete_notes_with_name( WooSubscriptionsNotes::CONNECTION_NOTE_NAME );
+}
+
+/**
+ * Disables the PayPal Standard gateway for stores that aren't using it.
+ *
+ * PayPal Standard has been deprecated since WooCommerce 5.5, but there are some stores that have it showing up in their
+ * list of available Payment methods even if it's not setup. In WooCommerce 8.9 we will disable PayPal Standard for those stores
+ * to reduce the amount of new connections to the legacy gateway.
+ *
+ * Shows an admin notice to inform the store owner that PayPal Standard has been disabled and suggests installing PayPal Payments.
+ *
+ * @return void
+ */
+function wc_update_890_update_paypal_standard_load_eligibility() {
+	$paypal = class_exists( 'WC_Gateway_Paypal' ) ? WC_Gateway_Paypal::get_instance() : null;
+
+	if ( ! $paypal ) {
+		return;
+	}
+
+	// If PayPal is enabled or set to load, but the store hasn't setup PayPal Standard live API keys and doesn't have any PayPal Orders, disable it.
+	if ( ( 'yes' === $paypal->enabled || 'yes' === $paypal->get_option( '_should_load' ) ) && ! $paypal->get_option( 'api_username' ) && ! $paypal->has_paypal_orders() ) {
+		$paypal->update_option( '_should_load', wc_bool_to_string( false ) );
+	}
+}
+
+/**
+ * Create the woocommerce_history_of_autoinstalled_plugins option if it doesn't exist
+ * as a copy of woocommerce_autoinstalled_plugins if it exists.
+ *
+ * @return void
+ */
+function wc_update_891_create_plugin_autoinstall_history_option() {
+	$autoinstalled_plugins_history_info = get_site_option( 'woocommerce_history_of_autoinstalled_plugins' );
+	if ( false === $autoinstalled_plugins_history_info ) {
+		$autoinstalled_plugins_info = get_site_option( 'woocommerce_autoinstalled_plugins' );
+		if ( false !== $autoinstalled_plugins_info ) {
+			update_site_option( 'woocommerce_history_of_autoinstalled_plugins', $autoinstalled_plugins_info );
+		}
+	}
+}
+
+/**
+ * Add woocommerce_show_lys_tour.
+ *
+ * @return void
+ */
+function wc_update_910_add_launch_your_store_tour_option() {
+	add_option( 'woocommerce_show_lys_tour', 'yes' );
+}
+
+/**
+ * Add woocommerce_hooked_blocks_version option for existing stores that are using a theme that supports the Block Hooks API
+ *
+ * @return void
+ */
+function wc_update_920_add_wc_hooked_blocks_version_option() {
+	if ( ! wp_is_block_theme() && ! current_theme_supports( 'block-template-parts' ) ) {
+		return;
+	}
+
+	$option_name  = 'woocommerce_hooked_blocks_version';
+	$option_value = get_option( $option_name );
+
+	// If the option already exists, we don't need to do anything.
+	if ( false !== $option_value ) {
+		return;
+	}
+
+	/**
+	 * A list of theme slugs to execute this with.
+	 * We are applying this filter to allow for the list to be extended by third-parties who were already using it.
+	 *
+	 * @since 8.4.0
+	 */
+	$theme_include_list               = apply_filters( 'woocommerce_hooked_blocks_theme_include_list', array( 'Twenty Twenty-Four', 'Twenty Twenty-Three', 'Twenty Twenty-Two', 'Tsubaki', 'Zaino', 'Thriving Artist', 'Amulet', 'Tazza' ) );
+	$active_theme_name                = wp_get_theme()->get( 'Name' );
+	$should_set_hooked_blocks_version = in_array( $active_theme_name, $theme_include_list, true );
+
+	if ( $should_set_hooked_blocks_version ) {
+		// Set 8.4.0 as the version for existing stores that are using a theme that supports the Block Hooks API.
+		// This will ensure that the Block Hooks API is enabled for these stores and works as expected.
+		// Existing stores that aren't running approved block themes will not have the Block Hooks API enabled.
+		add_option( $option_name, '8.4.0' );
+	} else {
+		// For block themes that aren't approved themes set this option to "no" to completely disable hooked blocks.
+		// This means we can assume the absence of the option is when a site is switching from a classic theme to a block theme for the first time.
+		// Note: We have to use "no" instead of false since the latter is the default value for the option if it doesn't exist.
+		add_option( $option_name, 'no' );
+	}
+}
+
+/**
+ * Remove user meta associated with the keys '_last_order', '_order_count' and '_money_spent'.
+ *
+ * New keys are now used for these, to improve compatibility with multisite networks.
+ *
+ * @return void
+ */
+function wc_update_910_remove_obsolete_user_meta() {
+	global $wpdb;
+
+	$deletions = $wpdb->query(
+		"
+		DELETE FROM $wpdb->usermeta
+		WHERE meta_key IN (
+			'_last_order',
+			'_order_count',
+			'_money_spent'
+		)
+	"
+	);
+
+	$logger = wc_get_logger();
+
+	if ( null === $logger ) {
+		return;
+	}
+
+	if ( false === $deletions ) {
+		$logger->notice(
+			'During the update to 9.1.0, WooCommerce attempted to remove user meta with the keys "_last_order", "_order_count" and "_money_spent" but was unable to do so.',
+			array(
+				'source' => 'wc-updater',
+			)
+		);
+	} else {
+		$logger->info(
+			sprintf(
+				1 === $deletions
+					? 'During the update to 9.1.0, WooCommerce removed %d user meta row associated with the meta keys "_last_order", "_order_count" or "_money_spent".'
+					: 'During the update to 9.1.0, WooCommerce removed %d user meta rows associated with the meta keys "_last_order", "_order_count" or "_money_spent".',
+				number_format_i18n( $deletions )
+			),
+			array(
+				'source' => 'wc-updater',
+			)
+		);
+	}
+}
+
+/**
+ * Add woocommerce_coming_soon option when it is not currently present.
+ *
+ * @return void
+ */
+function wc_update_930_add_woocommerce_coming_soon_option() {
+	add_option( 'woocommerce_coming_soon', 'no' );
+}
+
+/**
+ * Migrate Launch Your Store tour meta keys to the woocommerce_meta user data fields.
+ *
+ * @return void
+ */
+function wc_update_930_migrate_user_meta_for_launch_your_store_tour() {
+	// Rename `woocommerce_launch_your_store_tour_hidden` meta key to `woocommerce_admin_launch_your_store_tour_hidden`.
+	global $wpdb;
+	$wpdb->query(
+		$wpdb->prepare(
+			"UPDATE {$wpdb->usermeta}
+			SET meta_key = %s
+			WHERE meta_key = %s",
+			'woocommerce_admin_launch_your_store_tour_hidden',
+			'woocommerce_launch_your_store_tour_hidden'
+		)
+	);
+
+	// Rename `woocommerce_coming_soon_banner_dismissed` meta key to `woocommerce_admin_coming_soon_banner_dismissed`.
+	$wpdb->query(
+		$wpdb->prepare(
+			"UPDATE {$wpdb->usermeta}
+			SET meta_key = %s
+			WHERE meta_key = %s",
+			'woocommerce_admin_coming_soon_banner_dismissed',
+			'woocommerce_coming_soon_banner_dismissed'
+		)
+	);
+}
+
+/**
+ * Recreate FTS index if it already exists, so that phone number can be added to the index.
+ *
+ * @return void
+ */
+function wc_update_940_add_phone_to_order_address_fts_index(): void {
+	$fts_already_exists = get_option( CustomOrdersTableController::HPOS_FTS_ADDRESS_INDEX_CREATED_OPTION ) === 'yes';
+	if ( ! $fts_already_exists ) {
+		return;
+	}
+
+	$hpos_controller = wc_get_container()->get( CustomOrdersTableController::class );
+	$result          = $hpos_controller->recreate_order_address_fts_index();
+	if ( ! $result['status'] ) {
+		if ( class_exists( 'WC_Admin_Settings ' ) ) {
+			WC_Admin_Settings::add_error( $result['message'] );
+		}
+	}
+}
+
+/**
+ * Remove user meta associated with the key 'woocommerce_admin_help_panel_highlight_shown'.
+ *
+ * This key is no longer needed since the help panel spotlight tour has been removed.
+ *
+ * @return void
+ */
+function wc_update_940_remove_help_panel_highlight_shown() {
+	global $wpdb;
+
+	$meta_key = 'woocommerce_admin_help_panel_highlight_shown';
+
+	$deletions = $wpdb->query(
+		$wpdb->prepare(
+			"DELETE FROM $wpdb->usermeta WHERE meta_key = %s",
+			$meta_key
+		)
+	);
+
+	// Get the WooCommerce logger to track the results of the deletion.
+	$logger = wc_get_logger();
+
+	if ( null === $logger ) {
+		return;
+	}
+
+	if ( false === $deletions ) {
+		$logger->notice(
+			'During the update to 9.4.0, WooCommerce attempted to remove user meta with the key "woocommerce_admin_help_panel_highlight_shown", but was unable to do so.',
+			array(
+				'source' => 'wc-updater',
+			)
+		);
+	} else {
+		$logger->info(
+			sprintf(
+				1 === $deletions
+					? 'During the update to 9.4.0, WooCommerce removed %d user meta row associated with the meta key "woocommerce_admin_help_panel_highlight_shown".'
+					: 'During the update to 9.4.0, WooCommerce removed %d user meta rows associated with the meta key "woocommerce_admin_help_panel_highlight_shown".',
+				number_format_i18n( $deletions )
+			),
+			array(
+				'source' => 'wc-updater',
+			)
+		);
+	}
+}
+
+/**
+ * Set multisite customer visibility option for existing sites.
+ *
+ * If WooCommerce is updated from an earlier version to 10.0.0, and if it is a multisite network,
+ * then set 'woocommerce_network_wide_customers' to 'yes' (but only if it has not already been
+ * set).
+ *
+ * This preserves WooCommerce's historic handling of cross-network user visibility for existing
+ * networks. New sites, or sites that are newly turned into networks at some later point, will
+ * instead use updated and stricter handling.
+ *
+ * @return void
+ */
+function wc_update_1000_multisite_visibility_setting(): void {
+	if ( ! is_multisite() ) {
+		return;
+	}
+
+	$existing_site_option = get_site_option( 'woocommerce_network_wide_customers', '' );
+
+	if ( is_string( $existing_site_option ) && strlen( $existing_site_option ) > 0 ) {
+		return;
+	}
+
+	update_site_option( 'woocommerce_network_wide_customers', 'yes' );
+}
+
+/**
+ * Autoloads woocommerce_allow_tracking option.
+ *
+ * @return void
+ */
+function wc_update_950_tracking_option_autoload() {
+	$options = array(
+		'woocommerce_allow_tracking' => 'yes',
+	);
+	wp_set_option_autoload_values( $options );
+}
+
+/**
+ * Update the base color for emails as part of the WooCommerce rebranding,
+ * but only if the user hasn't specified a custom color.
+ *
+ * @return void
+ */
+function wc_update_961_migrate_default_email_base_color() {
+	$color = get_option( 'woocommerce_email_base_color' );
+	if ( '#7f54b3' === $color ) {
+		update_option( 'woocommerce_email_base_color', '#720eec' );
+	}
+}
+
+/**
+ * Add old refunded order items to the product_lookup_table.
+ *
+ * @return void
+ */
+function wc_update_1020_add_old_refunded_order_items_to_product_lookup_table() {
+	global $wpdb;
+
+	// Get every order ID where:
+	// 1. the total sales is less than 0, and
+	// 2. is not refunded shipping fee only, and
+	// 3. is not refunded tax fee only.
+	$refunded_orders = $wpdb->get_results(
+		"SELECT order_stats.order_id, order_stats.num_items_sold
+		FROM {$wpdb->prefix}wc_order_stats AS order_stats
+		WHERE order_stats.total_sales < 0 # Refunded orders
+			AND order_stats.total_sales != order_stats.shipping_total # Exclude refunded orders that only include a shipping refund
+			AND order_stats.total_sales != order_stats.tax_total # Exclude refunded orders that only include a tax refund"
+	);
+
+	if ( $refunded_orders ) {
+		update_option( 'woocommerce_analytics_uses_old_full_refund_data', 'yes' );
+		foreach ( $refunded_orders as $refunded_order ) {
+			if ( intval( $refunded_order->num_items_sold ) === 0 ) {
+				$order = wc_get_order( $refunded_order->order_id );
+				if ( ! $order ) {
+					continue;
+				}
+				// If the refund order has no line items, mark it as a full refund in orders_meta table.
+				// In the above query we already excluded orders for refunded shipping and tax, so it's safe to assume that the refund order without items is a full refund.
+				// Note that the "full" refund here means it's created by changing the order status to "Refunded", not partially refund all the items in the order.
+				if ( empty( $order->get_items() ) ) {
+					wc_get_logger()->info( sprintf( 'Setting refund type to full for order_id: %s', $refunded_order->order_id ) );
+					$order->update_meta_data( '_refund_type', 'full' );
+					$order->save_meta_data();
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Remove the option woocommerce_order_attribution_install_banner_dismissed.
+ * This data is now stored in the user meta table in the PR #55715.
+ *
+ * @return void
+ */
+function wc_update_980_remove_order_attribution_install_banner_dismissed_option() {
+	delete_option( 'woocommerce_order_attribution_install_banner_dismissed' );
+}
+
+/**
+ * One-time force enable the new Payments Settings page feature for all stores.
+ *
+ * @return void
+ */
+function wc_update_985_enable_new_payments_settings_page_feature() {
+	update_option( 'woocommerce_feature_reactify-classic-payments-settings_enabled', 'yes' );
+}
+
+/**
+ * Remove the transient wc_count_comments as this has migrated to use cache.
+ *
+ * @return void
+ */
+function wc_update_990_remove_wc_count_comments_transient() {
+	delete_transient( 'wc_count_comments' );
+}
+
+/**
+ * Remove all notes of type 'email' from wp_wc_admin_notes table.
+ *
+ * @return void
+ */
+function wc_update_990_remove_email_notes() {
+	global $wpdb;
+
+	$wpdb->delete(
+		$wpdb->prefix . 'wc_admin_notes',
+		array(
+			'type' => 'email',
+		),
+		array( '%s' )
+	);
+}
+
+/**
+ * Remove the transient ptk_patterns.
+ * This was used to store the Patterns Toolkit patterns in the database.
+ * The patterns are now stored in the option ptk_patterns.
+ *
+ * @return void
+ */
+function wc_update_1000_remove_patterns_toolkit_transient() {
+	delete_transient( 'ptk_patterns' );
+}
+
+/**
+ * Add an index to (comment_date_gmt, comment_type, comment_approved, comment_post_ID)
+ * on the comments table to improve the admin query that gets the latest 25 comments
+ * while excluding reviews and internal notes.
+ *
+ * @return void
+ */
+function wc_update_1030_add_comments_date_type_index() {
+	global $wpdb;
+	$date_type_index_exists = $wpdb->get_row( "SHOW INDEX FROM {$wpdb->comments} WHERE key_name = 'woo_idx_comment_date_type'" );
+
+	if ( is_null( $date_type_index_exists ) ) {
+		// Improve performance of the admin comments query when fetching the latest 25 comments while excluding reviews and internal notes.
+		$wpdb->query( "ALTER TABLE {$wpdb->comments} ADD INDEX woo_idx_comment_date_type (comment_date_gmt, comment_type, comment_approved, comment_post_ID)" );
+	}
+}
+
+/**
+ * Clean up the old last_fetch_patterns_request option and non-grouped actions after migration to using the `action_scheduler_ensure_recurring_actions` hook.
+ *
+ * In version 10.4.0, this functionality was replaced with Action Scheduler recurring actions.
+ *
+ * @return void
+ */
+function wc_update_1040_cleanup_legacy_ptk_patterns_fetching() {
+	delete_option( 'last_fetch_patterns_request' );
+	as_unschedule_all_actions( 'fetch_patterns' );
+}
+
+/**
+ * Update brand permalink setting to take into account obsolete 'woocommerce_prepend_shop_page_to_urls' option, removed in WC 2.0.3.
+ * This migration ensures any installations that still have this old option set will have their brand permalink updated appropriately.
+ *
+ * @since 10.5.0
+ *
+ * @return void
+ */
+function wc_update_1050_migrate_brand_permalink_setting() {
+	if ( 'yes' !== get_option( 'woocommerce_prepend_shop_page_to_urls' ) ) {
+		return;
+	}
+
+	$shop_page_id = wc_get_page_id( 'shop' );
+	$shop_slug    = ( $shop_page_id > 0 && get_post( $shop_page_id ) ) ? get_page_uri( $shop_page_id ) : 'shop';
+
+	if ( ! $shop_slug ) {
+		return;
+	}
+
+	$slug = trailingslashit( $shop_slug ) . __( 'brand', 'woocommerce' );
+	update_option( 'woocommerce_brand_permalink', $slug );
+}
+
+/**
+ * Autoload frequently used options for performance improvements (see https://github.com/woocommerce/woocommerce/issues/61855)
+ *
+ * `$autoload_options` are frequently used options that may already be in the db but with `autoload = off`.
+ * `$feature_options` are frequently used feature flag options that are not stored in the db.
+ *
+ * @return void
+ */
+function wc_update_1050_enable_autoload_options() {
+	global $wpdb;
+
+	$autoload_options = array(
+		// Page ID options with autoload `off` in the db.
+		'woocommerce_myaccount_page_id',
+		'woocommerce_cart_page_id',
+		'woocommerce_checkout_page_id',
+		'woocommerce_terms_page_id',
+		// Feature status options with autoload `off` in the db.
+		'woocommerce_show_marketplace_suggestions',
+		'woocommerce_enable_delayed_account_creation',
+		'wc_feature_woocommerce_brands_enabled',
+		'wc_connect_taxes_enabled',
+		'woocommerce_logs_logging_enabled',
+		'woocommerce_email_improvements_existing_store_enabled',
+		'woocommerce_custom_orders_table_data_sync_enabled',
+	);
+
+	$feature_options = array(
+		'fulfillments'         => 'woocommerce_feature_fulfillments_enabled',
+		'push_notifications'   => 'woocommerce_feature_push_notifications_enabled',
+		'cart_checkout_blocks' => 'woocommerce_feature_cart_checkout_blocks_enabled',
+	);
+
+	$features_controller = wc_get_container()->get( FeaturesController::class );
+
+	foreach ( $feature_options as $key => $option ) {
+		if ( false === get_option( $option, false ) ) {
+			add_option( $option, wc_bool_to_string( $features_controller->feature_is_enabled( $key ) ), '', true );
+		} else {
+			$autoload_options[] = $option;
+		}
+	}
+
+	$placeholders = implode( ', ', array_fill( 0, count( $autoload_options ), '%s' ) );
+
+	$wpdb->query(
+		$wpdb->prepare(
+		// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"UPDATE {$wpdb->options} SET autoload = 'on' WHERE option_name IN ($placeholders)",
+			...$autoload_options
+		)
+	);
+}
+
+/**
+ * Remove deprecated marketplace feature option from the database.
+ *
+ * The marketplace feature flag was deprecated in 10.5.0 and is now always enabled.
+ * The option is no longer needed as FeaturesUtil::feature_is_enabled('marketplace')
+ * returns the deprecated_value directly without reading from the database.
+ *
+ * @since 10.5.0
+ *
+ * @return void
+ */
+function wc_update_1050_remove_deprecated_marketplace_option(): void {
+	delete_option( 'woocommerce_feature_marketplace_enabled' );
+}
+
+/**
+ * Add the `woo_idx_comment_approved_type` index to improve the performance of comment-related queries in the admin area.
+ *
+ * @since 10.6.0
+ *
+ * @return void
+ */
+function wc_update_1060_add_woo_idx_comment_approved_type_index(): void {
+	global $wpdb;
+
+	$comment_approved_type_index_exists = $wpdb->get_row( "SHOW INDEX FROM {$wpdb->comments} WHERE key_name = 'woo_idx_comment_approved_type'" );
+	if ( null === $comment_approved_type_index_exists ) {
+		// Improve performance of the admin comments query when counting approved comments while excluding internal notes.
+		$wpdb->query( "ALTER TABLE {$wpdb->comments} ADD INDEX woo_idx_comment_approved_type (comment_approved, comment_type, comment_post_ID)" );
+	}
+}
+
+/**
+ * Previously added an admin notice about HPOS sync-on-read being disabled by default.
+ *
+ * HPOS sync-on-read status is now shown in Site Health.
+ *
+ * @since 10.7.0
+ *
+ * @return void
+ */
+function wc_update_1070_disable_hpos_sync_on_read(): void {
+	// Intentionally empty. The admin notice this update function used to queue has been
+	// replaced by a Site Health check, but the function must be kept so the 10.7.0 entry
+	// in WC_Install::$db_updates remains valid for stores upgrading from older versions.
+}
+
+/**
+ * Migrate the legacy analytics immediate import option to the renamed scheduled import option.
+ *
+ * In 10.5.0, `woocommerce_analytics_immediate_import` was renamed to
+ * `woocommerce_analytics_scheduled_import` with inverted semantics, but no
+ * migration was added. Stores that had opted into scheduled imports (legacy
+ * value 'no') silently reverted to immediate imports on upgrade.
+ *
+ * @since 10.8.0
+ *
+ * @return void
+ */
+function wc_update_1080_migrate_analytics_import_option(): void {
+	$legacy_option = 'woocommerce_analytics_immediate_import';
+	$new_option    = 'woocommerce_analytics_scheduled_import';
+
+	$legacy_value = get_option( $legacy_option, false );
+
+	// Nothing to migrate if the legacy option was never set.
+	if ( false === $legacy_value ) {
+		return;
+	}
+
+	// If the new option already exists, just clean up the legacy option.
+	if ( false !== get_option( $new_option, false ) ) {
+		delete_option( $legacy_option );
+		return;
+	}
+
+	// Invert the semantics: legacy 'yes' (immediate) = new 'no' (not scheduled),
+	// legacy 'no' (not immediate) = new 'yes' (scheduled).
+	$new_value = 'no' === $legacy_value ? 'yes' : 'no';
+
+	// Only delete the legacy option if the new option was written successfully.
+	// On failure, the runtime fallback in is_scheduled_import_enabled() can
+	// still read the legacy option to preserve the store's preference.
+	if ( add_option( $new_option, $new_value ) ) {
+		delete_option( $legacy_option );
+	}
+}
+
+/**
+ * Reshape the `meta_key_value` index on `wc_orders_meta` to `(meta_key(50), meta_value(20))`.
+ *
+ * This is labeled as a 10.8.0-2 migration because originally there was a 10.8 migration that modified the
+ * meta_key_value index to include only the meta_key column (see https://github.com/woocommerce/woocommerce/pull/63897),
+ * but later it was discovered that this caused performance issues (as commented in the same pull request),
+ * so this new migration was added. However sites where 10.8 beta was installed will already have run
+ * the original migration (the one that removed meta_value from the index) and will have their db
+ * version updated to 10.8, so this new migration wouldn't run. Hence the 10.8.0-2 marker, which
+ * sorts between 10.8.0 and 10.8.1 via version_compare() and leaves the 10.8.1 slot free for any
+ * future patch-release migrations. WooCommerce 10.8.0 beta 2 had a migration labeled as 10.8.0-1 already,
+ * hence the need to go with 10.8.0-2 for this one.
+ *
+ * Handles two starting states transparently:
+ *  - Pre-10.8 sites: the index is the original `(meta_key(100), meta_value(82))`.
+ *  - 10.8 beta sites: the index has been changed to `(meta_key(100))` only.
+ *
+ * The new prefixes are sized from profiling a production-scale table: all meta_keys fit
+ * within 47 chars (so `meta_key(50)` covers every existing key) and a 20-byte `meta_value`
+ * prefix preserves full selectivity for the affected query patterns, keeping most of the
+ * storage benefit of the slim attempt.
+ *
+ * @since 10.8.0
+ *
+ * @return void
+ */
+function wc_update_10802_restore_orders_meta_key_value_index(): void {
+	global $wpdb;
+
+	$table_name = $wpdb->prefix . 'wc_orders_meta';
+	$index_name = 'meta_key_value';
+
+	// Table only exists on sites with HPOS enabled. Skip if absent.
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) ) !== $table_name ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		return;
+	}
+
+	// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+	$columns = $wpdb->get_results(
+		$wpdb->prepare(
+			'SHOW INDEX FROM ' . $table_name . ' WHERE Key_name = %s',
+			$index_name
+		)
+	);
+	// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+
+	$already_correct =
+		is_array( $columns ) && 2 === count( $columns ) &&
+		'meta_key' === $columns[0]->Column_name && 50 === (int) $columns[0]->Sub_part &&
+		'meta_value' === $columns[1]->Column_name && 20 === (int) $columns[1]->Sub_part;
+
+	if ( $already_correct ) {
+		return;
+	}
+
+	if ( empty( $columns ) ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "ALTER TABLE {$table_name} ADD INDEX {$index_name} (meta_key(50), meta_value(20))" );
+	} else {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "ALTER TABLE {$table_name} DROP INDEX {$index_name}, ADD INDEX {$index_name} (meta_key(50), meta_value(20))" );
+	}
+}
+
+/**
+ * Backfill sync meta onto pre-existing `woo_email` posts so the template
+ * divergence detector introduced in the same release (RSM-138) can classify
+ * legacy installs safely.
+ *
+ * @since 10.8.0
+ *
+ * @return bool Always false. Once-per-site is enforced by the
+ *              `woocommerce_db_version` fence in `$db_updates`.
+ */
+function wc_update_1080_backfill_email_template_sync_meta(): bool {
+	return WCEmailTemplateSyncBackfill::run();
+}
+
+/**
+ * Remove the option woocommerce_task_list_reminder_bar_hidden.
+ * The task list reminder bar was removed in 10.9.0; this option is no longer used.
+ *
+ * @since 10.9.0
+ *
+ * @return void
+ */
+function wc_update_1090_remove_task_list_reminder_bar_hidden_option() {
+	delete_option( 'woocommerce_task_list_reminder_bar_hidden' );
+}
+
+/**
+ * Remove the deprecated push_notifications feature option from the database.
+ *
+ * The push_notifications feature flag was deprecated in 10.9.2 and is now always enabled.
+ * The option is no longer needed as FeaturesUtil::feature_is_enabled('push_notifications')
+ * returns the deprecated_value directly without reading from the database. Removing it also
+ * clears the stale "no" value that wc_update_1050_enable_autoload_options() persisted for
+ * stores upgrading across the 10.5.0 boundary.
+ *
+ * @since 10.9.2
+ *
+ * @return void
+ */
+function wc_update_10902_remove_deprecated_push_notifications_option(): void {
+	delete_option( 'woocommerce_feature_push_notifications_enabled' );
+}
+
+/**
+ * Set the stored value of the point_of_sale feature flag to enabled.
+ *
+ * The feature is deprecated as of 11.0.0 and always enabled in core, but the WooCommerce
+ * mobile apps read this option via the wc/v3 settings REST API to decide whether POS can
+ * be used, so the stored value must reflect the always-enabled state.
+ *
+ * @since 11.0.0
+ *
+ * @return void
+ */
+function wc_update_1100_enable_point_of_sale_feature() {
+	update_option( 'woocommerce_feature_point_of_sale_enabled', 'yes' );
+}
+
+/**
+ * Remove the deprecated variation gallery feature option from the database.
+ *
+ * The variation gallery feature flag is deprecated as of 11.1.0 and is now always enabled.
+ * The option is no longer needed as FeaturesUtil::feature_is_enabled('variation_gallery')
+ * returns the deprecated_value directly without reading from the database.
+ *
+ * @since 11.1.0
+ *
+ * @return void
+ */
+function wc_update_11101_remove_deprecated_variation_gallery_option(): void {
+	delete_option( VariationGalleryPackage::ENABLE_OPTION_NAME );
+}
+
+/**
+ * Delete the cached dashboard out-of-stock product count.
+ *
+ * @since 11.1.0
+ *
+ * @return void
+ */
+function wc_update_1110_delete_dashboard_outofstock_count_transient() {
+	delete_transient( ProductUtil::OUTOFSTOCK_COUNT_TRANSIENT );
+}
+
+/**
+ * Delete never-customized block email posts so those emails render from the
+ * file templates again (picking up template updates and the current site
+ * locale). Customized posts are kept untouched. See WOOPLUG-6171.
+ *
+ * @since 11.1.0
+ *
+ * @return bool Always false (one-shot migration).
+ */
+function wc_update_1110_cleanup_block_email_posts(): bool {
+	return WCEmailPostsCleanup::run();
+}
+
+/**
+ * Flush the persistent product count cache to purge potentially drifted counter values from v11.0-RC1.
+ *
+ * @since 11.1.0
+ *
+ * @return void
+ */
+function wc_update_1110_flush_product_count_cache() {
+	if ( class_exists( \Automattic\WooCommerce\Caches\ProductCountCache::class ) ) {
+		( new \Automattic\WooCommerce\Caches\ProductCountCache() )->flush( 'product' );
+	}
+}
+
+/**
+ * Clean up the state left behind by the removed abandoned cart recovery feature.
+ *
+ * The feature shipped in 11.0.x behind the experimental, default-off
+ * `abandoned_cart_recovery` flag and has now been removed in full: the email, its
+ * settings, the manual-send order action, the settings-page recommendations, and the
+ * email-unsubscribe endpoint and table. Sites that opted in can be left holding
+ * queued Action Scheduler sends, options and unsubscribe rows that no remaining code
+ * reads, so clear them here rather than orphaning them.
+ *
+ *
+ * Names are hardcoded rather than referenced through the classes that used to own
+ * them, because those classes no longer exist.
+ *
+ * @since 11.2.0
+ *
+ * @return void
+ */
+function wc_update_1120_remove_abandoned_cart_recovery() {
+	global $wpdb;
+
+	// Cancel queued automated sends. Nothing listens to the hook any more, so a
+	// due action would run as an inert no-op, but leaving it queued keeps dead
+	// rows in the Action Scheduler store until then.
+	if ( function_exists( 'as_unschedule_all_actions' ) ) {
+		as_unschedule_all_actions( 'woocommerce_send_abandoned_cart_recovery_notification' );
+	}
+
+	delete_option( 'woocommerce_feature_abandoned_cart_recovery_enabled' );
+	delete_option( 'woocommerce_customer_abandoned_cart_recovery_settings' );
+	delete_option( 'woocommerce_abandoned_cart_recovery_recommendations_hidden' );
+	delete_transient( 'wc_abandoned_cart_recovery_enabled_notice' );
+
+	// The unsubscribes table only ever held opt-outs for this email, and the GDPR
+	// eraser that covered it is gone too, so drop it rather than leave hashed
+	// recipient addresses behind with no erasure path.
+	$unsubscribes_table = $wpdb->prefix . 'wc_email_unsubscribes';
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name built from the wpdb prefix.
+	$wpdb->query( "DROP TABLE IF EXISTS {$unsubscribes_table}" );
+}
+
+/**
+ * Migrate the Back in Stock Notifications alpha opt-in from the
+ * WOOCOMMERCE_BIS_ALPHA_ENABLED constant to the feature toggle.
+ *
+ * The option is written with update_option() rather than add_option() because
+ * WC_Install::create_options() runs first and has already seeded every Features
+ * screen checkbox with its default. No store can have chosen 'no' deliberately:
+ * the toggle does not exist before this release.
+ *
+ * Writing the option fires 'updated_option', which FeaturesController turns into
+ * FEATURE_ENABLED_CHANGED_ACTION, so the feature's own activation side effects
+ * (the data retention task and the rewrite rules flush) run from there.
+ *
+ * @since 11.2.0
+ *
+ * @return void
+ */
+function wc_update_1120_migrate_stock_notifications_alpha_constant() {
+	if ( ! Constants::is_true( 'WOOCOMMERCE_BIS_ALPHA_ENABLED' ) ) {
+		return;
+	}
+
+	update_option( StockNotifications::ENABLE_OPTION_NAME, 'yes', true );
+}
+
+/**
+ * Delete the retired Surface Cart and Checkout inbox note.
+ *
+ * @since 11.2.0
+ *
+ * @return void
+ */
+function wc_update_1120_delete_surface_cart_checkout_note(): void {
+	InboxNotifications::delete_surface_cart_checkout_blocks_notification();
+}
+
+/**
+ * Remove variation featured images that duplicate the parent product's featured image.
+ *
+ * The classic editor used to persist the inherited parent image onto variations on save,
+ * freezing dynamic inheritance. Removing values that still equal the parent's canonical
+ * thumbnail is display-neutral; diverged values may be deliberate and are kept. Skipped
+ * for stores upgrading from before 10.9.0, which predates the variation gallery.
+ * A database error stops the cleanup and is logged.
+ *
+ * @since 11.2.0
+ *
+ * @return bool True to run again for the next batch, false when completed.
+ */
+function wc_update_1120_cleanup_inherited_variation_images() {
+	global $wpdb;
+
+	$state_option     = 'woocommerce_update_1120_cleanup_state';
+	$completed_option = 'woocommerce_update_1120_completed_at';
+	$batch_size       = 250;
+
+	// A manual db-version rollback replays all update callbacks; this one deletes data, so it must not run twice.
+	if ( get_option( $completed_option ) ) {
+		return false;
+	}
+
+	// Still the pre-update version here: the option is only bumped by the final update callback.
+	if ( version_compare( (string) get_option( 'woocommerce_db_version' ), '10.9.0', '<' ) ) {
+		return false;
+	}
+
+	$state = get_option( $state_option, array() );
+	$state = is_array( $state ) ? $state : array();
+
+	// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names cannot be prepared.
+	$matching_variations = (array) $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT variation.ID AS variation_id,
+				variation.post_parent AS parent_id,
+				GROUP_CONCAT(DISTINCT variation_thumb.meta_value) AS inherited_image_ids
+			FROM {$wpdb->posts} AS variation
+			INNER JOIN {$wpdb->postmeta} AS variation_thumb
+				ON variation_thumb.post_id = variation.ID
+				AND variation_thumb.meta_key = '_thumbnail_id'
+			INNER JOIN {$wpdb->postmeta} AS parent_thumb
+				ON parent_thumb.post_id = variation.post_parent
+				AND parent_thumb.meta_key = '_thumbnail_id'
+			WHERE variation.ID > %d
+				AND variation.post_type = 'product_variation'
+				AND variation_thumb.meta_value <> ''
+				AND variation_thumb.meta_value = parent_thumb.meta_value
+			GROUP BY variation.ID
+			ORDER BY variation.ID ASC
+			LIMIT %d",
+			(int) ( $state['last_processed_id'] ?? 0 ),
+			$batch_size + 1
+		),
+		ARRAY_A
+	);
+	// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+	if ( '' !== $wpdb->last_error ) {
+		wc_get_logger()->error(
+			sprintf( 'Stopped cleaning up inherited variation images: %s', $wpdb->last_error ),
+			array( 'source' => 'wc_update_1120_cleanup_inherited_variation_images' )
+		);
+		delete_option( $state_option );
+
+		return false;
+	}
+
+	$has_more            = count( $matching_variations ) > $batch_size;
+	$matching_variations = array_slice( $matching_variations, 0, $batch_size );
+
+	$cleaned_count = (int) ( $state['cleaned_count'] ?? 0 );
+
+	foreach ( $matching_variations as $matching_variation ) {
+		// The join matches any parent thumbnail row; only the canonical value is safe to delete.
+		$canonical_parent_thumbnail = (int) get_post_meta( (int) $matching_variation['parent_id'], '_thumbnail_id', true );
+		$deleted_any                = false;
+
+		foreach ( wp_parse_id_list( $matching_variation['inherited_image_ids'] ) as $inherited_image_id ) {
+			if ( $inherited_image_id === $canonical_parent_thumbnail && delete_post_meta( (int) $matching_variation['variation_id'], '_thumbnail_id', $inherited_image_id ) ) {
+				$deleted_any = true;
+			}
+		}
+
+		if ( $deleted_any ) {
+			++$cleaned_count;
+		}
+	}
+
+	if ( $has_more ) {
+		$last_processed = end( $matching_variations );
+		update_option(
+			$state_option,
+			array(
+				'last_processed_id' => (int) $last_processed['variation_id'],
+				'cleaned_count'     => $cleaned_count,
+			),
+			false
+		);
+
+		return true;
+	}
+
+	delete_option( $state_option );
+	update_option( $completed_option, time(), false );
+	VariationGalleryTelemetry::record_event(
+		VariationGalleryTelemetry::EVENT_INHERITED_IMAGE_CLEANUP_COMPLETED,
+		array( 'cleaned_count' => $cleaned_count )
+	);
+
+	return false;
+}
+
+/**
+ * Invalidate the Analytics report cache.
+ *
+ * Report responses are cached for a week and keyed on the query arguments alone, so a report
+ * run before the update keeps serving its pre-update answer. That hides the corrected result
+ * for category and product filters that have no product in common.
+ *
+ * @since 11.2.0
+ *
+ * @return void
+ */
+function wc_update_11201_invalidate_analytics_reports_cache() {
+	if ( class_exists( \Automattic\WooCommerce\Admin\API\Reports\Cache::class ) ) {
+		\Automattic\WooCommerce\Admin\API\Reports\Cache::invalidate();
+	}
+}
+
+/**
+ * Reset stale returning-customer markers on refund rows.
+ *
+ * Refund rows in the order stats table are written with a NULL returning_customer, but earlier
+ * first-order recalculations could overwrite that marker and never restore it. Customer aggregates
+ * now fall back to the order type for such rows; resetting the marker keeps them on the cheap path
+ * and restores the Orders report fallback to the refunded order's value.
+ *
+ * Batches walk the table by order ID. A database error is logged and stops the migration without a retry.
+ * Customer aggregates still use the order type, but unprocessed refunds keep their stale marker,
+ * so the Orders report can retain an incorrect customer_type until those rows are reset.
+ *
+ * @since 11.2.0
+ *
+ * @return bool True to run again for the next batch, false when completed.
+ */
+function wc_update_11202_reset_refund_returning_customer_markers() {
+	global $wpdb;
+
+	$last_id_option    = 'woocommerce_update_11202_last_refund_order_id';
+	$order_stats_table = $wpdb->prefix . 'wc_order_stats';
+	$orders_table      = OrderUtil::get_table_for_orders();
+	$hpos_enabled      = OrderUtil::custom_orders_table_usage_is_enabled();
+	$order_id_column   = $hpos_enabled ? 'id' : 'ID';
+	$order_type_column = $hpos_enabled ? 'type' : 'post_type';
+
+	// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table and column names cannot be prepared.
+	$refund_ids = $wpdb->get_col(
+		$wpdb->prepare(
+			"SELECT stats.order_id FROM {$order_stats_table} AS stats
+			INNER JOIN {$orders_table} AS orders ON orders.{$order_id_column} = stats.order_id
+			WHERE stats.order_id > %d AND stats.returning_customer IS NOT NULL AND orders.{$order_type_column} = 'shop_order_refund'
+			ORDER BY stats.order_id ASC
+			LIMIT 250",
+			(int) get_option( $last_id_option, 0 )
+		)
+	);
+	// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+	if ( '' === $wpdb->last_error && ! empty( $refund_ids ) ) {
+		$refund_ids      = array_map( 'intval', $refund_ids );
+		$id_placeholders = implode( ', ', array_fill( 0, count( $refund_ids ), '%d' ) );
+		$updated         = $wpdb->query(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Table name cannot be prepared; placeholders are generated per ID.
+			$wpdb->prepare( "UPDATE {$order_stats_table} SET returning_customer = NULL WHERE order_id IN ( {$id_placeholders} )", $refund_ids )
+		);
+
+		if ( false !== $updated ) {
+			update_option( $last_id_option, end( $refund_ids ), false );
+			return true;
+		}
+	}
+
+	if ( '' !== $wpdb->last_error ) {
+		wc_get_logger()->error(
+			sprintf( 'Stopped resetting refund returning-customer markers: %s', $wpdb->last_error ),
+			array( 'source' => 'wc_update_11202_reset_refund_returning_customer_markers' )
+		);
+	}
+
+	delete_option( $last_id_option );
+
+	// Reports cached against half-migrated data would otherwise keep being served.
+	wc_update_11201_invalidate_analytics_reports_cache();
+
+	return false;
+}
+
+/**
+ * Rewrite stored Back in Stock customer emails in canonical form (trimmed, lowercased).
+ *
+ * Lookups on `user_email` use plain SQL equality, so rows written before emails were
+ * normalized would not match on a case-sensitive collation. Processes one batch per
+ * call and requeues itself while rows remain. A database error stops the migration
+ * and is logged instead of retried: an unnormalized row only keeps the pre-migration
+ * lookup behaviour, and the log names it for manual repair.
+ *
+ * @since 11.2.0
+ *
+ * @return bool True when another batch remains, false when done.
+ */
+function wc_update_11203_normalize_stock_notification_emails() {
+	global $wpdb;
+
+	$last_id_option = 'woocommerce_update_11203_last_stock_notification_id';
+	$table          = $wpdb->prefix . 'wc_stock_notifications';
+	$batch_size     = 500;
+
+	$rows = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT id, user_email FROM {$table} WHERE id > %d ORDER BY id ASC LIMIT %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name cannot be prepared.
+			(int) get_option( $last_id_option, 0 ),
+			$batch_size
+		)
+	);
+
+	if ( '' !== $wpdb->last_error ) {
+		wc_get_logger()->error(
+			sprintf( 'Stopped normalizing stock notification emails: %s', $wpdb->last_error ),
+			array( 'source' => 'wc-updater' )
+		);
+		delete_option( $last_id_option );
+		return false;
+	}
+
+	// Normalize in PHP rather than with SQL LOWER()/TRIM() so stored values match exactly
+	// what EmailNormalizer produces at lookup time.
+	foreach ( $rows as $row ) {
+		$normalized = EmailNormalizer::normalize( (string) $row->user_email );
+		if ( $normalized === $row->user_email ) {
+			continue;
+		}
+
+		// Matching on the value read keeps a concurrent save (e.g. the privacy eraser) from being overwritten.
+		$updated = $wpdb->update(
+			$table,
+			array( 'user_email' => $normalized ),
+			array(
+				'id'         => (int) $row->id,
+				'user_email' => $row->user_email,
+			),
+			array( '%s' ),
+			array( '%d', '%s' )
+		);
+		if ( false === $updated ) {
+			wc_get_logger()->error(
+				sprintf( 'Stopped normalizing stock notification emails at notification #%d: %s', (int) $row->id, $wpdb->last_error ),
+				array( 'source' => 'wc-updater' )
+			);
+			delete_option( $last_id_option );
+			return false;
+		}
+	}
+
+	if ( count( $rows ) === $batch_size ) {
+		update_option( $last_id_option, (int) end( $rows )->id, false );
+		return true;
+	}
+
+	delete_option( $last_id_option );
+
+	return false;
 }

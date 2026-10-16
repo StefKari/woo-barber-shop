@@ -1,17 +1,2 @@
 <?php
-
-namespace WPML\UserInterface\Web\Infrastructure\CompositionRoot\Config;
-
-use WPML\UserInterface\Web\Infrastructure\CompositionRoot\Config\Updates\Update;
-
-interface UpdatesHandlerInterface {
-
-
-  /**
-   * @param array<string, Update> $allUpdates
-   * @return void
-   */
-  public function prepareUpdates( $allUpdates );
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/UserInterface/Web/Infrastructure/CompositionRoot/Config/UpdatesHandlerInterface.php';

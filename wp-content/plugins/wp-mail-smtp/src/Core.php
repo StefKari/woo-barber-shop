@@ -4,16 +4,24 @@ namespace WPMailSMTP;
 
 use Exception;
 use ReflectionFunction;
+use WPMailSMTP\Abilities\AbilityRegistrar;
+use WPMailSMTP\Abilities\DebugEvents\GetDebugEventsAbility;
 use WPMailSMTP\Admin\AdminBarMenu;
 use WPMailSMTP\Admin\DashboardWidget;
 use WPMailSMTP\Admin\DebugEvents\DebugEvents;
+use WPMailSMTP\Admin\EmailSendingErrors\EmailSendingErrors;
 use WPMailSMTP\Admin\Notifications;
+use WPMailSMTP\Admin\SetupWizard\Launcher as SetupWizardLauncher;
 use WPMailSMTP\Compatibility\Compatibility;
+use WPMailSMTP\Integrations\WPCode\RegisterLibrary as RegisterWPCodeLibrary;
 use WPMailSMTP\Providers\Outlook\Provider as OutlookProvider;
+use WPMailSMTP\Providers\Sendlayer\QuickConnect as SendlayerQuickConnect;
 use WPMailSMTP\Queue\Queue;
 use WPMailSMTP\Reports\Reports;
+use WPMailSMTP\SetupChecklist\SetupChecklist;
 use WPMailSMTP\Tasks\Meta;
 use WPMailSMTP\UsageTracking\UsageTracking;
+use WPMailSMTP\WPCLI\Bootstrap as WPCLIBootstrap;
 
 /**
  * Class Core to handle all plugin initialization.
@@ -57,6 +65,15 @@ class Core {
 	 * @var \WPMailSMTP\Pro\Pro
 	 */
 	public $pro;
+
+	/**
+	 * Abilities API registrar.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @var AbilityRegistrar
+	 */
+	private $abilities_registrar;
 
 	/**
 	 * Core constructor.
@@ -149,8 +166,18 @@ class Core {
 			function() {
 				( new OptimizedEmailSending() )->hooks();
 				( new OutlookProvider() )->hooks();
+				( new RegisterWPCodeLibrary() )->hooks();
+				( new SetupWizardLauncher() )->hooks();
+
+				$this->get_abilities_registrar()->hooks();
+				$this->get_sendlayer_quick_connect()->hooks();
+				$this->get_email_sending_errors()->hooks();
 			}
 		);
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			add_action( 'init', [ new WPCLIBootstrap(), 'register' ], 20 );
+		}
 	}
 
 	/**
@@ -162,6 +189,8 @@ class Core {
 
 		// Load translations just in case.
 		load_plugin_textdomain( 'wp-mail-smtp', false, plugin_basename( wp_mail_smtp()->plugin_path ) . '/assets/languages' );
+
+		$this->get_setup_checklist();
 
 		/*
 		 * Constantly check in admin area, that we don't need to upgrade DB.
@@ -203,7 +232,7 @@ class Core {
 	 *
 	 * @return bool
 	 */
-	protected function is_pro_allowed() {
+	public function is_pro_allowed() {
 
 		$is_allowed = true;
 
@@ -232,6 +261,26 @@ class Core {
 		}
 
 		return $this->pro;
+	}
+
+	/**
+	 * Get the Abilities API registrar.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @return AbilityRegistrar
+	 */
+	public function get_abilities_registrar() {
+
+		if ( ! isset( $this->abilities_registrar ) ) {
+			$this->abilities_registrar = new AbilityRegistrar(
+				[
+					GetDebugEventsAbility::class,
+				]
+			);
+		}
+
+		return $this->abilities_registrar;
 	}
 
 	/**
@@ -276,7 +325,7 @@ class Core {
 
 			if ( is_readable( $path ) ) {
 				/** @noinspection PhpIncludeInspection */
-				include_once $path;
+				require_once $path;
 			}
 		}
 	}
@@ -334,6 +383,36 @@ class Core {
 		}
 
 		return $admin;
+	}
+
+	/**
+	 * Load the plugin Setup Checklist. Its state listeners have to run on REST requests
+	 * too, so the returned instance's own `init()` does the `is_admin()` gating.
+	 *
+	 * @since 4.10.0
+	 *
+	 * @return SetupChecklist
+	 */
+	public function get_setup_checklist() {
+
+		static $setup_checklist;
+
+		if ( ! isset( $setup_checklist ) ) {
+			/**
+			 * Filter the Setup Checklist instance.
+			 *
+			 * @since 4.10.0
+			 *
+			 * @param SetupChecklist $setup_checklist Setup Checklist instance.
+			 */
+			$setup_checklist = apply_filters( 'wp_mail_smtp_core_get_setup_checklist', new SetupChecklist() );
+
+			if ( method_exists( $setup_checklist, 'init' ) ) {
+				$setup_checklist->init();
+			}
+		}
+
+		return $setup_checklist;
 	}
 
 	/**
@@ -455,38 +534,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 */
-	public function init_notifications() {
-
-		// Old PHP version notification.
-		if (
-			version_compare( phpversion(), '7.4', '<' ) &&
-			is_super_admin() &&
-			(
-				(
-					isset( $GLOBALS['pagenow'] ) &&
-					$GLOBALS['pagenow'] === 'index.php'
-				) ||
-				wp_mail_smtp()->get_admin()->is_admin_page()
-			)
-		) {
-			WP::add_admin_notice(
-				sprintf(
-					wp_kses( /* translators: %1$s - WP Mail SMTP plugin name. */
-						__( 'Your site is running an outdated version of PHP. In an upcoming %1$s plugin release, the minimum required PHP version will be increased to <strong>7.4</strong>. If no further action is taken, you will not be able to update the plugin and receive new features and security updates.', 'wp-mail-smtp' ),
-						[
-							'strong' => [],
-						]
-					),
-					'<strong>WP Mail SMTP</strong>'
-				) .
-				'<br><br>' .
-				esc_html__( 'For better security and performance, we recommend upgrading your site to PHP version 8.0 or higher, as it is faster and more secure than version 7.4.', 'wp-mail-smtp' ),
-				WP::ADMIN_NOTICE_ERROR,
-				true,
-				'outdated_php_version_below_74'
-			);
-		}
-	}
+	public function init_notifications() { }
 
 	/**
 	 * Display all debug mail-delivery related notices.
@@ -544,94 +592,6 @@ class Core {
 
 		if ( wp_mail_smtp()->get_admin()->is_admin_page() ) {
 			wp_mail_smtp()->wp_mail_function_incorrect_location_notice();
-		}
-
-		if ( wp_mail_smtp()->get_admin()->is_error_delivery_notice_enabled() ) {
-			$screen = get_current_screen();
-
-			// Skip the error notice if not on plugin page.
-			if (
-				is_object( $screen ) &&
-				strpos( $screen->id, 'page_wp-mail-smtp' ) === false
-			) {
-				return;
-			}
-
-			$notice = apply_filters(
-				'wp_mail_smtp_core_display_general_notices_email_delivery_error_notice',
-				Debug::get_last()
-			);
-
-			if ( ! empty( $notice ) ) {
-				?>
-
-				<div class="notice <?php echo esc_attr( WP::ADMIN_NOTICE_ERROR ); ?>">
-					<p>
-						<?php
-						echo wp_kses(
-							__( '<strong>Heads up!</strong> The last email your site attempted to send was unsuccessful.', 'wp-mail-smtp' ),
-							[
-								'strong' => [],
-							]
-						);
-						?>
-					</p>
-
-					<blockquote>
-						<pre><?php echo wp_kses_post( $notice ); ?></pre>
-					</blockquote>
-
-					<p>
-						<?php
-						if ( ! wp_mail_smtp()->get_admin()->is_admin_page() ) {
-							printf(
-								wp_kses( /* translators: %s - plugin admin page URL. */
-									__( 'Please review your WP Mail SMTP settings in <a href="%s">plugin admin area</a>.' ) . ' ',
-									array(
-										'a' => array(
-											'href' => array(),
-										),
-									)
-								),
-								esc_url( wp_mail_smtp()->get_admin()->get_admin_page_url() )
-							);
-						}
-
-						printf(
-							wp_kses( /* translators: %s - URL to the debug events page. */
-								__( 'For more details please try running an Email Test or reading the latest <a href="%s">error event</a>.' ),
-								[
-									'a' => [
-										'href' => [],
-									],
-								]
-							),
-							esc_url( DebugEvents::get_page_url() )
-						);
-						?>
-					</p>
-
-					<?php
-						echo wp_kses(
-							apply_filters(
-								'wp_mail_smtp_core_display_general_notices_email_delivery_error_notice_footer',
-								''
-							),
-							[
-								'p' => [],
-								'a' => [
-									'href'   => [],
-									'target' => [],
-									'class'  => [],
-									'rel'    => [],
-								],
-							]
-						);
-					?>
-				</div>
-
-				<?php
-			}
 		}
 	}
 
@@ -743,6 +703,11 @@ class Core {
 		$license_type = is_readable( $this->plugin_path . '/src/Pro/Pro.php' ) ? 'pro' : 'lite';
 		$activated    = get_option( 'wp_mail_smtp_activated', [] );
 
+		// The stored option can be a scalar when it was written by something other than this plugin.
+		if ( ! is_array( $activated ) ) {
+			$activated = [];
+		}
+
 		if ( empty( $activated[ $license_type ] ) ) {
 			$activated[ $license_type ] = time();
 			update_option( 'wp_mail_smtp_activated', $activated );
@@ -782,6 +747,24 @@ class Core {
 		}
 
 		return strtolower( $type );
+	}
+
+	/**
+	 * Get the site URL that identifies this site to WP Mail SMTP services.
+	 *
+	 * @since 4.10.0
+	 *
+	 * @return LicenseSiteUrl
+	 */
+	public function get_license_site_url() {
+
+		static $license_site_url = null;
+
+		if ( is_null( $license_site_url ) ) {
+			$license_site_url = new LicenseSiteUrl();
+		}
+
+		return $license_site_url;
 	}
 
 	/**
@@ -1345,6 +1328,60 @@ class Core {
 	}
 
 	/**
+	 * Get the SendLayer Quick Connect handler (lite or pro version).
+	 *
+	 * @since 4.10.1
+	 *
+	 * @return SendlayerQuickConnect
+	 */
+	public function get_sendlayer_quick_connect() {
+
+		static $sendlayer_quick_connect = null;
+
+		if ( is_null( $sendlayer_quick_connect ) ) {
+
+			/**
+			 * Filter the SendLayer Quick Connect class name.
+			 *
+			 * @since 4.10.1
+			 *
+			 * @param string $class_name The SendLayer Quick Connect class name to be instantiated.
+			 */
+			$class_name              = apply_filters( 'wp_mail_smtp_core_get_sendlayer_quick_connect', SendlayerQuickConnect::class );
+			$sendlayer_quick_connect = new $class_name();
+		}
+
+		return $sendlayer_quick_connect;
+	}
+
+	/**
+	 * Get the email sending errors handler (lite or pro version).
+	 *
+	 * @since 4.10.1
+	 *
+	 * @return EmailSendingErrors
+	 */
+	public function get_email_sending_errors() {
+
+		static $email_sending_errors = null;
+
+		if ( is_null( $email_sending_errors ) ) {
+
+			/**
+			 * Filter the email sending errors class name.
+			 *
+			 * @since 4.10.1
+			 *
+			 * @param string $class_name The email sending errors class name to be instantiated.
+			 */
+			$class_name           = apply_filters( 'wp_mail_smtp_core_get_email_sending_errors', EmailSendingErrors::class );
+			$email_sending_errors = new $class_name();
+		}
+
+		return $email_sending_errors;
+	}
+
+	/**
 	 * Detect incorrect `wp_mail` function location and display warning.
 	 *
 	 * @since 3.5.0
@@ -1435,6 +1472,38 @@ class Core {
 	}
 
 	/**
+	 * Capability required to manage WP Mail SMTP actions that operate on global plugin state.
+	 *
+	 * Returns `manage_network_options` on multisite when WP Mail SMTP's network-wide settings
+	 * mode is on, and `manage_options` otherwise. Use this getter (rather than
+	 * {@see Core::get_capability_manage_options()}) when the gated action reads or writes
+	 * state that lives on the main site / network scope in network-wide mode (the
+	 * `wp_mail_smtp` and `wp_mail_smtp_connections` option rows, license fields, OAuth
+	 * credentials, alerts subscriptions). Naming mirrors {@see WP::use_global_plugin_settings()}.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @return string
+	 */
+	public function get_capability_manage_global_options() {
+
+		$default = ( is_multisite() && WP::use_global_plugin_settings() )
+			? 'manage_network_options'
+			: 'manage_options';
+
+		/**
+		 * Filters the capability required to manage global WP Mail SMTP actions.
+		 *
+		 * @since 4.9.0
+		 *
+		 * @param string $capability The default capability for global actions. Defaults to
+		 *                           `manage_network_options` on multisite when network-wide
+		 *                           settings are on, and `manage_options` otherwise.
+		 */
+		return apply_filters( 'wp_mail_smtp_core_get_capability_manage_global_options', $default );
+	}
+
+	/**
 	 * Load the queue functionality.
 	 *
 	 * @since 4.0.0
@@ -1458,4 +1527,5 @@ class Core {
 
 		return $queue;
 	}
+
 }

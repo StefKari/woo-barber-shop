@@ -3,6 +3,7 @@
 namespace ADP\BaseVersion\Includes\ProductExtensions;
 
 use ADP\BaseVersion\Includes\Context;
+use ReflectionException;
 
 defined('ABSPATH') or exit;
 
@@ -38,15 +39,74 @@ class ProductExtension
      */
     public function getCustomPrice()
     {
-        return isset($this->product->adpCustomInitialPrice) ? (float)$this->product->adpCustomInitialPrice : null;
+        try {
+            $reflection = new \ReflectionClass($this->product);
+            $property = $reflection->getProperty('changes');
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+            $changes = $property->getValue($this->product);
+
+            return $changes['adpCustomInitialPrice'] ?? null;
+        } catch (ReflectionException $exception) {
+            $property = null;
+        }
+
+        return null;
     }
 
     public function setCustomPrice($price)
     {
-        if ( $price === null ) {
-            $this->product->adpCustomInitialPrice = null;
-        } else {
-            $this->product->adpCustomInitialPrice = (float)$price;
+        try {
+            $reflection = new \ReflectionClass($this->product);
+            $property = $reflection->getProperty('changes');
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+            $changes = $property->getValue($this->product);
+
+            $price = $price !== null ? (float)$price : null;
+
+            $property->setValue($this->product, array_merge($changes, ['adpCustomInitialPrice' => $price]));
+        } catch (ReflectionException $exception) {
+            $property = null;
         }
+    }
+
+    public function getProductPriceDependsOnPriceMode()
+    {
+        $product = $this->product;
+        $priceMode = $this->context->getOption('discount_for_onsale');
+        $initialPrice = $product->get_price('edit');
+
+        try {
+            $reflection = new \ReflectionClass($product);
+            $property = $reflection->getProperty('changes');
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+            $changes = $property->getValue($product);
+            if ( isset($changes['price']) ) {
+                $initialPrice = $changes['price'];
+                unset($changes['price']);
+            }
+            $property->setValue($product, $changes);
+        } catch (ReflectionException $exception) {
+            $property = null;
+        }
+
+        if ($product->is_on_sale('edit')) {
+            if ('sale_price' === $priceMode || 'discount_sale' === $priceMode) {
+                $price = $product->get_sale_price('edit');
+            } else {
+                $price = $product->get_regular_price('edit');
+            }
+        } else {
+            $price = $product->get_price('edit');
+        }
+
+        $product->set_price($initialPrice);
+
+        return $price;
     }
 }

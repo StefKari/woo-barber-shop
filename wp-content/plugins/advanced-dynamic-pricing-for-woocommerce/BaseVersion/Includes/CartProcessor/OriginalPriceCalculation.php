@@ -5,6 +5,7 @@ namespace ADP\BaseVersion\Includes\CartProcessor;
 use ADP\BaseVersion\Includes\ProductExtensions\ProductExtension;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 use ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Compatibility\Addons\TmExtraOptionsCmp;
 use Exception;
 use ReflectionClass;
 use ReflectionException;
@@ -35,7 +36,7 @@ class OriginalPriceCalculation
     public $trdPartyAdjustmentsAmount;
 
     /**
-     * @var float
+     * @var float|string
      */
     public $basePrice;
 
@@ -80,6 +81,7 @@ class OriginalPriceCalculation
 
         $product = $wcCartItem->getProduct();
         $product = apply_filters('adp_get_original_product_from_cart', $product, $wcCartItem);
+
         /** @var $product WC_Product */
 
         $this->isReadOnlyPrice = false;
@@ -96,14 +98,22 @@ class OriginalPriceCalculation
             try {
                 $reflection = new ReflectionClass($product);
                 $property   = $reflection->getProperty('changes');
-                $property->setAccessible(true);
+                if (\PHP_VERSION_ID < 80100) {
+                    $property->setAccessible(true);
+                }
                 $changes = $property->getValue($product);
                 $property->setValue($product, array());
             } catch (ReflectionException $exception) {
                 $property = null;
             }
 
-            $cleanPrice                      = $this->getPrice($product, $wcCartItem, false, false);
+            $priceMod = $context->getOption('discount_for_onsale');
+
+            if($priceMod === self::DISCOUNT_REGULAR_PRICE || $priceMod === self::COMPARE_WC_AND_ADP) {
+                $cleanPrice                      = $this->getRegularPrice($product, $wcCartItem, false, false);
+            } else
+                $cleanPrice                      = $this->getPrice($product, $wcCartItem, false, false);
+
             $this->trdPartyAdjustmentsAmount = $this->priceToAdjust - $cleanPrice;
             $this->basePrice                 = $cleanPrice;
 
@@ -111,7 +121,9 @@ class OriginalPriceCalculation
                 $property->setValue($product, $changes);
             }
         } elseif ($this->getIsOnSale($product, $wcCartItem, $prodPropsWithFilters, true)) {
-            if ($priceMod === self::USE_SALE_PRICE || $priceMod === self::DISCOUNT_SALE_PRICE) {
+            $rulesCanBeApplied = ! ($context->isRuleSuppressed() || $context->getOption('rules_apply_mode') === 'none');
+
+            if ($priceMod === self::USE_SALE_PRICE || $priceMod === self::DISCOUNT_SALE_PRICE || ! $rulesCanBeApplied) {
                 $this->priceToAdjust             = $this->getSalePrice($product, $wcCartItem, $prodPropsWithFilters,
                     true);
                 $cleanPrice                      = $this->getSalePrice($product, $wcCartItem, false, false);
@@ -190,7 +202,10 @@ class OriginalPriceCalculation
         $withWcFilters,
         $withAdpFilters
     ) {
-        $result = $product->get_regular_price($withWcFilters ? 'view' : 'edit');
+        if ($product instanceof \WC_Product_Variable)
+            $result = $product->get_variation_regular_price('min', $withWcFilters);
+        else
+            $result = $product->get_regular_price($withWcFilters ? 'view' : 'edit');
         if ($withAdpFilters) {
             $result = apply_filters("adp_get_original_product_regular_price_from_cart", $result, $product,
                 $wcCartItem);
@@ -217,7 +232,10 @@ class OriginalPriceCalculation
 
         /** Always remember about scheduled WC sales */
         if ($product->is_on_sale($withWcFilters ? 'view' : 'edit')) {
-            $result = $product->get_sale_price($withWcFilters ? 'view' : 'edit');
+            if ($product instanceof \WC_Product_Variable)
+                $result = $product->get_variation_sale_price('min', $withWcFilters);
+            else
+                $result = $product->get_sale_price($withWcFilters ? 'view' : 'edit');
         }
 
         if ($withAdpFilters) {
@@ -241,7 +259,10 @@ class OriginalPriceCalculation
         $withWcFilters,
         $withAdpFilters
     ) {
-        $result = $product->get_price($withWcFilters ? 'view' : 'edit');
+        if ($product instanceof \WC_Product_Variable)
+            $result = $product->get_variation_price('min', $withWcFilters);
+        else
+            $result = $product->get_price($withWcFilters ? 'view' : 'edit');
         if ($withAdpFilters) {
             $result = apply_filters("adp_get_original_product_initial_price_from_cart", $result, $product,
                 $wcCartItem);

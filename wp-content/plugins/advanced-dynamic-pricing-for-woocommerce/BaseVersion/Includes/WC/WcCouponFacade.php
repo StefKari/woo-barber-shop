@@ -3,7 +3,7 @@
 namespace ADP\BaseVersion\Includes\WC;
 
 use ADP\BaseVersion\Includes\Context;
-use ADP\BaseVersion\Includes\Core\Cart\CouponInterface;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponInterface;
 
 defined('ABSPATH') or exit;
 

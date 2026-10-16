@@ -13,25 +13,18 @@ use WPML\StringTranslation\Application\Setting\Repository\SettingsRepositoryInte
 
 class HtmlStringsService {
 
-	/** @var SettingsRepositoryInterface */
 	private $settingsRepository;
 
-	/** @var HtmlStringsRepositoryInterface */
 	private $htmlStringsRepository;
 
-	/** @var JsonStringsRepositoryInterface */
 	private $jsonStringsRepository;
 
-	/** @var QueueRepositoryInterface */
 	private $queueRepository;
 
-	/** @var GettextStringsRepositoryInterface */
 	private $gettextStringsRepository;
 
-	/** @var QueueGettextStringsToBeSetAsFrontendCommandInterface */
 	private $queueGettextStringsToBeSetAsFrontendCommand;
 
-	/** @var ProcessFrontendGettextStringsQueueInterface */
 	private $processFrontendGettextStringsQueueCommand;
 
 	public function __construct(
@@ -81,7 +74,7 @@ class HtmlStringsService {
 		$this->queueGettextStringsToBeSetAsFrontendCommand->run( $gettextStrings );
 	}
 
-	public function maybeProcessFrontendGettextStringsQueue() {
-		$this->processFrontendGettextStringsQueueCommand->run();
+	public function maybeProcessFrontendGettextStringsQueue(): int {
+		return $this->processFrontendGettextStringsQueueCommand->run();
 	}
 }

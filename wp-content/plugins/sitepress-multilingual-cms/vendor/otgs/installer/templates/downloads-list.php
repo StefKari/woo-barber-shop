@@ -16,7 +16,8 @@
 	use OTGS\Installer\CommercialTab\DownloadFilter;
 	use OTGS\Installer\CommercialTab\DownloadsList;
 
-	$sections = $this->get_plugins_sections( $repository_id, $package['downloads'] );
+	$sections     = $this->get_plugins_sections( $repository_id, $package['downloads'] );
+	$plan_plugins = empty( $package['plan_plugins']['downloads'] ) ? [] : $package['plan_plugins'];
 
     foreach ( $sections as $section ) {
         if ( ! empty( $section['downloads'] ) ) {
@@ -42,18 +43,22 @@
                 }
                 ?>
                 </tbody>
+				<?php
+				if ( $plan_plugins ) {
+					include $this->plugin_path() . '/templates/downloads-list-plan-plugins.php';
+					$plan_plugins = [];
+				}
+				?>
             </table>
             </div><?php
         }
 	}
 	?>
 
-    <br/>
-
     <div class="installer-error-box">
 		<?php if ( ! WP_Installer()->dependencies->is_uploading_allowed() ): ?>
             <p><?php printf( __( 'Downloading is not possible because WordPress cannot write into the plugins folder. %sHow to fix%s.', 'installer' ),
-					'<a href="http://codex.wordpress.org/Changing_File_Permissions">', '</a>' ) ?></p>
+					'<a href="https://codex.wordpress.org/Changing_File_Permissions">', '</a>' ) ?></p>
 		<?php elseif ( WP_Installer()->dependencies->is_win_paths_exception( $repository_id ) ): ?>
             <p><?php echo WP_Installer()->dependencies->win_paths_exception_message() ?></p>
 		<?php endif; ?>

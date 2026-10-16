@@ -7,40 +7,43 @@ use WPML\StringTranslation\Application\StringPackage\Query\Criteria\SearchPopula
 use WPML\StringTranslation\Application\StringPackage\Query\Criteria\StringPackageCriteria;
 
 trait QueryBuilderTrait {
+	protected function sqlStringLiteral( $value ): string {
+		return "'" . esc_sql( (string) $value ) . "'";
+	}
+
 	protected function getLanguageJoinColumName( string $languageCode ) : string {
 		return esc_sql( preg_replace( '/[^a-zA-Z0-9]/', '_', $languageCode ) ?: $languageCode );
 	}
 
-	/**
-	 * @param SearchPopulatedKindsCriteria|StringPackageCriteria $criteria
-	 */
 	private function getSourceLanguageCode( $criteria ): string {
 		return $criteria->getSourceLanguageCode()
 			? $criteria->getSourceLanguageCode()
 			: $this->settingsRepository->getDefaultLanguageCode();
 	}
 
-	/**
-	 * @param SearchPopulatedKindsCriteria|StringPackageCriteria $criteria
-	 */
 	private function getTargetLanguageCodes( $criteria ): array {
 		$languageCodes = $criteria->getTargetLanguageCode() ?
 			[  $criteria->getTargetLanguageCode() ] :
-			$this->settingsRepository->getActiveSecondaryLanguageCodes();
+			$this->settingsRepository->getActiveLanguageCodes();
 
-		return array_filter(
-			$languageCodes,
-			function ( $languageCode ) use ( $criteria ) {
-				return $languageCode !== $this->getSourceLanguageCode( $criteria );
-			}
+		return array_values(
+			array_filter(
+				$languageCodes,
+				function ( $languageCode ) use ( $criteria ) {
+					return $languageCode !== $this->getSourceLanguageCode( $criteria );
+				}
+			)
 		);
 	}
 
-	/**
-	 * @param string[] $languageCodes
-	 *
-	 * @return string[]
-	 */
+	protected function buildLanguageInCondition( string $column, array $languageCodes ): string {
+		if ( empty( $languageCodes ) ) {
+			return '1=0';
+		}
+
+		return $column . ' IN (' . wpml_prepare_in( $languageCodes, '%s' ) . ')';
+	}
+
 	private function escapeLanguages( array $languageCodes ): array {
 		return array_map(
 			function ( $languageCode ) {

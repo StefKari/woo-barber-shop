@@ -3,6 +3,7 @@
  * Contact form helper functions
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
  * Wrapper function of WPCF7_ContactForm::get_instance().
@@ -19,17 +20,25 @@ function wpcf7_contact_form( $post ) {
  * Searches for a contact form by an old unit ID.
  *
  * @param int $old_id Old unit ID.
- * @return WPCF7_ContactForm Contact form object.
+ * @return WPCF7_ContactForm|null Contact form object, or null if not found.
  */
-function wpcf7_get_contact_form_by_old_id( $old_id ) {
-	global $wpdb;
+function wpcf7_get_contact_form_by_old_id( $old_id ): ?WPCF7_ContactForm {
+	$contact_forms = WPCF7_ContactForm::find( array(
+		'meta_query' => array(
+			array(
+				'key' => '_old_cf7_unit_id',
+				'type' => 'DECIMAL',
+				'value' => $old_id,
+			),
+		),
+		'posts_per_page' => 1,
+	) );
 
-	$q = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_old_cf7_unit_id'"
-		. $wpdb->prepare( " AND meta_value = %d", $old_id );
-
-	if ( $new_id = $wpdb->get_var( $q ) ) {
-		return wpcf7_contact_form( $new_id );
+	if ( empty( $contact_forms ) ) {
+		return null;
 	}
+
+	return wpcf7_contact_form( $contact_forms[0] );
 }
 
 
@@ -40,21 +49,23 @@ function wpcf7_get_contact_form_by_old_id( $old_id ) {
  * @return WPCF7_ContactForm Contact form object.
  */
 function wpcf7_get_contact_form_by_hash( $hash ) {
-	global $wpdb;
-
-	$hash = trim( $hash );
-
-	if ( strlen( $hash ) < 7 ) {
+	if ( ! preg_match( '/^[0-9a-f]{7,}$/', $hash ) ) {
 		return null;
 	}
 
-	$like = $wpdb->esc_like( $hash ) . '%';
+	$contact_forms = WPCF7_ContactForm::find( array(
+		'meta_query' => array(
+			array(
+				'key' => '_hash',
+				'compare' => 'REGEXP',
+				'value' => '^' . $hash,
+			),
+		),
+		'posts_per_page' => 1,
+	) );
 
-	$q = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_hash'"
-		. $wpdb->prepare( " AND meta_value LIKE %s", $like );
-
-	if ( $post_id = $wpdb->get_var( $q ) ) {
-		return wpcf7_contact_form( $post_id );
+	if ( $contact_forms ) {
+		return wpcf7_contact_form( $contact_forms[0] );
 	}
 }
 
@@ -76,20 +87,20 @@ function wpcf7_get_contact_form_by_title( $title ) {
 	) );
 
 	if ( $contact_forms ) {
-		return wpcf7_contact_form( reset( $contact_forms ) );
+		return wpcf7_contact_form( $contact_forms[0] );
 	}
 }
 
 
 /**
- * Wrapper function of WPCF7_ContactForm::get_current().
+ * Returns the contact form that is currently processed.
  *
- * @return WPCF7_ContactForm Contact form object.
+ * This is a wrapper for WPCF7_ContactForm::get_current().
+ *
+ * @return WPCF7_ContactForm|null Contact form object, or null if none is set.
  */
-function wpcf7_get_current_contact_form() {
-	if ( $current = WPCF7_ContactForm::get_current() ) {
-		return $current;
-	}
+function wpcf7_get_current_contact_form(): ?WPCF7_ContactForm {
+	return WPCF7_ContactForm::get_current();
 }
 
 
@@ -119,12 +130,11 @@ function wpcf7_get_hangover( $name, $default_value = null ) {
 
 	$submission = WPCF7_Submission::get_instance();
 
-	if ( ! $submission
-	or $submission->is( 'mail_sent' ) ) {
+	if ( ! $submission or $submission->is( 'mail_sent' ) ) {
 		return $default_value;
 	}
 
-	return isset( $_POST[$name] ) ? wp_unslash( $_POST[$name] ) : $default_value;
+	return wpcf7_superglobal_post( $name, $default_value );
 }
 
 
@@ -296,8 +306,6 @@ function wpcf7_save_contact_form( $data = '', $context = 'save' ) {
 		'additional_settings' => null,
 	) );
 
-	$data = wp_unslash( $data );
-
 	$data['id'] = (int) $data['id'];
 
 	if ( -1 === $data['id'] ) {
@@ -462,7 +470,7 @@ function wpcf7_sanitize_additional_settings( $input, $default_template = '' ) {
  * @return string SHA-1 hash.
  */
 function wpcf7_generate_contact_form_hash( $post_id ) {
-	return sha1( implode( '|', array(
+	return hash( 'sha256', implode( '|', array(
 		get_current_user_id(),
 		$post_id,
 		time(),

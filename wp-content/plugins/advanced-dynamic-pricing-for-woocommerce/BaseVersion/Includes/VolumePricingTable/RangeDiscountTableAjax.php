@@ -7,6 +7,7 @@ use ADP\BaseVersion\Includes\CustomizerExtensions\CustomizerExtensions;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
 use ADP\Factory;
+use ADP\BaseVersion\Includes\Engine;
 
 defined('ABSPATH') or exit;
 
@@ -28,11 +29,12 @@ class RangeDiscountTableAjax
      * @param Context|CustomizerExtensions $contextOrCustomizer
      * @param null $deprecated
      */
-    public function __construct($contextOrCustomizer, $deprecated = null)
+    public function __construct($contextOrCustomizer, $customizerOrEngine, $deprecated = null)
     {
         $this->context            = adp_context();
-        $customizer               = $contextOrCustomizer instanceof CustomizerExtensions ? $contextOrCustomizer : $deprecated;
-        $this->rangeDiscountTable = Factory::get("VolumePricingTable_RangeDiscountTable", $customizer);
+        $customizer               = $contextOrCustomizer instanceof CustomizerExtensions ? $contextOrCustomizer : $customizerOrEngine;
+        $engine                   = $customizerOrEngine instanceof Engine ? $customizerOrEngine : $deprecated;
+        $this->rangeDiscountTable = Factory::get("VolumePricingTable_RangeDiscountTable", $customizer, $engine);
     }
 
     public function withContext(Context $context)
@@ -48,7 +50,9 @@ class RangeDiscountTableAjax
 
     public function handle()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
         $productID = ! empty($_REQUEST['product_id']) ? $_REQUEST['product_id'] : false;
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
         $attributes = ! empty($_REQUEST['attributes']) ? $_REQUEST['attributes'] : array();
 
         if ( ! $productID) {

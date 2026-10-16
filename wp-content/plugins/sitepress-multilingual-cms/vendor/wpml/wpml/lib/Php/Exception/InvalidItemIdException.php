@@ -1,7 +1,2 @@
 <?php
-
-namespace WPML\PHP\Exception;
-
-class InvalidItemIdException extends \InvalidArgumentException {
-
-}
+require_once __DIR__ . '/../../../../../../wpml/lib/Php/Exception/InvalidItemIdException.php';

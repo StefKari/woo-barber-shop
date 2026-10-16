@@ -3,6 +3,15 @@
 namespace ADP\BaseVersion\Includes\Shortcodes;
 
 use ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Cache\CacheHelper;
+use ADP\BaseVersion\Includes\Core\Rule\Rule;
+use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule;
+use ADP\BaseVersion\Includes\Database\Database;
+use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
+use ADP\BaseVersion\Includes\Database\RuleStorage;
+use ADP\BaseVersion\Includes\Enums\RuleTypeEnum;
+use ADP\Factory;
+
 use WC_Shortcode_Products;
 
 defined('ABSPATH') or exit;
@@ -10,7 +19,7 @@ defined('ABSPATH') or exit;
 abstract class Products extends WC_Shortcode_Products
 {
     const NAME = '';
-    const STORAGE_KEY = '';
+    const STORAGE_WITH_RULES_KEY = '';
 
     /**
      * @var Context
@@ -24,7 +33,7 @@ abstract class Products extends WC_Shortcode_Products
         });
     }
 
-    public function __construct($attributes = array(), $type = 'products')
+    final public function __construct($attributes = array(), $type = 'products')
     {
         $this->context = adp_context();
         parent::__construct($attributes, $type);
@@ -38,7 +47,6 @@ abstract class Products extends WC_Shortcode_Products
      */
     public static function create($atts)
     {
-
         // apply legacy [sale_products] attributes
         $atts = array_merge(array(
             'limit'        => '12',
@@ -55,58 +63,200 @@ abstract class Products extends WC_Shortcode_Products
     }
 
     /**
-     * @param null $deprecated
+     * Parse attributes.
      *
-     * @return mixed
+     * @since  3.2.0
+     * @param  array $attributes Shortcode attributes.
+     * @return array
      */
-    public static function getCachedProductsIds($deprecated = null)
-    {
+    protected function parse_attributes( $attributes ) {
+        $this->type = 'products'; //required
+        $parsed_attributes = parent::parse_attributes( $attributes );
+        $this->type = static::NAME;
 
-        // Load from cache.
-        $productIds = get_transient(static::STORAGE_KEY);
-
-        // Valid cache found.
-        if (false !== $productIds) {
-            return $productIds;
+        //parse own attrubutes
+        $parsed_attributes['show_wc_onsale_products'] = false;
+        if ( isset($attributes['show_wc_onsale_products']) ) {
+            $parsed_attributes['show_wc_onsale_products'] = wc_string_to_bool($attributes['show_wc_onsale_products']);
         }
-
-        return static::updateCachedProductsIds();
+        $parsed_attributes['rule_id'] = false;
+        if (isset($attributes['rule_id'])) {
+            $parsed_attributes['rule_id'] = explode(',', $attributes['rule_id']);
+        }
+        return $parsed_attributes;
     }
 
     /**
-     * @param null $deprecated
-     *
-     * @return mixed
-     */
-    public static function updateCachedProductsIds($deprecated = null)
-    {
+	 * Parse query args.
+	 *
+	 * @since  3.2.0
+	 * @return array
+	 */
+    protected function parse_query_args() {
+        if ($this->attributes['rule_id'] !== false) {
+            $productIds = static::getCachedProductsIdsByRule($this->attributes['rule_id']);
+        } else {
+            $productIds = static::getCachedProductsIdsByRule(); //get all
+        }
+        if ($this->attributes["show_wc_onsale_products"]) {
+            $post__in = array_unique(array_merge(array(0), $productIds, wc_get_product_ids_on_sale()));
+        } else {
+            $post__in = array_merge(array(0), $productIds);
+        }
 
-        $product_ids = static::getProductsIds();
+        $filter = function($query_args, $attributes, $type ) use ($post__in){
+                $query_args['post__in'] = $post__in;
+                return $query_args;
+        };
+        add_filter( 'woocommerce_shortcode_products_query', $filter, 0, 3);
+        $queryArgs = parent::parse_query_args();
+        remove_filter( 'woocommerce_shortcode_products_query', $filter, 0);
 
-        set_transient(static::STORAGE_KEY, $product_ids, DAY_IN_SECONDS * 30);
+        $queryArgs['post__in'] = $post__in;//force own ids only
 
-        return $product_ids;
+        return $queryArgs;
     }
 
-    public static function cachedProductsCount()
+    public static function getActiveRules()
     {
-        return count(static::getProductsIds());
+        $context         = adp_context();
+        if ($context->isRuleSuppressed() || $context->getOption('rules_apply_mode') === "none") {
+            return [];
+        }
+
+        $rulesCollection = CacheHelper::loadActiveRules($context);
+        $rulesArray = $rulesCollection->getRules();
+
+        /** @var RuleStorage $storage */
+        $storage        = Factory::get("Database_RuleStorage");
+        $ruleRepository = new RuleRepository();
+        $rows           = $ruleRepository->getRules([
+            'active_only' => true,
+            'rule_types'  => array(RuleTypeEnum::PERSISTENT()->getValue())
+        ]);
+        $persistentRulesCollection = $storage->buildPersistentRules($rows);
+
+        $persistentRulesArray = $persistentRulesCollection->getRules();
+
+        $rulesArray = array_merge($rulesArray, $persistentRulesArray);
+
+        $rulesArray = array_filter($rulesArray, function($rule) {
+            return static::filterRule($rule);
+        });
+
+        $rulesIds = array_map(function($rule) {
+            return $rule->getId();
+        }, $rulesArray);
+
+        return array_values($rulesIds);
     }
 
-    public static function clearCache()
+    public static function getProductIdsByRuleId($ruleId)
     {
-        delete_transient(static::STORAGE_KEY);
-    }
+        $ruleStorage    = Factory::get("Database_RuleStorage");
+        $ruleRepository = new RuleRepository();
+        $rows           = $ruleRepository->getRules(['id' => $ruleId]);
+        $rawRule        = reset($rows);
 
-    public static function partialUpdateCachedProductsIds($from, $count)
-    {
-        $result     = static::getProductsIds($from, $count);
-        $productIds = get_transient(static::STORAGE_KEY);
-        $productIds = $productIds ? array_merge($productIds, $result) : $result;
+        if ($rawRule->rule_type === RuleTypeEnum::PERSISTENT()->getValue()) {
+            $rulesCollection = $ruleStorage->buildPersistentRules([$rawRule]);
+        } else {
+            $rulesCollection = $ruleStorage->buildRules([$rawRule]);
+        }
 
-        set_transient(static::STORAGE_KEY, $productIds, DAY_IN_SECONDS * 30);
+        $rule = $rulesCollection->getFirst();
+
+        $sqlGenerator = Factory::get("Shortcodes_SqlGeneratorPersistent");
+        $sqlGenerator->applyRuleToQuery($rule);
+        $productIds = $sqlGenerator->getProductIds('on_sale');
 
         return $productIds;
     }
 
+    public static function updateCachedProductsIdsByRuleId($ruleId) {
+        $productIds = static::getProductIdsByRuleId($ruleId);
+        $productIdsPerRule = get_transient(static::STORAGE_WITH_RULES_KEY);
+
+        if(!$productIdsPerRule) {
+            $productIdsPerRule = [];
+        }
+
+        $productIdsPerRule[$ruleId] = $productIds;
+        set_transient(static::STORAGE_WITH_RULES_KEY, $productIdsPerRule, DAY_IN_SECONDS * 30);
+
+        return $productIds;
+    }
+
+    /**
+     * @param array $ruleId
+     * @return array
+     */
+    public static function getCachedProductsIdsByRule($ruleIds = null)
+    {
+        $productIdsPerRule = static::getCachedProductsIdsPerRule();
+
+        if(!$ruleIds) {
+            $ruleIds = array_keys($productIdsPerRule);
+        }
+
+        $productIdsByRuleIds = [];
+        foreach ($ruleIds as $ruleId) {
+            $productIdsByRuleIds = array_merge($productIdsByRuleIds, $productIdsPerRule[$ruleId] ?? []);
+        }
+
+        return array_unique($productIdsByRuleIds);
+    }
+
+    public static function getCachedProductsIds($deprecated = null)
+    {
+        return static::getCachedProductsIdsByRule();
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getCachedProductsIdsPerRule()
+    {
+        // Load from cache.
+        $productIdsPerRule = get_transient(static::STORAGE_WITH_RULES_KEY);
+
+        // Valid cache found.
+        if (false !== $productIdsPerRule) {
+            return $productIdsPerRule;
+        }
+
+        return static::updateCachedProductsIdsPerRule();
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function updateCachedProductsIdsPerRule()
+    {
+        $productIdsPerRule = [];
+
+        $rules = static::getActiveRules();
+        foreach ($rules as $ruleId) {
+            $productIdsPerRule[$ruleId] = static::getProductIdsByRuleId($ruleId);
+        }
+
+        set_transient(static::STORAGE_WITH_RULES_KEY, $productIdsPerRule, DAY_IN_SECONDS * 30);
+
+        return $productIdsPerRule;
+    }
+
+    public static function clearCache()
+    {
+        delete_transient(static::STORAGE_WITH_RULES_KEY);
+    }
+
+    /**
+     * @param Rule $rule
+     *
+     * @return bool
+     */
+    protected static function filterRule($rule)
+    {
+        return false;
+    }
 }

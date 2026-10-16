@@ -2,22 +2,22 @@
 
 namespace ADP\BaseVersion\Includes\Database\Repository;
 
+use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\CartProcessor\CartBuilder;
 use ADP\BaseVersion\Includes\Context;
-use ADP\BaseVersion\Includes\Core\Cart\CartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\ICartItem;
 use ADP\BaseVersion\Includes\Core\CartCalculatorPersistent;
 use ADP\BaseVersion\Includes\Core\Rule\PersistentRule;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\RangeDiscount;
-use ADP\BaseVersion\Includes\Database\Models\PersistentRuleCache as PersistentRuleModel;
-use ADP\BaseVersion\Includes\PriceDisplay\ProcessedVariableProduct;
-use ADP\BaseVersion\Includes\PriceDisplay\Processor;
-use ADP\BaseVersion\Includes\Shortcodes\SqlGenerator;
-use ADP\Factory;
-use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\Database\Models\PersistentRuleCache;
+use ADP\BaseVersion\Includes\Database\Models\PersistentRuleCache as PersistentRuleModel;
 use ADP\BaseVersion\Includes\Database\PersistentRuleCacheObject;
 use ADP\BaseVersion\Includes\Database\RuleStorage;
+use ADP\BaseVersion\Includes\PriceDisplay\ProcessedGroupedProduct;
+use ADP\BaseVersion\Includes\PriceDisplay\ProcessedVariableProduct;
+use ADP\BaseVersion\Includes\PriceDisplay\Processor;
+use ADP\Factory;
 
 defined('ABSPATH') or exit;
 
@@ -38,22 +38,22 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
     }
 
     /**
-     * @param CartItem $item
+     * @param ICartItem $item
      * @param float|null $qty
+     * @param array|null $roles
      *
      * @return array<int, PersistentRuleCacheObject>
      * @throws \Exception
      */
-    public function getCache($item, $qty = null)
+    public function getCache($item, $qty = null, $roles = null)
     {
-        $cacheKey = $this->calculateCacheHash($item, $qty);
+        $cacheKey = $this->calculateCacheHash($item, $qty, $roles);
 
         $objects = CacheHelper::cacheGet($cacheKey, CacheHelper::GROUP_RULES_CACHE);
 
-        if ( ! $objects) {
-            if ($objects = $this->calculate($item, $qty)) {
-                CacheHelper::cacheSet($cacheKey, $objects, CacheHelper::GROUP_RULES_CACHE);
-            }
+        if ( ! is_array($objects) ) {
+            $objects = $this->calculate($item, $qty, $roles);
+            CacheHelper::cacheSet($cacheKey, $objects, CacheHelper::GROUP_RULES_CACHE);
         }
 
         return $objects;
@@ -71,10 +71,9 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
 
         $objects = CacheHelper::cacheGet($cacheKey, CacheHelper::GROUP_RULES_CACHE);
 
-        if ( ! $objects) {
-            if ($objects = $this->calculate($product)) {
-                CacheHelper::cacheSet($cacheKey, $objects, CacheHelper::GROUP_RULES_CACHE);
-            }
+        if ( ! is_array($objects) ) {
+            $objects = $this->calculate($product);
+            CacheHelper::cacheSet($cacheKey, $objects, CacheHelper::GROUP_RULES_CACHE);
         }
 
         return $objects;
@@ -85,10 +84,12 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
 
         global $wpdb;
         $table = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->query('START TRANSACTION');
 
         if ( ! empty($ruleId)) {
             $where  = array('rule_id' => $ruleId);
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $result = $wpdb->delete($table, $where);
         }
 
@@ -96,19 +97,19 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
          * @var PersistentRuleCache $cache
          */
         foreach ($rows as $cache) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $result = $wpdb->insert($table, $cache->getData());
         }
-
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->query('COMMIT');
     }
 
     public function getAddRuleData($ruleId, Context $context)
     {
-
         global $wpdb;
 
-        /** @var $sqlGenerator SqlGenerator */
-        $sqlGenerator = Factory::get("Shortcodes_SqlGenerator");
+        /** @var $sqlGenerator SqlGeneratorPersistent */
+        $sqlGenerator = Factory::get("Shortcodes_SqlGeneratorPersistent");
 
         /** @var RuleStorage $storage */
         $storage         = Factory::get("Database_RuleStorage");
@@ -122,28 +123,10 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
             $sqlGenerator->applyRuleToQuery($context, $rule);
         }
 
-        if ($sqlGenerator->isEmpty()) {
-            return array();
+        $productIds = $sqlGenerator->getProductIds();
+        if(!$productIds) {
+            return [];
         }
-
-        $sql_joins    = $sqlGenerator->getJoin();
-        $sql_where    = $sqlGenerator->getWhere();
-        $excludeWhere = $sqlGenerator->getExcludeWhere();
-
-        $sql = "SELECT post.ID as id, post.post_parent as parent_id, post_children.ID as child_id FROM `$wpdb->posts` AS post
-            " . implode(" ", $sql_joins) . " LEFT JOIN {$wpdb->posts} as post_children ON (post.ID = post_children.post_parent OR post.ID = post_children.ID)
-            WHERE
-            post.post_type IN ( 'product', 'product_variation' ) AND post.post_status = 'publish'
-            AND post_children.post_type IN ('product', 'product_variation') AND post_children.post_status = 'publish'
-            " . ($sql_where ? " AND " : "") . implode(" OR ", array_map(function ($v) {
-                return "(" . $v . ")";
-            }, $sql_where)) . ($excludeWhere ? " AND " : "") . implode(" AND ", array_map(function ($v) {
-                return "(" . $v . ")";
-            }, $excludeWhere));
-
-        $products = $wpdb->get_results($sql);
-
-        $productIds = wp_parse_id_list(wp_list_pluck($products, 'child_id'));
 
         $data = array();
         /** @var PersistentRule $rule */
@@ -166,6 +149,8 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
             $persistentRuleCaches = $this->calculateCacheForProductWithRule($context, $productProcessor, $rule, $product);
             foreach ($persistentRuleCaches as $cache) {
                 $data[] = PersistentRuleCache::fromArray($cache);
+
+                $this->saveCacheInProductMetaData($product, $cache);
             }
         }
 
@@ -179,6 +164,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         $table = $wpdb->prefix .  PersistentRuleModel::TABLE_NAME;
 
         $where = array('rule_id' => $ruleId);
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->delete($table, $where);
     }
 
@@ -193,6 +179,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
 
         global $wpdb;
         $tableCache = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->query('START TRANSACTION');
 
         foreach ( $objects as $object ) {
@@ -203,6 +190,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
             $rule = $object->rule;
             $hash = $this->calculateDbHashWithProduct($product);
             $where  = array('rule_id' => $rule->getId(), 'product' => $hash);
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $result = $wpdb->delete($tableCache, $where);
 
             $cartCalculator   = new CartCalculatorPersistent($context, $rule);
@@ -211,10 +199,11 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
             $cart             = $cartBuilder->create(WC()->customer, WC()->session);
             $productProcessor->withCart($cart);
             foreach ($this->calculateCacheForProductWithRule($context, $productProcessor, $rule, $product, $cartItemData) as $data) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $result = $wpdb->insert($tableCache, $data);
             }
         }
-
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->query('COMMIT');
     }
 
@@ -255,6 +244,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
     public function truncate() {
         global $wpdb;
         $tableCache = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
+        //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $wpdb->query("TRUNCATE TABLE $tableCache");
     }
 
@@ -275,7 +265,44 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         $data = array();
         $hash = $this->calculateDbHashWithProduct($product, $cartItemData);
 
-        if ($rule->hasProductRangeAdjustment()) {
+        if($rolesDiscounts = $rule->getRoleDiscounts()) {
+            $customer = $productProcessor->getCart()->getContext()->getCustomer();
+            $initialRoles = $customer->getRoles();
+
+            foreach ($rolesDiscounts as $rolesDiscount) {
+                foreach ($rolesDiscount->getRoles() as $role) {
+                    $customer->setRoles([$role]);
+
+                    $customHash = function($key) use($role) {
+                        $key[] = "C{$role}";
+                        return $key;
+                    };
+                    add_filter("adp_calculate_persistent_rule_product_hash", $customHash);
+
+                    $hash = $this->calculateDbHashWithProduct($product, $cartItemData);
+
+                    $processedProduct = $productProcessor->calculateProduct($product, 1.0, $cartItemData);
+
+                    remove_filter("adp_calculate_persistent_rule_product_hash", $customHash);
+                    $customer->setRoles($initialRoles);
+
+                    if ($processedProduct === null || $processedProduct instanceof ProcessedVariableProduct || $processedProduct instanceof ProcessedGroupedProduct) {
+                        continue;
+                    }
+
+                    $row = [
+                        'product'        => $hash,
+                        'rule_id'        => $rule->getId(),
+                        'qty_start'      => 1.0,
+                        'qty_finish'     => null,
+                        'original_price' => $processedProduct->getOriginalPrice(),
+                        'price'          => $processedProduct->getCalculatedPrice(),
+                    ];
+
+                    $data[] = $row;
+                }
+            }
+        } else if ($rule->hasProductRangeAdjustment()) {
             $handler = $rule->getProductRangeAdjustmentHandler();
             $ranges  = $handler->getRanges();
 
@@ -298,7 +325,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
             foreach ($ranges as $range) {
                 $processedProduct = $productProcessor->calculateProduct($product, $range->getFrom(), $cartItemData);
 
-                if ($processedProduct === null || $processedProduct instanceof ProcessedVariableProduct) {
+                if ($processedProduct === null || $processedProduct instanceof ProcessedVariableProduct || $processedProduct instanceof ProcessedGroupedProduct) {
                     return $data;
                 }
 
@@ -314,7 +341,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         } else {
             $processedProduct = $productProcessor->calculateProduct($product, 1.0, $cartItemData);
 
-            if ($processedProduct === null || $processedProduct instanceof ProcessedVariableProduct) {
+            if ($processedProduct === null || $processedProduct instanceof ProcessedVariableProduct || $processedProduct instanceof ProcessedGroupedProduct) {
                 return $data;
             }
 
@@ -331,39 +358,63 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         return $data;
     }
 
+    protected function calculateDbHashWithRoles($item, $roles)
+    {
+        $hash = [];
+        if(!$roles) {
+            return $hash;
+        }
+        foreach ($roles as $role) {
+            $customHash = function($key) use($role) {
+                $key[] = "C{$role}";
+                return $key;
+            };
+            add_filter("adp_calculate_persistent_rule_product_hash", $customHash);
+
+            $hash[] = $this->calculateDbHash($item);
+
+            remove_filter("adp_calculate_persistent_rule_product_hash", $customHash);
+        }
+        return $hash;
+    }
 
     /**
-     * @param CartItem|\WC_Product $item
+     * @param ICartItem|\WC_Product $item
      * @param float|null $qty
      *
      * @return array<int, PersistentRuleCacheObject>
      * @throws \Exception
      */
-    protected function calculate($item, $qty = null)
+    protected function calculate($item, $qty = null, $roles=null)
     {
         $context = $this->context;
 
-        if ($item instanceof CartItem) {
-            $hash = $this->calculateDbHash($item);
+        if ($item instanceof ICartItem) {
+            $hash[] = $this->calculateDbHash($item);
+            $hash = \array_merge($hash, $this->calculateDbHashWithRoles($item, $roles));
             $qty  = ($qty !== null ? (float)$qty : $item->getQty());
         } elseif ($item instanceof \WC_Product) {
-            $hash = $this->calculateDbHashWithProduct($item);
+            $hash[] = $this->calculateDbHashWithProduct($item);
+            $hash = \array_merge($hash, $this->calculateDbHashWithRoles($item, $roles));
             $qty  = ($qty !== null ? (float)$qty : 1.0);
         } else {
             return array();
         }
 
+        $hash = implode(',', array_map(function($v) {
+            return "'" . esc_sql($v) . "'";
+        }, $hash));
+
         global $wpdb;
 
         $tableCache = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
-
-        $query = $wpdb->prepare("SELECT persistent_rules_cache.rule_id, persistent_rules_cache.price
-            FROM {$tableCache} AS persistent_rules_cache
-            WHERE persistent_rules_cache.product = %s
+        //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $query = $wpdb->prepare("SELECT persistent_rules_cache.rule_id, persistent_rules_cache.price FROM {$tableCache} AS persistent_rules_cache WHERE persistent_rules_cache.product IN ({$hash})
             AND persistent_rules_cache.qty_start <= %s
             AND (persistent_rules_cache.qty_finish IS NULL OR persistent_rules_cache.qty_finish >= %s)",
-            array($hash, $qty, $qty)
+            array($qty, $qty)
         );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- query built with $wpdb->prepare() above
         $rows  = $wpdb->get_results($query, ARRAY_A);
 
         if (count($rows) === 0) {
@@ -371,23 +422,15 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         }
 
         $objects = [];
-        foreach ( $rows as $row ) {
+        foreach ($rows as $row) {
             $price = $row['price'];
 
-            $ruleRepository = new RuleRepository();
-            $ruleRows  = $ruleRepository->getRules(array('id' => $row['rule_id']));
-
-            if (count($ruleRows) === 0) {
-                return array();
+            $rules = CacheHelper::loadProductOnlyRules([$row['rule_id']]);
+            if (count($rules) === 0) {
+                return [];
             }
 
-            $ruleRow = reset($ruleRows);
-
-            /** @var RuleStorage $storage */
-            $storage         = Factory::get("Database_RuleStorage");
-            $rulesCollection = $storage->buildPersistentRules(array($ruleRow));
-            $rule            = $rulesCollection->getFirst();
-
+            $rule = reset($rules);
             if ($rule === null) {
                 continue;
             }
@@ -400,7 +443,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
 
 
     /**
-     * @param CartItem $item
+     * @param ICartItem $item
      */
     protected function calculateDbHash($item)
     {
@@ -438,12 +481,17 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
     }
 
     /**
-     * @param CartItem $item
+     * @param ICartItem $item
      * @param float|null $qty
+     * @param array|null $roles
      */
-    protected function calculateCacheHash($item, $qty = null)
+    protected function calculateCacheHash($item, $qty = null, $roles = null)
     {
-        return $this->calculateDbHash($item) . '_' . ($qty !== null ? (float) $qty : $item->getQty());
+        return join('_', array_filter([
+            $this->calculateDbHash($item),
+            $qty !== null ? (float) $qty : $item->getQty(),
+            $roles !== null ? join(',', $roles) : ''
+        ]));
     }
 
     /**
@@ -454,5 +502,105 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         $qty = (string)(1.0);
 
         return $this->calculateDbHashWithProduct($product) . '_' . $qty;
+    }
+
+    /**
+     * @param \WC_Product $product
+     * @param array $cache
+     * @return void
+     */
+    protected function saveCacheInProductMetaData($product, $cache) {
+        static $last_parent_id = false, $last_parent_min_price=0;
+        global $wpdb;
+
+        $price = $cache['price'];
+
+        // save calculated price in product meta
+        update_post_meta($product->get_id(), '_sale_price_adp', $price);
+        //update lookup table too
+        // phpcs:ignore WordPress.DB
+        $wpdb->update( $wpdb->wc_product_meta_lookup, ['min_price' => $price, 'onsale'=>1],  ['product_id' => $product->get_id()] );
+
+        if($product instanceof \WC_Product_Variation) {
+            $parent_id = $product->get_parent_id('edit');
+            if( $last_parent_id == $parent_id){ // variations of same product processed still ?
+                if($last_parent_min_price > $price) //use min price of variation
+                    $last_parent_min_price = $price;
+            } else {
+                $last_parent_id = $parent_id;
+                $last_parent_min_price = $price;
+            }
+
+            update_post_meta($last_parent_id, '_sale_price_adp', $last_parent_min_price);
+            // phpcs:ignore WordPress.DB
+            $wpdb->update( $wpdb->wc_product_meta_lookup, ['min_price' => $last_parent_min_price, 'onsale'=>1],  ['product_id' => $last_parent_id] );
+        }
+    }
+
+    public function clearCacheInProductMetaData() {
+        delete_post_meta_by_key('_sale_price_adp');
+    }
+
+    public function installHooksForProductLookupTable() {
+        add_action( 'wc_update_product_lookup_tables_column', function($column){
+            global $wpdb;
+
+            if($column == 'min_max_price') {
+                // phpcs:ignore WordPress.DB
+                $sql = "UPDATE {$wpdb->wc_product_meta_lookup} lookup_table INNER JOIN {$wpdb->postmeta} meta ON lookup_table.product_id = meta.post_id AND meta.meta_key = '_sale_price_adp' SET lookup_table.min_price = meta.meta_value";
+                // phpcs:ignore  WordPress.DB
+                $wpdb->query($sql);
+            }
+            if($column == 'onsale') {
+                // phpcs:ignore WordPress.DB
+                $sql = "UPDATE {$wpdb->wc_product_meta_lookup} lookup_table INNER JOIN {$wpdb->postmeta} meta ON lookup_table.product_id = meta.post_id AND meta.meta_key = '_sale_price_adp' SET lookup_table.onsale = 1";
+                // phpcs:ignore  WordPress.DB
+                $wpdb->query($sql);
+            }
+        } , 100 );
+
+        add_filter( 'woocommerce_get_catalog_ordering_args', function ($sort_args) {
+            $orderby_value = null;
+
+            // phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only catalog sort parameter, no state change
+            if ( isset( $_GET['orderby'] ) ) {
+                $orderby_value = sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
+            }
+            // phpcs:enable
+
+            if (!empty($orderby_value) && $orderby_value === 'on_sale_first') {
+                add_filter(
+                    'woocommerce_product_query_meta_query',
+                    function ($meta_query) {
+
+                        $meta_query = [
+                            'relation' => 'OR',
+                            [
+                                'key'     => '_sale_price_adp',
+                                'compare' => 'NOT EXISTS',
+                            ],
+                            [
+                                'relation' => 'OR',
+                                [
+                                    'key'     => '_sale_price_adp',
+                                    'value'   => 0,
+                                    'compare' => '>=',
+                                    'type'    => 'NUMERIC',
+                                ],
+                                [
+                                    'key'     => '_sale_price_adp',
+                                    'value'   => '',
+                                    'compare' => '=',
+                                ],
+                            ],
+                        ];
+
+                        return $meta_query;
+                    },
+                    100
+                );
+            }
+            return $sort_args;
+        }, 100);
     }
 }

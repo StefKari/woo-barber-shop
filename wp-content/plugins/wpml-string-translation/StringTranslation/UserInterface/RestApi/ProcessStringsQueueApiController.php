@@ -13,32 +13,26 @@ use function WPML\Container\make;
 
 class ProcessStringsQueueApiController extends AbstractController {
 
-	/** @var StringsService */
 	private $stringsService;
 
-	/** @var HtmlStringsService */
 	private $htmlStringsService;
 
-	/** @var GettextStringsService */
 	private $gettextStringsService;
 
-	/** @var QueueRepositoryInterface */
 	private $queueRepository;
 
-	/** @var FrontendQueueRepositoryInterface */
 	private $frontendQueueRepository;
 
-	/** @var SettingsRepositoryInterface */
 	private $settingsRepository;
 
 	public function __construct(
-		Adaptor                          $adaptor,
-		StringsService                   $stringsService,
-		HtmlStringsService               $htmlStringsService,
-		GettextStringsService            $gettextStringsService,
-		QueueRepositoryInterface         $queueRepository,
+		Adaptor $adaptor,
+		StringsService $stringsService,
+		HtmlStringsService $htmlStringsService,
+		GettextStringsService $gettextStringsService,
+		QueueRepositoryInterface $queueRepository,
 		FrontendQueueRepositoryInterface $frontendQueueRepository,
-		SettingsRepositoryInterface      $settingsRepository
+		SettingsRepositoryInterface $settingsRepository
 	) {
 		parent::__construct( $adaptor );
 		$this->stringsService          = $stringsService;
@@ -49,28 +43,24 @@ class ProcessStringsQueueApiController extends AbstractController {
 		$this->settingsRepository      = $settingsRepository;
 	}
 
-	/**
-	 * @return array
-	 */
-	function get_routes() {
+	public function get_routes() {
 		return [
 			[
 				'route' => 'strings/processstringsqueue',
 				'args'  => [
 					'methods'  => 'POST',
 					'callback' => [ $this, 'post' ],
-				]
+				],
 			],
 		];
 	}
 
-	/**
-	 * @return array
-	 */
 	public function post( \WP_REST_Request $request ) {
 		if ( ! $this->gettextStringsService->isAutoregisterEnabled() ) {
 			return [
-				'wasProcessed' => false,
+				'wasProcessed'   => false,
+				'hasPending'     => false,
+				'shouldContinue' => false,
 			];
 		}
 
@@ -79,41 +69,75 @@ class ProcessStringsQueueApiController extends AbstractController {
 
 		if ( ! $hasLock ) {
 			return [
-				'wasProcessed' => false,
+				'wasProcessed'   => false,
+				'hasPending'     => true,
+				'shouldContinue' => true,
+				'workerBusy'     => true,
 			];
 		}
 
-		$hasPendingGettextStrings = array_sum(
-			array_map(
-				'count',
-				$this->queueRepository->loadPendingStrings()
-			)
-		) > 0;
-		$hasPendingHtmlStrings = array_sum(
-			array_map(
-				function( $gettextStringsByUrl ) {
-					return count( $gettextStringsByUrl->getStrings() );
-				},
-				$this->frontendQueueRepository->get()
-			)
-		);
+		$processedHtmlUrlGroups = 0;
+		$quarantineDiagnostic   = [];
 
-		if ( $hasPendingGettextStrings ) {
-			$this->stringsService->maybeProcessQueue();
-		}
-		if ( $hasPendingHtmlStrings ) {
-			$this->htmlStringsService->maybeProcessFrontendGettextStringsQueue();
-		}
+		try {
+			$hasPendingGettextStrings = $this->queueRepository->hasPendingStrings();
+			$pendingHtmlUrlGroups     = $this->frontendQueueRepository->count();
+			$hasPendingHtmlStrings    = $pendingHtmlUrlGroups > 0;
+			$deferralDiagnostic       = [];
+			$gettextQueueWasProcessed = true;
 
-		$wasProcessed = $hasPendingGettextStrings || $hasPendingHtmlStrings;
-		if ( $this->settingsRepository->wereNewTranslationsLoaded() ) {
-			$wasProcessed = true;
-			$this->settingsRepository->unsetNewTranslationsWereLoadedSetting();
-		}
-		$lock->release();
+			if ( $hasPendingGettextStrings ) {
+				$gettextQueueWasProcessed = $this->stringsService->maybeProcessQueue();
+				$deferralDiagnostic       = $this->stringsService->getLastQueueDeferralDiagnostic();
+				$quarantineDiagnostic     = $this->stringsService->getLastQueueQuarantineDiagnostic();
+			}
+			if ( $hasPendingHtmlStrings && $gettextQueueWasProcessed ) {
+				$processedHtmlUrlGroups = $this->htmlStringsService->maybeProcessFrontendGettextStringsQueue();
+			}
 
-		return [
-			'wasProcessed' => $wasProcessed,
-		];
+			$wasProcessed = $hasPendingGettextStrings || $hasPendingHtmlStrings;
+			if ( $this->settingsRepository->wereNewTranslationsLoaded() ) {
+				$wasProcessed = true;
+				$this->settingsRepository->unsetNewTranslationsWereLoadedSetting();
+			}
+
+			$remainingHtmlUrlGroups = $this->frontendQueueRepository->count();
+			$hasPending             = $this->queueRepository->hasPendingStrings()
+				|| $remainingHtmlUrlGroups > 0;
+			$canRetryInFreshRequest = ! isset( $deferralDiagnostic['retry_fresh_request'] )
+				|| (bool) $deferralDiagnostic['retry_fresh_request'];
+
+			return [
+				'wasProcessed'         => $wasProcessed,
+				'hasPending'           => $hasPending,
+				'shouldContinue'       => $hasPending && $canRetryInFreshRequest,
+				'retryFreshRequest'    => $canRetryInFreshRequest,
+				'quarantinedStrings'   => isset( $quarantineDiagnostic['count'] ) ? (int) $quarantineDiagnostic['count'] : 0,
+				'pagesProcessed'       => $processedHtmlUrlGroups,
+				'pagesRemaining'       => $remainingHtmlUrlGroups,
+			];
+		} catch ( \Throwable $processingError ) {
+			error_log(
+				sprintf(
+					'[WPML String Translation] Notice: background string processing paused early and will retry automatically on the next run. No data was lost. Reason: %s (%s:%d)',
+					$processingError->getMessage(),
+					$processingError->getFile(),
+					$processingError->getLine()
+				)
+			);
+
+			return [
+				'wasProcessed'       => false,
+				'hasPending'         => true,
+				'shouldContinue'     => false,
+				'retryFreshRequest'  => true,
+				'error'              => true,
+				'quarantinedStrings' => isset( $quarantineDiagnostic['count'] ) ? (int) $quarantineDiagnostic['count'] : 0,
+				'pagesProcessed'     => $processedHtmlUrlGroups,
+			];
+		} finally {
+			$lock->release();
+		}
 	}
+
 }

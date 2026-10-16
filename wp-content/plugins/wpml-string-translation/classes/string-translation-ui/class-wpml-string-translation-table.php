@@ -13,11 +13,6 @@ class WPML_String_Translation_Table {
 	private $additional_columns_to_render;
 	private $strings_in_page;
 
-	/**
-	 * WPML_String_Translation_Table constructor.
-	 *
-	 * @param array<string> $strings
-	 */
 	public function __construct( $strings ) {
 		global $sitepress;
 
@@ -76,7 +71,7 @@ class WPML_String_Translation_Table {
 			<div id="wpml-icl-string-translations-batch-loader" class="wpml-st-table-batch-loader">
 				<div class="loader-bg"></div>
 				<div class="loader-content">
-					<div class="content-text"><?php esc_html_e( 'Processing', 'wpml-string-translation' ); ?></div>
+					<div class="content-text"><?php /* translators: Shown over the list of texts on the String Translation page while a bulk action runs, above a percentage. */ esc_html_e( 'Processing', 'wpml-string-translation' ); ?></div>
 					<div class="content-percentage js-content-percentage">0%</div>
 					<div class="content-percentage-bar js-content-percentage-bar">
 						<div class="content-percentage-bar-status js-content-percentage-bar-status" style="width: 0%"></div>
@@ -116,8 +111,8 @@ class WPML_String_Translation_Table {
 			ob_start();
 			?>
 			<span
-				data-code="<?php esc_attr_e( $langData['code'] ); ?>"
-				title="<?php esc_attr_e( $langData['title'] ); ?>"
+				data-code="<?php echo esc_attr( $langData['code'] ); ?>"
+				title="<?php echo esc_attr( $langData['title'] ); ?>"
 			>
 				<?php echo $getFlagImg($langData) ?>
 			</span>
@@ -154,18 +149,18 @@ class WPML_String_Translation_Table {
 			}
 		?>
 		<tr>
-			<td scope="col" class="manage-column column-cb check-column"><input type="checkbox"/></td>
-			<th scope="col"><?php esc_html_e( 'Domain', 'wpml-string-translation' ); ?></th>
+			<td scope="col" class="manage-column column-cb check-column"><input class="wpml-checkbox-native" type="checkbox"/></td>
+			<th scope="col"><?php /* translators: Column heading in the table of texts on the String Translation page, and the label of the same value in the preview dialog: the domain is the theme, plugin or area a text comes from. Noun. */ esc_html_e( 'Domain', 'wpml-string-translation' ); ?></th>
 			<?php if ( $renderContext ) : ?>
-				<th scope="col"><?php esc_html_e( 'Context', 'wpml-string-translation' ); ?></th>
+				<th scope="col"><?php /* translators: Column heading in the table of texts on the String Translation page: the context the text is used in. Noun. */ esc_html_e( 'Context', 'wpml-string-translation' ); ?></th>
 			<?php endif; ?>
 			<?php if ( $renderName ) : ?>
-				<th scope="col"><?php esc_html_e( 'Name', 'wpml-string-translation' ); ?></th>
+				<th scope="col"><?php /* translators: Column heading in the tables of texts, of packages and of themes and plugins: the name of the item in the row. Noun, not the verb "to name". */ esc_html_e( 'Name', 'wpml-string-translation' ); ?></th>
 			<?php endif; ?>
 			<?php if ( $renderView ) : ?>
-				<th class="usage" scope="col"><?php esc_html_e( 'Usage', 'wpml-string-translation' ); ?></th>
+				<th class="usage" scope="col"><?php /* translators: Column heading in the table of texts on the String Translation page: where on the site the text was seen. Noun. */ esc_html_e( 'Usage', 'wpml-string-translation' ); ?></th>
 			<?php endif; ?>
-			<th scope="col"><?php esc_html_e( 'String', 'wpml-string-translation' ); ?></th>
+			<th scope="col"><?php /* translators: Column heading in the tables of texts on the String Translation page, and the label of the same value in the preview dialog: the text itself. Noun. */ esc_html_e( 'String', 'wpml-string-translation' ); ?></th>
 			<th scope="col" class="wpml-col-languages"
 				data-langs="<?php echo esc_attr( (string) json_encode( $codes ) ); ?>"><?php echo $flags->get(); ?></th>
 		</tr>
@@ -179,8 +174,10 @@ class WPML_String_Translation_Table {
 	}
 
 	private function renderBulkActionsRow( $colspan ) {
+		/* translators: Message above the table on the String Translation page when every text on the page is picked. %d: how many texts that is; keep it as a word of its own with a space on each side, because the page swaps it for the count. */
 		$msgAllOnPageSelected = esc_html( __( 'All %d strings on this page are selected.', 'wpml-string-translation' ) );
 		$msgSelectAll         = esc_html( __( 'Select all strings that match this search', 'wpml-string-translation' ) );
+		/* translators: Message above the table on the String Translation page when every text of every page is picked. %d: how many texts that is; keep it as a word of its own with a space on each side, because the page swaps it for the count. */
 		$msgAllSelected       = esc_html( __( 'All %d strings from all pages are selected.', 'wpml-string-translation' ) );
 		$msgUnselectAll       = esc_html( __( 'Unselect all strings that match this search', 'wpml-string-translation' ) );
 		?>
@@ -247,15 +244,10 @@ class WPML_String_Translation_Table {
 		return $string;
 	}
 
-	/**
-	 * @param array $string
-	 *
-	 * @return string html for the checkbox and the table cell it resides in
-	 */
 	private function render_checkbox_cell( $string ) {
 		$class = 'icl_st_row_cb' . ( ! empty( $string['string_package_id'] ) ? ' icl_st_row_package' : '' ) . ' js-icl-st-row-cb';
 
-		return '<td><input class="' . esc_attr( $class ) . '" type="checkbox" value="' . esc_attr( $string['string_id'] )
+		return '<td><input class="wpml-checkbox-native ' . esc_attr( $class ) . '" type="checkbox" value="' . esc_attr( $string['string_id'] )
 			   . '" data-language="' . esc_attr( $string['string_language'] ) . '" /></td>';
 	}
 
@@ -283,13 +275,13 @@ class WPML_String_Translation_Table {
 	{
 		return '<a
                 class="thickbox"
-                data-domain-title="' . esc_attr( __('Domain', 'wpml-string-translation') ) . '"
-                data-string-title="' . esc_attr( __('String', 'wpml-string-translation') ) . '"
+                data-domain-title="' . esc_attr( /* translators: Column heading in the table of texts on the String Translation page, and the label of the same value in the preview dialog: the domain is the theme, plugin or area a text comes from. Noun. */ __('Domain', 'wpml-string-translation') ) . '"
+                data-string-title="' . esc_attr( /* translators: Column heading in the tables of texts on the String Translation page, and the label of the same value in the preview dialog: the text itself. Noun. */ __('String', 'wpml-string-translation') ) . '"
                 data-domain="' . esc_html( $icl_string['context'] ) . '"
                 data-string="' . esc_html( $icl_string['value'] ) . '"
                 data-popup-title="' . esc_attr( __('Preview string on site', 'wpml-string-translation') ) . '"
                 data-popup-description="' . esc_attr( __('This preview shows where the selected string appears on your site’s front-end.', 'wpml-string-translation') ) . '"
-                data-iframe-title="' . esc_attr( __('Frontend preview', 'wpml-string-translation') ) . '"
+                data-iframe-title="' . esc_attr( /* translators: Label read out to screen readers for the frame that shows the front end of the site inside the string preview dialog. */ __('Frontend preview', 'wpml-string-translation') ) . '"
                 data-toggle="tooltip"
                 data-image-url="' . esc_url( $sitepress->get_flag_url( $icl_string['string_language'] ) ) . '"
                 title="' . esc_attr( __('Preview where this string appears on your site', 'wpml-string-translation') ) . '"
@@ -298,12 +290,6 @@ class WPML_String_Translation_Table {
             </a>';
 	}
 
-	/**
-	 * @param string $action
-	 * @param int    $string_id
-	 *
-	 * @return string
-	 */
 	private function get_thickbox_url( $action, $string_id ) {
 		return add_query_arg(
 			array(
@@ -323,9 +309,6 @@ class WPML_String_Translation_Table {
 		return preg_replace( '#^((.+)( - ))?([a-z0-9]{32})$#', '$2', $str );
 	}
 
-	/**
-	 * @param array<string,string|int> $string
-	 */
 	public function updateColumnsForString( $string ) {
 		if (
 			! $this->additional_columns_to_render->contains( 'context' )

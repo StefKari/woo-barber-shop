@@ -1,5 +1,7 @@
 <div id="wp-chatbot-shortcode-template-container"
-     class="<?php echo esc_attr($wp_chatbot_enable_rtl);?> wp-chatbot-shortcode-template-container chatbot-shortcode-template-02">
+     class="<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
+echo esc_attr($wp_chatbot_enable_rtl);?> wp-chatbot-shortcode-template-container chatbot-shortcode-template-02">
     <div class="wp-chatbot-product-container">
         <div class="wp-chatbot-product-details">
             <div class="wp-chatbot-product-image-col">
@@ -62,7 +64,7 @@
                 <div id="wp-chatbot-editor-area" class="wp-chatbot-editor-area">
                     <input id="wp-chatbot-editor" class="wp-chatbot-editor" required="" placeholder="<?php echo esc_attr(wpb_randmom_message_handle(unserialize(get_option('qlcd_wp_chatbot_send_a_msg')))); ?>"
                           >
-                    <button type="button" id="wp-chatbot-send-message" class="wp-chatbot-button"><?php esc_html_e('send', 'wpchatbot'); ?></button>
+                    <button type="button" id="wp-chatbot-send-message" class="wp-chatbot-button"><?php esc_html_e('send', 'chatbot'); ?></button>
                 </div>
                 <!--wp-chatbot-editor-container-->
             </div>

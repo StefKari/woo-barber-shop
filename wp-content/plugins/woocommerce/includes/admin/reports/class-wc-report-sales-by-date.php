@@ -6,6 +6,8 @@
  * @version     2.1.0
  */
 
+use Automattic\WooCommerce\Enums\OrderStatus;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -67,7 +69,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 				'query_type'   => 'get_results',
 				'filter_range' => true,
 				'order_types'  => wc_get_order_types( 'order-count' ),
-				'order_status' => array( 'completed', 'processing', 'on-hold', 'refunded' ),
+				'order_status' => array( OrderStatus::COMPLETED, OrderStatus::PROCESSING, OrderStatus::ON_HOLD, OrderStatus::REFUNDED ),
 			)
 		);
 
@@ -103,7 +105,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 				'query_type'   => 'get_results',
 				'filter_range' => true,
 				'order_types'  => wc_get_order_types( 'order-count' ),
-				'order_status' => array( 'completed', 'processing', 'on-hold', 'refunded' ),
+				'order_status' => array( OrderStatus::COMPLETED, OrderStatus::PROCESSING, OrderStatus::ON_HOLD, OrderStatus::REFUNDED ),
 			)
 		);
 
@@ -135,7 +137,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 				'query_type'   => 'get_results',
 				'filter_range' => true,
 				'order_types'  => wc_get_order_types( 'order-count' ),
-				'order_status' => array( 'completed', 'processing', 'on-hold', 'refunded' ),
+				'order_status' => array( OrderStatus::COMPLETED, OrderStatus::PROCESSING, OrderStatus::ON_HOLD, OrderStatus::REFUNDED ),
 			)
 		);
 
@@ -163,7 +165,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 					'query_type'   => 'get_var',
 					'filter_range' => true,
 					'order_types'  => wc_get_order_types( 'order-count' ),
-					'order_status' => array( 'refunded' ),
+					'order_status' => array( OrderStatus::REFUNDED ),
 				)
 			)
 		);
@@ -205,7 +207,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 				'query_type'   => 'get_results',
 				'filter_range' => true,
 				'order_types'  => wc_get_order_types( 'sales-reports' ),
-				'order_status' => array( 'completed', 'processing', 'on-hold', 'refunded' ),
+				'order_status' => array( OrderStatus::COMPLETED, OrderStatus::PROCESSING, OrderStatus::ON_HOLD, OrderStatus::REFUNDED ),
 			)
 		);
 
@@ -246,7 +248,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 				'query_type'          => 'get_results',
 				'filter_range'        => true,
 				'order_status'        => false,
-				'parent_order_status' => array( 'refunded' ),
+				'parent_order_status' => array( OrderStatus::REFUNDED ),
 			)
 		);
 
@@ -321,12 +323,12 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 				'query_type'          => 'get_results',
 				'filter_range'        => true,
 				'order_status'        => false,
-				'parent_order_status' => array( 'completed', 'processing', 'on-hold' ),
+				'parent_order_status' => array( OrderStatus::COMPLETED, OrderStatus::PROCESSING, OrderStatus::ON_HOLD ),
 			)
 		);
 
 		foreach ( $this->report_data->partial_refunds as $key => $order ) {
-			$this->report_data->partial_refunds[ $key ]->net_refund = $order->total_refund - ( $order->total_shipping + $order->total_tax + $order->total_shipping_tax );
+			$this->report_data->partial_refunds[ $key ]->net_refund = (float) $order->total_refund - ( (float) $order->total_shipping + (float) $order->total_tax + (float) $order->total_shipping_tax );
 		}
 
 		/**
@@ -391,7 +393,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 				'query_type'          => 'get_results',
 				'filter_range'        => true,
 				'order_status'        => false,
-				'parent_order_status' => array( 'completed', 'processing', 'on-hold', 'refunded' ),
+				'parent_order_status' => array( OrderStatus::COMPLETED, OrderStatus::PROCESSING, OrderStatus::ON_HOLD, OrderStatus::REFUNDED ),
 			)
 		);
 
@@ -406,14 +408,14 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 		$this->report_data->refunded_orders = array_merge( $this->report_data->partial_refunds, $this->report_data->full_refunds );
 
 		foreach ( $this->report_data->refunded_orders as $key => $value ) {
-			$this->report_data->total_tax_refunded          += floatval( $value->total_tax < 0 ? $value->total_tax * -1 : $value->total_tax );
+			$this->report_data->total_tax_refunded          += abs( (float) $value->total_tax );
 			$this->report_data->total_refunds               += floatval( $value->total_refund );
-			$this->report_data->total_shipping_tax_refunded += floatval( $value->total_shipping_tax < 0 ? $value->total_shipping_tax * -1 : $value->total_shipping_tax );
-			$this->report_data->total_shipping_refunded     += floatval( $value->total_shipping < 0 ? $value->total_shipping * -1 : $value->total_shipping );
+			$this->report_data->total_shipping_tax_refunded += abs( (float) $value->total_shipping_tax );
+			$this->report_data->total_shipping_refunded     += abs( (float) $value->total_shipping );
 
-			// Only applies to parial.
+			// Only applies to partial.
 			if ( isset( $value->order_item_count ) ) {
-				$this->report_data->refunded_order_items += floatval( $value->order_item_count < 0 ? $value->order_item_count * -1 : $value->order_item_count );
+				$this->report_data->refunded_order_items += abs( (int) $value->order_item_count );
 			}
 		}
 
@@ -422,7 +424,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 		$this->report_data->total_shipping     = wc_format_decimal( array_sum( wp_list_pluck( $this->report_data->orders, 'total_shipping' ) ) - $this->report_data->total_shipping_refunded, 2 );
 		$this->report_data->total_shipping_tax = wc_format_decimal( array_sum( wp_list_pluck( $this->report_data->orders, 'total_shipping_tax' ) ) - $this->report_data->total_shipping_tax_refunded, 2 );
 
-		// Total the refunds and sales amounts. Sales subract refunds. Note - total_sales also includes shipping costs.
+		// Total the refunds and sales amounts. Sales subtract refunds. Note - total_sales also includes shipping costs.
 		$this->report_data->total_sales = wc_format_decimal( array_sum( wp_list_pluck( $this->report_data->orders, 'total_sales' ) ) - $this->report_data->total_refunds, 2 );
 		$this->report_data->net_sales   = wc_format_decimal( $this->report_data->total_sales - $this->report_data->total_shipping - max( 0, $this->report_data->total_tax ) - max( 0, $this->report_data->total_shipping_tax ), 2 );
 
@@ -521,7 +523,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 			'title'            => sprintf(
 				/* translators: %s: total orders */
 				__( '%s orders placed', 'woocommerce' ),
-				'<strong>' . $data->total_orders . '</strong>'
+				'<strong>' . number_format_i18n( absint( $data->total_orders ) ) . '</strong>'
 			),
 			'color'            => $this->chart_colours['order_count'],
 			'highlight_series' => 1,
@@ -531,7 +533,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 			'title'            => sprintf(
 				/* translators: %s: total items */
 				__( '%s items purchased', 'woocommerce' ),
-				'<strong>' . $data->total_items . '</strong>'
+				'<strong>' . number_format_i18n( absint( $data->total_items ) ) . '</strong>'
 			),
 			'color'            => $this->chart_colours['item_count'],
 			'highlight_series' => 0,
@@ -539,10 +541,10 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 		$legend[] = array(
 			'title'            => sprintf(
 				/* translators: 1: total refunds 2: total refunded orders 3: refunded items */
-				_n( '%1$s refunded %2$d order (%3$d item)', '%1$s refunded %2$d orders (%3$d items)', $this->report_data->total_refunded_orders, 'woocommerce' ),
+				_n( '%1$s refunded %2$s order (%3$s item)', '%1$s refunded %2$s orders (%3$s items)', $this->report_data->total_refunded_orders, 'woocommerce' ),
 				'<strong>' . wc_price( $data->total_refunds ) . '</strong>',
-				$this->report_data->total_refunded_orders,
-				$this->report_data->refunded_order_items
+				number_format_i18n( absint( $this->report_data->total_refunded_orders ) ),
+				number_format_i18n( absint( $this->report_data->refunded_order_items ) )
 			),
 			'color'            => $this->chart_colours['refund_amount'],
 			'highlight_series' => 8,
@@ -745,7 +747,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 							points: { show: true, radius: 5, lineWidth: 2, fillColor: '#fff', fill: true },
 							lines: { show: true, lineWidth: 2, fill: false },
 							shadowSize: 0,
-							<?php echo $this->get_currency_tooltip();  // phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped ?>
+							<?php echo $this->get_currency_tooltip(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns a fixed JavaScript property with a JSON-encoded currency symbol. ?>
 						},
 						{
 							label: "<?php echo esc_js( __( 'Shipping amount', 'woocommerce' ) ); ?>",
@@ -755,7 +757,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 							points: { show: true, radius: 5, lineWidth: 2, fillColor: '#fff', fill: true },
 							lines: { show: true, lineWidth: 2, fill: false },
 							shadowSize: 0,
-							prepend_tooltip: "<?php echo get_woocommerce_currency_symbol(); // phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped ?>"
+							prepend_tooltip: <?php echo wp_json_encode( get_woocommerce_currency_symbol(), JSON_UNESCAPED_UNICODE ); ?>
 						},
 						{
 							label: "<?php echo esc_js( __( 'Gross sales amount', 'woocommerce' ) ); ?>",
@@ -765,7 +767,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 							points: { show: true, radius: 5, lineWidth: 2, fillColor: '#fff', fill: true },
 							lines: { show: true, lineWidth: 2, fill: false },
 							shadowSize: 0,
-							<?php echo $this->get_currency_tooltip(); // phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped ?>
+							<?php echo $this->get_currency_tooltip(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns a fixed JavaScript property with a JSON-encoded currency symbol. ?>
 						},
 						{
 							label: "<?php echo esc_js( __( 'Net sales amount', 'woocommerce' ) ); ?>",
@@ -775,7 +777,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 							points: { show: true, radius: 6, lineWidth: 4, fillColor: '#fff', fill: true },
 							lines: { show: true, lineWidth: 5, fill: false },
 							shadowSize: 0,
-							<?php echo $this->get_currency_tooltip(); // phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped ?>
+							<?php echo $this->get_currency_tooltip(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns a fixed JavaScript property with a JSON-encoded currency symbol. ?>
 						},
 						{
 							label: "<?php echo esc_js( __( 'Refund amount', 'woocommerce' ) ); ?>",
@@ -785,7 +787,7 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 							points: { show: true, radius: 5, lineWidth: 2, fillColor: '#fff', fill: true },
 							lines: { show: true, lineWidth: 2, fill: false },
 							shadowSize: 0,
-							prepend_tooltip: "<?php echo get_woocommerce_currency_symbol(); // phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped ?>"
+							prepend_tooltip: <?php echo wp_json_encode( get_woocommerce_currency_symbol(), JSON_UNESCAPED_UNICODE ); ?>
 						},
 					];
 
@@ -849,15 +851,15 @@ class WC_Report_Sales_By_Date extends WC_Admin_Report {
 						}
 					);
 
-					jQuery('.chart-placeholder').resize();
+					jQuery('.chart-placeholder').trigger( 'resize' );
 				}
 
 				drawGraph();
 
-				jQuery('.highlight_series').hover(
+				jQuery('.highlight_series').on( 'mouseenter',
 					function() {
 						drawGraph( jQuery(this).data('series') );
-					},
+					} ).on( 'mouseleave',
 					function() {
 						drawGraph();
 					}

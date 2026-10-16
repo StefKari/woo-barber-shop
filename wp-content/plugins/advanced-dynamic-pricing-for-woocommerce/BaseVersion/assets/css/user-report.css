@@ -226,10 +226,48 @@
     width: 40px;
     text-align: end;
     line-height: 40px;
-    margin-right: 40px;
+    margin-right: 80px;
 }
 
 .spinner_img {
     content:url(../images/spinner-2x.gif);
     vertical-align: middle;
+}
+
+#wdp-report-cart-tab .adp-align-left {
+  text-align: left;
+}
+
+#wdp-report-cart-tab .adp-margin-bottom {
+  margin-bottom: 5px;
+}
+
+#wdp-report-cart-tab .adp-border {
+  border: 1px solid black;
+}
+
+#wdp-report-cart-tab .adp-padding {
+  padding: 3px;
+}
+
+#wdp-report-control-bar .icon-logo-report {
+  max-width: 4rem;
+  max-height: 3rem;
+  padding-bottom: 0.5rem;
+  min-width: 0.5rem;
+  min-height: 0.5rem;
+}
+
+#wdp-icon-report .icon-logo-report {
+  height: 4rem;
+  width: 4rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+#wdp-icon-report .icon-logo-report:hover {
+  background-color: #dcdada;
 }

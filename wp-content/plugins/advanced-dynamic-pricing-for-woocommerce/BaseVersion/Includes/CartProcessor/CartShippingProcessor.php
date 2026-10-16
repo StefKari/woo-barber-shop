@@ -69,14 +69,15 @@ class CartShippingProcessor
 
     public function setFilterToEditPackageRates()
     {
-        add_filter('woocommerce_package_rates', array($this, 'packageRates'), PHP_INT_MAX, 2);
-        add_filter('woocommerce_package_rates', array($this, 'currencyPackageRates'), PHP_INT_MAX - 1, 2);
+        add_filter('woocommerce_package_rates', array($this, 'packageRates'), PHP_INT_MAX - 1, 2);
+        add_filter('woocommerce_package_rates', array($this, 'currencyPackageRates'), PHP_INT_MAX - 2, 2);
+        add_filter('woocommerce_cart_shipping_packages', array($this, 'filterDataPackages'), 10, 1);
     }
 
     public function unsetFilterToEditPackageRates()
     {
-        remove_filter('woocommerce_package_rates', array($this, 'packageRates'), PHP_INT_MAX);
-        remove_filter('woocommerce_package_rates', array($this, 'currencyPackageRates'), PHP_INT_MAX - 1);
+        remove_filter('woocommerce_package_rates', array($this, 'packageRates'), PHP_INT_MAX - 1);
+        remove_filter('woocommerce_package_rates', array($this, 'currencyPackageRates'), PHP_INT_MAX - 2);
     }
 
     public function setFilterToEditShippingMethodLabel()
@@ -131,7 +132,7 @@ class CartShippingProcessor
             }
 
             if ($this->context->currencyController->isCurrencyChanged()) {
-                $rate->set_cost($rate->get_cost() * $this->context->currencyController->getRate());
+                $rate->set_cost(floatval($rate->get_cost()) * $this->context->currencyController->getRate());
             }
         }
 
@@ -151,7 +152,7 @@ class CartShippingProcessor
         }
 
         foreach ($rates as &$rate) {
-            $cost = $rate->get_cost();
+            $cost = floatval($rate->get_cost());
 
             $adjustments = array();
 
@@ -232,6 +233,7 @@ class CartShippingProcessor
      */
     protected function fixAmounts(&$rateCost, &$appliedAdjustments)
     {
+        $rateCost = floatval($rateCost);
         foreach ($appliedAdjustments as &$adjustment) {
             $amount   = $adjustment->getAmount();
             $rateCost -= $amount;
@@ -269,14 +271,15 @@ class CartShippingProcessor
         } else {
             $initial_cost_html = '<del>' . wc_price($initial_cost) . '</del>';
         }
-        $initial_cost_html = preg_replace('/\samount/is', 'wdp-amount', $initial_cost_html);
+
+        $initial_cost_html = preg_replace('/\samount/is', ' wdp-amount', $initial_cost_html);
 
         return preg_replace('/(<span[^>]*>)/is', $initial_cost_html . ' $1', $label, 1);
     }
 
     /**
      * @param string $default
-     * @param WC_Shipping_Rate $rates
+     * @param array<int, WC_Shipping_Rate> $rates
      * @param string $chosenMethod
      *
      * @return mixed
@@ -284,5 +287,17 @@ class CartShippingProcessor
     public function hookShippingChosenMethod($default, $rates, $chosenMethod)
     {
         return isset($rates[$chosenMethod]) ? $chosenMethod : $default;
+    }
+
+    public function filterDataPackages($packages)
+    {
+        $newPackages = [];
+        foreach ( $packages as $package_key => $package ) {
+            $newPackages[$package_key] = $package;
+            foreach ( $newPackages[$package_key]['contents'] as $item_id => $item ) {
+                unset( $newPackages[$package_key]['contents'][ $item_id ]['adp'] );
+            }
+		}
+        return $newPackages;
     }
 }

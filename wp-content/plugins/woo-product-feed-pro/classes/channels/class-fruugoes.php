@@ -69,20 +69,21 @@ class WooSEA_fruugoes {
 					"woo_suggest" => "description",
 				),
 				"Normal Price With VAT" => array(
-					"name" => "NormalPriceWithVat",
-					"feed_name" => "NormalPriceWithVat",
+					"name" => "NormalPriceWithVAT",
+					"feed_name" => "NormalPriceWithVAT",
 					"format" => "required",
 					"woo_suggest" => "price",
 				),
 				"Normal Price Without VAT" => array(
-					"name" => "NormalPriceWithoutVat",
-					"feed_name" => "NormalPriceWithoutVat",
+					"name" => "NormalPriceWithoutVAT",
+					"feed_name" => "NormalPriceWithoutVAT",
 					"format" => "optional",
 				),
 				"VAT Rate" => array(
-					"name" => "VatRate",
-					"feed_name" => "VatRate",
+					"name" => "VATRate",
+					"feed_name" => "VATRate",
 					"format" => "required",
+					"woo_suggest" => "vat",
 				),
 				"Image URL 2" => array(
 					"name" => "Imageurl2",

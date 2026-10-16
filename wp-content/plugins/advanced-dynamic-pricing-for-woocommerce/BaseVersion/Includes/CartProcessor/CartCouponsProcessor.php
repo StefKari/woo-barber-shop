@@ -2,16 +2,16 @@
 
 namespace ADP\BaseVersion\Includes\CartProcessor;
 
+use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
 use ADP\BaseVersion\Includes\Core\Cart\CartContext;
-use ADP\BaseVersion\Includes\Core\Cart\CouponInterface;
-use ADP\BaseVersion\Includes\Core\Cart\CouponCart;
-use ADP\BaseVersion\Includes\Core\Cart\Coupon;
-use ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCart;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponInterface;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\WcCouponCart;
 use ADP\BaseVersion\Includes\Core\Cart\CouponsAdjustment;
 use ADP\BaseVersion\Includes\Core\Cart\DisableAllWcCouponsCart;
 use ADP\BaseVersion\Includes\Core\Cart\DisableWcCouponsCart;
-use ADP\BaseVersion\Includes\Core\Cart\WcCouponCart;
 use ADP\BaseVersion\Includes\WC\PriceFunctions;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 use ADP\BaseVersion\Includes\WC\WcCouponFacade;
@@ -21,7 +21,7 @@ use WC_Coupon;
 
 defined('ABSPATH') or exit;
 
-class CartCouponsProcessor
+class CartCouponsProcessor implements ICartCouponsProcessor
 {
     /**
      * @var Context
@@ -74,6 +74,21 @@ class CartCouponsProcessor
         $this->context = $context;
     }
 
+    public function disableAllWcCoupons(): bool
+    {
+        return boolval($this->disabledWcCoupons);
+    }
+
+    public function init()
+    {
+        $this->replaceNotices();
+    }
+
+    public function prepareConfig()
+    {
+
+    }
+
     /**
      * @param Cart $cart
      */
@@ -92,15 +107,15 @@ class CartCouponsProcessor
             if ($coupon instanceof CouponCart && $coupon->getValue()) {
                 if ($coupon->isType($coupon::TYPE_FIXED_VALUE)) {
                     if ($context->isCombineMultipleDiscounts()) {
-                        $coupon->setCode($context->getOption('default_discount_name'));
+                        $coupon->setCode(strtolower($context->getOption('default_discount_name')));
                     }
                     $this->addGroupCoupon($coupon);
                 } elseif ($coupon->isType($coupon::TYPE_PERCENTAGE)) {
                     $this->addSingleCoupon($coupon);
                 }
-            } elseif ($coupon instanceof Coupon && $coupon->getValue()) {
+            } elseif ($coupon instanceof CouponCartItem && $coupon->getValue()) {
                 if ($context->isCombineMultipleDiscounts()) {
-                    $coupon->setCode($context->getOption('default_discount_name'));
+                    $coupon->setCode(strtolower($context->getOption('default_discount_name')));
                     $this->addGroupCoupon($coupon);
                 } else {
                     $this->addGroupCoupon($coupon);
@@ -127,6 +142,22 @@ class CartCouponsProcessor
 
         $this->cartContext = $cart->getContext();
     }
+
+    public function processCouponAdjustments(Cart $cart, WC_Cart $wcCart)
+    {
+        $this->cartContext = $cart->getContext();
+
+        $this->disabledWcCoupons = [];
+        $this->disableAllWcCoupons = false;
+        foreach ($cart->getCouponsAdjustments() as $coupon) {
+            if ($coupon instanceof DisableWcCouponsCart) {
+                $this->disabledWcCoupons[] = $coupon->getCode();
+            } elseif ($coupon instanceof DisableAllWcCouponsCart) {
+                $this->disableAllWcCoupons = true;
+            }
+        }
+    }
+
 
     /**
      * @param WC_Cart $wcCart
@@ -205,7 +236,7 @@ class CartCouponsProcessor
     /**
      * @param WC_Cart $wcCart
      */
-    public function sanitize(&$wcCart)
+    public function sanitize(WC_Cart $wcCart)
     {
         $appliedCoupons = $wcCart->applied_coupons;
         $adpCoupons     = (new WcCustomerSessionFacade(WC()->session))->getAdpCoupons();
@@ -218,6 +249,13 @@ class CartCouponsProcessor
 
         $wcCart->applied_coupons = array_values($appliedCoupons);
         $this->purge();
+    }
+
+    public function installActions() {
+        $this->setFilterToInstallCouponsData();
+        $this->setFiltersToSupportPercentLimitCoupon();
+        $this->setFiltersToSupportExactItemApplicationOfReplacementCoupon();
+        $this->setFilterToSuppressDisabledWcCoupons();
     }
 
     public function setFilterToInstallCouponsData()
@@ -430,7 +468,7 @@ class CartCouponsProcessor
     /**
      * @param WC_Cart $wcCart
      */
-    public function updateTotals($wcCart)
+    public function updateTotals(WC_Cart $wcCart)
     {
         $this->cartContext->getSession()->insertCouponsData(
             $this->groupedCoupons,
@@ -458,9 +496,9 @@ class CartCouponsProcessor
         $facade       = new WcCartItemFacade($this->context, $cartItem);
         $couponFacade = new WcCouponFacade($this->context, $wcCoupon);
 
-        /** @var Coupon[] $coupons */
+        /** @var CouponCartItem[] $coupons */
         $coupons = array_filter($couponFacade->getParts(), function ($coupon) {
-            return $coupon instanceof Coupon;
+            return $coupon instanceof CouponCartItem;
         });
 
         if (count($coupons) === 0) {
@@ -468,11 +506,12 @@ class CartCouponsProcessor
         }
 
         $newAmount = floatval(0);
-        foreach ($coupons as $coupon) {
-            if ($coupon->getAffectedCartItemKey() === $facade->getKey() || $coupon->getAffectedCartItemKey() === $facade->getOriginalKey()) {
-                $newAmount += $coupon->getValue();
-            }
-        }
+        $ruleIds = array_unique(array_map(function ($coupon) {
+            return $coupon->getRuleId();
+        }, $coupons));
+        $newAmount += array_sum(array_map(function ($ruleId) use ($facade) {
+            return array_sum($facade->getHistory()[$ruleId] ?? []);
+        }, $ruleIds));
 
         if ($newAmount > 0) {
             $priceFunctions = new PriceFunctions($this->context);
@@ -503,13 +542,13 @@ class CartCouponsProcessor
 
         if ($this->disableAllWcCoupons === true && ! in_array($coupon->get_code(), $customAdpCoupons, true)) {
             throw new \Exception(
-                __('Sorry, this coupon is not applicable to cart.', 'advanced-dynamic-pricing-for-woocommerce')
+                esc_html__('Sorry, this coupon is not applicable to cart.', 'advanced-dynamic-pricing-for-woocommerce')
             );
         }
 
         if (in_array($coupon->get_code(), $this->disabledWcCoupons, true)) {
             throw new \Exception(
-                __('Sorry, this coupon is not applicable to cart.', 'advanced-dynamic-pricing-for-woocommerce')
+                esc_html__('Sorry, this coupon is not applicable to cart.', 'advanced-dynamic-pricing-for-woocommerce')
             );
         }
 
@@ -532,7 +571,7 @@ class CartCouponsProcessor
                         $amount           += $coupon->getValue();
                         $appliedCoupons[] = $coupon;
                     }
-                } elseif ($coupon instanceof Coupon) {
+                } elseif ($coupon instanceof CouponCartItem) {
                     $amount += $coupon->getValue() * $coupon->getAffectedCartItemQty();
                     if ($this->context->isAllowExactApplicationOfReplacementCoupon()) {
                         $coupon_type = WcCouponFacade::TYPE_ADP_FIXED_CART_ITEM;
@@ -553,7 +592,7 @@ class CartCouponsProcessor
                 if ($coupon->isType($coupon::TYPE_PERCENTAGE)) {
                     $coupon_type = WcCouponFacade::TYPE_PERCENT;
                 }
-            } elseif ($coupon instanceof Coupon) {
+            } elseif ($coupon instanceof CouponCartItem) {
                 $coupon_type = WcCouponFacade::TYPE_FIXED_PRODUCT;
             }
 
@@ -645,5 +684,208 @@ class CartCouponsProcessor
         $this->wcSingleCoupons     = array();
         $this->disabledWcCoupons   = array();
         $this->disableAllWcCoupons = false;
+    }
+
+    public function replaceNotices() {
+        $context = $this->context;
+
+        // Replace notice in case of removing coupons later
+        // If coupons won't be removed, notice will be replaced back
+        if (
+            $context->getOption('external_product_coupons_behavior') === 'disable_if_any_rule_applied'
+            || $context->getOption('external_product_coupons_behavior') === 'disable_if_any_of_cart_items_updated'
+            || $context->getOption('external_cart_coupons_behavior') === 'disable_if_any_rule_applied'
+            || $context->getOption('external_cart_coupons_behavior') === 'disable_if_any_of_cart_items_updated'
+        ) {
+            $this->replaceWcNotice(
+                array(
+                    //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+                    'text' => __('Coupon code applied successfully.', 'woocommerce'),
+                    'type' => 'success',
+                ),
+                array(
+                    'text' => __('Sorry, coupons are disabled for these products.',
+                        'advanced-dynamic-pricing-for-woocommerce'),
+                    'type' => 'error',
+                )
+            );
+        }
+    }
+
+    /**
+     * @param array $needleNotice
+     * @param array $newNotice
+     */
+    protected function replaceWcNotice($needleNotice, $newNotice)
+    {
+        if ( ! is_array($needleNotice) || ! is_array($newNotice)) {
+            return;
+        }
+
+        if ( ! function_exists("wc_get_notices") ) {
+            return;
+        }
+
+        $needleNotice = array(
+            'type' => isset($needleNotice['type']) ? $needleNotice['type'] : null,
+            'text' => isset($needleNotice['text']) ? $needleNotice['text'] : "",
+        );
+
+        $newNotice = array(
+            'type' => isset($newNotice['type']) ? $newNotice['type'] : null,
+            'text' => isset($newNotice['text']) ? $newNotice['text'] : "",
+        );
+
+
+        $newNotices = array();
+        foreach (wc_get_notices() as $type => $notices) {
+            if ( ! isset($newNotices[$type])) {
+                $newNotices[$type] = array();
+            }
+
+            foreach ($notices as $loopNotice) {
+                if ( ! empty($loopNotice['notice'])
+                    && $needleNotice['text'] === $loopNotice['notice']
+                    && ( ! $needleNotice['type'] || $needleNotice['type'] === $type)
+                ) {
+                    if ($newNotice['type'] === null) {
+                        $newNotice['type'] = $type;
+                    }
+
+                    if ( ! isset($newNotices[$newNotice['type']])) {
+                        $newNotices[$newNotice['type']] = array();
+                    }
+
+                    $newNotices[$newNotice['type']][] = array(
+                        'notice' => $newNotice['text'],
+                        'data'   => array(),
+                    );
+
+                    continue;
+                } else {
+                    $newNotices[$type][] = $loopNotice;
+                }
+            }
+        }
+        wc_set_notices($newNotices);
+    }
+
+    /**
+     * @param WC_Cart $wcCart
+     */
+    protected function purgeAppliedCoupons($wcCart)
+    {
+        $wcCart->applied_coupons = array();
+    }
+
+    /**
+     * @param Cart $cart
+     * @param WC_Cart $wcCart
+     */
+    protected function addOriginCoupons(&$cart, &$wcCart)
+    {
+        $wcCart->applied_coupons = array_merge($wcCart->applied_coupons, $cart->getOriginCoupons());
+    }
+
+    /**
+     * @param Cart $cart
+     * @param WC_Cart $wcCart
+     */
+    protected function addRuleTriggerCoupons(&$cart, &$wcCart)
+    {
+        $wcCart->applied_coupons = array_merge($wcCart->applied_coupons, $cart->getRuleTriggerCoupons());
+    }
+
+    /**
+     * @param Cart $cart
+     * @param WC_Cart $wcCart
+     */
+    protected function maybeRemoveOriginCoupons($cart, $wcCart)
+    {
+        $externalProductCouponsBehavior = $this->context->getOption('external_product_coupons_behavior');
+        $externalCartCouponsBehavior = $this->context->getOption('external_cart_coupons_behavior');
+
+        $checkIfPriceChanged = function ($wcCart) {
+            $is_price_changed = false;
+
+            foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
+                $wrapper = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
+                foreach ($wrapper->getDiscounts() as $ruleId => $amounts) {
+                    if (array_sum($amounts) > 0) {
+                        $is_price_changed = true;
+                        break;
+                    }
+                }
+            }
+
+            $is_price_changed = (bool)apply_filters(
+                'wdp_is_disable_external_coupons_if_items_updated',
+                $is_price_changed,
+                $this,
+                $wcCart
+            );
+
+            return $is_price_changed;
+        };
+
+        $isPriceChanged = false;
+        $isPriceChangedCalculated = false;
+        $isCouponsRemoved = false;
+
+        if ($externalProductCouponsBehavior === 'disable_if_any_rule_applied') {
+            if ($cart->removeProductOriginCoupon()) {
+                $isCouponsRemoved = true;
+            }
+        } elseif ($externalProductCouponsBehavior === 'disable_if_any_of_cart_items_updated') {
+            $isPriceChanged = $checkIfPriceChanged($wcCart);
+            $isPriceChangedCalculated = true;
+
+            if ($isPriceChanged) {
+                if ($cart->removeProductOriginCoupon()) {
+                    $isCouponsRemoved = true;
+                }
+            }
+        }
+
+        if ($externalCartCouponsBehavior === 'disable_if_any_rule_applied') {
+            if ($cart->removeCartOriginCoupon()) {
+                $isCouponsRemoved = true;
+            }
+        } elseif ($externalCartCouponsBehavior === 'disable_if_any_of_cart_items_updated') {
+            if (!$isPriceChangedCalculated) {
+                $isPriceChanged = $checkIfPriceChanged($wcCart);
+            }
+
+            if ($isPriceChanged) {
+                if ($cart->removeCartOriginCoupon()) {
+                    $isCouponsRemoved = true;
+                }
+            }
+        }
+
+        if (!$isCouponsRemoved) {
+            $this->replaceWcNotice(
+                array(
+                    'text' => __('Sorry, coupons are disabled for these products.',
+                        'advanced-dynamic-pricing-for-woocommerce'),
+                    'type' => 'error',
+                ),
+                array(
+                    //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+                    'text' => __('Coupon code applied successfully.', 'woocommerce'),
+                    'type' => 'success',
+                )
+            );
+        }
+    }
+
+    public function applyCouponsToWcCart(Cart $cart, WC_Cart $wcCart) {
+        $this->maybeRemoveOriginCoupons($cart, $wcCart);
+        $this->purgeAppliedCoupons($wcCart);
+        $this->addOriginCoupons($cart, $wcCart);
+        $this->addRuleTriggerCoupons($cart, $wcCart);
+
+        $this->refreshCoupons($cart);
+        $this->applyCoupons($wcCart);
     }
 }

@@ -3,6 +3,7 @@
 namespace ADP\BaseVersion\Includes\Shortcodes;
 
 use ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Engine;
 use ADP\BaseVersion\Includes\CustomizerExtensions\CustomizerExtensions;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
@@ -21,6 +22,11 @@ class CategoryRangeDiscountTableShortcode
     protected $context;
 
     /**
+     * @var Engine
+     */
+    protected $engine;
+
+    /**
      * @var CustomizerExtensions
      */
     protected $customizer;
@@ -29,10 +35,11 @@ class CategoryRangeDiscountTableShortcode
      * @param Context|CustomizerExtensions $contextOrCustomizer
      * @param null $deprecated
      */
-    public function __construct($contextOrCustomizer, $deprecated = null)
+    public function __construct($contextOrCustomizer, $customizerOrEngine, $deprecated = null)
     {
         $this->context    = adp_context();
-        $this->customizer = $contextOrCustomizer instanceof CustomizerExtensions ? $contextOrCustomizer : $deprecated;
+        $this->customizer = $contextOrCustomizer instanceof CustomizerExtensions ? $contextOrCustomizer : $customizerOrEngine;
+        $this->engine     = $customizerOrEngine instanceof Engine ? $customizerOrEngine : $deprecated;
     }
 
     public function withContext(Context $context)
@@ -43,9 +50,9 @@ class CategoryRangeDiscountTableShortcode
     /**
      * @param CustomizerExtensions $customizer
      */
-    public static function register($customizer)
+    public static function register($customizer, $engine)
     {
-        $shortcode = new self($customizer);
+        $shortcode = new self($customizer, $engine);
         add_shortcode(self::NAME, array($shortcode, 'getContent'));
     }
 
@@ -54,10 +61,8 @@ class CategoryRangeDiscountTableShortcode
         /** @var RangeDiscountTable $table */
         $rangeDiscountTable = Factory::get(
             "VolumePricingTable_RangeDiscountTable",
-            $this->context,
             $this->customizer,
-            new RuleRepository(),
-            new PersistentRuleRepository()
+            $this->engine
         );
 
         return $rangeDiscountTable->getCategoryTableContent();

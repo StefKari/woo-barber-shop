@@ -4,15 +4,20 @@ namespace ADP\BaseVersion\Includes;
 
 use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\CartProcessor\CartBuilder;
+use ADP\BaseVersion\Includes\CartProcessor\ToPricingCartItemAdapter\ToPricingCartItemAdapter;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\CartItemConverter;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\CartItemAttributeEnum;
 use ADP\BaseVersion\Includes\Core\CartCalculator;
 use ADP\BaseVersion\Includes\Core\Rule\Rule;
 use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
 use ADP\BaseVersion\Includes\Database\RulesCollection;
+use ADP\BaseVersion\Includes\PriceDisplay\ProcessedGroupedProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedProductSimple;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedVariableProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\Processor;
+use ADP\BaseVersion\Includes\PriceDisplay\WcProductCalculationWrapper;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 use ADP\Factory;
 use Exception;
@@ -38,7 +43,7 @@ class Functions
     protected $globalEngine;
 
     /**
-     * @var Engine
+     * @var Processor
      */
     protected $productProcessor;
 
@@ -48,14 +53,20 @@ class Functions
     protected $cartBuilder;
 
     /**
+     * @var CartItemConverter
+     */
+    protected $cartItemConverter;
+
+    /**
      * @param Engine|null $engine
      */
-    public function __construct($engine = null)
+    final public function __construct($engine = null)
     {
-        $this->context          = adp_context();
-        $this->globalEngine     = $engine;
-        $this->productProcessor = new Processor();
-        $this->cartBuilder      = new CartBuilder();
+        $this->context           = adp_context();
+        $this->globalEngine      = $engine;
+        $this->productProcessor  = new Processor();
+        $this->cartBuilder       = new CartBuilder();
+        $this->cartItemConverter = new CartItemConverter();
     }
 
     public function withContext(Context $context)
@@ -147,7 +158,7 @@ class Functions
             return array();
         }
 
-        if ($processedProduct instanceof ProcessedVariableProduct) {
+        if ($processedProduct instanceof ProcessedVariableProduct || $processedProduct instanceof ProcessedGroupedProduct) {
             return array();
         }
 
@@ -177,14 +188,17 @@ class Functions
     {
         if ( ! did_action('wp_loaded')) {
             _doing_it_wrong(__FUNCTION__,
-                sprintf(__('%1$s should not be called before the %2$s action.', 'woocommerce'),
-                    'getDiscountedProductsForCart', 'wp_loaded'), WC_ADP_VERSION);
+                /* translators: Message about the load order*/
+                //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch, WordPress.WP.I18n.MissingTranslatorsComment
+                sprintf(esc_html__('%1$s should not be called before the %2$s action.', 'woocommerce'),
+                    'getDiscountedProductsForCart', 'wp_loaded'), esc_html(WC_ADP_VERSION));
 
             return array();
         }
         $result = array();
         $cart   = $this->cartBuilder->create(WC()->customer, WC()->session);
 
+        $adapter = new ToPricingCartItemAdapter();
         foreach ($listOfProducts as $data) {
             if ( ! isset($data['product_id'], $data['qty'])) {
                 continue;
@@ -203,7 +217,7 @@ class Functions
 
             $cartItem = WcCartItemFacade::createFromProduct($this->context, $product, $cartItemData);
             $cartItem->setQty($qty);
-            $cart->addToCart($cartItem->createItem());
+            $adapter->adaptFacadeAndPutIntoCart($cart, $cartItem, -1);
         }
 
         $activeRuleCollection = CacheHelper::loadActiveRules($this->context);
@@ -245,11 +259,11 @@ class Functions
             }
 
             $items = array();
+            $adapter = new ToPricingCartItemAdapter();
             foreach ($listOfProductIds as $index => $prodId) {
                 if ($product = CacheHelper::getWcProduct($prodId)) {
-                    $cartItem = WcCartItemFacade::createFromProduct($this->context, $product);
-                    $item     = $cartItem->createItem();
-                    $item->addAttr($item::ATTR_TEMP);
+                    $item = $adapter->adaptWcProduct(new WcProductCalculationWrapper($product));
+                    $item->addAttr(CartItemAttributeEnum::TEMPORARY());
                     $items[] = $item;
                     $cart->addToCart($item);
                 }
@@ -272,7 +286,7 @@ class Functions
 
             $ruleResult = array();
             foreach ($cart->getItems() as $item) {
-                if ( ! $item->hasAttr($item::ATTR_TEMP)) {
+                if ( ! $item->hasAttr(CartItemAttributeEnum::TEMPORARY())) {
                     continue;
                 }
 
@@ -354,6 +368,8 @@ class Functions
 
         if ($processedProduct instanceof ProcessedVariableProduct) {
             return array($processedProduct->getLowestPrice(), $processedProduct->getHighestPrice());
+        } elseif ($processedProduct instanceof ProcessedGroupedProduct) {
+            return array($processedProduct->getLowestPrice(), $processedProduct->getHighestPrice());
         } elseif ($processedProduct instanceof ProcessedProductSimple) {
             return $processedProduct->getPrice();
         } else {
@@ -373,7 +389,7 @@ class Functions
      * @param float $qty
      * @param bool $useEmptyCart
      *
-     * @return ProcessedProductSimple|ProcessedVariableProduct|null
+     * @return ProcessedProductSimple|ProcessedVariableProduct|ProcessedGroupedProduct|null
      */
     public function calculateProduct($theProd, $qty, $useEmptyCart = true)
     {
@@ -429,4 +445,47 @@ class Functions
         }
     }
 
+    public function getProductProcessor(): Processor
+    {
+        return $this->productProcessor;
+    }
+
+    //TODO: delete unused function
+    public function getProductsWithSalePriceAdp() {
+        global $wpdb;
+
+        $query = "
+            SELECT post_id
+            FROM {$wpdb->postmeta}
+            WHERE meta_key = '_sale_price_adp'
+        ";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        $ids = $wpdb->get_col($query);
+
+        return array_map('intval', $ids);
+    }
+
+    public function getOnSaleProducts($include_wc_onsale = false, $ruleIds = null){
+        $productIds = [];
+
+        // get rules list
+        if( $ruleIds AND !is_array($ruleIds) ){
+            $ruleIds = [$ruleIds];
+        }
+        if( !$ruleIds ){
+            $ruleIds = \ADP\BaseVersion\Includes\Shortcodes\OnSaleProducts::getActiveRules();
+        }
+
+        //gather products
+        foreach($ruleIds as $ruleId) {
+            $productIds = array_merge( $productIds, \ADP\BaseVersion\Includes\Shortcodes\OnSaleProducts::getProductIdsByRuleId($ruleId) );
+        }
+
+        //include WC onsale ?
+        if( $include_wc_onsale ) {
+            $productIds = array_merge( $productIds, wc_get_product_ids_on_sale());
+        }
+
+        return array_unique($productIds);
+    }
 }

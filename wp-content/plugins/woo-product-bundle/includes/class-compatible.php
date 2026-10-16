@@ -3,18 +3,59 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 	class WPCleverWoosb_Compatible {
+		protected static $instance             = null;
+		protected static $options_post_backup  = [];
+		protected static $options_files_backup = [];
+		protected $helper                      = null;
+
+		public static function instance() {
+			if ( is_null( self::$instance ) ) {
+				self::$instance = new self();
+			}
+
+			return self::$instance;
+		}
+
 		function __construct() {
+			$this->helper = WPCleverWoosb_Helper();
+			// WPC Add Product to Order
+			add_action( 'wpcap_added_to_order', [ $this, 'wpcap_added_to_order' ], 99, 3 );
+
+			// WPC Variations Radio Buttons
+			add_filter( 'woovr_default_selector', [ $this, 'woovr_default_selector' ], 99, 4 );
+
+			// WPC Smart Messages
+			add_filter( 'wpcsm_locations', [ $this, 'wpcsm_locations' ] );
+
+			// Multi-currency discount conversion
+			add_filter( 'woosb_get_discount_amount', [ $this, 'convert_discount_amount' ], 10, 2 );
+			add_filter( 'woosb_cart_item_discount_amount', [ $this, 'convert_discount_amount' ], 10, 2 );
+
+			// WPML
+			if ( function_exists( 'wpml_loaded' ) && apply_filters( 'woosb_wpml_filters', true ) ) {
+				add_filter( 'woosb_item_id', [ $this, 'wpml_item_id' ], 99 );
+				add_action( 'woocommerce_cart_loaded_from_session', [ $this, 'wpml_sync_cart_contents' ], 5 );
+				add_action( 'woocommerce_cart_loaded_from_session', [ $this, 'wpml_sync_cart_contents' ], 25 );
+				add_action( 'woocommerce_before_calculate_totals', [ $this, 'wpml_sync_cart_contents_totals' ], 9998 );
+				add_action( 'wcml_switch_currency', [ $this, 'wpml_on_switch_currency' ] );
+				add_filter( 'woosb_remove_orphaned_bundled_product', [ $this, 'wpml_prevent_orphan_removal' ], 10, 3 );
+			}
+
+			// PayPal
+			add_filter( 'woocommerce_paypal_payments_simulate_cart_enabled', '__return_false' );
+			//add_filter( 'woocommerce_paypal_payments_simulate_cart_prevent_updates', '__return_false' );
+
 			/*
 			 * WooCommerce PDF Invoices & Packing Slips
 			 * https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/
 			 */
 
-			if ( get_option( '_woosb_compatible_wcpdf_hide_bundles', 'no' ) === 'yes' ) {
-				add_filter( 'wpo_wcpdf_order_items_data', array( $this, 'woosb_wcpdf_hide_bundles' ), 99, 1 );
+			if ( WPCleverWoosb_Helper()->get_setting( 'compatible_wcpdf_hide_bundles', 'no' ) === 'yes' ) {
+				add_filter( 'wpo_wcpdf_order_items_data', [ $this, 'wcpdf_hide_bundles' ], 99 );
 			}
 
-			if ( get_option( '_woosb_compatible_wcpdf_hide_bundled', 'no' ) === 'yes' ) {
-				add_filter( 'wpo_wcpdf_order_items_data', array( $this, 'woosb_wcpdf_hide_bundled' ), 99, 1 );
+			if ( WPCleverWoosb_Helper()->get_setting( 'compatible_wcpdf_hide_bundled', 'no' ) === 'yes' ) {
+				add_filter( 'wpo_wcpdf_order_items_data', [ $this, 'wcpdf_hide_bundled' ], 99 );
 			}
 
 			/*
@@ -22,23 +63,582 @@ if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 			 * https://en-gb.wordpress.org/plugins/print-invoices-packing-slip-labels-for-woocommerce/
 			 */
 
-			add_filter( 'wf_pklist_modify_meta_data', array( $this, 'woosb_pklist_hide_meta' ), 99, 1 );
+			add_filter( 'wf_pklist_modify_meta_data', [ $this, 'pklist_hide_meta' ], 99, 1 );
 
-			if ( get_option( '_woosb_compatible_pklist_hide_bundles', 'no' ) === 'yes' ) {
-				add_filter( 'wf_pklist_alter_order_items', array( $this, 'woosb_pklist_order_hide_bundles' ), 99, 1 );
-				add_filter( 'wf_pklist_alter_package_order_items', array(
-					$this,
-					'woosb_pklist_package_hide_bundles'
-				), 99, 1 );
+			if ( WPCleverWoosb_Helper()->get_setting( 'compatible_pklist_hide_bundles', 'no' ) === 'yes' ) {
+				add_filter( 'wf_pklist_alter_order_items', [ $this, 'pklist_order_hide_bundles' ], 99 );
+				add_filter( 'wf_pklist_alter_package_order_items', [ $this, 'pklist_package_hide_bundles' ], 99 );
 			}
 
-			if ( get_option( '_woosb_compatible_pklist_hide_bundled', 'no' ) === 'yes' ) {
-				add_filter( 'wf_pklist_alter_order_items', array( $this, 'woosb_pklist_order_hide_bundled' ), 99, 1 );
-				add_filter( 'wf_pklist_alter_package_order_items', array(
-					$this,
-					'woosb_pklist_package_hide_bundled'
-				), 99, 1 );
+			if ( WPCleverWoosb_Helper()->get_setting( 'compatible_pklist_hide_bundled', 'no' ) === 'yes' ) {
+				add_filter( 'wf_pklist_alter_order_items', [ $this, 'pklist_order_hide_bundled' ], 99 );
+				add_filter( 'wf_pklist_alter_package_order_items', [ $this, 'pklist_package_hide_bundled' ], 99 );
 			}
+
+			// Extra product options / addons compatibility
+			add_filter( 'woosb_parent_item_price_before_set', [ $this, 'parent_item_extra_options_price' ], 10, 2 );
+			add_action( 'woosb_before_add_to_cart_items', [ $this, 'clear_extra_options_before_add_child' ], 10, 4 );
+			add_action( 'woosb_after_add_to_cart_items', [ $this, 'restore_extra_options_after_add_child' ], 10, 4 );
+			add_filter( 'woocommerce_add_cart_item_data', [ $this, 'remove_child_extra_options_data' ], 9999, 2 );
+		}
+
+		function wpcap_added_to_order( $item_id, $order, $parsed_data ) {
+			if ( empty( $parsed_data['woosb_ids'] ) ) {
+				return;
+			}
+
+			$order_item = $order->get_item( $item_id );
+			$quantity   = $order_item->get_quantity();
+
+			if ( 'line_item' === $order_item->get_type() ) {
+				$product = $order_item->get_product();
+
+				if ( is_a( $product, 'WC_Product_Woosb' ) ) {
+					$product_id = $product->get_id();
+					$product->build_items( $parsed_data['woosb_ids'] );
+					$items = $product->get_items();
+
+					// get bundle info
+					$fixed_price         = $product->is_fixed_price();
+					$discount_amount     = (float) $product->get_discount_amount();
+					$discount_percentage = (float) $product->get_discount_percentage();
+					$parent_price        = 0;
+					$parent_item         = [
+						'data'       => $product,
+						'product_id' => $product->get_id(),
+						'quantity'   => $quantity,
+					];
+
+					// add the bundle
+					if ( ! $fixed_price ) {
+						$parent_price = (float) apply_filters( 'woosb_parent_item_price_before_set', 0, $parent_item, null );
+						$this->helper->set_price( $product, $parent_price );
+					}
+
+					if ( $order_id = $order->add_product( $product, $quantity ) ) {
+						$order_item = $order->get_item( $order_id );
+						$order_item->update_meta_data( '_woosb_ids', $product->get_ids_str(), true );
+
+						if ( ! $fixed_price ) {
+							$child_unit_prices         = [];
+							$child_display_line_totals = [];
+							$child_tax_factors         = [];
+							$display_incl_tax          = ! is_null( WC()->cart ) ? WC()->cart->display_prices_including_tax() : ( get_option( 'woocommerce_tax_display_cart' ) === 'incl' );
+
+							foreach ( $items as $key => $item ) {
+								$_product = wc_get_product( $item['id'] );
+
+								if ( ! $_product || in_array( $_product->get_type(), $this->helper::get_types(), true ) ) {
+									continue;
+								}
+
+								$_price = (float) $this->helper->get_price( $_product );
+
+								// WPC Price by Quantity: apply tier pricing before bundle discount
+								if ( function_exists( 'Wpcpq_Helper' ) ) {
+									$wpcpq_pricing = Wpcpq_Helper()::get_pricing( $item['id'], 'cart' );
+									if ( ! empty( $wpcpq_pricing['method'] ) && ! empty( $wpcpq_pricing['tiers'] ) ) {
+										$_price = (float) Wpcpq_Helper()::get_price( $wpcpq_pricing['method'], $wpcpq_pricing['tiers'], $item['qty'], $_price );
+									}
+								}
+
+								// Apply percentage discount
+								$child_discount = isset( $item['discount'] ) ? (float) $item['discount'] : $discount_percentage;
+								if ( ! empty( $child_discount ) ) {
+									$_price *= ( 100 - $child_discount ) / 100;
+								}
+
+								$_price = $this->helper->round_price( $_price );
+								
+								// Mock cart item structure for filters
+								$item['data']       = $_product;
+								$item['product_id'] = $_product->get_id();
+								$item['quantity']   = $item['qty'];
+								$_price = apply_filters( 'woosb_item_price_before_set', $_price, $item );
+
+								if ( $display_incl_tax ) {
+									$_display_price = wc_get_price_including_tax( $_product, [
+										'price' => $_price,
+										'qty'   => 1,
+									] );
+								} else {
+									$_display_price = wc_get_price_excluding_tax( $_product, [
+										'price' => $_price,
+										'qty'   => 1,
+									] );
+								}
+
+								$tax_factor = ( $_price > 0 && $_display_price > 0 ) ? ( $_display_price / $_price ) : 1.0;
+
+								$child_unit_prices[ $key ]         = $_price;
+								$child_tax_factors[ $key ]         = $tax_factor;
+								$child_display_line_totals[ $key ] = $_display_price * (float) $item['qty'];
+							}
+
+							$discount_amount = apply_filters( 'woosb_cart_item_discount_amount', $discount_amount, $parent_item );
+							$allocations     = [];
+
+							if ( $discount_amount > 0 && ! empty( $child_display_line_totals ) ) {
+								$precision   = function_exists( 'wc_get_price_decimals' ) ? wc_get_price_decimals() : 2;
+								$allocations = WPCleverWoosb_Helper::allocate_discount_proportionally( $discount_amount, $child_display_line_totals, $precision );
+							}
+
+							foreach ( $items as $key => $item ) {
+								if ( ! isset( $child_display_line_totals[ $key ] ) ) {
+									continue;
+								}
+
+								$line_discount      = $allocations[ $key ] ?? 0.0;
+								$orig_display_line  = $child_display_line_totals[ $key ] ?? 0.0;
+								$final_display_line = max( 0.0, $orig_display_line - $line_discount );
+								$final_display_unit = (float) $item['qty'] > 0 ? ( $final_display_line / (float) $item['qty'] ) : 0.0;
+
+								$tax_factor     = $child_tax_factors[ $key ] ?? 1.0;
+								$final_raw_unit = $tax_factor > 0 ? ( $final_display_unit / $tax_factor ) : $final_display_unit;
+
+								$items[ $key ]['final_price'] = $final_raw_unit;
+							}
+						}
+
+						$bundles_display_price = 0;
+
+						foreach ( $items as $key => $item ) {
+							$_product = wc_get_product( $item['id'] );
+
+							if ( ! $_product || in_array( $_product->get_type(), $this->helper::get_types(), true ) ) {
+								continue;
+							}
+
+							if ( $fixed_price ) {
+								$this->helper->set_price( $_product, 0 );
+							} else {
+								$_product->set_price( $items[ $key ]['final_price'] ?? 0 );
+							}
+
+							if ( ! $fixed_price ) {
+								if ( $display_incl_tax ) {
+									$_child_display = wc_get_price_including_tax( $_product, [
+										'price' => $_product->get_price(),
+										'qty'   => $item['qty'],
+									] );
+								} else {
+									$_child_display = wc_get_price_excluding_tax( $_product, [
+										'price' => $_product->get_price(),
+										'qty'   => $item['qty'],
+									] );
+								}
+								$bundles_display_price += $this->helper->round_price( $_child_display );
+							}
+
+							// add bundled products
+							$_order_item_id = $order->add_product( $_product, $item['qty'] * $quantity );
+
+							if ( ! $_order_item_id ) {
+								continue;
+							}
+
+							$_order_item = $order->get_item( $_order_item_id );
+							$_order_item->update_meta_data( '_woosb_parent_id', $product_id, true );
+							$_order_item->save();
+						}
+
+						if ( ! $fixed_price ) {
+							if ( $parent_price > 0 ) {
+								if ( $display_incl_tax ) {
+									$_parent_display = wc_get_price_including_tax( $product, [
+										'price' => $parent_price,
+										'qty'   => 1,
+									] );
+								} else {
+									$_parent_display = wc_get_price_excluding_tax( $product, [
+										'price' => $parent_price,
+										'qty'   => 1,
+									] );
+								}
+								$bundles_display_price += $this->helper->round_price( $_parent_display );
+							}
+
+							$bundles_display_price = apply_filters( 'woosb_bundles_display_price', $bundles_display_price, $parent_item );
+							$order_item->update_meta_data( '_woosb_price', $this->helper->round_price( $bundles_display_price ) );
+						}
+
+						$order_item->save();
+
+						// remove the old bundle
+						$order->remove_item( $item_id );
+					}
+				}
+
+				$order->save();
+			}
+		}
+
+		function woovr_default_selector( $selector, $product, $variation, $context ) {
+			if ( isset( $context ) && ( $context === 'woosb' ) ) {
+				if ( ( $selector_interface = $this->helper->get_setting( 'selector_interface', 'unset' ) ) && ( $selector_interface !== 'unset' ) ) {
+					$selector = $selector_interface;
+				}
+			}
+
+			return $selector;
+		}
+
+		function wpcsm_locations( $locations ) {
+			$locations['WPC Product Bundles'] = [
+				'woosb_before_wrap'       => esc_html__( 'Before bundled products', 'woo-product-bundle' ),
+				'woosb_after_wrap'        => esc_html__( 'After bundled products', 'woo-product-bundle' ),
+				'woosb_before_table'      => esc_html__( 'Before bundled products table', 'woo-product-bundle' ),
+				'woosb_after_table'       => esc_html__( 'After bundled products table', 'woo-product-bundle' ),
+				'woosb_before_item'       => esc_html__( 'Before bundled product', 'woo-product-bundle' ),
+				'woosb_after_item'        => esc_html__( 'After bundled product', 'woo-product-bundle' ),
+				'woosb_before_item_name'  => esc_html__( 'Before bundled product name', 'woo-product-bundle' ),
+				'woosb_after_item_name'   => esc_html__( 'After bundled product name', 'woo-product-bundle' ),
+				'woosb_before_item_price' => esc_html__( 'Before bundled product price', 'woo-product-bundle' ),
+				'woosb_after_item_price'  => esc_html__( 'After bundled product price', 'woo-product-bundle' ),
+				'woosb_before_bundles'    => esc_html__( 'Before bundles', 'woo-product-bundle' ),
+				'woosb_after_bundles'     => esc_html__( 'After bundles', 'woo-product-bundle' ),
+			];
+
+			return $locations;
+		}
+
+		/**
+		 * Translate product or variation ID for WPML.
+		 *
+		 * @param int $id Product or variation ID.
+		 * @return int
+		 */
+		function wpml_item_id( $id ) {
+			if ( ! empty( $id ) ) {
+				$post_type = get_post_type( $id ) ?: 'product';
+
+				return (int) apply_filters( 'wpml_object_id', (int) $id, $post_type, true );
+			}
+
+			return $id;
+		}
+
+		/**
+		 * Convert discount amount using active multi-currency plugin exchange rate.
+		 * Supports WPML/WCML, WOOCS/FOX, CURCY, and Aelia Currency Switcher.
+		 *
+		 * @param float $discount_amount Discount amount.
+		 * @param array|WC_Product_Woosb|null $product_or_cart_item Context.
+		 * @return float
+		 */
+		function convert_discount_amount( $discount_amount, $product_or_cart_item = null ) {
+			$base_amount = 0.0;
+
+			if ( is_array( $product_or_cart_item ) && isset( $product_or_cart_item['woosb_base_discount_amount'] ) ) {
+				$base_amount = (float) $product_or_cart_item['woosb_base_discount_amount'];
+			} elseif ( is_a( $product_or_cart_item, 'WC_Product' ) ) {
+				$base_amount = (float) $product_or_cart_item->get_meta( 'woosb_discount_amount' );
+			}
+
+			if ( $base_amount <= 0 ) {
+				$base_amount = (float) $discount_amount;
+			}
+
+			if ( $base_amount <= 0 ) {
+				return 0.0;
+			}
+
+			// 1. WPML / WCML
+			if ( function_exists( 'wpml_loaded' ) ) {
+				$converted = (float) apply_filters( 'wcml_raw_price_amount', $base_amount );
+				if ( $converted > 0 && $converted !== $base_amount ) {
+					return $converted;
+				}
+				$converted = (float) apply_filters( 'wcml_raw_price_filter', $base_amount );
+				if ( $converted > 0 && $converted !== $base_amount ) {
+					return $converted;
+				}
+			}
+
+			// 2. WOOCS (FOX - Currency Switcher Professional for WooCommerce)
+			global $WOOCS;
+			if ( isset( $WOOCS ) && method_exists( $WOOCS, 'woocs_exchange_value' ) ) {
+				return (float) $WOOCS->woocs_exchange_value( $base_amount );
+			}
+
+			// 3. CURCY (WooCommerce Multi Currency)
+			if ( function_exists( 'wmc_get_price' ) ) {
+				return (float) wmc_get_price( $base_amount );
+			}
+
+			// 4. Aelia Currency Switcher
+			if ( has_filter( 'wc_aelia_cs_convert' ) ) {
+				return (float) apply_filters( 'wc_aelia_cs_convert', $base_amount, get_option( 'woocommerce_currency' ), get_woocommerce_currency() );
+			}
+
+			return (float) $discount_amount;
+		}
+
+		function wpml_convert_discount_amount( $discount_amount, $product_or_cart_item = null ) {
+			return $this->convert_discount_amount( $discount_amount, $product_or_cart_item );
+		}
+
+		/**
+		 * Clear cached bundle prices and recalculate totals when currency changes.
+		 *
+		 * @param string $currency Active currency.
+		 */
+		function wpml_on_switch_currency( $currency = '' ) {
+			if ( did_action( 'woocommerce_load_cart_from_session' ) && ! empty( WC()->cart ) && ! WC()->cart->is_empty() ) {
+				foreach ( WC()->cart->cart_contents as $key => $item ) {
+					if ( isset( $item['woosb_price'] ) ) {
+						unset( WC()->cart->cart_contents[ $key ]['woosb_price'] );
+					}
+				}
+
+				WC()->cart->calculate_totals();
+			}
+		}
+
+		/**
+		 * Prevent accidental removal of child items if parent exists in translated cart.
+		 *
+		 * @param bool $remove Whether to remove orphaned item.
+		 * @param string $cart_item_key Cart item key.
+		 * @param array $cart_item Cart item data.
+		 * @return bool
+		 */
+		function wpml_prevent_orphan_removal( $remove, $cart_item_key, $cart_item ) {
+			if ( function_exists( 'wpml_loaded' ) && ! empty( WC()->cart ) && ! empty( WC()->cart->cart_contents ) ) {
+				$helper    = WPCleverWoosb_Helper();
+				$bundle_id = $helper->get_bundle_id( $cart_item );
+
+				// Match by stable bundle_id
+				if ( ! empty( $bundle_id ) ) {
+					return $helper->get_bundle_parent_key( WC()->cart->cart_contents, $bundle_id ) ? false : $remove;
+				}
+
+				// Legacy items without bundle_id: match by translated parent product ID
+				$parent_id = (int) ( $cart_item['woosb_bundle']['parent_id'] ?? $cart_item['woosb_parent_id'] ?? 0 );
+
+				if ( $parent_id > 0 ) {
+					$trans_parent_id = (int) apply_filters( 'wpml_object_id', $parent_id, 'product', true );
+
+					foreach ( WC()->cart->cart_contents as $item ) {
+						if ( $helper->is_bundle_parent( $item ) && $trans_parent_id === (int) $item['product_id'] ) {
+							return false;
+						}
+					}
+				}
+			}
+
+			return $remove;
+		}
+
+		/**
+		 * Re-sync cart items connections (parent-child keys and IDs) across language switches.
+		 *
+		 * @param WC_Cart|null $cart Cart instance.
+		 */
+		function wpml_sync_cart_contents( $cart = null ) {
+			if ( ! function_exists( 'wpml_loaded' ) ) {
+				return;
+			}
+
+			if ( is_null( $cart ) || ! is_a( $cart, 'WC_Cart' ) ) {
+				$cart = WC()->cart;
+			}
+
+			if ( ! $cart || empty( $cart->cart_contents ) ) {
+				return;
+			}
+
+			$helper   = WPCleverWoosb_Helper();
+			$parents  = [];
+			$children = [];
+
+			foreach ( $cart->cart_contents as $key => $item ) {
+				if ( $helper->is_bundle_parent( $item ) ) {
+					$parents[ $key ] = $item;
+				} elseif ( $helper->is_bundle_child( $item ) || ! empty( $item['woosb_group_key'] ) ) {
+					$children[ $key ] = $item;
+				}
+			}
+
+			if ( empty( $parents ) ) {
+				return;
+			}
+
+			// Build lookup maps of the parents (bundle_id => key, previous woosb_key => key)
+			$parents_by_bundle  = [];
+			$parents_by_old_key = [];
+
+			foreach ( $parents as $parent_key => $parent_item ) {
+				$parent_bundle_id = $helper->get_bundle_id( $parent_item );
+
+				if ( ! empty( $parent_bundle_id ) && ! isset( $parents_by_bundle[ $parent_bundle_id ] ) ) {
+					$parents_by_bundle[ $parent_bundle_id ] = $parent_key;
+				}
+
+				if ( ! empty( $parent_item['woosb_key'] ) && ! isset( $parents_by_old_key[ $parent_item['woosb_key'] ] ) ) {
+					$parents_by_old_key[ $parent_item['woosb_key'] ] = $parent_key;
+				}
+			}
+
+			// Assign every child to exactly one parent (child key => parent key)
+			$assignments = [];
+			$claimed     = [];
+
+			foreach ( $children as $child_key => $child_item ) {
+				$child_bundle_id  = $helper->get_bundle_id( $child_item );
+				$child_parent_key = $child_item['woosb_parent_key'] ?? '';
+
+				if ( ! empty( $child_bundle_id ) && isset( $parents_by_bundle[ $child_bundle_id ] ) ) {
+					// 1. Match by unique bundle_id / group key
+					$assignments[ $child_key ] = $parents_by_bundle[ $child_bundle_id ];
+				} elseif ( ! empty( $child_parent_key ) && isset( $parents[ $child_parent_key ] ) ) {
+					// 2. Match by direct parent key
+					$assignments[ $child_key ] = $child_parent_key;
+				} elseif ( ! empty( $child_parent_key ) && isset( $parents_by_old_key[ $child_parent_key ] ) ) {
+					// 3. Match by the parent's previous key (cart item re-keyed by WPML/WCML)
+					$assignments[ $child_key ] = $parents_by_old_key[ $child_parent_key ];
+				}
+
+				if ( isset( $assignments[ $child_key ] ) ) {
+					$claimed[ $assignments[ $child_key ] ] = true;
+				}
+			}
+
+			// 4. Fallback: match by translated parent product ID, only for legacy children without bundle_id that are still unassigned
+			foreach ( $children as $child_key => $child_item ) {
+				if ( isset( $assignments[ $child_key ] ) || empty( $child_item['woosb_parent_id'] ) || '' !== $helper->get_bundle_id( $child_item ) ) {
+					continue;
+				}
+
+				$translated_parent_id = (int) apply_filters( 'wpml_object_id', (int) $child_item['woosb_parent_id'], 'product', true );
+				$candidates           = [];
+
+				foreach ( $parents as $parent_key => $parent_item ) {
+					if ( (int) $parent_item['product_id'] === $translated_parent_id ) {
+						$candidates[] = $parent_key;
+					}
+				}
+
+				if ( empty( $candidates ) ) {
+					continue;
+				}
+
+				// Prefer a parent that does not own any child yet, so identical bundles are never merged
+				$unclaimed                             = array_values( array_diff( $candidates, array_keys( $claimed ) ) );
+				$assignments[ $child_key ]             = ! empty( $unclaimed ) ? $unclaimed[0] : $candidates[0];
+				$claimed[ $assignments[ $child_key ] ] = true;
+			}
+
+			foreach ( $parents as $parent_key => $parent_item ) {
+				$parent_product_id = (int) $parent_item['product_id'];
+				$parent_group_key  = $parent_item['woosb_group_key'] ?? '';
+				$parent_bundle_id  = $helper->get_bundle_id( $parent_item );
+				$new_child_keys    = [];
+
+				foreach ( $children as $child_key => $child_item ) {
+					$is_match = isset( $assignments[ $child_key ] ) && $assignments[ $child_key ] === $parent_key;
+
+					if ( $is_match ) {
+						// Update child references to current parent key and translated parent product ID
+						$cart->cart_contents[ $child_key ]['woosb_parent_key'] = $parent_key;
+						$cart->cart_contents[ $child_key ]['woosb_parent_id']  = $parent_product_id;
+						$cart->cart_contents[ $child_key ]['woosb_key']        = $child_key;
+
+						// Sync group key and bundle_id
+						if ( ! empty( $parent_bundle_id ) ) {
+							$cart->cart_contents[ $child_key ]['woosb_group_key'] = $parent_group_key ?: $parent_bundle_id;
+							if ( isset( $cart->cart_contents[ $child_key ]['woosb_bundle'] ) ) {
+								$cart->cart_contents[ $child_key ]['woosb_bundle']['bundle_id'] = $parent_bundle_id;
+								$cart->cart_contents[ $child_key ]['woosb_bundle']['parent_id'] = $parent_product_id;
+							}
+						}
+
+						// Sync pricing configuration from parent
+						if ( isset( $parent_item['woosb_fixed_price'] ) ) {
+							$cart->cart_contents[ $child_key ]['woosb_fixed_price'] = $parent_item['woosb_fixed_price'];
+						}
+
+						if ( isset( $parent_item['woosb_discount'] ) ) {
+							$cart->cart_contents[ $child_key ]['woosb_discount'] = $parent_item['woosb_discount'];
+						}
+
+						if ( isset( $parent_item['woosb_discount_amount'] ) ) {
+							$cart->cart_contents[ $child_key ]['woosb_discount_amount'] = $parent_item['woosb_discount_amount'];
+						}
+
+						if ( isset( $parent_item['woosb_base_discount_amount'] ) ) {
+							$cart->cart_contents[ $child_key ]['woosb_base_discount_amount'] = $parent_item['woosb_base_discount_amount'];
+						}
+
+						$new_child_keys[] = $child_key;
+					}
+				}
+
+				// Convert discount amount for active currency if WCML multi-currency is active
+				if ( ! empty( $parent_item['woosb_base_discount_amount'] ) ) {
+					$converted_discount = (float) apply_filters( 'wcml_raw_price_amount', $parent_item['woosb_base_discount_amount'] );
+					$cart->cart_contents[ $parent_key ]['woosb_discount_amount'] = $converted_discount;
+					if ( isset( $cart->cart_contents[ $parent_key ]['woosb_bundle'] ) ) {
+						$cart->cart_contents[ $parent_key ]['woosb_bundle']['discount_amount'] = $converted_discount;
+					}
+					foreach ( $new_child_keys as $ck ) {
+						$cart->cart_contents[ $ck ]['woosb_discount_amount'] = $converted_discount;
+					}
+				}
+
+				// Update parent references
+				$cart->cart_contents[ $parent_key ]['woosb_key']  = $parent_key;
+				$cart->cart_contents[ $parent_key ]['woosb_keys'] = array_unique( $new_child_keys );
+
+				// Translate product/variation IDs in parent's woosb_ids
+				if ( ! empty( $parent_item['woosb_ids'] ) ) {
+					if ( is_array( $parent_item['woosb_ids'] ) ) {
+						foreach ( $parent_item['woosb_ids'] as $k => $item_arr ) {
+							if ( ! empty( $item_arr['id'] ) ) {
+								$post_type = get_post_type( (int) $item_arr['id'] ) ?: 'product';
+								$trans_id  = (int) apply_filters( 'wpml_object_id', (int) $item_arr['id'], $post_type, true );
+
+								if ( $trans_id ) {
+									$cart->cart_contents[ $parent_key ]['woosb_ids'][ $k ]['id'] = $trans_id;
+								}
+							}
+						}
+					} elseif ( is_string( $parent_item['woosb_ids'] ) ) {
+						$ids_items        = explode( ',', $parent_item['woosb_ids'] );
+						$translated_items = [];
+
+						foreach ( $ids_items as $item_str ) {
+							if ( empty( $item_str ) ) {
+								continue;
+							}
+
+							$parts = explode( '/', $item_str );
+
+							if ( ! empty( $parts[0] ) && is_numeric( $parts[0] ) ) {
+								$item_post_type = get_post_type( (int) $parts[0] ) ?: 'product';
+								$trans_id       = (int) apply_filters( 'wpml_object_id', (int) $parts[0], $item_post_type, true );
+
+								if ( $trans_id ) {
+									$parts[0] = $trans_id;
+								}
+							}
+
+							$translated_items[] = implode( '/', $parts );
+						}
+
+						$cart->cart_contents[ $parent_key ]['woosb_ids'] = implode( ',', $translated_items );
+					}
+				}
+			}
+		}
+
+		/**
+		 * Re-sync cart items right before woosb calculates totals.
+		 *
+		 * @param WC_Cart $cart Cart instance.
+		 */
+		function wpml_sync_cart_contents_totals( $cart ) {
+			$this->wpml_sync_cart_contents( $cart );
 		}
 
 		/*
@@ -46,7 +646,7 @@ if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 		 * https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/
 		 */
 
-		function woosb_wcpdf_hide_bundles( $data_list ) {
+		function wcpdf_hide_bundles( $data_list ) {
 			foreach ( $data_list as $key => $data ) {
 				$bundles = wc_get_order_item_meta( $data['item_id'], '_woosb_ids', true );
 
@@ -59,7 +659,7 @@ if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 			return $data_list;
 		}
 
-		function woosb_wcpdf_hide_bundled( $data_list ) {
+		function wcpdf_hide_bundled( $data_list ) {
 			foreach ( $data_list as $key => $data ) {
 				$bundled = wc_get_order_item_meta( $data['item_id'], '_woosb_parent_id', true );
 
@@ -79,9 +679,9 @@ if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 
 		// meta data
 
-		function woosb_pklist_hide_meta( $meta_data ) {
+		function pklist_hide_meta( $meta_data ) {
 			if ( array_key_exists( '_woosb_ids', $meta_data ) || array_key_exists( '_woosb_parent_id', $meta_data ) ) {
-				$meta_data = array();
+				$meta_data = [];
 			}
 
 			return $meta_data;
@@ -89,7 +689,7 @@ if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 
 		// invoice
 
-		function woosb_pklist_order_hide_bundles( $order_items ) {
+		function pklist_order_hide_bundles( $order_items ) {
 			foreach ( $order_items as $order_item_id => $order_item ) {
 				if ( $order_item->meta_exists( '_woosb_ids' ) ) {
 					unset( $order_items[ $order_item_id ] );
@@ -99,7 +699,7 @@ if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 			return $order_items;
 		}
 
-		function woosb_pklist_order_hide_bundled( $order_items ) {
+		function pklist_order_hide_bundled( $order_items ) {
 			foreach ( $order_items as $order_item_id => $order_item ) {
 				if ( $order_item->meta_exists( '_woosb_parent_id' ) ) {
 					unset( $order_items[ $order_item_id ] );
@@ -111,7 +711,7 @@ if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 
 		// package
 
-		function woosb_pklist_package_hide_bundles( $order_package ) {
+		function pklist_package_hide_bundles( $order_package ) {
 			foreach ( $order_package as $order_package_key => $order_package_item ) {
 				if ( isset( $order_package_item['extra_meta_details'], $order_package_item['extra_meta_details']['_woosb_ids'] ) ) {
 					unset( $order_package[ $order_package_key ] );
@@ -121,7 +721,7 @@ if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 			return $order_package;
 		}
 
-		function woosb_pklist_package_hide_bundled( $order_package ) {
+		function pklist_package_hide_bundled( $order_package ) {
 			foreach ( $order_package as $order_package_key => $order_package_item ) {
 				if ( isset( $order_package_item['extra_meta_details'], $order_package_item['extra_meta_details']['_woosb_parent_id'] ) ) {
 					unset( $order_package[ $order_package_key ] );
@@ -130,7 +730,125 @@ if ( ! class_exists( 'WPCleverWoosb_Compatible' ) ) {
 
 			return $order_package;
 		}
+
+		/**
+		 * Add extra product options price to bundle parent cart item.
+		 * Supports TM Extra Product Options (Themecomplete Extra Product Options).
+		 *
+		 * @param float $price Bundle parent price.
+		 * @param array $parent_item Bundle parent cart item.
+		 * @return float
+		 */
+		function parent_item_extra_options_price( $price, $parent_item ) {
+			// TM Extra Product Options
+			if ( ! empty( $parent_item['tmcartepo'] ) && isset( $parent_item['tm_epo_options_prices'] ) ) {
+				$price += (float) $parent_item['tm_epo_options_prices'];
+			}
+
+			return $price;
+		}
+
+		/**
+		 * Clear extra product options data before adding bundled child items.
+		 *
+		 * @param array  $items Bundle items.
+		 * @param string $cart_item_key Cart item key of the bundle parent.
+		 * @param int    $product_id Bundle parent product ID.
+		 * @param int    $quantity Bundle quantity.
+		 */
+		function clear_extra_options_before_add_child( $items, $cart_item_key, $product_id, $quantity ) {
+			self::$options_post_backup  = [];
+			self::$options_files_backup = [];
+
+			$prefixes   = apply_filters( 'woosb_clear_extra_options_prefixes', [ 'tmcp_', 'tc_', 'cpf_', 'tm_', 'addon-', 'yith_wapo_', 'yith-wapo-' ] );
+			$exact_keys = apply_filters( 'woosb_clear_extra_options_exact_keys', [ 'cpf_product_price', 'cpf_bto_price', 'tm_epo_options_prices', 'tmcartepo', 'tm_meta_cpf' ] );
+
+			if ( ! empty( $_POST ) ) {
+				foreach ( $_POST as $key => $value ) {
+					$should_clear = in_array( $key, $exact_keys, true );
+
+					if ( ! $should_clear ) {
+						foreach ( $prefixes as $prefix ) {
+							if ( strpos( $key, $prefix ) === 0 ) {
+								$should_clear = true;
+								break;
+							}
+						}
+					}
+
+					if ( $should_clear ) {
+						self::$options_post_backup[ $key ] = $value;
+						unset( $_POST[ $key ] );
+
+						if ( isset( $_REQUEST[ $key ] ) ) {
+							unset( $_REQUEST[ $key ] );
+						}
+					}
+				}
+			}
+
+			if ( ! empty( $_FILES ) ) {
+				foreach ( $_FILES as $key => $file ) {
+					foreach ( $prefixes as $prefix ) {
+						if ( strpos( $key, $prefix ) === 0 ) {
+							self::$options_files_backup[ $key ] = $file;
+							unset( $_FILES[ $key ] );
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		/**
+		 * Restore extra product options data after adding bundled child items.
+		 *
+		 * @param array  $items Bundle items.
+		 * @param string $cart_item_key Cart item key of the bundle parent.
+		 * @param int    $product_id Bundle parent product ID.
+		 * @param int    $quantity Bundle quantity.
+		 */
+		function restore_extra_options_after_add_child( $items, $cart_item_key, $product_id, $quantity ) {
+			if ( ! empty( self::$options_post_backup ) ) {
+				foreach ( self::$options_post_backup as $key => $value ) {
+					$_POST[ $key ]    = $value;
+					$_REQUEST[ $key ] = $value;
+				}
+
+				self::$options_post_backup = [];
+			}
+
+			if ( ! empty( self::$options_files_backup ) ) {
+				foreach ( self::$options_files_backup as $key => $file ) {
+					$_FILES[ $key ] = $file;
+				}
+
+				self::$options_files_backup = [];
+			}
+		}
+
+		/**
+		 * Strip extra options data from bundled child items if present.
+		 *
+		 * @param array $cart_item_data Cart item data.
+		 * @param int   $product_id Product ID.
+		 * @return array
+		 */
+		function remove_child_extra_options_data( $cart_item_data, $product_id ) {
+			if ( ! empty( $cart_item_data['woosb_parent_id'] ) || ! empty( $cart_item_data['woosb_parent_key'] ) ) {
+				unset(
+					$cart_item_data['tmcartepo'],
+					$cart_item_data['tmcartfee'],
+					$cart_item_data['tmdata'],
+					$cart_item_data['tmpost_data'],
+					$cart_item_data['epo_price_override'],
+					$cart_item_data['tmhasepo']
+				);
+			}
+
+			return $cart_item_data;
+		}
 	}
 
-	new WPCleverWoosb_Compatible();
+	return WPCleverWoosb_Compatible::instance();
 }

@@ -3,47 +3,66 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "zh_CN"
          },
          "You must use the Advanced Translation Editor if you want to translate your content automatically.": [
-            "如果要自动翻译内容，必须使用高级翻译编辑器。"
+            "如果您想自动翻译您的内容，则必须使用高级翻译编辑器。"
          ],
          "Synchronize translators and translation managers with ATE": [
-            "将译员和翻译管理器与ATE同步"
+            "将译者和翻译管理员与 ATE 同步"
          ],
-         "Please try again in a few minutes. If the problem persists, please contact %sWPML support%s.": [
-            "请几分钟后再试一次。如果问题仍然存在，请联系%sWPML 支持%s。"
+         "Please try again in a few minutes. If the problem persists, please contact %1$sWPML support%2$s.": [
+            "请在几分钟后重试。如果问题仍然存在，请联系 %1$sWPML 支持%2$s。"
+         ],
+         "Are you sure you want to change the translation option?": [
+            "您确定要更改翻译选项吗？"
+         ],
+         "No, go back": [
+            "不，返回"
+         ],
+         "Yes, continue": [
+            "是，继续"
+         ],
+         "Once saved, WPML will automatically send affected posts to translation. This may use additional translation words.": [
+            "保存后，WPML 将自动发送受影响的文章进行翻译。这可能会消耗额外的翻译字数。"
+         ],
+         "Are you OK with this?": [
+            "您同意这样做吗？"
          ],
          "Save": [
             "保存"
          ],
-         "Please confirm this translation setting": [
-            "请确认该翻译设置"
+         "This change affects %d post. Once saved, WPML will update the translation status of this post. This can take up to 1 minute.": [
+            "此更改会影响 %d 篇文章。保存后，WPML 将更新这些文章的翻译状态。这可能需要长达 1 分钟。"
          ],
-         "Your site is set to translate all content automatically. When you make <PostTypesNames /> translatable, WPML will automatically translate the %1$d existing item.": [
-            "您的网站设置为自动翻译所有内容。当您将<PostTypesNames /> 设置为可翻译时，WPML 将自动翻译%1$d 现有项目。",
-            "您的网站设置为自动翻译所有内容。当您将<PostTypesNames /> 设置为可翻译时，WPML 将自动翻译%1$d 现有项目。"
+         "This change affects %1$d post. Once saved, WPML will update the translation status of this post. This can take up to %2$d hours.": [
+            "此更改会影响 %1$d 篇文章。保存后，WPML 将更新这些文章的翻译状态。这可能需要长达 %2$d 小时。"
          ],
-         "Your site is set to translate all content automatically. When you make <PostTypesNames /> translatable, WPML will automatically translate all future content.": [
-            "您的网站已设置为自动翻译所有内容。当您将<PostTypesNames /> 设置为可翻译时，WPML 将自动翻译今后的所有内容。"
+         "This change affects %1$d post. Once saved, WPML will update the translation status of this post. This can take up to %2$d minutes.": [
+            "此更改会影响 %1$d 篇文章。保存后，WPML 将更新这些文章的翻译状态。这可能需要长达 %2$d 分钟。"
          ],
-         "Are you OK with paying for this?": [
-            "你愿意为此付费吗？"
+         "Calculate Costs": [
+            "计算费用"
          ],
-         "Cancel": [
-            "取消"
+         "WPML will automatically translate %1$s into %2$s.": [
+            "WPML 将自动把 %1$s 翻译为 %2$s。"
          ],
-         "Make translatable": [
-            "可翻译"
+         "Automatic translation uses translation words.": [
+            "自动翻译会消耗翻译字数。"
          ],
-         "Yes, translate <b>existing</b> and <b>future</b> content automatically": [
-            "是，自动翻译<b>现有</b>和<b>未来的</b>内容"
+         "%d term": [
+            "%d 个术语"
          ],
-         "Yes, but only translate <b>future</b> content automatically": [
-            "可以，但只能自动翻译<b>未来的</b>内容"
+         "%d language": [
+            "%d 种语言"
          ],
-         "Yes, translate <b>future</b> content automatically": [
-            "是，自动翻译<b>未来</b>内容"
+         "%s will be translated.": [
+            "%s 将被翻译。"
+         ],
+         "WPML's automatic translation service did not accept this request (it answered %d). Wait a minute and try again, and contact WPML support if it keeps happening.": [
+            "WPML 的自动翻译服务未接受此请求（返回了 %d）。请稍等片刻并重试，如果问题仍然存在，请联系 WPML 支持。"
          ]
       }
    }

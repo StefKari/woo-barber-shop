@@ -33,6 +33,12 @@ class Time extends AbstractCondition implements DateTimeComparisonCondition
         $time = (new \DateTime("now", new \DateTimeZone("UTC")))->setTimestamp($cart->getContext()->time());
 
         $comparisonTime   = \DateTime::createFromFormat("H:i", $this->comparisonTime, new \DateTimeZone("UTC"));
+        $comparisonTime->setDate(
+            (int)$time->format('Y'),
+            (int)$time->format('m'),
+            (int)$time->format('d')
+        );
+
         $comparisonMethod = $this->comparisonMethod;
 
         return $this->compareTimeUnixFormat($time->getTimestamp(), $comparisonTime->getTimestamp(), $comparisonMethod);

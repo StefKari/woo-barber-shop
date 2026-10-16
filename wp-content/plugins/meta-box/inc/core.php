@@ -3,14 +3,21 @@ class RWMB_Core {
 	public function init() {
 		add_filter( 'plugin_action_links_meta-box/meta-box.php', [ $this, 'plugin_links' ], 20 );
 
-		// Uses priority 20 to support custom port types registered using the default priority.
+		// Uses priority 20 to support custom post types registered using the default priority.
 		add_action( 'init', [ $this, 'register_meta_boxes' ], 20 );
 		add_action( 'edit_page_form', [ $this, 'fix_page_template' ] );
 		$this->add_context_hooks();
 	}
 
-	public function plugin_links( array $links ) : array {
-		$links[] = '<a href="https://docs.metabox.io">' . esc_html__( 'Docs', 'meta-box' ) . '</a>';
+	public function plugin_links( array $links ): array {
+		$links[] = '<a href="https://docs.metabox.io?utm_source=plugin_links&utm_medium=link&utm_campaign=meta_box" target="_blank">' . esc_html__( 'Docs', 'meta-box' ) . '</a>';
+
+		$utc_timezone = new DateTimeZone( 'UTC' );
+		$now          = new DateTime( 'now', $utc_timezone );
+		$sale_end     = new DateTime( '2025-12-02 00:00:00', $utc_timezone );
+		if ( $now < $sale_end ) {
+			$links[] = '<a href="https://metabox.io/black-friday/?utm_source=plugin_links&utm_medium=link&utm_campaign=black_friday" target="_blank" style="color: #39b54a; font-weight: bold">' . esc_html__( 'Black Friday Sale', 'meta-box' ) . '</a>';
+		}
 		return $links;
 	}
 
@@ -46,7 +53,7 @@ class RWMB_Core {
 	 * Get registered meta boxes via a filter.
 	 * @deprecated No longer used. Keep for backward-compatibility with extensions.
 	 */
-	public static function get_meta_boxes() : array {
+	public static function get_meta_boxes(): array {
 		$meta_boxes = rwmb_get_registry( 'meta_box' )->all();
 		return wp_list_pluck( $meta_boxes, 'meta_box' );
 	}

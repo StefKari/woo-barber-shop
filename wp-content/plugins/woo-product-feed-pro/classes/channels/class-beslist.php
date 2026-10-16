@@ -56,6 +56,36 @@ class WooSEA_beslist {
 					"feed_name" => "extra_image_3",
 					"format" => "optional",
 				),
+				"Extra image 4" => array(
+					"name" => "extra_image_4",
+					"feed_name" => "extra_image_4",
+					"format" => "optional",
+				),
+				"Extra image 5" => array(
+					"name" => "extra_image_5",
+					"feed_name" => "extra_image_5",
+					"format" => "optional",
+				),
+				"Extra image 6" => array(
+					"name" => "extra_image_6",
+					"feed_name" => "extra_image_6",
+					"format" => "optional",
+				),
+				"Extra image 7" => array(
+					"name" => "extra_image_7",
+					"feed_name" => "extra_image_7",
+					"format" => "optional",
+				),
+				"Extra image 8" => array(
+					"name" => "extra_image_8",
+					"feed_name" => "extra_image_8",
+					"format" => "optional",
+				),
+				"Extra image 9" => array(
+					"name" => "extra_image_9",
+					"feed_name" => "extra_image_9",
+					"format" => "optional",
+				),
                                 "Category" => array(
                                         "name" => "category",
                                         "feed_name" => "category",

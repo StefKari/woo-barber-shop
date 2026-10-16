@@ -1,9 +1,2 @@
 <?php
-
-namespace WPML\UserInterface\Web\Core\Component\Dashboard\Application\Endpoint\GetPosts;
-
-use WPML\Core\Port\Endpoint\EndpointInterface;
-
-interface GetPostControllerInterface extends EndpointInterface {
-
-}
+require_once __DIR__ . '/../../../../../../../../../../../../wpml/src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/GetPosts/GetPostControllerInterface.php';

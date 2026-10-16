@@ -20,6 +20,8 @@ class Cached_Container extends Container
 {
     private $parameters = [];
     private $targetDirs = [];
+    // Declared explicitly: newer Yoast SEO vendor Container no longer defines it (PHP 8.2+ dynamic property deprecation).
+    protected $normalizedIds = [];
 
     public function __construct()
     {

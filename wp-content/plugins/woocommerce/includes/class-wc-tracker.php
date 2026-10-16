@@ -11,14 +11,26 @@
  */
 
 use Automattic\Jetpack\Constants;
+use Automattic\WooCommerce\Blocks\Domain\Services\CheckoutFields;
+use Automattic\WooCommerce\Blocks\Package;
+use Automattic\WooCommerce\Enums\ProductStatus;
+use Automattic\WooCommerce\Internal\Admin\EmailImprovements\EmailImprovements;
+use Automattic\WooCommerce\Internal\CLI\Migrator\Core\MigratorTracker;
+use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableDataStore;
+use Automattic\WooCommerce\Internal\Utilities\BlocksUtil;
+use Automattic\WooCommerce\Proxies\LegacyProxy;
+use Automattic\WooCommerce\Internal\Utilities\ProductUtil;
+use Automattic\WooCommerce\Utilities\{ FeaturesUtil, OrderUtil, PluginUtil };
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable Squiz.Classes.ClassFileName.NoMatch, Squiz.Classes.ValidClassName.NotCamelCaps -- Backwards compatibility.
 /**
  * WooCommerce Tracker Class
  */
 class WC_Tracker {
 
+	// phpcs:enable
 	/**
 	 * URL to the WooThemes Tracker API endpoint.
 	 *
@@ -27,9 +39,19 @@ class WC_Tracker {
 	private static $api_url = 'https://tracking.woocommerce.com/v1/';
 
 	/**
+	 * Consecutive failed attempts after which the current snapshot is abandoned.
+	 *
+	 * Counts attempts rather than delivery failures, so a snapshot that cannot be built is
+	 * bounded too. Retries happen on the daily tracker action, so this is a few days.
+	 *
+	 * @var int
+	 */
+	private const MAX_CONSECUTIVE_SEND_FAILURES = 3;
+
+	/**
 	 * Hook into cron event.
 	 */
-	public static function init() {
+	public static function init() { // phpcs:ignore WooCommerce.Functions.InternalInjectionMethod.MissingFinal, WooCommerce.Functions.InternalInjectionMethod.MissingInternalTag -- Not an injection.
 		add_action( 'woocommerce_tracker_send_event', array( __CLASS__, 'send_tracking_data' ) );
 	}
 
@@ -44,45 +66,179 @@ class WC_Tracker {
 			return;
 		}
 
+		/**
+		 * Filter whether to send tracking data or not.
+		 *
+		 * @since 2.3.0
+		 */
 		if ( ! apply_filters( 'woocommerce_tracker_send_override', $override ) ) {
 			// Send a maximum of once per week by default.
 			$last_send = self::get_last_send_time();
-			if ( $last_send && $last_send > apply_filters( 'woocommerce_tracker_last_send_interval', strtotime( '-1 week' ) ) ) {
+			if ( $last_send && $last_send > apply_filters( 'woocommerce_tracker_last_send_interval', strtotime( '-1 week' ) ) ) { // phpcs:ignore
 				return;
 			}
 		} else {
 			// Make sure there is at least a 1 hour delay between override sends, we don't want duplicate calls due to double clicking links.
-			$last_send = self::get_last_send_time();
-			if ( $last_send && $last_send > strtotime( '-1 hours' ) ) {
+			$last_attempt = max( (int) self::get_last_send_time(), (int) get_option( 'woocommerce_tracker_last_attempt', 0 ) );
+			if ( $last_attempt > strtotime( '-1 hours' ) ) {
 				return;
 			}
 		}
 
-		// Update time first before sending to ensure it is set.
-		update_option( 'woocommerce_tracker_last_send', time() );
+		// Recorded before building the snapshot so overlapping override sends are still suppressed.
+		update_option( 'woocommerce_tracker_last_attempt', time(), false );
 
-		$params = self::get_tracking_data();
-		wp_safe_remote_post(
+		// Count the attempt before the snapshot is built. A fatal or timeout inside
+		// get_tracking_data() never reaches record_send_result(), so a counter that only
+		// moved on delivery outcomes would let an unbuildable snapshot rebuild on every
+		// scheduled run instead of giving up the way a failed delivery does.
+		$attempts = (int) get_option( 'woocommerce_tracker_send_failures', 0 ) + 1;
+
+		if ( self::MAX_CONSECUTIVE_SEND_FAILURES < $attempts ) {
+			self::finish_snapshot();
+			wc_get_logger()->warning(
+				'WooCommerce tracker snapshot attempts ended before recording a result; giving up until the next interval.',
+				array(
+					'source'   => 'woocommerce-tracker',
+					'failures' => $attempts - 1,
+				)
+			);
+			return;
+		}
+
+		update_option( 'woocommerce_tracker_send_failures', $attempts, false );
+
+		$body = wp_json_encode( self::get_tracking_data() );
+		if ( false === $body ) {
+			self::record_send_failure( false, 0, 'json_encode_failure', 0 );
+			return;
+		}
+
+		$response = wp_safe_remote_post(
 			self::$api_url,
 			array(
 				'method'      => 'POST',
-				'timeout'     => 45,
+				'timeout'     => 10,
 				'redirection' => 5,
 				'httpversion' => '1.0',
-				'blocking'    => false,
+				'blocking'    => true,
 				'headers'     => array( 'user-agent' => 'WooCommerceTracker/' . md5( esc_url_raw( home_url( '/' ) ) ) . ';' ),
-				'body'        => wp_json_encode( $params ),
+				'body'        => $body,
 				'cookies'     => array(),
+			)
+		);
+
+		self::record_send_result( $response, strlen( $body ) );
+	}
+
+	/**
+	 * Record the outcome of a delivery attempt.
+	 *
+	 * The send time is recorded after acceptance or permanent abandonment. A transient failure
+	 * remains pending for the next run.
+	 *
+	 * @param array|WP_Error $response   Response from wp_safe_remote_post().
+	 * @param int            $body_bytes Size of the posted snapshot.
+	 */
+	private static function record_send_result( $response, $body_bytes ): void {
+		$status = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
+
+		if ( 200 <= $status && 300 > $status ) {
+			self::finish_snapshot();
+			return;
+		}
+
+		self::record_send_failure( self::is_retryable_status( $status ), $status, is_wp_error( $response ) ? (string) $response->get_error_code() : '', $body_bytes );
+	}
+
+	/**
+	 * Record a failed delivery attempt.
+	 *
+	 * The attempt was already counted before the snapshot was built, so this only decides
+	 * whether to keep retrying: a non-retryable failure or the last allowed attempt gives up
+	 * on the current snapshot. Retry state is discarded when tracking was turned off while
+	 * the request was in flight.
+	 *
+	 * @param bool   $retryable  Whether the next scheduled run should try again.
+	 * @param int    $status     HTTP status code, 0 when no response was received.
+	 * @param string $error_code Error code when no response was received.
+	 * @param int    $body_bytes Size of the snapshot.
+	 */
+	private static function record_send_failure( $retryable, $status, $error_code, $body_bytes ): void {
+		// The attempt was already counted before the snapshot was built.
+		$failures = (int) get_option( 'woocommerce_tracker_send_failures', 0 );
+		$give_up  = ! $retryable || self::MAX_CONSECUTIVE_SEND_FAILURES <= $failures;
+
+		if ( $give_up ) {
+			self::finish_snapshot();
+		} elseif ( true !== wc_string_to_bool( get_option( 'woocommerce_allow_tracking', 'no' ) ) ) {
+			delete_option( 'woocommerce_tracker_send_failures' );
+		}
+
+		if ( 413 === $status ) {
+			$message = 'WooCommerce tracker snapshot delivery failed; the snapshot is too large for the service and will not be retried.';
+		} elseif ( 'json_encode_failure' === $error_code ) {
+			$message = 'WooCommerce tracker snapshot could not be encoded and will not be retried.';
+		} elseif ( $give_up ) {
+			$message = 'WooCommerce tracker snapshot delivery failed; giving up until the next interval.';
+		} else {
+			$message = 'WooCommerce tracker snapshot delivery failed; it will be retried on the next run.';
+		}
+
+		wc_get_logger()->warning(
+			$message,
+			array(
+				'source'      => 'woocommerce-tracker',
+				'http_status' => $status,
+				'error_code'  => $error_code,
+				'failures'    => $failures,
+				'body_bytes'  => $body_bytes,
 			)
 		);
 	}
 
 	/**
-	 * Get the last time tracking data was sent.
+	 * Close out the current tracking attempt, whether a snapshot was sent or the
+	 * attempt was abandoned before one existed.
+	 *
+	 * The scheduled gate reads only the send time, so advancing it is what puts the
+	 * store back on the weekly interval and stops the daily retries.
+	 */
+	private static function finish_snapshot(): void {
+		update_option( 'woocommerce_tracker_last_send', time() );
+		delete_option( 'woocommerce_tracker_send_failures' );
+	}
+
+	/**
+	 * Whether a delivery failure with the given status is worth retrying.
+	 *
+	 * Transport failures (status 0), rate limiting, timeouts and server errors are retried;
+	 * other client errors mean the snapshot itself was rejected.
+	 *
+	 * @param int $status HTTP status code, 0 for a transport failure.
+	 * @return bool
+	 */
+	private static function is_retryable_status( $status ) {
+		return 0 === $status || in_array( $status, array( 408, 425, 429 ), true ) || 500 <= $status;
+	}
+
+	/**
+	 * Get the time the current tracking attempt was closed out.
+	 *
+	 * Despite the option name, this is not only set on delivery: it also advances when an
+	 * attempt is abandoned, including before a snapshot could be built. The scheduled gate
+	 * reads it as "this cycle is done", not "a snapshot was sent".
 	 *
 	 * @return int|bool
 	 */
 	private static function get_last_send_time() {
+		/**
+		 * Filter the last time tracking data was sent.
+		 *
+		 * The timestamp also covers abandoned attempts, not only deliveries.
+		 *
+		 * @since 2.3.0
+		 */
 		return apply_filters( 'woocommerce_tracker_last_send_time', get_option( 'woocommerce_tracker_last_send', false ) );
 	}
 
@@ -94,13 +250,20 @@ class WC_Tracker {
 	 * However, there are version of JP where \Automattic\Jetpack\Status exists, but does *not* contain is_staging_site method,
 	 * so with those, code still needs to use the previous check as a fallback.
 	 *
+	 * After upgrading Jetpack Status to v3.3.2 is_staging_site is also deprecated and in_safe_mode is the new replacement.
+	 * So we check this first of all.
+	 *
 	 * @return bool
 	 */
 	private static function is_jetpack_staging_site() {
 		if ( class_exists( '\Automattic\Jetpack\Status' ) ) {
-			// Preferred way of checking with Jetpack 8.1+.
+
 			$jp_status = new \Automattic\Jetpack\Status();
-			if ( is_callable( array( $jp_status, 'is_staging_site' ) ) ) {
+
+			if ( is_callable( array( $jp_status, 'in_safe_mode' ) ) ) {
+				return $jp_status->in_safe_mode();
+			} elseif ( is_callable( array( $jp_status, 'is_staging_site' ) ) ) {
+				// Preferred way of checking with Jetpack 8.1+.
 				return $jp_status->is_staging_site();
 			}
 		}
@@ -113,11 +276,20 @@ class WC_Tracker {
 	 *
 	 * @return array
 	 */
-	private static function get_tracking_data() {
-		$data = array();
+	public static function get_tracking_data() {
+		$data       = array();
+		$start_time = microtime( true );
 
 		// General site info.
-		$data['url']   = home_url();
+		$data['url']      = home_url();
+		$data['store_id'] = get_option( \WC_Install::STORE_ID_OPTION, null );
+		$data['blog_id']  = class_exists( 'Jetpack_Options' ) ? Jetpack_Options::get_option( 'id' ) : null;
+
+		/**
+		 * Filter the admin email that's sent with data.
+		 *
+		 * @since 2.3.0
+		 */
 		$data['email'] = apply_filters( 'woocommerce_tracker_admin_email', get_option( 'admin_email' ) );
 		$data['theme'] = self::get_theme_info();
 
@@ -133,7 +305,6 @@ class WC_Tracker {
 		$data['inactive_plugins'] = $all_plugins['inactive_plugins'];
 
 		// Jetpack & WooCommerce Connect.
-
 		$data['jetpack_version']    = Constants::is_defined( 'JETPACK__VERSION' ) ? Constants::get_constant( 'JETPACK__VERSION' ) : 'none';
 		$data['jetpack_connected']  = ( class_exists( 'Jetpack' ) && is_callable( 'Jetpack::is_active' ) && Jetpack::is_active() ) ? 'yes' : 'no';
 		$data['jetpack_is_staging'] = self::is_jetpack_staging_site() ? 'yes' : 'no';
@@ -147,26 +318,123 @@ class WC_Tracker {
 		$data['orders']     = self::get_orders();
 		$data['reviews']    = self::get_review_counts();
 		$data['categories'] = self::get_category_counts();
+		$data['brands']     = self::get_brands_counts();
+
+		// Migrator CLI statistics.
+		$data['migrator'] = self::get_migrator_data();
+
+		// Get order snapshot.
+		$data['order_snapshot'] = self::get_order_snapshot();
 
 		// Payment gateway info.
 		$data['gateways'] = self::get_active_payment_gateways();
 
+		// WcPay settings info.
+		$data['wcpay_settings'] = self::get_wcpay_settings();
+
 		// Shipping method info.
 		$data['shipping_methods'] = self::get_active_shipping_methods();
+
+		// Features.
+		$data['enabled_features'] = self::get_enabled_features();
 
 		// Get all WooCommerce options info.
 		$data['settings'] = self::get_all_woocommerce_options_values();
 
 		// Template overrides.
-		$data['template_overrides'] = self::get_all_template_overrides();
-
-		// Template overrides.
-		$data['admin_user_agents'] = self::get_admin_user_agents();
+		$template_overrides         = self::get_all_template_overrides();
+		$data['template_overrides'] = $template_overrides;
 
 		// Cart & checkout tech (blocks or shortcodes).
 		$data['cart_checkout'] = self::get_cart_checkout_info();
 
-		return apply_filters( 'woocommerce_tracker_data', $data );
+		// Mini Cart block, which only exists since wp 5.9.
+		if ( version_compare( get_bloginfo( 'version' ), '5.9', '>=' ) ) {
+			$data['mini_cart_block'] = self::get_mini_cart_info();
+		}
+
+		/**
+		 * Filter whether to disable admin tracking.
+		 *
+		 * @since 5.2.0
+		 */
+		$data['wc_admin_disabled'] = apply_filters( 'woocommerce_admin_disabled', false ) ? 'yes' : 'no';
+
+		// Mobile info.
+		$data['wc_mobile_usage'] = self::get_woocommerce_mobile_usage();
+
+		// WC Tracker data.
+		$data['woocommerce_allow_tracking']               = get_option( 'woocommerce_allow_tracking', 'no' );
+		$data['woocommerce_allow_tracking_last_modified'] = get_option( 'woocommerce_allow_tracking_last_modified', 'unknown' );
+		$data['woocommerce_allow_tracking_first_optin']   = get_option( 'woocommerce_allow_tracking_first_optin', 'unknown' );
+
+		// Email improvements tracking data.
+		$data['email_improvements'] = self::get_email_improvements_info( $template_overrides );
+
+		// Store email usage.
+		$data['store_emails'] = self::get_store_emails();
+
+		// Address autocomplete usage.
+		$data['address_autocomplete'] = self::get_address_autocomplete_info();
+
+		/**
+		 * Filter the data that's sent with the tracker.
+		 *
+		 * @since 2.3.0
+		 */
+		$data = apply_filters( 'woocommerce_tracker_data', $data );
+
+		// Total seconds taken to generate snapshot (including filtered data).
+		$data['snapshot_generation_time'] = microtime( true ) - $start_time;
+
+		return $data;
+	}
+
+	/**
+	 * Get address autocomplete info.
+	 *
+	 * @return array Address autocomplete info.
+	 */
+	public static function get_address_autocomplete_info() {
+		$data = array(
+			'enabled'            => ( 'yes' === wc_bool_to_string( get_option( 'woocommerce_address_autocomplete_enabled', 'no' ) ) ) ? 'yes' : 'no',
+			'providers'          => array(),
+			'preferred_provider' => '',
+		);
+
+		if ( ! class_exists( \Automattic\WooCommerce\Internal\AddressProvider\AddressProviderController::class ) ) {
+			// The option could still be set even if the class doesn't exist (e.g. if set manually in the DB).
+			$data['enabled'] = 'no';
+			return $data;
+		}
+
+		$autocomplete_controller = wc_get_container()->get( \Automattic\WooCommerce\Internal\AddressProvider\AddressProviderController::class );
+		$autocomplete_controller->init();
+
+		// Get all registered providers.
+		$providers = $autocomplete_controller->get_providers();
+		if ( is_array( $providers ) ) {
+			foreach ( $providers as $provider ) {
+				if ( ! ( $provider instanceof WC_Address_Provider ) ) {
+					continue;
+				}
+				$data['providers'][] = $provider->id;
+			}
+		}
+
+		if ( empty( $data['providers'] ) ) {
+			// If there are no providers, the feature is effectively disabled.
+			$data['enabled'] = 'no';
+			return $data;
+		}
+
+		if ( 'no' === $data['enabled'] ) {
+			// If the feature is disabled, no need to go further, but we will still track which providers are available.
+			return $data;
+		}
+
+		$data['preferred_provider'] = $autocomplete_controller->get_preferred_provider();
+		return $data;
 	}
 
 	/**
@@ -175,15 +443,17 @@ class WC_Tracker {
 	 * @return array
 	 */
 	public static function get_theme_info() {
-		$theme_data        = wp_get_theme();
-		$theme_child_theme = wc_bool_to_string( is_child_theme() );
-		$theme_wc_support  = wc_bool_to_string( current_theme_supports( 'woocommerce' ) );
+		$theme_data           = wp_get_theme();
+		$theme_child_theme    = wc_bool_to_string( is_child_theme() );
+		$theme_wc_support     = wc_bool_to_string( current_theme_supports( 'woocommerce' ) );
+		$theme_is_block_theme = wc_bool_to_string( wp_is_block_theme() );
 
 		return array(
 			'name'        => $theme_data->Name, // @phpcs:ignore
 			'version'     => $theme_data->Version, // @phpcs:ignore
 			'child_theme' => $theme_child_theme,
 			'wc_support'  => $theme_wc_support,
+			'block_theme' => $theme_is_block_theme,
 		);
 	}
 
@@ -198,6 +468,7 @@ class WC_Tracker {
 		$memory = wc_let_to_num( WP_MEMORY_LIMIT );
 
 		if ( function_exists( 'memory_get_usage' ) ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- False positive.
 			$system_memory = wc_let_to_num( @ini_get( 'memory_limit' ) );
 			$memory        = max( $memory, $system_memory );
 		}
@@ -215,6 +486,7 @@ class WC_Tracker {
 		$wp_data['version']      = get_bloginfo( 'version' );
 		$wp_data['multisite']    = is_multisite() ? 'Yes' : 'No';
 		$wp_data['env_type']     = $environment_type;
+		$wp_data['dropins']      = array_keys( get_dropins() );
 
 		return $wp_data;
 	}
@@ -259,33 +531,37 @@ class WC_Tracker {
 	 *
 	 * @return array
 	 */
-	private static function get_all_plugins() {
+	public static function get_all_plugins() {
 		// Ensure get_plugins function is loaded.
 		if ( ! function_exists( 'get_plugins' ) ) {
 			include ABSPATH . '/wp-admin/includes/plugin.php';
 		}
 
-		$plugins             = get_plugins();
+		$plugins             = wc_get_container()->get( LegacyProxy::class )->call_function( 'get_plugins' );
 		$active_plugins_keys = get_option( 'active_plugins', array() );
 		$active_plugins      = array();
 
 		foreach ( $plugins as $k => $v ) {
 			// Take care of formatting the data how we want it.
 			$formatted         = array();
-			$formatted['name'] = strip_tags( $v['Name'] );
+			$formatted['name'] = wp_strip_all_tags( $v['Name'] );
 			if ( isset( $v['Version'] ) ) {
-				$formatted['version'] = strip_tags( $v['Version'] );
+				$formatted['version'] = wp_strip_all_tags( $v['Version'] );
 			}
 			if ( isset( $v['Author'] ) ) {
-				$formatted['author'] = strip_tags( $v['Author'] );
+				$formatted['author'] = wp_strip_all_tags( $v['Author'] );
 			}
 			if ( isset( $v['Network'] ) ) {
-				$formatted['network'] = strip_tags( $v['Network'] );
+				$formatted['network'] = wp_strip_all_tags( $v['Network'] );
 			}
 			if ( isset( $v['PluginURI'] ) ) {
-				$formatted['plugin_uri'] = strip_tags( $v['PluginURI'] );
+				$formatted['plugin_uri'] = wp_strip_all_tags( $v['PluginURI'] );
 			}
-			if ( in_array( $k, $active_plugins_keys ) ) {
+			$formatted['feature_compatibility'] = array();
+			if ( wc_get_container()->get( PluginUtil::class )->is_woocommerce_aware_plugin( $k ) ) {
+				$formatted['feature_compatibility'] = array_filter( FeaturesUtil::get_compatible_features_for_plugin( $k ) );
+			}
+			if ( in_array( $k, $active_plugins_keys, true ) ) {
 				// Remove active plugins from list so we can show active and inactive separately.
 				unset( $plugins[ $k ] );
 				$active_plugins[ $k ] = $formatted;
@@ -301,7 +577,16 @@ class WC_Tracker {
 	}
 
 	/**
-	 * Check to see if the helper is connected to woocommerce.com
+	 * Get the settings of WooCommerce Payments plugin
+	 *
+	 * @return array
+	 */
+	private static function get_wcpay_settings() {
+		return get_option( 'woocommerce_woocommerce_payments_settings' );
+	}
+
+	/**
+	 * Check to see if the helper is connected to WooCommerce.com
 	 *
 	 * @return string
 	 */
@@ -339,9 +624,8 @@ class WC_Tracker {
 	 * @return array
 	 */
 	public static function get_product_counts() {
-		$product_count          = array();
-		$product_count_data     = wp_count_posts( 'product' );
-		$product_count['total'] = $product_count_data->publish;
+		$product_count_data = wc_get_container()->get( ProductUtil::class )->get_counts_for_type( 'product' );
+		$product_count      = array( 'total' => $product_count_data[ ProductStatus::PUBLISH ] ?? 0 );
 
 		$product_statuses = get_terms( 'product_type', array( 'hide_empty' => 0 ) );
 		foreach ( $product_statuses as $product_status ) {
@@ -352,122 +636,416 @@ class WC_Tracker {
 	}
 
 	/**
-	 * Get all order data.
+	 * Get order counts.
+	 *
+	 * @return array
+	 */
+	private static function get_order_counts() {
+		$order_count = array();
+		foreach ( wc_get_order_statuses() as $status_slug => $status_name ) {
+			$order_count[ $status_slug ] = wc_orders_count( $status_slug );
+		}
+		return $order_count;
+	}
+
+	/**
+	 * Combine all order data.
 	 *
 	 * @return array
 	 */
 	private static function get_orders() {
-		$args = array(
-			'type'  => array( 'shop_order', 'shop_order_refund' ),
-			'limit' => get_option( 'posts_per_page' ),
-			'paged' => 1,
+		$order_dates    = self::get_order_dates();
+		$order_counts   = self::get_order_counts();
+		$order_totals   = self::get_order_totals();
+		$order_gateways = self::get_orders_by_gateway();
+		$order_origin   = self::get_orders_origins();
+
+		return array_merge( $order_dates, $order_counts, $order_totals, $order_gateways, $order_origin );
+	}
+
+	/**
+	 * Get order totals.
+	 *
+	 * Keeping the internal statuses names as strings to avoid regression issues (not referencing Automattic\WooCommerce\Enums\OrderInternalStatus class).
+	 *
+	 * @since 5.4.0
+	 * @return array
+	 */
+	private static function get_order_totals() {
+		global $wpdb;
+
+		$orders_table = OrdersTableDataStore::get_orders_table_name();
+
+		if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$gross_total = $wpdb->get_var(
+				"
+				SELECT SUM(total_amount) AS 'gross_total'
+				FROM $orders_table
+				WHERE status in ('wc-completed', 'wc-refunded');
+			"
+			);
+			// phpcs:enable
+		} else {
+			$gross_total = $wpdb->get_var(
+				"
+					SELECT
+						SUM( order_meta.meta_value ) AS 'gross_total'
+					FROM {$wpdb->prefix}posts AS orders
+					LEFT JOIN {$wpdb->prefix}postmeta AS order_meta ON order_meta.post_id = orders.ID
+					WHERE order_meta.meta_key = '_order_total'
+						AND orders.post_status in ( 'wc-completed', 'wc-refunded' )
+					GROUP BY order_meta.meta_key
+				"
+			);
+		}
+
+		if ( is_null( $gross_total ) ) {
+			$gross_total = 0;
+		}
+
+		if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$processing_gross_total = $wpdb->get_var(
+				"
+				SELECT SUM(total_amount) AS 'gross_total'
+				FROM $orders_table
+				WHERE status = 'wc-processing';
+			"
+			);
+			// phpcs:enable
+		} else {
+			$processing_gross_total = $wpdb->get_var(
+				"
+				SELECT
+					SUM( order_meta.meta_value ) AS 'gross_total'
+				FROM {$wpdb->prefix}posts AS orders
+				LEFT JOIN {$wpdb->prefix}postmeta AS order_meta ON order_meta.post_id = orders.ID
+				WHERE order_meta.meta_key = '_order_total'
+					AND orders.post_status = 'wc-processing'
+				GROUP BY order_meta.meta_key
+			"
+			);
+		}
+
+		if ( is_null( $processing_gross_total ) ) {
+			$processing_gross_total = 0;
+		}
+
+		return array(
+			'gross'            => $gross_total,
+			'processing_gross' => $processing_gross_total,
+		);
+	}
+
+	/**
+	 * Get last order date.
+	 *
+	 * @return string
+	 */
+	private static function get_order_dates() {
+		global $wpdb;
+
+		$orders_table = OrdersTableDataStore::get_orders_table_name();
+		if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$min_max = $wpdb->get_row(
+				"
+				SELECT
+					MIN( date_created_gmt ) as 'first', MAX( date_created_gmt ) as 'last'
+				FROM $orders_table
+				WHERE status = 'wc-completed';
+				",
+				ARRAY_A
+			);
+			// phpcs:enable
+		} else {
+			$min_max = $wpdb->get_row(
+				"
+					SELECT
+						MIN( post_date_gmt ) as 'first', MAX( post_date_gmt ) as 'last'
+					FROM {$wpdb->prefix}posts
+					WHERE post_type = 'shop_order'
+					AND post_status = 'wc-completed'
+				",
+				ARRAY_A
+			);
+		}
+
+		if ( is_null( $min_max ) ) {
+			$min_max = array(
+				'first' => '-',
+				'last'  => '-',
+			);
+		}
+
+		if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$processing_min_max = $wpdb->get_row(
+				"
+				SELECT
+					MIN( date_created_gmt ) as 'processing_first', MAX( date_created_gmt ) as 'processing_last'
+				FROM $orders_table
+				WHERE status = 'wc-processing';
+				",
+				ARRAY_A
+			);
+			// phpcs:enable
+		} else {
+			$processing_min_max = $wpdb->get_row(
+				"
+				SELECT
+					MIN( post_date_gmt ) as 'processing_first', MAX( post_date_gmt ) as 'processing_last'
+				FROM {$wpdb->prefix}posts
+				WHERE post_type = 'shop_order'
+				AND post_status = 'wc-processing'
+			",
+				ARRAY_A
+			);
+		}
+
+		if ( is_null( $processing_min_max ) ) {
+			$processing_min_max = array(
+				'processing_first' => '-',
+				'processing_last'  => '-',
+			);
+		}
+
+		return array_merge( $min_max, $processing_min_max );
+	}
+
+	/**
+	 * Extract the group key for an associative array of objects which have unique ids in the key.
+	 * A 'group_key' property is introduced in the object.
+	 * For example, two objects with keys like 'WooDataPay ** #123' and 'WooDataPay ** #78' would
+	 * both have a group_key of 'WooDataPay **' after this function call.
+	 *
+	 * @param array  $objects     The array of objects that need to be grouped.
+	 * @param string $default_key The property that will be the default group_key.
+	 * @return array Contains the objects with a group_key property.
+	 */
+	private static function extract_group_key( $objects, $default_key ) {
+		$keys = array_keys( $objects );
+
+		// Sort keys by length and then by characters within the same length keys.
+		usort(
+			$keys,
+			function ( $a, $b ) {
+				if ( strlen( $a ) === strlen( $b ) ) {
+					return strcmp( $a, $b );
+				}
+				return ( strlen( $a ) < strlen( $b ) ) ? -1 : 1;
+			}
 		);
 
-		$first            = time();
-		$processing_first = $first;
-		$first_time       = $first;
-		$last             = 0;
-		$processing_last  = 0;
-		$order_data       = array();
+		// Look for common tokens in every pair of adjacent keys.
+		$prev = '';
+		foreach ( $keys as $key ) {
+			if ( $prev ) {
+				$comm_tokens = array();
 
-		$orders       = wc_get_orders( $args );
-		$orders_count = count( $orders );
+				// Tokenize the current and previous gateway names.
+				$curr_tokens = preg_split( '/[ :,\-_]+/', $key );
+				$prev_tokens = preg_split( '/[ :,\-_]+/', $prev );
 
-		while ( $orders_count ) {
+				$len_curr = is_array( $curr_tokens ) ? count( $curr_tokens ) : 0;
+				$len_prev = is_array( $prev_tokens ) ? count( $prev_tokens ) : 0;
 
-			foreach ( $orders as $order ) {
-
-				$date_created = (int) $order->get_date_created()->getTimestamp();
-				$type         = $order->get_type();
-				$status       = $order->get_status();
-
-				if ( 'shop_order' == $type ) {
-
-					// Find the first and last order dates for completed and processing statuses.
-					if ( 'completed' == $status && $date_created < $first ) {
-						$first = $date_created;
+				$index_unique = -1;
+				// Gather the common tokens.
+				// Let us allow for the unique reference id to be anywhere in the name.
+				for ( $i = 0; $i < $len_curr && $i < $len_prev; $i++ ) {
+					if ( $curr_tokens[ $i ] === $prev_tokens[ $i ] ) {
+						$comm_tokens[] = $curr_tokens[ $i ];
+					} elseif ( preg_match( '/\d/', $curr_tokens[ $i ] ) && preg_match( '/\d/', $prev_tokens[ $i ] ) ) {
+						$index_unique = $i;
 					}
-					if ( 'completed' == $status && $date_created > $last ) {
-						$last = $date_created;
-					}
-					if ( 'processing' == $status && $date_created < $processing_first ) {
-						$processing_first = $date_created;
-					}
-					if ( 'processing' == $status && $date_created > $processing_last ) {
-						$processing_last = $date_created;
-					}
+				}
 
-					// Get order counts by status.
-					$status = 'wc-' . $status;
-
-					if ( ! isset( $order_data[ $status ] ) ) {
-						$order_data[ $status ]  = 1;
-					} else {
-						$order_data[ $status ] += 1;
-					}
-
-					// Count number of orders by gateway used.
-					$gateway = $order->get_payment_method();
-
-					if ( ! empty( $gateway ) && in_array( $status, array( 'wc-completed', 'wc-refunded', 'wc-processing' ) ) ) {
-						$gateway = 'gateway_' . $gateway;
-
-						if ( ! isset( $order_data[ $gateway ] ) ) {
-							$order_data[ $gateway ]  = 1;
-						} else {
-							$order_data[ $gateway ] += 1;
-						}
-					}
+				// If only one token is different, and those tokens contain digits, then that could be the unique id.
+				if ( $len_curr - count( $comm_tokens ) <= 1 && count( $comm_tokens ) > 0 && $index_unique > -1 ) {
+					$objects[ $key ]->group_key  = implode( ' ', $comm_tokens );
+					$objects[ $prev ]->group_key = implode( ' ', $comm_tokens );
 				} else {
-					// If it is a refunded order (shop_order_refunnd type), add the prefix as this prefix gets
-					// added midway in the if clause.
-					$status = 'wc-' . $status;
+					$objects[ $key ]->group_key = $objects[ $key ]->$default_key;
 				}
-
-				// Calculate the gross total for 'completed' and 'processing' orders.
-				$total = $order->get_total();
-
-				if ( in_array( $status, array( 'wc-completed', 'wc-refunded' ) ) ) {
-					if ( ! isset( $order_data['gross'] ) ) {
-						$order_data['gross']  = $total;
-					} else {
-						$order_data['gross'] += $total;
-					}
-				} elseif ( 'wc-processing' == $status ) {
-					if ( ! isset( $order_data['processing_gross'] ) ) {
-						$order_data['processing_gross']  = $total;
-					} else {
-						$order_data['processing_gross'] += $total;
-					}
-				}
+			} else {
+				$objects[ $key ]->group_key = $objects[ $key ]->$default_key;
 			}
-			$args['paged']++;
+			$prev = $key;
+		}
+		return $objects;
+	}
 
-			$orders       = wc_get_orders( $args );
-			$orders_count = count( $orders );
+	/**
+	 * Get order details by gateway.
+	 *
+	 * @return array
+	 */
+	private static function get_orders_by_gateway() {
+		global $wpdb;
+
+		if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			$orders_table = OrdersTableDataStore::get_orders_table_name();
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$orders_and_gateway_details = $wpdb->get_results(
+				"
+				SELECT IFNULL(payment_method, '') AS gateway, currency AS currency, SUM( total_amount ) AS totals, count( id ) AS counts
+				FROM $orders_table
+				WHERE status IN ( 'wc-completed', 'wc-processing', 'wc-refunded' )
+				GROUP BY gateway, currency;
+				"
+			);
+			// phpcs:enable
+		} else {
+			$orders_and_gateway_details = $wpdb->get_results(
+				"
+				SELECT
+					gateway, currency, SUM(total) AS totals, COUNT(order_id) AS counts
+				FROM (
+					SELECT
+						orders.id AS order_id,
+						IFNULL(MAX(CASE WHEN meta_key = '_payment_method' THEN meta_value END), '') gateway,
+						MAX(CASE WHEN meta_key = '_order_total' THEN meta_value END) total,
+						MAX(CASE WHEN meta_key = '_order_currency' THEN meta_value END) currency
+					FROM
+						{$wpdb->prefix}posts orders
+					LEFT JOIN
+						{$wpdb->prefix}postmeta order_meta ON order_meta.post_id = orders.id
+					WHERE orders.post_type = 'shop_order'
+						AND orders.post_status in ( 'wc-completed', 'wc-processing', 'wc-refunded' )
+						AND meta_key in( '_payment_method','_order_total','_order_currency')
+					GROUP BY orders.id
+				) order_gateways
+				GROUP BY gateway, currency
+				"
+			);
 		}
 
-		if ( $first !== $first_time ) {
-			$order_data['first'] = gmdate( 'Y-m-d H:i:s', $first );
+		$orders_by_gateway_currency = array();
+
+		// The associative array that is created as the result of array_reduce is passed to extract_group_key()
+		// This function has the logic that will remove specific transaction identifiers that may sometimes be part of a
+		// payment method. For example, two payments methods like 'WooDataPay ** #123' and 'WooDataPay ** #78' would
+		// both have the same group_key 'WooDataPay **'.
+		$orders_by_gateway = self::extract_group_key(
+			// Convert into an associative array with a combination of currency and gateway as key.
+			array_reduce(
+				$orders_and_gateway_details,
+				function ( $result, $item ) {
+					$item->gateway = preg_replace( '/\s+/', ' ', $item->gateway ?? '' );
+
+					// Introduce currency as a prefix for the key.
+					$key = $item->currency . '==' . $item->gateway;
+
+					$result[ $key ] = $item;
+					return $result;
+				},
+				array()
+			),
+			'gateway'
+		);
+
+		// Aggregate using group_key.
+		foreach ( $orders_by_gateway as $orders_details ) {
+			$gkey = $orders_details->group_key;
+
+			// Remove currency as prefix of key for backward compatibility.
+			if ( str_contains( $gkey, '==' ) ) {
+				$tokens = preg_split( '/==/', $gkey );
+				$key    = $tokens[1];
+			} else {
+				$key = $gkey;
+			}
+
+			$key = str_replace( array( 'payment method', 'payment gateway', 'gateway' ), '', strtolower( $key ) );
+			$key = trim( preg_replace( '/[: ,#*\-_]+/', ' ', $key ) );
+
+			// Add currency as postfix of gateway for backward compatibility.
+			$key       = 'gateway_' . $key . '_' . $orders_details->currency;
+			$count_key = $key . '_count';
+			$total_key = $key . '_total';
+
+			if ( array_key_exists( $count_key, $orders_by_gateway_currency ) || array_key_exists( $total_key, $orders_by_gateway_currency ) ) {
+				$orders_by_gateway_currency[ $count_key ] = $orders_by_gateway_currency[ $count_key ] + $orders_details->counts;
+				$orders_by_gateway_currency[ $total_key ] = $orders_by_gateway_currency[ $total_key ] + $orders_details->totals;
+			} else {
+				$orders_by_gateway_currency[ $count_key ] = $orders_details->counts;
+				$orders_by_gateway_currency[ $total_key ] = $orders_details->totals;
+			}
 		}
 
-		if ( $processing_first !== $first_time ) {
-			$order_data['processing_first'] = gmdate( 'Y-m-d H:i:s', $processing_first );
+		return $orders_by_gateway_currency;
+	}
+
+	/**
+	 * Get orders origin details.
+	 *
+	 * @return array
+	 */
+	private static function get_orders_origins() {
+		global $wpdb;
+
+		if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			$op_table_name = OrdersTableDataStore::get_operational_data_table_name();
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$orders_origin = $wpdb->get_results(
+				"
+				SELECT IFNULL(created_via, '') as origin, COUNT( order_id ) as count
+				FROM $op_table_name
+				GROUP BY origin;
+				"
+			);
+			// phpcs:enable
+		} else {
+			$orders_origin = $wpdb->get_results(
+				"
+				SELECT
+					IFNULL(meta_value, '') as origin, COUNT( DISTINCT ( orders.id ) ) as count
+				FROM
+					$wpdb->posts orders
+				LEFT JOIN
+					$wpdb->postmeta order_meta ON order_meta.post_id = orders.id
+				WHERE
+					meta_key = '_created_via'
+				GROUP BY
+					origin;
+			"
+			);
 		}
 
-		if ( $last ) {
-			$order_data['last'] = gmdate( 'Y-m-d H:i:s', $last );
+		// The associative array that is created as the result of array_reduce is passed to extract_group_key()
+		// This function has the logic that will remove specific identifiers that may sometimes be part of an origin.
+		// For example, two origins like 'Import #123' and 'Import ** #78' would both have a group_key 'Import **'.
+		$orders_and_origins = self::extract_group_key(
+			// Convert into an associative array with the origin as key.
+			array_reduce(
+				$orders_origin,
+				function ( $result, $item ) {
+					$key = $item->origin;
+
+					$result[ $key ] = $item;
+					return $result;
+				},
+				array()
+			),
+			'origin'
+		);
+
+		$orders_by_origin = array();
+
+		// Aggregate using group_key.
+		foreach ( $orders_and_origins as $origin ) {
+			$key = strtolower( $origin->group_key ?? '' );
+
+			if ( array_key_exists( $key, $orders_by_origin ) ) {
+				$orders_by_origin[ $key ] = $orders_by_origin[ $key ] + (int) $origin->count;
+			} else {
+				$orders_by_origin[ $key ] = (int) $origin->count;
+			}
 		}
 
-		if ( $processing_last ) {
-			$order_data['processing_last']  = gmdate( 'Y-m-d H:i:s', $processing_last );
-		}
-
-		foreach ( $order_data as $key => $value ) {
-			$order_data[ $key ] = (string) $value;
-		}
-
-		return $order_data;
+		return array( 'created_via' => $orders_by_origin );
 	}
 
 	/**
@@ -519,6 +1097,36 @@ class WC_Tracker {
 	}
 
 	/**
+	 * Get the number of product brands.
+	 *
+	 * @return int
+	 */
+	private static function get_brands_counts() {
+		if ( ! taxonomy_exists( 'product_brand' ) ) {
+			return 0;
+		}
+		return wp_count_terms( 'product_brand' );
+	}
+
+	/**
+	 * Get migrator CLI statistics.
+	 *
+	 * @return array
+	 */
+	private static function get_migrator_data() {
+		if ( ! class_exists( MigratorTracker::class ) ) {
+			return array();
+		}
+
+		try {
+			$tracker = wc_get_container()->get( MigratorTracker::class );
+			return $tracker->get_data();
+		} catch ( \Throwable $e ) {
+			return array();
+		}
+	}
+
+	/**
 	 * Get a list of all active payment gateways.
 	 *
 	 * @return array
@@ -537,6 +1145,7 @@ class WC_Tracker {
 
 		return $active_gateways;
 	}
+
 
 	/**
 	 * Get a list of all active shipping methods.
@@ -559,17 +1168,36 @@ class WC_Tracker {
 	}
 
 	/**
+	 * Get an array of slugs for WC features that are enabled on the site.
+	 *
+	 * @return string[]
+	 */
+	private static function get_enabled_features() {
+		$all_features     = FeaturesUtil::get_features( true, true );
+		$enabled_features = array_filter(
+			$all_features,
+			function ( $feature ) {
+				return $feature['is_enabled'];
+			}
+		);
+
+		return array_keys( $enabled_features );
+	}
+
+	/**
 	 * Get all options starting with woocommerce_ prefix.
 	 *
 	 * @return array
 	 */
 	private static function get_all_woocommerce_options_values() {
 		return array(
-			'version'                               => WC()->version,
+			'version'                               => WC()->stable_version(),
 			'currency'                              => get_woocommerce_currency(),
 			'base_location'                         => WC()->countries->get_base_country(),
+			'base_state'                            => WC()->countries->get_base_state(),
+			'base_postcode'                         => WC()->countries->get_base_postcode(),
 			'selling_locations'                     => WC()->countries->get_allowed_countries(),
-			'api_enabled'                           => get_option( 'woocommerce_api_enabled' ),
+			'api_enabled'                           => WC()->legacy_rest_api_is_available() ? 'yes' : 'no',
 			'weight_unit'                           => get_option( 'woocommerce_weight_unit' ),
 			'dimension_unit'                        => get_option( 'woocommerce_dimension_unit' ),
 			'download_method'                       => get_option( 'woocommerce_file_download_method' ),
@@ -577,11 +1205,19 @@ class WC_Tracker {
 			'calc_taxes'                            => get_option( 'woocommerce_calc_taxes' ),
 			'coupons_enabled'                       => get_option( 'woocommerce_enable_coupons' ),
 			'guest_checkout'                        => get_option( 'woocommerce_enable_guest_checkout' ),
+			'delayed_account_creation'              => get_option( 'woocommerce_enable_delayed_account_creation' ),
+			'checkout_login_reminder'               => get_option( 'woocommerce_enable_checkout_login_reminder' ),
 			'secure_checkout'                       => get_option( 'woocommerce_force_ssl_checkout' ),
 			'enable_signup_and_login_from_checkout' => get_option( 'woocommerce_enable_signup_and_login_from_checkout' ),
 			'enable_myaccount_registration'         => get_option( 'woocommerce_enable_myaccount_registration' ),
 			'registration_generate_username'        => get_option( 'woocommerce_registration_generate_username' ),
 			'registration_generate_password'        => get_option( 'woocommerce_registration_generate_password' ),
+			'hpos_sync_enabled'                     => get_option( 'woocommerce_custom_orders_table_data_sync_enabled' ),
+			'hpos_cot_authoritative'                => get_option( 'woocommerce_custom_orders_table_enabled' ),
+			'hpos_transactions_enabled'             => get_option( 'woocommerce_use_db_transactions_for_custom_orders_table_data_sync' ),
+			'hpos_transactions_level'               => get_option( 'woocommerce_db_transactions_isolation_level_for_custom_orders_table_data_sync' ),
+			'show_marketplace_suggestions'          => get_option( 'woocommerce_show_marketplace_suggestions' ),
+			'admin_install_timestamp'               => get_option( 'woocommerce_admin_install_timestamp' ),
 		);
 	}
 
@@ -590,9 +1226,14 @@ class WC_Tracker {
 	 *
 	 * @return array
 	 */
-	private static function get_all_template_overrides() {
-		$override_data  = array();
-		$template_paths = apply_filters( 'woocommerce_template_overrides_scan_paths', array( 'WooCommerce' => WC()->plugin_path() . '/templates/' ) );
+	public static function get_all_template_overrides() {
+		$override_data = array();
+		/**
+		 * Filter the paths to scan for template overrides.
+		 *
+		 * @since 2.3.0
+		 */
+		$template_paths = (array) apply_filters( 'woocommerce_template_overrides_scan_paths', array( 'WooCommerce' => WC()->plugin_path() . '/templates/' ) );
 		$scanned_files  = array();
 
 		require_once WC()->plugin_path() . '/includes/admin/class-wc-admin-status.php';
@@ -621,26 +1262,6 @@ class WC_Tracker {
 			}
 		}
 		return $override_data;
-	}
-
-	/**
-	 * When an admin user logs in, there user agent is tracked in user meta and collected here.
-	 *
-	 * @return array
-	 */
-	private static function get_admin_user_agents() {
-		return array_filter( (array) get_option( 'woocommerce_tracker_ua', array() ) );
-	}
-
-	/**
-	 * Get order totals
-	 *
-	 * @deprecated 5.1.0 Logic moved to get_orders.
-	 * @return array
-	 */
-	public static function get_order_totals() {
-		wc_deprecated_function( 'WC_Tracker::get_order_totals', '5.1.0', '' );
-		return self::get_orders();
 	}
 
 	/**
@@ -698,6 +1319,45 @@ class WC_Tracker {
 	}
 
 	/**
+	 * Get tracker data for a pickup location method.
+	 *
+	 * @return array Associative array of tracker data with keys:
+	 * - pickup_location_enabled
+	 * - pickup_locations_count
+	 */
+	public static function get_pickup_location_data() {
+		$pickup_location_enabled          = false;
+		$pickup_location_pickup_locations = get_option( 'pickup_location_pickup_locations', array() );
+		$pickup_locations_count           = is_countable( $pickup_location_pickup_locations ) ? count( $pickup_location_pickup_locations ) : 0;
+
+		// Get the available shipping methods.
+		$shipping_methods = WC()->shipping()->get_shipping_methods();
+
+		// Check if the desired shipping method is enabled.
+		if ( isset( $shipping_methods['pickup_location'] ) && $shipping_methods['pickup_location']->is_enabled() ) {
+			$pickup_location_enabled = true;
+		}
+
+		return array(
+			'pickup_location_enabled' => $pickup_location_enabled,
+			'pickup_locations_count'  => $pickup_locations_count,
+		);
+	}
+
+	/**
+	 * Get tracker data for additional fields on the checkout page.
+	 *
+	 * @return array Array of fields count and names.
+	 */
+	public static function get_checkout_additional_fields_data() {
+		$additional_fields_controller = Package::container()->get( CheckoutFields::class );
+
+		return array(
+			'fields_count' => count( $additional_fields_controller->get_additional_fields() ),
+			'fields_names' => array_keys( $additional_fields_controller->get_additional_fields() ),
+		);
+	}
+	/**
 	 * Get info about the cart & checkout pages.
 	 *
 	 * @return array
@@ -708,6 +1368,10 @@ class WC_Tracker {
 
 		$cart_block_data     = self::get_block_tracker_data( 'woocommerce/cart', 'cart' );
 		$checkout_block_data = self::get_block_tracker_data( 'woocommerce/checkout', 'checkout' );
+
+		$pickup_location_data = self::get_pickup_location_data();
+
+		$additional_fields_data = self::get_checkout_additional_fields_data();
 
 		return array(
 			'cart_page_contains_cart_shortcode'         => self::post_contains_text(
@@ -723,8 +1387,354 @@ class WC_Tracker {
 			'cart_block_attributes'                     => $cart_block_data['block_attributes'],
 			'checkout_page_contains_checkout_block'     => $checkout_block_data['page_contains_block'],
 			'checkout_block_attributes'                 => $checkout_block_data['block_attributes'],
+			'pickup_location'                           => $pickup_location_data,
+			'additional_fields'                         => $additional_fields_data,
+		);
+	}
+
+	/**
+	 * Get info about the Mini Cart Block.
+	 *
+	 * @return array
+	 */
+	private static function get_mini_cart_info() {
+		$mini_cart_block_name = 'woocommerce/mini-cart';
+		$mini_cart_block_data = wp_is_block_theme() ? BlocksUtil::get_block_from_template_part( $mini_cart_block_name, 'header' ) : BlocksUtil::get_blocks_from_widget_area( $mini_cart_block_name );
+		return array(
+			'mini_cart_used'             => empty( $mini_cart_block_data[0] ) ? 'No' : 'Yes',
+			'mini_cart_block_attributes' => empty( $mini_cart_block_data[0] ) ? array() : $mini_cart_block_data[0]['attrs'],
+		);
+	}
+
+	/**
+	 * Get info about WooCommerce Mobile App usage
+	 *
+	 * @return array
+	 */
+	public static function get_woocommerce_mobile_usage() {
+		return get_option( 'woocommerce_mobile_app_usage' );
+	}
+
+	/**
+	 * Map legacy order meta keys to a column name.
+	 *
+	 * @param string $meta_key Legacy meta key name.
+	 * @return string Mapped column name.
+	 */
+	private static function map_legacy_meta_key_name( $meta_key ) {
+		switch ( $meta_key ) {
+			case '_order_currency':
+				return 'currency';
+			case '_order_total':
+				return 'total_amount';
+			case '_payment_method':
+				return 'payment_method';
+			case '_payment_method_title':
+				return 'payment_method_title';
+			case '_recorded_sales':
+				return 'recorded_sales';
+			case '_order_version':
+				return 'woocommerce_version';
+			default:
+				return $meta_key;
+		}
+	}
+
+	/**
+	 * Fetch main order data.
+	 *
+	 * @param string  $sort_order Date sort order (ASC or DESC).
+	 * @param integer $limit      Limit the amount of orders to return (default 20).
+	 * @return array Found orders indexed by ID.
+	 */
+	private static function get_order_data( $sort_order = 'ASC', $limit = 20 ) {
+		global $wpdb;
+
+		if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			$order_table_name = OrdersTableDataStore::get_orders_table_name();
+
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$orders = $wpdb->get_results(
+				"SELECT
+					id,
+					row_number() OVER (ORDER BY date_created_gmt) AS order_rank,
+					date_created_gmt AS order_created_at,
+					date_updated_gmt AS order_updated_at,
+					currency,
+					total_amount,
+					payment_method,
+					payment_method_title
+				FROM $order_table_name
+				WHERE
+					type = 'shop_order'
+					AND status IN ('wc-completed', 'wc-refunded')
+				ORDER BY date_created_gmt $sort_order
+				LIMIT $limit;",
+				ARRAY_A
+			);
+			// phpcs:enable
+		} else {
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$orders = $wpdb->get_results(
+				"SELECT
+					ID AS id,
+					row_number() OVER (ORDER BY post_date_gmt) AS order_rank,
+					post_date_gmt AS order_created_at,
+					post_modified_gmt AS order_updated_at
+				FROM $wpdb->posts
+				WHERE
+					post_type = 'shop_order'
+					AND post_status IN ('wc-completed', 'wc-refunded')
+				ORDER BY post_date_gmt $sort_order
+				LIMIT $limit;",
+				ARRAY_A
+			);
+			// phpcs:enable
+		}
+
+		return array_column( $orders, null, 'id' );
+	}
+
+	/**
+	 * Fetch additional data for a specific set of orders.
+	 *
+	 * @param array $order_ids List of order ID's to fetch data for.
+	 * @return array Additional data, indexed by order ID.
+	 */
+	private static function get_additional_order_data( $order_ids ) {
+		global $wpdb;
+
+		if ( empty( $order_ids ) || ! is_array( $order_ids ) ) {
+			return array();
+		}
+		$joined_ids      = implode( ',', $order_ids );
+		$additional_data = array();
+
+		if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			$op_table_name = OrdersTableDataStore::get_operational_data_table_name();
+
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$data = $wpdb->get_results(
+				"SELECT order_id, woocommerce_version, recorded_sales
+				FROM $op_table_name
+				WHERE order_id IN ($joined_ids)",
+				ARRAY_A
+			);
+			// phpcs:enable
+
+			foreach ( $data as $row ) {
+				$additional_data[ $row['order_id'] ] = array(
+					'woocommerce_version' => $row['woocommerce_version'],
+					'recorded_sales'      => $row['recorded_sales'] ? 'yes' : 'no',
+				);
+			}
+		} else {
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$data = $wpdb->get_results(
+				"SELECT post_id AS order_id, meta_key, meta_value
+				FROM $wpdb->postmeta
+				WHERE
+					meta_key IN (
+						'_order_currency',
+						'_order_total',
+						'_payment_method',
+						'_payment_method_title',
+						'_recorded_sales',
+						'_order_version'
+					)
+					AND post_id IN ($joined_ids)
+				",
+				ARRAY_A
+			);
+			// phpcs:enable
+
+			foreach ( $data as $row ) {
+				$meta_key = self::map_legacy_meta_key_name( $row['meta_key'] );
+				$additional_data[ $row['order_id'] ][ $meta_key ] = $row['meta_value'];
+			}
+		}
+
+		return $additional_data;
+	}
+
+	/**
+	 * Fetch refund data for a specific set of orders.
+	 *
+	 * @param array $order_ids List of order ID's to fetch data for.
+	 * @return array Refund data, indexed by order ID.
+	 */
+	private static function get_refund_order_data( $order_ids ) {
+		global $wpdb;
+
+		if ( empty( $order_ids ) || ! is_array( $order_ids ) ) {
+			return array();
+		}
+		$joined_ids  = implode( ',', $order_ids );
+		$refund_data = array();
+
+		if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			$order_table_name = OrdersTableDataStore::get_orders_table_name();
+
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$data = $wpdb->get_results(
+				"SELECT
+					parent_order_id AS order_id,
+					SUM(total_amount) AS refund_amount
+				FROM $order_table_name
+				WHERE
+					type = 'shop_order_refund'
+					AND status = 'wc-completed'
+					AND parent_order_id IN ($joined_ids)
+				GROUP BY parent_order_id",
+				ARRAY_A
+			);
+			// phpcs:enable
+		} else {
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$data = $wpdb->get_results(
+				"SELECT
+					refunds.post_parent AS order_id,
+					SUM(amount.meta_value) AS refund_amount
+				FROM $wpdb->posts AS refunds
+				LEFT JOIN $wpdb->postmeta AS amount ON amount.post_id = refunds.ID AND amount.meta_key = '_order_total'
+				WHERE
+					refunds.post_type = 'shop_order_refund'
+					AND refunds.post_status = 'wc-completed'
+					AND refunds.post_parent IN ($joined_ids)
+				GROUP BY refunds.post_parent",
+				ARRAY_A
+			);
+			// phpcs:enable
+		}
+
+		foreach ( $data as $row ) {
+			$refund_data[ $row['order_id'] ] = array(
+				'refund_amount' => $row['refund_amount'],
+			);
+		}
+
+		return $refund_data;
+	}
+
+	/**
+	 * Get a snapshot of the first 20 orders and the last 20 orders.
+	 *
+	 * @return array
+	 */
+	private static function get_order_snapshot() {
+		$first_20  = self::get_order_data( 'ASC', 20 );
+		$last_20   = self::get_order_data( 'DESC', 20 );
+		$order_ids = array_unique( array_merge( array_keys( $first_20 ), array_keys( $last_20 ) ) );
+
+		foreach ( self::get_additional_order_data( $order_ids ) as $order_id => $data ) {
+			if ( isset( $first_20[ $order_id ] ) ) {
+				$first_20[ $order_id ] = array_merge( $first_20[ $order_id ], $data );
+			}
+			if ( isset( $last_20[ $order_id ] ) ) {
+				$last_20[ $order_id ] = array_merge( $last_20[ $order_id ], $data );
+			}
+		}
+
+		foreach ( self::get_refund_order_data( $order_ids ) as $order_id => $data ) {
+			if ( isset( $first_20[ $order_id ] ) ) {
+				$first_20[ $order_id ] = array_merge( $first_20[ $order_id ], $data );
+			}
+			if ( isset( $last_20[ $order_id ] ) ) {
+				$last_20[ $order_id ] = array_merge( $last_20[ $order_id ], $data );
+			}
+		}
+
+		return array(
+			'first_20_orders' => $first_20,
+			'last_20_orders'  => $last_20,
+		);
+	}
+
+	/**
+	 * Get email improvements tracking data.
+	 *
+	 * @param array $template_overrides Template overrides.
+	 * @return array Email improvements tracking data.
+	 */
+	private static function get_email_improvements_info( $template_overrides ) {
+		$core_email_counts    = self::get_core_email_status_counts();
+		$core_email_overrides = self::get_core_email_overrides( $template_overrides );
+
+		return array(
+			'enabled'                        => get_option( 'woocommerce_feature_email_improvements_enabled', 'no' ),
+			'default_enabled'                => get_option( 'woocommerce_email_improvements_default_enabled', 'no' ),
+			'existing_store_enabled'         => get_option( 'woocommerce_email_improvements_existing_store_enabled', 'no' ),
+			'auto_sync_enabled'              => get_option( 'woocommerce_email_auto_sync_with_theme', 'no' ),
+			'first_enabled_at'               => get_option( 'woocommerce_email_improvements_first_enabled_at', null ),
+			'last_enabled_at'                => get_option( 'woocommerce_email_improvements_last_enabled_at', null ),
+			'enabled_count'                  => get_option( 'woocommerce_email_improvements_enabled_count', 0 ),
+			'first_disabled_at'              => get_option( 'woocommerce_email_improvements_first_disabled_at', null ),
+			'last_disabled_at'               => get_option( 'woocommerce_email_improvements_last_disabled_at', null ),
+			'disabled_count'                 => get_option( 'woocommerce_email_improvements_disabled_count', 0 ),
+			'core_email_enabled_count'       => $core_email_counts['enabled'],
+			'core_email_disabled_count'      => $core_email_counts['disabled'],
+			'core_email_overrides_count'     => $core_email_overrides['count'],
+			'core_email_overrides_templates' => array_keys( $core_email_overrides['templates'] ),
+		);
+	}
+
+	/**
+	 * Get store email usage.
+	 *
+	 * @return array Email usage.
+	 */
+	private static function get_store_emails() {
+		$enabled_emails                          = EmailImprovements::get_enabled_emails();
+		$disabled_emails                         = EmailImprovements::get_disabled_emails();
+		$enabled_or_manual_emails_with_cc_or_bcc = EmailImprovements::get_enabled_or_manual_emails_with_cc_or_bcc();
+
+		return array(
+			'enabled_emails'                          => $enabled_emails,
+			'enabled_emails_count'                    => count( $enabled_emails ),
+			'disabled_emails'                         => $disabled_emails,
+			'disabled_emails_count'                   => count( $disabled_emails ),
+			'enabled_or_manual_emails_with_cc'        => $enabled_or_manual_emails_with_cc_or_bcc['ccs'],
+			'enabled_or_manual_emails_with_cc_count'  => count( $enabled_or_manual_emails_with_cc_or_bcc['ccs'] ),
+			'enabled_or_manual_emails_with_bcc'       => $enabled_or_manual_emails_with_cc_or_bcc['bccs'],
+			'enabled_or_manual_emails_with_bcc_count' => count( $enabled_or_manual_emails_with_cc_or_bcc['bccs'] ),
+		);
+	}
+
+	/**
+	 * Get counts of enabled and disabled core emails.
+	 *
+	 * @return array Array with counts of enabled and disabled emails.
+	 */
+	private static function get_core_email_status_counts() {
+		$core_emails = EmailImprovements::get_core_emails();
+		$enabled     = 0;
+		$disabled    = 0;
+
+		foreach ( $core_emails as $email ) {
+			if ( $email->is_enabled() ) {
+				++$enabled;
+			} else {
+				++$disabled;
+			}
+		}
+
+		return array(
+			'enabled'  => $enabled,
+			'disabled' => $disabled,
+		);
+	}
+
+	/**
+	 * Check if any core emails are being overridden by a template override.
+	 *
+	 * @param array $template_overrides Template overrides.
+	 * @return array Array with count of core email overrides and the templates that are overridden.
+	 */
+	public static function get_core_email_overrides( $template_overrides ): array {
+		$email_template_overrides = EmailImprovements::get_core_email_overrides( $template_overrides );
+		return array(
+			'count'     => count( $email_template_overrides ),
+			'templates' => $email_template_overrides,
 		);
 	}
 }
-
-WC_Tracker::init();

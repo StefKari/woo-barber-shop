@@ -118,6 +118,7 @@ class ProductFiltering
      */
     public function checkProductSuitability($product, $cartItem = array())
     {
+
         if ($this->type === 'any' && $this->method === 'in_list') {
             return true;
         }
@@ -132,26 +133,37 @@ class ProductFiltering
 
         $func = array($this, "compareProductWith" . ucfirst($this->type));
 
-        if (is_callable($func)) {
-            return call_user_func($func, $product, $cartItem);
-        } elseif (in_array($this->type, array_keys(Helpers::getCustomProductTaxonomies()))) {
-            return $this->compareProductWithCustom_taxonomy($product, $cartItem);
-        }
+        static $cached_results = array();
+        $func_name = "compareProductWith" . ucfirst($this->type);
+        $key = md5($func_name . $product->get_id() . json_encode($cartItem) . json_encode($this->values). $this->method);
+        if(isset($cached_results[$key]))
+            return $cached_results[$key];
 
-        return false;
+        if (is_callable($func)) {
+            $result = call_user_func($func, $product, $cartItem);
+        } elseif (in_array($this->type, array_keys(Helpers::getCustomProductTaxonomies(true)))) {
+            $result = $this->compareProductWithCustom_taxonomy($product, $cartItem);
+        } else
+            $result = false;
+
+        //truncate if too many values in cache
+        if( count($cached_results) >1000)
+            $cached_results = array_slice($cached_results,count($cached_results)- 900);
+        $cached_results[$key] = $result;
+
+        return $result;
     }
 
     protected function compareProductWithProducts($product, $cartItem)
     {
         $result         = false;
         $product_parent = $this->getMainProduct($product);
+        $values = is_array($this->values) ? $this->values : [];
 
         if ('in_list' === $this->method) {
-            $result = (in_array($product->get_id(), $this->values) or in_array($product_parent->get_id(),
-                    $this->values));
+            $result = (in_array($product->get_id(), $values) || in_array($product_parent->get_id(), $values));
         } elseif ('not_in_list' === $this->method) {
-            $result = ! (in_array($product->get_id(), $this->values) or in_array($product_parent->get_id(),
-                    $this->values));
+            $result = !(in_array($product->get_id(), $values) || in_array($product_parent->get_id(), $values));
         } elseif ('any' === $this->method) {
             $result = true;
         }
@@ -350,30 +362,30 @@ class ProductFiltering
             $operationValuesCustomAttrs[$attributeName][] = $term_obj->name;
         }
 
-        $isProductHasAttrsId = true;
+        $isProductHasAttrsId = false;
         foreach ($operationValuesTax as $attributeName => $tmpAttrIds) {
             if (
                 (
-                    ! isset($attrIds[$attributeName])
-                    || ! count(array_intersect($tmpAttrIds, $attrIds[$attributeName]))
+                    isset($attrIds[$attributeName])
+                    && count(array_intersect($tmpAttrIds, $attrIds[$attributeName]))
                 )
-                && (
-                    ! isset($attrIds[wc_attribute_taxonomy_name($attributeName)])
-                    || ! count(array_intersect($tmpAttrIds, $attrIds[wc_attribute_taxonomy_name($attributeName)]))
+                || (
+                    isset($attrIds[wc_attribute_taxonomy_name($attributeName)])
+                    && count(array_intersect($tmpAttrIds, $attrIds[wc_attribute_taxonomy_name($attributeName)]))
                 )
             ) {
-                $isProductHasAttrsId = false;
+                $isProductHasAttrsId = true;
                 break;
             }
         }
 
-        $isProductHasAttrsCustom = true;
+        $isProductHasAttrsCustom = false;
         foreach ($operationValuesCustomAttrs as $attributeName => $tmp_attr_names) {
             if (
-                ! isset($attrCustom[$attributeName])
-                || ! count(array_intersect($tmp_attr_names, $attrCustom[$attributeName]))
+                isset($attrCustom[$attributeName])
+                && count(array_intersect($tmp_attr_names, $attrCustom[$attributeName]))
             ) {
-                $isProductHasAttrsCustom = false;
+                $isProductHasAttrsCustom = true;
                 break;
             }
         }
@@ -468,8 +480,8 @@ class ProductFiltering
         $inList = false;
         foreach ($this->values as $customAttr) {
             $pieces        = explode(":", $customAttr);
-            $attributeName = strtolower(trim($pieces[0]));
-            $option        = strtolower(trim($pieces[1]));
+            $attributeName = strtolower(trim(array_shift($pieces)));
+            $option        = strtolower(implode(":",$pieces));
 
             if (isset($attrsCustom[$attributeName])) {
                 if (in_array($option, $attrsCustom[$attributeName], true)) {
@@ -563,6 +575,10 @@ class ProductFiltering
             }
 
             $meta               = array_merge_recursive($this->getProductPostMeta($parentProduct), $meta);
+            if ($product instanceof \WC_Product_Variation) {
+                $variationMeta = $this->getProductPostMeta($product);
+                $meta = array_merge($meta, $variationMeta);
+            }
             $customFields       = $this->prepareMeta($meta);
             $isProductHasFields = count(array_intersect($customFields, $values)) > 0;
         }

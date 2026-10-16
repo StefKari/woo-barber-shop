@@ -2,9 +2,12 @@
 
 namespace WPML\ST\TranslationFile;
 
-use WP_Filesystem_Direct;
+use WP_Filesystem_Base;
 use WPML\Collect\Support\Collection;
+use WPML\StringTranslation\Infrastructure\Core\Command\SaveFileCommand;
 use WPML\ST\MO\File\makeDir;
+use WPML\ST\Storage\StoragePerLanguageInterface;
+use WPML\ST\Storage\WpTransientPerLanguage;
 use WPML_Language_Records;
 use WPML_ST_Translations_File_Dictionary;
 use function wpml_collect;
@@ -15,47 +18,56 @@ abstract class Manager {
 	use makeDir;
 
 	const SUB_DIRECTORY = 'wpml';
+	const INDEX_CACHE_ID = 'wpml_st_translation_file_index';
 
-	/** @var StringsRetrieve $strings */
 	protected $strings;
-	/** @var WPML_Language_Records $language_records */
 	protected $language_records;
-	/** @var Builder $builder */
 	protected $builder;
-	/** @var WPML_ST_Translations_File_Dictionary $file_dictionary */
 	protected $file_dictionary;
-	/** @var Domains $domains */
 	protected $domains;
+	protected $save_file_command;
+
+	private $index = [];
+	private $index_learned = [];
+	private $index_written = [];
+	private $index_storage;
+	private $index_persist_hooked = false;
 
 	public function __construct(
 		StringsRetrieve $strings,
 		Builder $builder,
-		WP_Filesystem_Direct $filesystem,
+		WP_Filesystem_Base $filesystem,
 		WPML_Language_Records $language_records,
-		Domains $domains
+		Domains $domains,
+		?SaveFileCommand $save_file_command = null,
+		?StoragePerLanguageInterface $index_storage = null
 	) {
-		$this->strings          = $strings;
-		$this->builder          = $builder;
-		$this->filesystem       = $filesystem;
-		$this->language_records = $language_records;
-		$this->domains          = $domains;
+		$this->strings           = $strings;
+		$this->builder           = $builder;
+		$this->filesystem        = $filesystem;
+		$this->language_records  = $language_records;
+		$this->domains           = $domains;
+		$this->save_file_command = $save_file_command ?: new SaveFileCommand( $filesystem );
+		$this->index_storage     = $index_storage;
 	}
 
-	/**
-	 * @param string $domain
-	 * @param string $locale
-	 */
 	public function remove( $domain, $locale ) {
 		$filepath = $this->getFilepath( $domain, $locale );
-		$this->filesystem->delete( $filepath );
+		$this->with_file_lock(
+			$filepath,
+			function () use ( $filepath ) {
+				$this->filesystem->delete( $filepath );
 
-		// Delete the translation file .l10n.php along with the .mo file.
-		if ( 'mo' === $this->getFileExtension() ) {
-			$php_filepath = substr( $filepath, 0, -3 ) . '.l10n.php';
-			if ( $this->filesystem->is_file( $php_filepath ) && $this->filesystem->is_readable( $php_filepath ) ) {
-				$this->filesystem->delete( $php_filepath );
+				if ( 'mo' === $this->getFileExtension() ) {
+					$php_filepath = substr( $filepath, 0, -3 ) . '.l10n.php';
+					if ( $this->filesystem->is_file( $php_filepath ) && $this->filesystem->is_readable( $php_filepath ) ) {
+						$this->filesystem->delete( $php_filepath );
+					}
+				}
 			}
-		}
+		);
+
+		$this->recordFile( $locale, $filepath, false );
 
 		do_action(
 			'wpml_st_translation_file_removed',
@@ -67,10 +79,22 @@ abstract class Manager {
 
 	public function write( $domain, $locale, $content ) {
 		$filepath = $this->getFilepath( $domain, $locale );
-		$chmod    = defined( 'FS_CHMOD_FILE' ) ? FS_CHMOD_FILE : 0644;
-		if ( ! $this->filesystem->put_contents( $filepath, $content, $chmod ) ) {
+		$written  = $this->with_file_lock(
+			$filepath,
+			function () use ( $filepath, $content ) {
+				if ( ! $this->save_file_command->run( $filepath, $content ) ) {
+					return false;
+				}
+
+				return $this->write_php_file_from_mo( $filepath );
+			}
+		);
+
+		if ( ! $written ) {
 			return false;
 		}
+
+		$this->recordFile( $locale, $filepath, true );
 
 		do_action(
 			'wpml_st_translation_file_written',
@@ -79,37 +103,46 @@ abstract class Manager {
 			$locale
 		);
 
-		$this->write_php_file_from_mo( $filepath, $chmod );
-
 		return $filepath;
 	}
 
-	private function write_php_file_from_mo( $mo_filepath, $chmod ) {
+	private function with_file_lock( $filepath, callable $operation ) {
+		$temp_dir  = function_exists( 'get_temp_dir' ) ? \get_temp_dir() : sys_get_temp_dir();
+		$lock_path = rtrim( $temp_dir, '/\\' ) . DIRECTORY_SEPARATOR . 'wpml-st-' . md5( $filepath ) . '.lock';
+		$lock      = @fopen( $lock_path, 'c' );
+
+		if ( false === $lock ) {
+			return $operation();
+		}
+
+		flock( $lock, LOCK_EX );
+		try {
+			return $operation();
+		} finally {
+			flock( $lock, LOCK_UN );
+			fclose( $lock );
+		}
+	}
+
+	private function write_php_file_from_mo( $mo_filepath ) {
 		if (
-			! class_exists( '\WP_Translation_File' )
+			'mo' !== $this->getFileExtension()
+			|| ! class_exists( '\WP_Translation_File' )
 			|| ! method_exists( 'WP_Translation_File', 'transform' )
 		) {
-			return;
+			return true;
 		}
 
 		$content = \WP_Translation_File::transform( $mo_filepath, 'php' );
 		if ( ! $content ) {
-			return;
+			return false;
 		}
 
 		$filepath = str_replace( '.mo', '.l10n.php', $mo_filepath );
-		$this->filesystem->put_contents( $filepath, $content, $chmod );
+
+		return $this->save_file_command->run( $filepath, $content );
 	}
 
-	/**
-	 * Builds and saves the .MO file.
-	 * Returns false if file doesn't exist, file path otherwise.
-	 *
-	 * @param string $domain
-	 * @param string $locale
-	 *
-	 * @return false|string
-	 */
 	public function add( $domain, $locale ) {
 		if ( ! $this->maybeCreateSubdir() ) {
 			return false;
@@ -130,45 +163,89 @@ abstract class Manager {
 		return $this->write( $domain, $locale, $file_content );
 	}
 
-	/**
-	 * @param string $domain
-	 * @param string $locale
-	 *
-	 * @return string|null
-	 */
 	public function get( $domain, $locale ) {
 		$filepath = $this->getFilepath( $domain, $locale );
 
-		if ( $this->filesystem->is_file( $filepath ) && $this->filesystem->is_readable( $filepath ) ) {
+		if ( $this->fileExists( $locale, $filepath ) && $this->filesystem->is_readable( $filepath ) ) {
 			return $filepath;
 		}
 
 		return null;
 	}
 
-	/**
-	 * @param string $domain
-	 * @param string $locale
-	 *
-	 * @return string
-	 */
+	private function fileExists( $locale, $filepath ) {
+		$this->loadIndex( $locale );
+
+		if ( ! isset( $this->index[ $locale ][ $filepath ] ) ) {
+			$exists = (bool) $this->filesystem->is_file( $filepath );
+
+			$this->index[ $locale ][ $filepath ]         = $exists;
+			$this->index_learned[ $locale ][ $filepath ] = $exists;
+			$this->persistIndexOnShutdown();
+		}
+
+		return $this->index[ $locale ][ $filepath ];
+	}
+
+	private function recordFile( $locale, $filepath, $exists ) {
+		$this->loadIndex( $locale );
+
+		$this->index[ $locale ][ $filepath ]         = $exists;
+		$this->index_written[ $locale ][ $filepath ] = $exists;
+
+		$this->persistIndex();
+	}
+
+	private function loadIndex( $locale ) {
+		if ( ! isset( $this->index[ $locale ] ) ) {
+			$stored                 = $this->indexStorage()->get( $locale );
+			$this->index[ $locale ] = is_array( $stored ) ? $stored : [];
+		}
+	}
+
+	private function persistIndexOnShutdown() {
+		if ( $this->index_persist_hooked ) {
+			return;
+		}
+
+		$this->index_persist_hooked = true;
+		add_action( 'shutdown', [ $this, 'persistIndex' ], PHP_INT_MAX );
+	}
+
+	public function persistIndex() {
+		foreach ( array_keys( $this->index_learned + $this->index_written ) as $locale ) {
+			$stored = $this->indexStorage()->get( $locale );
+			$stored = is_array( $stored ) ? $stored : [];
+
+			$merged = $stored + ( $this->index_learned[ $locale ] ?? [] );
+			$merged = array_merge( $merged, $this->index_written[ $locale ] ?? [] );
+
+			$this->indexStorage()->save( $locale, $merged );
+			$this->index[ $locale ] = $merged;
+		}
+
+		$this->index_learned = [];
+		$this->index_written = [];
+	}
+
+	private function indexStorage() {
+		if ( ! $this->index_storage ) {
+			$this->index_storage = new WpTransientPerLanguage( self::INDEX_CACHE_ID . '_' . $this->getFileExtension() );
+		}
+
+		return $this->index_storage;
+	}
+
 	public function getFilepath( $domain, $locale ) {
-		// Some domains for JS translations can contain '/' - like 'woocommerce-wc-blocks-cart-blocks/order-summary-heading-frontend-chunk'.
-		// In such case file with custom JS translations will not be created in '/wp-content/languages/wpml' directory.
-		$domain = str_replace( '/', '-', $domain );
+		$domain = str_replace( [ '/', '\\' ], '-', $domain );
+		$locale = str_replace( [ '/', '\\' ], '-', $locale );
 		return $this->getSubdir() . '/' . strtolower( $domain ) . '-' . $locale . '.' . $this->getFileExtension();
 	}
 
-	/**
-	 * @param string $domain
-	 *
-	 * @return bool
-	 */
 	public function handles( $domain ) {
 		return $this->getDomains()->contains( $domain );
 	}
 
-	/** @return string */
 	public static function getSubdir() {
 		$subdir = WP_LANG_DIR . '/' . self::SUB_DIRECTORY;
 
@@ -180,18 +257,9 @@ abstract class Manager {
 		return $subdir;
 	}
 
-	/**
-	 * @return string
-	 */
 	abstract protected function getFileExtension();
 
-	/**
-	 * @return bool
-	 */
 	abstract public function isPartialFile();
 
-	/**
-	 * @return Collection
-	 */
 	abstract protected function getDomains();
 }

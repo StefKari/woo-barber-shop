@@ -1,26 +1,21 @@
 <?php
+/**
+ * Shows an order item meta
+ *
+ * @package WooCommerce\Admin
+ * @var object $item The item being displayed
+ * @var int $item_id The id of the item being displayed
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$hidden_order_itemmeta = apply_filters(
-	'woocommerce_hidden_order_itemmeta',
-	array(
-		'_qty',
-		'_tax_class',
-		'_product_id',
-		'_variation_id',
-		'_line_subtotal',
-		'_line_subtotal_tax',
-		'_line_total',
-		'_line_tax',
-		'method_id',
-		'cost',
-		'_reduced_stock',
-	)
-);
+$hidden_order_itemmeta = \Automattic\WooCommerce\Internal\Utilities\OrderItemMetaUtil::get_hidden_keys();
 ?><div class="view">
-	<?php if ( $meta_data = $item->get_formatted_meta_data( '' ) ) : ?>
+	<?php
+	$meta_data = $item->get_all_formatted_meta_data( '' );
+	if ( $meta_data ) :
+		?>
 		<table cellspacing="0" class="display_meta">
 			<?php
 			foreach ( $meta_data as $meta_id => $meta ) :
@@ -39,7 +34,7 @@ $hidden_order_itemmeta = apply_filters(
 <div class="edit" style="display: none;">
 	<table class="meta" cellspacing="0">
 		<tbody class="meta_items">
-			<?php if ( $meta_data = $item->get_formatted_meta_data( '' ) ) : ?>
+			<?php if ( $meta_data ) : ?>
 				<?php
 				foreach ( $meta_data as $meta_id => $meta ) :
 					if ( in_array( $meta->key, $hidden_order_itemmeta, true ) ) {

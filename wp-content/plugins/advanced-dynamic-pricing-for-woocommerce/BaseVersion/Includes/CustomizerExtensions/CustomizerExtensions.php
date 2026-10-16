@@ -81,6 +81,78 @@ class CustomizerExtensions
         );
     }
 
+    protected function initChooseProductDiscountFontOptions($panelId, $section)
+    {
+        $mapSectionAndCssSelector = array(
+            "$panelId-table_header" => '.adp-choose-product-discount-title',
+            "$panelId-table_discount_title" => '.adp-choose-card-header',
+            "$panelId-table_discount_description_title" => '.adp-choose-card-description',
+        );
+
+        if (empty($mapSectionAndCssSelector[$section])) {
+            return false;
+        }
+
+        $selector = $mapSectionAndCssSelector[$section];
+
+        $fontOptions = array(
+            "$panelId-emphasis_bold" => array(
+                'label'             => __('Bold text', 'advanced-dynamic-pricing-for-woocommerce'),
+                'default'           => false,
+                'sanitize_callback' => 'wc_bool_to_string',
+                'control_class'     => 'ADP\BaseVersion\Includes\CustomizerExtensions\Controls\FontEmphasisBold',
+                'priority'          => 10,
+
+                'apply_type'       => 'css',
+                'selector'         => $selector,
+                'css_option_name'  => 'font-weight',
+                'css_option_value' => 'bold',
+                'layout'           => 'any',
+            ),
+
+            "$panelId-emphasis_italic" => array(
+                'label'             => __('Italic text', 'advanced-dynamic-pricing-for-woocommerce'),
+                'default'           => false,
+                'sanitize_callback' => 'wc_bool_to_string',
+                'control_class'     => 'ADP\BaseVersion\Includes\CustomizerExtensions\Controls\FontEmphasisItalic',
+                'priority'          => 20,
+
+                'apply_type'       => 'css',
+                'selector'         => $selector,
+                'css_option_name'  => 'font-style',
+                'css_option_value' => 'italic',
+                'layout'           => 'any',
+            ),
+
+            "$panelId-text_align" => array(
+                'label'         => __('Text align', 'advanced-dynamic-pricing-for-woocommerce'),
+                'default'       => '',
+                'control_class' => 'ADP\BaseVersion\Includes\CustomizerExtensions\Controls\TextAlign',
+                'priority'      => 30,
+
+                'apply_type'      => 'css',
+                'selector'        => $selector,
+                'css_option_name' => 'justify-content',
+                'layout'          => 'any',
+            ),
+
+            "$panelId-text_color" => array(
+                'label'             => __('Text color', 'advanced-dynamic-pricing-for-woocommerce'),
+                'default'           => '#6d6d6d',
+                'sanitize_callback' => 'sanitize_hex_color',
+                'control_class'     => '\WP_Customize_Color_Control',
+                'priority'          => 40,
+
+                'apply_type'      => 'css',
+                'selector'        => $selector,
+                'css_option_name' => 'color',
+                'layout'          => 'any',
+            ),
+        );
+
+        return $fontOptions;
+    }
+
     protected function initFontOptions($panelId, $section)
     {
         $mapSectionAndCssSelector = array(
@@ -346,6 +418,29 @@ class CustomizerExtensions
                         'css_option_name' => 'background-color',
                         'layout'          => 'any',
                     ),
+                    'higlight_background_color'                  => array(
+                        'label'             => __('Background higlight color', 'advanced-dynamic-pricing-for-woocommerce'),
+                        'default'           => '#efefef',
+                        'sanitize_callback' => 'sanitize_hex_color',
+                        'control_class'     => 'WP_Customize_Color_Control',
+                        'priority'          => 90,
+
+                        'apply_type'      => 'css',
+                        'selector'        => '.wdp_bulk_table_content table thead td',
+                        'css_option_name' => 'higlight_background_color-color',
+                        'layout'          => 'any',
+                    ),
+                    "higlight_text_color"      => array(
+                        'label'             => __('Text higlight color', 'advanced-dynamic-pricing-for-woocommerce'),
+                        'default'           => '#6d6d6d',
+                        'sanitize_callback' => 'sanitize_hex_color',
+                        'control_class'     => '\WP_Customize_Color_Control',
+                        'priority'          => 10,
+                        'apply_type'      => 'css',
+                        'selector'        => '.wdp_bulk_table_content table thead td',
+                        'css_option_name' => 'higlight_text_color',
+                        'layout'          => 'any',
+                    ),
                 ),
             ),
             ProductBulkTableThemeProperties\StyleBodyMenu::KEY    => array(
@@ -398,6 +493,8 @@ class CustomizerExtensions
                         'control_type' => 'select',
                         'choices'      => array(
                             CategoryOptionsMenuAlias::LAYOUT_VERBOSE => __('Display ranges as rows',
+                                'advanced-dynamic-pricing-for-woocommerce'),
+                            CategoryOptionsMenuAlias::LAYOUT_SIMPLE  => __('Display ranges as headers',
                                 'advanced-dynamic-pricing-for-woocommerce'),
                         ),
                         'priority'     => 5,
@@ -598,21 +695,14 @@ class CustomizerExtensions
                 'title'    => __('Cart', 'advanced-dynamic-pricing-for-woocommerce'),
                 'priority' => 10,
                 'options'  => array(
-                    'enable'   => array(
-                        'label'             => __('Enable amount saved', 'advanced-dynamic-pricing-for-woocommerce'),
-                        'default'           => false,
-                        'priority'          => 5,
-                        'control_type'      => 'checkbox',
-                        'sanitize_callback' => 'wc_string_to_bool',
-
-                        'apply_type' => 'filter',
-                    ),
                     'position' => array(
                         'label'        => __('Position of amount saved', 'advanced-dynamic-pricing-for-woocommerce'),
                         'default'      => "woocommerce_cart_totals_before_order_total",
                         'control_type' => 'select',
                         'choices'      => apply_filters("wdp_" . "cart" . "_discount_message_places",
                             array(
+                                'woocommerce_cart_totals_before_shipping' => __('Before shipping',
+                                    'advanced-dynamic-pricing-for-woocommerce'),
                                 'woocommerce_cart_totals_before_order_total' => __('Before order total',
                                     'advanced-dynamic-pricing-for-woocommerce'),
                                 'woocommerce_cart_totals_after_order_total'  => __('After order total',
@@ -628,15 +718,6 @@ class CustomizerExtensions
                 'title'    => __('Mini Cart', 'advanced-dynamic-pricing-for-woocommerce'),
                 'priority' => 15,
                 'options'  => array(
-                    'enable'   => array(
-                        'label'             => __('Enable amount saved', 'advanced-dynamic-pricing-for-woocommerce'),
-                        'default'           => false,
-                        'priority'          => 5,
-                        'control_type'      => 'checkbox',
-                        'sanitize_callback' => 'wc_string_to_bool',
-
-                        'apply_type' => 'filter',
-                    ),
                     'position' => array(
                         'label'        => __('Position of amount saved', 'advanced-dynamic-pricing-for-woocommerce'),
                         'default'      => "woocommerce_mini_cart_contents",
@@ -658,24 +739,19 @@ class CustomizerExtensions
                 'title'    => __('Checkout', 'advanced-dynamic-pricing-for-woocommerce'),
                 'priority' => 20,
                 'options'  => array(
-                    'enable'   => array(
-                        'label'             => __('Enable amount saved', 'advanced-dynamic-pricing-for-woocommerce'),
-                        'default'           => false,
-                        'priority'          => 5,
-                        'control_type'      => 'checkbox',
-                        'sanitize_callback' => 'wc_string_to_bool',
-
-                        'apply_type' => 'filter',
-                    ),
                     'position' => array(
                         'label'        => __('Position of amount saved', 'advanced-dynamic-pricing-for-woocommerce'),
-                        'default'      => "woocommerce_review_order_after_cart_contents",
+                        'default'      => "woocommerce_review_order_before_order_total",
                         'control_type' => 'select',
                         'choices'      => apply_filters("wdp_" . "checkout" . "_discount_message_places",
                             array(
                                 'woocommerce_review_order_before_cart_contents' => __('Before cart contents',
                                     'advanced-dynamic-pricing-for-woocommerce'),
                                 'woocommerce_review_order_after_cart_contents'  => __('After cart contents',
+                                    'advanced-dynamic-pricing-for-woocommerce'),
+                                'woocommerce_review_order_before_shipping'    => __('Before shipping',
+                                    'advanced-dynamic-pricing-for-woocommerce'),
+                                'woocommerce_review_order_before_order_total'    => __('Before order total',
                                     'advanced-dynamic-pricing-for-woocommerce'),
                                 'woocommerce_review_order_after_order_total'    => __('After order total',
                                     'advanced-dynamic-pricing-for-woocommerce'),
@@ -737,7 +813,9 @@ class CustomizerExtensions
         }
         ?>
         <style type="text/css">
-            <?php echo join(' ', $css); ?>
+            <?php
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo join(' ', $css); ?>
         </style>
         <?php
 
@@ -750,7 +828,9 @@ class CustomizerExtensions
     {
         if ( ! did_action('wp_loaded')) {
             _doing_it_wrong(__FUNCTION__,
-                sprintf(__('%1$s should not be called before the %2$s action.', 'woocommerce'),
+                /* translators: Message about the load order*/
+                //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch, WordPress.WP.I18n.MissingTranslatorsComment
+                sprintf(esc_html__('%1$s should not be called before the %2$s action.', 'woocommerce'),
                     __NAMESPACE__ . '/Customizer::getThemeOptions', 'wp_loaded'), '2.2.2');
 
             return null;
@@ -852,6 +932,8 @@ class CustomizerExtensions
         $obj->discountedPriceColumnTitleForFixedPriceRule = $data['discount_column_title_for_fixed_price'];
         $obj->discountedPriceColumnTitle                  = $data['discounted_price_title'];
         $obj->headerBackgroundColor                       = $data['header_background_color'];
+        $obj->higlightBackgroundColor                     = $data['higlight_background_color'];
+        $obj->higlightTextColor                           = $data['higlight_text_color'];
 
         $obj                  = $themeProperties->productBulkTable->styleBody;
         $data                 = $props[$themeProperties->productBulkTable::KEY][$obj::KEY];
@@ -918,17 +1000,14 @@ class CustomizerExtensions
 
         $obj                            = $themeProperties->advertisingThemeProperties->cart;
         $data                           = $props[$themeProperties->advertisingThemeProperties::KEY][$obj::KEY];
-        $obj->isEnableAmountSaved       = $data['enable'];
         $obj->positionAmountSavedAction = $data['position'];
 
         $obj                            = $themeProperties->advertisingThemeProperties->miniCart;
         $data                           = $props[$themeProperties->advertisingThemeProperties::KEY][$obj::KEY];
-        $obj->isEnableAmountSaved       = $data['enable'];
         $obj->positionAmountSavedAction = $data['position'];
 
         $obj                            = $themeProperties->advertisingThemeProperties->checkout;
         $data                           = $props[$themeProperties->advertisingThemeProperties::KEY][$obj::KEY];
-        $obj->isEnableAmountSaved       = $data['enable'];
         $obj->positionAmountSavedAction = $data['position'];
 
         return $themeProperties;
@@ -1055,7 +1134,7 @@ class CustomizerExtensions
             'wc-plc-customizer-control-js',
             $baseVersionUrl . 'assets/js/customize-controls.js',
             ['jquery'],
-            WC_ADP_VERSION
+            WC_ADP_VERSION, true
         );
     }
 

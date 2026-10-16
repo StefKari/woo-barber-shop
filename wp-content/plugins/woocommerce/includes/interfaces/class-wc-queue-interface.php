@@ -6,10 +6,6 @@
  * @package WooCommerce\Interface
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
-
 /**
  * WC Queue Interface
  *
@@ -25,7 +21,7 @@ interface WC_Queue_Interface {
 	 * @param string $hook The hook to trigger.
 	 * @param array  $args Arguments to pass when the hook triggers.
 	 * @param string $group The group to assign this job to.
-	 * @return string The action ID
+	 * @return int The action ID
 	 */
 	public function add( $hook, $args = array(), $group = '' );
 
@@ -36,7 +32,7 @@ interface WC_Queue_Interface {
 	 * @param string $hook The hook to trigger.
 	 * @param array  $args Arguments to pass when the hook triggers.
 	 * @param string $group The group to assign this job to.
-	 * @return string The action ID
+	 * @return int The action ID
 	 */
 	public function schedule_single( $timestamp, $hook, $args = array(), $group = '' );
 
@@ -48,7 +44,7 @@ interface WC_Queue_Interface {
 	 * @param string $hook The hook to trigger.
 	 * @param array  $args Arguments to pass when the hook triggers.
 	 * @param string $group The group to assign this job to.
-	 * @return string The action ID
+	 * @return int The action ID
 	 */
 	public function schedule_recurring( $timestamp, $interval_in_seconds, $hook, $args = array(), $group = '' );
 
@@ -70,7 +66,7 @@ interface WC_Queue_Interface {
 	 * @param string $hook The hook to trigger.
 	 * @param array  $args Arguments to pass when the hook triggers.
 	 * @param string $group The group to assign this job to.
-	 * @return string The action ID
+	 * @return int The action ID
 	 */
 	public function schedule_cron( $timestamp, $cron_schedule, $hook, $args = array(), $group = '' );
 
@@ -95,7 +91,7 @@ interface WC_Queue_Interface {
 	public function cancel_all( $hook, $args = array(), $group = '' );
 
 	/**
-	 * Get the date and time for the next scheduled occurence of an action with a given hook
+	 * Get the date and time for the next scheduled occurrence of an action with a given hook
 	 * (an optionally that matches certain args and group), if any.
 	 *
 	 * @param string $hook The hook that the job will trigger.

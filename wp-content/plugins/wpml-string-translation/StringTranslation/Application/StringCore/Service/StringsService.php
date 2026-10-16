@@ -6,20 +6,27 @@ use WPML\StringTranslation\Application\StringGettext\Service\GettextStringsServi
 
 class StringsService {
 
-	/** @var GettextStringsService */
 	private $gettextStringsService;
 
 	public function __construct(
-		GettextStringsService  $gettextStringsService
+		GettextStringsService $gettextStringsService
 	) {
 		$this->gettextStringsService = $gettextStringsService;
 	}
 
-	public function maybeProcessQueue() {
+	public function maybeProcessQueue(): bool {
 		if ( ! $this->gettextStringsService->isAutoregisterEnabled() ) {
-			return;
+			return true;
 		}
 
-		$this->gettextStringsService->processSavedPendingStringsAndSettingsQueue();
+		return $this->gettextStringsService->processSavedPendingStringsAndSettingsQueue();
+	}
+
+	public function getLastQueueDeferralDiagnostic(): array {
+		return $this->gettextStringsService->getLastPendingQueueDeferralDiagnostic();
+	}
+
+	public function getLastQueueQuarantineDiagnostic(): array {
+		return $this->gettextStringsService->getLastPendingQueueQuarantineDiagnostic();
 	}
 }

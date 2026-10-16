@@ -4,8 +4,8 @@ Donate link: http://wp-dreams.com
 Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
-Tested up to: 6.7
-Stable tag: 4.12.6
+Tested up to: 7.1
+Stable tag: 4.14.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,10 +17,13 @@ The Best Ajax Live Search and Filter for WordPress. Live suggestions, Custom Pos
 
 [youtube https://www.youtube.com/watch?v=qI2_iKK4n_4]
 
+
 Very smooth animations with mobile device support and regular updates. Use **Ajax Search Lite** as a replacement for the default WordPress search with a better looking, more efficient search engine.
 Fine-tune the user experience by providing a powerful ajax search plugin to your visitors. Supports custom post types and custom fields and more. Boost your site search engine with this custom built live search engine.
 
 [Home](https://ajaxsearchpro.com) | [Features](https://ajaxsearchpro.com/features) | [Lite Docs](https://documentation.ajaxsearchlite.com/) | [Pro Docs](https://documentation.ajaxsearchpro.com/)
+
+[youtube https://www.youtube.com/watch?v=tMde9nDQOEU]
 
 Ajax Search Lite and Ajax Search Pro **does not require monthly subscriptions**, does not store your data on external servers – **everything is done locally**, on your server.
 
@@ -33,6 +36,8 @@ Ajax Search Lite and Ajax Search Pro **does not require monthly subscriptions**,
 * Automatic search replacement as well as **widget** and **shortcode** availalbe
 * Custom Filter boxes (checkbox filters) for categories and post types
 * **WPML**, **Polylang** and **QtranslateX** compatible
+* [Live Search Statistics](https://documentation.ajaxsearchpro.com/search-statistics)
+* [Super Fast Search Cache](https://documentation.ajaxsearchpro.com/performance-tuning/cache) - instant cached results
 * 10+ built in templates + options for color adjustments
 * Retina ready vectorized **SVG** and **CSS3** icons
 * Category and post exclusions
@@ -134,6 +139,83 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.5 = 
+* Fixed: A security issue, discovered by Jakub Herman, [CVE-2026-16258](https://wpscan.com/vulnerability/8487a2ce-cb4d-46b8-942e-334ac94cf115)
+
+= 4.14.4 =                                                                                                                 
+* Fixed: the search block now uses the current Gutenberg block API (v3), resolving the WordPress 6.9 deprecation notice and rendering correctly inside the new iframe block editor                                                                 
+* Fixed: optimized taxonomy filtering in search queries (EXISTS / NOT EXISTS instead of nested IN/NOT IN sub-queries) to prevent oversized queries being killed on some managed hosts                                                               
+* Fixed: a possible fatal error during plugin updates caused by a stale class reference held in memory                     
+* Fixed: prevented theme-bundled jscolor scripts from hijacking the admin colour pickers and resetting values after save   
+* Fixed: the admin menu icon is now a crisp vector (SVG) instead of a blurry raster image                                  
+* Changed: upgraded the back-end colour picker (spectrum) from v1.1.1 to v2.0.10, fixing a Safari white-swatch bug         
+
+= 4.14.3 =
+* Fix: Taxonomy term exclusions incorrectly excluded posts not assigned to the filtered category
+* Fix: Admin font (Inter) not loading due to misplaced @import; body font-family no longer overrides the WordPress admin globally
+
+= 4.14.2 =
+* New: Compatibility, Maintenance, and Help & Support settings submenus redesigned with a modern interface
+* New: Statistics page now includes area charts
+* New: Bulk delete option for recent search entries in the Statistics submenu
+* Improvement: Compatibility and Performance settings merged into a single submenu
+* Fix: Results pages are no longer limited to 50 items
+* Fix: A fatal error which was related to excluding hidden search/catalog WooCommerce products from the results
+
+= 4.14.1 =
+* Fix: Multiple potential TypeError exceptions on PHP 8+ (charcount, posts_per_page, search override filter, query args type coercion)
+* Fix: Undefined array key notice in search helper filters
+
+= 4.14.0 =
+* New: [Search statistics](https://documentation.ajaxsearchpro.com/search-statistics) — tracks searches, result counts, device types and cache hit rates via a new admin panel
+* New: [Search results cache](https://documentation.ajaxsearchpro.com/performance-tuning/cache) admin panel with real-time hit/miss chart and per-entry management (File, Database and Super File cache modes)
+* New: PSR-4 modern search layer (AbstractSearch, SearchQuery, SearchQueryArgs) as the foundation for future improvements
+* New: Detects when Ajax Search Pro is active and disables conflicting Lite features to prevent duplicate operation
+* Improvement: Shared code extracted into separate versioned repositories
+* Fix: Exact match prioritization for keyword suggestion auto-scroll (#94)
+* Fix: Possible undefined `$_sdata` variable warning (#95)
+
+= 4.13.5 =
+* Added an option to control visibility for WPML non-translated content (display on main language, on all or off)
+* Greatly improved the image parser by allowing additional data attributes and divs with these data attributes as a potential image source
+* Fixed a deprecation warning in PHP 8.0+
+* Fixed an issue for a potential conflict where a null value could be returned in the get_posts hook
+* Fixed and issue with the WooCommerce advanced field handler
+
+= 4.13.4 =
+* Added an option to limit the result title length (default 999 characters)
+* Fixed a potential security issue, see [CVE-2025-48086](https://www.cve.org/CVERecord?id=CVE-2025-48086)
+
+= 4.13.3 =
+* Fixed a type coercion issue which caused the auto complete to be enabled at all times even when it was turned off
+* Fixed an issue with WooCommerce related advanced fields, where it would cause an error when WooCommerce is not enabled but a product post type is used
+* Fixed an issue with WooCommerce catalog/hidden product exclusions, which caused an error in very rare cases due to an unspecified taxonomy argument
+
+= 4.13.2 =
+* Fixed a security issue, where password protected posts were returned by default, see [CVE-2025-7956](https://www.cve.org/CVERecord?id=CVE-2025-7956)
+* A full scale code review was performed, implementing additional sanitization and escaping of all output based on WP Codesniffs and recommendations
+* Removed a lot of unused code and some unused files
+* Fixed an issue with the results page live loader, where in some cases it was not working
+* Fixed an issue with the thumbnail generator where in some cases a notice was generated
+* Fixed an issue with the facet change trigger settings
+
+= 4.13.1 =
+* Quickfix on 4.13 advanced title and field types, where a bug caused an error 500 in some cases
+
+= 4.13 =
+* Added advanced [title and content fields](https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields) visual editor
+* WooCommerce Add To cart button is now available as content field
+* WooCommerce Price field is now available as content field
+* Keyword highligher scrolling now prioritizes exact matches
+* Fixed an issue where Polylang strings were not properly registered
+* Fixed an issue with Google Analytics integration
+* Fixed an issue with Divi Pop-ups, now the floating results window closes when pop-up is closed
+* Front-end scripts sources have been refactored to TypeScript for more stability
+
+= 4.12.7 =
+* Fixed an issue when the plugin textdomain was registered too early
+* Fixed an issue with sorting parameters on the results page
+
 = 4.12.6 =
 * Fixed an issue with the advanced title and content fields where HTML was not properly processed and validated
 * Plugin is now compatible with [Search Exclude](https://wordpress.org/plugins/search-exclude/) plugin exclusions

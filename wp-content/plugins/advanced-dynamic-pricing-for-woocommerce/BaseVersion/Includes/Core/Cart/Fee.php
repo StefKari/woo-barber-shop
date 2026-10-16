@@ -4,10 +4,11 @@ namespace ADP\BaseVersion\Includes\Core\Cart;
 
 use ADP\BaseVersion\Includes\Context;
 use Exception;
+use ADP\BaseVersion\Includes\Helpers\Serializable;
 
 defined('ABSPATH') or exit;
 
-class Fee
+class Fee extends Serializable
 {
     const TYPE_ITEM_OVERPRICE = 'item';
     const TYPE_PERCENTAGE = 'percentage';

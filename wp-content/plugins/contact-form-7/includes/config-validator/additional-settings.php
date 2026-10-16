@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 trait WPCF7_ConfigValidator_AdditionalSettings {
 
 	/**
@@ -16,7 +18,7 @@ trait WPCF7_ConfigValidator_AdditionalSettings {
 			if ( $deprecated_settings_used ) {
 				$this->add_error( $section, 'deprecated_settings',
 					array(
-						'message' => __( "Deprecated settings are used.", 'contact-form-7' ),
+						'message' => __( 'Deprecated settings are used.', 'contact-form-7' ),
 					)
 				);
 			} else {

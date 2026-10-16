@@ -5,11 +5,11 @@ defined('ABSPATH') or exit;
 
 <tr valign="top">
     <th scope="row" class="titledesc">
-        <?php _e('Combine multiple fixed discounts', 'advanced-dynamic-pricing-for-woocommerce') ?></th>
+        <?php esc_html_e('Combine multiple fixed discounts', 'advanced-dynamic-pricing-for-woocommerce') ?></th>
     <td class="forminp forminp-checkbox">
         <fieldset>
             <legend class="screen-reader-text">
-                <span><?php _e('Combine multiple fixed discounts', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
+                <span><?php esc_html_e('Combine multiple fixed discounts', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
             </legend>
             <label for="combine_discounts">
                 <input <?php checked($options['combine_discounts']) ?>

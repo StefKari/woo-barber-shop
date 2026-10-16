@@ -77,47 +77,47 @@ class Help implements AdminTabInterface
             array(
                 'title' => __('Getting started', 'advanced-dynamic-pricing-for-woocommerce'),
                 'description' => __('Plugins installation, activation and updates.', 'advanced-dynamic-pricing-for-woocommerce'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/getting-started/'),
+                'link' => esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/getting-started/getting-started/'),
             ),
             array(
                 'title' => __('Rules List', 'advanced-dynamic-pricing-for-woocommerce'),
                 'description' => __('Describe settings of the rules list, talking about rules priority.', 'advanced-dynamic-pricing-for-woocommerce'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/rules-list/'),
+                'link' => esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules/rules-list/'),
             ),
             array(
-                'title' => __('Need more settings? Go to PRO'),
-                'description' => __('Difference between free and pro.'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/go-to-pro/')
+                'title' => __('Need more settings? Go to PRO', 'advanced-dynamic-pricing-for-woocommerce'),
+                'description' => __('Difference between free and pro.', 'advanced-dynamic-pricing-for-woocommerce'),
+                'link' => esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/getting-started/go-to-pro/')
             ),
             array(
                 'title' => __('Creating a Rule', 'advanced-dynamic-pricing-for-woocommerce'),
                 'description' => __('How to add a new rule.', 'advanced-dynamic-pricing-for-woocommerce'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/creating-a-rule/')
+                'link' => esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules/creating-a-rule/')
             ),
             array(
                 'title' => __('Rules Settings', 'advanced-dynamic-pricing-for-woocommerce'),
-                'description' => __('More detailed about applying of the sections/rules, as a coupon.'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/rules-settings/')
+                'description' => __('More details about applying of the sections/rules as a coupon.', 'advanced-dynamic-pricing-for-woocommerce'),
+                'link' => esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules/rules-settings/')
             ),
             array(
                 'title' => __('Settings', 'advanced-dynamic-pricing-for-woocommerce'),
                 'description' => __('Detailed information about plugin settings', 'advanced-dynamic-pricing-for-woocommerce'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/settings/')
+                'link' => esc_url('https://docs.algolplus.com/category/settings-algol-pricing/')
             ),
             array(
                 'title' => __('Frequently Created Rules', 'advanced-dynamic-pricing-for-woocommerce'),
                 'description' => __('How to create a rule for the most popular discounts scenario.', 'advanced-dynamic-pricing-for-woocommerce'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/frequently-created-rules/')
+                'link' => esc_url('https://docs.algolplus.com/category/frequently-created-rules/')
             ),
             array(
                 'title' => __('Rules Sections', 'advanced-dynamic-pricing-for-woocommerce'),
                 'description' => __('Detailed information about every rule sections: from Product filter to Limits.', 'advanced-dynamic-pricing-for-woocommerce'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/rules-sections/')
+                'link' => esc_url('https://docs.algolplus.com/category/rules-sections/')
             ),
             array(
                 'title' => __('Tools', 'advanced-dynamic-pricing-for-woocommerce'),
-                'description' => __('More detailed about Tools tab.', 'advanced-dynamic-pricing-for-woocommerce'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/tools-free/')
+                'description' => __('More details about Tools tab.', 'advanced-dynamic-pricing-for-woocommerce'),
+                'link' => esc_url('https://docs.algolplus.com/category/tools/')
             ),
         );
     }

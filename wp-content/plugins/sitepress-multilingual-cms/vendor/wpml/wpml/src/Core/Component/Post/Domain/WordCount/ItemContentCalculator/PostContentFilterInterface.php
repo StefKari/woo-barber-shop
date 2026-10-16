@@ -1,14 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\Post\Domain\WordCount\ItemContentCalculator;
-
-interface PostContentFilterInterface {
-
-
-  public function getContent( string $content, int $postId ): string;
-
-
-  public function getAdditionalContent( string $initial, int $postId ): string;
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../../wpml/src/Core/Component/Post/Domain/WordCount/ItemContentCalculator/PostContentFilterInterface.php';

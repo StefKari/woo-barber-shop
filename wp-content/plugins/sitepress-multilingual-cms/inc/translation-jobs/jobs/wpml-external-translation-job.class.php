@@ -2,6 +2,8 @@
 
 require_once WPML_TM_PATH . '/inc/translation-jobs/jobs/wpml-translation-job.class.php';
 
+use WPML\Translation\TranslationElements\FieldCompression;
+
 class WPML_External_Translation_Job extends WPML_Element_Translation_Job {
 
 	function get_original_document() {
@@ -15,11 +17,6 @@ class WPML_External_Translation_Job extends WPML_Element_Translation_Job {
 		);
 	}
 
-	/**
-	 * @param bool|false $original
-	 *
-	 * @return string
-	 */
 	public function get_url( $original = false ) {
 
 		$url        = null;
@@ -33,9 +30,6 @@ class WPML_External_Translation_Job extends WPML_Element_Translation_Job {
 		return apply_filters( 'wpml_element_translation_job_url', $url, $original, $element_id, $this->get_original_document() );
 	}
 
-	/**
-	 * @return string
-	 */
 	public function get_title() {
 		$title = $this->get_title_from_db();
 
@@ -50,9 +44,6 @@ class WPML_External_Translation_Job extends WPML_Element_Translation_Job {
 			: $this->original_del_text;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function get_type_title() {
 		$original_element = $this->get_original_document();
 		return $original_element->kind;
@@ -83,7 +74,7 @@ class WPML_External_Translation_Job extends WPML_Element_Translation_Job {
 		);
 
 		return $title_and_name !== null ? ( $title_and_name->name ?
-			base64_decode( $title_and_name->name )
-			: base64_decode( $title_and_name->title ) ) : '';
+			FieldCompression::decompress( $title_and_name->name )
+			: FieldCompression::decompress( $title_and_name->title ) ) : '';
 	}
 }

@@ -12,7 +12,6 @@ use ADP\BaseVersion\Includes\Helpers\Helpers;
 use ADP\BaseVersion\Includes\ImportExport\KeyKeeperDB;
 use ADP\BaseVersion\Includes\SpecialStrategies\CompareStrategy;
 use ADP\Factory;
-use ADP\ProVersion\Includes\Database\Repository\CollectionRepository;
 
 class Rule
 {
@@ -124,11 +123,26 @@ class Rule
     public $autoAddProducts;
 
     /**
+     * @var array
+     */
+    public $conditionMessage;
+
+    /**
      * @var string
      */
     public $summary;
 
-    public function __construct(
+    /**
+     * @var string
+     */
+    public $hash;
+
+    /**
+     * @var string
+     */
+    public $date;
+
+    final public function __construct(
         $id,
         $deleted,
         $enabled,
@@ -149,7 +163,8 @@ class Rule
         $getProducts,
         $autoAddProducts,
         $additional,
-        $advertising
+        $advertising,
+        $conditionMessage
     ) {
         $this->id                     = intval($id);
         $this->deleted                = boolval($deleted);
@@ -172,8 +187,11 @@ class Rule
         $this->autoAddProducts        = $autoAddProducts;
         $this->additional             = $additional;
         $this->advertising            = $advertising;
+        $this->conditionMessage       = $conditionMessage;
 
         $this->summary                = "";
+        $this->hash                   = "";
+        $this->date                   = null;
     }
 
     /**
@@ -203,14 +221,16 @@ class Rule
             'auto_add_products'        => null,
             'additional'               => null,
             'advertising'              => null,
+            'condition_message'        => null,
         );
         $rule = array_merge($rule, $data);
 
-        $rule['advertising'] ? array_walk($rule['advertising'], function (&$value) {
-            $value = stripslashes($value);
-        }) : null;
+        $rule['filters']           = stripslashes_deep($rule['filters']);
+        $rule['advertising']       = stripslashes_deep($rule['advertising']);
+        $rule['cart_adjustments']  = stripslashes_deep($rule['cart_adjustments']);
+        $rule['condition_message'] = stripslashes_deep($rule['condition_message']);
 
-        return new self(
+        return new static(
             $rule['id'],
             $rule['deleted'],
             (new CompareStrategy())->isStringBool($rule['enabled']),
@@ -231,7 +251,8 @@ class Rule
             $rule['get_products'],
             $rule['auto_add_products'],
             $rule['additional'],
-            $rule['advertising']
+            $rule['advertising'],
+            $rule['condition_message']
         );
     }
 
@@ -259,6 +280,7 @@ class Rule
             'auto_add_products'        => $this->autoAddProducts,
             'additional'               => $this->additional,
             'advertising'              => $this->advertising,
+            'condition_message'        => $this->conditionMessage,
         );
 
         return $data;
@@ -266,6 +288,7 @@ class Rule
 
     public function getDataForDB()
     {
+
         $data = array(
             'deleted'                  => isset($this->deleted) ? intval($this->deleted) : null,
             'enabled'                  => isset($this->enabled) ? intval($this->enabled) : null,
@@ -281,27 +304,28 @@ class Rule
             'cart_adjustments'         => is_array($this->cartAdjustments) ? serialize(self::sanitizeArrayTextFields($this->cartAdjustments)) : null,
             'product_adjustments'      => is_array($this->productAdjustments) ? serialize(self::sanitizeArrayTextFields($this->productAdjustments)) : null,
             'sortable_blocks_priority' => is_array($this->sortableBlocksPriority) ? serialize(self::sanitizeArrayTextFields($this->sortableBlocksPriority)) : null,
-            'bulk_adjustments'         => is_array($this->bulkAdjustments) ? serialize(self::sanitizeArrayTextFields($this->bulkAdjustments)) : null,
+            'bulk_adjustments'         => is_array($this->bulkAdjustments) ? serialize($this->bulkAdjustments) : null,
             'role_discounts'           => is_array($this->roleDiscounts) ? serialize(self::sanitizeArrayTextFields($this->roleDiscounts)) : null,
             'get_products'             => is_array($this->getProducts) ? serialize(self::sanitizeArrayTextFields($this->getProducts)) : null,
             'auto_add_products'        => is_array($this->autoAddProducts) ? serialize(self::sanitizeArrayTextFields($this->autoAddProducts)) : null,
             'additional'               => is_array($this->additional) ? serialize($this->additional) : null,
             'advertising'              => is_array($this->advertising) ? serialize($this->advertising) : null,
+            'condition_message'        => is_array($this->conditionMessage) ? serialize($this->conditionMessage) : null,
         );
 
         $data = array_filter($data, function ($value) {
             return isset($value);
         });
 
+        $rule = $this->buildRule();
         $data['summary'] = $this->buildSummary();
+        $data['hash'] = $rule->getHash();
+        $data['date'] = gmdate('Y-m-d H:i:s', time());
 
         return $data;
     }
 
-    /**
-     * @return string
-     */
-    protected function buildSummary() {
+    protected function buildRule() {
         /** @var RuleStorage $ruleStorage */
         $ruleStorage = Factory::get("Database_RuleStorage");
 
@@ -315,7 +339,16 @@ class Rule
             return "";
         }
 
-        $rule = $rulesCol->getRules()[0];
+        $rule = $rulesCol->getFirst();
+
+        return $rule;
+    }
+
+    /**
+     * @return string
+     */
+    protected function buildSummary() {
+        $rule = $this->buildRule();
 
         $pieces = [];
         if ($rule->getTitle()) {
@@ -411,11 +444,6 @@ class Rule
                     array("ADP\\BaseVersion\\Includes\\Helpers\\Helpers", "getAttributeTitle"),
                     $filter->getValue()
                 );
-            } elseif ($filter::TYPE_COLLECTIONS === $filter->getType()) {
-                $collectionRepository = new CollectionRepository();
-                foreach ($collectionRepository::getProductCollectionsByIds($filter->getValue()) as $collection ) {
-                    $result[] = $collection->title;
-                }
             }
         }
 
@@ -455,7 +483,10 @@ class Rule
             cart_adjustments TEXT,
             get_products TEXT,
             auto_add_products TEXT,
+            condition_message TEXT,
             summary TEXT,
+            hash VARCHAR(32),
+            date datetime,
             PRIMARY KEY  (id),
             KEY deleted (deleted),
             KEY enabled (enabled)
@@ -468,16 +499,19 @@ class Rule
         global $wpdb;
 
         $tableName = $wpdb->prefix . self::TABLE_NAME;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $wpdb->query("DROP TABLE IF EXISTS $tableName");
     }
 
-    public static function sanitizeArrayTextFields($array)
+    public static function sanitizeArrayTextFields($array, $allowed_html_tags = array())
     {
         foreach ($array as &$value) {
             if (is_array($value)) {
                 $value = self::sanitizeArrayTextFields($value);
+            }elseif (is_null($value)) {
+                $value = '';
             } else {
-                $value = sanitize_text_field($value);
+                $value = wp_kses($value, $allowed_html_tags);
             }
         }
 

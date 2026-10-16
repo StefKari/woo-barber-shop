@@ -17,16 +17,10 @@ class TranslationJobImages implements \IWPML_Frontend_Action, \IWPML_Backend_Act
 			->then( spreadArgs( Lst::append( '/image-(\d+)-\d+$/' ) ) );
 	}
 
-	/**
-	 * @param string $title
-	 * @param array  $shortcode
-	 *
-	 * @return string
-	 */
 	public function filterStringTitle( $title, $shortcode ) {
 		$atts = shortcode_parse_atts( '[dummy ' . $shortcode['attributes'] . ']' );
 		if ( isset( $atts['src'] ) && Groups::isGroupLabel( $title ) ) {
-			$url = preg_replace( '/-\d+x\d+(\.\w+)$/', '$1', $atts['src'] );
+			$url = preg_replace( '/-\d+x\d+(\.\w+)$/', '$1', \WPML_Media_Attachment_By_URL::normalizeUrl( $atts['src'] ) );
 			$id  = attachment_url_to_postid( $url );
 			if ( $id ) {
 				$title = Groups::appendImageIdToGroupLabel( $title, $id );

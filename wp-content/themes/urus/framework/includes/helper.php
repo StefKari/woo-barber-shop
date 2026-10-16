@@ -178,7 +178,7 @@ if( !class_exists('Urus_Helper')){
             else
                 return $html;
         }
-        public static function resize_image( $attachment_id = null, $width, $height, $crop = false, $use_lazy = false ){
+        public static function resize_image( $attachment_id, $width, $height, $crop = false, $use_lazy = false ){
             $original    = false;
             $image_src   = array();
             $enable_lazy = self::get_option( 'theme_use_lazy_load',0 );
@@ -487,7 +487,7 @@ if( !class_exists('Urus_Helper')){
             $uri = apply_filters( 'urus_get_current_page_url', $uri );
             return $uri;
         }
-        public static function carousel_data_attributes($prefix = '', $atts){
+        public static function carousel_data_attributes($prefix, $atts){
             $responsive = array();
             $slick      = array();
 
@@ -589,7 +589,7 @@ if( !class_exists('Urus_Helper')){
             $results    .= 'data-responsive = ' . json_encode( array_values( $responsive ) ) . ' ';
             return wp_specialchars_decode( $results );
         }
-        public static function get_reponsive_settings( $prefix = '', $atts){
+        public static function get_reponsive_settings( $prefix, $atts){
             $slick      = array();
             if ( isset( $atts[$prefix . 'autoplay'] ) && $atts[$prefix . 'autoplay'] == 'true' ) {
                 $slick['autoplay'] = true;

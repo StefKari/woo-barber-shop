@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Urus';
-  font-display: auto;
+  font-display: swap;
   src:  url('../fonts/Urus.eot?5fdq4q');
   src:  url('../fonts/Urus.eot?5fdq4q#iefix') format('embedded-opentype'),
     url('../fonts/Urus.ttf?5fdq4q') format('truetype'),

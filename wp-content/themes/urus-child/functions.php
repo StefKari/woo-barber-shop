@@ -573,3 +573,24 @@ function display_delivery_sticker() {
         echo '</div>';
     }
 }
+
+// 4. MINI CART: since WooCommerce 7.8 the cart fragments script is no longer enqueued
+// automatically; the theme's header mini cart (cart drawer and counter) depends on it.
+// Only needed when the cart has items: an empty mini cart is already correct in the HTML, and
+// ajax add-to-cart updates it from its own response. Pages for visitors with items in the cart
+// are never served from the page cache (woocommerce_items_in_cart cookie), so this stays correct.
+add_action('wp_enqueue_scripts', 'barbers_enqueue_cart_fragments', 20);
+function barbers_enqueue_cart_fragments() {
+    if (function_exists('WC') && !is_cart() && !is_checkout() && !empty($_COOKIE['woocommerce_items_in_cart'])) {
+        wp_enqueue_script('wc-cart-fragments');
+    }
+}
+
+// WooCommerce admin fixes the product list price column at 10ch, so "1,900.00 RSD" overflows into
+// the categories column; widen it so the price (and sale price) fits on its own.
+add_action('admin_head-edit.php', 'barbers_admin_price_column');
+function barbers_admin_price_column() {
+    if (($GLOBALS['typenow'] ?? '') === 'product') {
+        echo '<style>table.wp-list-table .column-price{width:15ch}</style>';
+    }
+}

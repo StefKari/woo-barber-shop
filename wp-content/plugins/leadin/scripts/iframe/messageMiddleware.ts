@@ -15,6 +15,31 @@ import { startActivation, startInstall } from '../utils/contentEmbedInstaller';
 
 export type Message = { key: MessageType; payload?: any };
 
+/*
+ * We cannot postMessage error objects. We will run into serialization errors
+ * Extract some properties we care about from the errors and create an error object from these
+ */
+function createSafeErrorPayload(
+  error: any,
+  defaultMessage: string = 'An error occurred'
+) {
+  const safePayload: any = {
+    status: (error && error.status) || 500,
+    statusText: (error && error.statusText) || 'Error',
+    message:
+      (error && error.responseJSON && error.responseJSON.message) ||
+      (error && error.message) ||
+      defaultMessage,
+    code: error && error.responseJSON && error.responseJSON.code,
+  };
+
+  if (error && error.responseJSON && error.responseJSON.data) {
+    safePayload.data = error.responseJSON.data;
+  }
+
+  return safePayload;
+}
+
 const messageMapper: Map<MessageType, Function> = new Map([
   [
     PluginMessages.TrackConsent,
@@ -32,10 +57,11 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload: message.payload,
           });
         })
-        .catch(payload => {
+        .catch(error => {
+          // Extract only serializable properties from error. You cannot postMessage raw error obj with prototype methods
           embedder.postMessage({
             key: PluginMessages.InternalTrackingChangeError,
-            payload,
+            payload: createSafeErrorPayload(error),
           });
         });
     },
@@ -50,10 +76,10 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload,
           });
         })
-        .catch(payload => {
+        .catch(error => {
           embedder.postMessage({
             key: PluginMessages.InternalTrackingFetchError,
-            payload,
+            payload: createSafeErrorPayload(error, 'Fetch error occurred'),
           });
         });
     },
@@ -68,10 +94,10 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload,
           });
         })
-        .catch(payload => {
+        .catch(error => {
           embedder.postMessage({
             key: PluginMessages.BusinessUnitFetchError,
-            payload,
+            payload: createSafeErrorPayload(error, 'Business unit fetch error'),
           });
         });
     },
@@ -86,10 +112,13 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload,
           });
         })
-        .catch(payload => {
+        .catch(error => {
           embedder.postMessage({
             key: PluginMessages.BusinessUnitChangeError,
-            payload,
+            payload: createSafeErrorPayload(
+              error,
+              'Business unit change error'
+            ),
           });
         });
     },
@@ -104,10 +133,10 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload,
           });
         })
-        .catch(payload => {
+        .catch(error => {
           embedder.postMessage({
             key: PluginMessages.SkipReviewError,
-            payload,
+            payload: createSafeErrorPayload(error, 'Skip review error'),
           });
         });
     },
@@ -128,10 +157,13 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload: payload,
           });
         })
-        .catch(payload => {
+        .catch(error => {
           embedder.postMessage({
             key: PluginMessages.ContentEmbedInstallError,
-            payload,
+            payload: createSafeErrorPayload(
+              error,
+              'Content embed install error'
+            ),
           });
         });
     },
@@ -146,10 +178,13 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload: payload,
           });
         })
-        .catch(payload => {
+        .catch(error => {
           embedder.postMessage({
             key: PluginMessages.ContentEmbedActivationError,
-            payload,
+            payload: createSafeErrorPayload(
+              error,
+              'Content embed activation error'
+            ),
           });
         });
     },
@@ -164,10 +199,13 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload: {},
           });
         })
-        .catch(payload => {
+        .catch(error => {
           embedder.postMessage({
             key: PluginMessages.RefreshProxyMappingsError,
-            payload,
+            payload: createSafeErrorPayload(
+              error,
+              'Refresh proxy mappings error'
+            ),
           });
         });
     },
@@ -182,10 +220,13 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload,
           });
         })
-        .catch(payload => {
+        .catch(error => {
           embedder.postMessage({
             key: PluginMessages.ProxyMappingsEnabledError,
-            payload,
+            payload: createSafeErrorPayload(
+              error,
+              'Proxy mappings enabled fetch error'
+            ),
           });
         });
     },
@@ -200,10 +241,13 @@ const messageMapper: Map<MessageType, Function> = new Map([
             payload,
           });
         })
-        .catch(payload => {
+        .catch(error => {
           embedder.postMessage({
             key: PluginMessages.ProxyMappingsEnabledChangeError,
-            payload,
+            payload: createSafeErrorPayload(
+              error,
+              'Proxy mappings enabled change error'
+            ),
           });
         });
     },

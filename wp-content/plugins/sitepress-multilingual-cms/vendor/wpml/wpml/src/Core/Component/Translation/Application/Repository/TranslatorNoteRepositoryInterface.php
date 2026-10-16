@@ -1,16 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\Translation\Application\Repository;
-
-interface TranslatorNoteRepositoryInterface {
-
-
-  /**
-   * @param int $id
-   * @param string $note
-   * @return bool
-   */
-  public function save( int $id, string $note );
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/Translation/Application/Repository/TranslatorNoteRepositoryInterface.php';

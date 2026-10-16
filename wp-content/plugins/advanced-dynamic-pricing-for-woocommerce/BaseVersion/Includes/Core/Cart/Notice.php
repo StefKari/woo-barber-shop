@@ -1,8 +1,8 @@
 <?php
 
 namespace ADP\BaseVersion\Includes\Core\Cart;
-
-class Notice
+use ADP\BaseVersion\Includes\Helpers\Serializable;
+class Notice extends Serializable
 {
     /**
      * @var string

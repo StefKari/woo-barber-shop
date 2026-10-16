@@ -8,6 +8,8 @@
  * @version 2.6.0
  */
 
+use Automattic\WooCommerce\Internal\Utilities\Users;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -54,6 +56,7 @@ function wc_rest_allowed_image_mime_types() {
 			'bmp'          => 'image/bmp',
 			'tiff|tif'     => 'image/tiff',
 			'ico'          => 'image/x-icon',
+			'webp'         => 'image/webp',
 		)
 	);
 }
@@ -139,7 +142,7 @@ function wc_rest_set_uploaded_image_as_attachment( $upload, $id = 0 ) {
 		include_once ABSPATH . 'wp-admin/includes/image.php';
 	}
 
-	$image_meta = wp_read_image_metadata( $upload['file'] );
+	$image_meta = @wp_read_image_metadata( $upload['file'] );
 	if ( $image_meta ) {
 		if ( trim( $image_meta['title'] ) && ! is_numeric( sanitize_title( $image_meta['title'] ) ) ) {
 			$title = wc_clean( $image_meta['title'] );
@@ -159,7 +162,7 @@ function wc_rest_set_uploaded_image_as_attachment( $upload, $id = 0 ) {
 
 	$attachment_id = wp_insert_attachment( $attachment, $upload['file'], $id );
 	if ( ! is_wp_error( $attachment_id ) ) {
-		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $upload['file'] ) );
+		@wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $upload['file'] ) );
 	}
 
 	return $attachment_id;
@@ -169,7 +172,7 @@ function wc_rest_set_uploaded_image_as_attachment( $upload, $id = 0 ) {
  * Validate reports request arguments.
  *
  * @since 2.6.0
- * @param mixed           $value   Value to valdate.
+ * @param mixed           $value   Value to validate.
  * @param WP_REST_Request $request Request instance.
  * @param string          $param   Param to validate.
  * @return WP_Error|boolean
@@ -237,7 +240,10 @@ function wc_rest_check_post_permissions( $post_type, $context = 'read', $object_
 	} else {
 		$cap              = $contexts[ $context ];
 		$post_type_object = get_post_type_object( $post_type );
-		$permission       = current_user_can( $post_type_object->cap->$cap, $object_id );
+		$permission       = false;
+		if ( $post_type_object instanceof WP_Post_Type ) {
+			$permission = current_user_can( $post_type_object->cap->$cap, $object_id );
+		}
 	}
 
 	return apply_filters( 'woocommerce_rest_check_permissions', $permission, $context, $object_id, $post_type );
@@ -247,14 +253,16 @@ function wc_rest_check_post_permissions( $post_type, $context = 'read', $object_
  * Check permissions of users on REST API.
  *
  * @since 2.6.0
+ * @since 9.4.0 Became multisite aware. The function now considers whether the user belongs to the current site.
+ *
  * @param string $context   Request context.
- * @param int    $object_id Post ID.
+ * @param int    $object_id User ID.
  * @return bool
  */
 function wc_rest_check_user_permissions( $context = 'read', $object_id = 0 ) {
 	$contexts = array(
 		'read'   => 'list_users',
-		'create' => 'promote_users', // Check if current user can create users, shop managers are not allowed to create users.
+		'create' => 'create_customers',
 		'edit'   => 'edit_users',
 		'delete' => 'delete_users',
 		'batch'  => 'promote_users',
@@ -267,10 +275,10 @@ function wc_rest_check_user_permissions( $context = 'read', $object_id = 0 ) {
 		$shop_manager_editable_roles = apply_filters( 'woocommerce_shop_manager_editable_roles', array( 'customer' ) );
 
 		if ( isset( $user_data->roles ) ) {
-			$can_manage_users = array_intersect( $user_data->roles, array_unique( $shop_manager_editable_roles ) );
+			$can_manage_user = ! empty( $user_data->roles ) && empty( array_diff( $user_data->roles, array_unique( $shop_manager_editable_roles ) ) );
 
-			// Check if Shop Manager can edit customer or with the is same shop manager.
-			if ( 0 < count( $can_manage_users ) || intval( $object_id ) === intval( get_current_user_id() ) ) {
+			// Check if the Shop Manager can edit the user or is editing themselves.
+			if ( $can_manage_user || intval( $object_id ) === intval( get_current_user_id() ) ) {
 				$permission = current_user_can( $contexts[ $context ], $object_id );
 			}
 		}
@@ -278,6 +286,22 @@ function wc_rest_check_user_permissions( $context = 'read', $object_id = 0 ) {
 		$permission = current_user_can( $contexts[ $context ], $object_id );
 	}
 
+	// Possibly revoke $permission if the user is 'out of bounds' from a multisite-network perspective.
+	if ( $permission && ! Users::get_user_in_current_site( $object_id ) ) {
+		$permission = false;
+	}
+
+	/**
+	 * Provides an opportunity to override the permission check made before acting on an object in relation to
+	 * REST API requests.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param bool   $permission  If we have permission to act on this object.
+	 * @param string $context     Describes the operation being performed: 'read', 'edit', 'delete', etc.
+	 * @param int    $object_id   Object ID. This could be a user ID, order ID, post ID, etc.
+	 * @param string $object_type Type of object ('user', 'shop_order', etc) for which checks are being made.
+	 */
 	return apply_filters( 'woocommerce_rest_check_permissions', $permission, $context, $object_id, 'user' );
 }
 
@@ -342,15 +366,95 @@ function wc_rest_check_product_reviews_permissions( $context = 'read', $object_i
 	$permission = false;
 	$contexts   = array(
 		'read'   => 'moderate_comments',
-		'create' => 'moderate_comments',
-		'edit'   => 'moderate_comments',
-		'delete' => 'moderate_comments',
-		'batch'  => 'moderate_comments',
+		'create' => 'edit_products',
+		'edit'   => 'edit_products',
+		'delete' => 'edit_products',
+		'batch'  => 'edit_products',
 	);
 
+	if ( $object_id > 0 ) {
+		$object = get_comment( $object_id );
+
+		if ( ! is_a( $object, 'WP_Comment' ) || get_comment_type( $object ) !== 'review' ) {
+			return false;
+		}
+	}
+
 	if ( isset( $contexts[ $context ] ) ) {
-		$permission = current_user_can( $contexts[ $context ] );
+		$permission = current_user_can( $contexts[ $context ], $object_id );
 	}
 
 	return apply_filters( 'woocommerce_rest_check_permissions', $permission, $context, $object_id, 'product_review' );
+}
+
+/**
+ * Returns true if the current REST request is from the product editor.
+ *
+ * @since 8.9.0
+ * @return bool
+ */
+function wc_rest_is_from_product_editor() {
+	return isset( $_SERVER['HTTP_X_WC_FROM_PRODUCT_EDITOR'] ) && '1' === $_SERVER['HTTP_X_WC_FROM_PRODUCT_EDITOR'];
+}
+
+/**
+ * Check if a REST namespace should be loaded. Useful to maintain site performance even when lots of REST namespaces are registered.
+ *
+ * @since 9.2.0.
+ *
+ * @param string $ns The namespace to check.
+ * @param string $rest_route (Optional) The REST route being checked.
+ *
+ * @return bool True if the namespace should be loaded, false otherwise.
+ */
+function wc_rest_should_load_namespace( string $ns, string $rest_route = '' ): bool {
+	if ( '' === $rest_route ) {
+		$rest_route = $GLOBALS['wp']->query_vars['rest_route'] ?? '';
+	}
+
+	if ( '' === $rest_route ) {
+		return true;
+	}
+
+	$rest_route = trailingslashit( ltrim( $rest_route, '/' ) );
+	$ns         = trailingslashit( $ns );
+
+	/**
+	 * Known namespaces that we know are safe to not load if the request is not for them. Namespaces not in this namespace should always be loaded, because we don't know if they won't be making another internal REST request to an unloaded namespace.
+	 */
+	$known_namespaces = array(
+		'wc/v1',
+		'wc/v2',
+		'wc/v3',
+		'wc/v4',
+		'wc-telemetry',
+		'wc-admin',
+		'wc-analytics',
+		'wc/store',
+		'wc/private',
+	);
+
+	$known_namespace_request = false;
+	foreach ( $known_namespaces as $known_namespace ) {
+		if ( str_starts_with( $rest_route, $known_namespace ) ) {
+			$known_namespace_request = true;
+			break;
+		}
+	}
+
+	if ( ! $known_namespace_request ) {
+		return true;
+	}
+
+	/**
+	 * Filters whether a namespace should be loaded.
+	 *
+	 * @param bool   $should_load True if the namespace should be loaded, false otherwise.
+	 * @param string $ns          The namespace to check.
+	 * @param string $rest_route  The REST route being checked.
+	 * @param array  $known_namespaces Known namespaces that we know are safe to not load if the request is not for them.
+	 *
+	 * @since 9.4
+	 */
+	return apply_filters( 'wc_rest_should_load_namespace', str_starts_with( $rest_route, $ns ), $ns, $rest_route, $known_namespaces );
 }

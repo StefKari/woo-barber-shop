@@ -6,6 +6,7 @@ namespace ADP\BaseVersion\Includes\Enums;
  * @method static self PRODUCT()
  * @method static self CATEGORY()
  * @method static self CLONE_ADJUSTED()
+ * @method static self CLONE_ADJUSTED_FIRST()
  */
 class GiftChoiceTypeEnum extends BaseEnum
 {
@@ -15,6 +16,7 @@ class GiftChoiceTypeEnum extends BaseEnum
     const CATEGORY = 'product_category';
 
     const CLONE_ADJUSTED = 'clone';
+    const CLONE_ADJUSTED_FIRST = 'clone_first';
 
     /**
      * @param self $variable

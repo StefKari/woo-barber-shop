@@ -50,15 +50,25 @@ class WcCustomerConverter
         /** @var WcCustomerSessionFacade $wcSessionFacade */
         $wcSessionFacade = Factory::get("WC_WcCustomerSessionFacade", $wcSession);
         if ($wcSessionFacade->isValid()) {
-            if ($context->is($context::WC_CHECKOUT_PAGE)) {
+            if ($context->isUseSelectedPaymentMethodEverywhere()
+                || $context->is($context::WC_CHECKOUT_PAGE ) || $context->isWCStoreAPIRequest()
+            ) {
                 $customer->setSelectedPaymentMethod($wcSessionFacade->getChosenPaymentMethod());
             }
-            if ($context->is($context::WC_CHECKOUT_PAGE) || $context->is($context::WC_CART_PAGE) || ! $context->isCatalog()) {
+
+            if ($context->isUseSelectedShippingMethodsEverywhere()
+                || $context->is($context::WC_CHECKOUT_PAGE)
+                || $context->is($context::WC_CART_PAGE)
+                || ! $context->isCatalog()
+                || $context->isWCStoreAPIRequest()
+            ) {
                 $customer->setSelectedShippingMethods($wcSessionFacade->getChosenShippingMethods());
             }
 
             $customer->setRemovedFreeItemsList($wcSessionFacade->getRemovedFreeItemsList());
             $customer->setRemovedAutoAddItemsList($wcSessionFacade->getRemovedAutoAddItemsList());
+            $customer->setAddedRecommendedAutoAddItemsList($wcSessionFacade->getAddedRecommendedAutoAddItemsList());
+            $customer->setRemovedRecommendedPromotionsList($wcSessionFacade->getRemovedRecommendedPromotions());
         }
 
         $wpUser = new \WP_User($customer->getId());

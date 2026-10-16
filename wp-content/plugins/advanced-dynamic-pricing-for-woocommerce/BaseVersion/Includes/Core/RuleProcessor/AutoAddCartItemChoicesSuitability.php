@@ -52,6 +52,12 @@ class AutoAddCartItemChoicesSuitability
             )
         );
 
+        $products = array_values(
+            array_filter($products, function($product) {
+                return $product->is_purchasable();
+            })
+        );
+
         if ( count($products) === 0 ) {
             return array();
         }
@@ -65,6 +71,7 @@ class AutoAddCartItemChoicesSuitability
 
             if ($qtyToAdd === (float)0) {
                 unset($products[$currentIndex]);
+                $products = array_values($products);
                 continue;
             }
 

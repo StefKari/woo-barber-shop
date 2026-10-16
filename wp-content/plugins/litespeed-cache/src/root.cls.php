@@ -17,10 +17,21 @@ abstract class Root {
 	// Instance set
 	private static $_instances;
 
-	private static $_options         = array();
-	private static $_const_options   = array();
-	private static $_primary_options = array();
-	private static $_network_options = array();
+	private static $_options         = [];
+	private static $_const_options   = [];
+	private static $_primary_options = [];
+	private static $_network_options = [];
+
+	/**
+	 * Per-class summary cache backing get_summary()/save_summary()/reload_summary().
+	 *
+	 * Declared here (not in each child class) so every Root descendant that touches the summary API has a real property instead of a dynamic one, which PHP 8.2+ deprecates.
+	 * Untyped on purpose: the plugin still supports PHP 7.2, and typed properties require 7.4.
+	 *
+	 * @since 7.9
+	 * @var array<string,mixed>
+	 */
+	protected $_summary = [];
 
 	/**
 	 * Check if need to separate ccss for mobile
@@ -156,9 +167,9 @@ abstract class Root {
 		$filepath_prefix = $this->_build_filepath_prefix($type);
 		$static_path     = LITESPEED_STATIC_DIR . $filepath_prefix . '.litespeed_conf.dat';
 
-		$queue = array();
+		$queue = [];
 		if (file_exists($static_path)) {
-			$queue = \json_decode(file_get_contents($static_path), true) ?: array();
+			$queue = \json_decode(file_get_contents($static_path), true) ?: [];
 		}
 
 		return $queue;
@@ -304,11 +315,35 @@ abstract class Root {
 	}
 
 	/**
-	 * Check if is overwritten by code filter
+	 * Check if is overwritten by filter.
 	 *
-	 * @since  7.4
+	 * @since 7.7
 	 */
 	public function filter_overwritten( $id ) {
+		$val_setting = $this->conf($id, true);
+		// if setting not found
+		if( null === $val_setting ){
+			return null;
+		}
+
+		$filter_name = 'litespeed_conf_load_option_' . $id;
+		$val_filter  = apply_filters($filter_name, $val_setting );
+
+		if ($val_setting === $val_filter) {
+			// If the value is the same, return null.
+			return null;
+		}
+
+		return $val_filter;
+	}
+
+	/**
+	 * Check if is overwritten by code filter
+	 *
+	 * @deprecated 7.7 Use general filter_overwritten()
+	 * @since  7.4
+	 */
+	public function deprecated_filter_overwritten( $id ) {
 		$cls_admin_display = Admin_Display::$settings_filters;
 		// Check if filter name is set.
 		if(!isset($cls_admin_display[$id]) || !isset($cls_admin_display[$id]['filter']) || is_array($cls_admin_display[$id]['filter']) ){
@@ -402,6 +437,11 @@ abstract class Root {
 				}
 
 				$val = $this->primary_overwritten($id); // Network Use primary site settings
+				if ($val !== null) {
+					return $val;
+				}
+
+				$val = $this->filter_overwritten($id);
 				if ($val !== null) {
 					return $val;
 				}
@@ -506,22 +546,6 @@ abstract class Root {
 	}
 
 	/**
-	 * Dropin with prefix for WP's get_blog_option
-	 *
-	 * @since 3.0
-	 */
-	public static function get_blog_option( $blog_id, $id, $default_v = false ) {
-		$v = get_blog_option($blog_id, self::name($id), $default_v);
-
-		// Maybe decode array
-		if (is_array($default_v)) {
-			$v = self::_maybe_decode($v);
-		}
-
-		return $v;
-	}
-
-	/**
 	 * Dropin with prefix for WP's add_option
 	 *
 	 * @since 3.0
@@ -562,7 +586,7 @@ abstract class Root {
 	 *
 	 * @since  4.0
 	 */
-	private static function _maybe_decode( $v ) {
+	protected static function _maybe_decode( $v ) {
 		if (!is_array($v)) {
 			$v2 = \json_decode($v, true);
 			if ($v2 !== null) {
@@ -609,10 +633,10 @@ abstract class Root {
 	 * @access public
 	 */
 	public static function get_summary( $field = false ) {
-		$summary = self::get_option('_summary', array());
+		$summary = self::get_option('_summary', []);
 
 		if (!is_array($summary)) {
-			$summary = array();
+			$summary = [];
 		}
 
 		if (!$field) {
@@ -639,9 +663,9 @@ abstract class Root {
 
 		$existing_summary = static::cls()->_summary;
 		if ($overwrite || !is_array($existing_summary)) {
-			$existing_summary = array();
+			$existing_summary = [];
 		}
-		$new_summary = array_merge($existing_summary, $data ?: array());
+		$new_summary = array_merge($existing_summary, $data ?: []);
 		// self::debug2('Save after Reloaded summary', $new_summary);
 		static::cls()->_summary = $new_summary;
 

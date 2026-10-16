@@ -3,6 +3,7 @@ namespace Elementor;
 
 use Elementor\Core\Base\Document;
 use Elementor\Core\DynamicTags\Manager;
+use Elementor\TemplateLibrary\Source_Local;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -277,6 +278,37 @@ class DB {
 		return $data_container;
 	}
 
+	public static function iterate_elementor_documents( $callback, $batch_size = 100, $additional_post_types = [] ) {
+		$processed_posts = 0;
+
+		while ( true ) {
+			$args = wp_parse_args( [
+				'post_type' => array_merge( [ Source_Local::CPT, 'post', 'page' ], $additional_post_types ),
+				'post_status' => [ 'publish' ],
+				'posts_per_page' => $batch_size,
+				'meta_key' => Document::BUILT_WITH_ELEMENTOR_META_KEY,
+				'meta_value' => 'builder',
+				'offset' => $processed_posts,
+				'fields' => 'ids',
+			] );
+
+			$query = new \WP_Query( $args );
+
+			if ( empty( $query->posts ) ) {
+				break;
+			}
+
+			foreach ( $query->posts as $post_id ) {
+				$document = Plugin::$instance->documents->get( $post_id );
+				$elements_data = $document->get_json_meta( Document::ELEMENTOR_DATA_META_KEY );
+
+				$callback( $document, $elements_data );
+
+				++$processed_posts;
+			}
+		}
+	}
+
 	/**
 	 * Safely copy Elementor meta.
 	 *
@@ -318,10 +350,11 @@ class DB {
 	 * @since 1.1.0
 	 * @access public
 	 *
-	 * @param int $from_post_id Original post ID.
-	 * @param int $to_post_id   Target post ID.
+	 * @param int    $from_post_id Original post ID.
+	 * @param int    $to_post_id   Target post ID.
+	 * @param ?array $specific_meta_keys Optional. Specific meta keys to copy. Default is null, which copies all elementor meta keys.
 	 */
-	public function copy_elementor_meta( $from_post_id, $to_post_id ) {
+	public function copy_elementor_meta( $from_post_id, $to_post_id, $specific_meta_keys = null ) {
 		$from_post_meta = get_post_meta( $from_post_id );
 		$core_meta = [
 			'_wp_page_template',
@@ -329,6 +362,10 @@ class DB {
 		];
 
 		foreach ( $from_post_meta as $meta_key => $values ) {
+			if ( $specific_meta_keys && ! in_array( $meta_key, $specific_meta_keys, true ) ) {
+				continue;
+			}
+
 			// Copy only meta with the `_elementor` prefix.
 			if ( 0 === strpos( $meta_key, '_elementor' ) || in_array( $meta_key, $core_meta, true ) ) {
 				$value = $values[0];

@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the Plugins - SrbTransLatin &#8211; Serbian Latinisation - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-08-22 19:40:00+0000\n"
+"PO-Revision-Date: 2026-10-14 02:28:15+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.0-alpha.11\n"
+"X-Generator: GlotPress/4.1.0\n"
 "Language: sr_RS\n"
 "Project-Id-Version: Plugins - SrbTransLatin &#8211; Serbian Latinisation - Stable (latest release)\n"
 
@@ -46,42 +46,6 @@ msgstr "Активирај"
 msgid "Fix Ajax"
 msgstr "Поправи Ajax"
 
-#: lib/Widget/Selector_Widget.php:135
-msgid "List"
-msgstr "Листа"
-
-#: lib/Widget/Selector_Widget.php:133
-msgid "One Line"
-msgstr "Једнолинијски"
-
-#: lib/Widget/Selector_Widget.php:118
-msgid "Separator (oneline)"
-msgstr "Сепаратор"
-
-#: lib/Widget/Selector_Widget.php:98
-msgid "Selector style"
-msgstr "Стил селектора"
-
-#: lib/Widget/Selector_Widget.php:87
-msgid "Display Options"
-msgstr "Опције приказа"
-
-#: lib/Widget/Selector_Widget.php:79
-msgid "Link text - Latin"
-msgstr "Текст линка - Латиница"
-
-#: lib/Widget/Selector_Widget.php:67
-msgid "Link text - Cyrillic"
-msgstr "Текст линка - Ћирилица"
-
-#: lib/Widget/Selector_Widget.php:58
-msgid "Link Options"
-msgstr "Опције линкова"
-
-#: lib/Widget/Selector_Widget.php:50
-msgid "Title"
-msgstr "Наслов"
-
 #: lib/Widget/Selector_Widget.php:22
 msgid "Serbian Script selector"
 msgstr "Селектор српског писма"
@@ -94,25 +58,9 @@ msgstr "Latinica"
 msgid "Ћирилица"
 msgstr "Ћирилица"
 
-#: lib/Widget/Selector_Widget.php:29
-msgid "Script Selection"
-msgstr "Одабир писма"
-
-#: lib/Widget/Selector_Widget.php:24
-msgid "Serbian Script selection widget"
-msgstr "Одабир писма (Српска Латинизација)"
-
-#: config/settings.php:30
-msgid "Latinisation"
-msgstr "Латинизација"
-
-#: config/settings.php:123
-msgid "Inline"
-msgstr "У равни"
-
-#: lib/Widget/Selector_Widget.php:134
-msgid "Dropdown"
-msgstr "Падајући мени"
+#: config/settings.php:24
+msgid "Documentation"
+msgstr "Документација"
 
 #: config/settings.php:117
 msgid "Selector type"
@@ -122,25 +70,9 @@ msgstr "Тип селектора"
 msgid "Menu settings control extending and tweaking the script selector in theme menus"
 msgstr "Подешавања за изборнике контролишу проширивање и сређивање селектора писма у изборницима теме"
 
-#: config/settings.php:201
-msgid "Extend WPML Language Switcher"
-msgstr "Прошири WPML изборник језика"
-
 #: config/settings.php:57
 msgid "URL parameter used for script selector"
 msgstr "URL Параметар који користи селектор писма"
-
-#: config/settings.php:47
-msgid "Default script used for the website if user did not select a script"
-msgstr "Подразумевано писмо за веб сајт уколико корисник није одабрао писмо"
-
-#: lib/Utils/core.php:37
-msgid "Latin"
-msgstr "Латиница"
-
-#: lib/Utils/core.php:36
-msgid "Cyrillic"
-msgstr "Ћирилица"
 
 #: config/settings.php:41
 msgid "General settings control main functionality of the plugin"
@@ -149,10 +81,6 @@ msgstr "Општа подешавања контролишу главне фун
 #: config/settings.php:55
 msgid "URL Parameter"
 msgstr "URL Параметар"
-
-#: config/settings.php:46
-msgid "Default script"
-msgstr "Подразумевано писмо"
 
 #: config/settings.php:231
 msgid "Fix Search"
@@ -170,13 +98,9 @@ msgstr "Напредна подешавања контролишу опције 
 msgid "Script specific filenames"
 msgstr "Двојна имена датотека"
 
-#: config/settings.php:24
-msgid "Documentation"
-msgstr "Документација"
-
-#: config/settings.php:31
-msgid "Settings"
-msgstr "Подешавања"
+#: config/settings.php:30
+msgid "Latinisation"
+msgstr "Латинизација"
 
 #. Description of the plugin
 msgid "SrbTransLatin - Serbian Latinisation plugin allows you to have a website in both cyrillic and latin scripts"
@@ -185,3 +109,79 @@ msgstr "Додатак СрбТрансЛатин - Српска Латиниз�
 #. Plugin Name of the plugin
 msgid "SrbTransLatin - Serbian Latinisation"
 msgstr "Српска Латинизација"
+
+#: lib/Widget/Selector_Widget.php:50
+msgid "Title"
+msgstr "Наслов"
+
+#: lib/Utils/core.php:37
+msgid "Latin"
+msgstr "Латиница"
+
+#: lib/Utils/core.php:36
+msgid "Cyrillic"
+msgstr "Ћирилица"
+
+#: config/settings.php:46
+msgid "Default script"
+msgstr "Подразумевано писмо"
+
+#: config/settings.php:31
+msgid "Settings"
+msgstr "Подешавања"
+
+#: lib/Widget/Selector_Widget.php:29
+msgid "Script Selection"
+msgstr "Одабир писма"
+
+#: lib/Widget/Selector_Widget.php:24
+msgid "Serbian Script selection widget"
+msgstr "Одабир писма (Српска Латинизација)"
+
+#: lib/Widget/Selector_Widget.php:58
+msgid "Link Options"
+msgstr "Опције линкова"
+
+#: lib/Widget/Selector_Widget.php:79
+msgid "Link text - Latin"
+msgstr "Текст линка - Латиница"
+
+#: config/settings.php:47
+msgid "Default script used for the website if user did not select a script"
+msgstr "Подразумевано писмо за веб сајт уколико корисник није одабрао писмо"
+
+#: lib/Widget/Selector_Widget.php:67
+msgid "Link text - Cyrillic"
+msgstr "Текст линка - Ћирилица"
+
+#: lib/Widget/Selector_Widget.php:118
+msgid "Separator (oneline)"
+msgstr "Сепаратор"
+
+#: lib/Widget/Selector_Widget.php:98
+msgid "Selector style"
+msgstr "Стил селектора"
+
+#: lib/Widget/Selector_Widget.php:87
+msgid "Display Options"
+msgstr "Опције приказа"
+
+#: lib/Widget/Selector_Widget.php:135
+msgid "List"
+msgstr "Листа"
+
+#: lib/Widget/Selector_Widget.php:133
+msgid "One Line"
+msgstr "Једнолинијски"
+
+#: config/settings.php:123
+msgid "Inline"
+msgstr "У равни"
+
+#: config/settings.php:201
+msgid "Extend WPML Language Switcher"
+msgstr "Прошири WPML изборник језика"
+
+#: lib/Widget/Selector_Widget.php:134
+msgid "Dropdown"
+msgstr "Падајући избор"

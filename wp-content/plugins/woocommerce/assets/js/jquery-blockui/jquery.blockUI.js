@@ -25,7 +25,7 @@
 		var msie = /MSIE/.test(navigator.userAgent);
 		var ie6  = /MSIE 6.0/.test(navigator.userAgent) && ! /MSIE 8.0/.test(navigator.userAgent);
 		var mode = document.documentMode || 0;
-		var setExpr = $.isFunction( document.createElement('div').style.setExpression );
+		var setExpr = 'function' === typeof document.createElement('div').style.setExpression ? document.createElement('div').style.setExpression : false;
 
 		// global $ methods for blocking/unblocking the entire page
 		$.blockUI   = function(opts) { install(window, opts); };
@@ -56,7 +56,7 @@
 
 			callBlock();
 			var nonmousedOpacity = $m.css('opacity');
-			$m.mouseover(function() {
+			$m.on( 'mouseover', function() {
 				callBlock({
 					fadeIn: 0,
 					timeout: 30000
@@ -65,7 +65,7 @@
 				var displayBlock = $('.blockMsg');
 				displayBlock.stop(); // cancel fadeout if it has started
 				displayBlock.fadeTo(300, 1); // make it easier to read the message by removing transparency
-			}).mouseout(function() {
+			}).on( 'mouseout', function() {
 				$('.blockMsg').fadeOut(1000);
 			});
 			// End konapun additions
@@ -191,7 +191,7 @@
 			// enable if you want key and mouse events to be disabled for content that is blocked
 			bindEvents: true,
 
-			// be default blockUI will supress tab navigation from leaving blocking content
+			// by default blockUI will suppress tab navigation from leaving blocking content
 			// (if bindEvents is true)
 			constrainTabKey: true,
 
@@ -286,7 +286,7 @@
 			var z = opts.baseZ;
 
 			// blockUI uses 3 layers for blocking, for simplicity they are all used on every platform;
-			// layer1 is the iframe layer which is used to supress bleed through of underlying content
+			// layer1 is the iframe layer which is used to suppress bleed through of underlying content
 			// layer2 is the overlay layer which has opacity and a wait cursor (by default)
 			// layer3 is the message content that is displayed while blocking
 			var lyr1, lyr2, lyr3, s;
@@ -550,9 +550,9 @@
 			// bind anchors and inputs for mouse and key events
 			var events = 'mousedown mouseup keydown keypress keyup touchstart touchend touchmove';
 			if (b)
-				$(document).bind(events, opts, handler);
+				$(document).on(events, opts, handler);
 			else
-				$(document).unbind(events, handler);
+				$(document).off(events, handler);
 
 		// former impl...
 		//		var $e = $('a,:input');
@@ -591,7 +591,7 @@
 				return;
 			var e = pageBlockEls[back===true ? pageBlockEls.length-1 : 0];
 			if (e)
-				e.focus();
+				e.trigger( 'focus' );
 		}
 
 		function center(el, x, y) {

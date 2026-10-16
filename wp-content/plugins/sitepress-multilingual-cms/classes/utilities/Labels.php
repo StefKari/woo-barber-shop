@@ -13,20 +13,25 @@ class Labels implements \IWPML_Frontend_Action, \IWPML_Backend_Action {
 			->then( spreadArgs( [ $this, 'labelize' ] ) );
 	}
 
-	/**
-	 * @param string $string
-	 *
-	 * @return string
-	 */
 	public static function labelize( $string ) {
-		return ucwords(
-			strtr(
-				$string,
-				[
-					'-' => ' ',
-					'_' => ' ',
-				]
-			)
+		if ( ! is_string( $string ) ) {
+			return $string;
+		}
+
+		$string = strtr(
+			$string,
+			[
+				'-' => ' ',
+				'_' => ' ',
+			]
+		);
+
+		return preg_replace_callback(
+			'/\b\p{L}/u',
+			function ( $matches ) {
+				return mb_convert_case( $matches[0], MB_CASE_UPPER, 'UTF-8' );
+			},
+			$string
 		);
 	}
 }

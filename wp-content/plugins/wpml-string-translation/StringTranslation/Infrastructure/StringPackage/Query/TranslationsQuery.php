@@ -8,10 +8,8 @@ use WPML\StringTranslation\Application\Setting\Repository\SettingsRepositoryInte
 class TranslationsQuery {
 	use QueryBuilderTrait;
 
-	/** @var \wpdb */
 	private $wpdb;
 
-	/** @var SettingsRepository */
 	private $settingsRepository;
 
 	public function __construct(
@@ -29,6 +27,10 @@ class TranslationsQuery {
 
 		$sourceLanguage = $this->getSourceLanguageCode( $criteria );
 		$targetLanguageCodes = $this->getTargetLanguageCodes( $criteria );
+
+		if ( empty( $targetLanguageCodes ) ) {
+			return $this->addTranslationStatusString( $stringPackages, [], $criteria );
+		}
 
 		$stringPackageIds = [];
 		$stringPackageKindSlugs = [];
@@ -65,10 +67,9 @@ class TranslationsQuery {
       WHERE source_t.element_id IN (" . wpml_prepare_in( $stringPackageIds, '%d' ) . ")
         AND source_t.element_type IN (" . wpml_prepare_in( $stringPackageKindSlugs, '%s' ) . ")
         AND source_t.language_code = %s
-        AND target_t.source_language_code = %s
     ";
 
-		$sql = $this->wpdb->prepare( $sql, $sourceLanguage, $sourceLanguage );
+		$sql = $this->wpdb->prepare( $sql, $sourceLanguage );
 
 		$translationStatuses = $this->wpdb->get_results( $sql, ARRAY_A );
 

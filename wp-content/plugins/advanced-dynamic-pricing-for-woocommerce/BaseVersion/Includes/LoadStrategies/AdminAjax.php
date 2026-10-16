@@ -9,6 +9,7 @@ use ADP\BaseVersion\Includes\AdminExtensions\WcOrderPreviewExtensions;
 use ADP\BaseVersion\Includes\AdminExtensions\WcProductPageExtensions;
 use ADP\BaseVersion\Includes\Advertising\DiscountMessage;
 use ADP\BaseVersion\Includes\CartExtensions\CartExtensions;
+use ADP\BaseVersion\Includes\Compatibility\Wpml\WpmlCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\CustomizerExtensions\CustomizerExtensions;
 use ADP\BaseVersion\Includes\Database\Repository\OrderItemRepository;
@@ -49,6 +50,23 @@ class AdminAjax implements LoadStrategy
 
     public function start()
     {
+        if (!apply_filters("adp_wp_admin_ajax_strategy_load", true)) {
+            return false;
+        }
+        //phpcs:ignore WordPress.Security
+        $action = isset($_POST['action']) ? sanitize_text_field(wp_unslash($_POST['action'])) : '';
+
+        if ($action === 'woocommerce_do_ajax_product_export'
+            && ! apply_filters("adp_available_during_wc_product_export", false)
+        ) {
+            return;
+        }
+
+        $this->startPostConditions();
+    }
+
+    public function startPostConditions()
+    {
         /**
          * @var CustomizerExtensions $customizer
          * @var DiscountMessage $discountMessage
@@ -56,7 +74,7 @@ class AdminAjax implements LoadStrategy
          * @var Engine $engine
          */
         $customizer      = Factory::get("CustomizerExtensions_CustomizerExtensions");
-        $discountMessage = Factory::get("Advertising_DiscountMessage");
+        $discountMessage = Factory::get("Advertising_DiscountMessage", $customizer);
         $adminPage       = Factory::get('AdminExtensions_AdminPage');
         $engine          = Factory::get("Engine", WC()->cart);
 
@@ -67,10 +85,10 @@ class AdminAjax implements LoadStrategy
         $adminPage->registerAjax();
 
         /** @var $ajax Ajax */
-        $ajax = Factory::get('AdminExtensions_Ajax');
+        $ajax = Factory::get('AdminExtensions_Ajax', $customizer, $engine);
         $ajax->register();
 
-        $tableAjax = new RangeDiscountTableAjax($customizer);
+        $tableAjax = new RangeDiscountTableAjax($customizer, $engine);
         $tableAjax->register();
         if ( ! $this->context->is(Context::CUSTOMIZER)) {
             $discountMessage->setThemeOptions($customizer);
@@ -85,6 +103,7 @@ class AdminAjax implements LoadStrategy
         $cartExtensions = new CartExtensions();
         $cartExtensions->hideCouponWordInTotals();
         $cartExtensions->removeDeleteLinkForAdpCoupons();
+        $cartExtensions->readOnlyPriceForFreeProducts();
 
         $metaBoxes = new MetaBoxes();
         $metaBoxes->register();
@@ -108,12 +127,12 @@ class AdminAjax implements LoadStrategy
         $wcCartStatsCollector->setActionCheckoutOrderProcessed();
 
         if ($this->context->getOption('update_cross_sells')) {
-            add_filter('woocommerce_add_to_cart_fragments', array($this, 'woocommerceAddToCartFragments'), 10, 2);
+            add_filter('woocommerce_add_to_cart_fragments', array($this, 'woocommerceAddToCartFragments'), 10);
         }
 
         /** Register shortcodes for quick view */
-        ProductRangeDiscountTableShortcode::register($customizer);
-        CategoryRangeDiscountTableShortcode::register($customizer);
+        ProductRangeDiscountTableShortcode::register($customizer, $engine);
+        CategoryRangeDiscountTableShortcode::register($customizer, $engine);
 
         /** @see Functions::install() */
         Factory::callStaticMethod("Functions", 'install', $engine);
@@ -125,9 +144,14 @@ class AdminAjax implements LoadStrategy
 
     public function woocommerceAddToCartFragments($fragments)
     {
+
+        $wpmlCmp = new WpmlCmp();
+        if ($wpmlCmp->isActiveSitepress()) {
+            add_filter('wpml_is_ajax', '__return_true');
+        }
         /**
-         * Fix incorrect add-to-cart url in cross sells elements.
-         * We need to remove "wc-ajax" argument because WC_Product childs in method add_to_cart_url() use
+         * Fix incorrect add-to-cart url in cross-sells elements.
+         * We need to remove "wc-ajax" argument because WC_Product children in method add_to_cart_url() use
          * add_query_arg() with current url.
          * Do not forget to set current url to cart_url.
          */
@@ -139,6 +163,11 @@ class AdminAjax implements LoadStrategy
         if (empty($text)) {
             $text = '<div class="cross-sells"></div>';
         }
+
+        if ($wpmlCmp->isActiveSitepress()) {
+            remove_filter('wpml_is_ajax', '__return_true');
+        }
+
         $fragments['div.cross-sells'] = $text;
 
         return $fragments;

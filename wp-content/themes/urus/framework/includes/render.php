@@ -294,13 +294,16 @@ if( !class_exists('Urus_Render')){
                 )
             );
 
+            $live_search_url = class_exists( 'Urus_Pluggable_Search_Module' ) ? Urus_Pluggable_Search_Module::live_search_file_url() : '';
             wp_localize_script( 'urus', 'familab_ajax', array(
                     'ajaxurl'             => admin_url( 'admin-ajax.php' ),
                     'security'            => $security_nonce,
                     'search_empty'        => esc_html__('No Item matched your keyword','urus'),
                     'add_to_cart'  => esc_html__('Add to cart','urus'),
                     'item_added_to_cart'  => esc_html__('Item added to cart','urus'),
-                    '_urus_live_search_products' =>get_option('_urus_live_search_products',array()),
+                    // The index is loaded on demand from a static file; it is only inlined if that file is unavailable.
+                    '_urus_live_search_products' => $live_search_url ? array() : get_option('_urus_live_search_products',array()),
+                    '_urus_live_search_url' => $live_search_url,
                     '_urus_current_lang' => apply_filters( 'wpml_current_language', NULL ),
                 )
             );

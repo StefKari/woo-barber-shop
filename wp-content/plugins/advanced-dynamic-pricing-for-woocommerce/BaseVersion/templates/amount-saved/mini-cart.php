@@ -7,6 +7,8 @@ defined('ABSPATH') or exit;
  */
 ?>
 <li class="woocommerce-mini-cart__total total adp-discount" style="text-align: center">
-    <strong><?php echo $title; ?>:</strong>
-    <?php echo wc_price($amount_saved); ?>
+    <strong><?php echo esc_html($title); ?>:</strong>
+    <?php
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    echo wc_price($amount_saved); ?>
 </li>

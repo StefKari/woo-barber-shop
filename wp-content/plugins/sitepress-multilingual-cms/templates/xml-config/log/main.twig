@@ -4,11 +4,6 @@
 		<p>
 			{{ strings.message }}
 		</p>
-		<p>
-			{% for button_id,button in buttons %}
-				<a href="{{ button.url }}" class="button-{{ button.type|default('secondary') }}">{{ button.label }}</a>
-			{% endfor %}
-		</p>
 		<h3>{{ strings.details }}</h3>
 		<table class="widefat wpml-xml-config-log">
 			<thead>

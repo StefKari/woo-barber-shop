@@ -23,7 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 		<div class="edit" style="display: none;">
 			<input type="hidden" name="shipping_method_id[]" value="<?php echo esc_attr( $item_id ); ?>" />
-			<input type="text" class="shipping_method_name" placeholder="<?php esc_attr_e( 'Shipping name', 'woocommerce' ); ?>" name="shipping_method_title[<?php echo esc_attr( $item_id ); ?>]" value="<?php echo esc_attr( $item->get_name() ); ?>" />
+			<input
+				type="text"
+				class="shipping_method_name"
+				placeholder="<?php esc_attr_e( 'Shipping name', 'woocommerce' ); ?>"
+				name="shipping_method_title[<?php echo esc_attr( $item_id ); ?>]"
+				value="<?php echo esc_attr( $item->get_name() ); ?>"
+				data-default-shipping-title="<?php esc_attr_e( 'Shipping', 'woocommerce' ); ?>"
+			/>
 			<select class="shipping_method" name="shipping_method[<?php echo esc_attr( $item_id ); ?>]">
 				<optgroup label="<?php esc_attr_e( 'Shipping method', 'woocommerce' ); ?>">
 					<option value=""><?php esc_html_e( 'N/A', 'woocommerce' ); ?></option>
@@ -31,11 +38,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$found_method = false;
 
 					foreach ( $shipping_methods as $method ) {
-						$current_method = ( 0 === strpos( $item->get_method_id(), $method->id ) ) ? $item->get_method_id() : $method->id;
+						$is_active = $item->get_method_id() === $method->id;
 
-						echo '<option value="' . esc_attr( $current_method ) . '" ' . selected( $item->get_method_id() === $current_method, true, false ) . '>' . esc_html( $method->get_method_title() ) . '</option>';
+						echo '<option value="' . esc_attr( $method->id ) . '" ' . selected( true, $is_active, false ) . '>' . esc_html( $method->get_method_title() ) . '</option>';
 
-						if ( $item->get_method_id() === $current_method ) {
+						if ( $is_active ) {
 							$found_method = true;
 						}
 					}
@@ -57,6 +64,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php do_action( 'woocommerce_admin_order_item_values', null, $item, absint( $item_id ) ); ?>
 
+	<?php if ( $cogs_is_enabled ) : ?>
+	<td class="item_cost_of_goods"></td>
+	<?php endif; ?>
 	<td class="item_cost" width="1%">&nbsp;</td>
 	<td class="quantity" width="1%">&nbsp;</td>
 
@@ -64,9 +74,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="view">
 			<?php
 			echo wp_kses_post( wc_price( $item->get_total(), array( 'currency' => $order->get_currency() ) ) );
-			$refunded = $order->get_total_refunded_for_item( $item_id, 'shipping' );
+			$refunded = -1 * $order->get_total_refunded_for_item( $item_id, 'shipping' );
 			if ( $refunded ) {
-				echo wp_kses_post( '<small class="refunded">-' . wc_price( $refunded, array( 'currency' => $order->get_currency() ) ) . '</small>' );
+				echo wp_kses_post( '<small class="refunded">' . wc_price( $refunded, array( 'currency' => $order->get_currency() ) ) . '</small>' );
 			}
 			?>
 		</div>
@@ -89,9 +99,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="view">
 					<?php
 					echo wp_kses_post( ( '' !== $tax_item_total ) ? wc_price( $tax_item_total, array( 'currency' => $order->get_currency() ) ) : '&ndash;' );
-					$refunded = $order->get_tax_refunded_for_item( $item_id, $tax_item_id, 'shipping' );
+					$refunded = -1 * $order->get_tax_refunded_for_item( $item_id, $tax_item_id, 'shipping' );
 					if ( $refunded ) {
-						echo wp_kses_post( '<small class="refunded">-' . wc_price( $refunded, array( 'currency' => $order->get_currency() ) ) . '</small>' );
+						echo wp_kses_post( '<small class="refunded">' . wc_price( $refunded, array( 'currency' => $order->get_currency() ) ) . '</small>' );
 					}
 					?>
 				</div>
@@ -109,7 +119,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<td class="wc-order-edit-line-item">
 		<?php if ( $order->is_editable() ) : ?>
 			<div class="wc-order-edit-line-item-actions">
-				<a class="edit-order-item" href="#"></a><a class="delete-order-item" href="#"></a>
+				<a class="edit-order-item tips" href="#" data-tip="<?php esc_attr_e( 'Edit shipping', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Edit shipping', 'woocommerce' ); ?>"></a><a class="delete-order-item tips" href="#" data-tip="<?php esc_attr_e( 'Delete shipping', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Delete shipping', 'woocommerce' ); ?>"></a>
 			</div>
 		<?php endif; ?>
 	</td>

@@ -96,7 +96,8 @@ class Vc_Updating_Manager {
 			$obj->plugin = $this->plugin_slug;
 			$obj->url = '';
 			$obj->package = vc_license()->isActivated();
-			$obj->name = vc_updater()->title;
+			// Vc_Updater has no $title property (PHP 8 "undefined property" warning).
+			$obj->name = isset( vc_updater()->title ) ? vc_updater()->title : 'WPBakery Page Builder';
 			$transient->response[ $this->plugin_slug ] = $obj;
 		}
 

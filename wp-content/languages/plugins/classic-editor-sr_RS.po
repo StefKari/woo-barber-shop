@@ -2,104 +2,104 @@
 # This file is distributed under the same license as the Plugins - Classic Editor - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-09-01 20:25:19+0000\n"
+"PO-Revision-Date: 2026-10-08 04:25:44+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.1\n"
+"X-Generator: GlotPress/4.1.0\n"
 "Language: sr_RS\n"
 "Project-Id-Version: Plugins - Classic Editor - Stable (latest release)\n"
 
-#: classic-editor.php:503
+#: classic-editor.php:511
 msgctxt "Editor Name"
 msgid "Classic Editor"
 msgstr "Класични уређивач"
 
-#: classic-editor.php:429 classic-editor.php:507 classic-editor.php:907
+#: classic-editor.php:437 classic-editor.php:515 classic-editor.php:915
 msgctxt "Editor Name"
 msgid "Block editor"
-msgstr "Уређивач блокова"
+msgstr "Уређивач блока"
 
-#: classic-editor.php:425 classic-editor.php:907
+#: classic-editor.php:433 classic-editor.php:915
 msgctxt "Editor Name"
 msgid "Classic editor"
 msgstr "Класични уређивач"
 
-#: classic-editor.php:860
+#: classic-editor.php:868
 msgctxt "Editor Name"
 msgid "Edit (classic editor)"
 msgstr "Уреди (Класични уређивач)"
 
-#: classic-editor.php:853
+#: classic-editor.php:861
 msgctxt "Editor Name"
 msgid "Edit (block editor)"
 msgstr "Уреди (Уређивач блокова)"
 
-#: classic-editor.php:512
+#: classic-editor.php:520
 msgid "Change settings"
 msgstr "Измени подешавања"
 
-#: classic-editor.php:499
+#: classic-editor.php:507
 msgid "Default editor for all sites"
 msgstr "Подразумевани уређивач за све сајтове"
 
-#: classic-editor.php:495
+#: classic-editor.php:503
 msgid "Editor Settings"
 msgstr "Подешавања уређивача"
 
-#: classic-editor.php:479
+#: classic-editor.php:487
 msgid "Default Editor"
 msgstr "Подразумевани уређивач"
 
-#: classic-editor.php:894
+#: classic-editor.php:902
 msgctxt "Editor Name"
 msgid "block editor"
-msgstr "уређивач блокова"
+msgstr "уређивач блока"
 
-#: classic-editor.php:891
+#: classic-editor.php:899
 msgctxt "Editor Name"
 msgid "classic editor"
 msgstr "класични уређивач"
 
 #. translators: %s: post title
-#: classic-editor.php:855
+#: classic-editor.php:863
 msgid "Edit &#8220;%s&#8221; in the block editor"
 msgstr "Уреди &#0132;%s&#0147; у уређивачу блокова"
 
-#: classic-editor.php:690
+#: classic-editor.php:698
 msgid "Switch to block editor"
 msgstr "Пређи на уређивач блокова"
 
-#: classic-editor.php:719
+#: classic-editor.php:727
 msgid "Switch to classic editor"
 msgstr "Пређи на класични уређивач"
 
-#: classic-editor.php:516
+#: classic-editor.php:524
 msgid "By default the block editor is replaced with the classic editor and users cannot switch editors."
 msgstr "Подразумевано, уређивач блокова је замењен класичним уређивачем и корисници не могу да промене уређиваче."
 
-#: classic-editor.php:515
+#: classic-editor.php:523
 msgid "Allow site admins to change settings"
 msgstr "Дозволи управницима веб места да мењају подешавања"
 
-#: classic-editor.php:671
+#: classic-editor.php:679
 msgid "Editor"
 msgstr "Уређивач"
 
-#: classic-editor.php:453
+#: classic-editor.php:461
 msgid "No"
 msgstr "Не"
 
-#: classic-editor.php:449
+#: classic-editor.php:457
 msgid "Yes"
 msgstr "Да"
 
-#: classic-editor.php:376
+#: classic-editor.php:384
 msgid "Allow users to switch editors"
 msgstr "Дозволи корисницима да промене уређиваче"
 
-#: classic-editor.php:375
+#: classic-editor.php:383
 msgid "Default editor for all users"
 msgstr "Подразумевани уређивач за све кориснике"
 
@@ -129,10 +129,10 @@ msgid "Classic Editor"
 msgstr "Класични уређивач"
 
 #. translators: %s: post title
-#: classic-editor.php:862
+#: classic-editor.php:870
 msgid "Edit &#8220;%s&#8221; in the classic editor"
 msgstr "Уреди &#0132;%s&#0147; у класичном уређивачу"
 
-#: classic-editor.php:738
+#: classic-editor.php:746
 msgid "Settings"
-msgstr "Подешавања"
+msgstr "Podešavanja"

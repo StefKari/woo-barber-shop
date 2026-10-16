@@ -37,6 +37,11 @@ class ProductAttributesAll extends AbstractCondition implements ProductAll
         return true;
     }
 
+    public static function getIndex()
+    {
+        return 5;
+    }
+
     public static function getMeasures() {
         return array(
             ProductMeasure::MEASURE_QTY()->getValue() => __('Qty', 'advanced-dynamic-pricing-for-woocommerce'),

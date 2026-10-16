@@ -115,6 +115,7 @@ class FeeAmount extends AbstractCartAdjustment implements FeeCartAdj, CartAdjust
 
     public function translate()
     {
-        $this->feeName = __($this->feeName, 'advanced-dynamic-pricing-for-woocommerce');
+        //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+        $this->feeName = _x($this->feeName, "Fee name from rule", 'advanced-dynamic-pricing-for-woocommerce');
     }
 }

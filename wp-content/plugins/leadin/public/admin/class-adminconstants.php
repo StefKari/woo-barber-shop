@@ -165,7 +165,9 @@ class AdminConstants {
 			'redirectNonce'             => wp_create_nonce( Routing::REDIRECT_NONCE ),
 			'phpVersion'                => Versions::get_php_version(),
 			'pluginPath'                => constant( 'LEADIN_PATH' ),
-			'plugins'                   => get_plugins(),
+			// Returning and empty array to release a hotfix to a security issue ensuring no errors on the frontend
+			// 'plugins'                   => get_plugins(),
+			'plugins'                   => array(),
 			'portalId'                  => $portal_id,
 			'accountName'               => Portal_Options::get_account_name(),
 			'portalDomain'              => Portal_Options::get_portal_domain(),
@@ -184,9 +186,9 @@ class AdminConstants {
 
 		if ( false === $refresh_token ) {
 				$background_config['decryptError'] = OAuthCryptoError::DECRYPT_FAILED;
-		} else {
-				$background_config['refreshToken'] = $refresh_token;
 		}
+		// refreshToken is no longer included in leadinConfig — PHP exchanges it for
+		// a short-lived access token server-side via the /access-token REST endpoint
 
 		return $background_config;
 	}

@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\User_Interface\Scores;
 
@@ -74,9 +75,7 @@ abstract class Abstract_Scores_Route implements Route_Interface {
 	 *
 	 * @return void
 	 */
-	public function set_collectors(
-		Content_Types_Collector $content_types_collector
-	) {
+	public function set_collectors( Content_Types_Collector $content_types_collector ) {
 		$this->content_types_collector = $content_types_collector;
 	}
 
@@ -147,7 +146,7 @@ abstract class Abstract_Scores_Route implements Route_Interface {
 							'type'              => 'integer',
 							'default'           => null,
 							'sanitize_callback' => static function ( $param ) {
-								return \intval( $param );
+								return (int) $param;
 							},
 						],
 						'troubleshooting' => [
@@ -158,7 +157,7 @@ abstract class Abstract_Scores_Route implements Route_Interface {
 						],
 					],
 				],
-			]
+			],
 		);
 	}
 
@@ -181,13 +180,13 @@ abstract class Abstract_Scores_Route implements Route_Interface {
 				[
 					'error' => $exception->getMessage(),
 				],
-				$exception->getCode()
+				$exception->getCode(),
 			);
 		}
 
 		return new WP_REST_Response(
 			$results,
-			200
+			200,
 		);
 	}
 
@@ -240,7 +239,7 @@ abstract class Abstract_Scores_Route implements Route_Interface {
 	 * @param int|null      $term_id  The term ID to be validated.
 	 * @param Taxonomy|null $taxonomy The taxonomy.
 	 *
-	 * @return bool The validated term ID.
+	 * @return int|null The validated term ID.
 	 *
 	 * @throws Exception When the term id is invalidated.
 	 */

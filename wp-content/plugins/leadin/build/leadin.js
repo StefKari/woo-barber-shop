@@ -67,6 +67,7 @@ var isPropValid = /* #__PURE__ */(0,_emotion_memoize__WEBPACK_IMPORTED_MODULE_0_
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "disableInternalTracking": () => (/* binding */ disableInternalTracking),
+/* harmony export */   "fetchAccessToken": () => (/* binding */ fetchAccessToken),
 /* harmony export */   "fetchDisableInternalTracking": () => (/* binding */ fetchDisableInternalTracking),
 /* harmony export */   "fetchProxyMappingsEnabled": () => (/* binding */ fetchProxyMappingsEnabled),
 /* harmony export */   "getBusinessUnitId": () => (/* binding */ getBusinessUnitId),
@@ -161,6 +162,39 @@ function fetchProxyMappingsEnabled() {
 }
 function toggleProxyMappingsEnabled(value) {
   return makeRequest('put', '/wp-mappings-proxy-enabled', value);
+}
+var ACCESS_TOKEN_CACHE_KEY = 'leadin_access_token';
+var ACCESS_TOKEN_MIN_TTL_SECONDS = 300;
+var accessTokenRequest = null;
+function fetchAccessToken() {
+  try {
+    var cached = sessionStorage.getItem(ACCESS_TOKEN_CACHE_KEY);
+    if (cached) {
+      var _JSON$parse = JSON.parse(cached),
+        accessToken = _JSON$parse.accessToken,
+        expiresAt = _JSON$parse.expiresAt;
+      if (accessToken && expiresAt > Math.floor(Date.now() / 1000) + ACCESS_TOKEN_MIN_TTL_SECONDS) {
+        return Promise.resolve({
+          accessToken: accessToken,
+          expiresIn: expiresAt - Math.floor(Date.now() / 1000)
+        });
+      }
+    }
+  } catch (_) {}
+  if (!accessTokenRequest) {
+    accessTokenRequest = makeRequest('get', '/access-token').then(function (response) {
+      try {
+        sessionStorage.setItem(ACCESS_TOKEN_CACHE_KEY, JSON.stringify({
+          accessToken: response.accessToken,
+          expiresAt: Math.floor(Date.now() / 1000) + response.expiresIn
+        }));
+      } catch (_) {}
+      return response;
+    })["finally"](function () {
+      accessTokenRequest = null;
+    });
+  }
+  return accessTokenRequest;
 }
 
 /***/ }),
@@ -513,6 +547,7 @@ var ProxyMessages = {
   FetchForms: 'FETCH_FORMS',
   FetchForm: 'FETCH_FORM',
   CreateFormFromTemplate: 'CREATE_FORM_FROM_TEMPLATE',
+  GetTemplateAvailability: 'GET_TEMPLATE_AVAILABILITY',
   FetchAuth: 'FETCH_AUTH',
   FetchMeetingsAndUsers: 'FETCH_MEETINGS_AND_USERS',
   FetchContactsCreateSinceActivation: 'FETCH_CONTACTS_CREATED_SINCE_ACTIVATION',
@@ -550,6 +585,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+/*
+ * We cannot postMessage error objects. We will run into serialization errors
+ * Extract some properties we care about from the errors and create an error object from these
+ */
+function createSafeErrorPayload(error) {
+  var defaultMessage = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'An error occurred';
+  var safePayload = {
+    status: error && error.status || 500,
+    statusText: error && error.statusText || 'Error',
+    message: error && error.responseJSON && error.responseJSON.message || error && error.message || defaultMessage,
+    code: error && error.responseJSON && error.responseJSON.code
+  };
+  if (error && error.responseJSON && error.responseJSON.data) {
+    safePayload.data = error.responseJSON.data;
+  }
+  return safePayload;
+}
 var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.TrackConsent, function (message) {
   (0,_api_wordpressApiClient__WEBPACK_IMPORTED_MODULE_1__.trackConsent)(message.payload);
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.InternalTrackingChangeRequest, function (message, embedder) {
@@ -558,10 +610,11 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.InternalTrackingFetchResponse,
       payload: message.payload
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
+    // Extract only serializable properties from error. You cannot postMessage raw error obj with prototype methods
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.InternalTrackingChangeError,
-      payload: payload
+      payload: createSafeErrorPayload(error)
     });
   });
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.InternalTrackingFetchRequest, function (__message, embedder) {
@@ -571,10 +624,10 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.InternalTrackingFetchResponse,
       payload: payload
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.InternalTrackingFetchError,
-      payload: payload
+      payload: createSafeErrorPayload(error, 'Fetch error occurred')
     });
   });
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.BusinessUnitFetchRequest, function (__message, embedder) {
@@ -583,10 +636,10 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.BusinessUnitFetchResponse,
       payload: payload
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.BusinessUnitFetchError,
-      payload: payload
+      payload: createSafeErrorPayload(error, 'Business unit fetch error')
     });
   });
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.BusinessUnitChangeRequest, function (message, embedder) {
@@ -595,10 +648,10 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.BusinessUnitFetchResponse,
       payload: payload
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.BusinessUnitChangeError,
-      payload: payload
+      payload: createSafeErrorPayload(error, 'Business unit change error')
     });
   });
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.SkipReviewRequest, function (__message, embedder) {
@@ -607,10 +660,10 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.SkipReviewResponse,
       payload: payload
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.SkipReviewError,
-      payload: payload
+      payload: createSafeErrorPayload(error, 'Skip review error')
     });
   });
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.RemoveParentQueryParam, function (message) {
@@ -621,10 +674,10 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ContentEmbedInstallResponse,
       payload: payload
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ContentEmbedInstallError,
-      payload: payload
+      payload: createSafeErrorPayload(error, 'Content embed install error')
     });
   });
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ContentEmbedActivationRequest, function (message, embedder) {
@@ -633,10 +686,10 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ContentEmbedActivationResponse,
       payload: payload
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ContentEmbedActivationError,
-      payload: payload
+      payload: createSafeErrorPayload(error, 'Content embed activation error')
     });
   });
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.RefreshProxyMappingsRequest, function (__message, embedder) {
@@ -645,10 +698,10 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.RefreshProxyMappingsResponse,
       payload: {}
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.RefreshProxyMappingsError,
-      payload: payload
+      payload: createSafeErrorPayload(error, 'Refresh proxy mappings error')
     });
   });
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ProxyMappingsEnabledRequest, function (__message, embedder) {
@@ -657,10 +710,10 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ProxyMappingsEnabledResponse,
       payload: payload
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ProxyMappingsEnabledError,
-      payload: payload
+      payload: createSafeErrorPayload(error, 'Proxy mappings enabled fetch error')
     });
   });
 }], [_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ProxyMappingsEnabledChangeRequest, function (_ref2, embedder) {
@@ -670,10 +723,10 @@ var messageMapper = new Map([[_integratedMessages__WEBPACK_IMPORTED_MODULE_0__.P
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ProxyMappingsEnabledResponse,
       payload: payload
     });
-  })["catch"](function (payload) {
+  })["catch"](function (error) {
     embedder.postMessage({
       key: _integratedMessages__WEBPACK_IMPORTED_MODULE_0__.PluginMessages.ProxyMappingsEnabledChangeError,
-      payload: payload
+      payload: createSafeErrorPayload(error, 'Proxy mappings enabled change error')
     });
   });
 }]]);
@@ -770,15 +823,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _lib_Raven__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/Raven */ "./scripts/lib/Raven.ts");
 /* harmony import */ var _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../constants/leadinConfig */ "./scripts/constants/leadinConfig.ts");
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./constants */ "./scripts/iframe/constants.ts");
-/* harmony import */ var _messageMiddleware__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./messageMiddleware */ "./scripts/iframe/messageMiddleware.ts");
-/* harmony import */ var _utils_iframe__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/iframe */ "./scripts/utils/iframe.ts");
+/* harmony import */ var _api_wordpressApiClient__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../api/wordpressApiClient */ "./scripts/api/wordpressApiClient.ts");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./constants */ "./scripts/iframe/constants.ts");
+/* harmony import */ var _messageMiddleware__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./messageMiddleware */ "./scripts/iframe/messageMiddleware.ts");
+/* harmony import */ var _utils_iframe__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/iframe */ "./scripts/utils/iframe.ts");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
 
 
 
@@ -838,19 +893,19 @@ var getAppOptions = function getAppOptions(app) {
     PluginAppOptions = _window.PluginAppOptions;
   var options;
   switch (app) {
-    case _constants__WEBPACK_IMPORTED_MODULE_3__.App.Plugin:
+    case _constants__WEBPACK_IMPORTED_MODULE_4__.App.Plugin:
       options = new PluginAppOptions();
       break;
-    case _constants__WEBPACK_IMPORTED_MODULE_3__.App.PluginSettings:
+    case _constants__WEBPACK_IMPORTED_MODULE_4__.App.PluginSettings:
       options = new PluginAppOptions().setPluginSettingsInit();
       break;
-    case _constants__WEBPACK_IMPORTED_MODULE_3__.App.Forms:
+    case _constants__WEBPACK_IMPORTED_MODULE_4__.App.Forms:
       options = new FormsAppOptions().setIntegratedAppConfig(getIntegrationConfig());
       if (createRoute) {
         options = options.setCreateFormAppInit();
       }
       break;
-    case _constants__WEBPACK_IMPORTED_MODULE_3__.App.LiveChat:
+    case _constants__WEBPACK_IMPORTED_MODULE_4__.App.LiveChat:
       options = new LiveChatAppOptions();
       if (createRoute) {
         options = options.setCreateLiveChatAppInit();
@@ -862,25 +917,42 @@ var getAppOptions = function getAppOptions(app) {
   return options;
 };
 function useAppEmbedder(app, createRoute, container) {
-  console.info('HubSpot plugin - starting app embedder for:', _constants__WEBPACK_IMPORTED_MODULE_3__.AppIframe[app], container);
-  var iframeNotRendered = (0,_utils_iframe__WEBPACK_IMPORTED_MODULE_5__.useIframeNotRendered)(_constants__WEBPACK_IMPORTED_MODULE_3__.AppIframe[app]);
+  console.info('HubSpot plugin - starting app embedder for:', _constants__WEBPACK_IMPORTED_MODULE_4__.AppIframe[app], container);
+  var iframeNotRendered = (0,_utils_iframe__WEBPACK_IMPORTED_MODULE_6__.useIframeNotRendered)(_constants__WEBPACK_IMPORTED_MODULE_4__.AppIframe[app]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var _window2 = window,
       IntegratedAppEmbedder = _window2.IntegratedAppEmbedder;
-    if (IntegratedAppEmbedder) {
-      var options = getAppOptions(app, createRoute).setLocale(_constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.locale).setDeviceId(_constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.deviceId).setRefreshToken(_constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.refreshToken).setLeadinConfig(getLeadinConfig());
-      var embedder = new IntegratedAppEmbedder(_constants__WEBPACK_IMPORTED_MODULE_3__.AppIframe[app], _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.portalId, _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.hubspotBaseUrl, _utils_iframe__WEBPACK_IMPORTED_MODULE_5__.resizeWindow, _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.refreshToken ? '' : _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.impactLink).setOptions(options);
-      embedder.subscribe((0,_messageMiddleware__WEBPACK_IMPORTED_MODULE_4__.messageMiddleware)(embedder));
+    if (!IntegratedAppEmbedder) {
+      return;
+    }
+    var createEmbedder = function createEmbedder() {
+      var accessToken = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var expiresIn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var options = getAppOptions(app, createRoute).setLocale(_constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.locale).setDeviceId(_constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.deviceId).setAccessToken(accessToken, expiresIn).setLeadinConfig(getLeadinConfig());
+      var embedder = new IntegratedAppEmbedder(_constants__WEBPACK_IMPORTED_MODULE_4__.AppIframe[app], _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.portalId, _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.hubspotBaseUrl, _utils_iframe__WEBPACK_IMPORTED_MODULE_6__.resizeWindow, accessToken ? '' : _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.impactLink).setOptions(options);
+      embedder.subscribe(function (message) {
+        (0,_messageMiddleware__WEBPACK_IMPORTED_MODULE_5__.messageMiddleware)(embedder)(message);
+      });
+      embedder.setTokenRenewalCallback(_api_wordpressApiClient__WEBPACK_IMPORTED_MODULE_3__.fetchAccessToken);
       embedder.attachTo(container, true);
       embedder.postStartAppMessage(); // lets the app know all all data has been passed to it
       window.embedder = embedder;
+    };
+    if (_constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.connectionStatus === 'Connected') {
+      (0,_api_wordpressApiClient__WEBPACK_IMPORTED_MODULE_3__.fetchAccessToken)().then(function (_ref) {
+        var accessToken = _ref.accessToken,
+          expiresIn = _ref.expiresIn;
+        createEmbedder(accessToken, expiresIn);
+      })["catch"](function () {});
+    } else {
+      createEmbedder();
     }
   }, []);
   if (iframeNotRendered) {
     console.error('HubSpot plugin Iframe not rendered', {
       portalId: _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.portalId,
       container: container,
-      appName: _constants__WEBPACK_IMPORTED_MODULE_3__.AppIframe[app],
+      appName: _constants__WEBPACK_IMPORTED_MODULE_4__.AppIframe[app],
       hasIntegratedAppEmbedder: !!window.IntegratedAppEmbedder
     });
     _lib_Raven__WEBPACK_IMPORTED_MODULE_1__["default"].captureException(new Error('Leadin Iframe not rendered'), {
@@ -891,8 +963,8 @@ function useAppEmbedder(app, createRoute, container) {
         app: app,
         hubspotBaseUrl: _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.hubspotBaseUrl,
         impactLink: _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.impactLink,
-        appName: _constants__WEBPACK_IMPORTED_MODULE_3__.AppIframe[app],
-        hasRefreshToken: !!_constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.refreshToken
+        appName: _constants__WEBPACK_IMPORTED_MODULE_4__.AppIframe[app],
+        isConnected: _constants_leadinConfig__WEBPACK_IMPORTED_MODULE_2__.connectionStatus === 'Connected'
       }
     });
   }

@@ -124,6 +124,7 @@ class Order
             'rule_id'          => $this->ruleId,
             'amount'           => $this->amount,
             'extra'            => $this->extra,
+            'qty'              => $this->qty,
             'shipping'         => $this->shipping,
             'is_free_shipping' => intval($this->isFreeShipping),
             'gifted_amount'    => $this->giftedAmount,
@@ -148,7 +149,7 @@ class Order
         $sql = /** @lang MySQL */
             "CREATE TABLE {$tableName} (
             id INT NOT NULL AUTO_INCREMENT,
-            order_id INT NOT NULL,
+            order_id bigint(20) unsigned NOT NULL,
             rule_id INT NOT NULL,
             amount DECIMAL(50,2) DEFAULT 0,
             qty INT DEFAULT 0,
@@ -171,6 +172,7 @@ class Order
         global $wpdb;
 
         $tableName = $wpdb->prefix . self::TABLE_NAME;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $wpdb->query("DROP TABLE IF EXISTS $tableName");
     }
 }

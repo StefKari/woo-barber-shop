@@ -53,10 +53,10 @@ class Url_List_Presenter extends Abstract_Presenter {
 			if ( $this->target_blank ) {
 				$output .= ' target = "_blank"';
 			}
-			$output .= ' href="' . $link['permalink'] . '">' . $link['title'] . '</a></li>';
-
+			$output .= ' href="' . \esc_url( $link['permalink'] ) . '">' . \esc_html( $link['title'] ) . '</a></li>';
 		}
 		$output .= '</ul>';
+
 		return $output;
 	}
 }

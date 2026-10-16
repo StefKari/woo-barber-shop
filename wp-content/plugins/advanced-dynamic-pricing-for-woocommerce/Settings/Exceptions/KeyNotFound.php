@@ -6,7 +6,7 @@ class KeyNotFound extends \Exception
 {
     private $key;
 
-    public function __construct($key, $code = 0, \Throwable $previous = null)
+    public function __construct($key, $code = 0, ?\Throwable $previous = null)
     {
         $this->key = $key;
         parent::__construct('', $code, $previous);

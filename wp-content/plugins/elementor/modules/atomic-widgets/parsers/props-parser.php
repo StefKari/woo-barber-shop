@@ -3,6 +3,7 @@
 namespace Elementor\Modules\AtomicWidgets\Parsers;
 
 use Elementor\Modules\AtomicWidgets\PropTypes\Contracts\Prop_Type;
+use Elementor\Core\Utils\Api\Parse_Result;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -11,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Props_Parser {
 
 	private array $schema;
-	private array $errors_bag = [];
 
 	public function __construct( array $schema ) {
 		$this->schema = $schema;
@@ -25,14 +25,10 @@ class Props_Parser {
 	 * @param array $props
 	 * The key of each item represents the prop name (should match the schema),
 	 * and the value is the prop value to validate
-	 *
-	 * @return array{
-	 *     0: bool,
-	 *     1: array<string, mixed>,
-	 *     2: array<string>
-	 * }
 	 */
-	public function validate( array $props ): array {
+	public function validate( array $props ): Parse_Result {
+		$result = Parse_Result::make();
+
 		$validated = [];
 
 		foreach ( $this->schema as $key => $prop_type ) {
@@ -45,7 +41,7 @@ class Props_Parser {
 			$is_valid = $prop_type->validate( $value ?? $prop_type->get_default() );
 
 			if ( ! $is_valid ) {
-				$this->errors_bag[] = $key;
+				$result->errors()->add( $key, 'invalid_value' );
 
 				continue;
 			}
@@ -55,23 +51,15 @@ class Props_Parser {
 			}
 		}
 
-		$is_valid = empty( $this->errors_bag );
-
-		return [
-			$is_valid,
-			$validated,
-			$this->errors_bag,
-		];
+		return $result->wrap( $validated );
 	}
 
 	/**
 	 * @param array $props
 	 * The key of each item represents the prop name (should match the schema),
 	 * and the value is the prop value to sanitize
-	 *
-	 * @return array<string, mixed>
 	 */
-	public function sanitize( array $props ): array {
+	public function sanitize( array $props ): Parse_Result {
 		$sanitized = [];
 
 		foreach ( $this->schema as $key => $prop_type ) {
@@ -79,30 +67,30 @@ class Props_Parser {
 				continue;
 			}
 
-			$sanitized[ $key ] = $prop_type->sanitize( $props[ $key ] );
+			$sanitized_value = $prop_type->sanitize( $props[ $key ] );
+
+			if ( ! $prop_type->should_persist( $sanitized_value ) ) {
+				continue;
+			}
+
+			$sanitized[ $key ] = $sanitized_value;
 		}
 
-		return $sanitized;
+		return Parse_Result::make()->wrap( $sanitized );
 	}
 
 	/**
 	 * @param array $props
 	 * The key of each item represents the prop name (should match the schema),
 	 * and the value is the prop value to parse
-	 *
-	 * @return array{
-	 *      0: bool,
-	 *      1: array<string, mixed>,
-	 *      2: array<string>
-	 *  }
 	 */
-	public function parse( array $props ): array {
-		[ $is_valid, $validated, $errors_bag  ] = $this->validate( $props );
+	public function parse( array $props ): Parse_Result {
+		$validate_result = $this->validate( $props );
 
-		return [
-			$is_valid,
-			$this->sanitize( $validated ),
-			$errors_bag,
-		];
+		$sanitize_result = $this->sanitize( $validate_result->unwrap() );
+
+		$sanitize_result->errors()->merge( $validate_result->errors() );
+
+		return $sanitize_result;
 	}
 }

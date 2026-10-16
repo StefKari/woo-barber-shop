@@ -10,6 +10,7 @@ use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepositoryInterface;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
 use ADP\BaseVersion\Includes\PriceDisplay\Processor;
+use ADP\BaseVersion\Includes\PriceDisplay\WcProductProcessor\IWcProductProcessor;
 use ADP\Factory;
 
 defined('ABSPATH') or exit;
@@ -29,7 +30,7 @@ class CalculationProfiler
     protected $cartProcessor;
 
     /**
-     * @var Processor
+     * @var IWcProductProcessor
      */
     protected $productProcessor;
 
@@ -62,7 +63,7 @@ class CalculationProfiler
     {
         $this->context                  = adp_context();
         $this->cartProcessor            = $contextOrCartProcessor instanceof CartProcessor ? $contextOrCartProcessor : $cartProcessorOrProductProcessor;
-        $this->productProcessor         = $cartProcessorOrProductProcessor instanceof Processor ? $cartProcessorOrProductProcessor : $deprecated;
+        $this->productProcessor         = $cartProcessorOrProductProcessor instanceof IWcProductProcessor ? $cartProcessorOrProductProcessor : $deprecated;
         $this->persistentRuleRepository = new PersistentRuleRepository();
 
         // should wait, because impossible to create import key earlier
@@ -125,6 +126,7 @@ class CalculationProfiler
             'active_hooks'       => (new Collectors\ActiveHooks())->collect(),
 
             'rules' => $activeRulesAsDict,
+            'product_collections' => (Factory::get("Debug_Collectors_Collections"))->collect()
         );
 
         foreach ($reports as $report_key => $report) {
@@ -154,8 +156,10 @@ class CalculationProfiler
     {
         if ( ! did_action('wp_loaded')) {
             _doing_it_wrong(__FUNCTION__,
-                sprintf(__('%1$s should not be called before the %2$s action.', 'woocommerce'), 'create_import_key',
-                    'wp_loaded'), WC_ADP_VERSION);
+                /* translators: Message about the load order*/
+                //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch, WordPress.WP.I18n.MissingTranslatorsComment
+                sprintf(esc_html__('%1$s should not be called before the %2$s action.', 'woocommerce'), 'create_import_key',
+                    'wp_loaded'), esc_html(WC_ADP_VERSION));
 
             return null;
         }

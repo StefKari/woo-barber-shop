@@ -10,6 +10,8 @@
  */
 class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 
+	use WPCode_WPConsent_Notice;
+
 	/**
 	 * The page slug to be used when adding the submenu.
 	 *
@@ -45,6 +47,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 	 * @return void
 	 */
 	public function output_content() {
+		$this->notice_wpconsent();
 		if ( method_exists( $this, 'output_view_' . $this->view ) ) {
 			echo '<div class="wpcode-blur-area">';
 			call_user_func( array( $this, 'output_view_' . $this->view ) );
@@ -62,7 +65,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 
 		$text = sprintf(
 		// translators: %1$s and %2$s are <u> tags.
-			'<p>' . esc_html__( 'While you can always add pixels manually using code snippets, our Conversion Pixels addon helps you %1$ssave time%2$s while %1$sreducing errors%2$s. It lets you properly implement Facebook, Google, Pinterest, TikTok and Snapchat ads tracking with deep integrations for eCommerce events, interaction measurement, and more. This addon is available on WPCode Plus plan or higher.', 'insert-headers-and-footers' ) . '</p>',
+			'<p>' . esc_html__( 'While you can always add pixels manually using code snippets, our Conversion Pixels addon helps you %1$ssave time%2$s while %1$sreducing errors%2$s. It lets you properly implement Facebook, Google, Pinterest, TikTok, Snapchat and OpenAI ads tracking with deep integrations for eCommerce events, interaction measurement, and more. This addon is available on WPCode Plus plan or higher.', 'insert-headers-and-footers' ) . '</p>',
 			'<u>',
 			'</u>'
 		);
@@ -77,7 +80,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 			array(),
 			array(
 				esc_html__( 'Seamless integration with WooCommerce, Easy Digital Downloads and MemberPress', 'insert-headers-and-footers' ),
-				esc_html__( 'Works with Facebook, Google Ads, Pinterest, TikTok and Snapchat', 'insert-headers-and-footers' ),
+				esc_html__( 'Works with Facebook, Google Ads, Pinterest, TikTok, Snapchat and OpenAI', 'insert-headers-and-footers' ),
 				esc_html__( 'No coding required', 'insert-headers-and-footers' ),
 				esc_html__( '1-click setup for conversion tracking', 'insert-headers-and-footers' ),
 			)
@@ -96,6 +99,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 			'pinterest'      => __( 'Pinterest', 'insert-headers-and-footers' ),
 			'tiktok'         => __( 'TikTok', 'insert-headers-and-footers' ),
 			'snapchat'       => __( 'Snapchat', 'insert-headers-and-footers' ),
+			'openai'         => __( 'OpenAI', 'insert-headers-and-footers' ),
 			'click_tracking' => __( 'Click Tracking', 'insert-headers-and-footers' ),
 		);
 	}
@@ -135,7 +139,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'facebook_pixel_id',
 				$this->get_option( 'facebook_pixel_id', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'You can find your Facebook Pixel ID in the Facebook Ads Manager. %1$sRead our step by step directions%2$s. ', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-facebook-pixel-id-and-conversions-api-token/', 'conversion-pixels', 'facebook', 'pixel' ) . '">',
 					'</a>'
@@ -153,6 +157,9 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 			),
 			'facebook_pixel_api_token'
 		);
+		?>
+		<button type="button" class="wpcode-button wpcode-button-secondary wpcode-add-pixel"><?php esc_html_e( 'Add Another Pixel', 'insert-headers-and-footers' ); ?></button>
+		<?php
 		$this->metabox_row(
 			__( 'Facebook Pixel Events', 'insert-headers-and-footers' ),
 			$this->get_checkbox_inputs(
@@ -164,7 +171,8 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 						'ecommerce'   => false,
 					),
 				),
-				'facebook_pixel_events' )
+				'facebook_pixel_events'
+			)
 		);
 		$this->metabox_row(
 			__( 'eCommerce Events Tracking', 'insert-headers-and-footers' ),
@@ -193,7 +201,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'google_analytics_id',
 				$this->get_option( 'google_analytics_id', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'You can find your Google Analytics ID in the Google Analytics Admin panel. %1$sRead our step by step directions%2$s. ', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-google-analytics-id/', 'conversion-pixels', 'google', 'pixel' ) . '">',
 					'</a>'
@@ -207,7 +215,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'google_ads_id',
 				$this->get_option( 'google_ads_id', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'You can find your Google Ads Tag ID in the Google Ads Settings under Google Tag. %1$sRead our step by step directions%2$s. ', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-google-ads-tag-id/', 'conversion-pixels', 'google', 'pixel' ) . '">',
 					'</a>'
@@ -221,7 +229,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'google_ads_label',
 				$this->get_option( 'google_ads_label', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'Add your Google Ads Conversion Label for tracking conversion events. %1$sLearn More%2$s.', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-google-ads-tag-id/', 'conversion-pixels', 'google', 'pixel' ) . '">',
 					'</a>'
@@ -229,6 +237,9 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 			),
 			'google_ads_label'
 		);
+		?>
+		<button type="button" class="wpcode-button wpcode-button-secondary wpcode-add-pixel"><?php esc_html_e( 'Add Google ID', 'insert-headers-and-footers' ); ?></button>
+		<?php
 		$this->metabox_row(
 			__( 'Google Events', 'insert-headers-and-footers' ),
 			$this->get_checkbox_inputs(
@@ -270,7 +281,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'pinterest_id',
 				$this->get_option( 'pinterest_id', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'You can find your Tag id in your Pinterest Business account. %1$sRead our step by step directions%2$s. ', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-pinterest-tag-id-and-conversion-access-token/', 'conversion-pixels', 'pinterest', 'pixel' ) . '">',
 					'</a>'
@@ -284,7 +295,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'pinterest_ad_account_id',
 				$this->get_option( 'pinterest_ad_account_id', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'You can find your Ad Account ID in your Pinterest Business account. %1$sRead more%2$s. ', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-pinterest-tag-id-and-conversion-access-token/', 'conversion-pixels', 'pinterest', 'pixel' ) . '">',
 					'</a>'
@@ -298,7 +309,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'pinterest_conversion_token',
 				$this->get_option( 'pinterest_conversion_token', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'You can find your Conversion Access Token under Ads > Conversions > Conversion access token. %1$sRead more%2$s. ', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-pinterest-tag-id-and-conversion-access-token/', 'conversion-pixels', 'pinterest', 'pixel' ) . '">',
 					'</a>'
@@ -334,7 +345,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'tiktok_pixel_id',
 				$this->get_option( 'tiktok_pixel_id', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'You can find your Pixel id in your TikTok Business Account. %1$sRead our step by step directions%2$s.', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-tiktok-pixel-id-and-events-api-access-token/', 'conversion-pixels', 'tiktok', 'pixel' ) . '">',
 					'</a>'
@@ -348,7 +359,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'tiktok_access_token',
 				$this->get_option( 'tiktok_access_token', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'You can generate an access token in the Pixel Settings under Access Token Generation. %1$sRead more%2$s', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-tiktok-pixel-id-and-events-api-access-token/', 'conversion-pixels', 'tiktok', 'pixel' ) . '">',
 					'</a>'
@@ -384,7 +395,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 				'snapchat_pixel_id',
 				$this->get_option( 'snapchat_pixel_id', '' ),
 				sprintf(
-				// translators: %1$s and %2$s are the opening and closing anchor tags.
+						// translators: %1$s and %2$s are the opening and closing anchor tags.
 					__( 'You can find your Snapchat Pixel ID in the Snapchat Ads Manager. %1$sRead our step by step directions%2$s. ', 'insert-headers-and-footers' ),
 					'<a target="_blank" href="' . wpcode_utm_url( 'https://wpcode.com/docs/how-to-find-your-snapchat-pixel-id-and-conversions-api-token/', 'conversion-pixels', 'snapchat', 'pixel' ) . '">',
 					'</a>'
@@ -422,6 +433,61 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 			$this->get_ecommerce_events_input() . $this->get_checkbox_inputs( $this->get_snap_pixel_events_inputs(), 'snapchat_pixel_events' )
 		);
 		wp_nonce_field( 'wpcode-save-snapchat-pixel-data', 'wpcode-pixel-nonce' );
+		?>
+		<button type="submit" class="wpcode-button">
+			<?php esc_html_e( 'Save Changes', 'insert-headers-and-footers' ); ?>
+		</button>
+		<?php
+	}
+
+	/**
+	 * Page for OpenAI pixel settings.
+	 *
+	 * @return void
+	 */
+	public function output_view_openai() {
+		?>
+		<h2><?php esc_html_e( 'OpenAI Ads Measurement Pixel', 'insert-headers-and-footers' ); ?></h2>
+		<?php
+		$this->metabox_row(
+			__( 'OpenAI Pixel ID', 'insert-headers-and-footers' ),
+			$this->get_input_text(
+				'openai_pixel_id',
+				$this->get_option( 'openai_pixel_id', '' ),
+				__( 'Enter the Pixel ID from OpenAI Ads Manager to load the OpenAI Ads Measurement Pixel on your site.', 'insert-headers-and-footers' ),
+				true
+			),
+			'openai_pixel_id'
+		);
+		$this->metabox_row(
+			__( 'OpenAI Conversion Key', 'insert-headers-and-footers' ),
+			$this->get_input_text(
+				'openai_pixel_api_key',
+				$this->get_option( 'openai_pixel_api_key', '' ),
+				__( 'Enter the Conversion Key from your OpenAI Ads Manager > Conversions tab to send matching server-side events. This is not your platform API key.', 'insert-headers-and-footers' ),
+				true
+			),
+			'openai_pixel_api_key'
+		);
+		$this->metabox_row(
+			__( 'OpenAI Pixel Events', 'insert-headers-and-footers' ),
+			$this->get_checkbox_inputs(
+				array(
+					array(
+						'label'       => __( 'Page Viewed Event', 'insert-headers-and-footers' ),
+						'name'        => 'page_view',
+						'description' => __( 'Enable the "page_viewed" event to track and record page visits on all pages using the OpenAI Ads Measurement Pixel.', 'insert-headers-and-footers' ),
+						'ecommerce'   => false,
+					),
+				),
+				'openai_pixel_events'
+			)
+		);
+		$this->metabox_row(
+			__( 'eCommerce Events Tracking', 'insert-headers-and-footers' ),
+			$this->get_ecommerce_events_input() . $this->get_checkbox_inputs( $this->get_openai_pixel_events_inputs(), 'openai_pixel_events' )
+		);
+		wp_nonce_field( 'wpcode-save-openai-pixel-data', 'wpcode-pixel-nonce' );
 		?>
 		<button type="submit" class="wpcode-button">
 			<?php esc_html_e( 'Save Changes', 'insert-headers-and-footers' ); ?>
@@ -715,6 +781,44 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 	}
 
 	/**
+	 * Event options checkboxes for the OpenAI Ads Measurement Pixel.
+	 *
+	 * @return array[]
+	 */
+	public function get_openai_pixel_events_inputs() {
+		return array(
+			array(
+				'label'       => __( 'Contents Viewed Event', 'insert-headers-and-footers' ),
+				'name'        => 'view_content',
+				'description' => __( 'Turn on the "contents_viewed" event to track views of product pages on your website.', 'insert-headers-and-footers' ),
+				'ecommerce'   => true,
+				'css_class'   => 'view-content',
+			),
+			array(
+				'label'       => __( 'Items Added Event', 'insert-headers-and-footers' ),
+				'name'        => 'add_to_cart',
+				'description' => __( 'Turn on the "items_added" event to track when items are added to a shopping cart on your website.', 'insert-headers-and-footers' ),
+				'ecommerce'   => true,
+				'css_class'   => 'add-to-cart',
+			),
+			array(
+				'label'       => __( 'Checkout Started Event', 'insert-headers-and-footers' ),
+				'name'        => 'begin_checkout',
+				'description' => __( 'Turn on the "checkout_started" event to track when a user reaches the checkout page on your website.', 'insert-headers-and-footers' ),
+				'ecommerce'   => true,
+				'css_class'   => 'begin-checkout',
+			),
+			array(
+				'label'       => __( 'Order Created Event', 'insert-headers-and-footers' ),
+				'name'        => 'purchase',
+				'description' => __( 'Turn on the "order_created" event to track successful purchases on your website.', 'insert-headers-and-footers' ),
+				'ecommerce'   => true,
+				'css_class'   => 'purchase',
+			),
+		);
+	}
+
+	/**
 	 * This is the page content for the Custom Events page.
 	 *
 	 * @return void
@@ -741,7 +845,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 						'',
 						'',
 						sprintf(
-						// Translators: %1$s is an opening anchor tag, %2$s is a closing anchor tag.
+								// Translators: %1$s is an opening anchor tag, %2$s is a closing anchor tag.
 							esc_html__( 'Define the HTML element that triggers the event upon clicking (button, link, etc). Input the appropriate CSS selector here. %1$sLearn more%2$s', 'insert-headers-and-footers' ),
 							'<a href="' . esc_url( wpcode_utm_url( 'https://wpcode.com/docs/finding-css-selector/' ) ) . '" target="_blank" rel="noopener noreferrer">',
 							'</a>'
@@ -782,6 +886,7 @@ class WPCode_Admin_Page_Pixel extends WPCode_Admin_Page {
 								'Pinterest',
 								'TikTok',
 								'Snapchat',
+								__( 'OpenAI', 'insert-headers-and-footers' ),
 							);
 							foreach ( $pixels as $pixel ) {
 								echo '<div class="wpcode-checkbox-row">';

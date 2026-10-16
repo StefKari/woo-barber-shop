@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 // phpcs:disable Yoast.NamingConventions.NamespaceName.MaxExceeded
 namespace Yoast\WP\SEO\Dashboard\Domain\Score_Groups\Readability_Score_Groups;
@@ -38,7 +39,7 @@ class Bad_Readability_Score_Group extends Abstract_Readability_Score_Group {
 	/**
 	 * Gets the minimum score of the readability score group.
 	 *
-	 * @return int The minimum score of the readability score group.
+	 * @return int|null The minimum score of the readability score group.
 	 */
 	public function get_min_score(): ?int {
 		return 1;
@@ -47,7 +48,7 @@ class Bad_Readability_Score_Group extends Abstract_Readability_Score_Group {
 	/**
 	 * Gets the maximum score of the readability score group.
 	 *
-	 * @return int The maximum score of the readability score group.
+	 * @return int|null The maximum score of the readability score group.
 	 */
 	public function get_max_score(): ?int {
 		return 40;

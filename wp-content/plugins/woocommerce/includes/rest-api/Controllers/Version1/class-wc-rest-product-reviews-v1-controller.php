@@ -130,7 +130,7 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function get_items_permissions_check( $request ) {
-		if ( ! wc_rest_check_post_permissions( 'product', 'read' ) ) {
+		if ( ! wc_rest_check_product_reviews_permissions( 'read' ) ) {
 			return new WP_Error( 'woocommerce_rest_cannot_view', __( 'Sorry, you cannot list resources.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
 		}
 
@@ -144,9 +144,12 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function get_item_permissions_check( $request ) {
-		$post = get_post( (int) $request['product_id'] );
+		$review = $this->get_review( (int) $request['id'], (int) $request['product_id'] );
+		if ( is_wp_error( $review ) ) {
+			return $review;
+		}
 
-		if ( $post && ! wc_rest_check_post_permissions( 'product', 'read', $post->ID ) ) {
+		if ( ! wc_rest_check_product_reviews_permissions( 'read', (int) $request['id'] ) ) {
 			return new WP_Error( 'woocommerce_rest_cannot_view', __( 'Sorry, you cannot view this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
 		}
 
@@ -160,10 +163,10 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function create_item_permissions_check( $request ) {
-		$post = get_post( (int) $request['product_id'] );
-		if ( $post && ! wc_rest_check_post_permissions( 'product', 'create', $post->ID ) ) {
+		if ( ! wc_rest_check_product_reviews_permissions( 'create' ) ) {
 			return new WP_Error( 'woocommerce_rest_cannot_create', __( 'Sorry, you are not allowed to create resources.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
 		}
+
 		return true;
 	}
 
@@ -174,10 +177,15 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function update_item_permissions_check( $request ) {
-		$post = get_post( (int) $request['product_id'] );
-		if ( $post && ! wc_rest_check_post_permissions( 'product', 'edit', $post->ID ) ) {
+		$review = $this->get_review( (int) $request['id'], (int) $request['product_id'] );
+		if ( is_wp_error( $review ) ) {
+			return $review;
+		}
+
+		if ( ! wc_rest_check_product_reviews_permissions( 'edit', (int) $request['id'] ) ) {
 			return new WP_Error( 'woocommerce_rest_cannot_edit', __( 'Sorry, you cannot edit this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
 		}
+
 		return true;
 	}
 
@@ -188,10 +196,15 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function delete_item_permissions_check( $request ) {
-		$post = get_post( (int) $request['product_id'] );
-		if ( $post && ! wc_rest_check_post_permissions( 'product', 'delete', $post->ID ) ) {
-			return new WP_Error( 'woocommerce_rest_cannot_edit', __( 'Sorry, you cannot delete this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
+		$review = $this->get_review( (int) $request['id'], (int) $request['product_id'] );
+		if ( is_wp_error( $review ) ) {
+			return $review;
 		}
+
+		if ( ! wc_rest_check_product_reviews_permissions( 'delete', (int) $request['id'] ) ) {
+			return new WP_Error( 'woocommerce_rest_cannot_delete', __( 'Sorry, you cannot delete this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
 		return true;
 	}
 
@@ -221,23 +234,37 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 	}
 
 	/**
+	 * Fetch a single product review from the database.
+	 *
+	 * @param int $id         Review ID.
+	 * @param int $product_id Product ID.
+	 *
+	 * @since  9.2.0
+	 * @return \WP_Comment
+	 */
+	protected function get_review( int $id, int $product_id ) {
+		if ( 0 >= $product_id || 'product' !== get_post_type( $product_id ) ) {
+			return new WP_Error( 'woocommerce_rest_product_invalid_id', __( 'Invalid product ID.', 'woocommerce' ), array( 'status' => 404 ) );
+		}
+
+		$review = 0 <= $id ? get_comment( $id ) : null;
+		if ( empty( $review ) || empty( $review->comment_ID ) || 'review' !== get_comment_type( $id ) || empty( $review->comment_post_ID ) || (int) $review->comment_post_ID !== $product_id ) {
+			return new WP_Error( 'woocommerce_rest_product_review_invalid_id', __( 'Invalid product review ID.', 'woocommerce' ), array( 'status' => 404 ) );
+		}
+
+		return $review;
+	}
+
+	/**
 	 * Get a single product review.
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|WP_REST_Response
 	 */
 	public function get_item( $request ) {
-		$id         = (int) $request['id'];
-		$product_id = (int) $request['product_id'];
-
-		if ( 'product' !== get_post_type( $product_id ) ) {
-			return new WP_Error( 'woocommerce_rest_product_invalid_id', __( 'Invalid product ID.', 'woocommerce' ), array( 'status' => 404 ) );
-		}
-
-		$review = get_comment( $id );
-
-		if ( empty( $id ) || empty( $review ) || intval( $review->comment_post_ID ) !== $product_id ) {
-			return new WP_Error( 'woocommerce_rest_invalid_id', __( 'Invalid resource ID.', 'woocommerce' ), array( 'status' => 404 ) );
+		$review = $this->get_review( (int) $request['id'], (int) $request['product_id'] );
+		if ( is_wp_error( $review ) ) {
+			return $review;
 		}
 
 		$delivery = $this->prepare_item_for_response( $review, $request );
@@ -271,8 +298,23 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 		 * @param WP_REST_Request $request          Request used to insert the comment.
 		 */
 		$prepared_review = apply_filters( 'rest_pre_insert_product_review', $prepared_review, $request );
+		if ( is_wp_error( $prepared_review ) ) {
+			return $prepared_review;
+		}
 
-		$product_review_id = wp_insert_comment( $prepared_review );
+		$prepared_review = wp_parse_args(
+			(array) $prepared_review,
+			array(
+				'comment_content'      => '',
+				'comment_author'       => '',
+				'comment_author_email' => '',
+				'comment_author_url'   => '',
+				'comment_author_IP'    => '',
+				'comment_agent'        => '',
+			)
+		);
+
+		$product_review_id = wp_insert_comment( wp_filter_comment( wp_slash( $prepared_review ) ) );
 		if ( ! $product_review_id ) {
 			return new WP_Error( 'rest_product_review_failed_create', __( 'Creating product review failed.', 'woocommerce' ), array( 'status' => 500 ) );
 		}
@@ -280,6 +322,19 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 		update_comment_meta( $product_review_id, 'rating', ( ! empty( $request['rating'] ) ? $request['rating'] : '0' ) );
 
 		$product_review = get_comment( $product_review_id );
+
+		/*
+		 * Core has already updated wp_posts.comment_count, but the rating meta above was unavailable
+		 * during that update. Refresh the post-meta aggregates directly now that the meta is in place:
+		 * repeating wp_update_comment_count() would add count queries, post writes, edit hooks, and
+		 * deferral where an immediate post-meta aggregate refresh is required. Only an approved rated
+		 * review can change the aggregates, and the refresh targets the comment's own product because
+		 * a rest_pre_insert_product_review callback can send the review to a different one.
+		 */
+		if ( ! empty( $request['rating'] ) && $product_review instanceof WP_Comment && '1' === $product_review->comment_approved ) {
+			WC_Comments::clear_transients( (int) $product_review->comment_post_ID );
+		}
+
 		$this->update_additional_fields_for_object( $product_review, $request );
 
 		/**
@@ -311,28 +366,59 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 		$product_review_id = (int) $request['id'];
 		$product_id        = (int) $request['product_id'];
 
-		if ( 'product' !== get_post_type( $product_id ) ) {
-			return new WP_Error( 'woocommerce_rest_product_invalid_id', __( 'Invalid product ID.', 'woocommerce' ), array( 'status' => 404 ) );
+		$review = $this->get_review( $product_review_id, $product_id );
+		if ( is_wp_error( $review ) ) {
+			return $review;
 		}
 
-		$review = get_comment( $product_review_id );
-
-		if ( empty( $product_review_id ) || empty( $review ) || intval( $review->comment_post_ID ) !== $product_id ) {
-			return new WP_Error( 'woocommerce_rest_product_review_invalid_id', __( 'Invalid resource ID.', 'woocommerce' ), array( 'status' => 404 ) );
-		}
+		$original_product_id = (int) $review->comment_post_ID;
 
 		$prepared_review = $this->prepare_item_for_database( $request );
-
-		$updated = wp_update_comment( $prepared_review );
-		if ( 0 === $updated ) {
+		if ( is_wp_error( $prepared_review ) ) {
+			return $prepared_review;
+		}
+		if ( ! is_array( $prepared_review ) ) {
 			return new WP_Error( 'rest_product_review_failed_edit', __( 'Updating product review failed.', 'woocommerce' ), array( 'status' => 500 ) );
 		}
 
+		/*
+		 * Core stores update-side comment meta before it updates the comment count. Passing the
+		 * rating here lets WooCommerce's count callback see the new value in the same product save.
+		 */
 		if ( ! empty( $request['rating'] ) ) {
-			update_comment_meta( $product_review_id, 'rating', $request['rating'] );
+			if ( array_key_exists( 'comment_meta', $prepared_review ) && ! is_array( $prepared_review['comment_meta'] ) ) {
+				return new WP_Error( 'rest_product_review_failed_edit', __( 'Updating product review failed.', 'woocommerce' ), array( 'status' => 500 ) );
+			}
+
+			$prepared_review['comment_meta']['rating'] = (int) $request['rating'];
 		}
 
-		$product_review = get_comment( $product_review_id );
+		$core_counted_product_id = (int) ( $prepared_review['comment_post_ID'] ?? $original_product_id );
+
+		/*
+		 * Zero means no comment-table row changed; false is the actual update failure. A rating-only
+		 * request legitimately returns zero while still storing comment_meta and refreshing counts.
+		 */
+		$updated = wp_update_comment( $prepared_review );
+		if ( false === $updated ) {
+			return new WP_Error( 'rest_product_review_failed_edit', __( 'Updating product review failed.', 'woocommerce' ), array( 'status' => 500 ) );
+		}
+
+		$product_review     = get_comment( $product_review_id );
+		$current_product_id = $product_review instanceof WP_Comment ? (int) $product_review->comment_post_ID : 0;
+
+		/*
+		 * Core chooses its count target before wp_update_comment_data can redirect the persisted review.
+		 * Refresh each affected product that Core did not count.
+		 */
+		if ( $product_review instanceof WP_Comment ) {
+			foreach ( array_unique( array( $original_product_id, $current_product_id ) ) as $product_id_to_count ) {
+				if ( $product_id_to_count !== $core_counted_product_id ) {
+					wp_update_comment_count( $product_id_to_count );
+				}
+			}
+		}
+
 		$this->update_additional_fields_for_object( $product_review, $request );
 
 		/**
@@ -358,12 +444,13 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 	 * @return bool|WP_Error|WP_REST_Response
 	 */
 	public function delete_item( $request ) {
-		$product_review_id = absint( is_array( $request['id'] ) ? $request['id']['id'] : $request['id'] );
-		$force             = isset( $request['force'] ) ? (bool) $request['force']     : false;
+		$product_id        = (int) $request['product_id'];
+		$product_review_id = (int) $request['id'];
+		$product_review    = $this->get_review( $product_review_id, $product_id );
+		$force             = isset( $request['force'] ) ? (bool) $request['force'] : false;
 
-		$product_review = get_comment( $product_review_id );
-		if ( empty( $product_review_id ) || empty( $product_review->comment_ID ) || empty( $product_review->comment_post_ID ) ) {
-			return new WP_Error( 'woocommerce_rest_product_review_invalid_id', __( 'Invalid product review ID.', 'woocommerce' ), array( 'status' => 404 ) );
+		if ( is_wp_error( $product_review ) ) {
+			return $product_review;
 		}
 
 		/**

@@ -55,9 +55,16 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 	);
 
 	/**
-	 * The updated coupon properties
+	 * The updated coupon properties.
+	 *
+	 * Accumulates the properties written by every save performed through this data
+	 * store instance, with duplicates, and is never reset. It feeds the payload of
+	 * the deprecated woocommerce_coupon_object_updated_props action and must not be
+	 * removed while that action still fires. Use the woocommerce_coupon_updated_props
+	 * action to learn what the current save changed.
 	 *
 	 * @since 4.1.0
+	 * @deprecated 11.1.0 Use the woocommerce_coupon_updated_props action.
 	 * @var array
 	 */
 	protected $updated_props = array();
@@ -78,7 +85,7 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 				'woocommerce_new_coupon_data',
 				array(
 					'post_type'     => 'shop_coupon',
-					'post_status'   => 'publish',
+					'post_status'   => $coupon->get_status( 'edit' ) ? $coupon->get_status( 'edit' ) : 'publish',
 					'post_author'   => get_current_user_id(),
 					'post_title'    => $coupon->get_code( 'edit' ),
 					'post_content'  => '',
@@ -118,11 +125,13 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 			throw new Exception( __( 'Invalid coupon.', 'woocommerce' ) );
 		}
 
-		$coupon_id = $coupon->get_id();
+		$coupon_id              = $coupon->get_id();
+		$limit_usage_to_x_items = get_post_meta( $coupon_id, 'limit_usage_to_x_items', true );
 		$coupon->set_props(
 			array(
 				'code'                        => $post_object->post_title,
 				'description'                 => $post_object->post_excerpt,
+				'status'                      => $post_object->post_status,
 				'date_created'                => $this->string_to_timestamp( $post_object->post_date_gmt ),
 				'date_modified'               => $this->string_to_timestamp( $post_object->post_modified_gmt ),
 				'date_expires'                => metadata_exists( 'post', $coupon_id, 'date_expires' ) ? get_post_meta( $coupon_id, 'date_expires', true ) : get_post_meta( $coupon_id, 'expiry_date', true ), // @todo: Migrate expiry_date meta to date_expires in upgrade routine.
@@ -130,11 +139,11 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 				'amount'                      => get_post_meta( $coupon_id, 'coupon_amount', true ),
 				'usage_count'                 => get_post_meta( $coupon_id, 'usage_count', true ),
 				'individual_use'              => 'yes' === get_post_meta( $coupon_id, 'individual_use', true ),
-				'product_ids'                 => array_filter( (array) explode( ',', get_post_meta( $coupon_id, 'product_ids', true ) ) ),
-				'excluded_product_ids'        => array_filter( (array) explode( ',', get_post_meta( $coupon_id, 'exclude_product_ids', true ) ) ),
+				'product_ids'                 => $this->get_coupon_meta_as_array( $coupon_id, 'product_ids' ),
+				'excluded_product_ids'        => $this->get_coupon_meta_as_array( $coupon_id, 'exclude_product_ids' ),
 				'usage_limit'                 => get_post_meta( $coupon_id, 'usage_limit', true ),
 				'usage_limit_per_user'        => get_post_meta( $coupon_id, 'usage_limit_per_user', true ),
-				'limit_usage_to_x_items'      => 0 < get_post_meta( $coupon_id, 'limit_usage_to_x_items', true ) ? get_post_meta( $coupon_id, 'limit_usage_to_x_items', true ) : null,
+				'limit_usage_to_x_items'      => $limit_usage_to_x_items > 0 ? $limit_usage_to_x_items : null,
 				'free_shipping'               => 'yes' === get_post_meta( $coupon_id, 'free_shipping', true ),
 				'product_categories'          => array_filter( (array) get_post_meta( $coupon_id, 'product_categories', true ) ),
 				'excluded_product_categories' => array_filter( (array) get_post_meta( $coupon_id, 'exclude_product_categories', true ) ),
@@ -142,12 +151,29 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 				'minimum_amount'              => get_post_meta( $coupon_id, 'minimum_amount', true ),
 				'maximum_amount'              => get_post_meta( $coupon_id, 'maximum_amount', true ),
 				'email_restrictions'          => array_filter( (array) get_post_meta( $coupon_id, 'customer_email', true ) ),
-				'used_by'                     => array_filter( (array) get_post_meta( $coupon_id, '_used_by' ) ),
 			)
 		);
 		$coupon->read_meta_data();
 		$coupon->set_object_read( true );
 		do_action( 'woocommerce_coupon_loaded', $coupon );
+	}
+
+	/**
+	 * Get a metadata value that is stored as either a string consisting of a comma-separated list of values
+	 * or as a serialized array.
+	 *
+	 * WooCommerce always stores the coupon product ids as a comma-separated string, but it seems that
+	 * some plugins mistakenly change these to an array.
+	 *
+	 * @param int    $coupon_id The coupon id.
+	 * @param string $meta_key The meta key to get.
+	 * @return array The metadata value as an array, with empty values removed.
+	 */
+	private function get_coupon_meta_as_array( $coupon_id, string $meta_key ) {
+		$meta_value = get_post_meta( $coupon_id, $meta_key, true );
+		return array_filter(
+			is_array( $meta_value ) ? $meta_value : explode( ',', $meta_value )
+		);
 	}
 
 	/**
@@ -160,10 +186,11 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 		$coupon->save_meta_data();
 		$changes = $coupon->get_changes();
 
-		if ( array_intersect( array( 'code', 'description', 'date_created', 'date_modified' ), array_keys( $changes ) ) ) {
+		if ( array_intersect( array( 'code', 'description', 'date_created', 'date_modified', 'status' ), array_keys( $changes ) ) ) {
 			$post_data = array(
 				'post_title'        => $coupon->get_code( 'edit' ),
 				'post_excerpt'      => $coupon->get_description( 'edit' ),
+				'post_status'       => $coupon->get_status( 'edit' ),
 				'post_date'         => gmdate( 'Y-m-d H:i:s', $coupon->get_date_created( 'edit' )->getOffsetTimestamp() ),
 				'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $coupon->get_date_created( 'edit' )->getTimestamp() ),
 				'post_modified'     => isset( $changes['date_modified'] ) ? gmdate( 'Y-m-d H:i:s', $coupon->get_date_modified( 'edit' )->getOffsetTimestamp() ) : current_time( 'mysql' ),
@@ -189,6 +216,13 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 		$this->update_post_meta( $coupon );
 		$coupon->apply_changes();
 		delete_transient( 'rest_api_coupons_type_count' );
+
+		// The `coupon_id_from_code` entry in the object cache must not exist when the coupon is not published, otherwise the coupon will remain available for use.
+		if ( 'publish' !== $coupon->get_status() ) {
+			$hashed_code = md5( wc_strtolower( $coupon->get_code() ) );
+			wp_cache_delete( WC_Cache_Helper::get_cache_prefix( 'coupons' ) . 'coupon_id_from_code_' . $hashed_code, 'coupons' );
+		}
+
 		do_action( 'woocommerce_update_coupon', $coupon->get_id(), $coupon );
 	}
 
@@ -217,12 +251,14 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 		if ( $args['force_delete'] ) {
 			wp_delete_post( $id );
 
-			wp_cache_delete( WC_Cache_Helper::get_cache_prefix( 'coupons' ) . 'coupon_id_from_code_' . $coupon->get_code(), 'coupons' );
+			$hashed_code = md5( wc_strtolower( $coupon->get_code() ) );
+			wp_cache_delete( WC_Cache_Helper::get_cache_prefix( 'coupons' ) . 'coupon_id_from_code_' . $hashed_code, 'coupons' );
 
 			$coupon->set_id( 0 );
 			do_action( 'woocommerce_delete_coupon', $id );
 		} else {
 			wp_trash_post( $id );
+			$coupon->set_status( 'trash' );
 			do_action( 'woocommerce_trash_coupon', $id );
 		}
 	}
@@ -234,6 +270,8 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 	 * @since 3.0.0
 	 */
 	private function update_post_meta( &$coupon ) {
+		$updated_props = array();
+
 		$meta_key_to_props = array(
 			'discount_type'              => 'discount_type',
 			'coupon_amount'              => 'amount',
@@ -284,10 +322,37 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 
 			if ( $updated ) {
 				$this->updated_props[] = $prop;
+				$updated_props[]       = $prop;
 			}
 		}
 
-		do_action( 'woocommerce_coupon_object_updated_props', $coupon, $this->updated_props );
+		/**
+		 * Fires after a coupon's properties have been updated, with its historical
+		 * payload: the properties written by every save performed through this data
+		 * store instance, accumulated with duplicates and never reset.
+		 *
+		 * @param WC_Coupon $coupon        Coupon object.
+		 * @param string[]  $updated_props Properties updated by all saves through this data store instance, with duplicates.
+		 *
+		 * @since 3.0.0
+		 * @deprecated 11.1.0 Use woocommerce_coupon_updated_props, which reports only the current save's properties.
+		 */
+		do_action_deprecated(
+			'woocommerce_coupon_object_updated_props',
+			array( $coupon, $this->updated_props ),
+			'11.1.0',
+			'woocommerce_coupon_updated_props'
+		);
+
+		/**
+		 * Fires after a coupon's properties have been updated.
+		 *
+		 * @param WC_Coupon $coupon        Coupon object.
+		 * @param string[]  $updated_props Properties updated by the current save.
+		 *
+		 * @since 11.1.0
+		 */
+		do_action( 'woocommerce_coupon_updated_props', $coupon, $updated_props );
 	}
 
 	/**
@@ -346,6 +411,8 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 		} else {
 			add_post_meta( $coupon->get_id(), '_used_by', strtolower( $used_by ) );
 		}
+
+		$this->refresh_coupon_data( $coupon );
 	}
 
 	/**
@@ -374,6 +441,7 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 			if ( $meta_id ) {
 				delete_metadata_by_mid( 'post', $meta_id );
 				$coupon->set_used_by( (array) get_post_meta( $coupon->get_id(), '_used_by' ) );
+				$this->refresh_coupon_data( $coupon );
 			}
 		}
 
@@ -404,6 +472,8 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 			)
 		);
 
+		$this->refresh_coupon_data( $coupon );
+
 		// Get the latest value direct from the DB, instead of possibly the WP meta cache.
 		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = 'usage_count' AND post_id = %d;", $id ) );
 	}
@@ -433,9 +503,9 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 	 */
 	public function get_usage_by_user_id( &$coupon, $user_id ) {
 		global $wpdb;
-		$usage_count = $wpdb->get_var(
+		$usage_count           = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT( meta_id ) FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = '_used_by' AND meta_value = %d;",
+				"SELECT COUNT( meta_id ) FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = '_used_by' AND meta_value = %s;",
 				$coupon->get_id(),
 				$user_id
 			)
@@ -454,7 +524,7 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 	 */
 	public function get_usage_by_email( &$coupon, $email ) {
 		global $wpdb;
-		$usage_count = $wpdb->get_var(
+		$usage_count           = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT( meta_id ) FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = '_used_by' AND meta_value = %s;",
 				$coupon->get_id(),
@@ -477,18 +547,32 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 		global $wpdb;
 		return $wpdb->get_var(
 			$this->get_tentative_usage_query_for_user( $coupon_id, $user_aliases )
-		); // WPCS: unprepared SQL ok.
-
+		); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The interpolated subquery is returned by a helper that prepares all values.
 	}
 
 	/**
-	 * Get held time for resources before cancelling the order. Use 60 minutes as sane default.
+	 * Get held time for resources before cancelling the order.
+	 * It will use `woocommerce_coupon_hold_minutes` filter to get the value, defaulting to `woocommerce_hold_stock_minutes` option if set, with a 1-minute minimum if set to 0.
 	 * Note that the filter `woocommerce_coupon_hold_minutes` only support minutes because it's getting used elsewhere as well, however this function returns in seconds.
 	 *
 	 * @return int
 	 */
 	private function get_tentative_held_time() {
-		return apply_filters( 'woocommerce_coupon_hold_minutes', ( (int) get_option( 'woocommerce_hold_stock_minutes', 60 ) ) ) * 60;
+		$default_hold_time_minutes = (int) get_option( 'woocommerce_hold_stock_minutes', 1 );
+
+		if ( 0 >= $default_hold_time_minutes ) {
+			// Held time is at least 1 minute if `woocommerce_hold_stock_minutes` is set to 0.
+			$default_hold_time_minutes = 1;
+		}
+
+		/**
+		 * Filter the tentative hold time in minutes for a coupon before it expires.
+		 *
+		 * @since 3.7.0
+		 *
+		 * @param int $default_hold_time_minutes The default hold time for coupons in minutes.
+		 */
+		return (int) apply_filters( 'woocommerce_coupon_hold_minutes', $default_hold_time_minutes ) * 60;
 	}
 
 	/**
@@ -502,17 +586,18 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 		global $wpdb;
 
 		$usage_limit = $coupon->get_usage_limit();
-		$held_time   = $this->get_tentative_held_time();
 
-		if ( 0 >= $usage_limit || 0 >= $held_time ) {
+		if ( 0 >= $usage_limit ) {
 			return null;
 		}
 
-		if ( ! apply_filters( 'woocommerce_hold_stock_for_checkout', true ) ) {
+		$held_time = $this->get_tentative_held_time();
+
+		if ( 0 >= $held_time ) {
 			return null;
 		}
 
-		// Make sure we have usage_count meta key for this coupon because its required for `$query_for_usages`.
+		// Make sure we have usage_count meta key for this coupon because it's required for `$query_for_usages`.
 		// We are not directly modifying `$query_for_usages` to allow for `usage_count` not present only keep that query simple.
 		if ( ! metadata_exists( 'post', $coupon->get_id(), 'usage_count' ) ) {
 			$coupon->set_usage_count( $coupon->get_usage_count() ); // Use `get_usage_count` here to write default value, which may changed by a filter.
@@ -531,29 +616,31 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 		);
 
 		$query_for_tentative_usages = $this->get_tentative_usage_query( $coupon->get_id() );
-		$db_timestamp               = $wpdb->get_var( 'SELECT UNIX_TIMESTAMP() FROM DUAL' );
+		$db_timestamp               = $wpdb->get_var( 'SELECT UNIX_TIMESTAMP() FROM ' . $wpdb->posts . ' LIMIT 1' );
 
 		$coupon_usage_key = '_coupon_held_' . ( (int) $db_timestamp + $held_time ) . '_' . wp_generate_password( 6, false );
 
 		$insert_statement = $wpdb->prepare(
 			"
 			INSERT INTO $wpdb->postmeta ( post_id, meta_key, meta_value )
-			SELECT %d, %s, %s FROM DUAL
+			SELECT %d, %s, %s FROM $wpdb->posts
 			WHERE ( $query_for_usages ) + ( $query_for_tentative_usages ) < %d
-			",
+			LIMIT 1",
 			$coupon->get_id(),
 			$coupon_usage_key,
 			'',
 			$usage_limit
-		); // WPCS: unprepared SQL ok.
+		); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The embedded subqueries and outer values are prepared before interpolation.
 
 		/**
 		 * In some cases, specifically when there is a combined index on post_id,meta_key, the insert statement above could end up in a deadlock.
 		 * We will try to insert 3 times before giving up to recover from deadlock.
 		 */
 		for ( $count = 0; $count < 3; $count++ ) {
-			$result = $wpdb->query( $insert_statement ); // WPCS: unprepared SQL ok.
+			$result = $wpdb->query( $insert_statement ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- The statement is prepared before entering the deadlock-retry loop.
 			if ( false !== $result ) {
+				// Clear meta cache.
+				$this->refresh_coupon_data( $coupon );
 				break;
 			}
 		}
@@ -583,7 +670,7 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 				'_coupon_held_' . time(),
 				$coupon_id,
 			)
-		);  // WPCS: unprepared SQL ok.
+		);  // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The coupon ID and aliases are prepared; only the trusted postmeta table name is interpolated.
 	}
 
 	/**
@@ -598,14 +685,16 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 	public function check_and_hold_coupon_for_user( $coupon, $user_aliases, $user_alias ) {
 		global $wpdb;
 		$limit_per_user = $coupon->get_usage_limit_per_user();
-		$held_time      = $this->get_tentative_held_time();
 
-		if ( 0 >= $limit_per_user || 0 >= $held_time ) {
+		if ( 0 >= $limit_per_user ) {
 			// This coupon do not have any restriction for usage per customer. No need to check further, lets bail.
 			return null;
 		}
 
-		if ( ! apply_filters( 'woocommerce_hold_stock_for_checkout', true ) ) {
+		$held_time = $this->get_tentative_held_time();
+
+		if ( 0 >= $held_time ) {
+			// This coupon has held time set to zero. No need to check further, lets bail.
 			return null;
 		}
 
@@ -623,30 +712,32 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 				$user_aliases,
 				array( $coupon->get_id() )
 			)
-		); // WPCS: unprepared SQL ok.
+		); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The placeholder list is generated locally and all values are prepared.
 
 		$query_for_tentative_usages = $this->get_tentative_usage_query_for_user( $coupon->get_id(), $user_aliases );
-		$db_timestamp               = $wpdb->get_var( 'SELECT UNIX_TIMESTAMP() FROM DUAL' );
+		$db_timestamp               = $wpdb->get_var( 'SELECT UNIX_TIMESTAMP() FROM ' . $wpdb->posts . ' LIMIT 1' );
 
-		$coupon_used_by_meta_key    = '_maybe_used_by_' . ( (int) $db_timestamp + $held_time ) . '_' . wp_generate_password( 6, false );
-		$insert_statement           = $wpdb->prepare(
+		$coupon_used_by_meta_key = '_maybe_used_by_' . ( (int) $db_timestamp + $held_time ) . '_' . wp_generate_password( 6, false );
+		$insert_statement        = $wpdb->prepare(
 			"
 			INSERT INTO $wpdb->postmeta ( post_id, meta_key, meta_value )
-			SELECT %d, %s, %s FROM DUAL
+			SELECT %d, %s, %s FROM $wpdb->posts
 			WHERE ( $query_for_usages ) + ( $query_for_tentative_usages ) < %d
-			",
+			LIMIT 1",
 			$coupon->get_id(),
 			$coupon_used_by_meta_key,
 			$user_alias,
 			$limit_per_user
-		); // WPCS: unprepared SQL ok.
+		); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The embedded subqueries and outer values are prepared before interpolation.
 
 		// This query can potentially be deadlocked if a combined index on post_id and meta_key is present and there is
 		// high concurrency, in which case DB will abort the query which has done less work to resolve deadlock.
 		// We will try up to 3 times before giving up.
 		for ( $count = 0; $count < 3; $count++ ) {
-			$result = $wpdb->query( $insert_statement ); // WPCS: unprepared SQL ok.
+			$result = $wpdb->query( $insert_statement ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- The statement is prepared before entering the deadlock-retry loop.
 			if ( false !== $result ) {
+				// Clear meta cache.
+				$this->refresh_coupon_data( $coupon );
 				break;
 			}
 		}
@@ -685,7 +776,19 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 				),
 				$user_aliases
 			)
-		); // WPCS: unprepared SQL ok.
+		); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The placeholder list is generated locally and all values are prepared.
+	}
+
+	/**
+	 * This function clears coupon data from the WP cache after certain operations which, for performance reasons,
+	 * are done via SQL queries.
+	 *
+	 * @param \WC_Coupon $coupon The coupon object.
+	 * @return void
+	 */
+	private function refresh_coupon_data( &$coupon ) {
+		wp_cache_delete( $coupon->get_meta_cache_key(), 'coupons' );
+		wp_cache_delete( $coupon->get_id(), 'post_meta' );
 	}
 
 	/**
@@ -721,7 +824,7 @@ class WC_Coupon_Data_Store_CPT extends WC_Data_Store_WP implements WC_Coupon_Dat
 		global $wpdb;
 		return $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type = 'shop_coupon' AND post_status = 'publish' ORDER BY post_date DESC",
+				"SELECT ID FROM $wpdb->posts WHERE LOWER(post_title) = LOWER(%s) AND post_type = 'shop_coupon' AND post_status = 'publish' ORDER BY post_date DESC",
 				wc_sanitize_coupon_code( $code )
 			)
 		);

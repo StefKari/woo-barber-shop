@@ -3,16 +3,19 @@
 namespace ADP\BaseVersion\Includes\Core\Cart;
 
 use ADP\BaseVersion\Includes\Context\Currency;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\AutoAdd\AutoAddCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\CartItemAttributeEnum;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Free\FreeCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\ICartItem;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponInterface;
 use ADP\BaseVersion\Includes\WC\WcCouponFacade;
-
-use function foo\func;
 
 defined('ABSPATH') or exit;
 
 class Cart
 {
     /**
-     * @var CartItem[]
+     * @var ICartItem[]
      */
     protected $items = array();
 
@@ -25,6 +28,11 @@ class Cart
      * @var AutoAddCartItem[]
      */
     protected $autoAddItems = array();
+
+    /**
+     * @var AutoAddCartItem[]
+     */
+    protected $recommendedPromotions = array();
 
     protected $originCouponsCodes = array();
 
@@ -68,20 +76,24 @@ class Cart
      */
     protected $couponsAdjustments = [];
 
+    /** @var bool */
+    protected $anyRulesApplied;
+
     /**
      * @param CartContext $cartContext
      */
     public function __construct(CartContext $cartContext)
     {
-        $this->cartContext         = $cartContext;
+        $this->cartContext = $cartContext;
         $this->shippingAdjustments = array();
-        $this->coupons             = array();
-        $this->fees                = array();
+        $this->coupons = array();
+        $this->fees = array();
 
         $this->originCouponsCodes = array();
-        $this->currency           = $cartContext->getGlobalContext()->currencyController->getCurrentCurrency();
+        $this->currency = $cartContext->getGlobalContext()->currencyController->getCurrentCurrency();
 
         $this->ruleTriggerCouponCodes = array();
+        $this->anyRulesApplied = false;
     }
 
     public function __clone()
@@ -97,6 +109,18 @@ class Cart
             $newItems[] = clone $item;
         }
         $this->freeItems = $newItems;
+
+        $newItems = array();
+        foreach ($this->autoAddItems as $item) {
+            $newItems[] = clone $item;
+        }
+        $this->autoAddItems = $newItems;
+
+        $newItems = array();
+        foreach ($this->recommendedPromotions as $item) {
+            $newItems[] = clone $item;
+        }
+        $this->recommendedPromotions = $newItems;
 
         $this->cartContext = clone $this->cartContext;
 
@@ -128,6 +152,14 @@ class Cart
         $this->originCouponsCodes[] = $code;
     }
 
+    /**
+     * @param array $originCouponsCodes
+     */
+    public function setOriginCouponsCodes(array $originCouponsCodes)
+    {
+        $this->originCouponsCodes = array_map('strval', $originCouponsCodes);
+    }
+
     public function removeOriginCoupon($code)
     {
         $pos = array_search($code, $this->originCouponsCodes);
@@ -146,9 +178,10 @@ class Cart
     /**
      * @return bool
      */
-    public function removeCartOriginCoupon() {
+    public function removeCartOriginCoupon()
+    {
         $removed = false;
-        $this->originCouponsCodes = array_filter($this->originCouponsCodes, function($code) use (&$removed) {
+        $this->originCouponsCodes = array_filter($this->originCouponsCodes, function ($code) use (&$removed) {
             $coupon = new \WC_Coupon($code);
             $couponType = $coupon->get_discount_type();
             $valid = $couponType !== WcCouponFacade::TYPE_FIXED_CART;
@@ -164,7 +197,8 @@ class Cart
     /**
      * @return bool
      */
-    public function removeProductOriginCoupon() {
+    public function removeProductOriginCoupon()
+    {
         $removed = false;
         $this->originCouponsCodes = array_filter($this->originCouponsCodes, function ($code) use (&$removed) {
             $coupon = new \WC_Coupon($code);
@@ -186,7 +220,7 @@ class Cart
 
     public function isEmpty()
     {
-        return ! count($this->items) && ! count($this->freeItems);
+        return !count($this->items) && !count($this->freeItems);
     }
 
     /**
@@ -195,7 +229,7 @@ class Cart
     public function addToCart(...$newCartItems)
     {
         foreach ($newCartItems as $newCartItem) {
-            if ($newCartItem instanceof CartItem) {
+            if ($newCartItem instanceof ICartItem) {
                 $this->addSingleItem($newCartItem);
             } elseif ($newCartItem instanceof FreeCartItem) {
                 $this->addFreeItem($newCartItem);
@@ -212,7 +246,7 @@ class Cart
      */
     protected function addFreeItem(FreeCartItem $newFreeItem)
     {
-        if ( ! $newFreeItem instanceof FreeCartItem) {
+        if (!$newFreeItem instanceof FreeCartItem) {
             return false;
         }
 
@@ -220,6 +254,7 @@ class Cart
             if ($freeItem->hash() === $newFreeItem->hash()) {
                 $freeItem->qty += $newFreeItem->qty;
                 $freeItem->setQtyAlreadyInWcCart($freeItem->getQtyAlreadyInWcCart() + $newFreeItem->getQtyAlreadyInWcCart());
+                $freeItem->setPrice($newFreeItem->getPrice());
 
                 return true;
             }
@@ -237,7 +272,7 @@ class Cart
      */
     protected function addAutoAddItem(AutoAddCartItem $newAutoAddItem)
     {
-        if ( ! $newAutoAddItem instanceof AutoAddCartItem) {
+        if (!$newAutoAddItem instanceof AutoAddCartItem) {
             return false;
         }
 
@@ -256,19 +291,10 @@ class Cart
         return true;
     }
 
-    /**
-     * @param CartItem $newCartItem
-     *
-     * @return boolean
-     */
-    protected function addSingleItem(CartItem $newCartItem)
+    protected function addSingleItem(ICartItem $newCartItem): bool
     {
-        if ( ! $newCartItem instanceof CartItem) {
-            return false;
-        }
-
         foreach ($this->items as $cartItem) {
-            if ($cartItem->hasAttr($cartItem::ATTR_IMMUTABLE)) {
+            if ($cartItem->hasAttr(CartItemAttributeEnum::IMMUTABLE())) {
                 continue;
             }
 
@@ -276,7 +302,7 @@ class Cart
              * The single 'if' condition is too long, so we have what you see
              */
             $identical = true;
-            if ($identical && $cartItem->hasAttr($cartItem::ATTR_IMMUTABLE) !== $newCartItem->hasAttr($newCartItem::ATTR_IMMUTABLE)) {
+            if ($identical && $cartItem->hasAttr(CartItemAttributeEnum::IMMUTABLE()) !== $newCartItem->hasAttr(CartItemAttributeEnum::IMMUTABLE())) {
                 $identical = false;
             }
             if ($identical && $cartItem->getHash() !== $newCartItem->getHash()) {
@@ -296,20 +322,40 @@ class Cart
         }
 
         $this->items[] = $newCartItem;
-//		usort( $this->items, function ( $item1, $item2 ) {
-//			/**
-//			 * @var $item1 CartItem
-//			 * @var $item2 CartItem
-//			 */
-//
-//			$pos1 = $item1->get_pos();
-//			$pos2 = $item2->get_pos();
-//
-//			return $pos1 - $pos2;
-//		} );
-
 
         return true;
+    }
+
+    /**
+     * @param AutoAddCartItem $newRecommendationItem
+     */
+    public function addRecommendedPromotion($newRecommendationItem)
+    {
+        if (!$newRecommendationItem instanceof AutoAddCartItem) {
+            return false;
+        }
+
+        foreach ($this->recommendedPromotions as $item) {
+            if ($item->hash() === $newRecommendationItem->hash()) {
+                $item->qty += $newRecommendationItem->qty;
+                $item->setQtyAlreadyInWcCart($item->getQtyAlreadyInWcCart() + $newRecommendationItem->getQtyAlreadyInWcCart());
+                $item->setPrice($newRecommendationItem->getPrice());
+
+                return true;
+            }
+        }
+
+        $this->recommendedPromotions[] = $newRecommendationItem;
+
+        return true;
+    }
+
+    /**
+     * @return AutoAddCartItem[]
+     */
+    public function getRecommendedPromotions()
+    {
+        return $this->recommendedPromotions;
     }
 
     /**
@@ -319,10 +365,8 @@ class Cart
     {
         $result = false;
         foreach ($this->items as $item) {
-            /**
-             * @var CartItem $item
-             */
-            if ($item->hasAttr($item::ATTR_IMMUTABLE) && $item->areRuleApplied()) {
+            /** @var ICartItem $item */
+            if ($item->hasAttr(CartItemAttributeEnum::IMMUTABLE()) && $item->areRuleApplied()) {
                 $result = true;
                 break;
             }
@@ -333,7 +377,7 @@ class Cart
     }
 
     /**
-     * @return array<int, CartItem>
+     * @return array<int, ICartItem>
      */
     public function getItems()
     {
@@ -341,14 +385,14 @@ class Cart
     }
 
     /**
-     * @param $items array<int, CartItem>
+     * @param $items array<int, ICartItem>
      */
     public function setItems($items)
     {
         $this->items = array();
 
         foreach ($items as $item) {
-            if ($item instanceof CartItem) {
+            if ($item instanceof ICartItem) {
                 $this->items[] = $item;
             }
         }
@@ -383,7 +427,7 @@ class Cart
     /**
      * @return CartContext
      */
-    public function getContext(): CartContext
+    public function getContext()
     {
         return $this->cartContext;
     }
@@ -392,17 +436,17 @@ class Cart
     {
         usort($this->items, function ($item_a, $item_b) {
             /**
-             * @var $item_a CartItem
-             * @var $item_b CartItem
+             * @var $item_a ICartItem
+             * @var $item_b ICartItem
              */
-            $tmp_a = $item_a->hasAttr($item_a::ATTR_TEMP);
-            $tmp_b = $item_b->hasAttr($item_a::ATTR_TEMP);
+            $tmp_a = $item_a->hasAttr(CartItemAttributeEnum::TEMPORARY());
+            $tmp_b = $item_b->hasAttr(CartItemAttributeEnum::TEMPORARY());
 
-            if ( ! $tmp_a && $tmp_b) {
+            if (!$tmp_a && $tmp_b) {
                 return -1;
             }
 
-            if ($tmp_a && ! $tmp_b) {
+            if ($tmp_a && !$tmp_b) {
                 return 1;
             }
 
@@ -412,15 +456,15 @@ class Cart
     }
 
     /**
-     * @return array<int, CartItem>
+     * @return array<int, ICartItem>
      */
     public function getMutableItems()
     {
         $this->sortItems();
 
         return array_filter($this->items, function ($item) {
-            /**@var $item CartItem */
-            return ! $item->hasAttr($item::ATTR_IMMUTABLE);
+            /**@var $item ICartItem */
+            return !$item->hasAttr(CartItemAttributeEnum::IMMUTABLE());
         });
     }
 
@@ -428,8 +472,8 @@ class Cart
     public function purgeMutableItems()
     {
         $this->items = array_filter($this->items, function ($item) {
-            /** @var $item CartItem */
-            return $item->hasAttr($item::ATTR_IMMUTABLE);
+            /** @var $item ICartItem */
+            return $item->hasAttr(CartItemAttributeEnum::IMMUTABLE());
         });
     }
 
@@ -437,7 +481,7 @@ class Cart
     {
         $this->items = array_values(array_filter($this->items, function ($item) {
             /**
-             * @var $item CartItem
+             * @var $item ICartItem
              */
             return $item->getQty() > 0;
         }));
@@ -543,7 +587,8 @@ class Cart
         return $this->ruleTriggerCouponCodes;
     }
 
-    public function removeExactItem($item) {
+    public function removeExactItem($item)
+    {
         $this->items = array_values(array_filter($this->items, function ($tmpItem) use ($item) {
             return $tmpItem !== $item;
         }));
@@ -582,5 +627,114 @@ class Cart
         if ($couponsAdjustment instanceof CouponsAdjustment) {
             $this->couponsAdjustments[] = $couponsAdjustment;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAnyRulesApplied(): bool
+    {
+        return $this->anyRulesApplied;
+    }
+
+    /**
+     * @param bool $anyRulesApplied
+     */
+    public function setAnyRulesApplied(bool $anyRulesApplied)
+    {
+        $this->anyRulesApplied = $anyRulesApplied;
+    }
+
+    /**
+     * @return array<int,FreeCartItemChoices>
+     */
+    public function getListOfFreeCartItemChoices()
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function expose(): array {
+        return get_object_vars($this);
+    }
+
+    public function toArray()
+    {
+        return [
+            'freeItems' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->freeItems),
+
+            'autoAddItems' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->autoAddItems),
+
+            'recommendedPromotions' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->recommendedPromotions),
+
+            'coupons' => $this->coupons,
+            'originCouponsCodes' => $this->originCouponsCodes,
+            'ruleTriggerCouponCodes' => $this->ruleTriggerCouponCodes,
+            'anyRulesApplied' => $this->anyRulesApplied,
+
+            'shippingAdjustments' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->shippingAdjustments),
+
+            'fees' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->fees),
+
+            'couponsAdjustments' => array_map(function($item) {
+                return ['class' => get_class($item)] + $item->toArray();
+            }, $this->couponsAdjustments),
+
+            'notices' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->notices),
+        ];
+    }
+
+    public function fromArray($data)
+    {
+        $this->freeItems = array_map(function($data) {
+            return FreeCartItem::fromArray($data);
+        }, $data['freeItems'] ?? []);
+
+        $this->autoAddItems = array_map(function($data) {
+            return AutoAddCartItem::fromArray($data);
+        }, $data['autoAddItems'] ?? []);
+
+        $this->recommendedPromotions = array_map(function($data) {
+            return AutoAddCartItem::fromArray($data);
+        }, $data['recommendedPromotions'] ?? []);
+
+        $this->coupons = $data['coupons'] ?? [];
+
+        $this->originCouponsCodes = $data['originCouponsCodes'];
+        $this->ruleTriggerCouponCodes = $data['ruleTriggerCouponCodes'];
+        $this->anyRulesApplied = $data['anyRulesApplied'];
+
+        $this->shippingAdjustments = array_map(function($data) {
+            return ShippingAdjustment::fromArray($data);
+        }, $data['shippingAdjustments'] ?? []);
+
+        $this->fees = array_map(function($data) {
+            return Fee::fromArray($data);
+        }, $data['fees'] ?? []);
+
+        $this->couponsAdjustments = array_map(function($data) {
+            $class = $data['class'] ?? DisableWcCouponsCart::class;
+
+            return $class::fromArray($data);
+        }, $data['couponsAdjustments'] ?? []);
+
+        $this->notices = array_map(function($data) {
+            return Notice::fromArray($data);
+        }, $data['notices'] ?? []);
+
     }
 }

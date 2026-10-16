@@ -2,8 +2,10 @@
 
 namespace ADP\BaseVersion\Includes\Core\Cart;
 
+use ADP\BaseVersion\Includes\Core\Cart\CartCustomer\AddedRecommendedAutoAddItems;
 use ADP\BaseVersion\Includes\Core\Cart\CartCustomer\RemovedAutoAddItems;
 use ADP\BaseVersion\Includes\Core\Cart\CartCustomer\RemovedFreeItems;
+use ADP\BaseVersion\Includes\Core\Cart\CartCustomer\RemovedRecommendedPromotions;
 
 defined('ABSPATH') or exit;
 
@@ -55,6 +57,16 @@ class CartCustomer
     protected $removedAutoAddItemsList;
 
     /**
+     * @var AddedRecommendedAutoAddItems[]
+     */
+    protected $addedRecommendedAutoAddItemsList;
+
+    /**
+     * @var RemovedRecommendedPromotions[]
+     */
+    protected $removedRecommendedPromotions;
+
+    /**
      * @var array
      */
     protected $meta;
@@ -79,9 +91,27 @@ class CartCustomer
         $this->isVatExempt             = false;
         $this->removedFreeItemsList    = array();
         $this->removedAutoAddItemsList = array();
+        $this->addedRecommendedAutoAddItemsList = array();
+        $this->removedRecommendedPromotions = array();
         $this->meta                    = array();
 
         $this->customerTaxAdj = null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getJson()
+    {
+        return [
+            'id'                      => $this->getId(),
+            'billingAddress'          => $this->getBillingAddress(),
+            'shippingAddress'         => $this->getShippingAddress(),
+            'selectedPaymentMethod'   => $this->getSelectedPaymentMethod(),
+            'selectedShippingMethods' => $this->getSelectedShippingMethods(),
+            'isVatExempt'             => $this->isVatExempt(),
+            'roles'                   => $this->getRoles(),
+        ];
     }
 
     /**
@@ -291,6 +321,10 @@ class CartCustomer
         return isset($this->billingAddress['city']) ? $this->billingAddress['city'] : "";
     }
 
+    public function getBillingEmail()
+    {
+        return isset($this->billingAddress['email']) ? $this->billingAddress['email'] : "";
+    }
     /**
      * @return array<int, RemovedFreeItems>
      */
@@ -387,5 +421,125 @@ class CartCustomer
         }
 
         return $result;
+    }
+
+    /**
+     * @return array<int, AddedRecommendedAutoAddItems>
+     */
+    public function getAddedRecommendedAutoAddItemsList()
+    {
+        return $this->addedRecommendedAutoAddItemsList;
+    }
+
+    /**
+     * @param array<int, AddedRecommendedAutoAddItems> $addedRecommendedAutoAddItemsList
+     */
+    public function setAddedRecommendedAutoAddItemsList($addedRecommendedAutoAddItemsList)
+    {
+        if (!is_array($addedRecommendedAutoAddItemsList)) {
+            return;
+        }
+
+        $this->addedRecommendedAutoAddItemsList = array();
+        foreach ($addedRecommendedAutoAddItemsList as $item) {
+            if ($item instanceof AddedRecommendedAutoAddItems) {
+                $this->addedRecommendedAutoAddItemsList[] = $item;
+            }
+        }
+    }
+
+    /**
+     * @param string $autoAddHash
+     *
+     * @return AddedRecommendedAutoAddItems
+     */
+    public function getAddedRecommendedAutoAddItems($autoAddHash)
+    {
+        $result = null;
+
+        foreach ($this->addedRecommendedAutoAddItemsList as $addedRecommendedAutoAddItems) {
+            if ($addedRecommendedAutoAddItems->getAutoAddHash() === $autoAddHash) {
+                $result = $addedRecommendedAutoAddItems;
+                break;
+            }
+        }
+
+        if ($result === null) {
+            $result = new AddedRecommendedAutoAddItems($autoAddHash);
+            $this->addedRecommendedAutoAddItemsList[] = $result;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array<int, RemovedRecommendedPromotions>
+     */
+    public function getRemovedRecommendedPromotionsList()
+    {
+        return $this->removedRecommendedPromotions;
+    }
+
+    /**
+     * @param array<int, RemovedRecommendedPromotions> $removedRecommendedPromotions
+     */
+    public function setRemovedRecommendedPromotionsList($removedRecommendedPromotions)
+    {
+        if (!is_array($removedRecommendedPromotions)) {
+            return;
+        }
+
+        $this->removedRecommendedPromotions = array();
+        foreach ($removedRecommendedPromotions as $item) {
+            if ($item instanceof RemovedRecommendedPromotions) {
+                $this->removedRecommendedPromotions[] = $item;
+            }
+        }
+    }
+
+    /**
+     * @param string $autoAddHash
+     *
+     * @return RemovedRecommendedPromotions
+     */
+    public function getRemovedRecommendedPromotionsItems($autoAddHash)
+    {
+        $result = null;
+
+        foreach ($this->removedRecommendedPromotions as $removedRecommendedPromotion) {
+            if ($removedRecommendedPromotion->getAutoAddHash() === $autoAddHash) {
+                $result = $removedRecommendedPromotion;
+                break;
+            }
+        }
+
+        if ($result === null) {
+            $result = new RemovedRecommendedPromotions($autoAddHash);
+            $this->removedRecommendedPromotions[] = $result;
+        }
+
+        return $result;
+    }
+
+    public function getHash() {
+        $data = [
+            $this->getJson(),
+
+            'removedFreeItemsList' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->removedFreeItemsList),
+            'removedAutoAddItemsList' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->removedAutoAddItemsList),
+            'addedRecommendedAutoAddItemsList' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->addedRecommendedAutoAddItemsList),
+            'removedRecommendedPromotions' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->removedRecommendedPromotions),
+        ];
+
+        $hash = md5(json_encode($data));
+        return $hash;
     }
 }

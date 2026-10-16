@@ -4,8 +4,7 @@ namespace ADP\BaseVersion\Includes\PriceDisplay\ConcreteProductPriceHtml;
 
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\PriceDisplay\ConcreteProductPriceHtml;
-use ADP\BaseVersion\Includes\PriceDisplay\PriceFormatters\DiscountRangeFormatter;
-use ADP\BaseVersion\Includes\PriceDisplay\ProcessedVariableProduct;
+use ADP\BaseVersion\Includes\PriceDisplay\ProcessedGroupedProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\ProductPriceDisplay;
 use ADP\BaseVersion\Includes\WC\PriceFunctions;
 use ADP\Factory;
@@ -20,7 +19,7 @@ class GroupedProductPriceHtml implements ConcreteProductPriceHtml
     protected $context;
 
     /**
-     * @var ProcessedVariableProduct
+     * @var ProcessedGroupedProduct
      */
     protected $processedProduct;
 
@@ -35,13 +34,13 @@ class GroupedProductPriceHtml implements ConcreteProductPriceHtml
     protected $priceFunctions;
 
     /**
-     * @param Context|ProcessedVariableProduct $contextOrProcessedProduct
-     * @param ProcessedVariableProduct|null $deprecated
+     * @param Context|ProcessedGroupedProduct $contextOrProcessedProduct
+     * @param ProcessedGroupedProduct|null $deprecated
      */
     public function __construct($contextOrProcessedProduct, $deprecated = null)
     {
         $this->context          = adp_context();
-        $this->processedProduct = $contextOrProcessedProduct instanceof ProcessedVariableProduct ? $contextOrProcessedProduct : $deprecated;
+        $this->processedProduct = $contextOrProcessedProduct instanceof ProcessedGroupedProduct ? $contextOrProcessedProduct : $deprecated;
         $this->priceFunctions   = new PriceFunctions();
 
         $this->striked = false;
@@ -160,46 +159,6 @@ class GroupedProductPriceHtml implements ConcreteProductPriceHtml
         return $priceHtml;
     }
 
-    public function getLowestOriginalPrice()
-    {
-        $lowestOrigPriceProduct = $this->processedProduct->getLowestInitialPriceProduct();
-        $settings = $this->context->getSettings();
-        $useRegularPrice = $settings->getOption('regular_price_for_striked_price');
-
-        if ( $lowestOrigPriceProduct === null ) {
-            return null;
-        }
-
-        $product = $lowestOrigPriceProduct->getProduct();
-
-        return $this->priceFunctions->getPriceToDisplay(
-            $product,
-            array(
-                'price' => $useRegularPrice ? $product->get_regular_price('edit') : $lowestOrigPriceProduct->getOriginalPrice(),
-            )
-        );
-    }
-
-    public function getHighestOriginalPrice()
-    {
-        $highestOrigPriceProduct = $this->processedProduct->getHighestInitialPriceProduct();
-        $settings = $this->context->getSettings();
-        $useRegularPrice = $settings->getOption('regular_price_for_striked_price');
-
-        if ( $highestOrigPriceProduct === null ) {
-            return null;
-        }
-
-        $product = $highestOrigPriceProduct->getProduct();
-
-        return $this->priceFunctions->getPriceToDisplay(
-            $product,
-            array(
-                'price' => $useRegularPrice ? $product->get_regular_price('edit') : $highestOrigPriceProduct->getOriginalPrice(),
-            )
-        );
-    }
-
     public function getLowestDiscountedPrice()
     {
         $lowestPriceProduct = $this->processedProduct->getLowestPriceProduct();
@@ -228,48 +187,6 @@ class GroupedProductPriceHtml implements ConcreteProductPriceHtml
             $highestPriceProduct->getProduct(),
             array(
                 'price' => $highestPriceProduct->getCalculatedPrice(),
-            )
-        );
-    }
-
-    public function getLowestOriginalSubtotal($qty)
-    {
-        $lowestOrigPriceProduct = $this->processedProduct->getLowestInitialPriceProduct();
-        $settings = $this->context->getSettings();
-        $useRegularPrice = $settings->getOption('regular_price_for_striked_price');
-
-        if ( $lowestOrigPriceProduct === null ) {
-            return null;
-        }
-
-        $product = $lowestOrigPriceProduct->getProduct();
-
-        return $this->priceFunctions->getPriceToDisplay(
-            $product,
-            array(
-                'price' => $useRegularPrice ? $product->get_regular_price('edit') : $lowestOrigPriceProduct->getOriginalPrice(),
-                'qty'   => $qty,
-            )
-        );
-    }
-
-    public function getHighestOriginalSubtotal($qty)
-    {
-        $highestOrigPriceProduct = $this->processedProduct->getHighestInitialPriceProduct();
-        $settings = $this->context->getSettings();
-        $useRegularPrice = $settings->getOption('regular_price_for_striked_price');
-
-        if ( $highestOrigPriceProduct === null ) {
-            return null;
-        }
-
-        $product = $highestOrigPriceProduct->getProduct();
-
-        return $this->priceFunctions->getPriceToDisplay(
-            $product,
-            array(
-                'price' => $useRegularPrice ? $product->get_regular_price('edit') : $highestOrigPriceProduct->getOriginalPrice(),
-                'qty'   => $qty,
             )
         );
     }

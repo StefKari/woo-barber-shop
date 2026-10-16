@@ -10,6 +10,52 @@ jQuery(function ($) {
         var openingHourIs = 0;
     }
 
+    /**
+     * Hide slimScroll bar when content fits; otherwise pin bar to the bottom correctly.
+     * slimScroll shows the bar when scrollHeight < clientHeight due to its size math.
+     */
+    window.wpbotSyncSlimScrollBar = function ($inner) {
+        $inner = ($inner && $inner.jquery) ? $inner : $('.wp-chatbot-ball-inner');
+        $inner.each(function () {
+            var el = this;
+            var $el = $(el);
+            var $wrap = $el.parent();
+            if (!$wrap.hasClass('slimScrollDiv')) {
+                return;
+            }
+            var $bar = $wrap.children('.slimScrollBar');
+            var $rail = $wrap.children('.slimScrollRail');
+            if (!$bar.length) {
+                return;
+            }
+            if (el.scrollHeight <= el.clientHeight + 2) {
+                $wrap.addClass('wpbot-no-scroll');
+                $bar.stop(true, true).hide().css({ opacity: 0 });
+                $rail.stop(true, true).hide();
+                return;
+            }
+            $wrap.removeClass('wpbot-no-scroll');
+            var barH = Math.max(($el.outerHeight() / el.scrollHeight) * $el.outerHeight(), 30);
+            barH = Math.min(barH, $el.outerHeight());
+            var maxTop = Math.max(0, $el.outerHeight() - barH);
+            var ratio = el.scrollHeight > el.clientHeight
+                ? el.scrollTop / (el.scrollHeight - el.clientHeight)
+                : 1;
+            $bar.css({
+                height: barH + 'px',
+                top: (ratio * maxTop) + 'px',
+                display: 'block',
+                opacity: 0.4
+            });
+            clearTimeout($bar.data('wpbotBarHideTimer'));
+            $bar.data('wpbotBarHideTimer', setTimeout(function () {
+                if (!$bar.is(':hover')) {
+                    $bar.fadeOut('slow');
+                }
+            }, 1000));
+        });
+    };
+
     wpChatBotVar.exit_intent_handler = 0;
     wpChatBotVar.scroll_open_handler = 0;
     wpChatBotVar.auto_open_handler = 0;
@@ -21,6 +67,29 @@ jQuery(function ($) {
             LoadwpwBotPlugin = 0;
         }
 		var botimage = jQuery('#wp-chatbot-ball').find('img').attr('qcld_agent');
+
+		// Custom Icon Video / YouTube: start playback after configured delay
+		var wpbotIconVideo = wpChatBotVar.icon_video || '';
+		var wpbotVideoDelay = parseInt(wpChatBotVar.icon_video_delay, 10) || 0;
+		if (wpbotIconVideo !== '') {
+			var $wpbotVidEl = $('#wp-chatbot-ball-icon-video');
+			if ($wpbotVidEl.length) {
+				if (wpbotVideoDelay > 0) {
+					$wpbotVidEl.hide();
+					setTimeout(function () {
+						$wpbotVidEl.show();
+						if ($wpbotVidEl.is('video')) {
+							try { $wpbotVidEl[0].play(); } catch(e){}
+						}
+					}, wpbotVideoDelay * 1000);
+				} else {
+					if ($wpbotVidEl.is('video')) {
+						try { $wpbotVidEl[0].play(); } catch(e){}
+					}
+				}
+			}
+		}
+
         if ($('#wp-chatbot-shortcode-template-container').length == 0 && $('#wp-chatbot-chat-app-shortcode-container').length == 0) {
             //Main wpwbot area.
             //show it
@@ -92,7 +161,15 @@ jQuery(function ($) {
                     }
 					$('#wp-chatbot-ball').removeClass('wpbot_chatopen_iconanimation');
 					$('#wp-chatbot-ball').addClass('wpbot_chatclose_iconanimation');
-					$('#wp-chatbot-ball').find('img').attr('src', botimage)		
+					// Restore: hide close icon, show video OR image
+					$('#wp-chatbot-ball').find('img#wp-chatbot-ball-icon-img').attr('src', botimage);
+					if (wpbotIconVideo !== '') {
+						$('#wp-chatbot-ball-icon-video').show();
+						$('#wp-chatbot-ball').find('img#wp-chatbot-ball-icon-img').hide();
+						$('#wp-chatbot-ball').find('img.wpbot-close-icon-overlay').hide();
+					} else {
+						$('#wp-chatbot-ball').find('img#wp-chatbot-ball-icon-img').show();
+					}
                     $('.wp-chatbot-ball').css('background', '#ffffff');
 
 
@@ -100,14 +177,38 @@ jQuery(function ($) {
 
 					$('#wp-chatbot-ball').removeClass('wpbot_chatclose_iconanimation');
 					$('#wp-chatbot-ball').addClass('wpbot_chatopen_iconanimation');
-					$('#wp-chatbot-ball').find('img').attr('src', wpChatBotVar.imgurl+'wpbot-close-icon.png');
+					// Show close icon; hide video OR image
+					if (wpbotIconVideo !== '') {
+						$('#wp-chatbot-ball-icon-video').hide();
+						$('#wp-chatbot-ball').find('img#wp-chatbot-ball-icon-img').attr('src', wpChatBotVar.imgurl+'wpbot-close-icon.png').show();
+					} else {
+						$('#wp-chatbot-ball').find('img').attr('src', wpChatBotVar.imgurl+'wpbot-close-icon.png');
+					}
                     //$('.wp-chatbot-ball').css('background', 'unset');
 
 
 				}
 				
-                $("#wp-chatbot-board-container").toggleClass('active-chat-board');
-                wpwbot_board_action();
+                var $boardContainer = $("#wp-chatbot-board-container");
+                var animationDuration = 280;
+                var isOpening = !$boardContainer.hasClass('active-chat-board');
+                $boardContainer.removeClass('wp-chatbot-open-anim wp-chatbot-close-anim');
+                if (isOpening) {
+                    $boardContainer.addClass('active-chat-board');
+                    void $boardContainer[0].offsetWidth;
+                    $boardContainer.addClass('wp-chatbot-open-anim');
+                    wpwbot_board_action();
+                    setTimeout(function () {
+                        $boardContainer.removeClass('wp-chatbot-open-anim');
+                    }, 360);
+                } else {
+                    void $boardContainer[0].offsetWidth;
+                    $boardContainer.addClass('wp-chatbot-close-anim');
+                    setTimeout(function () {
+                        $boardContainer.removeClass('active-chat-board wp-chatbot-close-anim');
+                        wpwbot_board_action();
+                    }, animationDuration);
+                }
 
             });
             //wpwBot proActive start
@@ -317,7 +418,12 @@ jQuery(function ($) {
                                     setTimeout(function () {
 										$('#wp-chatbot-ball').removeClass('wpbot_chatclose_iconanimation');
 									$('#wp-chatbot-ball').addClass('wpbot_chatopen_iconanimation');
-									$('#wp-chatbot-ball').find('img').attr('src', wpChatBotVar.imgurl+'wpbot-close-icon.png');
+									if (wpbotIconVideo !== '') {
+										$('#wp-chatbot-ball-icon-video').hide();
+										$('#wp-chatbot-ball').find('img#wp-chatbot-ball-icon-img').attr('src', wpChatBotVar.imgurl+'wpbot-close-icon.png').show();
+									} else {
+										$('#wp-chatbot-ball').find('img').attr('src', wpChatBotVar.imgurl+'wpbot-close-icon.png');
+									}
                                         $("#wp-chatbot-board-container").addClass('active-chat-board');
                                         wpwbot_board_action();
                                         showing_proactive_msg(wpChatBotVar.checkout_msg);
@@ -374,15 +480,25 @@ jQuery(function ($) {
 
             //wpwBot proActive end
             function wpwbot_board_action() {
-                if (widowW <= 1024 && wpChatBotVar.mobile_full_screen==1 ) {//For mobile
+                var currentW = $(window).width();
+                var isBoardOpen = $('#wp-chatbot-board-container').hasClass('active-chat-board');
+                if (currentW <= 480 && wpChatBotVar.mobile_full_screen==1 && isBoardOpen) {//For mobile
                     if ($('#wp-chatbot-mobile-close').length <= 0) {
                         $('.wp-chatbot-board-container').append('<div id="wp-chatbot-mobile-close">X</div>');
                     }
                     $('.wp-chatbot-ball-inner').slimScroll({
                         height: '100hv',
                         start: 'bottom'
-                    }).parent().find('.slimScrollBar').css({'top': $('.wp-chatbot-ball-inner').height() + 'px'});
-                    $('#wp-chatbot-chat-container').css({'bottom': '0', 'left': '0', 'right': '0'});
+                    });
+                    wpbotSyncSlimScrollBar($('.wp-chatbot-ball-inner'));
+                    $('#wp-chatbot-chat-container').addClass('wp-chatbot-mobile-fs-open').css({
+                        'bottom': '0',
+                        'left': '0',
+                        'right': '0',
+                        'width': '100%',
+                        'max-width': '100%'
+                    });
+                    $('#wp-chatbot-board-container').css({'width': '100%', 'max-width': '100%'});
                     $('#wp-chatbot-ball').hide();
                     //Maintain inner chat box height
                     var widowH = $(window).height();
@@ -394,11 +510,15 @@ jQuery(function ($) {
                     $('.wp-chatbot-ball-inner').css({'max-height': AppContentInner + 'px'})
                     $(this).hide();
                 } else {
+                    if (!isBoardOpen) {
+                        $('#wp-chatbot-chat-container').removeClass('wp-chatbot-mobile-fs-open');
+                    }
                 //    $('.wp-chatbot-header').append('<div id="wp-chatbot-desktop-close"><span class="dashicons dashicons-no"></span></div>');
                     $('.wp-chatbot-ball-inner').slimScroll({
                         height: '55hv',
                         start: 'bottom'
-                    }).parent().find('.slimScrollBar').css({'top': $('.wp-chatbot-ball-inner').height() + 'px'});
+                    });
+                    wpbotSyncSlimScrollBar($('.wp-chatbot-ball-inner'));
                 }
 
 
@@ -406,7 +526,7 @@ jQuery(function ($) {
                 if (LoadwpwBotPlugin == 0) {
                     $.wpwbot({obj: wpChatBotVar, editor_handler: textEditorHandler, preLoadingTime: wpChatBotVar.botpreloadingtime});
                     LoadwpwBotPlugin++;
-					var data = {'action': 'qcld_wb_chatbot_session_count'};
+					var data = {'action': 'qcld_wb_chatbot_session_count', 'nonce': wpChatBotVar.session_nonce};
                     jQuery.post(wpChatBotVar.ajax_url, data, function (response) {
                        //
                     });
@@ -435,33 +555,75 @@ jQuery(function ($) {
                 }
             }
             function showing_proactive_msg(msg){
+                var enableleReactions = globalwpw.settings.obj.skip_chat_reactions_menu;
+                var eanleeReport = globalwpw.settings.obj.enable_chat_report_menu;
+                var enableshare = globalwpw.settings.obj.enable_chat_share_menu;
+                var likeTxt = globalwpw.settings.obj.qlcd_wp_chatbot_like_text;
+                var disLikeTxt = globalwpw.settings.obj.qlcd_wp_chatbot_dislike_text;
+                var reportTxt = globalwpw.settings.obj.qlcd_wp_chatbot_report_text;
+                var sharetTxt = globalwpw.settings.obj.qlcd_wp_chatbot_share_text;
+                console.log(globalwpw.settings);
+                console.log(enableleReactions);
                 //first open then chatboard
                 if(localStorage.getItem("wpwHitory") && ! $('.wp-chatbot-operation-option[data-option="chat"]').parent().hasClass('wp-chatbot-operation-active')){
-                    $('.wp-chatbot-messages-wrapper').html(localStorage.getItem("wpwHitory"));
-                    $('.wp-chatbot-operation-option').each(function(){
-                        if($(this).attr('data-option')=='chat'){
-                            $(this).parent().addClass('wp-chatbot-operation-active');
-                        }else{
-                            $(this).parent().removeClass('wp-chatbot-operation-active');
-                        }
-                    });
-                }
-                var msgContent='<li class="wp-chatbot-msg">' +
-                    '<div class="wp-chatbot-avatar">'+
-                    '<img src="'+wpChatBotVar.agent_image_path+'" alt="">'+
-                    '</div>'+
-                    '<div class="wp-chatbot-agent">'+ wpChatBotVar.agent+'</div>'
-                    +'<div class="wp-chatbot-paragraph"><img class="wp-chatbot-comment-loader" src="'+wpChatBotVar.image_path+'comment.gif" alt="Typing..." /></div></li>';
+                        $('.wp-chatbot-messages-wrapper').html(localStorage.getItem("wpwHitory"));
+                        $('.wp-chatbot-operation-option').each(function(){
+                            if($(this).attr('data-option')=='chat'){
+                                $(this).parent().addClass('wp-chatbot-operation-active');
+                            }else{
+                                $(this).parent().removeClass('wp-chatbot-operation-active');
+                            }
+                        });
+                    }
+                    var msgContent='<li class="wp-chatbot-msg">' +
+                        '<div class="wp-chatbot-avatar">'+
+                        '<img src="'+wpChatBotVar.agent_image_path+'" alt="">'+
+                        '</div>'+
+                        '<div class="wp-chatbot-agent">'+ wpChatBotVar.agent+'</div>'
+                        +'<div class="wp-chatbot-paragraph"><img class="wp-chatbot-comment-loader" src="'+wpChatBotVar.image_path+'comment.gif" alt="Typing..." /></div>'+
+                            '<div class="qcld-like-dislike-icon">' +
+                (enableleReactions == 1 
+                    ? '<a href="#" title="' + (disLikeTxt?.en_US || 'Dislike') + '"><i class="dashicons dashicons-thumbs-down"></i></a>' +
+                    '<a href="#" title="' + (likeTxt?.en_US || 'Like') + '"><i class="dashicons dashicons-thumbs-up" ></i></a>' 
+                    : '') +
+
+                (eanleeReport == 1 
+                    ? '<a href="#" title="' + (reportTxt?.en_US || 'Report') + '"><i class="dashicons dashicons-admin-comments"></i></a>'
+                    : '') +
+
+                (enableshare == 1 
+                    ? '<div class="qcld-share">' +
+                        '<a href="#" class="share-toggle" title="' + (sharetTxt?.en_US || 'Share') + '"><i class="dashicons dashicons-share" aria-hidden="true"></i></a>' +
+                        '<div class="share-menu" style="display:none;">' +
+                            '<a href="#" class="share-fb"><i class="dashicons dashicons-facebook"></i></a>' +
+                            '<a href="#" class="share-wa"><i class="dashicons dashicons-whatsapp"></i></a>' +
+                            '<a href="#" class="share-x"><i class="dashicons dashicons-twitter"></i></a>' +
+                            '<a href="#" class="share-email"><i class="dashicons dashicons-email-alt"></i></a>' +
+                        '</div>' +
+                    '</div>'
+                    : '') +
+            '</div>' +
+                    '</li>';
+                    
                     $('#wp-chatbot-messages-container').append(msgContent);
                 //Scroll to the last message
-                $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow').parent().find('.slimScrollBar').css({'top':$('.wp-chatbot-ball-inner').height()+'px'});
+                $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow', function () { wpbotSyncSlimScrollBar($('.wp-chatbot-ball-inner')); });
                 setTimeout(function(){
                     $('#wp-chatbot-messages-container li:last .wp-chatbot-paragraph').html(msg).css({'background-color':wpChatBotVar.proactive_bg_color});
                     //scroll to the last message
-                    $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow').parent().find('.slimScrollBar').css({'top':$('.wp-chatbot-ball-inner').height()+'px'});
+                    $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow', function () { wpbotSyncSlimScrollBar($('.wp-chatbot-ball-inner')); });
                 }, 2000);
             }
             function  showing_proactive_double_msg(secondMsg) {
+                var enableleReactions = globalwpw.settings.obj.skip_chat_reactions_menu;
+                var eanleeReport = globalwpw.settings.obj.enable_chat_report_menu;
+                var enableshare = globalwpw.settings.obj.enable_chat_share_menu;
+                var likeTxt = globalwpw.settings.obj.qlcd_wp_chatbot_like_text;
+                var disLikeTxt = globalwpw.settings.obj.qlcd_wp_chatbot_dislike_text;
+                var reportTxt = globalwpw.settings.obj.qlcd_wp_chatbot_report_text;
+                var sharetTxt = globalwpw.settings.obj.qlcd_wp_chatbot_share_text;
+                console.log(globalwpw.settings);
+                console.log(enableleReactions);
                 //first open then chatboard
                 if(localStorage.getItem("wpwHitory")){
                     $('.wp-chatbot-messages-wrapper').html(localStorage.getItem("wpwHitory"));
@@ -479,35 +641,74 @@ jQuery(function ($) {
                     '<img src="'+wpChatBotVar.agent_image_path+'" alt="">'+
                     '</div>'+
                     '<div class="wp-chatbot-agent">'+ wpChatBotVar.agent+'</div>'
-                    +'<div class="wp-chatbot-paragraph"><img class="wp-chatbot-comment-loader" src="'+wpChatBotVar.image_path+'comment.gif" alt="Typing..." /></div></li>';
+                    +'<div class="wp-chatbot-paragraph"><img class="wp-chatbot-comment-loader" src="'+wpChatBotVar.image_path+'comment.gif" alt="Typing..." /></div>'+
+                     '<div class="qcld-like-dislike-icon">' +
+              (enableleReactions == 1 
+                  ? '<a href="#" title="' + (disLikeTxt?.en_US || 'Dislike') + '"><i class="dashicons dashicons-thumbs-down"></i></a>' +
+                    '<a href="#" title="' + (likeTxt?.en_US || 'Like') + '"><i class="dashicons dashicons-thumbs-up"></i></a>'
+                  : '') +
+
+              (eanleeReport == 1 
+                  ? '<a href="#" title="' + (reportTxt?.en_US || 'Report') + '"><i class="dashicons dashicons-admin-comments"></i></a>'
+                  : '') +
+
+              (enableshare == 1 
+                  ? '<div class="qcld-share">' +
+                      '<a href="#" class="share-toggle" title="' + (sharetTxt?.en_US || 'Share') + '"><i class="dashicons dashicons-share"></i></a>' +
+                      '<div class="share-menu" style="display:none;">' +
+                          '<a href="#" class="share-fb"><i class="dashicons dashicons-facebook"></i></a>' +
+                          '<a href="#" class="share-wa"><i class="dashicons dashicons-whatsapp"></i></a>' +
+                          '<a href="#" class="share-x"><i class="dashicons dashicons-twitter"></i></a>' +
+                          '<a href="#" class="share-email"><i class="dashicons dashicons-email-alt"></i></a>' +
+                      '</div>' +
+                  '</div>'
+                  : '') +
+          '</div>' +
+          '</li>';
                 $('#wp-chatbot-messages-container').append(msgContent);
                 //Scroll to the last message
-                $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow').parent().find('.slimScrollBar').css({'top':$('.wp-chatbot-ball-inner').height()+'px'});
+                $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow', function () { wpbotSyncSlimScrollBar($('.wp-chatbot-ball-inner')); });
 
                 setTimeout(function(){
                     $('#wp-chatbot-messages-container li:last .wp-chatbot-paragraph').html(fristMsg);
                     //Second Message with interval
                     $('#wp-chatbot-messages-container').append(msgContent);
                     //Scroll to the last message
-                    $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow').parent().find('.slimScrollBar').css({'top':$('.wp-chatbot-ball-inner').height()+'px'});
+                    $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow', function () { wpbotSyncSlimScrollBar($('.wp-chatbot-ball-inner')); });
                      setTimeout(function(){
                         $('#wp-chatbot-messages-container li:last .wp-chatbot-paragraph').html(secondMsg).css({'background-color':wpChatBotVar.proactive_bg_color});
                         //Scroll to the last message
-                         $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow').parent().find('.slimScrollBar').css({'top':$('.wp-chatbot-ball-inner').height()+'px'});
+                         $('.wp-chatbot-ball-inner').animate({ scrollTop: $('.wp-chatbot-messages-wrapper').prop("scrollHeight")}, 'slow', function () { wpbotSyncSlimScrollBar($('.wp-chatbot-ball-inner')); });
 
                     }, 2000);
 
                 }, 2000);
             }
             $(document).on('click', '#wp-chatbot-mobile-close, #wp-chatbot-desktop-close', function (event) {
-                $("#wp-chatbot-board-container").toggleClass('active-chat-board');
+                var $boardContainer = $("#wp-chatbot-board-container");
+                if ($boardContainer.hasClass('active-chat-board')) {
+                    $boardContainer.removeClass('wp-chatbot-open-anim wp-chatbot-expand-anim wp-chatbot-collapse-anim');
+                    void $boardContainer[0].offsetWidth;
+                    $boardContainer.addClass('wp-chatbot-close-anim');
+                    setTimeout(function () {
+                        $boardContainer.removeClass('active-chat-board wp-chatbot-close-anim');
+                    }, 280);
+                }
                 $("#wp-chatbot-notification-container").removeClass('wp-chatbot-notification-container-disable').addClass('wp-chatbot-notification-container-sliding');
-                $('#wp-chatbot-chat-container').css({
+                $('#wp-chatbot-chat-container').removeClass('wp-chatbot-mobile-fs-open').css({
                     'right': wpChatBotVar.wp_chatbot_position_x + 'px',
                     'bottom': wpChatBotVar.wp_chatbot_position_y + 'px',
-                    'top': 'auto', 'left': 'auto'
+                    'top': 'auto', 'left': 'auto',
+                    'width': '', 'max-width': ''
                 });
-				$('#wp-chatbot-ball').find('img').attr('src', botimage)		
+                $('#wp-chatbot-board-container').css({'width': '', 'max-width': ''});
+				// Restore icon: show video OR image when chat is closed via X button
+				if (wpbotIconVideo !== '') {
+					$('#wp-chatbot-ball').find('img#wp-chatbot-ball-icon-img').attr('src', botimage).hide();
+					$('#wp-chatbot-ball-icon-video').show();
+				} else {
+					$('#wp-chatbot-ball').find('img').attr('src', botimage);
+				}
                 $('.wp-chatbot-ball').css('background', '#ffffff');
                 $('#wp-chatbot-ball').show();
                 //Facebook Messenger.
@@ -517,7 +718,37 @@ jQuery(function ($) {
                     $('#wp-chatbot-integration-container').hide();
                 }
             });
+            function wpbotSyncExpandIconState() {
+                var $boardContainer = $('#wp-chatbot-board-container');
+                var isExpanded = $boardContainer.hasClass('wp-chatbot-expanded');
+                $('#wp-chatbot-desktop-expand').attr('title', isExpanded ? 'Collapse' : 'Expand').find('span')
+                    .removeClass('dashicons dashicons-fullscreen-exit-alt')
+                    .addClass('dashicons ' + (isExpanded ? 'dashicons-editor-contract' : 'dashicons-editor-expand'));
+            }
 
+            wpbotSyncExpandIconState();
+
+            $(document).on('click', '#wp-chatbot-desktop-expand', function (event) {
+                event.preventDefault();
+                var $boardContainer = $('#wp-chatbot-board-container');
+                // Size toggle only — CSS width/height transition. No opacity/scale anims (they flash white).
+                $boardContainer.removeClass('wp-chatbot-open-anim wp-chatbot-expand-anim wp-chatbot-collapse-anim wp-chatbot-close-anim');
+                $boardContainer.toggleClass('wp-chatbot-expanded');
+                wpbotSyncExpandIconState();
+                // Keep slimScroll in sync after height change
+                setTimeout(function () {
+                    var $inner = $boardContainer.find('.wp-chatbot-ball-inner');
+                    if (!$inner.length || !$inner[0]) {
+                        return;
+                    }
+                    var computedH = window.getComputedStyle($inner[0]).height;
+                    if (computedH) {
+                        $inner.slimScroll({ height: computedH, start: 'bottom' });
+                        wpbotSyncSlimScrollBar($inner);
+                    }
+                }, 40);
+            });
+         
 
             $("#qcld-wp-chatbot-shortcode-style-css").attr("disabled", "disabled");
             /***
@@ -570,7 +801,8 @@ jQuery(function ($) {
             $('.wp-chatbot-ball-inner').slimScroll({
                 height: '60hv',
                 start: 'bottom'
-            }).parent().find('.slimScrollBar').css({'top': $('.wp-chatbot-ball-inner').height() + 'px'});
+            });
+                    wpbotSyncSlimScrollBar($('.wp-chatbot-ball-inner'));
             //Add scroll to cart part
             var recentViewHeight = $('.wp-chatbot-container').outerHeight();
             if ($('.chatbot-shortcode-template-02').length == 0) {
@@ -584,7 +816,7 @@ jQuery(function ($) {
             if (LoadwpwBotPlugin == 0) {
                 $.wpwbot({obj: wpChatBotVar, editor_handler: textEditorHandler});
                 LoadwpwBotPlugin++;
-				var data = {'action': 'qcld_wb_chatbot_session_count'};
+				var data = {'action': 'qcld_wb_chatbot_session_count', 'nonce': wpChatBotVar.session_nonce};
                     jQuery.post(wpChatBotVar.ajax_url, data, function (response) {
                        //
                     });
@@ -623,11 +855,12 @@ jQuery(function ($) {
             $('.wp-chatbot-ball-inner').slimScroll({
                 height: '55hv',
                 start: 'bottom'
-            }).parent().find('.slimScrollBar').css({'top': $(window).height() + 'px'});
+            }).parent();
+            wpbotSyncSlimScrollBar($('.wp-chatbot-ball-inner'));
             if (LoadwpwBotPlugin == 0) {
                 $.wpwbot({obj: wpChatBotVar, editor_handler: textEditorHandler});
                 LoadwpwBotPlugin++;
-				var data = {'action': 'qcld_wb_chatbot_session_count'};
+				var data = {'action': 'qcld_wb_chatbot_session_count', 'nonce': wpChatBotVar.session_nonce};
                     jQuery.post(wpChatBotVar.ajax_url, data, function (response) {
                        //
                     });

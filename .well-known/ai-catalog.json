@@ -1,0 +1,45 @@
+{
+    "specVersion": "1.0",
+    "host": {
+        "displayName": "Barbers – Barber Shop",
+        "identifier": "did:web:barbershop.wp1.smartweb.rs",
+        "documentationUrl": "https://barbershop.wp1.smartweb.rs/llms.txt"
+    },
+    "entries": [
+        {
+            "identifier": "urn:air:barbershop.wp1.smartweb.rs:shop:barbers-shop",
+            "displayName": "Barbers online prodavnica",
+            "type": "text/markdown; profile=\"urn:air:agent-skills\"",
+            "url": "https://barbershop.wp1.smartweb.rs/.well-known/agent-skills/barbers-shop/SKILL.md",
+            "description": "Uputstvo za AI agente: pretraga i pregled proizvoda za negu brade, kose i brijanje, cene u RSD, dostava po Srbiji i poručivanje u prodavnici Barbers.",
+            "tags": [
+                "ecommerce",
+                "woocommerce",
+                "kozmetika za bradu",
+                "kozmetika za kosu",
+                "brijanje",
+                "Srbija"
+            ],
+            "capabilities": [
+                "ProductSearch",
+                "ProductCatalog",
+                "ProductCategories",
+                "ShippingInfo",
+                "Ordering"
+            ],
+            "representativeQueries": [
+                "Gde mogu da kupim ulje za bradu u Srbiji?",
+                "Koje pomade za kosu Reuzel su dostupne i koliko koštaju?",
+                "Koliko košta dostava i od kog iznosa je besplatna?",
+                "Preporuči kozmetiku za negu brade"
+            ],
+            "version": "1.0.0",
+            "metadata": {
+                "currency": "RSD",
+                "language": "sr-RS",
+                "storeApi": "https://barbershop.wp1.smartweb.rs/wp-json/wc/store/v1/",
+                "llmsTxt": "https://barbershop.wp1.smartweb.rs/llms.txt"
+            }
+        }
+    ]
+}

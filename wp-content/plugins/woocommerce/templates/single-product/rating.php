@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
+ * @see     https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
  * @version 3.6.0
  */
@@ -32,7 +32,7 @@ $average      = $product->get_average_rating();
 if ( $rating_count > 0 ) : ?>
 
 	<div class="woocommerce-product-rating">
-		<?php echo wc_get_rating_html( $average, $rating_count ); // WPCS: XSS ok. ?>
+		<?php echo wc_get_rating_html( $average, $rating_count ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The rating helper returns intentionally filterable HTML. ?>
 		<?php if ( comments_open() ) : ?>
 			<?php //phpcs:disable ?>
 			<a href="#reviews" class="woocommerce-review-link" rel="nofollow">(<?php printf( _n( '%s customer review', '%s customer reviews', $review_count, 'woocommerce' ), '<span class="count">' . esc_html( $review_count ) . '</span>' ); ?>)</a>

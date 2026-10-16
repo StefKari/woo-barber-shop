@@ -1,17 +1,104 @@
 /* global jQuery, woocommerce_admin_system_status, wcSetClipboard, wcClearClipboard */
 jQuery( function ( $ ) {
-
 	/**
 	 * Users country and state fields
 	 */
 	var wcSystemStatus = {
-		init: function() {
+		toolsPollTimer: null,
+		toolsPollInProgress: false,
+
+		init: function () {
 			$( document.body )
-				.on( 'click', 'a.help_tip, a.woocommerce-help-tip', this.preventTipTipClick )
+				.on(
+					'click',
+					'a.help_tip, a.woocommerce-help-tip, woocommerce-product-type-tip',
+					this.preventTipTipClick
+				)
 				.on( 'click', 'a.debug-report', this.generateReport )
 				.on( 'click', '#copy-for-support', this.copyReport )
-				.on( 'aftercopy', '#copy-for-support', this.copySuccess )
-				.on( 'aftercopyfailure', '#copy-for-support', this.copyFail );
+				.on( 'click', '#copy-for-github', this.copyGithubReport )
+				.on( 'aftercopy', '#copy-for-support, #copy-for-github', this.copySuccess )
+				.on( 'aftercopyfailure', '#copy-for-support, #copy-for-github', this.copyFail )
+				.on( 'click', '#download-for-support', this.downloadReport );
+
+			this.maybePollTools();
+		},
+
+		/**
+		 * Start polling the tools page if a background tool is running.
+		 */
+		maybePollTools: function() {
+			if (
+				this.toolsPollTimer ||
+				! woocommerce_admin_system_status.tools_url ||
+				! this.shouldPollTools()
+			) {
+				return;
+			}
+
+			this.toolsPollTimer = window.setInterval(
+				$.proxy( this.pollTools, this ),
+				parseInt( woocommerce_admin_system_status.tools_poll_interval, 10 ) || 10000
+			);
+		},
+
+		/**
+		 * Check whether any tool rows still need polling.
+		 *
+		 * @return {Bool}
+		 */
+		shouldPollTools: function() {
+			return $( '.wc_status_table--tools tr.requires-refresh' ).is( function() {
+				var $row = $( this );
+				return $row.find( '.run-tool-status' ).length > 0 || $row.find( '.run-tool .button:disabled' ).length > 0;
+			});
+		},
+
+		/**
+		 * Refresh background tool rows from the tools page.
+		 */
+		pollTools: function() {
+			if ( this.toolsPollInProgress ) {
+				return;
+			}
+
+			this.toolsPollInProgress = true;
+
+			var self = this;
+			var toolsUrl = woocommerce_admin_system_status.tools_url;
+			var pollUrl = toolsUrl + ( toolsUrl.indexOf( '?' ) === -1 ? '?' : '&' ) + 'wc_status_tools_poll=' + Date.now();
+
+			$.get( pollUrl )
+				.done( function( response ) {
+					var $response = $( '<div>' ).append( $.parseHTML( response ) );
+
+					$( '.wc_status_table--tools tr.requires-refresh' ).each( function() {
+						var $currentRow = $( this );
+						var action      = $currentRow.data( 'tool-action' );
+
+						if ( ! action ) {
+							return;
+						}
+
+						var $updatedRow = $response.find( '.wc_status_table--tools tr[data-tool-action="' + action + '"]' );
+
+						if ( $updatedRow.length ) {
+							$currentRow.replaceWith( $updatedRow );
+						}
+					});
+
+					if ( ! self.shouldPollTools() ) {
+						window.clearInterval( self.toolsPollTimer );
+						self.toolsPollTimer = null;
+					}
+				})
+				.fail( function() {
+					window.clearInterval( self.toolsPollTimer );
+					self.toolsPollTimer = null;
+				})
+				.always( function() {
+					self.toolsPollInProgress = false;
+				});
 		},
 
 		/**
@@ -33,11 +120,11 @@ jQuery( function ( $ ) {
 
 			$( '.wc_status_table thead, .wc_status_table tbody' ).each( function() {
 				if ( $( this ).is( 'thead' ) ) {
-					var label = $( this ).find( 'th:eq(0)' ).data( 'export-label' ) || $( this ).text();
+					var label = $( this ).find( 'th:eq(0)' ).data( 'exportLabel' ) || $( this ).text();
 					report = report + '\n### ' + label.trim() + ' ###\n\n';
 				} else {
 					$( 'tr', $( this ) ).each( function() {
-						var label       = $( this ).find( 'td:eq(0)' ).data( 'export-label' ) || $( this ).find( 'td:eq(0)' ).text();
+						var label       = $( this ).find( 'td:eq(0)' ).data( 'exportLabel' ) || $( this ).find( 'td:eq(0)' ).text();
 						var the_name    = label.trim().replace( /(<([^>]+)>)/ig, '' ); // Remove HTML.
 
 						// Find value
@@ -61,19 +148,23 @@ jQuery( function ( $ ) {
 							the_value = temp_line;
 						}
 
-						report = report + '' + the_name + ': ' + the_value + '\n';
+						if ( the_name || the_value ) {
+							report = report + '' + the_name + ': ' + the_value + '\n';
+						} else {
+							report = report + '\n';
+						}
 					});
 				}
 			});
 
 			try {
 				$( '#debug-report' ).slideDown();
-				$( '#debug-report' ).find( 'textarea' ).val( '`' + report + '`' ).focus().select();
+				$( '#debug-report' ).find( 'textarea' ).val( '`' + report + '`' ).trigger( 'focus' ).trigger( 'select' );
 				$( this ).fadeOut();
 				return false;
 			} catch ( e ) {
 				/* jshint devel: true */
-				console.log( e );
+				window.console.log( e );
 			}
 
 			return false;
@@ -89,18 +180,57 @@ jQuery( function ( $ ) {
 			wcSetClipboard( $( '#debug-report' ).find( 'textarea' ).val(), $( this ) );
 			evt.preventDefault();
 		},
+		/**
+		 * Apply redactions
+		 */
+		applyRedactions( report ) {
+			var redactions = [
+				{
+					regex: /(WordPress address \(URL\):)[^\n]*/,
+					replacement: "$1 [Redacted]"
+				},
+				{
+					regex: /(Site address \(URL\):)[^\n]*/,
+					replacement: "$1 [Redacted]"
+				},
+				{
+					regex: /(### Database ###\n)([\s\S]*?)(\n### Post Type Counts ###)/,
+					replacement: "$1\n[REDACTED]\n$3"
+				}
+			];
+
+			redactions.forEach( function( redaction ) {
+				report = report.replace( redaction.regex, redaction.replacement );
+			});
+			return report;
+		},
+		/**
+		 * Copy for GitHub report.
+		 *
+		 * @param {Object} event Copy event.
+		 */
+		copyGithubReport: function( event ) {
+			wcClearClipboard();
+			var reportValue = $( '#debug-report' ).find( 'textarea' ).val();
+			var redactedReport = wcSystemStatus.applyRedactions( reportValue );
+
+			var reportForGithub = '<details><summary>System Status Report</summary>\n\n``' + redactedReport + '``\n</details>';
+
+			wcSetClipboard( reportForGithub, $( this ) );
+			event.preventDefault();
+		},
 
 		/**
 		 * Display a "Copied!" tip when success copying
 		 */
-		copySuccess: function() {
-			$( '#copy-for-support' ).tipTip({
+		copySuccess: function( event ) {
+			$( event.target ).tipTip({
 				'attribute':  'data-tip',
 				'activation': 'focus',
 				'fadeIn':     50,
 				'fadeOut':    50,
 				'delay':      0
-			}).focus();
+			}).trigger( 'focus' );
 		},
 
 		/**
@@ -108,13 +238,28 @@ jQuery( function ( $ ) {
 		 */
 		copyFail: function() {
 			$( '.copy-error' ).removeClass( 'hidden' );
-			$( '#debug-report' ).find( 'textarea' ).focus().select();
+			$( '#debug-report' ).find( 'textarea' ).trigger( 'focus' ).trigger( 'select' );
+		},
+
+		downloadReport: function() {
+			var ssr_text = new Blob( [ $( '#debug-report' ).find( 'textarea' ).val() ], { type: 'text/plain' } );
+
+			var domain = window.location.hostname;
+			var datetime = new Date().toISOString().slice( 0, 19 ).replace( /:/g, '-' );
+
+			var a = document.createElement( 'a' );
+			a.download = 'SystemStatusReport_' + domain + '_' + datetime + '.txt';
+			a.href = window.URL.createObjectURL( ssr_text );
+			a.textContent = 'Download ready';
+			a.style='display:none';
+			a.click();
+			a.remove();
 		}
 	};
 
 	wcSystemStatus.init();
 
-	$( '.wc_status_table' ).on( 'click', '.run-tool .button', function( evt ) {
+	$( '.wc_status_table' ).on( 'click', '.run-tool input.button', function( evt ) {
 		evt.stopImmediatePropagation();
 		return window.confirm( woocommerce_admin_system_status.run_tool_confirmation );
 	});

@@ -6,6 +6,8 @@
  * @since   3.2.0
  */
 
+use Automattic\WooCommerce\Enums\OrderInternalStatus;
+use Automattic\WooCommerce\Utilities\DiscountsUtil;
 use Automattic\WooCommerce\Utilities\NumberUtil;
 
 defined( 'ABSPATH' ) || exit;
@@ -84,7 +86,7 @@ class WC_Discounts {
 			$item->object        = $cart_item;
 			$item->product       = $cart_item['data'];
 			$item->quantity      = $cart_item['quantity'];
-			$item->price         = wc_add_number_precision_deep( $item->product->get_price() * $item->quantity );
+			$item->price         = wc_add_number_precision_deep( (float) $item->product->get_price() * (float) $item->quantity );
 			$this->items[ $key ] = $item;
 		}
 
@@ -255,8 +257,9 @@ class WC_Discounts {
 			return $is_coupon_valid;
 		}
 
-		if ( ! isset( $this->discounts[ $coupon->get_code() ] ) ) {
-			$this->discounts[ $coupon->get_code() ] = array_fill_keys( array_keys( $this->items ), 0 );
+		$coupon_code = $coupon->get_code();
+		if ( ! isset( $this->discounts[ $coupon_code ] ) || ! is_array( $this->discounts[ $coupon_code ] ) ) {
+			$this->discounts[ $coupon_code ] = array_fill_keys( array_keys( $this->items ), 0 );
 		}
 
 		$items_to_apply = $this->get_items_to_apply_coupon( $coupon );
@@ -289,8 +292,8 @@ class WC_Discounts {
 	 * @return int
 	 */
 	protected function sort_by_price( $a, $b ) {
-		$price_1 = $a->price * $a->quantity;
-		$price_2 = $b->price * $b->quantity;
+		$price_1 = $a->quantity > 1 ? $a->price / $a->quantity : $a->price;
+		$price_2 = $b->quantity > 1 ? $b->price / $b->quantity : $b->price;
 		if ( $price_1 === $price_2 ) {
 			return 0;
 		}
@@ -332,7 +335,20 @@ class WC_Discounts {
 
 			$items_to_apply[] = $item_to_apply;
 		}
-		return $items_to_apply;
+
+		/**
+		 * Filters the items that a coupon should be applied to.
+		 *
+		 * This filter allows you to modify the items that a coupon will be applied to before the discount calculations take place.
+		 *
+		 * @since 8.8.0
+		 * @param array            $items_to_apply The items that the coupon will be applied to.
+		 * @param WC_Coupon        $coupon The coupon object.
+		 * @param WC_Discounts     $this The discounts instance.
+		 *
+		 * @return array The modified list of items that the coupon should be applied to.
+		 */
+		return apply_filters( 'woocommerce_coupon_get_items_to_apply', $items_to_apply, $coupon, $this );
 	}
 
 	/**
@@ -411,7 +427,7 @@ class WC_Discounts {
 	 */
 	protected function apply_coupon_fixed_product( $coupon, $items_to_apply, $amount = null ) {
 		$total_discount  = 0;
-		$amount          = $amount ? $amount : wc_add_number_precision( $coupon->get_amount() );
+		$amount          = $amount ? $amount : wc_add_number_precision( (float) $coupon->get_amount() );
 		$limit_usage_qty = 0;
 		$applied_count   = 0;
 
@@ -462,7 +478,7 @@ class WC_Discounts {
 	 */
 	protected function apply_coupon_fixed_cart( $coupon, $items_to_apply, $amount = null ) {
 		$total_discount = 0;
-		$amount         = $amount ? $amount : wc_add_number_precision( $coupon->get_amount() );
+		$amount         = $amount ? $amount : wc_add_number_precision( (float) $coupon->get_amount() );
 		$items_to_apply = array_filter( $items_to_apply, array( $this, 'filter_products_with_price' ) );
 		$item_count     = array_sum( wp_list_pluck( $items_to_apply, 'quantity' ) );
 
@@ -521,7 +537,7 @@ class WC_Discounts {
 			$apply_quantity = max( 0, apply_filters( 'woocommerce_coupon_get_apply_quantity', $apply_quantity, $item, $coupon, $this ) );
 
 			// Run coupon calculations.
-			$discount      = wc_add_number_precision( $coupon->get_discount_amount( $price_to_discount / $item->quantity, $item->object, true ) ) * $apply_quantity;
+			$discount      = wc_add_number_precision( (float) $coupon->get_discount_amount( $price_to_discount / $item->quantity, $item->object, true ) ) * $apply_quantity;
 			$discount      = wc_round_discount( min( $discounted_price, $discount ), 0 );
 			$applied_count = $applied_count + $apply_quantity;
 
@@ -540,7 +556,7 @@ class WC_Discounts {
 	 * until the amount is expired, discounting 1 cent at a time.
 	 *
 	 * @since 3.2.0
-	 * @param  WC_Coupon $coupon Coupon object if appliable. Passed through filters.
+	 * @param  WC_Coupon $coupon Coupon object if applicable. Passed through filters.
 	 * @param  array     $items_to_apply Array of items to apply the coupon to.
 	 * @param  int       $amount Fixed discount amount to apply.
 	 * @return int Total discounted.
@@ -549,7 +565,9 @@ class WC_Discounts {
 		$total_discount = 0;
 
 		foreach ( $items_to_apply as $item ) {
-			for ( $i = 0; $i < $item->quantity; $i ++ ) {
+			$quantity = NumberUtil::ceil( $item->quantity );
+
+			for ( $i = 0; $i < $quantity; $i++ ) {
 				// Find out how much price is available to discount for the item.
 				$price_to_discount = $this->get_discounted_price_in_cents( $item );
 
@@ -576,15 +594,24 @@ class WC_Discounts {
 	/**
 	 * Ensure coupon exists or throw exception.
 	 *
+	 * A coupon is also considered to no longer exist if it has been placed in the trash, even if the trash has not yet
+	 * been emptied.
+	 *
 	 * @since  3.2.0
 	 * @throws Exception Error message.
 	 * @param  WC_Coupon $coupon Coupon data.
 	 * @return bool
 	 */
 	protected function validate_coupon_exists( $coupon ) {
-		if ( ! $coupon->get_id() && ! $coupon->get_virtual() ) {
-			/* translators: %s: coupon code */
-			throw new Exception( sprintf( __( 'Coupon "%s" does not exist!', 'woocommerce' ), esc_html( $coupon->get_code() ) ), 105 );
+		if ( ( ! $coupon->get_id() && ! $coupon->get_virtual() ) || 'trash' === $coupon->get_status() ) {
+			throw new Exception(
+				sprintf(
+					/* translators: %s: coupon code */
+					esc_html__( 'Coupon "%s" cannot be applied because it does not exist.', 'woocommerce' ),
+					esc_html( $coupon->get_code() )
+				),
+				105
+			);
 		}
 
 		return true;
@@ -617,7 +644,7 @@ class WC_Discounts {
 			$recent_pending_orders = wc_get_orders(
 				array(
 					'limit'       => 1,
-					'post_status' => array( 'wc-failed', 'wc-pending' ),
+					'post_status' => array( OrderInternalStatus::FAILED, OrderInternalStatus::PENDING ),
 					'customer'    => get_current_user_id(),
 					'return'      => 'ids',
 				)
@@ -684,7 +711,14 @@ class WC_Discounts {
 	 */
 	protected function validate_coupon_expiry_date( $coupon ) {
 		if ( $coupon->get_date_expires() && apply_filters( 'woocommerce_coupon_validate_expiry_date', time() > $coupon->get_date_expires()->getTimestamp(), $coupon, $this ) ) {
-			throw new Exception( __( 'This coupon has expired.', 'woocommerce' ), 107 );
+			throw new Exception(
+				sprintf(
+					/* translators: %s: coupon code */
+					esc_html__( 'Coupon "%s" has expired.', 'woocommerce' ),
+					esc_html( $coupon->get_code() )
+				),
+				107
+			);
 		}
 
 		return true;
@@ -702,8 +736,22 @@ class WC_Discounts {
 		$subtotal = wc_remove_number_precision( $this->get_object_subtotal() );
 
 		if ( $coupon->get_minimum_amount() > 0 && apply_filters( 'woocommerce_coupon_validate_minimum_amount', $coupon->get_minimum_amount() > $subtotal, $coupon, $subtotal ) ) {
-			/* translators: %s: coupon minimum amount */
-			throw new Exception( sprintf( __( 'The minimum spend for this coupon is %s.', 'woocommerce' ), wc_price( $coupon->get_minimum_amount() ) ), 108 );
+			$allowed_tags = array(
+				'span'  => array(
+					'class' => true,
+				),
+				'bdi'   => true,
+				'small' => true,
+			);
+			throw new Exception(
+				sprintf(
+					/* translators: %1$s: coupon code, %2$s: coupon minimum amount */
+					esc_html__( 'The minimum spend for coupon "%1$s" is %2$s.', 'woocommerce' ),
+					esc_html( $coupon->get_code() ),
+					wp_kses( wc_price( $coupon->get_minimum_amount() ), $allowed_tags )
+				),
+				108
+			);
 		}
 
 		return true;
@@ -721,8 +769,22 @@ class WC_Discounts {
 		$subtotal = wc_remove_number_precision( $this->get_object_subtotal() );
 
 		if ( $coupon->get_maximum_amount() > 0 && apply_filters( 'woocommerce_coupon_validate_maximum_amount', $coupon->get_maximum_amount() < $subtotal, $coupon ) ) {
-			/* translators: %s: coupon maximum amount */
-			throw new Exception( sprintf( __( 'The maximum spend for this coupon is %s.', 'woocommerce' ), wc_price( $coupon->get_maximum_amount() ) ), 112 );
+			$allowed_tags = array(
+				'span'  => array(
+					'class' => true,
+				),
+				'bdi'   => true,
+				'small' => true,
+			);
+			throw new Exception(
+				sprintf(
+					/* translators: %1$s: coupon code, %2$s: coupon maximum amount */
+					esc_html__( 'The maximum spend for coupon "%1$s" is %2$s.', 'woocommerce' ),
+					esc_html( $coupon->get_code() ),
+					wp_kses( wc_price( $coupon->get_maximum_amount() ), $allowed_tags )
+				),
+				112
+			);
 		}
 
 		return true;
@@ -741,14 +803,36 @@ class WC_Discounts {
 			$valid = false;
 
 			foreach ( $this->get_items_to_validate() as $item ) {
-				if ( $item->product && in_array( $item->product->get_id(), $coupon->get_product_ids(), true ) || in_array( $item->product->get_parent_id(), $coupon->get_product_ids(), true ) ) {
+				if ( $item->product && ( in_array( $item->product->get_id(), $coupon->get_product_ids(), true ) || in_array( $item->product->get_parent_id(), $coupon->get_product_ids(), true ) ) ) {
 					$valid = true;
 					break;
 				}
 			}
 
+			/**
+			 * Filter whether the coupon is valid for the cart given its product_ids restriction.
+			 *
+			 * Return true to treat the coupon as valid, or false to reject it. Mind the polarity: these
+			 * woocommerce_coupon_is_valid_for_* filters follow the woocommerce_coupon_is_valid convention where
+			 * true means valid. This is the opposite of the woocommerce_coupon_validate_* filters
+			 * (e.g. woocommerce_coupon_validate_expiry_date), where returning true rejects the coupon.
+			 *
+			 * @since 11.1.0
+			 * @param bool         $valid     Whether the coupon is valid for the selected products.
+			 * @param WC_Coupon    $coupon    Coupon data.
+			 * @param WC_Discounts $discounts The discounts instance.
+			 */
+			$valid = apply_filters( 'woocommerce_coupon_is_valid_for_product_ids', $valid, $coupon, $this );
+
 			if ( ! $valid ) {
-				throw new Exception( __( 'Sorry, this coupon is not applicable to selected products.', 'woocommerce' ), 109 );
+				throw new Exception(
+					sprintf(
+					/* translators: %s: coupon code */
+						esc_html__( 'Sorry, coupon "%s" is not applicable to selected products.', 'woocommerce' ),
+						esc_html( $coupon->get_code() )
+					),
+					109
+				);
 			}
 		}
 
@@ -785,8 +869,30 @@ class WC_Discounts {
 				}
 			}
 
+			/**
+			 * Filter whether the coupon is valid for the cart given its product_categories restriction.
+			 *
+			 * Return true to treat the coupon as valid, or false to reject it. Mind the polarity: these
+			 * woocommerce_coupon_is_valid_for_* filters follow the woocommerce_coupon_is_valid convention where
+			 * true means valid. This is the opposite of the woocommerce_coupon_validate_* filters
+			 * (e.g. woocommerce_coupon_validate_expiry_date), where returning true rejects the coupon.
+			 *
+			 * @since 11.1.0
+			 * @param bool         $valid     Whether the coupon is valid for the selected product categories.
+			 * @param WC_Coupon    $coupon    Coupon data.
+			 * @param WC_Discounts $discounts The discounts instance.
+			 */
+			$valid = apply_filters( 'woocommerce_coupon_is_valid_for_product_categories', $valid, $coupon, $this );
+
 			if ( ! $valid ) {
-				throw new Exception( __( 'Sorry, this coupon is not applicable to selected products.', 'woocommerce' ), 109 );
+				throw new Exception(
+					sprintf(
+						/* translators: %s: coupon code */
+						esc_html__( 'Sorry, coupon "%s" is not applicable to selected products.', 'woocommerce' ),
+						esc_html( $coupon->get_code() )
+					),
+					109
+				);
 			}
 		}
 
@@ -812,8 +918,30 @@ class WC_Discounts {
 				}
 			}
 
+			/**
+			 * Filter whether the coupon is valid for the cart given its sale_items restriction.
+			 *
+			 * Return true to treat the coupon as valid, or false to reject it. Mind the polarity: these
+			 * woocommerce_coupon_is_valid_for_* filters follow the woocommerce_coupon_is_valid convention where
+			 * true means valid. This is the opposite of the woocommerce_coupon_validate_* filters
+			 * (e.g. woocommerce_coupon_validate_expiry_date), where returning true rejects the coupon.
+			 *
+			 * @since 11.1.0
+			 * @param bool         $valid     Whether the coupon is valid given the sale items in the cart.
+			 * @param WC_Coupon    $coupon    Coupon data.
+			 * @param WC_Discounts $discounts The discounts instance.
+			 */
+			$valid = apply_filters( 'woocommerce_coupon_is_valid_for_sale_items', $valid, $coupon, $this );
+
 			if ( ! $valid ) {
-				throw new Exception( __( 'Sorry, this coupon is not valid for sale items.', 'woocommerce' ), 110 );
+				throw new Exception(
+					sprintf(
+						/* translators: %s: coupon code */
+						esc_html__( 'Sorry, coupon "%s" is not valid for sale items.', 'woocommerce' ),
+						esc_html( $coupon->get_code() )
+					),
+					110
+				);
 			}
 		}
 
@@ -840,8 +968,30 @@ class WC_Discounts {
 				}
 			}
 
+			/**
+			 * Filter whether the coupon is valid for the cart given its excluded items.
+			 *
+			 * Return true to treat the coupon as valid, or false to reject it. Mind the polarity: these
+			 * woocommerce_coupon_is_valid_for_* filters follow the woocommerce_coupon_is_valid convention where
+			 * true means valid. This is the opposite of the woocommerce_coupon_validate_* filters
+			 * (e.g. woocommerce_coupon_validate_expiry_date), where returning true rejects the coupon.
+			 *
+			 * @since 11.1.0
+			 * @param bool         $valid     Whether the coupon is valid given the cart's exclusion rules.
+			 * @param WC_Coupon    $coupon    Coupon data.
+			 * @param WC_Discounts $discounts The discounts instance.
+			 */
+			$valid = apply_filters( 'woocommerce_coupon_is_valid_for_excluded_items', $valid, $coupon, $this );
+
 			if ( ! $valid ) {
-				throw new Exception( __( 'Sorry, this coupon is not applicable to selected products.', 'woocommerce' ), 109 );
+				throw new Exception(
+					sprintf(
+						/* translators: %s: coupon code */
+						esc_html__( 'Sorry, coupon "%s" is not applicable to selected products.', 'woocommerce' ),
+						esc_html( $coupon->get_code() )
+					),
+					109
+				);
 			}
 		}
 
@@ -885,9 +1035,42 @@ class WC_Discounts {
 				}
 			}
 
-			if ( ! empty( $products ) ) {
-				/* translators: %s: products list */
-				throw new Exception( sprintf( __( 'Sorry, this coupon is not applicable to the products: %s.', 'woocommerce' ), implode( ', ', $products ) ), 113 );
+			$valid = empty( $products );
+
+			/**
+			 * Filter whether the coupon is valid for the cart given its excluded_product_ids restriction.
+			 *
+			 * Return true to treat the coupon as valid, or false to reject it. Mind the polarity: these
+			 * woocommerce_coupon_is_valid_for_* filters follow the woocommerce_coupon_is_valid convention where
+			 * true means valid. This is the opposite of the woocommerce_coupon_validate_* filters
+			 * (e.g. woocommerce_coupon_validate_expiry_date), where returning true rejects the coupon. When
+			 * rejecting, use the woocommerce_coupon_error filter (error code
+			 * WC_Coupon::E_WC_COUPON_EXCLUDED_PRODUCTS) to customize the message shown to the shopper.
+			 *
+			 * @since 11.1.0
+			 * @param bool         $valid     Whether the coupon is valid given the excluded products.
+			 * @param WC_Coupon    $coupon    Coupon data.
+			 * @param WC_Discounts $discounts The discounts instance.
+			 */
+			$valid = apply_filters( 'woocommerce_coupon_is_valid_for_excluded_product_ids', $valid, $coupon, $this );
+
+			if ( ! $valid ) {
+				// When a filter forces rejection but no cart item matched, fall back to the generic message.
+				throw new Exception(
+					empty( $products )
+						? sprintf(
+							/* translators: %s: coupon code */
+							esc_html__( 'Sorry, coupon "%s" is not applicable to selected products.', 'woocommerce' ),
+							esc_html( $coupon->get_code() )
+						)
+						: sprintf(
+							/* translators: %1$s: coupon code, %2$s: products list */
+							esc_html__( 'Sorry, coupon "%1$s" is not applicable to the products: %2$s.', 'woocommerce' ),
+							esc_html( $coupon->get_code() ),
+							esc_html( implode( ', ', $products ) )
+						),
+					113
+				);
 			}
 		}
 
@@ -926,10 +1109,87 @@ class WC_Discounts {
 				}
 			}
 
-			if ( ! empty( $categories ) ) {
-				/* translators: %s: categories list */
-				throw new Exception( sprintf( __( 'Sorry, this coupon is not applicable to the categories: %s.', 'woocommerce' ), implode( ', ', array_unique( $categories ) ) ), 114 );
+			$valid = empty( $categories );
+
+			/**
+			 * Filter whether the coupon is valid for the cart given its excluded_product_categories restriction.
+			 *
+			 * Return true to treat the coupon as valid, or false to reject it. Mind the polarity: these
+			 * woocommerce_coupon_is_valid_for_* filters follow the woocommerce_coupon_is_valid convention where
+			 * true means valid. This is the opposite of the woocommerce_coupon_validate_* filters
+			 * (e.g. woocommerce_coupon_validate_expiry_date), where returning true rejects the coupon. When
+			 * rejecting, use the woocommerce_coupon_error filter (error code
+			 * WC_Coupon::E_WC_COUPON_EXCLUDED_CATEGORIES) to customize the message shown to the shopper.
+			 *
+			 * @since 11.1.0
+			 * @param bool         $valid     Whether the coupon is valid given the excluded categories.
+			 * @param WC_Coupon    $coupon    Coupon data.
+			 * @param WC_Discounts $discounts The discounts instance.
+			 */
+			$valid = apply_filters( 'woocommerce_coupon_is_valid_for_excluded_product_categories', $valid, $coupon, $this );
+
+			if ( ! $valid ) {
+				// When a filter forces rejection but no cart item matched, fall back to the generic message.
+				throw new Exception(
+					empty( $categories )
+						? sprintf(
+							/* translators: %s: coupon code */
+							esc_html__( 'Sorry, coupon "%s" is not applicable to selected products.', 'woocommerce' ),
+							esc_html( $coupon->get_code() )
+						)
+						: sprintf(
+							/* translators: %1$s: coupon code, %2$s: categories list */
+							esc_html__( 'Sorry, coupon "%1$s" is not applicable to the categories: %2$s.', 'woocommerce' ),
+							esc_html( $coupon->get_code() ),
+							esc_html( implode( ', ', array_unique( $categories ) ) )
+						),
+					114
+				);
 			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Ensure coupon is valid for allowed emails or throw exception.
+	 *
+	 * @since  8.6.0
+	 * @throws Exception Error message.
+	 * @param  WC_Coupon $coupon Coupon data.
+	 * @return bool
+	 */
+	protected function validate_coupon_allowed_emails( $coupon ) {
+
+		$restrictions = $coupon->get_email_restrictions();
+
+		if ( ! is_array( $restrictions ) || empty( $restrictions ) ) {
+			return true;
+		}
+
+		$user         = wp_get_current_user();
+		$check_emails = array( $user->user_email );
+
+		if ( $this->object instanceof WC_Cart ) {
+			$check_emails[] = $this->object->get_customer()->get_billing_email();
+		} elseif ( $this->object instanceof WC_Order ) {
+			$check_emails[] = $this->object->get_billing_email();
+		}
+
+		$check_emails = array_unique(
+			array_filter(
+				array_map(
+					'strtolower',
+					array_map(
+						'sanitize_email',
+						$check_emails
+					)
+				)
+			)
+		);
+
+		if ( ! DiscountsUtil::is_coupon_emails_allowed( $check_emails, $restrictions ) ) {
+			throw new Exception( $coupon->get_coupon_error( WC_Coupon::E_WC_COUPON_NOT_YOURS_REMOVED ), WC_Coupon::E_WC_COUPON_NOT_YOURS_REMOVED ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		}
 
 		return true;
@@ -942,9 +1202,9 @@ class WC_Discounts {
 	 */
 	protected function get_object_subtotal() {
 		if ( is_a( $this->object, 'WC_Cart' ) ) {
-			return wc_add_number_precision( $this->object->get_displayed_subtotal() );
+			return wc_add_number_precision( (float) $this->object->get_displayed_subtotal() );
 		} elseif ( is_a( $this->object, 'WC_Order' ) ) {
-			$subtotal = wc_add_number_precision( $this->object->get_subtotal() );
+			$subtotal = wc_add_number_precision( (float) $this->object->get_subtotal() );
 
 			if ( $this->object->get_prices_include_tax() ) {
 				// Add tax to tax-exclusive subtotal.
@@ -977,10 +1237,11 @@ class WC_Discounts {
 	 * - 113: Excluded products.
 	 * - 114: Excluded categories.
 	 *
-	 * @since  3.2.0
-	 * @throws Exception Error message.
-	 * @param  WC_Coupon $coupon Coupon data.
+	 * @param WC_Coupon $coupon Coupon data.
+	 *
 	 * @return bool|WP_Error
+	 * @throws Exception Error message.
+	 * @since  3.2.0
 	 */
 	public function is_coupon_valid( $coupon ) {
 		try {
@@ -994,9 +1255,10 @@ class WC_Discounts {
 			$this->validate_coupon_product_categories( $coupon );
 			$this->validate_coupon_excluded_items( $coupon );
 			$this->validate_coupon_eligible_items( $coupon );
+			$this->validate_coupon_allowed_emails( $coupon );
 
 			if ( ! apply_filters( 'woocommerce_coupon_is_valid', true, $coupon, $this ) ) {
-				throw new Exception( __( 'Coupon is not valid.', 'woocommerce' ), 100 );
+				throw new Exception( __( 'Coupon is not valid.', 'woocommerce' ), WC_Coupon::E_WC_COUPON_INVALID_FILTERED );
 			}
 		} catch ( Exception $e ) {
 			/**
@@ -1008,14 +1270,23 @@ class WC_Discounts {
 			 */
 			$message = apply_filters( 'woocommerce_coupon_error', is_numeric( $e->getMessage() ) ? $coupon->get_coupon_error( $e->getMessage() ) : $e->getMessage(), $e->getCode(), $coupon );
 
+			$additional_data = array(
+				'status' => 400,
+			);
+
+			$context_coupon_errors = $coupon->get_context_based_coupon_errors( $e->getCode() );
+
+			if ( ! empty( $context_coupon_errors ) ) {
+				$additional_data['details'] = $context_coupon_errors;
+			}
+
 			return new WP_Error(
 				'invalid_coupon',
 				$message,
-				array(
-					'status' => 400,
-				)
+				$additional_data,
 			);
 		}
+
 		return true;
 	}
 }

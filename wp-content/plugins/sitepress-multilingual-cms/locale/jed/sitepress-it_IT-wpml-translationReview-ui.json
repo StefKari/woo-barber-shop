@@ -3,34 +3,33 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "it_IT"
          },
          "Accepted": [
-            "Accettato"
+            "Accettata"
          ],
          "Approved!": [
-            "Approvato!"
+            "Approvata!"
          ],
          "Loading the next translation for review...": [
-            "Caricamento della prossima traduzione da revisionare..."
+            "Caricamento della prossima traduzione per la revisione..."
          ],
          "Back": [
             "Indietro"
          ],
          "Turn off to not automatically load the next translation after finishing this review.": [
-            "Disattiva per non caricare automaticamente la prossima traduzione dopo aver terminato questa revisione."
+            "Disattiva per non caricare automaticamente la traduzione successiva dopo aver terminato questa revisione."
          ],
          "Turn on to automatically load the next translation after finishing this  .": [
-            "Attiva per caricare automaticamente la prossima traduzione dopo aver terminato questa revisione."
+            "Attiva per caricare automaticamente la traduzione successiva dopo aver terminato questa revisione."
          ],
          "Edit": [
             "Modifica"
          ],
          "Edit translation": [
             "Modifica traduzione"
-         ],
-         "Please wait, applying translation..": [
-            "Attendere prego, applicazione della traduzione in corso.."
          ],
          "Next review": [
             "Prossima revisione"
@@ -42,13 +41,16 @@
             "Accetta questa traduzione"
          ],
          "Published!": [
-            "Pubblicato!"
+            "Pubblicata!"
          ],
-         "Someone is already reviewing this translation. Please try again later.": [
-            "Qualcuno sta già revisionando questa traduzione. Si prega di riprovare più tardi."
+         "Please wait, applying translation..": [
+            "Attendi, applicazione della traduzione in corso..."
          ],
          "There was an error in applying translation.": [
-            "Si è verificato un errore nell'applicazione della traduzione."
+            "Si è verificato un errore durante l'applicazione della traduzione."
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "Qualcuno sta già revisionando questa traduzione. Riprova più tardi."
          ]
       }
    }

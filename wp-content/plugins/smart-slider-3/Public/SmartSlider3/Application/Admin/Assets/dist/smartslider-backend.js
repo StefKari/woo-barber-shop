@@ -2442,7 +2442,7 @@ _N2.d('ImageHelper', function () {
                 images.push({
                     title: attachment.title,
                     description: attachment.description,
-                    image: _N2._imageHelper.dynamic(attachment.url),
+                    media: _N2._imageHelper.dynamic(attachment.url),
                     alt: attachment.alt
                 })
             }
@@ -12635,7 +12635,7 @@ _N2.d('NextendBrowse', ['$'], function () {
                         xhr.onerror = function () {
                             reject();
                         };
-                        formData.append('image', files[i]);
+                        formData.append('media', files[i]);
                         formData.append('path', this.currentPath);
                         xhr.send(formData)
                     }).bind(this)));
@@ -20346,8 +20346,8 @@ _N2.d('GeneratorAdd', '$', function () {
                 e.preventDefault();
 
                 switch ($(e.currentTarget).data('action')) {
-                    case 'image':
-                        this.addQuickImage(e);
+                    case 'media':
+                        this.addQuickMedia(e);
                         break;
                     case 'empty-slide':
                         e.preventDefault();
@@ -20363,7 +20363,7 @@ _N2.d('GeneratorAdd', '$', function () {
                 }
             }).bind(this));
 
-        $('.n2-box-slide-dummy').on('click', this.addQuickImage.bind(this));
+        $('.n2-box-slide-dummy').on('click', this.addQuickMedia.bind(this));
 
         $('.n2_slide_manager__block_notice_button').on('click', this.changeSliderType.bind(this));
 
@@ -20402,7 +20402,7 @@ _N2.d('GeneratorAdd', '$', function () {
                 }
 
                 if (files.length) {
-                    var images = [],
+                    var medias = [],
                         promises = [];
                     _N2.LoadingScreen.startLoading();
 
@@ -20415,10 +20415,10 @@ _N2.d('GeneratorAdd', '$', function () {
                             xhr.onload = function () {
                                 var response = JSON.parse(xhr.response);
                                 if (response.data && response.data.name) {
-                                    images.push({
+                                    medias.push({
                                         title: response.data.name.replace(/\.[^\/.]+$/, ""),
                                         description: '',
-                                        image: response.data.url
+                                        media: response.data.url
                                     });
                                 } else {
                                     _N2.AjaxHelper.notification(response);
@@ -20429,7 +20429,7 @@ _N2.d('GeneratorAdd', '$', function () {
                             xhr.onerror = function () {
                                 reject();
                             };
-                            formData.append('image', files[i]);
+                            formData.append('media', files[i]);
                             formData.append('path', '/' + uploadDir);
                             xhr.send(formData)
                         }));
@@ -20437,14 +20437,14 @@ _N2.d('GeneratorAdd', '$', function () {
                     }
 
                     Promise.all(promises).finally((function () {
-                        if (images.length) {
-                            this._addQuickImages(images);
+                        if (medias.length) {
+                            this._addQuickMedias(medias);
                         } else {
                             setTimeout(function () {
                                 _N2.LoadingScreen.stopLoading();
                             }, 100);
                         }
-                        images = [];
+                        medias = [];
                     }).bind(this));
                 }
             }).bind(this));
@@ -20546,21 +20546,31 @@ _N2.d('GeneratorAdd', '$', function () {
         }).bind(this));
     };
 
-    SlidesManager.prototype.addQuickImage = function (e) {
+    SlidesManager.prototype.addQuickMedia = function (e) {
         e.preventDefault();
-        _N2._imageHelper.openMultipleLightbox(this._addQuickImages.bind(this));
+        _N2._imageHelper.openMultipleLightbox(this._addQuickMedias.bind(this));
     };
 
-    SlidesManager.prototype._addQuickImages = function (_images) {
+    SlidesManager.prototype._addQuickMedias = function (_medias) {
         var images = [];
-        for (var i = 0; i < _images.length; i++) {
-            if (!_images[i].image.match(/\.(mp4)/i)) {
-                images.push(_images[i]);
+        var videos = [];
+
+        for (var i = 0; i < _medias.length; i++) {
+            if (!_medias[i].media.match(/\.(mp4)/i)) {
+                images.push(_medias[i]);
+            } else {
+                videos.push(_medias[i]);
             }
         }
         if (images.length) {
             this.createSlide('image', {
                 images: _N2.Base64.encode(JSON.stringify(images))
+            });
+        }
+
+        if (videos.length) {
+            this.createSlide('video', {
+                videos: _N2.Base64.encode(JSON.stringify(videos))
             });
         }
     };
@@ -21035,8 +21045,8 @@ _N2.d('GeneratorAdd', '$', function () {
         } else if (this.elements.image) {
             this.elements.image.setDesktopSrc(image);
         } else if (image !== '') {
-            if (image.match(/\.(png|jpg|jpeg|gif|webp|svg)/i) === null) {
-                _N2.Notification.error('The background image format is not correct! The supported image formats are: png, jpg, jpeg, gif, webp, svg.');
+            if (image.match(/\.(png|jpg|jpeg|gif|webp|avif|svg)/i) === null) {
+                _N2.Notification.error('The background image format is not correct! The supported image formats are: png, jpg, jpeg, gif, webp, avif, svg.');
                 $('#layerslide-backgroundImage').val('').trigger('change');
             } else if (this.sectionSlide.getProperty('background-type') === 'image') {
                 this.createImageElement();
@@ -21047,7 +21057,7 @@ _N2.d('GeneratorAdd', '$', function () {
     SmartSliderSlideBackgroundAdmin.prototype.setThumbnail = function (image, oldBackgroundImage) {
         var $thumbnail = $('#layerslide-thumbnail');
 
-        if (image !== '' && image.match(/\.(png|jpg|jpeg|gif|webp|svg)/i) && ($thumbnail.val() === '' || $thumbnail.val() === oldBackgroundImage)) {
+        if (image !== '' && image.match(/\.(png|jpg|jpeg|gif|webp|avif|svg)/i) && ($thumbnail.val() === '' || $thumbnail.val() === oldBackgroundImage)) {
             $thumbnail.val(image).trigger('change');
         }
 
@@ -21203,8 +21213,25 @@ _N2.d('GeneratorAdd', '$', function () {
         $slideBox.find('.n2_slide_box__footer_title')
             .text(slide.getProperty('title'));
 
-        $slideBox.find('.n2_slide_box__content')
-            .css('background-image', 'url(' + _N2._imageHelper.fixed(this.editor.generator.fill(slide.getProperty('thumbnail') || slide.getProperty('backgroundImage') || '$ss3-frontend$/images/placeholder/image.png')) + ')');
+        var thumbnail = _N2._imageHelper.fixed(
+            this.editor.generator.fill(
+                slide.getProperty('thumbnail') ||
+                slide.getProperty('backgroundImage') ||
+                '$ss3-frontend$/images/placeholder/image.png'
+            )
+        );
+
+        var $thumbnail = $slideBox.find('.n2_slide_box__thumbnail');
+
+        if (!$thumbnail.length) {
+            $thumbnail = $('<img>', {
+                class: 'n2_slide_box__thumbnail',
+                alt: '',
+                loading: 'lazy'
+            }).prependTo($slideBox.find('.n2_slide_box__content'));
+        }
+
+        $thumbnail.attr('src', thumbnail);
 
         var hiddenOn = [];
         if (!parseInt(slide.getProperty('desktopPortrait'))) {
@@ -38035,10 +38062,12 @@ _N2.d('ComponentAbstract', dependencies, function () {
     };
 
     ItemVimeo.prototype.added = function () {
-        this.needFill = ['vimeourl', 'image'];
+        this.needFill = ['vimeourl', 'image', 'alt', 'playbuttonalt'];
 
         this.generator.registerField('#item_vimeovimeourl');
         this.generator.registerField('#item_vimeoimage');
+        this.generator.registerField('#item_vimeoalt');
+        this.generator.registerField('#item_vimeoplaybuttonalt');
     };
 
     ItemVimeo.prototype.parseAll = function (data) {
@@ -38179,9 +38208,9 @@ _N2.d('ComponentAbstract', dependencies, function () {
     };
 
     ItemYoutube.prototype.added = function () {
-        this.needFill = ['youtubeurl', 'image', 'start'];
+        this.needFill = ['youtubeurl', 'image', 'start', 'alt', 'playbuttonalt'];
 
-        this.generator.registerFields(['#item_youtubeyoutubeurl', '#item_youtubeimage', '#item_youtubestart']);
+        this.generator.registerFields(['#item_youtubeyoutubeurl', '#item_youtubeimage', '#item_youtubestart', '#item_youtubealt', '#item_youtubeplaybuttonalt']);
     };
 
     ItemYoutube.prototype.parseAll = function (data) {

@@ -1,12 +1,2 @@
 <?php
-
-namespace WPML;
-
-interface ConfigEventsInterface {
-
-
-  /** @return void */
-  public function loadEvents();
-
-
-}
+require_once __DIR__ . '/../../../../wpml/src/ConfigEventsInterface.php';

@@ -3,6 +3,8 @@
 namespace ADP\BaseVersion\Includes\Core\Rule\CartCondition\Impl;
 
 use ADP\BaseVersion\Includes\Core\Rule\Internationalization\FilterTranslator;
+use ADP\BaseVersion\Includes\Core\Rule\Internationalization\IObjectInternationalization;
+use ADP\BaseVersion\Includes\Core\Rule\Internationalization\RuleTranslator;
 use ADP\Factory;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\ProductFiltering;
 use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Interfaces\ListComparisonCondition;
@@ -106,19 +108,15 @@ abstract class AbstractConditionCartItems extends AbstractCondition implements L
         );
     }
 
-    public function translate($languageCode)
+    public function translate(IObjectInternationalization $oi)
     {
-        parent::translate($languageCode);
+        parent::translate($oi);
 
-        $comparison_list = (array)$this->comparisonList;
-
-        $comparison_list = (new FilterTranslator())->translateByType(
+        $this->comparisonList = (new FilterTranslator())->translateByType(
             $this->filterType,
-            $comparison_list,
-            $languageCode
+            (array)$this->comparisonList,
+            $oi
         );
-
-        $this->comparisonList = $comparison_list;
     }
 
     /**

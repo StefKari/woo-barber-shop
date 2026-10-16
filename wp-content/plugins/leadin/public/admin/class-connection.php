@@ -150,6 +150,7 @@ class Connection {
 		Portal_Options::set_portal_domain( $portal_domain );
 		Portal_Options::set_hublet( $hublet );
 		Portal_Options::set_disable_internal_tracking();
+		Portal_Options::set_proxy_mappings_enabled(false);
 	}
 
 	/**

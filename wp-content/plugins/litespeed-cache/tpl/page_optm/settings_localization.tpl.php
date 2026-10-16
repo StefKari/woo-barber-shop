@@ -13,19 +13,29 @@ namespace LiteSpeed;
 defined( 'WPINC' ) || exit;
 
 $last_generated = Avatar::get_summary();
-$avatar_queue   = Avatar::cls()->queue_count();
+$avatar_enabled = $this->conf( Base::O_DISCUSS_AVATAR_CACHE );
+$avatar_queue   = $avatar_enabled ? Avatar::cls()->queue_count() : 0;
 ?>
 
 <?php if ( $this->cls( 'Avatar' )->need_db() && ! $this->cls( 'Data' )->tb_exist( 'avatar' ) ) : ?>
 <div class="litespeed-callout notice notice-error inline">
 	<h4><?php esc_html_e( 'WARNING', 'litespeed-cache' ); ?></h4>
-	<p><?php printf( esc_html__( 'Failed to create Avatar table. Please follow <a %s>Table Creation guidance from LiteSpeed Wiki</a> to finish setup.', 'litespeed-cache' ), 'href="https://www.litespeedtech.com/support/wiki/doku.php/litespeed_wiki:cache:lscwp:installation" target="_blank"' ); ?></p>
+	<p>
+		<?php
+			echo wp_kses_post( 
+				sprintf ( 
+					__( 'Failed to create Avatar table. Please follow <a %s>Table Creation guidance from LiteSpeed Wiki</a> to finish setup.', 'litespeed-cache' ), 
+					'href="https://www.litespeedtech.com/support/wiki/doku.php/litespeed_wiki:cache:lscwp:installation" target="_blank"' 
+				)
+			);
+		?>
+	</p>
 </div>
 <?php endif; ?>
 
 <h3 class="litespeed-title-short">
 	<?php esc_html_e( 'Localization Settings', 'litespeed-cache' ); ?>
-	<?php Doc::learn_more( 'https://docs.litespeedtech.com/lscache/lscwp/pageopt/#localization-settings-tab' ); ?>
+	<?php Doc::learn_more( 'https://docs.litespeedtech.com/lscache/lscwp/pageopt/#localization-tab' ); ?>
 </h3>
 
 <table class="wp-list-table striped litespeed-table"><tbody>
@@ -54,7 +64,7 @@ $avatar_queue   = Avatar::cls()->queue_count();
 				<?php esc_html_e( 'Refresh Gravatar cache by cron.', 'litespeed-cache' ); ?>
 			</div>
 
-			<?php if ( $last_generated ) : ?>
+			<?php if ( $avatar_enabled && $last_generated ) : ?>
 			<div class="litespeed-desc">
 				<?php if ( ! empty( $last_generated['last_request'] ) ) : ?>
 					<p>
@@ -102,7 +112,7 @@ $avatar_queue   = Avatar::cls()->queue_count();
 			<?php $this->build_switch( $option_id ); ?>
 			<div class="litespeed-desc">
 				<?php esc_html_e( 'Localize external resources.', 'litespeed-cache' ); ?>
-				<?php Doc::learn_more( 'https://docs.litespeedtech.com/lscache/lscwp/pageopt/#localize' ); ?>
+				<?php Doc::learn_more( 'https://docs.litespeedtech.com/lscache/lscwp/pageopt/#localize-resources' ); ?>
 
 				<br /><font class="litespeed-danger">
 					🚨 <?php printf( esc_html__( 'Please thoroughly test all items in %s to ensure they function as expected.', 'litespeed-cache' ), '<code>' . esc_html( Lang::title( Base::O_OPTM_LOCALIZE_DOMAINS ) ) . '</code>' ); ?>

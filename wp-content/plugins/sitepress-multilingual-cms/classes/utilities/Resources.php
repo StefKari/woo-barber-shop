@@ -12,7 +12,6 @@ class Resources {
 
 	private static $script_vendor_registered = false;
 
-	// enqueueApp :: string $app -> ( string $localizeData )
 	public static function enqueueApp( $app ) {
 		return function( $localize = null, $dependencies = [] ) use ( $app ) {
 			$dependencies = array_merge( [ self::vendorAsDependency() ], $dependencies );
@@ -26,10 +25,6 @@ class Resources {
 		};
 	}
 
-	/**
-	 * @param string $name
-	 * @param mixed $value
-	 */
 	public static function enqueueGlobalVariable( $name, $value ) {
 		$print_javascript_variable = function() use ( $name, $value ) {
 
@@ -61,6 +56,12 @@ class Resources {
 			self::VENDOR,
 			ICL_PLUGIN_URL . '/dist/js/vendor/app.js', [],
 			ICL_SITEPRESS_SCRIPT_VERSION
+		);
+
+		wp_localize_script(
+			self::VENDOR,
+			'wpmlOutboundLinks',
+			\WPML\OutboundLinks\OutboundLinks::getJsConfig()
 		);
 	}
 

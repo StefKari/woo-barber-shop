@@ -53,7 +53,7 @@ class WC_Webhook_Data_Store implements WC_Webhook_Data_Store_Interface {
 			'pending_delivery' => $webhook->get_pending_delivery( 'edit' ),
 		);
 
-		$wpdb->insert( $wpdb->prefix . 'wc_webhooks', $data ); // WPCS: DB call ok.
+		$wpdb->insert( $wpdb->prefix . 'wc_webhooks', $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- This data store owns the formatted write and invalidates webhook caches afterward.
 
 		$webhook_id = $wpdb->insert_id;
 		$webhook->set_id( $webhook_id );
@@ -77,7 +77,7 @@ class WC_Webhook_Data_Store implements WC_Webhook_Data_Store_Interface {
 		$data = wp_cache_get( $webhook->get_id(), 'webhooks' );
 
 		if ( false === $data ) {
-			$data = $wpdb->get_row( $wpdb->prepare( "SELECT webhook_id, status, name, user_id, delivery_url, secret, topic, date_created, date_modified, api_version, failure_count, pending_delivery FROM {$wpdb->prefix}wc_webhooks WHERE webhook_id = %d LIMIT 1;", $webhook->get_id() ), ARRAY_A ); // WPCS: cache ok, DB call ok.
+			$data = $wpdb->get_row( $wpdb->prepare( "SELECT webhook_id, status, name, user_id, delivery_url, secret, topic, date_created, date_modified, api_version, failure_count, pending_delivery FROM {$wpdb->prefix}wc_webhooks WHERE webhook_id = %d LIMIT 1;", $webhook->get_id() ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- This data store checks and populates the webhook object cache around the prepared query.
 
 			wp_cache_add( $webhook->get_id(), $data, 'webhooks' );
 		}
@@ -148,7 +148,7 @@ class WC_Webhook_Data_Store implements WC_Webhook_Data_Store_Interface {
 			array(
 				'webhook_id' => $webhook->get_id(),
 			)
-		); // WPCS: DB call ok.
+		); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- This data store owns the formatted update and invalidates webhook caches afterward.
 
 		$webhook->apply_changes();
 
@@ -181,7 +181,7 @@ class WC_Webhook_Data_Store implements WC_Webhook_Data_Store_Interface {
 				'webhook_id' => $webhook->get_id(),
 			),
 			array( '%d' )
-		); // WPCS: cache ok, DB call ok.
+		); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- This data store owns the formatted delete; caching a DELETE is not applicable.
 
 		$this->delete_transients( 'all' );
 		wp_cache_delete( $webhook->get_id(), 'webhooks' );
@@ -272,15 +272,18 @@ class WC_Webhook_Data_Store implements WC_Webhook_Data_Store_Interface {
 			'post_modified' => 'date_modified_gmt',
 		);
 		$orderby         = isset( $orderby_mapping[ $args['orderby'] ] ) ? $orderby_mapping[ $args['orderby'] ] : 'webhook_id';
-		$order           = "ORDER BY {$orderby} " . esc_sql( strtoupper( $args['order'] ) );
+		$sort            = 'ASC' === strtoupper( $args['order'] ) ? 'ASC' : 'DESC';
+		$order           = "ORDER BY {$orderby} {$sort}";
 		$limit           = -1 < $args['limit'] ? $wpdb->prepare( 'LIMIT %d', $args['limit'] ) : '';
 		$offset          = 0 < $args['offset'] ? $wpdb->prepare( 'OFFSET %d', $args['offset'] ) : '';
 		$status          = ! empty( $args['status'] ) ? $wpdb->prepare( 'AND `status` = %s', isset( $statuses[ $args['status'] ] ) ? $statuses[ $args['status'] ] : $args['status'] ) : '';
-		$search          = ! empty( $args['search'] ) ? "AND `name` LIKE '%" . $wpdb->esc_like( sanitize_text_field( $args['search'] ) ) . "%'" : '';
+		$search          = ! empty( $args['search'] ) ? $wpdb->prepare( 'AND `name` LIKE %s', '%' . $wpdb->esc_like( sanitize_text_field( $args['search'] ) ) . '%' ) : '';
 		$include         = '';
 		$exclude         = '';
 		$date_created    = '';
 		$date_modified   = '';
+		$user_id         = '';
+		$api_version     = '';
 
 		if ( ! empty( $args['include'] ) ) {
 			$args['include'] = implode( ',', wp_parse_id_list( $args['include'] ) );
@@ -290,6 +293,10 @@ class WC_Webhook_Data_Store implements WC_Webhook_Data_Store_Interface {
 		if ( ! empty( $args['exclude'] ) ) {
 			$args['exclude'] = implode( ',', wp_parse_id_list( $args['exclude'] ) );
 			$exclude         = 'AND webhook_id NOT IN (' . $args['exclude'] . ')';
+		}
+
+		if ( ! empty( $args['user_id'] ) ) {
+			$user_id = $wpdb->prepare( 'AND `user_id` = %d', absint( $args['user_id'] ) );
 		}
 
 		if ( ! empty( $args['after'] ) || ! empty( $args['before'] ) ) {
@@ -304,6 +311,11 @@ class WC_Webhook_Data_Store implements WC_Webhook_Data_Store_Interface {
 			$args['modified_before'] = empty( $args['modified_before'] ) ? current_time( 'mysql', 1 ) : $args['modified_before'];
 
 			$date_modified = "AND `date_modified_gmt` BETWEEN STR_TO_DATE('" . esc_sql( $args['modified_after'] ) . "', '%Y-%m-%d %H:%i:%s') and STR_TO_DATE('" . esc_sql( $args['modified_before'] ) . "', '%Y-%m-%d %H:%i:%s')";
+		}
+
+		$api_version_value = $args['api_version'] ?? null;
+		if ( is_numeric( $api_version_value ) ) {
+			$api_version = 'AND `api_version`=' . esc_sql( $api_version_value );
 		}
 
 		// Check for cache.
@@ -325,6 +337,8 @@ class WC_Webhook_Data_Store implements WC_Webhook_Data_Store_Interface {
 				{$exclude}
 				{$date_created}
 				{$date_modified}
+				{$api_version}
+				{$user_id}
 				{$order}
 				{$limit}
 				{$offset}"
@@ -348,6 +362,7 @@ class WC_Webhook_Data_Store implements WC_Webhook_Data_Store_Interface {
 				{$exclude}
 				{$date_created}
 				{$date_modified}
+				{$user_id}
 				{$order}
 				{$limit}
 				{$offset}"

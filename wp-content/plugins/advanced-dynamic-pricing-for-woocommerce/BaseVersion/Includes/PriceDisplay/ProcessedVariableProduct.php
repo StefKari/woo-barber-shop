@@ -14,6 +14,7 @@ class ProcessedVariableProduct
 {
     const KEY_LOWEST_PRICE_PROD = 'min_calculated_price';
     const KEY_LOWEST_RANGE_PRICE_PROD = 'min_range_calculated_price';
+    const KEY_HIGHEST_RANGE_PRICE_PROD = 'max_range_calculated_price';
     const KEY_HIGHEST_PRICE_PROD = 'max_calculated_price';
     const KEY_LOWEST_INITIAL_PRICE_PROD = 'min_initial_price';
     const KEY_HIGHEST_INITIAL_PRICE_PROD = 'max_initial_price';
@@ -54,6 +55,11 @@ class ProcessedVariableProduct
     protected $childSummary;
 
     /**
+     * @var array<int, ProcessedProductSimple>
+     */
+    protected $children;
+
+    /**
      * @var float
      */
     protected $qty;
@@ -90,6 +96,7 @@ class ProcessedVariableProduct
         $this->usingCustomPrice               = false;
         $this->isFullyAffectedByRangeDiscount = null;
         $this->childSummary                   = array();
+        $this->children                       = array();
 
         $this->priceFunctions = new PriceFunctions();
     }
@@ -179,6 +186,21 @@ class ProcessedVariableProduct
     /**
      * @return ProcessedProductSimple|null
      */
+    public function getHighestRangeDiscountPriceProduct()
+    {
+        if (isset($this->childSummary[self::KEY_HIGHEST_RANGE_PRICE_PROD])) {
+            /** @var ProcessedProductSimple $prod */
+            $prod = $this->childSummary[self::KEY_HIGHEST_RANGE_PRICE_PROD];
+        } else {
+            $prod = null;
+        }
+
+        return $prod;
+    }
+
+    /**
+     * @return ProcessedProductSimple|null
+     */
     public function getLowestInitialPriceProduct()
     {
         if (isset($this->childSummary[self::KEY_LOWEST_INITIAL_PRICE_PROD])) {
@@ -231,16 +253,28 @@ class ProcessedVariableProduct
         }
 
         if ($product->isAffectedByRangeDiscount()) {
+            $childLowestRangePrice = $product->getMinDiscountRangePrice();
+            $lowestRangePrice = null;
             if (isset($this->childSummary[self::KEY_LOWEST_RANGE_PRICE_PROD])) {
                 /** @var ProcessedProductSimple $prod */
                 $prod             = $this->childSummary[self::KEY_LOWEST_RANGE_PRICE_PROD];
                 $lowestRangePrice = $prod->getMinDiscountRangePrice();
-            } else {
-                $lowestRangePrice = null;
             }
 
-            if (is_null($lowestRangePrice) || ($childPrice < $lowestRangePrice)) {
+            if (is_null($lowestRangePrice) || $childLowestRangePrice < $lowestRangePrice) {
                 $this->childSummary[self::KEY_LOWEST_RANGE_PRICE_PROD] = $product;
+            }
+
+            $childHighestRangePrice = $product->getMaxDiscountRangePrice();
+            $highestRangePrice = null;
+            if (isset($this->childSummary[self::KEY_HIGHEST_RANGE_PRICE_PROD])) {
+                /** @var ProcessedProductSimple $prod */
+                $prod             = $this->childSummary[self::KEY_HIGHEST_RANGE_PRICE_PROD];
+                $highestRangePrice = $prod->getMaxDiscountRangePrice();
+            }
+
+            if (is_null($highestRangePrice) || $childHighestRangePrice > $highestRangePrice) {
+                $this->childSummary[self::KEY_HIGHEST_RANGE_PRICE_PROD] = $product;
             }
 
             if (is_null($this->isFullyAffectedByRangeDiscount)) {
@@ -265,6 +299,8 @@ class ProcessedVariableProduct
         if ($product->isUsingCustomPrice()) {
             $this->usingCustomPrice = true;
         }
+
+        $this->children[] = $product;
     }
 
     /**
@@ -395,5 +431,17 @@ class ProcessedVariableProduct
     public function isUsingCustomPrice()
     {
         return $this->usingCustomPrice;
+    }
+
+    public function getPrice() {
+        return $this->getLowestPrice();
+    }
+
+    /**
+     * @return array<int, ProcessedProductSimple>
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

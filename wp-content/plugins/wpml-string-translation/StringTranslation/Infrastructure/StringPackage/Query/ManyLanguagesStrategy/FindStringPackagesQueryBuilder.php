@@ -20,13 +20,10 @@ class FindStringPackagesQueryBuilder implements FindStringPackagesQueryBuilderIn
         sp.translator_note
     ';
 
-	/** @var \SitePress */
 	private $sitepress;
 
-	/** @var SettingsRepository */
 	private $settingsRepository;
 
-	/** @var \wpdb */
 	private $wpdb;
 
 	public function __construct(
@@ -41,9 +38,9 @@ class FindStringPackagesQueryBuilder implements FindStringPackagesQueryBuilderIn
 
 	public function build( StringPackageCriteria $criteria ): string {
 		$targetLanguageCodes = $this->getTargetLanguageCodes( $criteria );
-		$sourceLanguage = $this->getSourceLanguageCode( $criteria );
+		$sourceLanguage = $this->sqlStringLiteral( $this->getSourceLanguageCode( $criteria ) );
 		$fields = $this->getFields();
-		$stringPackageId = $criteria->getType();
+		$stringPackageId = $this->sqlStringLiteral( $criteria->getType() );
 
 		$sql = "
       SELECT
@@ -52,13 +49,13 @@ class FindStringPackagesQueryBuilder implements FindStringPackagesQueryBuilderIn
       INNER JOIN {$this->wpdb->prefix}icl_translations source_t
           ON source_t.element_id = sp.ID
           AND source_t.element_type = CONCAT('package_', sp.kind_slug)
-          AND source_t.language_code = %s
+		  AND source_t.language_code = {$sourceLanguage}
       LEFT JOIN {$this->wpdb->prefix}icl_translations target_t
           ON target_t.trid = source_t.trid
-          AND target_t.language_code IN (" . wpml_prepare_in( $targetLanguageCodes ) . ")
+          AND " . $this->buildLanguageInCondition( 'target_t.language_code', $targetLanguageCodes ) . "
       LEFT JOIN {$this->wpdb->prefix}icl_translation_status target_ts
           ON target_ts.translation_id = target_t.translation_id
-      WHERE sp.kind_slug = %s
+		WHERE sp.kind_slug = {$stringPackageId}
           {$this->buildPostTitleCondition( $criteria )}
           {$this->buildTranslationStatusConditionWrapper( $criteria, $targetLanguageCodes )}
       GROUP BY sp.ID
@@ -66,7 +63,7 @@ class FindStringPackagesQueryBuilder implements FindStringPackagesQueryBuilderIn
       {$this->buildPagination( $criteria )}
     ";
 
-		return $this->wpdb->prepare( $sql, $sourceLanguage, $stringPackageId );
+		return $sql;
 	}
 
 	private function getFields(): string {

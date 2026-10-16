@@ -96,15 +96,20 @@ class AutoAddCartItemChoices implements \Serializable
      */
     public function serialize()
     {
+        return serialize($this->__serialize());
+    }
+
+    public function __serialize(): array
+    {
         $choices = $this->choices;
         sort($choices);
 
-        return serialize(array(
+        return [
             'choices' => array_map(function ($choice) {
                 return $choice->serialize();
             }, $choices),
             'requiredQty' => $this->requiredQty,
-        ));
+        ];
     }
 
     /**
@@ -112,8 +117,13 @@ class AutoAddCartItemChoices implements \Serializable
      */
     public function unserialize($data)
     {
-        $data = unserialize($data);
+        $data = maybe_unserialize($data);
 
+        $this->__unserialize($data);
+    }
+
+    public function __unserialize($data)
+    {
         $this->choices = $data['choices'];
         $this->requiredQty = $data['requiredQty'];
     }

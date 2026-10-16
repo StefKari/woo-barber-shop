@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2020 ServMask Inc.
+ * Copyright (C) 2014-2025 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Attribution: This code is part of the All-in-One WP Migration plugin, developed by
  *
  * ███████╗███████╗██████╗ ██╗   ██╗███╗   ███╗ █████╗ ███████╗██╗  ██╗
  * ██╔════╝██╔════╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔════╝██║ ██╔╝
@@ -35,7 +37,6 @@ class Ai1wm_Import_Controller {
 
 	public static function import( $params = array() ) {
 		global $ai1wm_params;
-		ai1wm_setup_environment();
 
 		// Set params
 		if ( empty( $params ) ) {
@@ -47,11 +48,20 @@ class Ai1wm_Import_Controller {
 			$params['priority'] = 10;
 		}
 
+		$ai1wm_params = $params;
+
+		// Set job ID for per-job status tracking
+		if ( isset( $params['storage'] ) ) {
+			Ai1wm_Status::$job_id = $params['storage'];
+		}
+
 		// Set secret key
 		$secret_key = null;
 		if ( isset( $params['secret_key'] ) ) {
 			$secret_key = trim( $params['secret_key'] );
 		}
+
+		ai1wm_setup_environment();
 
 		try {
 			// Ensure that unauthorized people cannot access import action
@@ -60,7 +70,11 @@ class Ai1wm_Import_Controller {
 			exit;
 		}
 
-		$ai1wm_params = $params;
+		// Error handling is set up for the authorised request, after the secret-key check.
+		ai1wm_setup_errors();
+
+		// Release the caller before the work starts
+		ai1wm_close_connection( $params );
 
 		// Loop over filters
 		if ( ( $filters = ai1wm_get_filters( 'ai1wm_import' ) ) ) {
@@ -72,31 +86,68 @@ class Ai1wm_Import_Controller {
 							// Run function hook
 							$params = call_user_func_array( $hook['function'], array( $params ) );
 
-						} catch ( Ai1wm_Import_Retry_Exception $e ) {
+						} catch ( Ai1wm_Upload_Exception $e ) {
+							do_action( 'ai1wm_status_upload_error', $params, $e );
+
 							if ( defined( 'WP_CLI' ) ) {
-								WP_CLI::error( sprintf( __( 'Unable to import. Error code: %s. %s', AI1WM_PLUGIN_NAME ), $e->getCode(), $e->getMessage() ) );
-							} else {
-								status_header( $e->getCode() );
-								ai1wm_json_response( array( 'errors' => array( array( 'code' => $e->getCode(), 'message' => $e->getMessage() ) ) ) );
+								/* translators: 1: Error code, 2: Error message. */
+								WP_CLI::error( sprintf( __( 'Import failed. Code: %1$s. %2$s', 'all-in-one-wp-migration' ), $e->getCode(), $e->getMessage() ) );
 							}
+
+							// REST API: write job-scoped error so poll clients see the terminal state, then re-throw
+							if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+								Ai1wm_Status::error( __( 'Import failed', 'all-in-one-wp-migration' ), $e->getMessage() );
+								throw $e;
+							}
+
+							status_header( $e->getCode() );
+							ai1wm_json_response( array( 'errors' => array( array( 'code' => $e->getCode(), 'message' => $e->getMessage() ) ) ) );
 							exit;
 						} catch ( Ai1wm_Database_Exception $e ) {
+							do_action( 'ai1wm_status_import_error', $params, $e );
+
 							if ( defined( 'WP_CLI' ) ) {
-								WP_CLI::error( sprintf( __( 'Unable to import. Error code: %s. %s', AI1WM_PLUGIN_NAME ), $e->getCode(), $e->getMessage() ) );
-							} else {
-								status_header( $e->getCode() );
-								ai1wm_json_response( array( 'errors' => array( array( 'code' => $e->getCode(), 'message' => $e->getMessage() ) ) ) );
+								/* translators: 1: Error code, 2: Error message. */
+								WP_CLI::error( sprintf( __( 'Import failed (database error). Code: %1$s. %2$s', 'all-in-one-wp-migration' ), $e->getCode(), $e->getMessage() ) );
 							}
-							Ai1wm_Directory::delete( ai1wm_storage_path( $params ) );
+
+							// REST API: write job-scoped error so poll clients see the terminal state, then re-throw
+							if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+								Ai1wm_Status::error( __( 'Import failed', 'all-in-one-wp-migration' ), $e->getMessage() );
+								throw $e;
+							}
+
+							status_header( $e->getCode() );
+							ai1wm_json_response( array( 'errors' => array( array( 'code' => $e->getCode(), 'message' => $e->getMessage() ) ) ) );
+							exit;
+						} catch ( Ai1wm_Not_Decryptable_Exception $e ) {
+							// Check_Encryption signals pipeline halt; storage/status preserved for retry via /confirm
+							if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+								throw $e;
+							}
+
 							exit;
 						} catch ( Exception $e ) {
+							do_action( 'ai1wm_status_import_error', $params, $e );
+
 							if ( defined( 'WP_CLI' ) ) {
-								WP_CLI::error( sprintf( __( 'Unable to import: %s', AI1WM_PLUGIN_NAME ), $e->getMessage() ) );
-							} else {
-								Ai1wm_Status::error( __( 'Unable to import', AI1WM_PLUGIN_NAME ), $e->getMessage() );
-								Ai1wm_Notification::error( __( 'Unable to import', AI1WM_PLUGIN_NAME ), $e->getMessage() );
+								/* translators: Error message. */
+								WP_CLI::error( sprintf( __( 'Import failed: %s', 'all-in-one-wp-migration' ), $e->getMessage() ) );
 							}
-							Ai1wm_Directory::delete( ai1wm_storage_path( $params ) );
+
+							// Write job-scoped error first so REST poll clients see the terminal state
+							if ( $e instanceof Ai1wm_CRC_Exception ) {
+								Ai1wm_Status::left_error( __( 'Import failed', 'all-in-one-wp-migration' ), $e->getMessage() );
+							} else {
+								Ai1wm_Status::error( __( 'Import failed', 'all-in-one-wp-migration' ), $e->getMessage() );
+							}
+
+							// REST API: re-throw so the handler can return a WP_Error
+							if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+								throw $e;
+							}
+
+							Ai1wm_Notification::error( __( 'Import failed', 'all-in-one-wp-migration' ), $e->getMessage() );
 							exit;
 						}
 					}
@@ -131,6 +182,12 @@ class Ai1wm_Import_Controller {
 								'body'      => apply_filters( 'ai1wm_http_import_body', $params ),
 							)
 						);
+
+						// REST API: return params instead of exit so the handler can build a response
+						if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+							return $params;
+						}
+
 						exit;
 					}
 				}
@@ -153,11 +210,11 @@ class Ai1wm_Import_Controller {
 			$static_filters[] = apply_filters( 'ai1wm_import_file', Ai1wm_Template::get_content( 'import/button-file' ) );
 		}
 
-		// Add URL Extension
-		if ( defined( 'AI1WMLE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_url', Ai1wm_Template::get_content( 'import/button-url' ) );
+		// Add Google Drive Extension
+		if ( defined( 'AI1WMGE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_gdrive', Ai1wm_Template::get_content( 'import/button-gdrive' ) );
 		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_url', Ai1wm_Template::get_content( 'import/button-url' ) );
+			$static_filters[] = apply_filters( 'ai1wm_import_gdrive', Ai1wm_Template::get_content( 'import/button-gdrive' ) );
 		}
 
 		// Add FTP Extension
@@ -174,11 +231,11 @@ class Ai1wm_Import_Controller {
 			$static_filters[] = apply_filters( 'ai1wm_import_dropbox', Ai1wm_Template::get_content( 'import/button-dropbox' ) );
 		}
 
-		// Add Google Drive Extension
-		if ( defined( 'AI1WMGE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_gdrive', Ai1wm_Template::get_content( 'import/button-gdrive' ) );
+		// Add URL Extension
+		if ( defined( 'AI1WMLE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_url', Ai1wm_Template::get_content( 'import/button-url' ) );
 		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_gdrive', Ai1wm_Template::get_content( 'import/button-gdrive' ) );
+			$static_filters[] = apply_filters( 'ai1wm_import_url', Ai1wm_Template::get_content( 'import/button-url' ) );
 		}
 
 		// Add Amazon S3 Extension
@@ -188,60 +245,11 @@ class Ai1wm_Import_Controller {
 			$static_filters[] = apply_filters( 'ai1wm_import_s3', Ai1wm_Template::get_content( 'import/button-s3' ) );
 		}
 
-		// Add Backblaze B2 Extension
-		if ( defined( 'AI1WMAE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_b2', Ai1wm_Template::get_content( 'import/button-b2' ) );
-		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_b2', Ai1wm_Template::get_content( 'import/button-b2' ) );
-		}
-
 		// Add OneDrive Extension
 		if ( defined( 'AI1WMOE_PLUGIN_NAME' ) ) {
 			$active_filters[] = apply_filters( 'ai1wm_import_onedrive', Ai1wm_Template::get_content( 'import/button-onedrive' ) );
 		} else {
 			$static_filters[] = apply_filters( 'ai1wm_import_onedrive', Ai1wm_Template::get_content( 'import/button-onedrive' ) );
-		}
-
-		// Add Box Extension
-		if ( defined( 'AI1WMBE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_box', Ai1wm_Template::get_content( 'import/button-box' ) );
-		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_box', Ai1wm_Template::get_content( 'import/button-box' ) );
-		}
-
-		// Add Mega Extension
-		if ( defined( 'AI1WMEE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_mega', Ai1wm_Template::get_content( 'import/button-mega' ) );
-		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_mega', Ai1wm_Template::get_content( 'import/button-mega' ) );
-		}
-
-		// Add DigitalOcean Spaces Extension
-		if ( defined( 'AI1WMIE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_digitalocean', Ai1wm_Template::get_content( 'import/button-digitalocean' ) );
-		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_digitalocean', Ai1wm_Template::get_content( 'import/button-digitalocean' ) );
-		}
-
-		// Add Google Cloud Storage Extension
-		if ( defined( 'AI1WMCE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_gcloud_storage', Ai1wm_Template::get_content( 'import/button-gcloud-storage' ) );
-		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_gcloud_storage', Ai1wm_Template::get_content( 'import/button-gcloud-storage' ) );
-		}
-
-		// Add Microsoft Azure Extension
-		if ( defined( 'AI1WMZE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_azure_storage', Ai1wm_Template::get_content( 'import/button-azure-storage' ) );
-		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_azure_storage', Ai1wm_Template::get_content( 'import/button-azure-storage' ) );
-		}
-
-		// Add Amazon Glacier Extension
-		if ( defined( 'AI1WMRE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_glacier', Ai1wm_Template::get_content( 'import/button-glacier' ) );
-		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_glacier', Ai1wm_Template::get_content( 'import/button-glacier' ) );
 		}
 
 		// Add pCloud Extension
@@ -251,13 +259,6 @@ class Ai1wm_Import_Controller {
 			$static_filters[] = apply_filters( 'ai1wm_import_pcloud', Ai1wm_Template::get_content( 'import/button-pcloud' ) );
 		}
 
-		// Add WebDAV Extension
-		if ( defined( 'AI1WMWE_PLUGIN_NAME' ) ) {
-			$active_filters[] = apply_filters( 'ai1wm_import_webdav', Ai1wm_Template::get_content( 'import/button-webdav' ) );
-		} else {
-			$static_filters[] = apply_filters( 'ai1wm_import_webdav', Ai1wm_Template::get_content( 'import/button-webdav' ) );
-		}
-
 		// Add S3 Client Extension
 		if ( defined( 'AI1WMNE_PLUGIN_NAME' ) ) {
 			$active_filters[] = apply_filters( 'ai1wm_import_s3_client', Ai1wm_Template::get_content( 'import/button-s3-client' ) );
@@ -265,21 +266,67 @@ class Ai1wm_Import_Controller {
 			$static_filters[] = apply_filters( 'ai1wm_import_s3_client', Ai1wm_Template::get_content( 'import/button-s3-client' ) );
 		}
 
+		// Add Google Cloud Storage Extension
+		if ( defined( 'AI1WMCE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_gcloud_storage', Ai1wm_Template::get_content( 'import/button-gcloud-storage' ) );
+		} else {
+			$static_filters[] = apply_filters( 'ai1wm_import_gcloud_storage', Ai1wm_Template::get_content( 'import/button-gcloud-storage' ) );
+		}
+
+		// Add DigitalOcean Spaces Extension
+		if ( defined( 'AI1WMIE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_digitalocean', Ai1wm_Template::get_content( 'import/button-digitalocean' ) );
+		} else {
+			$static_filters[] = apply_filters( 'ai1wm_import_digitalocean', Ai1wm_Template::get_content( 'import/button-digitalocean' ) );
+		}
+
+		// Add Mega Extension
+		if ( defined( 'AI1WMEE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_mega', Ai1wm_Template::get_content( 'import/button-mega' ) );
+		} else {
+			$static_filters[] = apply_filters( 'ai1wm_import_mega', Ai1wm_Template::get_content( 'import/button-mega' ) );
+		}
+
+		// Add Backblaze B2 Extension
+		if ( defined( 'AI1WMAE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_b2', Ai1wm_Template::get_content( 'import/button-b2' ) );
+		} else {
+			$static_filters[] = apply_filters( 'ai1wm_import_b2', Ai1wm_Template::get_content( 'import/button-b2' ) );
+		}
+
+		// Add Box Extension
+		if ( defined( 'AI1WMBE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_box', Ai1wm_Template::get_content( 'import/button-box' ) );
+		} else {
+			$static_filters[] = apply_filters( 'ai1wm_import_box', Ai1wm_Template::get_content( 'import/button-box' ) );
+		}
+
+		// Add Microsoft Azure Extension
+		if ( defined( 'AI1WMZE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_azure_storage', Ai1wm_Template::get_content( 'import/button-azure-storage' ) );
+		} else {
+			$static_filters[] = apply_filters( 'ai1wm_import_azure_storage', Ai1wm_Template::get_content( 'import/button-azure-storage' ) );
+		}
+
+		// Add WebDAV Extension
+		if ( defined( 'AI1WMWE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_webdav', Ai1wm_Template::get_content( 'import/button-webdav' ) );
+		} else {
+			$static_filters[] = apply_filters( 'ai1wm_import_webdav', Ai1wm_Template::get_content( 'import/button-webdav' ) );
+		}
+
+		// Add Amazon Glacier Extension
+		if ( defined( 'AI1WMRE_PLUGIN_NAME' ) ) {
+			$active_filters[] = apply_filters( 'ai1wm_import_glacier', Ai1wm_Template::get_content( 'import/button-glacier' ) );
+		} else {
+			$static_filters[] = apply_filters( 'ai1wm_import_glacier', Ai1wm_Template::get_content( 'import/button-glacier' ) );
+		}
+
 		return array_merge( $active_filters, $static_filters );
 	}
 
 	public static function pro() {
 		return Ai1wm_Template::get_content( 'import/pro' );
-	}
-
-	public static function http_import_headers( $headers = array() ) {
-		if ( ( $user = get_option( AI1WM_AUTH_USER ) ) && ( $password = get_option( AI1WM_AUTH_PASSWORD ) ) ) {
-			if ( ( $hash = base64_encode( sprintf( '%s:%s', $user, $password ) ) ) ) {
-				$headers['Authorization'] = sprintf( 'Basic %s', $hash );
-			}
-		}
-
-		return $headers;
 	}
 
 	public static function max_chunk_size() {

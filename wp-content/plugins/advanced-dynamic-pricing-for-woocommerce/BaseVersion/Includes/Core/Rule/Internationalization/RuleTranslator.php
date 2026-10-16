@@ -96,61 +96,43 @@ class RuleTranslator
 
         if ($rule instanceof SingleItemRule || $rule instanceof PackageRule) {
             $rule->setItemGiftSubtotalDivider($rule->getItemGiftSubtotalDivider() * $rate);
+
+            $giftsDiscount = $rule->getItemGiftsDiscount();
+            if ($giftsDiscount && $giftsDiscount->getType() !== Discount::TYPE_PERCENTAGE) {
+                $giftsDiscount->setValue($giftsDiscount->getValue() * $rate);
+                $rule->setItemGiftsDiscount($giftsDiscount);
+            }
         }
 
         return $rule;
     }
 
-    /**
-     * @param Rule $rule
-     * @param string $languageCode
-     *
-     * @return Rule
-     */
-    public static function translate($rule, $languageCode)
+    public static function translate(Rule $rule, IObjectInternationalization $oi) : Rule
     {
         $filterTranslator = new FilterTranslator();
 
         if ($rule instanceof SingleItemRule) {
-            $filters = array();
+            $filters = [];
             foreach ($rule->getFilters() as $filter) {
-                $filter->setValue(
-                    $filterTranslator->translateByType(
-                        $filter->getType(),
-                        $filter->getValue(),
-                        $languageCode
-                    )
-                );
+                $filter->setValue($filterTranslator->translateByType($filter->getType(), $filter->getValue(), $oi));
 
-                $filter->setExcludeProductIds(
-                    $filterTranslator->translateProduct(
-                        $filter->getExcludeProductIds(),
-                        $languageCode
-                    )
-                );
+                foreach ($filter->getExcludeFilters() as $excludeFilter) {
+                    $excludeFilter->setValue($filterTranslator->translateByType($excludeFilter->getType(), $excludeFilter->getValue(), $oi));
+                }
 
                 $filters[] = $filter;
             }
             $rule->setFilters($filters);
         } elseif ($rule instanceof PackageRule) {
-            $packages = array();
+            $packages = [];
             foreach ($rule->getPackages() as $package) {
-                $filters = array();
+                $filters = [];
                 foreach ($package->getFilters() as $filter) {
-                    $filter->setValue(
-                        $filterTranslator->translateByType(
-                            $filter->getType(),
-                            $filter->getValue(),
-                            $languageCode
-                        )
-                    );
+                    $filter->setValue($filterTranslator->translateByType($filter->getType(), $filter->getValue(), $oi));
 
-                    $filter->setExcludeProductIds(
-                        $filterTranslator->translateProduct(
-                            $filter->getExcludeProductIds(),
-                            $languageCode
-                        )
-                    );
+                    foreach ($filter->getExcludeFilters() as $excludeFilter) {
+                        $excludeFilter->setValue($filterTranslator->translateByType($excludeFilter->getType(), $excludeFilter->getValue(), $oi));
+                    }
 
                     $filters[] = $filter;
                 }
@@ -163,18 +145,13 @@ class RuleTranslator
         if ($rule instanceof SingleItemRule || $rule instanceof PackageRule) {
             if ($rule->hasProductRangeAdjustment()) {
                 $productAdj = $rule->getProductRangeAdjustmentHandler();
+
                 $productAdj->setSelectedProductIds(
-                    $filterTranslator->translateProduct(
-                        $productAdj->getSelectedCategoryIds(),
-                        $languageCode
-                    )
+                    array_map([$oi, 'translateProductId'], $productAdj->getSelectedProductIds())
                 );
 
                 $productAdj->setSelectedCategoryIds(
-                    $filterTranslator->translateCategory(
-                        $productAdj->getSelectedCategoryIds(),
-                        $languageCode
-                    )
+                    array_map([$oi, 'translateCategoryId'], $productAdj->getSelectedCategoryIds())
                 );
 
                 $rule->installProductRangeAdjustmentHandler($productAdj);
@@ -183,29 +160,34 @@ class RuleTranslator
             foreach ($rule->getItemGiftsCollection()->asArray() as $gift) {
                 foreach ($gift->getChoices() as $choice) {
                     if ($choice->getType()->equals(GiftChoiceTypeEnum::PRODUCT())) {
-                        $choice->setValues($filterTranslator->translateProduct($choice->getValues(), $languageCode));
+                        $choice->setValues(
+                            array_map([$oi, 'translateProductId'], $choice->getValues())
+                        );
                     }
 
                     if ($choice->getType()->equals(GiftChoiceTypeEnum::CATEGORY())) {
-                        $choice->setValues($filterTranslator->translateCategory($choice->getValues(), $languageCode));
+                        $choice->setValues(
+                            array_map([$oi, 'translateCategoryId'], $choice->getValues())
+                        );
                     }
                 }
             }
         }
 
-        $cartConditions = array();
+        $cartConditions = [];
         foreach ($rule->getConditions() as $cartCondition) {
-            $cartCondition->translate($languageCode);
+            $cartCondition->translate($oi);
             $cartConditions[] = $cartCondition;
         }
         $rule->setConditions($cartConditions);
 
-        $cartAdjustments = array();
+        $cartAdjustments = [];
         foreach ($rule->getCartAdjustments() as $cartAdjustment) {
             if ($cartAdjustment instanceof FeeCartAdj) {
                 $cartAdjustment->translate();
-                $cartAdjustments[] = $cartAdjustment;
             }
+
+            $cartAdjustments[] = $cartAdjustment;
         }
         $rule->setCartAdjustments($cartAdjustments);
 

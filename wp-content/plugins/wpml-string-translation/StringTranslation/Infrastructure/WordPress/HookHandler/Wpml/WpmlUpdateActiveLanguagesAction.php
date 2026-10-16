@@ -2,22 +2,26 @@
 namespace WPML\StringTranslation\Infrastructure\WordPress\HookHandler\Wpml;
 
 use WPML\StringTranslation\Infrastructure\WordPress\HookHandler\AbstractActionHookHandler;
-use WPML\StringTranslation\Application\StringCore\Command\LoadExistingStringTranslationsForAllStringsCommandInterface;
+use WPML\StringTranslation\Application\StringCore\Command\LoadExistingStringTranslationsForNewLocalesCommandInterface;
 
 class WpmlUpdateActiveLanguagesAction extends AbstractActionHookHandler {
 	const ACTION_NAME = 'icl_update_active_languages';
 	const ACTION_ARGS = 1;
 
-	/** @var LoadExistingStringTranslationsForAllStringsCommandInterface */
-	private $loadExistingStringTranslationsForAllStringsCommand;
+	private $loadExistingStringTranslationsForNewLocalesCommand;
 
 	public function __construct(
-		LoadExistingStringTranslationsForAllStringsCommandInterface $loadExistingStringTranslationsForAllStringsCommand
+		LoadExistingStringTranslationsForNewLocalesCommandInterface $loadExistingStringTranslationsForNewLocalesCommand
 	) {
-		$this->loadExistingStringTranslationsForAllStringsCommand = $loadExistingStringTranslationsForAllStringsCommand;
+		$this->loadExistingStringTranslationsForNewLocalesCommand = $loadExistingStringTranslationsForNewLocalesCommand;
 	}
 
 	protected function onAction( ...$args ) {
-		$this->loadExistingStringTranslationsForAllStringsCommand->run();
+		if ( \WPML\ST\BackgroundTask\LoadExistingTranslationsTask::canBeEnqueued()
+			&& \WPML\ST\BackgroundTask\LoadExistingTranslationsTask::enqueue() ) {
+			return;
+		}
+
+		$this->loadExistingStringTranslationsForNewLocalesCommand->run();
 	}
 }

@@ -1,40 +1,54 @@
 <?php
+/**
+ * Displays the attributes tab in the product data meta box.
+ *
+ * @package WooCommerce\Admin
+ */
+
+use Automattic\WooCommerce\Internal\ProductAttributes\VisualAttributeTermAdmin;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+global $wc_product_attributes;
+// Array of defined attribute taxonomies.
+$attribute_taxonomies = wc_get_attribute_taxonomies();
+// Product attributes - taxonomies and custom, ordered, with visibility and variation attributes set.
+$product_attributes = $product_object->get_attributes( 'edit' );
 ?>
 <div id="product_attributes" class="panel wc-metaboxes-wrapper hidden">
 	<div class="toolbar toolbar-top">
+		<div id="message" class="inline notice woocommerce-message is-dismissible">
+			<p class="help">
+				<?php
+				esc_html_e(
+					'Add descriptive pieces of information that customers can use to search for this product on your store, such as “Material” or “Size”.',
+					'woocommerce'
+				);
+				?>
+				<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'woocommerce' ); ?></span></button>
+			</p>
+		</div>
 		<span class="expand-close">
 			<a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'woocommerce' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'woocommerce' ); ?></a>
 		</span>
-		<select name="attribute_taxonomy" class="attribute_taxonomy">
-			<option value=""><?php esc_html_e( 'Custom product attribute', 'woocommerce' ); ?></option>
+		<div class="actions">
 			<?php
-			global $wc_product_attributes;
-
-			// Array of defined attribute taxonomies.
-			$attribute_taxonomies = wc_get_attribute_taxonomies();
-
-			if ( ! empty( $attribute_taxonomies ) ) {
-				foreach ( $attribute_taxonomies as $tax ) {
-					$attribute_taxonomy_name = wc_attribute_taxonomy_name( $tax->attribute_name );
-					$label                   = $tax->attribute_label ? $tax->attribute_label : $tax->attribute_name;
-					echo '<option value="' . esc_attr( $attribute_taxonomy_name ) . '">' . esc_html( $label ) . '</option>';
-				}
-			}
+			/* translators: 'Global' refers to 'global attribute'. */
+			$add_global_attribute_placeholder = __( 'Add global', 'woocommerce' );
 			?>
-		</select>
-		<button type="button" class="button add_attribute"><?php esc_html_e( 'Add', 'woocommerce' ); ?></button>
+			<button type="button" class="button add_custom_attribute"><?php esc_html_e( 'Add new', 'woocommerce' ); ?></button>
+			<select class="wc-attribute-search" data-placeholder="<?php echo esc_attr( $add_global_attribute_placeholder ); ?>" data-minimum-input-length="0">
+			</select>
+		</div>
 	</div>
 	<div class="product_attributes wc-metaboxes">
 		<?php
-		// Product attributes - taxonomies and custom, ordered, with visibility and variation attributes set.
-		$attributes = $product_object->get_attributes( 'edit' );
-		$i          = -1;
+		$i = -1;
 
-		foreach ( $attributes as $attribute ) {
-			$i++;
+		foreach ( $product_attributes as $attribute ) {
+			++$i;
 			$metabox_class = array();
 
 			if ( $attribute->is_taxonomy() ) {
@@ -46,11 +60,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 	</div>
-	<div class="toolbar">
+	<div class="toolbar toolbar-buttons">
 		<span class="expand-close">
 			<a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'woocommerce' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'woocommerce' ); ?></a>
 		</span>
-		<button type="button" class="button save_attributes button-primary"><?php esc_html_e( 'Save attributes', 'woocommerce' ); ?></button>
+		<button type="button" aria-disabled="true" class="button save_attributes button-primary disabled"><?php esc_html_e( 'Save attributes', 'woocommerce' ); ?></button>
 	</div>
 	<?php do_action( 'woocommerce_product_options_attributes' ); ?>
 </div>
+
+<script type="text/template" id="tmpl-wc-modal-add-attribute-term">
+	<div class="wc-backbone-modal wc-backbone-modal-add-attribute-term">
+		<div class="wc-backbone-modal-content">
+			<section class="wc-backbone-modal-main" role="main">
+				<header class="wc-backbone-modal-header">
+					<h1><?php esc_html_e( 'Create value', 'woocommerce' ); ?></h1>
+					<button class="modal-close modal-close-link dashicons dashicons-no-alt">
+						<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', 'woocommerce' ); ?></span>
+					</button>
+				</header>
+				<article>
+					<form class="wc-add-attribute-term-fields" action="" method="post">
+						<label for="wc-modal-add-attribute-term-input"><?php esc_html_e( 'Name', 'woocommerce' ); ?></label>
+						<input id="wc-modal-add-attribute-term-input" type="text" name="term" value="" />
+						<# if ( data.isVisualAttribute ) { #>
+							<?php VisualAttributeTermAdmin::render_add_attribute_term_modal_fields(); ?>
+						<# } #>
+					</form>
+				</article>
+				<footer>
+					<div class="wc-backbone-modal-buttons">
+						<button class="modal-close button button-large"><?php esc_html_e( 'Cancel', 'woocommerce' ); ?></button>
+						<button id="btn-ok" disabled class="button button-primary button-large"><?php esc_html_e( 'OK', 'woocommerce' ); ?></button>
+					</div>
+				</footer>
+			</section>
+		</div>
+	</div>
+	<div class="wc-backbone-modal-backdrop modal-close"></div>
+</script>

@@ -82,11 +82,19 @@ class WC_REST_Setting_Options_Controller extends WC_REST_Setting_Options_V2_Cont
 			return new WP_Error( 'rest_setting_setting_group_invalid', __( 'Invalid setting group.', 'woocommerce' ), array( 'status' => 404 ) );
 		}
 
+		$this->prime_options_cache_for_settings( $settings );
+
 		$filtered_settings = array();
 		foreach ( $settings as $setting ) {
 			$option_key = $setting['option_key'];
 			$setting    = $this->filter_setting( $setting );
 			$default    = isset( $setting['default'] ) ? $setting['default'] : '';
+
+			if ( in_array( $setting['type'] ?? '', array( 'title', 'sectionend' ), true ) ) {
+				$filtered_settings[] = $setting;
+				continue;
+			}
+
 			// Get the option value.
 			if ( is_array( $option_key ) ) {
 				$option           = get_option( $option_key[0] );
@@ -102,7 +110,7 @@ class WC_REST_Setting_Options_Controller extends WC_REST_Setting_Options_V2_Cont
 			} elseif ( 'single_select_country' === $setting['type'] ) {
 				$setting['type']    = 'select';
 				$setting['options'] = $this->get_countries_and_states();
-			} elseif ( 'single_select_page' === $setting['type'] ) {
+			} elseif ( $setting['type'] === 'single_select_page' || $setting['type'] === 'single_select_page_with_search' ) {
 				$pages   = get_pages(
 					array(
 						'sort_column'  => 'menu_order',

@@ -29,14 +29,22 @@ class NotificationsUpdateTask extends Task {
 	}
 
 	/**
+	 * Register the task's callbacks.
+	 *
+	 * @since 4.10.0
+	 */
+	public function hooks() { // phpcs:ignore WPForms.PHP.HooksMethod.InvalidPlaceForAddingHooks
+
+		// Register the action handler.
+		add_action( self::ACTION, [ $this, 'process' ] );
+	}
+
+	/**
 	 * Initialize the task with all the proper checks.
 	 *
 	 * @since 4.3.0
 	 */
-	public function init() { // phpcs:ignore WPForms.PHP.HooksMethod.InvalidPlaceForAddingHooks
-
-		// Register the action handler.
-		add_action( self::ACTION, [ $this, 'process' ] );
+	public function init() {
 
 		// Exit if notifications are disabled
 		// or this task is already scheduled.
@@ -52,9 +60,8 @@ class NotificationsUpdateTask extends Task {
 			strtotime( '+1 minute' ),
 			wp_mail_smtp()->get_notifications()->get_notification_update_task_interval()
 		)
-			->unique()
-			->params()
-			->register();
+		     ->unique()
+		     ->register();
 	}
 
 	/**
@@ -63,6 +70,13 @@ class NotificationsUpdateTask extends Task {
 	 * @since 4.3.0
 	 */
 	public function process() {
+
+		// Announcements were hidden after the task was scheduled; init() schedules it again once they are shown.
+		if ( ! wp_mail_smtp()->get_notifications()->is_enabled() ) {
+			$this->cancel_force();
+
+			return;
+		}
 
 		// Delete task duplicates.
 		try {

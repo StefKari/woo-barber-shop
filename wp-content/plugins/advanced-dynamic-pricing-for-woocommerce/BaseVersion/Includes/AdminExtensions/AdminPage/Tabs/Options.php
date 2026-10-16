@@ -51,10 +51,11 @@ class Options implements AdminTabInterface
 	public function handleSubmitAction()
 	{
 		if (isset($_POST['save-options'])) {
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
             if (wp_verify_nonce($_POST[$this->nonceParam] ?? null, $this->nonceName) === false) {
                 wp_die(
-                    __('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
-                    __('Error', 'advanced-dynamic-pricing-for-woocommerce'),
+                    esc_html__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                    esc_html__('Error', 'advanced-dynamic-pricing-for-woocommerce'),
                     array('response' => 403,)
                 );
             }
@@ -87,8 +88,25 @@ class Options implements AdminTabInterface
 			}
 
 			$settings->save();
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			wp_safe_redirect($_SERVER['HTTP_REFERER']);
+			exit();
+		} else if(isset($_POST['reset-options'])) {
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+            if (wp_verify_nonce($_POST[$this->nonceParam] ?? null, $this->nonceName) === false) {
+                wp_die(
+                    esc_html__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                    esc_html__('Error', 'advanced-dynamic-pricing-for-woocommerce'),
+                    array('response' => 403,)
+                );
+            }
 
-			wp_redirect($_SERVER['HTTP_REFERER']);
+			$settings = $this->context->getSettings();
+
+			$settings->drop();
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			wp_safe_redirect($_SERVER['HTTP_REFERER']);
+			exit();
 		}
 	}
 
@@ -101,6 +119,8 @@ class Options implements AdminTabInterface
 		list($product, $category) = $this->calculateCustomizerUrls();
 		$data['product_bulk_table_customizer_url']  = $product;
 		$data['category_bulk_table_customizer_url'] = $category;
+		$data['highlight_bulk_table_customizer_url'] = $this->makeCustomerUrl('product', 'table_columns');
+		$data['highlight_rows_bulk_table_customizer_url'] = $this->makeCustomerUrl('product', 'table');
 		$data['amount_saved_customer_url']          = $this->makeCustomerUrl('discount_message');
 
 		$data['sections'] = $this->getSections();
@@ -109,6 +129,18 @@ class Options implements AdminTabInterface
 		$data['security_param'] = $this->nonceParam;
 
 		return $data;
+	}
+
+	public function getScriptData()
+	{
+		return [
+			'labels' => [
+				'are_you_sure_to_reset_settings' => __(
+					"Are you sure to reset all settings to default?",
+					'advanced-dynamic-pricing-for-woocommerce'
+				),
+			]
+		];
 	}
 
 	public static function getRelativeViewPath()
@@ -135,47 +167,77 @@ class Options implements AdminTabInterface
 	{
 		$baseVersionUrl = WC_ADP_PLUGIN_URL . "/BaseVersion/";
 		wp_enqueue_script('wdp_options-scripts', $baseVersionUrl . 'assets/js/options.js', array('jquery'),
-			WC_ADP_VERSION);
+			WC_ADP_VERSION, true);
+
+		$defaultOptions = $this->context->getSettings()->getOptions(true);
+		wp_add_inline_script('wdp_options-scripts', 'var wdp_default_options = '. wp_json_encode($defaultOptions) .';', 'before');
+
+		wp_localize_script('wdp_options-scripts', 'wdp_data', $this->getScriptData());
+
 		wp_enqueue_style('wdp_options-styles', $baseVersionUrl . 'assets/css/options.css', array(), WC_ADP_VERSION);
 	}
 
 	protected function getSections()
 	{
 		$sections = array(
-			"rules"           => array(
-				'title'     => __("Rules", 'advanced-dynamic-pricing-for-woocommerce'),
+			"calculation"     => array(
+				'title'     => __("Calculation", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/calculation/',
 				'templates' => array(
-					"rules_per_page",
-					"rule_max_exec_time",
-					"limit_results_in_autocomplete",
-					"allow_to_exclude_products",
-                    "support_persistence_rules",
-					"support_shortcode_products_on_sale",
-					"support_shortcode_products_bogo",
-				),
-			),
-			"category_page"   => array(
-				'title'     => __("Category page", 'advanced-dynamic-pricing-for-woocommerce'),
-				'templates' => array(),
-			),
-			"product_page"    => array(
-				'title'     => __("Product page", 'advanced-dynamic-pricing-for-woocommerce'),
-				'templates' => array(
-					"do_not_modify_price_at_product_page",
-					"use_first_range_as_min_qty",
+                    10 => "apply_discount_for_onsale_products",
+					20 => "disable_shipping_calc_during_process",
+					30 => "dont_recalculate_cart_on_page_load",
+					35 => "dont_recalculate_cart_if_not_changed",
+                    40 => "combine_discounts",
+                    50 => "default_discount_name",
+                    60 => "combine_fees",
+                    70 => "default_fee_name",
+                    80 => "default_fee_tax_class",
+					90 => "is_calculate_based_on_wc_precision",
+                    100 => "override_cents",
+                    130 => "initial_price_context",
 				),
 			),
 			"price_templates" => array(
 				'title'     => __("Product price", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/product-price/',
 				'templates' => array(
 					1  => "show_onsale_badge",
+                    6 => "process_product_strategy",
+                    7 => "process_product_strategy_after_use_price",
 					25 => "show_unmodified_price_if_discounts_with_coupon",
                     30 => "replace_price_with_min_bulk_price",
                     40 => "product_price_html",
 				),
 			),
+			"cart"            => array(
+				'title'     => __("Cart", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/cart/',
+				'templates' => array(
+                    0  => "show_striked_prices",
+                    5  => "show_cross_out_subtotal_in_cart_totals",
+					10 => "amount_saved_url_to_customizer",
+				),
+			),
+			"product_page"    => array(
+				'title'     => __("Product page", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/product-page/',
+				'templates' => array(
+					1 => "do_not_modify_price_at_product_page",
+					3 => "use_first_range_as_min_qty",
+					8 => "force_displaying_variation_price",
+				),
+			),
+			"category_page"   => array(
+				'title'     => __("Category page", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/category-page-pro/',
+				'templates' => array(
+					4 => "req_variations_for_optimization_at_shop"
+                ),
+			),
 			"bulk_table"      => array(
 				'title'     => __("Bulk table", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/bulk-table/',
 				'templates' => array(
 					"show_category_bulk_table",
 					"show_matched_bulk_table",
@@ -183,62 +245,61 @@ class Options implements AdminTabInterface
 					"bulk_table_calculation_mode",
 				),
 			),
-			"cart"            => array(
-				'title'     => __("Cart", 'advanced-dynamic-pricing-for-woocommerce'),
-				'templates' => array(
-					5  => "show_striked_prices",
-					10 => "show_cross_out_subtotal_in_cart_totals",
-					15 => "amount_saved_url_to_customizer",
-				),
-			),
 			"free_products"   => array(
-				'title'     => __("Free products", 'advanced-dynamic-pricing-for-woocommerce'),
+				'title'     => __("Gifts", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/free-products-2/',
 				'templates' => array(
-					"message_after_add_free_product",
+					10 => "message_after_add_free_product",
 				),
 			),
 			"coupons"         => array(
 				'title'     => __("Coupons", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/coupons-3/',
 				'templates' => array(
 					5  => "external_coupons_behavior",
-					10 => "hide_coupon_word_in_totals",
-				),
-			),
-			"calculation"     => array(
-				'title'     => __("Calculation", 'advanced-dynamic-pricing-for-woocommerce'),
-				'templates' => array(
-                    1 => "apply_discount_for_onsale_products",
-                    2 => "combine_discounts",
-                    3 => "default_discount_name",
-                    4 => "combine_fees",
-                    5 => "default_fee_name",
-                    6 => "default_fee_tax_class",
-                    7 => "override_cents",
-                    8 => "is_calculate_based_on_wc_precision",
-                    9 => "disable_shipping_calc_during_process",
-                    13 => "initial_price_context",
+					7 => "individual_wc_coupon_suppress_coupons",
+					15 => "hide_coupon_word_in_totals",
 				),
 			),
             "advertising" => array(
                 'title'     => __("Advertising", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/advertising-pro-2/',
                 'templates' => array(),
             ),
             "order"           => array(
                 'title'     => __("Order", 'advanced-dynamic-pricing-for-woocommerce'),
-                'templates' => array(),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/order-pro/',
+                'templates' => array(
+                    20 => "order_amount_saved_url_to_customizer"
+                ),
             ),
+			"rules"           => array(
+				'title'     => __("Rules", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/rules/',
+				'templates' => array(
+					100 => "rules_per_page",
+					"rule_max_exec_time",
+					"limit_results_in_autocomplete",
+                    "support_persistence_rules",
+					"support_shortcode_products_on_sale",
+					"support_shortcode_products_bogo",
+					300 => "create_blank_rule"
+				),
+			),
 			"system"          => array(
 				'title'     => __("System", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/system/',
 				'templates' => array(
 					"suppress_other_pricing_plugins",
-					"allow_to_edit_prices_in_po",
 					"update_prices_while_doing_cron",
-					"update_prices_while_doing_rest_api",
+                    "update_prices_while_doing_rest_api",
 					"uninstall_remove_data",
+					"reset_settings"
 				),
 			),
 			"debug"           => array(
 				'title'     => __("Debug", 'advanced-dynamic-pricing-for-woocommerce'),
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/debug/',
 				'templates' => array(
 					"show_debug_bar",
 				),
@@ -337,9 +398,13 @@ class Options implements AdminTabInterface
 			$panel = "wdp_{$type}_bulk_table";
 		} elseif ($type === 'discount_message') {
 			$panel = "wdp_discount_message";
+		} elseif ($type === 'condition_message') {
+			$panel = "wdp_condition_message";
 		} elseif ($type === 'cart_gifts') {
             $panel = 'wdp_cart_gift';
             $url = get_permalink(wc_get_page_id( 'cart' ));
+        } elseif ($type === 'product_page_gifts') {
+            $panel = 'wdp_page_gift';
         } else {
 			return '';
 		}
@@ -354,7 +419,14 @@ class Options implements AdminTabInterface
         }
 
         if(!empty($section)) {
-            $query_args['autofocus[section]'] = "{$panel}-{$section}";
+            if($panel === 'wdp_product_bulk_table') {
+                $query_args = array(
+                    'return'           => admin_url('themes.php'),
+                    'autofocus[section]' => "{$panel}-{$section}",
+                );
+            } else {
+                $query_args['autofocus[section]'] = "{$panel}-{$section}";
+            }
         }
 
 		return add_query_arg($query_args, admin_url('customize.php'));

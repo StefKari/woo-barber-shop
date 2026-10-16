@@ -686,18 +686,24 @@ class autoptimizeImages
                 $imgopt_h  = $_get_size['height'];
 
                 // then start replacing images src.
-                if ( preg_match_all( '#src=(?:"|\')(?!data)(.*)(?:"|\')#Usmi', $tag, $urls, PREG_SET_ORDER ) ) {
-                    foreach ( $urls as $url ) {
-                        $full_src_orig = $url[0];
-                        $url           = $url[1];
-                        if ( $this->can_optimize_image( $url, $tag, $testing ) && false === apply_filters( 'autoptimize_filter_imgopt_do_spai', false ) ) {
-                            $imgopt_url      = $this->build_imgopt_url( $url, $imgopt_w, $imgopt_h );
-                            $full_imgopt_src = str_replace( $url, $imgopt_url, $full_src_orig );
-                            $tag             = str_replace( $full_src_orig, $full_imgopt_src, $tag );
-                        }
+                $tag = autoptimizeAttributeParser::modify_attributes( $tag, 'img', '/src$/i', function( $name, $url ) use ( $tag, $testing, $imgopt_w, $imgopt_h ) {
+                    // 1. Skip if empty or a data-URI
+                    if ( ! $url || strpos( $url, 'data:' ) === 0 ) {
+                        return $url;
                     }
-                }
 
+                    // 2. Run Autoptimize logic
+                    if ( $this->can_optimize_image( $url, $tag, $testing ) && ! apply_filters( 'autoptimize_filter_imgopt_do_spai', false ) ) {
+                        return $this->build_imgopt_url( $url, $imgopt_w, $imgopt_h );
+                    }
+
+                    // 3. No changes needed
+                    return $url;
+                }, false, true );
+
+                $_url = autoptimizeAttributeParser::get( $tag, 'img', '/src$/i' );
+                $url  = $_url['src'];
+                
                 // check if the image needs to be prelaoded.
                 if ( ! empty( $metabox_preloads ) && is_array( $metabox_preloads ) && str_replace( $metabox_preloads, '', $tag ) !== $tag ) {
                     $to_preload .= $this->create_img_preload_tag( $tag );
@@ -801,7 +807,7 @@ class autoptimizeImages
         if ( ! empty( $metabox_preloads ) && is_array( $metabox_preloads ) && empty( $to_preload ) && false !== apply_filters( 'autoptimize_filter_imgopt_dopreloads', true ) ) {
             // the preload was not in an img tag, so adding a non-responsive preload instead.
             foreach ( $metabox_preloads as $img_preload ) {
-                $to_preload .= '<link rel="preload" href="' . $img_preload . '" as="image">';
+                $to_preload .= apply_filters( 'autoptimize_filter_imgopt_preload_tag_result', $this->kses_preload_link( '<link fetchpriority="high" rel="preload" href="' . $img_preload . '" as="image">' ) );
             }
         }
 
@@ -935,7 +941,7 @@ class autoptimizeImages
         if ( ! empty( $metabox_preloads ) && is_array( $metabox_preloads ) && empty( $to_preload ) && false !== apply_filters( 'autoptimize_filter_imgopt_dopreloads', true ) ) {
             // the preload was not in an img tag, so adding a non-responsive preload instead.
             foreach ( $metabox_preloads as $img_preload ) {
-                $to_preload .= '<link rel="preload" href="' . $img_preload . '" as="image">';
+                $to_preload .= apply_filters( 'autoptimize_filter_imgopt_preload_tag_result', $this->kses_preload_link( '<link fetchpriority="high" rel="preload" href="' . $img_preload . '" as="image">' ) );
             }
         }
 
@@ -984,8 +990,9 @@ class autoptimizeImages
                 $placeholder = apply_filters( 'autoptimize_filter_imgopt_lazyload_placeholder', $this->get_default_lazyload_placeholder( $width, $height ) );
             }
 
-            $tag = preg_replace( '/(\s)src=/', ' src=\'' . $placeholder . '\' data-src=', $tag );
-            $tag = preg_replace( '/(\s)srcset=/', ' data-srcset=', $tag );
+            $tag = str_replace( ' src=', ' data-src=', $tag );
+            $tag = str_replace( ' srcset=', ' data-srcset=', $tag );
+            $tag = str_replace( '<img ', '<img src=\'' . $placeholder . '\' ', $tag );
 
             // move sizes to data-sizes unless filter says no.
             if ( apply_filters( 'autoptimize_filter_imgopt_lazyload_move_sizes', true ) ) {
@@ -1038,7 +1045,7 @@ class autoptimizeImages
         echo apply_filters( 'autoptimize_filter_imgopt_lazyload_js', '<script async' . $type_js . $noptimize_flag . ' src=\'' . $lazysizes_js . '\'></script>' );
     }
 
-    public static function create_img_preload_tag( $tag ) {
+    public function create_img_preload_tag( $tag ) {
         if ( false === apply_filters( 'autoptimize_filter_imgopt_dopreloads', true ) ) {
             return '';
         }
@@ -1053,17 +1060,36 @@ class autoptimizeImages
 
         // rewrite img tag to link preload img.
         $_from = array( '<img ', ' src=', ' sizes=', ' srcset=' );
-        $_to   = array( '<link rel="preload" as="image" ', ' href=', ' imagesizes=', ' imagesrcset=' );
+        $_to   = array( '<link fetchpriority="high" rel="preload" as="image" ', ' href=', ' imagesizes=', ' imagesrcset=' );
         $tag   = str_replace( $_from, $_to, $tag );
 
-        // and remove title, alt, class and id.
-        $tag = preg_replace( '/ ((?:title|alt|class|id|loading|fetchpriority|decoding|data-no-lazy|width|height)=".*")/Um', '', $tag );
-        if ( str_replace( array( ' title=', ' class=', ' alt=', ' id=', ' fetchpriority=', ' decoding=', ' data-no-lazy=' ), '', $tag ) !== $tag ) {
-            // 2nd regex pass if still title/ class/ alt in case single quotes were used iso doubles.
-            $tag = preg_replace( '/ ((?:title|alt|class|id|loading|fetchpriority|decoding|data-no-lazy)=\'.*\')/Um', '', $tag );
-        }
-
+        // sanitize output
+        $tag = $this->kses_preload_link( $tag );
+        
+        // and provide filter for late changes.
+        $tag = apply_filters( 'autoptimize_filter_imgopt_preload_tag_result', $tag );
+        
         return $tag;
+    }
+
+    public function kses_preload_link( $_preload ) {
+        // using kses, remove all unneeded attributes
+        // keeping only those we *know* are OK and/ or needed.
+        $allowed_html = array(
+                'link' => array(
+                    'rel'           => true,
+                    'as'            => true,
+                    'href'          => true,
+                    'imagesizes'    => true,
+                    'imagesrcset'   => true,
+                    'type'          => true,
+                    'media'         => true,
+                    'fetchpriority' => true,
+                ),
+            );
+        $_preload = wp_kses( $_preload, $allowed_html );
+        
+        return $_preload;
     }
 
     public static function get_cdn_url() {
@@ -1208,9 +1234,8 @@ class autoptimizeImages
 
     public function maybe_fix_missing_quotes( $tag_in ) {
         // W3TC's Minify_HTML class removes quotes around attribute value, this re-adds them for the class and width/height attributes so we can lazyload properly.
-        if ( file_exists( WP_PLUGIN_DIR . '/w3-total-cache/w3-total-cache.php' ) && class_exists( 'Minify_HTML' ) && apply_filters( 'autoptimize_filter_imgopt_fixquotes', true ) ) {
-            $tag_out = preg_replace( '/class\s?=([^("|\')]*)(\s|>)/U', 'class=\'$1\'$2', $tag_in );
-            $tag_out = preg_replace( '/\s(width|height)=(?:"|\')?([^\s"\'>]*)(?:"|\')?/', ' $1=\'$2\'', $tag_out );
+        if ( ( file_exists( WP_PLUGIN_DIR . '/w3-total-cache/w3-total-cache.php' ) && class_exists( 'Minify_HTML' ) && apply_filters( 'autoptimize_filter_imgopt_fixquotes', true ) ) ) {
+            $tag_out = autoptimizeAttributeParser::rebuild( $tag_in );
             return $tag_out;
         } else {
             return $tag_in;

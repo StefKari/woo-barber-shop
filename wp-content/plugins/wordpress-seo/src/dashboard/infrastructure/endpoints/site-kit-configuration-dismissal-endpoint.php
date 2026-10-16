@@ -1,15 +1,15 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\Infrastructure\Endpoints;
 
 use Exception;
-use Yoast\WP\SEO\Dashboard\Domain\Endpoint\Endpoint_Interface;
 use Yoast\WP\SEO\Dashboard\User_Interface\Configuration\Site_Kit_Configuration_Dismissal_Route;
 
 /**
  * Represents the readability scores endpoint.
  */
-class Site_Kit_Configuration_Dismissal_Endpoint implements Endpoint_Interface {
+class Site_Kit_Configuration_Dismissal_Endpoint implements Dashboard_Endpoint_Interface {
 
 	/**
 	 * Gets the name.
@@ -32,8 +32,9 @@ class Site_Kit_Configuration_Dismissal_Endpoint implements Endpoint_Interface {
 	/**
 	 * Gets the route.
 	 *
-	 * @throws Exception If the route prefix is not overwritten this throws.
 	 * @return string
+	 *
+	 * @throws Exception If the route prefix is not overwritten this throws.
 	 */
 	public function get_route(): string {
 		return Site_Kit_Configuration_Dismissal_Route::ROUTE_PREFIX;

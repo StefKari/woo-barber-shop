@@ -295,7 +295,7 @@ class PriceFunctions
         }
 
         /* translators: 1: price from 2: price to */
-
+        //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch, WordPress.WP.I18n.MissingTranslatorsComment
         return sprintf(_x('%1$s &ndash; %2$s', 'Price range: from-to', 'woocommerce'),
             is_numeric($from) ? wc_price($from) : $from, is_numeric($to) ? wc_price($to) : $to);
     }
@@ -317,6 +317,23 @@ class PriceFunctions
         $ins = is_numeric($salePrice) ? $this->format($salePrice) : $salePrice;
 
         return '<del>' . $del . '</del> <ins>' . $ins . '</ins>';
+    }
+
+    /**
+     * @param string $price Regular price.
+     *
+     * @return string
+     * @see wc_format_sale_price()
+     */
+    function formatStrikedPrice($regularPrice, $salePrice = null)
+    {
+        $del = is_numeric($regularPrice) ? $this->format($regularPrice) : $regularPrice;
+
+        if($salePrice < $regularPrice) {
+            return '<del>' . $del . '</del>';
+        }
+
+        return "";
     }
 
     /**

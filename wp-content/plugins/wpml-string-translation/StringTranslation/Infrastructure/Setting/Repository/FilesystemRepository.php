@@ -4,19 +4,43 @@ namespace WPML\StringTranslation\Infrastructure\Setting\Repository;
 
 use WPML\StringTranslation\Application\Setting\Repository\FilesystemRepositoryInterface;
 use WPML\FP\Str;
+use WP_Filesystem_Base;
 
 class FilesystemRepository implements FilesystemRepositoryInterface {
 
-	public function createQueueDir() {
-		if ( ! file_exists( $this->getWpmlDir() ) ) {
-			mkdir( $this->getWpmlDir(), 0777, true );
-		}
+	const ENCODED_DOMAIN_PREFIX = 'wpmlenc-';
 
-		if ( file_exists( $this->getQueueDir() ) ) {
+	private $filesystem;
+
+	public function __construct( WP_Filesystem_Base $filesystem ) {
+		$this->filesystem = $filesystem;
+	}
+
+	public function createQueueDir() {
+		$this->makeDirRecursive( $this->getQueueDir() );
+	}
+
+	private function makeDirRecursive( string $dir ) {
+		$dir = rtrim( $dir, '/\\' );
+
+		if ( '' === $dir || $this->filesystem->is_dir( $dir ) ) {
 			return;
 		}
 
-		mkdir( $this->getQueueDir(), 0777, true );
+		$missing = [];
+		while ( '' !== $dir && ! $this->filesystem->is_dir( $dir ) ) {
+			$missing[] = $dir;
+			$parent    = dirname( $dir );
+			if ( $parent === $dir ) {
+				break;
+			}
+			$dir = $parent;
+		}
+
+		$chmod = defined( 'FS_CHMOD_DIR' ) ? FS_CHMOD_DIR : 0777;
+		foreach ( array_reverse( $missing ) as $path ) {
+			$this->filesystem->mkdir( $path, $chmod );
+		}
 	}
 
 	private function getWpmlDir(): string {
@@ -37,11 +61,46 @@ class FilesystemRepository implements FilesystemRepositoryInterface {
 	}
 
 	public function getProcessedStringsFilepath( string $domain, string $ext = 'php' ): string {
-		return $this->getQueueDir() . $domain . '.' . $ext;
+		return $this->getQueueDir() . self::encodeDomain( $domain ) . '.' . $this->validateExt( $ext );
 	}
 
 	public function getPendingStringsFilepath( string $domain, string $ext = 'php' ): string {
-		return $this->getQueueDir() . $domain . '_pending.' . $ext;
+		return $this->getQueueDir() . self::encodeDomain( $domain ) . '_pending.' . $this->validateExt( $ext );
+	}
+
+	public static function encodeDomain( string $domain ): string {
+		if ( strpos( $domain, self::ENCODED_DOMAIN_PREFIX ) !== 0
+			&& preg_match( '/^[A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)*$/', $domain )
+		) {
+			return $domain;
+		}
+
+		return self::ENCODED_DOMAIN_PREFIX . bin2hex( $domain );
+	}
+
+	private function decodeDomain( string $filename ): string {
+		if ( strpos( $filename, self::ENCODED_DOMAIN_PREFIX ) !== 0 ) {
+			return $filename;
+		}
+
+		$encoded = substr( $filename, strlen( self::ENCODED_DOMAIN_PREFIX ) );
+		if ( '' === $encoded ) {
+			return '';
+		}
+
+		if ( strlen( $encoded ) % 2 === 0 && ctype_xdigit( $encoded ) ) {
+			return hex2bin( $encoded );
+		}
+
+		return $filename;
+	}
+
+	private function validateExt( string $ext ): string {
+		if ( ! preg_match( '/^[A-Za-z0-9]+$/', $ext ) ) {
+			throw new \InvalidArgumentException( 'Invalid queue file extension.' );
+		}
+
+		return $ext;
 	}
 
 	public function getDomainFromFilepath( string $filepath ): string {
@@ -56,19 +115,25 @@ class FilesystemRepository implements FilesystemRepositoryInterface {
 			$filename = substr( $filename, 0, -strlen( '_pending' ) );
 		}
 
-		return $filename;
+		return $this->decodeDomain( $filename );
 	}
 
 	private function getQueueFileData( $ext = 'php' ): array {
 		$filenames = [];
-		if ( file_exists( $this->getQueueDir() ) ) {
-			$filenames = array_filter(
-				scandir( $this->getQueueDir() ),
-				function( $filename ) use ( $ext ) {
-					$tmpFileExt = '_tmp.' . $ext;
-					return substr( $filename, -strlen( $tmpFileExt ) ) !== $tmpFileExt;
+		if ( $this->filesystem->is_dir( $this->getQueueDir() ) ) {
+			$entries = $this->filesystem->dirlist( $this->getQueueDir() );
+			if ( is_array( $entries ) ) {
+				$tmpFileExt = '_tmp.' . $ext;
+				foreach ( $entries as $name => $info ) {
+					if ( isset( $info['type'] ) && 'f' !== $info['type'] ) {
+						continue;
+					}
+					if ( substr( $name, -strlen( $tmpFileExt ) ) === $tmpFileExt ) {
+						continue;
+					}
+					$filenames[] = $name;
 				}
-			);
+			}
 		}
 		$fileData  = [
 			'processed' => [

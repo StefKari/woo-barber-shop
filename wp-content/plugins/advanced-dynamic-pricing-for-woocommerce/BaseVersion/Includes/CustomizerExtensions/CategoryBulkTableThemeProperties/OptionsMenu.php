@@ -10,6 +10,7 @@ class OptionsMenu
 {
     const KEY = CategoryBulkTableThemeProperties::KEY . "-table";
     const LAYOUT_VERBOSE = "verbose";
+    const LAYOUT_SIMPLE = "simple";
 
     /**
      * @var string

@@ -237,7 +237,23 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 			if ( empty( $this->boxes ) && class_exists( 'Redux_Metaboxes' ) ) {
 				$this->boxes = Redux_Metaboxes::construct_boxes( $this->parent->args['opt_name'] );
 			}
-
+			// Automatically push filter-registered fields into the allowlist.
+			if ( class_exists( 'Redux_Metaboxes' ) && ! empty( $this->boxes ) && is_array( $this->boxes ) ) {
+        		foreach ( $this->boxes as $box ) {
+            if ( isset( $box['sections'] ) && is_array( $box['sections'] ) ) {
+                foreach ( $box['sections'] as $section ) {
+                    if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
+                        foreach ( $section['fields'] as $field ) {
+                            // If the field isn't in the allowlist yet, add it.
+                            if (  ! empty( $field['id'] ) && ! isset( Redux_Metaboxes::$fields[ $this->parent->args['opt_name'] ][ $field['id'] ] ) ) {
+                                Redux_Metaboxes::$fields[ $this->parent->args['opt_name'] ][ $field['id'] ] = $field;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 			if ( empty( $this->boxes ) || ! is_array( $this->boxes ) ) {
 				return;
 			}
@@ -445,10 +461,17 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 			$this->parent->default_values();
 			$this->parent_defaults = $this->parent->options_defaults;
 
+			$field_args = Redux_Metaboxes::$fields[ $this->parent->args['opt_name'] ] ?? array();
+
 			$meta = $this->get_meta( $this->post_id );
 			$data = wp_parse_args( $meta, $this->options_defaults );
 
 			foreach ( $data as $key => $value ) {
+				if ( ! isset( $field_args[ $key ] ) ) {
+					unset( $data[ $key ] );
+					continue;
+				}
+
 				if ( isset( $meta[ $key ] ) && '' !== $meta[ $key ] ) {
 					$data[ $key ] = $meta[ $key ];
 					continue;
@@ -472,6 +495,7 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 		 * @return array|void
 		 */
 		public function loop_start( $the_post = array() ) {
+			// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals -- Cannot rename 'this.'
 			if ( is_admin() ) {
 				return $the_post;
 			}
@@ -497,6 +521,8 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 				$GLOBALS[ $this->parent->args['global_variable'] . '-loop' ] = $GLOBALS[ $this->parent->args['global_variable'] ];
 				$GLOBALS[ $this->parent->args['global_variable'] ]           = wp_parse_args( $meta, $GLOBALS[ $this->parent->args['global_variable'] . '-loop' ] );
 			}
+
+			// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals -- Cannot rename 'this.'
 		}
 
 		/**
@@ -504,6 +530,7 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 		 */
 		public function loop_end() {
 			if ( isset( $GLOBALS[ $this->parent->args['global_variable'] . '-loop' ] ) ) {
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- Cannot rename 'this.'  C'mon WP guys. Dumbest fucking misflag ever!
 				$GLOBALS[ $this->parent->args['global_variable'] ] = $GLOBALS[ $this->parent->args['global_variable'] . '-loop' ];
 
 				unset( $GLOBALS[ $this->parent->args['global_variable'] . '-loop' ] );
@@ -866,10 +893,6 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 						}
 					}
 
-					if ( ( empty( $query['page'] ) ) && ( empty( $query['pagename'] ) ) ) {
-						return 0;
-					}
-
 					$query = new WP_Query( $query );
 
 					if ( ! empty( $query->posts ) && $query->is_singular ) {
@@ -880,7 +903,9 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 						if ( isset( $query->query['post_type'] ) && 'product' === $query->query['post_type'] && class_exists( 'WooCommerce' ) ) {
 							return get_option( 'woocommerce_shop_page_id' );
 						}
+					}
 
+					if ( ( empty( $query->page ) ) && ( empty( $query->pagename ) ) ) {
 						return 0;
 					}
 				}
@@ -1395,15 +1420,11 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 				$dont_save = false;
 			}
 
-			foreach ( Redux_Helpers::sanitize_array( wp_unslash( $_POST[ $this->parent->args['opt_name'] ] ) ) as $key => $value ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			$field_args = Redux_Metaboxes::$fields[ $this->parent->args['opt_name'] ] ?? array();
 
-				// Have to remove the escaping for array comparison.
-				if ( is_array( $value ) ) {
-					foreach ( $value as $k => $v ) {
-						if ( ! is_array( $v ) ) {
-							$value[ $k ] = wp_unslash( $v );
-						}
-					}
+			foreach ( Redux_Helpers::sanitize_array( wp_unslash( $_POST[ $this->parent->args['opt_name'] ] ) ) as $key => $value ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- Sanitized with `Redux_Helpers::sanitize_array`.
+				if ( ! isset( $field_args[ $key ] ) ) {
+					continue;
 				}
 
 				$save = true;

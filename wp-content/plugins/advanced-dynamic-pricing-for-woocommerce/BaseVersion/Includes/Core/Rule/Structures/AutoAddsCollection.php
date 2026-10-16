@@ -14,7 +14,7 @@ class AutoAddsCollection
     protected $rule;
 
     /**
-     * @var array<int,AutoAdd>
+     * @var array<string,AutoAdd>
      */
     protected $autoAdds;
 
@@ -47,7 +47,7 @@ class AutoAddsCollection
     }
 
     /**
-     * @param array<int,AutoAdd> ...$autoAdds
+     * @param array<string,AutoAdd> ...$autoAdds
      */
     public function bulkAdd(...$autoAdds)
     {
@@ -74,7 +74,7 @@ class AutoAddsCollection
     }
 
     /**
-     * @return array<int,AutoAdd>
+     * @return array<string,AutoAdd>
      */
     public function asArray()
     {

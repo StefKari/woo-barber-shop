@@ -24,8 +24,14 @@ class Loader implements \IWPML_Backend_Action, \IWPML_DIC_Action {
 			Hooks::onAction( 'wp_loaded' )
 				->then( [ $this, 'verifyAdminInitialization' ] )
 			     ->then( [ $this, 'getData' ] )
-			     ->then( Resources::enqueueApp( 'jobs' ) );
+			     ->then( [ $this, 'enqueue' ] );
 		}
+	}
+
+	public function enqueue( $localize ) {
+		$enqueue = Resources::enqueueApp( 'jobs' );
+
+		$enqueue( $localize, [ 'wp-i18n' ] );
 	}
 
 	public function verifyAdminInitialization() {

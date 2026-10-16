@@ -1,5 +1,5 @@
 <?php
-
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
 #
 #
 # Parsedown
@@ -12,8 +12,8 @@
 # with this source code.
 #
 #
-if(!class_exists('Parsedown')){
-    class Parsedown
+if(!class_exists('Qcld_Parsedown')){
+    class Qcld_Parsedown
     {
         # ~
 

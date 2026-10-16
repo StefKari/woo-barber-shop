@@ -3,17 +3,14 @@
 namespace WPML\PB\Elementor\Config\DynamicElements;
 
 use WPML\FP\Obj;
-use WPML\FP\Relation;
+use WPML\PB\Elementor\Helper\Path;
 use function WPML\FP\compose;
 
 
 class ContainerPopup {
 
-	/**
-	 * @return array
-	 */
 	public static function get() {
-		$isContainerPopup = Relation::propEq( 'elType', 'container' );
+		$isContainerPopup = Path::propEq( 'elType', 'container' );
 	
 		$containerLinksLens = compose(
 			Obj::lensProp( 'settings' ),

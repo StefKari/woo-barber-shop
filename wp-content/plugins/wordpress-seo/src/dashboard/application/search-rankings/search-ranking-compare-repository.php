@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\Application\Search_Rankings;
 
@@ -17,14 +18,14 @@ class Search_Ranking_Compare_Repository implements Dashboard_Repository_Interfac
 	/**
 	 * The adapter.
 	 *
-	 * @var Site_Kit_Search_Console_Adapter $site_kit_search_console_adapter
+	 * @var Site_Kit_Search_Console_Adapter
 	 */
 	private $site_kit_search_console_adapter;
 
 	/**
 	 * The site kit configuration object.
 	 *
-	 * @var Site_Kit $site_kit_configuration
+	 * @var Site_Kit
 	 */
 	private $site_kit_configuration;
 

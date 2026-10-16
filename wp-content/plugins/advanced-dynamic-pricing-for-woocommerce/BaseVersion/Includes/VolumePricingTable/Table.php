@@ -3,6 +3,7 @@
 namespace ADP\BaseVersion\Includes\VolumePricingTable;
 
 use ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Core\RuleProcessor\BulkDiscount\BulkMeasurementEnum;
 use ADP\BaseVersion\Includes\TemplateLoader;
 
 defined('ABSPATH') or exit;
@@ -30,9 +31,32 @@ class Table
     protected $rows;
 
     /**
+     * @var array[]
+     */
+    protected $dataRows;
+
+    /**
      * @var string
      */
     protected $tableFooter;
+
+    /**
+     * @var BulkMeasurementEnum
+     */
+
+    protected $measurement;
+
+    /**
+     * @var string
+     */
+
+    protected $layout;
+
+    /**
+     * @var string
+     */
+
+    protected $tableClass;
 
     /**
      * @param null $deprecated
@@ -44,7 +68,11 @@ class Table
         $this->tableHeader = '';
         $this->columns     = array();
         $this->rows        = array();
+        $this->dataRows   = array();
         $this->tableFooter = '';
+        $this->measurement = '';
+        $this->layout      = '';
+        $this->tableClass  = '';
     }
 
     public function getHtml()
@@ -68,10 +96,15 @@ class Table
             'header_html'  => $this->tableHeader,
             'table_header' => $this->columns,
             'rows'         => $this->rows,
+            'data_rows'    => $this->dataRows,
             'footer_html'  => $this->tableFooter,
+            'measurement'  => $this->measurement,
+            'layout'       => $this->layout,
+            'tableClass'   => $this->tableClass
         );
 
         ob_start();
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo TemplateLoader::wdpGetTemplate("bulk-table.php", $args);
 
         return ob_get_clean();
@@ -102,6 +135,34 @@ class Table
     }
 
     /**
+     * @param array $data_row
+     */
+    public function addDataRow($data_row, $key=null)
+    {
+        if(is_null($key)) {
+            $this->dataRows[] = $data_row;
+        } else {
+            $this->dataRows[$key] = $data_row;
+        }
+    }
+
+    /**
+     * @param BulkMeasurementEnum $measurement
+     */
+
+    public function setMeasurement($measurement) {
+        $this->measurement = $measurement;
+    }
+
+    /**
+     * @param string $layout
+     */
+
+    public function setLayout($layout) {
+        $this->layout = $layout;
+    }
+
+    /**
      * @return array[]
      */
     public function getRows()
@@ -125,7 +186,10 @@ class Table
             $this->tableFooter = $text;
         }
 
-
         return $this;
+    }
+
+    public function setTableClass($tableClass) {
+        $this->tableClass = $tableClass;
     }
 }

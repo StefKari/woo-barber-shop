@@ -1,20 +1,2 @@
 <?php
-
-namespace WPML\PHP;
-
-class Boolean {
-
-
-  /** @return true */
-  public static function true() {
-    return true;
-  }
-
-
-  /** @return false */
-  public static function false() {
-    return false;
-  }
-
-
-}
+require_once __DIR__ . '/../../../../../wpml/lib/Php/Boolean.php';

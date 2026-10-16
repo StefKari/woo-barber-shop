@@ -2,7 +2,9 @@
 
 namespace ADP\BaseVersion\Includes\Shortcodes;
 
+use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Engine;
 use ADP\BaseVersion\Includes\CustomizerExtensions\CustomizerExtensions;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
@@ -23,6 +25,11 @@ class ProductRangeDiscountTableShortcode
     protected $context;
 
     /**
+     * @var Engine
+     */
+    protected $engine;
+
+    /**
      * @var CustomizerExtensions
      */
     protected $customizer;
@@ -31,10 +38,11 @@ class ProductRangeDiscountTableShortcode
      * @param Context|CustomizerExtensions $contextOrCustomizer
      * @param null $deprecated
      */
-    public function __construct($contextOrCustomizer, $deprecated = null)
+    public function __construct($contextOrCustomizer, $customizerOrEngine, $deprecated = null)
     {
         $this->context    = adp_context();
-        $this->customizer = $contextOrCustomizer instanceof CustomizerExtensions ? $contextOrCustomizer : $deprecated;
+        $this->customizer = $contextOrCustomizer instanceof CustomizerExtensions ? $contextOrCustomizer : $customizerOrEngine;
+        $this->engine     = $customizerOrEngine instanceof Engine ? $customizerOrEngine : $deprecated;
     }
 
     public function withContext(Context $context)
@@ -45,9 +53,9 @@ class ProductRangeDiscountTableShortcode
     /**
      * @param CustomizerExtensions $customizer
      */
-    public static function register($customizer)
+    public static function register($customizer, $engine)
     {
-        $shortcode = new self($customizer);
+        $shortcode = new self($customizer, $engine);
         add_shortcode(self::NAME, array($shortcode, 'getContent'));
     }
 
@@ -55,8 +63,8 @@ class ProductRangeDiscountTableShortcode
     {
         /** @var RangeDiscountTable $table */
         /** @var RangeDiscountTableDisplay $tableDisplay */
-        $table = Factory::get("VolumePricingTable_RangeDiscountTable", $this->customizer);
-        $tableDisplay = Factory::get("VolumePricingTable_RangeDiscountTableDisplay", $this->customizer);
+        $table = Factory::get("VolumePricingTable_RangeDiscountTable", $this->customizer, $this->engine);
+        $tableDisplay = Factory::get("VolumePricingTable_RangeDiscountTableDisplay", $this->customizer, $this->engine);
 
         $productTableOptions = new ProductVolumePricingTableProperties();
 
@@ -74,10 +82,17 @@ class ProductRangeDiscountTableShortcode
 
         $table->setProductContextOptions($productTableOptions);
 
-        $productId = ! empty($args['id']) ? intval($args['id']) : null;
+        global $product;
+        if ( $product ) {
+            $productForTable = $product;
+        } else {
+            $productForTable = ! empty($args['id']) ? CacheHelper::getWcProduct(intval($args['id'])) : null;
+        }
 
         $tableDisplay->hookLoadAssets();
 
-        return $table->getProductTableContent($productId);
+        $ruleId = ! empty($args['rule_id']) ? intval($args['rule_id']) : null;
+
+        return $tableDisplay->getProductTableContent($productForTable, $ruleId);
     }
 }

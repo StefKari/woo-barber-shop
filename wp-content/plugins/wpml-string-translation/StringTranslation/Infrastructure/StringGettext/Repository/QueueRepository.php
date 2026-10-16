@@ -9,7 +9,6 @@ use WPML\StringTranslation\Application\Setting\Repository\UrlRepositoryInterface
 use WPML\StringTranslation\Application\StringCore\Domain\StringItem;
 use WPML\StringTranslation\Application\StringCore\Domain\StringPosition;
 use WPML\StringTranslation\Application\StringCore\Repository\ComponentRepositoryInterface;
-use WPML\StringTranslation\Application\StringGettext\Command\DeletePendingStringsCommandInterface;
 use WPML\StringTranslation\Application\StringGettext\Command\InitStorageCommandInterface;
 use WPML\StringTranslation\Application\StringGettext\Command\SavePendingStringsCommandInterface;
 use WPML\StringTranslation\Application\StringGettext\Command\SaveProcessedStringsCommandInterface;
@@ -20,98 +19,52 @@ class QueueRepository implements QueueRepositoryInterface {
 
 	const MAX_PENDING_STRINGS_COUNT_FOR_DOMAIN = 30000;
 
-	/**
-	 * @var array<string, array{string, string, string|null}>
-	 */
+	const DATABASE_VERIFICATION_SAMPLE_SIZE = 10;
+
+	const DATABASE_VERIFICATION_QUERY_MARKER = 'wpml-st gettext queue reconciliation';
+
+	const DATABASE_WATERMARK_QUERY_MARKER = 'wpml-st gettext queue watermark';
+
+	const WATERMARK_KEY = "\0wpml-st:watermark";
+
 	private $currentUrlStrings = [];
 
-	/** @var array {
-	 *     [domain]: array {
-	 *         [text\4context]: array {
-	 *             'names': array {
-	 *                 'name1',
-	 *                 'name2',
-	 *                 ...
-	 *             }, // optional
-	 *             'urls': array {
-	 *                 'url1',
-	 *                 'url2',
-	 *                 ...
-	 *              },
-	 *         },
-	 *     },
-	 * }
-	 */
 	private $processedStrings = [];
 
-	/** @var array {
-	 *     [domain]: array {
-	 *         [text\4context]: array {
-	 *             'names': array {
-	 *                  'name1',
-	 *                  'name2',
-	 *                  ...
-	 *              }, // optional
-	 *             'cmp': array {
-	 *                 0: string, // componentId
-	 *                 1: int,    // componentType
-	 *             },
-	 *             'urls': array {
-	 *                 array {
-	 *                     'kind': int,
-	 *                     'url': string,
-	 *                 },
-	 *                 array { ... },
-	 *             },
-	 *         },
-	 *     },
-	 * }
-	 */
 	private $pendingStrings = [];
 
-	/** @var bool */
+	private $pendingStringsToSave = [];
+
 	private $hasNewPendingStrings = false;
 
-	/** @var \wpdb */
+	private $databaseVerifiedDomains = [];
+
+	private $processedWatermarks = [];
+
 	private $wpdb;
 
-	/** @var Factory */
 	private $factory;
 
-	/** @var SettingsRepositoryInterface */
 	private $settingsRepository;
 
-	/** @var ComponentRepositoryInterface */
 	private $componentRepository;
 
-	/** @var UrlRepositoryInterface */
 	private $urlRepository;
 
-	/** @var DeletePendingStringsCommandInterface */
-	private $deletePendingStrings;
-
-	/** @var InitStorageCommandInterface */
 	private $initStorage;
 
-	/** @var SavePendingStringsCommandInterface */
 	private $savePendingStrings;
 
-	/** @var SaveProcessedStringsCommandInterface */
 	private $saveProcessedStrings;
 
-	/** @var StringItemFactory */
 	private $stringItemFactory;
 
-	/**
-	 * @param \wpdb $wpdb
-	 */
 	public function __construct(
 		$wpdb,
 		Factory                                $factory,
 		SettingsRepositoryInterface            $settingsRepository,
 		ComponentRepositoryInterface           $componentRepository,
 		UrlRepositoryInterface                 $urlRepository,
-		DeletePendingStringsCommandInterface   $deletePendingStrings,
 		InitStorageCommandInterface            $initStorage,
 		SavePendingStringsCommandInterface     $savePendingStrings,
 		SaveProcessedStringsCommandInterface   $saveProcessedStrings,
@@ -122,7 +75,6 @@ class QueueRepository implements QueueRepositoryInterface {
 		$this->settingsRepository           = $settingsRepository;
 		$this->componentRepository          = $componentRepository;
 		$this->urlRepository                = $urlRepository;
-		$this->deletePendingStrings         = $deletePendingStrings;
 		$this->initStorage                  = $initStorage;
 		$this->savePendingStrings           = $savePendingStrings;
 		$this->saveProcessedStrings         = $saveProcessedStrings;
@@ -130,22 +82,22 @@ class QueueRepository implements QueueRepositoryInterface {
 	}
 
 	public function unloadStrings() {
-		$this->pendingStrings   = [];
-		$this->processedStrings = [];
+		$this->pendingStrings          = [];
+		$this->pendingStringsToSave    = [];
+		$this->processedStrings        = [];
+		$this->processedWatermarks     = [];
+		$this->databaseVerifiedDomains = [];
 	}
 
 	private function getStorage() {
 		return $this->factory->getGettextStringsQueueStorage();
 	}
 
-	public function addCurrentUrlString( string $text, string $domain, string $context = null ) {
+	public function addCurrentUrlString( string $text, string $domain, ?string $context = null ) {
 		$key = $text . $domain . $context;
 		$this->currentUrlStrings[ $key ] = [ $text, $domain, $context ];
 	}
 
-	/**
-	 * @return array<int, array{string, string, string|null}>
-	 */
 	public function getCurrentUrlStrings(): array {
 		return array_values( $this->currentUrlStrings );
 	}
@@ -155,7 +107,154 @@ class QueueRepository implements QueueRepositoryInterface {
 			return;
 		}
 
-		$this->processedStrings[ $domain ] = $this->getStorage()->getProcessedStringsByDomain( $domain );
+		$entries = $this->getStorage()->getProcessedStringsByDomain( $domain );
+
+		$this->processedWatermarks[ $domain ] = $this->extractWatermark( $entries );
+		$this->processedStrings[ $domain ]    = $entries;
+
+		$this->reconcileProcessedStringsWithDatabase( $domain );
+	}
+
+	private function extractWatermark( array &$entries ) {
+		if ( ! array_key_exists( self::WATERMARK_KEY, $entries ) ) {
+			return null;
+		}
+
+		$watermark = $entries[ self::WATERMARK_KEY ];
+		unset( $entries[ self::WATERMARK_KEY ] );
+
+		if ( ! is_array( $watermark ) || ! isset( $watermark['rows'] ) || ! is_numeric( $watermark['rows'] ) ) {
+			return null;
+		}
+
+		$written = isset( $watermark['written'] ) && is_numeric( $watermark['written'] )
+			? (int) $watermark['written']
+			: 0;
+
+		return [
+			'rows'    => (int) $watermark['rows'],
+			'written' => $written,
+		];
+	}
+
+	private function saveProcessedStringsWithWatermark( string $domain, array $entries, int $rowsBeingRemoved = 0 ) : bool {
+		$rows = $this->countDomainStringRows( $domain );
+
+		if ( null === $rows ) {
+			$this->processedWatermarks[ $domain ] = null;
+
+			return $this->saveProcessedStrings->run( $domain, $entries );
+		}
+
+		$watermark = [
+			'rows'    => max( 0, $rows - $rowsBeingRemoved ),
+			'written' => time(),
+		];
+		$this->processedWatermarks[ $domain ] = $watermark;
+		$entries[ self::WATERMARK_KEY ]       = $watermark;
+
+		return $this->saveProcessedStrings->run( $domain, $entries );
+	}
+
+	private function reconcileProcessedStringsWithDatabase( string $domain ) {
+		if ( isset( $this->databaseVerifiedDomains[ $domain ] ) ) {
+			return;
+		}
+		$this->databaseVerifiedDomains[ $domain ] = true;
+
+		$identities = $this->getProcessedStringIdentitySample( $domain );
+		if ( count( $identities ) === 0 ) {
+			return;
+		}
+
+		if (
+			! $this->hasDomainLostStringRows( $domain )
+			&& $this->countKnownStringIdentities( $identities ) > 0
+		) {
+			return;
+		}
+
+		$this->processedStrings[ $domain ] = [];
+		$this->saveProcessedStringsWithWatermark( $domain, [] );
+	}
+
+	private function hasDomainLostStringRows( string $domain ) : bool {
+		$watermark = isset( $this->processedWatermarks[ $domain ] )
+			? $this->processedWatermarks[ $domain ]
+			: null;
+		if ( null === $watermark ) {
+			return false;
+		}
+
+		$rows = $this->countDomainStringRows( $domain );
+
+		return null !== $rows && $rows < $watermark['rows'];
+	}
+
+	private function countDomainStringRows( string $domain ) {
+		$query = 'SELECT COUNT(*) FROM ' . $this->wpdb->prefix . 'icl_strings'
+			. ' /* ' . self::DATABASE_WATERMARK_QUERY_MARKER . ' */'
+			. ' WHERE context = %s';
+
+		$preparedQuery = $this->wpdb->prepare( $query, $domain );
+		if ( ! is_string( $preparedQuery ) || '' === $preparedQuery ) {
+			return null;
+		}
+
+		$count    = $this->wpdb->get_var( $preparedQuery );
+		$hasError = (
+			isset( $this->wpdb->last_error )
+			&& is_string( $this->wpdb->last_error )
+			&& '' !== $this->wpdb->last_error
+		);
+		if ( null === $count || $hasError ) {
+			return null;
+		}
+
+		return (int) $count;
+	}
+
+	private function getProcessedStringIdentitySample( string $domain ) : array {
+		$identities = [];
+
+		foreach ( array_reverse( array_keys( $this->processedStrings[ $domain ] ) ) as $key ) {
+			if ( count( $identities ) >= self::DATABASE_VERIFICATION_SAMPLE_SIZE ) {
+				break;
+			}
+
+			$key = (string) $key;
+			list( $text, $context ) = StringItem::parseTextAndContextKey( $key );
+			$names = $this->getProcessedStringEntry( $domain, $key, 'names' );
+			$name  = count( $names ) > 0 ? (string) reset( $names ) : md5( (string) $text );
+
+			$identities[ md5( $domain . $name . (string) $context ) ] = true;
+		}
+
+		return array_keys( $identities );
+	}
+
+	private function countKnownStringIdentities( array $identities ) : int {
+		$placeholders = implode( ',', array_fill( 0, count( $identities ), '%s' ) );
+		$identities_sql = $this->wpdb->prepare( $placeholders, $identities );
+		if ( ! is_string( $identities_sql ) || '' === $identities_sql ) {
+			return count( $identities );
+		}
+
+		$query = 'SELECT COUNT(*) FROM ' . $this->wpdb->prefix . 'icl_strings'
+			. ' /* ' . self::DATABASE_VERIFICATION_QUERY_MARKER . ' */'
+			. ' WHERE domain_name_context_md5 IN (' . $identities_sql . ')';
+
+		$count    = $this->wpdb->get_var( $query );
+		$hasError = (
+			isset( $this->wpdb->last_error )
+			&& is_string( $this->wpdb->last_error )
+			&& '' !== $this->wpdb->last_error
+		);
+		if ( null === $count || $hasError ) {
+			return count( $identities );
+		}
+
+		return (int) $count;
 	}
 
 	private function loadDomainPendingStrings( string $domain ) {
@@ -206,7 +305,7 @@ class QueueRepository implements QueueRepositoryInterface {
 		return $hasEntry ? $pendingString[ $entryKey ]: [];
 	}
 
-	public function isStringAlreadyRegistered( string $text, string $domain, string $context = null, string $name = null ): bool {
+	public function isStringAlreadyRegistered( string $text, string $domain, ?string $context = null, ?string $name = null ): bool {
 		$key = StringItem::createTextAndContextKey( $text, $context );
 		$this->loadDomainProcessedStrings( $domain );
 		$this->loadDomainPendingStrings( $domain );
@@ -222,7 +321,7 @@ class QueueRepository implements QueueRepositoryInterface {
 		return $isProcessed || $isPending;
 	}
 
-	public function canTrackString( string $text, string $domain, string $context = null ): bool {
+	public function canTrackString( string $text, string $domain, ?string $context = null ): bool {
 		$key = StringItem::createTextAndContextKey( $text, $context );
 		$this->loadDomainProcessedStrings( $domain );
 		$this->loadDomainPendingStrings( $domain );
@@ -246,7 +345,7 @@ class QueueRepository implements QueueRepositoryInterface {
 		return $totalCount <= $maxCount;
 	}
 
-	public function isStringAlreadyTrackedOnUrl( string $text, string $domain, string $context = null, string $requestUrl ): bool {
+	public function isStringAlreadyTrackedOnUrl( string $text, string $domain, string $requestUrl, ?string $context = null ): bool {
 		$key = StringItem::createTextAndContextKey( $text, $context );
 		$this->loadDomainProcessedStrings( $domain );
 		$this->loadDomainPendingStrings( $domain );
@@ -258,9 +357,7 @@ class QueueRepository implements QueueRepositoryInterface {
 			return false;
 		}
 
-		// String was already registered(processed) and tracked on the current request url.
 		$isTrackedOnCurrentUrl = in_array( $requestUrl, $this->getProcessedStringEntry( $domain, $key, 'urls' ) );
-		// String was already registered and is scheduled to be tracked on the current request url.
 		$willBeTrackedOnCurrentUrl = in_array(
 			$requestUrl,
 			array_map(
@@ -277,7 +374,7 @@ class QueueRepository implements QueueRepositoryInterface {
 		);
 	}
 
-	public function queueStringAsPending( string $text, string $domain, string $context = null, string $name = null ): bool {
+	public function queueStringAsPending( string $text, string $domain, ?string $context = null, ?string $name = null ): bool {
 		$key = StringItem::createTextAndContextKey( $text, $context );
 		$this->loadDomainProcessedStrings( $domain );
 		$this->loadDomainPendingStrings( $domain );
@@ -300,11 +397,12 @@ class QueueRepository implements QueueRepositoryInterface {
 		if ( is_string( $name ) && strlen( $name ) > 0 ) {
 			$this->pendingStrings[ $domain ][ $key ]['names'][] = $name;
 		}
+		$this->markPendingStringForSaving( $domain, $key );
 
 		return $this->hasNewPendingStrings = true;
 	}
 
-	public function trackString( string $text, string $domain, string $context = null, string $requestUrl ) {
+	public function trackString( string $text, string $domain, string $requestUrl, ?string $context = null ) {
 		if ( ! $this->settingsRepository->isStringTrackingEnabled() ) {
 			return;
 		}
@@ -343,8 +441,13 @@ class QueueRepository implements QueueRepositoryInterface {
 				'urls' => $urls,
 			]
 		);
+		$this->markPendingStringForSaving( $domain, $key );
 
 		$this->hasNewPendingStrings = true;
+	}
+
+	private function markPendingStringForSaving( string $domain, string $key ) {
+		$this->pendingStringsToSave[ $domain ][ $key ] = $this->pendingStrings[ $domain ][ $key ];
 	}
 
 	public function savePendingStringsQueue() {
@@ -352,103 +455,149 @@ class QueueRepository implements QueueRepositoryInterface {
 			return;
 		}
 
-		foreach ( $this->pendingStrings as $domain => $pendingStrings ) {
+		foreach ( $this->pendingStringsToSave as $domain => $pendingStrings ) {
 			$this->initStorage->run( $domain );
-			$this->savePendingStrings->run( $domain, $pendingStrings );
+			if ( $this->savePendingStrings->run( $domain, $pendingStrings ) ) {
+				unset( $this->pendingStringsToSave[ $domain ] );
+			}
 		}
 
-		$this->hasNewPendingStrings = false;
+		$this->hasNewPendingStrings = count( $this->pendingStringsToSave ) > 0;
 	}
 
-	public function loadPendingStrings(): array {
-		$pendingStringDomains = $this->getStorage()->getPendingStringDomainNames();
-
-		foreach ( $pendingStringDomains as $domain ) {
-			$this->loadDomainPendingStrings( $domain );
-		}
-
-		return $this->pendingStrings;
+	public function hasPendingStrings(): bool {
+		return count( $this->getPendingStringDomainNames() ) > 0;
 	}
 
-	public function markPendingStringsAsProcessed() {
-		$pendingStringDomains = $this->getStorage()->getPendingStringDomainNames();
+	public function getPendingStringDomainNames(): array {
+		return $this->getStorage()->getPendingStringDomainNames();
+	}
 
-		foreach ( $pendingStringDomains as $domain ) {
-			$this->loadDomainProcessedStrings( $domain );
+	public function claimPendingStringsByDomain( string $domain ): array {
+		return $this->getStorage()->claimPendingStringsByDomain( $domain );
+	}
 
-			foreach ( $this->pendingStrings[ $domain ] as $textAndContext => $string ) {
-				$key = $textAndContext;
-				foreach ( $string as $prop => $value ) {
-					if ( ! isset( $this->processedStrings[ $domain ][ $key ] ) ) {
-						$this->processedStrings[ $domain ][ $key ] = [
-							'urls'  => [],
-							'names' => [],
-						];
-					}
-					if ( ! array_key_exists( 'urls', $this->processedStrings ) ) {
-						$this->processedStrings['urls'] = [];
-					}
-					if ( ! array_key_exists( 'names', $this->processedStrings ) ) {
-						$this->processedStrings['names'] = [];
-					}
+	public function getPendingStringsClaimProgress( string $claimId ): array {
+		return $this->getStorage()->getPendingStringsClaimProgress( $claimId );
+	}
 
-					if ( $prop === 'saveStringInDb' ) {
-						continue;
-					}
+	public function savePendingStringsClaimProgress( string $claimId, array $progress ): bool {
+		return $this->getStorage()->savePendingStringsClaimProgress( $claimId, $progress );
+	}
 
-					if ( $prop === 'urls' ) {
-						foreach ( $value as $url ) {
-							if ( ! in_array( $url['url'], $this->getProcessedStringEntry( $domain, $key, 'urls' ) ) ) {
-								$this->processedStrings[ $domain ][ $key ]['urls'][] = $url['url'];
-							}
+	public function releasePendingStringsClaim( string $claimId ) {
+		$this->getStorage()->releasePendingStringsClaim( $claimId );
+	}
+
+	public function acknowledgePendingStringsClaim( string $domain, string $claimId, array $pendingStrings ): bool {
+		$this->loadDomainProcessedStrings( $domain );
+
+		foreach ( $pendingStrings as $textAndContext => $string ) {
+			$key = $textAndContext;
+			if ( ! isset( $this->processedStrings[ $domain ][ $key ] ) ) {
+				$this->processedStrings[ $domain ][ $key ] = [
+					'urls'  => [],
+					'names' => [],
+				];
+			}
+			$processedUrlKeys  = $this->getProcessedEntryIdentitySet( $domain, $key, 'urls' );
+			$processedNameKeys = $this->getProcessedEntryIdentitySet( $domain, $key, 'names' );
+
+			foreach ( $string as $prop => $value ) {
+				if ( $prop === 'saveStringInDb' ) {
+					continue;
+				}
+
+				if ( $prop === 'urls' ) {
+					foreach ( $value as $url ) {
+						$urlIdentity = $this->getProcessedEntryIdentity( $url['url'] );
+						if ( ! isset( $processedUrlKeys[ $urlIdentity ] ) ) {
+							$this->processedStrings[ $domain ][ $key ]['urls'][] = $url['url'];
+							$processedUrlKeys[ $urlIdentity ]                    = true;
 						}
-					} else if ( $prop === 'names' ) {
-						foreach ( $value as $name ) {
-							if ( ! in_array( $name, $this->getProcessedStringEntry( $domain, $key, 'names' ) ) ) {
-								$this->processedStrings[ $domain ][ $key ]['names'][] = $name;
-							}
-						}
-					} else {
-						$this->processedStrings[ $domain ][ $key ][ $prop ] = $value;
 					}
+				} else if ( $prop === 'names' ) {
+					foreach ( $value as $name ) {
+						$nameIdentity = $this->getProcessedEntryIdentity( $name );
+						if ( ! isset( $processedNameKeys[ $nameIdentity ] ) ) {
+							$this->processedStrings[ $domain ][ $key ]['names'][] = $name;
+							$processedNameKeys[ $nameIdentity ]                    = true;
+						}
+					}
+				} else {
+					$this->processedStrings[ $domain ][ $key ][ $prop ] = $value;
 				}
 			}
-
-			$this->saveProcessedStrings->run(
-				$domain,
-				$this->processedStrings[ $domain ]
-			);
-			unset( $this->processedStrings[ $domain ] );
-
-			unset( $this->pendingStrings[ $domain ] );
-			$this->deletePendingStrings->run( $domain );
 		}
+
+		$wasSaved = $this->saveProcessedStringsWithWatermark(
+			$domain,
+			$this->processedStrings[ $domain ]
+		);
+		unset( $this->processedStrings[ $domain ], $this->processedWatermarks[ $domain ] );
+
+		if ( ! $wasSaved ) {
+			return false;
+		}
+
+		$wasAcknowledged = $this->getStorage()->acknowledgePendingStringsClaim( $claimId );
+		if ( $wasAcknowledged ) {
+			unset( $this->pendingStrings[ $domain ] );
+		}
+
+		return $wasAcknowledged;
 	}
 
-	/**
-	 * @param StringItem[] $strings
-	 */
+	private function getProcessedEntryIdentitySet( string $domain, string $key, string $entryKey ) : array {
+		$identities = [];
+		foreach ( $this->getProcessedStringEntry( $domain, $key, $entryKey ) as $value ) {
+			$identities[ $this->getProcessedEntryIdentity( $value ) ] = true;
+		}
+
+		return $identities;
+	}
+
+	private function getProcessedEntryIdentity( $value ) : string {
+		$stringValue = (string) $value;
+
+		return strlen( $stringValue ) . ':' . $stringValue;
+	}
+
 	public function removeProcessedStrings( array $strings ) {
-		$domainsToSave = [];
+		$domainsToSave    = [];
+		$rowsBeingRemoved = [];
+
 		foreach ( $strings as $string ) {
-			$this->loadDomainProcessedStrings( $string->getDomain() );
+			$domain = $string->getDomain();
+			$this->loadDomainProcessedStrings( $domain );
+
+			$rowsBeingRemoved[ $domain ] = isset( $rowsBeingRemoved[ $domain ] )
+				? $rowsBeingRemoved[ $domain ] + 1
+				: 1;
+
 			$key = StringItem::createTextAndContextKey( $string->getValue(), $string->getContext() );
-			if ( ! array_key_exists( $key, $this->processedStrings[ $string->getDomain() ] ) ) {
+			if ( ! array_key_exists( $key, $this->processedStrings[ $domain ] ) ) {
 				continue;
 			}
 
-			unset( $this->processedStrings[ $string->getDomain() ][ $key ] );
-			$domainsToSave[] = $string->getDomain();
+			unset( $this->processedStrings[ $domain ][ $key ] );
+			$domainsToSave[] = $domain;
 		}
 
-		$domainsToSave = array_unique( $domainsToSave );
+		foreach ( array_keys( $rowsBeingRemoved ) as $touchedDomain ) {
+			$touchedDomain = (string) $touchedDomain;
+			if ( count( $this->processedStrings[ $touchedDomain ] ) > 0 ) {
+				$domainsToSave[] = $touchedDomain;
+			}
+		}
 
-		foreach ( $domainsToSave as $domain ) {
-			$this->saveProcessedStrings->run(
+		foreach ( array_unique( $domainsToSave ) as $domain ) {
+			$this->saveProcessedStringsWithWatermark(
 				$domain,
-				$this->processedStrings[ $domain ]
+				$this->processedStrings[ $domain ],
+				(int) $rowsBeingRemoved[ $domain ]
 			);
-			unset( $this->processedStrings[ $domain ] );
+			unset( $this->processedStrings[ $domain ], $this->processedWatermarks[ $domain ] );
 		}
 	}
 }
