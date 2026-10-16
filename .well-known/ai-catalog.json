@@ -2,15 +2,15 @@
     "specVersion": "1.0",
     "host": {
         "displayName": "Barbers – Barber Shop",
-        "identifier": "did:web:barbershop.wp1.smartweb.rs",
-        "documentationUrl": "https://barbershop.wp1.smartweb.rs/llms.txt"
+        "identifier": "did:web:barbers.rs",
+        "documentationUrl": "https://www.barbers.rs/llms.txt"
     },
     "entries": [
         {
-            "identifier": "urn:air:barbershop.wp1.smartweb.rs:shop:barbers-shop",
+            "identifier": "urn:air:barbers.rs:shop:barbers-shop",
             "displayName": "Barbers online prodavnica",
             "type": "text/markdown; profile=\"urn:air:agent-skills\"",
-            "url": "https://barbershop.wp1.smartweb.rs/.well-known/agent-skills/barbers-shop/SKILL.md",
+            "url": "https://www.barbers.rs/.well-known/agent-skills/barbers-shop/SKILL.md",
             "description": "Uputstvo za AI agente: pretraga i pregled proizvoda za negu brade, kose i brijanje, cene u RSD, dostava po Srbiji i poručivanje u prodavnici Barbers.",
             "tags": [
                 "ecommerce",
@@ -37,8 +37,8 @@
             "metadata": {
                 "currency": "RSD",
                 "language": "sr-RS",
-                "storeApi": "https://barbershop.wp1.smartweb.rs/wp-json/wc/store/v1/",
-                "llmsTxt": "https://barbershop.wp1.smartweb.rs/llms.txt"
+                "storeApi": "https://www.barbers.rs/wp-json/wc/store/v1/",
+                "llmsTxt": "https://www.barbers.rs/llms.txt"
             }
         }
     ]

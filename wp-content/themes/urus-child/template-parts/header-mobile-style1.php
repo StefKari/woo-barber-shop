@@ -18,7 +18,7 @@
 
    <div class="mobile-button-group">
         <i id="search-btn-custom-mobile" class="fa fa-search search-btn-custom"  onclick="toggleSearchButtonMobile()"></i>
-        <i id="close-btn-custom-mobile" class="fas fa-times search-btn-custom hide"  onclick="toggleSearchButtonMobile()"></i>
+        <i id="close-btn-custom-mobile" class="fa fa-times search-btn-custom hide"  onclick="toggleSearchButtonMobile()"></i>
        <?php //echo do_shortcode('[wpdreams_ajaxsearchlite]'); ?>
        <?php if(class_exists('WooCommerce')):?>
 

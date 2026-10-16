@@ -16,6 +16,11 @@ class WPSEO_Redirect_Validator {
 	 * @var array
 	 */
 	protected $validation_rules = [
+		'control-chars' => [
+			'validation_class' => 'WPSEO_Redirect_Control_Chars_Validation',
+			'exclude_types'    => [],
+			'exclude_format'   => [],
+		],
 		'relative-origin' => [
 			'validation_class' => 'WPSEO_Redirect_Relative_Origin_Validation',
 			'exclude_types'    => [],
@@ -40,6 +45,11 @@ class WPSEO_Redirect_Validator {
 			'validation_class' => 'WPSEO_Redirect_Subdirectory_Validation',
 			'exclude_types'    => [],
 			'exclude_format'   => [],
+		],
+		'wp-json' => [
+			'validation_class' => 'WPSEO_Redirect_Self_Wp_Json_Redirect_Validation',
+			'exclude_types'    => [ WPSEO_Redirect_Types::DELETED, WPSEO_Redirect_Types::UNAVAILABLE ],
+			'exclude_format'   => [ WPSEO_Redirect_Formats::REGEX ],
 		],
 		'accessible' => [
 			'validation_class' => 'WPSEO_Redirect_Accessible_Validation',

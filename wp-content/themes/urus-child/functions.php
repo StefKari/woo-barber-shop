@@ -594,3 +594,44 @@ function barbers_admin_price_column() {
         echo '<style>table.wp-list-table .column-price{width:15ch}</style>';
     }
 }
+
+// Theme-internal post types (menus, footers, popups, category texts) are building blocks, not pages:
+// keep them out of the Yoast sitemaps and out of the search index.
+function barbers_internal_post_types() {
+    return array('familab_menu', 'urus-footer', 'category_description', 'urus-popup');
+}
+add_filter('wpseo_sitemap_exclude_post_type', function ($excluded, $post_type) {
+    return $excluded || in_array($post_type, barbers_internal_post_types(), true);
+}, 10, 2);
+add_filter('wpseo_robots', function ($robots) {
+    return is_singular(barbers_internal_post_types()) ? 'noindex, nofollow' : $robots;
+});
+
+// Local business data for Google (store address, contact), linked to Yoast's Organization.
+add_filter('wpseo_schema_graph', function ($graph) {
+    if (!is_front_page() && !is_page('kontakt')) {
+        return $graph;
+    }
+    $graph[] = array(
+        '@type'              => 'Store',
+        '@id'                => home_url('/#store'),
+        'name'               => 'Barbers Shop',
+        'description'        => 'Prodajna vitrina u berbernici The Barbers – kozmetika za bradu i kosu, oprema za brijanje.',
+        'url'                => home_url('/'),
+        'image'              => 'https://www.barbers.rs/wp-content/uploads/2020/02/Barbers-logo.png',
+        'telephone'          => '+381641448424',
+        'email'              => 'bgbarbersshop@gmail.com',
+        'priceRange'         => 'RSD',
+        'address'            => array(
+            '@type'           => 'PostalAddress',
+            'streetAddress'   => 'Karađorđeva 49/1 (ugao sa Crnogorskom)',
+            'addressLocality' => 'Beograd',
+            'addressRegion'   => 'Savski venac',
+            'postalCode'      => '11000',
+            'addressCountry'  => 'RS',
+        ),
+        'hasMap'             => 'https://maps.google.com/maps?q=Kara%C4%91or%C4%91eva+49%2C+Beograd',
+        'parentOrganization' => array('@id' => home_url('/#organization')),
+    );
+    return $graph;
+});

@@ -19,11 +19,24 @@ final class Barbers_Perf_Assets {
 	}
 
 	/**
-	 * Serves foo.min.js instead of foo.js when a minified copy exists next to it and is not older
-	 * than the source (so an edited source is never shadowed by a stale minified file).
+	 * Sources whose .min.js copy we generate ourselves (terser). Other vendor .min.js files are
+	 * not used: some themes edit the source and leave an outdated minified file next to it
+	 * (urus jquery.sticky.min.js lacks FmSticky), and git checkouts make mtimes meaningless.
+	 */
+	const MINIFIED_SOURCES = array(
+		'/wp-content/themes/urus/assets/js/functions.js',
+		'/wp-content/themes/urus/assets/3rd-party/lazyload/jquery.lazy.js',
+	);
+
+	/**
+	 * Serves foo.min.js instead of foo.js for the files in MINIFIED_SOURCES when the minified
+	 * copy is not older than the source (so an edited source is never shadowed by a stale file).
 	 */
 	public static function minified_script( $src ) {
 		if ( ! is_string( $src ) || is_admin() || ! preg_match( '#^(.*?)(?<!\.min)\.js(\?.*)?$#', $src, $m ) ) {
+			return $src;
+		}
+		if ( ! in_array( wp_parse_url( $m[1] . '.js', PHP_URL_PATH ), self::MINIFIED_SOURCES, true ) ) {
 			return $src;
 		}
 		$path = wp_parse_url( $m[1] . '.js', PHP_URL_PATH );
@@ -171,7 +184,10 @@ final class Barbers_Perf_Assets {
 			// switched to their real media together, so the page never shows a partially styled state.
 			. "function apply(){var ls=[].slice.call(document.querySelectorAll('link[rel=\"barbers-css\"]')),n=ls.length;if(!n)return;"
 			. "ls.forEach(function(l){l.dataset.media=l.media||'all';l.media='print';l.onload=l.onerror=function(){if(--n===0)all();};l.rel='stylesheet';});"
-			. "function all(){ls.forEach(function(l){l.media=l.dataset.media;});requestAnimationFrame(function(){dispatchEvent(new Event('resize'));});}}"
+			// Transitions are suspended while the full CSS is switched on: otherwise every property that
+			// differs from the critical CSS starts a (non-composited) transition on the main thread.
+			. "function all(){var s=document.createElement('style');s.textContent='*,*::before,*::after{transition:none!important}';document.head.appendChild(s);"
+			. "ls.forEach(function(l){l.media=l.dataset.media;});requestAnimationFrame(function(){dispatchEvent(new Event('resize'));requestAnimationFrame(function(){s.remove();});});}}"
 			. "function go(){if(done)return;done=true;ev.forEach(function(e){removeEventListener(e,go,{passive:true});});"
 			. "if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',apply);}else{apply();}}"
 			. "ev.forEach(function(e){addEventListener(e,go,{passive:true});});"
@@ -244,8 +260,12 @@ final class Barbers_Perf_Assets {
 				$tag = preg_replace( '#(\bclass="[^"]*?)\s*\blazy\b#', '$1', $tag );
 				$tag = preg_replace( '#\sloading="lazy"#', '', $tag );
 				// Without the SVG placeholder the loading image needs an explicit width (see size_gallery_images()).
+				// The width only reserves space while loading and is dropped once the image is in.
 				if ( preg_match( '#\bwidth="(\d+)"#', $tag, $w ) && false === stripos( $tag, ' style="' ) ) {
 					$tag = str_replace( '<img ', '<img style="width:' . (int) $w[1] . 'px;" ', $tag );
+					if ( false === stripos( $tag, ' onload=' ) ) {
+						$tag = str_replace( '<img ', '<img onload="this.style.removeProperty(&#039;width&#039;)" ', $tag );
+					}
 				}
 				if ( 0 === $done && false === strpos( $tag, 'fetchpriority=' ) ) {
 					$tag = str_replace( '<img ', '<img fetchpriority="high" ', $tag );

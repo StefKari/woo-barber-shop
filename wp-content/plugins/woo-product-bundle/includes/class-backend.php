@@ -2461,11 +2461,12 @@ if ( ! class_exists( 'WPCleverWoosb_Backend' ) ) {
 
             $ids      = [];
             $ids_arr  = [];
-            $ids_data = sanitize_textarea_field( wp_unslash( $_POST['ids'] ?? '' ) );
+            // Do not run sanitize_textarea_field() on the raw string: it strips percent-encoded octets (%5B, %5D...) and breaks parse_str().
+            $ids_data = isset( $_POST['ids'] ) && is_string( $_POST['ids'] ) ? wp_unslash( $_POST['ids'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
             parse_str( $ids_data, $ids_arr );
 
             if ( isset( $ids_arr['woosb_ids'] ) && is_array( $ids_arr['woosb_ids'] ) ) {
-                $ids = $ids_arr['woosb_ids'];
+                $ids = $this->helper->sanitize_array( $ids_arr['woosb_ids'] );
             }
 
             echo '<textarea class="woosb_import_export_data" style="width: 100%; height: 200px">' . esc_textarea( ( ! empty( $ids ) ? wp_json_encode( $ids, JSON_PRETTY_PRINT ) : '' ) ) . '</textarea>';

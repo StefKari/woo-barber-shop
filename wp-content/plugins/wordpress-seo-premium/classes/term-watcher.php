@@ -116,13 +116,13 @@ class WPSEO_Term_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 	}
 
 	/**
-	 * Detect if the slug changed, hooked into 'post_updated'.
+	 * Detect if the slug changed, hooked into 'edited_term'.
 	 *
 	 * @param int      $term_id  The term id.
 	 * @param int      $tt_id    The term taxonomy id.
 	 * @param stdClass $taxonomy Object with the values of the taxonomy.
 	 *
-	 * @return bool
+	 * @return bool|null Null if a redirect should be created, false if not.
 	 */
 	public function detect_slug_change( $term_id, $tt_id, $taxonomy ) {
 		/**
@@ -150,6 +150,16 @@ class WPSEO_Term_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 		}
 
 		$old_url = $this->get_old_url();
+
+		$term = get_term( $term_id, $taxonomy );
+
+		if ( is_wp_error( $term ) || ! $term ) {
+			return false;
+		}
+
+		if ( ! $this->is_redirect_needed( $term, $old_url ) ) {
+			return false;
+		}
 
 		if ( ! $old_url ) {
 			return false;
@@ -203,7 +213,7 @@ class WPSEO_Term_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 	protected function is_redirect_needed( $term, $url ) {
 		$redirect_manager = new WPSEO_Redirect_Manager( 'plain' );
 		$redirect         = $redirect_manager->get_redirect( $url );
-		return ! $redirect || ( ! is_nav_menu( $term->term_id ) && is_taxonomy_viewable( $term->taxonomy ) );
+		return ! $redirect && ! is_nav_menu( $term->term_id ) && is_taxonomy_viewable( $term->taxonomy );
 	}
 
 	/**
@@ -237,17 +247,11 @@ class WPSEO_Term_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 			return '';
 		}
 
-		// Use the correct URL path.
-		$url = wp_parse_url( $term_link );
-		if ( is_array( $url ) && isset( $url['path'] ) ) {
-			return $url['path'];
-		}
-
-		return '';
+		return str_replace( home_url(), '', $term_link );
 	}
 
 	/**
-	 * Get permalink for taxonomy.
+	 * Get permalink for taxonomy for quick edit.
 	 *
 	 * @return string|WP_Error
 	 */
@@ -288,10 +292,10 @@ class WPSEO_Term_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 	 * @return string
 	 */
 	protected function get_undo_slug_notification() {
-		/* translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the admin page. */
+		/* translators: %s expands to Yoast SEO Premium. */
 		return __(
-			'%1$s created a %2$sredirect%3$s from the old term URL to the new term URL.',
-			'wordpress-seo-premium'
+			'A redirect from the old URL to the new URL was just created. You can manage this redirect in %s.',
+			'wordpress-seo-premium',
 		);
 	}
 
@@ -304,7 +308,7 @@ class WPSEO_Term_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 		/* translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a href='{post_with_explaination.}'>, %4$s: </a>, %5%s: The removed url. */
 		return __(
 			'%1$s detected that you deleted a term (%5$s). You can either: %2$s Don\'t know what to do? %3$sRead this post %4$s.',
-			'wordpress-seo-premium'
+			'wordpress-seo-premium',
 		);
 	}
 

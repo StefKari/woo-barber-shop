@@ -5,6 +5,8 @@
  * @package WPSEO\Premium\Classes
  */
 
+use Yoast\WP\SEO\Helpers\Short_Link_Helper;
+
 /**
  * Class WPSEO_Redirect_Page.
  */
@@ -30,10 +32,7 @@ class WPSEO_Redirect_Page {
 	 * @return void
 	 */
 	public function display() {
-		$display_args = [ 'current_tab' => $this->get_current_tab() ];
-
-		$redirect_presenter = new WPSEO_Redirect_Page_Presenter();
-		$redirect_presenter->display( $display_args );
+		echo '<div id="yoast-seo-redirects"></div>';
 	}
 
 	/**
@@ -57,7 +56,7 @@ class WPSEO_Redirect_Page {
 		if ( $url !== $new_url ) {
 			// Do the redirect.
 			wp_safe_redirect( $new_url );
-			exit;
+			exit();
 		}
 	}
 
@@ -118,38 +117,48 @@ class WPSEO_Redirect_Page {
 	 */
 	public function enqueue_assets() {
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
-		$version       = $asset_manager->flatten_version( WPSEO_PREMIUM_VERSION );
 
-		$dependencies = [
-			'jquery',
-			'jquery-ui-dialog',
-			'wp-util',
-			'underscore',
-			'wp-api',
-			'wp-api-fetch',
-		];
-
-		wp_enqueue_script(
-			'wp-seo-premium-admin-redirects',
-			plugin_dir_url( WPSEO_PREMIUM_FILE )
-			. 'assets/js/dist/wp-seo-premium-admin-redirects-' . $version . WPSEO_CSSJS_SUFFIX . '.js',
-			$dependencies,
-			WPSEO_PREMIUM_VERSION,
-			true
-		);
+		wp_enqueue_script( 'wp-seo-premium-admin-redirects' );
 		wp_localize_script( 'wp-seo-premium-admin-redirects', 'wpseoPremiumStrings', WPSEO_Premium_Javascript_Strings::strings() );
 		wp_localize_script( 'wp-seo-premium-admin-redirects', 'wpseoUserLocale', [ 'code' => substr( get_user_locale(), 0, 2 ) ] );
-		wp_localize_script( 'wp-seo-premium-admin-redirects', 'wpseoAdminRedirect', [ 'homeUrl' => home_url( '/' ) ] );
-		wp_enqueue_style( 'wpseo-premium-redirects', plugin_dir_url( WPSEO_PREMIUM_FILE ) . 'assets/css/dist/premium-redirects-' . $version . '.css', [], WPSEO_PREMIUM_VERSION );
+		wp_localize_script(
+			'wp-seo-premium-admin-redirects',
+			'wpseoScriptData',
+			[
+				'linkParams'  => YoastSEO()->classes->get( Short_Link_Helper::class )->get_query_params(),
+				'preferences' => [
+					'homeUrl'     => home_url( '/' ),
+					'isRtl'       => is_rtl(),
+					'isMultisite' => is_multisite(),
+					'oldUrl'      => $this->get_old_url_from_request(),
+				],
+			],
+		);
+		wp_enqueue_style( WPSEO_Admin_Asset_Manager::PREFIX . 'premium-tailwind' );
+		$asset_manager->enqueue_style( 'redirects' );
+	}
 
-		wp_enqueue_style( 'wp-jquery-ui-dialog' );
+	/**
+	 * Gets the old URL from the request query parameters.
+	 *
+	 * @return string The sanitized old URL, or empty string if not present or invalid.
+	 */
+	private function get_old_url_from_request() {
+		if ( isset( $_GET['old_url'] ) && is_string( $_GET['old_url'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Reason: We decode it before sanitization to keep encoded characters.
+			$old_url = sanitize_text_field( rawurldecode( wp_unslash( $_GET['old_url'] ) ) );
+			if ( ! empty( $old_url ) ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Reason: We sanitize the nonce value with sanitize_text_field.
+				$nonce = isset( $_REQUEST['wpseo_premium_redirects_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['wpseo_premium_redirects_nonce'] ) ) : '';
+				if ( $nonce && wp_verify_nonce( $nonce, 'wpseo_redirects-old-url' ) ) { // nosemgrep scanner.php.wp.security.csrf.verify-nonce-inverted -- Nonce check logic is correct, returns data only when nonce is valid.
+					return $old_url;
+				}
 
-		$screen_option_args = [
-			'label'   => __( 'Redirects per page', 'wordpress-seo-premium' ),
-			'default' => 25,
-			'option'  => 'redirects_per_page',
-		];
-		add_screen_option( 'per_page', $screen_option_args );
+				return '';
+			}
+		}
+
+		return '';
 	}
 
 	/**
@@ -243,8 +252,6 @@ class WPSEO_Redirect_Page {
 	 * @return void
 	 */
 	private function initialize_admin() {
-		$this->fetch_bulk_action();
-
 		// Check if we need to save files after updating options.
 		add_action( 'update_option_wpseo_redirect', [ $this, 'save_redirect_files' ], 10, 2 );
 
@@ -258,6 +265,7 @@ class WPSEO_Redirect_Page {
 
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 			add_filter( 'set-screen-option', [ $this, 'set_screen_option' ], 11, 3 );
+			add_action( 'in_admin_header', [ $this, 'remove_notices' ], PHP_INT_MAX );
 		}
 	}
 
@@ -267,88 +275,18 @@ class WPSEO_Redirect_Page {
 	 * @return void
 	 */
 	private function initialize_ajax() {
-		// Normal Redirect AJAX.
 		new WPSEO_Redirect_Ajax( WPSEO_Redirect_Formats::PLAIN );
-
-		// Regex Redirect AJAX.
-		new WPSEO_Redirect_Ajax( WPSEO_Redirect_Formats::REGEX );
 	}
 
 	/**
-	 * Getting the current active tab.
-	 *
-	 * @return string
-	 */
-	private function get_current_tab() {
-		static $current_tab;
-
-		if ( $current_tab === null ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended --  We're not manipulating the value.
-			if ( isset( $_GET['tab'] ) && is_string( $_GET['tab'] )
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Recommended -- value sanitized in the if body, regex filters unwanted values.
-			&& in_array( wp_unslash( $_GET['tab'] ), [ WPSEO_Redirect_Formats::PLAIN, WPSEO_Redirect_Formats::REGEX, 'settings' ], true ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- the regex takes care of filtering out unwanted values.
-				$current_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
-			}
-			else {
-				$current_tab = WPSEO_Redirect_Formats::PLAIN;
-			}
-		}
-
-		return $current_tab;
-	}
-
-	/**
-	 * Setting redirect manager, based on the current active tab.
-	 *
-	 * @return WPSEO_Redirect_Manager
-	 */
-	private function get_redirect_manager() {
-		static $redirect_manager;
-
-		if ( $redirect_manager === null ) {
-			$redirects_format = WPSEO_Redirect_Formats::PLAIN;
-			if ( $this->get_current_tab() === WPSEO_Redirect_Formats::REGEX ) {
-				$redirects_format = WPSEO_Redirect_Formats::REGEX;
-			}
-
-			$redirect_manager = new WPSEO_Redirect_Manager( $redirects_format );
-		}
-
-		return $redirect_manager;
-	}
-
-	/**
-	 * Fetches the bulk action for removing redirects.
+	 * Removes all current WP notices.
 	 *
 	 * @return void
 	 */
-	private function fetch_bulk_action() {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in wp_verify_none.
-		if ( ! isset( $_POST['wpseo_redirects_ajax_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['wpseo_redirects_ajax_nonce'] ), 'wpseo-redirects-ajax-security' ) ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We're just strictly comparing the value.
-		if ( ( ! isset( $_POST['action'] ) || ! is_string( $_POST['action'] ) || ! wp_unslash( $_POST['action'] ) === 'delete' )
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We're just strictly comparing the value.
-		&& ( ! isset( $_POST['action2'] ) || ! is_string( $_POST['action2'] ) || ! wp_unslash( $_POST['action2'] ) === 'delete' ) ) {
-			return;
-		}
-
-		if ( ! isset( $_POST['wpseo_redirects_bulk_delete'] ) || ! is_array( $_POST['wpseo_redirects_bulk_delete'] ) ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array elements are sanitized one by one in the foreach loop.
-		$bulk_delete = wp_unslash( $_POST['wpseo_redirects_bulk_delete'] );
-		$redirects   = [];
-		foreach ( $bulk_delete as $origin ) {
-			$redirect = $this->get_redirect_manager()->get_redirect( $origin );
-			if ( $redirect !== false ) {
-				$redirects[] = $redirect;
-			}
-		}
-		$this->get_redirect_manager()->delete_redirects( $redirects );
+	public function remove_notices() {
+		remove_all_actions( 'admin_notices' );
+		remove_all_actions( 'user_admin_notices' );
+		remove_all_actions( 'network_admin_notices' );
+		remove_all_actions( 'all_admin_notices' );
 	}
 }

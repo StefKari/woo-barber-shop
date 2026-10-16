@@ -20,11 +20,42 @@ final class Barbers_Perf_CSS_Bundler {
 	const CHUNK = 40000;
 
 	public static function process( $html ) {
+		$html = self::drop_duplicate_stylesheets( $html );
 		return preg_replace_callback(
 			'#(?:<link\b[^>]*\brel=[\'"]stylesheet[\'"][^>]*>\s*)+#i',
 			array( __CLASS__, 'bundle_run' ),
 			$html
 		);
+	}
+
+	/**
+	 * The same file enqueued twice (urus-child style.css under two handles) is removed everywhere
+	 * but at its last position: the last copy re-applies every rule anyway, so the cascade is unchanged.
+	 */
+	private static function drop_duplicate_stylesheets( $html ) {
+		if ( ! preg_match_all( '#<link\b[^>]*\brel=[\'"]stylesheet[\'"][^>]*>#i', $html, $m ) ) {
+			return $html;
+		}
+		$last = array();
+		foreach ( $m[0] as $i => $tag ) {
+			$attrs = Barbers_Perf_HTML_Optimizer::parse_attrs( $tag );
+			$path  = (string) wp_parse_url( html_entity_decode( $attrs['href'] ?? '' ), PHP_URL_PATH );
+			if ( '' !== $path ) {
+				$last[ $path . '|' . ( $attrs['media'] ?? 'all' ) ] = $i;
+			}
+		}
+		foreach ( $m[0] as $i => $tag ) {
+			$attrs = Barbers_Perf_HTML_Optimizer::parse_attrs( $tag );
+			$path  = (string) wp_parse_url( html_entity_decode( $attrs['href'] ?? '' ), PHP_URL_PATH );
+			$key   = $path . '|' . ( $attrs['media'] ?? 'all' );
+			if ( '' !== $path && $last[ $key ] !== $i ) {
+				$pos = strpos( $html, $tag );
+				if ( false !== $pos ) {
+					$html = substr_replace( $html, '', $pos, strlen( $tag ) );
+				}
+			}
+		}
+		return $html;
 	}
 
 	private static function bundle_run( $m ) {
@@ -85,6 +116,9 @@ final class Barbers_Perf_CSS_Bundler {
 		foreach ( $group as $item ) {
 			$key .= $item['file'] . ':' . filemtime( $item['file'] ) . '|';
 		}
+		// A new set of purged stylesheets must produce new bundles.
+		$purged_index = BARBERS_PERF_DIR . '/purged/index.json';
+		$key         .= is_file( $purged_index ) ? 'purged:' . filemtime( $purged_index ) : '';
 		$hash     = substr( md5( $key . self::CHUNK ), 0, 16 );
 		$dir      = WP_CONTENT_DIR . '/' . self::DIR;
 		$manifest = $dir . '/' . $hash . '.json';
@@ -96,7 +130,7 @@ final class Barbers_Perf_CSS_Bundler {
 			}
 			$css = '';
 			foreach ( $group as $item ) {
-				$css .= '/* ' . basename( $item['file'] ) . " */\n" . self::rebase( (string) file_get_contents( $item['file'] ), $item['href'] ) . "\n";
+				$css .= '/* ' . basename( $item['file'] ) . " */\n" . self::rebase( self::source_css( $item['file'] ), $item['href'] ) . "\n";
 			}
 			$names = array();
 			foreach ( self::split_css( $css, self::CHUNK ) as $i => $chunk ) {
@@ -160,6 +194,26 @@ final class Barbers_Perf_CSS_Bundler {
 			$chunks[] = substr( $css, $start );
 		}
 		return $chunks;
+	}
+
+	/**
+	 * Contents of a stylesheet, or of its purged copy (rules the site never uses removed, generated
+	 * by tools/purge/build.mjs) while the original file is still exactly the one that was purged.
+	 * After a theme/plugin update the md5 no longer matches and the full original is used again.
+	 */
+	private static function source_css( $file ) {
+		static $index = null;
+		if ( null === $index ) {
+			$path  = BARBERS_PERF_DIR . '/purged/index.json';
+			$index = is_file( $path ) ? (array) json_decode( (string) file_get_contents( $path ), true ) : array();
+		}
+		$css = (string) file_get_contents( $file );
+		$rel = ltrim( substr( wp_normalize_path( $file ), strlen( wp_normalize_path( untrailingslashit( ABSPATH ) ) ) ), '/' );
+		$hit = $index[ $rel ] ?? null;
+		if ( $hit && md5( $css ) === $hit['md5'] && is_readable( BARBERS_PERF_DIR . '/purged/' . $hit['file'] ) ) {
+			return (string) file_get_contents( BARBERS_PERF_DIR . '/purged/' . $hit['file'] );
+		}
+		return $css;
 	}
 
 	/**

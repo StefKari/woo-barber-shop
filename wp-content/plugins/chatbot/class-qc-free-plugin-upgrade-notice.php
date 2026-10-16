@@ -182,7 +182,7 @@ if( !class_exists('QcchatbotPluginUpgradeToProNotice') )
 		   
 		    $link_text = '<span class="qc-up-pro-link-chatbot"  style="font-weight: bold; padding: 5px; background: '.esc_attr($this->link_color).'; border-radius: 4px; color: #fff">'.$this->link_text.'</span>';
 
-			if( ( $current_user->roles[0] ?? '' ) != 'subscriber' )
+			if($current_user->roles[0]!='subscriber')
 				$submenu["$this->plugin_menu_slug"][300] = array( $link_text, 'activate_plugins' , $this->upgrade_link );
 			
 			return $submenu;

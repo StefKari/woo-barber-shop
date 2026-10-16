@@ -32,8 +32,9 @@
         <div class="woocommerce-tabs wc-tabs-wrapper container">
             <ul class="tabs wc-tabs" role="tablist">
                 <?php foreach ( $tabs as $key => $tab ) : ?>
-                    <li class="<?php echo esc_attr( $key ); ?>_tab" id="tab-title-<?php echo esc_attr( $key ); ?>" role="tab" aria-controls="tab-<?php echo esc_attr( $key ); ?>">
-                        <a href="#tab-<?php echo esc_attr( $key ); ?>"><?php echo apply_filters( 'woocommerce_product_' . $key . '_tab_title', esc_html( $tab['title'] ), $key ); ?></a>
+                    <?php // Same ARIA structure as WooCommerce 11 tabs.php: its JS sets aria-selected on the link. ?>
+                    <li class="<?php echo esc_attr( $key ); ?>_tab" id="tab-title-<?php echo esc_attr( $key ); ?>" role="presentation">
+                        <a href="#tab-<?php echo esc_attr( $key ); ?>" role="tab" aria-controls="tab-<?php echo esc_attr( $key ); ?>"><?php echo apply_filters( 'woocommerce_product_' . $key . '_tab_title', esc_html( $tab['title'] ), $key ); ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>

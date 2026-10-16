@@ -288,7 +288,7 @@ class WPSEO_Post_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 				$this->get_delete_action_list( $url, $id ),
 				'<a target="_blank" href="' . WPSEO_Shortlinker::get( 'https://yoa.st/2jd' ) . '">',
 				'</a>',
-				'<code>' . $url . '</code>'
+				'<code>' . $url . '</code>',
 			);
 
 			$this->create_notification( $message, 'trash' );
@@ -313,7 +313,7 @@ class WPSEO_Post_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 				'Yoast SEO Premium',
 				'<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_redirects' ) ) . '" class="button">',
 				'</a>',
-				'<code>' . $redirect->get_origin() . '</code>'
+				'<code>' . $redirect->get_origin() . '</code>',
 			);
 
 			$this->create_notification( $message, 'untrash' );
@@ -381,8 +381,9 @@ class WPSEO_Post_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 
 		// The post types should be a public one.
 		if ( $this->check_public_post_status( $post_id ) ) {
-			// Get the right URL.
-			$url = $this->get_target_url( $post_id );
+			// Stored origins are relative to the home URL, so the subdirectory has to be left out.
+			$url_formatter = new WPSEO_Redirect_Url_Formatter( $this->get_target_url( $post_id ) );
+			$url           = $url_formatter->format_without_subdirectory( get_home_url() );
 
 			// If $url is not a single /, there may be the option to create a redirect.
 			if ( $url !== '/' ) {
@@ -476,10 +477,10 @@ class WPSEO_Post_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 	 * @return string
 	 */
 	protected function get_undo_slug_notification() {
-		/* translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the admin page. */
+		/* translators: %s expands to Yoast SEO Premium. */
 		return __(
-			'%1$s created a %2$sredirect%3$s from the old post URL to the new post URL.',
-			'wordpress-seo-premium'
+			'A redirect from the old URL to the new URL was just created. You can manage this redirect in %s.',
+			'wordpress-seo-premium',
 		);
 	}
 
@@ -492,7 +493,7 @@ class WPSEO_Post_Watcher extends WPSEO_Watcher implements WPSEO_WordPress_Integr
 		/* translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a href='{post_with_explaination.}'>, %4$s: </a>, %5%s: The removed url.  */
 		return __(
 			'%1$s detected that you deleted a post (%5$s). You can either: %2$s Don\'t know what to do? %3$sRead this post %4$s.',
-			'wordpress-seo-premium'
+			'wordpress-seo-premium',
 		);
 	}
 

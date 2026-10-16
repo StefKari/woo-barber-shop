@@ -4,7 +4,11 @@
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="facebook-domain-verification" content="pl5mm55cwi1qc96o7ekmjjt02gl4e8" />
-    <link rel="icon" type="image/png"  href="<?php echo bloginfo('template_directory');?>/assets/images/favicon.jpg" />
+    <?php // Icons live in the web root: robots.txt blocks /wp-content/themes/ for Google, and Google needs 48px+. ?>
+    <link rel="icon" href="<?php echo esc_url( home_url( '/favicon.ico' ) ); ?>" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="96x96" href="<?php echo esc_url( home_url( '/favicon-96x96.png' ) ); ?>" />
+    <link rel="icon" type="image/png" sizes="192x192" href="<?php echo esc_url( home_url( '/favicon-192x192.png' ) ); ?>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo esc_url( home_url( '/apple-touch-icon.png' ) ); ?>" />
     <link rel="profile" href="http://gmpg.org/xfn/11">
     <?php wp_head(); ?>
 </head>

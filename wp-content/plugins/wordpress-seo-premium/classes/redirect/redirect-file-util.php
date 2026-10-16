@@ -44,8 +44,8 @@ class WPSEO_Redirect_File_Util {
 				new Yoast_Notification(
 					/* translators: %s expands to the file path that we tried to write to */
 					sprintf( __( "We're unable to create the directory %s", 'wordpress-seo-premium' ), $basedir ),
-					[ 'type' => 'error' ]
-				)
+					[ 'type' => 'error' ],
+				),
 			);
 
 			return;
@@ -86,8 +86,8 @@ class WPSEO_Redirect_File_Util {
 				new Yoast_Notification(
 					/* translators: %s expands to the file path that we tried to write to */
 					sprintf( __( "We're unable to write data to the file %s", 'wordpress-seo-premium' ), $file_path ),
-					[ 'type' => 'error' ]
-				)
+					[ 'type' => 'error' ],
+				),
 			);
 
 			return false;
@@ -118,5 +118,29 @@ class WPSEO_Redirect_File_Util {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Checks if a file is writable.
+	 *
+	 * @param string $file The file path to check.
+	 *
+	 * @return bool If the file is writable.
+	 */
+	public static function is_writable( string $file ): ?bool {
+		if ( ! function_exists( 'WP_Filesystem' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+
+		if ( ! WP_Filesystem() ) {
+			return false;
+		}
+
+		global $wp_filesystem;
+		if ( ! $wp_filesystem->is_writable( $file ) ) {
+			return false;
+		}
+
+		return true;
 	}
 }

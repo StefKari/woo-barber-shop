@@ -11,26 +11,26 @@ Barbers je online prodavnica kozmetike i opreme za negu brade, brkova i kose i z
 
 Koristi javni WooCommerce Store API (samo čitanje, bez autentifikacije):
 
-- Pretraga: `GET https://barbershop.wp1.smartweb.rs/wp-json/wc/store/v1/products?search=ulje%20za%20bradu&per_page=20`
-- Proizvod po ID-u: `GET https://barbershop.wp1.smartweb.rs/wp-json/wc/store/v1/products/{id}`
-- Kategorije: `GET https://barbershop.wp1.smartweb.rs/wp-json/wc/store/v1/products/categories`
-- Proizvodi iz kategorije: `GET https://barbershop.wp1.smartweb.rs/wp-json/wc/store/v1/products?category={slug}`
+- Pretraga: `GET https://www.barbers.rs/wp-json/wc/store/v1/products?search=ulje%20za%20bradu&per_page=20`
+- Proizvod po ID-u: `GET https://www.barbers.rs/wp-json/wc/store/v1/products/{id}`
+- Kategorije: `GET https://www.barbers.rs/wp-json/wc/store/v1/products/categories`
+- Proizvodi iz kategorije: `GET https://www.barbers.rs/wp-json/wc/store/v1/products?category={slug}`
 
 Cene u odgovoru su u najmanjoj jedinici valute (`prices.currency_minor_unit`). Polje `permalink` vodi na stranicu proizvoda.
 
 ## Glavne kategorije
 
-- [Aksesoari](https://barbershop.wp1.smartweb.rs/kategorija/aksesoari/)
-- [Brijanje](https://barbershop.wp1.smartweb.rs/kategorija/brijanje/)
-- [Kozmetika za bradu](https://barbershop.wp1.smartweb.rs/kategorija/kozmetika-za-bradu/)
-- [Kozmetika za kosu](https://barbershop.wp1.smartweb.rs/kategorija/kozmetika-za-kosu/)
-- [Telo](https://barbershop.wp1.smartweb.rs/kategorija/telo/)
+- [Aksesoari](https://www.barbers.rs/kategorija/aksesoari/)
+- [Brijanje](https://www.barbers.rs/kategorija/brijanje/)
+- [Kozmetika za bradu](https://www.barbers.rs/kategorija/kozmetika-za-bradu/)
+- [Kozmetika za kosu](https://www.barbers.rs/kategorija/kozmetika-za-kosu/)
+- [Telo](https://www.barbers.rs/kategorija/telo/)
 
 ## Poručivanje
 
-1. Otvori stranicu proizvoda (iz [prodavnice](https://barbershop.wp1.smartweb.rs/shop/) ili iz pretrage) i dodaj ga u korpu.
-2. Pregledaj [korpu](https://barbershop.wp1.smartweb.rs/cart/).
-3. Završi porudžbinu na [stranici za plaćanje](https://barbershop.wp1.smartweb.rs/checkout/) – kupac unosi podatke za dostavu. Porudžbinu uvek potvrđuje kupac.
+1. Otvori stranicu proizvoda (iz [prodavnice](https://www.barbers.rs/shop/) ili iz pretrage) i dodaj ga u korpu.
+2. Pregledaj [korpu](https://www.barbers.rs/cart/).
+3. Završi porudžbinu na [stranici za plaćanje](https://www.barbers.rs/checkout/) – kupac unosi podatke za dostavu. Porudžbinu uvek potvrđuje kupac.
 
 ## Dostava i plaćanje
 
@@ -40,8 +40,8 @@ Cene u odgovoru su u najmanjoj jedinici valute (`prices.currency_minor_unit`). P
 
 ## Kontakt
 
-- [Kontakt stranica](https://barbershop.wp1.smartweb.rs/kontakt/)
+- [Kontakt stranica](https://www.barbers.rs/kontakt/)
 
 ## Dodatno
 
-- [llms.txt](https://barbershop.wp1.smartweb.rs/llms.txt) – pregled sadržaja sajta za jezičke modele.
+- [llms.txt](https://www.barbers.rs/llms.txt) – pregled sadržaja sajta za jezičke modele.

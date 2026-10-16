@@ -20,7 +20,7 @@ class WPSEO_Premium_Orphaned_Post_Query {
 	 *
 	 * @param array $post_types The post types to get the counts for.
 	 *
-	 * @return int[] The counts for all post types.
+	 * @return int The counts for all post types.
 	 */
 	public static function get_counts( array $post_types ) {
 		_deprecated_function( __METHOD__, 'Yoast SEO 21.7', 'WPSEO_Premium_Orphaned_Post_Filter::get_post_total' );
@@ -45,7 +45,7 @@ class WPSEO_Premium_Orphaned_Post_Query {
 					[
 						[ 'incoming_link_count' => 0 ],
 						[ 'incoming_link_count' => null ],
-					]
+					],
 				);
 
 			$frontpage_id = self::get_frontpage_id();

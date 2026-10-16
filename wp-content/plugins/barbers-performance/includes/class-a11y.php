@@ -82,7 +82,28 @@ final class Barbers_Perf_A11y {
 		$html = self::crawlable_void_links( $html );
 		$html = self::label_void_links( $html );
 		$html = self::widget_heading_levels( $html );
+		$html = self::iframe_titles( $html );
 		return $html;
+	}
+
+	/**
+	 * Embedded maps/videos without a title get one, so screen readers can name the frame.
+	 */
+	private static function iframe_titles( $html ) {
+		return preg_replace_callback(
+			'#<iframe\b(?![^>]*\btitle=)([^>]*)>#i',
+			static function ( $m ) {
+				if ( preg_match( '#\bsrc="[^"]*google\.[^"]*/maps#i', $m[1] ) ) {
+					$title = 'Mapa – lokacija prodavnice';
+				} elseif ( preg_match( '#\bsrc="[^"]*(youtube|vimeo)#i', $m[1] ) ) {
+					$title = 'Video';
+				} else {
+					return $m[0];
+				}
+				return '<iframe title="' . esc_attr( $title ) . '"' . $m[1] . '>';
+			},
+			$html
+		);
 	}
 
 	/**
