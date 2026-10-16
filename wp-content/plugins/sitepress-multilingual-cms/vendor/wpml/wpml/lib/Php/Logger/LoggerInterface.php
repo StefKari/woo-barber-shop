@@ -1,25 +1,2 @@
 <?php
-
-namespace WPML\PHP\Logger;
-
-interface LoggerInterface {
-
-  /**
-   * @param string $message
-   *
-   * @return void
-   */
-
-
-  public function error( $message );
-
-
-  /**
-   * @param string $message
-   *
-   * @return void
-   */
-  public function notice( $message );
-
-
-}
+require_once __DIR__ . '/../../../../../../wpml/lib/Php/Logger/LoggerInterface.php';

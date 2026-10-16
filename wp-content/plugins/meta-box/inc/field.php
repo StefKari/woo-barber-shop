@@ -37,12 +37,12 @@ abstract class RWMB_Field {
 			$field_html = self::filter( 'html', $field_html, $field, $meta );
 		}
 
-		$end = static::end_html( $field );
-		$end = self::filter( 'end_html', $end, $field, $meta );
+		$end  = static::end_html( $field );
+		$end  = self::filter( 'end_html', $end, $field, $meta );
 		$html = self::filter( 'wrapper_html', $begin . $field_html . $end, $field, $meta );
 
 		// Display label and input in DIV and allow user-defined classes to be appended.
-		$classes = "rwmb-field rwmb-{$field['type']}-wrapper " . $field['class'];
+		$classes  = "rwmb-field rwmb-{$field['type']}-wrapper " . $field['class'];
 		$required = $field['required'] || ! empty( $field['attributes']['required'] );
 
 		if ( $required ) {
@@ -106,12 +106,12 @@ abstract class RWMB_Field {
 
 	protected static function label_description( array $field ): string {
 		$id = $field['id'] ? ' id="' . esc_attr( $field['id'] ) . '-label-description"' : '';
-		return $field['label_description'] ? "<p{$id} class='description'>{$field['label_description']}</p>" : '';
+		return $field['label_description'] ? "<p{$id} class='description'>" . wp_kses_post( $field['label_description'] ) . '</p>' : '';
 	}
 
 	protected static function input_description( array $field ): string {
 		$id = $field['id'] ? ' id="' . esc_attr( $field['id'] ) . '-description"' : '';
-		return $field['desc'] ? "<p{$id} class='description'>{$field['desc']}</p>" : '';
+		return $field['desc'] ? "<p{$id} class='description'>" . wp_kses_post( $field['desc'] ) . '</p>' : '';
 	}
 
 	/**
@@ -167,9 +167,9 @@ abstract class RWMB_Field {
 			return '';
 		}
 		// Get raw meta.
-		$raw_meta = self::call( $field, 'raw_meta', $post_id );
+		$raw_meta   = self::call( $field, 'raw_meta', $post_id );
 		$single_std = self::call( 'get_single_std', $field );
-		$std = self::call( 'get_std', $field );
+		$std        = self::call( 'get_std', $field );
 
 		$saved = $saved && $field['save_field'];
 		// Use $field['std'] only when the meta box hasn't been saved (i.e. the first time we run).
@@ -183,8 +183,8 @@ abstract class RWMB_Field {
 		$meta = is_array( $raw_meta ) ? $raw_meta : [];
 
 		if ( empty( $meta ) ) {
-			$empty_meta = empty( $raw_meta ) ? [null] : $raw_meta;
-			$std 		= $field['clone_empty_start'] ? [] : $std;
+			$empty_meta = empty( $raw_meta ) ? [ null ] : $raw_meta;
+			$std        = $field['clone_empty_start'] ? [] : $std;
 			$empty_std  = $field['clone_empty_start'] ? [] : Arr::to_depth( $empty_meta, Arr::depth( $std ) );
 
 			$meta = $saved ? $empty_std : $std;
@@ -288,39 +288,40 @@ abstract class RWMB_Field {
 			];
 		}
 		$field = wp_parse_args( $field, [
-			'id'                => '',
-			'name'              => '',
-			'type'              => 'text',
-			'label_description' => '',
-			'multiple'          => false,
-			'std'               => '',
-			'desc'              => '',
-			'format'            => '',
-			'before'            => '',
-			'after'             => '',
-			'field_name'        => $field['id'] ?? '',
-			'placeholder'       => '',
-			'save_field'        => true,
+			'id'                       => '',
+			'name'                     => '',
+			'type'                     => 'text',
+			'label_description'        => '',
+			'multiple'                 => false,
+			'std'                      => '',
+			'desc'                     => '',
+			'format'                   => '',
+			'before'                   => '',
+			'after'                    => '',
+			'field_name'               => $field['id'] ?? '',
+			'placeholder'              => '',
+			'save_field'               => true,
+			'hide_from_block_bindings' => false,
 
-			'clone'             => false,
-			'min_clone'         => 0,
-			'max_clone'         => 0,
-			'sort_clone'        => false,
-			'add_button'        => __( '+ Add more', 'meta-box' ),
-			'clone_default'     => false,
-			'clone_as_multiple' => false,
-			'clone_empty_start' => false,
+			'clone'                    => false,
+			'min_clone'                => 0,
+			'max_clone'                => 0,
+			'sort_clone'               => false,
+			'add_button'               => __( '+ Add more', 'meta-box' ),
+			'clone_default'            => false,
+			'clone_as_multiple'        => false,
+			'clone_empty_start'        => false,
 
-			'class'             => '',
-			'disabled'          => false,
-			'required'          => false,
-			'autofocus'         => false,
-			'attributes'        => [],
+			'class'                    => '',
+			'disabled'                 => false,
+			'required'                 => false,
+			'autofocus'                => false,
+			'attributes'               => [],
 
-			'sanitize_callback' => null,
+			'sanitize_callback'        => null,
 		] );
 
-		// Store the original ID to run correct filters for the clonable field.
+		// Store the original ID to run correct filters for the cloneable field.
 		if ( $field['clone'] ) {
 			$field['_original_id'] = $field['id'];
 		}
@@ -577,11 +578,11 @@ abstract class RWMB_Field {
 		$depth = 0;
 
 		if ( $field['multiple'] ) {
-			$depth++;
+			++$depth;
 		}
 
 		if ( $field['clone'] ) {
-			$depth++;
+			++$depth;
 		}
 
 		return Arr::to_depth( $field['std'], $depth );
@@ -591,9 +592,9 @@ abstract class RWMB_Field {
 		$depth = 0;
 
 		if ( $field['multiple'] ) {
-			$depth++;
+			++$depth;
 		}
 
-		return Arr::to_depth( $field[ 'std' ], $depth );
+		return Arr::to_depth( $field['std'], $depth );
 	}
 }

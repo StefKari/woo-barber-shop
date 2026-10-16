@@ -23,6 +23,10 @@ class wfConfig {
 	const OPTIONS_TYPE_AUDIT_LOG = 'auditlog';
 	const OPTIONS_TYPE_DIAGNOSTICS = 'diagnostics';
 	const OPTIONS_TYPE_ALL = 'all';
+
+	const DEFAULT_ALERT_MAX_HOURLY = 5;
+	
+	const DEFAULT_LOCK_TIMEOUT = 3600;
 	
 	private static $tableExists = true;
 	private static $cache = array();
@@ -145,7 +149,7 @@ class wfConfig {
 			'maxExecutionTime' => array('value' => 0, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)), 
 			'howGetIPs' => array('value' => '', 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)), 
 			'actUpdateInterval' => array('value' => 2, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)), 
-			'alert_maxHourly' => array('value' => 0, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)), 
+			'alert_maxHourly' => array('value' => self::DEFAULT_ALERT_MAX_HOURLY, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)),
 			'loginSec_userBlacklist' => array('value' => '', 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
 			'liveTraf_maxRows' => array('value' => 2000, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)),
 			'liveTraf_maxAge' => array('value' => 30, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)),
@@ -194,6 +198,7 @@ class wfConfig {
 		'defaultsOnly' => array(
 			"apiKey" => array('value' => "", 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
 			'keyType' => array('value' => wfLicense::KEY_TYPE_FREE, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
+			'licenseType' => array('value' => wfLicense::TYPE_FREE, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
 			'isPaid' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'hasKeyConflict' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'timeoffset_wf_updated' => array('value' => 0, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)),
@@ -211,14 +216,12 @@ class wfConfig {
 			'needsNewTour_scan' => array('value' => true, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'needsNewTour_blocking' => array('value' => true, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'needsNewTour_livetraffic' => array('value' => true, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
-			'needsNewTour_loginsecurity' => array('value' => true, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'needsNewTour_auditlog' => array('value' => true, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'needsUpgradeTour_dashboard' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'needsUpgradeTour_firewall' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'needsUpgradeTour_scan' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'needsUpgradeTour_blocking' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'needsUpgradeTour_livetraffic' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
-			'needsUpgradeTour_loginsecurity' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'needsUpgradeTour_auditlog' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'supportContent' => array('value' => '{}', 'autoload' => self::DONT_AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
 			'supportHash' => array('value' => '', 'autoload' => self::DONT_AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
@@ -235,7 +238,7 @@ class wfConfig {
 			'satisfactionPromptOverride' => array('value' => true, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 		),
 	);
-	public static $serializedOptions = array('lastAdminLogin', 'scanSched', 'emailedIssuesList', 'wf_summaryItems', 'adminUserList', 'twoFactorUsers', 'alertFreqTrack', 'wfStatusStartMsgs', 'vulnerabilities_core', 'vulnerabilities_plugin', 'vulnerabilities_theme', 'dashboardData', 'malwarePrefixes', 'coreHashes', 'noc1ScanSchedule', 'allScansScheduled', 'disclosureStates', 'scanStageStatuses', 'adminNoticeQueue', 'suspiciousAdminUsernames', 'wordpressPluginVersions', 'wordpressThemeVersions', 'lastAuditEvents');
+	public static $serializedOptions = array('lastAdminLogin', 'scanSched', 'emailedIssuesList', 'wf_summaryItems', 'adminUserList', 'twoFactorUsers', 'alertFreqTrack', 'wfStatusStartMsgs', 'vulnerabilities_core', 'vulnerabilities_plugin', 'vulnerabilities_theme', 'dashboardData', 'malwarePrefixes', 'coreHashes', 'noc1ScanSchedule', 'allScansScheduled', 'disclosureStates', 'scanStageStatuses', 'adminNoticeQueue', 'suspiciousAdminUsernames', 'wordpressPluginVersions', 'wordpressThemeVersions', 'lastAuditEvents', 'recentServerAddr');
 	// Configuration keypairs that can be set from Central.
 	private static $wfCentralInternalConfig = array(
 		'wordfenceCentralUserSiteAuthGrant',
@@ -497,7 +500,7 @@ class wfConfig {
 		if (is_array($val)) {
 			$msg = sprintf(
 				/* translators: 1. Key in key-value store. 2. Value in key-value store. */
-				__('wfConfig::set() got an array as second param with key: %1$s and value: %2$s', 'wordfence'), $key, var_export($val, true));
+				wfI18n::__('wfConfig::set() got an array as second param with key: %1$s and value: %2$s', 'wordfence'), $key, var_export($val, true));
 			wordfence::status(1, 'error', $msg);
 			return;
 		}
@@ -574,6 +577,21 @@ class wfConfig {
 		return (int) self::get($key, $default, $allowCached);
 	}
 	
+	/**
+	 * Alternate version of `getInt` that returns an int if the value is numeric, otherwise returns the raw value.
+	 *
+	 * @param string $key
+	 * @param mixed $default
+	 * @return int|mixed
+	 */
+	public static function getMaybeInt($key, $default = 0, $allowCached = true) {
+		$raw = self::get($key, $default, $allowCached);
+		if (is_numeric($raw)) {
+			return (int) $raw;
+		}
+		return $raw;
+	}
+	
 	public static function getJSON($key, $default = false, $allowCached = true) {
 		$json = self::get($key, $default, $allowCached, $isDefault);
 		if ($isDefault)
@@ -587,6 +605,56 @@ class wfConfig {
 	
 	public static function getBool($key, $default = false, $allowCached = true) {
 		return wfUtils::truthyToBoolean(self::get($key, $default, $allowCached));
+	}
+	
+	/**
+	 * Returns multiple config values at once in an optimized way. Any that are uncached (or if $allowCached is false)
+	 * will all be queried in a single statement rather than multiple.
+	 * 
+	 * @param array $keysDefaults An associative array mapping 'key' => <default>
+	 * @param bool $allowCached
+	 * @return array
+	 */
+	public static function getMultiple($keysDefaults, $allowCached = true) {
+		global $wpdb;
+		
+		$result = array();
+		$remaining = array();
+		foreach ($keysDefaults as $key => $default) {
+			if ($allowCached && self::hasCachedOption($key)) {
+				$result[$key] = self::getCachedOption($key);
+			}
+			else {
+				$remaining[$key] = $default;
+			}
+		}
+		
+		if (!empty($remaining)) {
+			if (!self::$tableExists) {
+				return array_merge($remaining, $result);
+			}
+			
+			$sanitizedKeys = esc_sql(array_keys($remaining));
+			$keysINClause = "'" . implode("','", $sanitizedKeys) . "'";
+			
+			$table = self::table();
+			$rows = $wpdb->get_results("SELECT name, val, autoload FROM {$table} WHERE name IN ({$keysINClause})", ARRAY_A);
+			foreach ($rows as $r) {
+				$name = $r['name'];
+				$val = $r['val'];
+				if (in_array($name, self::$serializedOptions)) {
+					$val = maybe_unserialize($val);
+				}
+				
+				$result[$name] = $val;
+				unset($remaining[$name]);
+				if ($r['autoload'] != self::DONT_AUTOLOAD) {
+					self::updateCachedOption($name, $val);
+				}
+			}
+		}
+		
+		return array_merge($remaining, $result);
 	}
 	
 	/**
@@ -642,8 +710,8 @@ class wfConfig {
 		return 'wordfence_chunked_' . $key . '_';
 	}
 	
-	public static function get_ser($key, $default = false, $cache = true) {
-		if (self::hasCachedOption($key)) {
+	public static function get_ser($key, $default = false, $cache = true, $allowCacheRead = true) {
+		if ($allowCacheRead && self::hasCachedOption($key)) {
 			return self::getCachedOption($key);
 		}
 		
@@ -664,7 +732,7 @@ class wfConfig {
 				$chunk = self::getDB()->querySingle("select val from " . self::table() . " where name=%s", $chunkedValueKey . $i);
 				self::getDB()->flush(); //clear cache
 				if (!$chunk) {
-					wordfence::status(2, 'error', sprintf(/* translators: Key in key-value store. */ __("Error reassembling value for %s", 'wordfence'), $key));
+					wordfence::status(2, 'error', sprintf(/* translators: Key in key-value store. */ wfI18n::__("Error reassembling value for %s", 'wordfence'), $key));
 					return $default;
 				}
 				fwrite($fh, $chunk);
@@ -760,7 +828,7 @@ class wfConfig {
 					if ($stmt === false) {
 						wordfence::status(2, 'error', sprintf(
 						/* translators: 1. Key in key-value store. 2. MySQL error number. 3. MySQL error message. */
-							__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
+							wfI18n::__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
 						return false;
 					}
 					$null = NULL;
@@ -769,14 +837,14 @@ class wfConfig {
 					if (!$stmt->send_long_data(1, $dataChunk)) {
 						wordfence::status(2, 'error', sprintf(
 						/* translators: 1. Key in key-value store. 2. MySQL error number. 3. MySQL error message. */
-							__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
+							wfI18n::__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
 						return false;
 					}
 					
 					if (!$stmt->execute()) {
 						wordfence::status(2, 'error', sprintf(
 						/* translators: 1. Key in key-value store. 2. MySQL error number. 3. MySQL error message. */
-							__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
+							wfI18n::__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
 						return false;
 					}
 				}
@@ -786,14 +854,14 @@ class wfConfig {
 							$errno = mysqli_errno($wpdb->dbh);
 							wordfence::status(2, 'error', sprintf(
 							/* translators: 1. Key in key-value store. 2. MySQL error number. 3. MySQL error message. */
-								__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $errno, $wpdb->last_error));
+								wfI18n::__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $errno, $wpdb->last_error));
 						}
 						else if (function_exists('mysql_errno')) {
 							// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved
 							$errno = mysql_errno($wpdb->dbh);
 							wordfence::status(2, 'error', sprintf(
 							/* translators: 1. Key in key-value store. 2. MySQL error number. 3. MySQL error message. */
-								__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $errno, $wpdb->last_error));
+								wfI18n::__('Error writing value chunk for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $errno, $wpdb->last_error));
 						}
 						
 						return false;
@@ -805,7 +873,7 @@ class wfConfig {
 			if (!self::getDB()->queryWrite(sprintf("insert ignore into " . self::table() . " (name, val, autoload) values (%%s, X'%s', 'no')", bin2hex(serialize(array('count' => $chunks)))), $chunkedValueKey . 'header')) {
 				wordfence::status(2, 'error', sprintf(
 				/* translators: Key in key-value store. */
-					__("Error writing value header for %s", 'wordfence'), $key));
+					wfI18n::__("Error writing value header for %s", 'wordfence'), $key));
 				return false;
 			}
 		}
@@ -818,7 +886,7 @@ class wfConfig {
 					if ($stmt === false) {
 						wordfence::status(2, 'error', sprintf(
 						/* translators: 1. Key in key-value store. 2. MySQL error number. 3. MySQL error message. */
-							__('Error writing value for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
+							wfI18n::__('Error writing value for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
 						return false;
 					}
 					$null = NULL;
@@ -829,7 +897,7 @@ class wfConfig {
 					if ($stmt === false) {
 						wordfence::status(2, 'error', sprintf(
 						/* translators: 1. Key in key-value store. 2. MySQL error number. 3. MySQL error message. */
-							__('Error writing value for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
+							wfI18n::__('Error writing value for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
 						return false;
 					}
 					$null = NULL;
@@ -839,14 +907,14 @@ class wfConfig {
 				if (!$stmt->send_long_data(0, $data)) {
 					wordfence::status(2, 'error', sprintf(
 					/* translators: 1. Key in key-value store. 2. MySQL error number. 3. MySQL error message. */
-						__('Error writing value for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
+						wfI18n::__('Error writing value for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
 					return false;
 				}
 				
 				if (!$stmt->execute()) {
 					wordfence::status(2, 'error', sprintf(
 					/* translators: 1. Key in key-value store. 2. MySQL error number. 3. MySQL error message. */
-					__('Error finishing writing value for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
+					wfI18n::__('Error finishing writing value for %1$s (MySQLi error: [%2$s] %3$s)', 'wordfence'), $key, $dbh->errno, $dbh->error));
 					return false;
 				}
 			}
@@ -944,12 +1012,12 @@ class wfConfig {
 		}
 		return 0;
 	}
-	public static function liveTrafficEnabled(&$overriden = null){
-		$enabled = self::get('liveTrafficEnabled');
+	public static function liveTrafficEnabled(&$overridden = null) {
+		$enabled = self::getBool('liveTrafficEnabled');
 		if (WORDFENCE_DISABLE_LIVE_TRAFFIC || WF_IS_WP_ENGINE) {
 			$enabled = false;
-			if ($overriden !== null) {
-				$overriden = true;
+			if ($overridden !== null) {
+				$overridden = true;
 			}
 		}
 		return $enabled;
@@ -965,11 +1033,21 @@ class wfConfig {
 		wfConfig::set('autoUpdate', '0');	
 		wp_clear_scheduled_hook('wordfence_daily_autoUpdate');
 	}
+	
+	/**
+	 * Implements a database-based lock using our wfconfig table for storage. The option name is `$name` . '.lock', and
+	 * by default it auto-expires after `DEFAULT_LOCK_TIMEOUT` and does not autoload.
+	 * 
+	 * @param string $name
+	 * @param int|null $timeout Defaults to `DEFAULT_LOCK_TIMEOUT` if null
+	 * @param bool $autoload Whether the lock option should be saved as an autoloading option
+	 * @return bool Whether the lock was acquired
+	 */
 	public static function createLock($name, $timeout = null) { //Our own version of WP_Upgrader::create_lock that uses our table instead
 		global $wpdb;
 		
 		if (!$timeout) {
-			$timeout = 3600;
+			$timeout = self::DEFAULT_LOCK_TIMEOUT;
 		}
 		
 		$table = self::table();
@@ -993,6 +1071,7 @@ class wfConfig {
 		
 		return true;
 	}
+	
 	public static function releaseLock($name) {
 		self::remove($name . '.lock');
 	}
@@ -1196,6 +1275,69 @@ Options -ExecCGI
 	}
 	
 	/**
+	 * Preprocesses the $changes array to apply actions like conversion from browser time zone to server.
+	 *
+	 * @param array $changes
+	 * @param string|null $timeZone
+	 * @return void
+	 */
+	public static function preprocess(&$changes, $timeZone = null) {
+		$wpTimeZone = null;
+		if (function_exists('wp_timezone') /* WP 5.3+ */) {
+			$wpTimeZone = wp_timezone();
+		}
+		else {
+			//Polyfill
+			try {
+				$timezone_string = get_option( 'timezone_string' );
+				
+				if ( $timezone_string ) {
+					$wpTimeZone = new DateTimeZone($timezone_string);
+				}
+				else {
+					$offset  = (float) get_option( 'gmt_offset' );
+					$hours   = (int) $offset;
+					$minutes = ( $offset - $hours );
+					
+					$sign      = ( $offset < 0 ) ? '-' : '+';
+					$abs_hour  = abs( $hours );
+					$abs_mins  = abs( $minutes * 60 );
+					$tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
+					
+					$wpTimeZone = new DateTimeZone($tz_offset);
+				}
+			}
+			catch (Exception $e) {
+				$wpTimeZone = new DateTimeZone('UTC');
+			}
+		}
+		
+		if ($timeZone !== null) {
+			try {
+				$timeZone = new DateTimeZone($timeZone);
+			}
+			catch (Exception $e) {
+				$timeZone = null;
+			}
+		}
+		
+		if ($timeZone === null) {
+			$timeZone = $wpTimeZone;
+		}
+		
+		foreach ($changes as $key => $value) {
+			$checked = false;
+			switch ($key) {
+				//============ WAF
+				case 'learningModeGracePeriod':
+					$dtUtc = (new DateTimeImmutable(substr((string) $value, 0, 10) . ' 00:00:00', $timeZone))->setTimezone(new DateTimeZone('UTC'));
+					$changes[$key] = $dtUtc->format('Y-m-d\TH:i:sP');
+					break;
+			}
+		}
+	}
+	
+	/**
 	 * Validates the array of configuration changes without applying any. All bounds checks must be performed here.
 	 *
 	 * @param array $changes
@@ -1361,10 +1503,10 @@ Options -ExecCGI
 				{
 					$value = trim($value);
 					if (empty($value)) {
-						$errors[] = array('option' => $key, 'error' => __('An empty license key was entered.', 'wordfence'));
+						$errors[] = array('option' => $key, 'error' => wfI18n::__('An empty license key was entered.', 'wordfence'));
 					}
 					else if ($value && !preg_match('/^[a-fA-F0-9]+$/', $value)) {
-						$errors[] = array('option' => $key, 'error' => __('The license key entered is not in a valid format. It must contain only numbers and the letters A-F.', 'wordfence'));
+						$errors[] = array('option' => $key, 'error' => wfI18n::__('The license key entered is not in a valid format. It must contain only numbers and the letters A-F.', 'wordfence'));
 					}
 					
 					$checked = true;
@@ -1387,7 +1529,7 @@ Options -ExecCGI
 					$value = (int) $value;
 					wfScanMonitor::validateResumeAttempts($value, $valid);
 					if (!$valid)
-						$errors[] = array('option' => $key, 'error' => sprintf(__('Invalid number of scan resume attempts specified: %d', 'wordfence'), $value));
+						$errors[] = array('option' => $key, 'error' => sprintf(/* translators: attempt count */ __('Invalid number of scan resume attempts specified: %d', 'wordfence'), $value));
 					break;
 				}
 			}
@@ -1444,7 +1586,7 @@ Options -ExecCGI
 				{
 					$wafStatus = (isset($changes['wafStatus']) ? $changes['wafStatus'] : $wafConfig->getConfig('wafStatus'));
 					if ($wafStatus == wfFirewall::FIREWALL_MODE_LEARNING) {
-						$dt = wfUtils::parseLocalTime($value);
+						$dt = new DateTimeImmutable($value /* this has previously been normalized to UTC */);
 						$gracePeriodEnd = $dt->format('U');
 						$wafConfig->setConfig($key, $gracePeriodEnd);
 					}
@@ -1924,6 +2066,16 @@ Options -ExecCGI
 					//Letting these fall through to the default save handler
 					break;
 				}
+				
+				//Legacy 2FA
+				case wfCredentialsController::DISABLE_LEGACY_2FA_OPTION:
+					wfAdminNoticeQueue::removeAdminNoticeForCategory('legacy2faDeprecation', wfAdminNoticeQueue::USERS_ALL);
+					wfAdminNoticeQueue::removeAdminNoticeForCategory('legacy2faDeprecationUnprivileged', wfAdminNoticeQueue::USERS_ALL);
+          			//Fall through
+				case wfCredentialsController::ALLOW_LEGACY_2FA_OPTION:
+					wfConfig::set($key, wfUtils::truthyToInt($value));
+					$saved = true;
+					break;
 			}
 			
 			//============ Plugin (default treatment)
@@ -1939,7 +2091,7 @@ Options -ExecCGI
 				}
 				else if ((isset(self::$defaultConfig['otherParams'][$key]) && (self::$defaultConfig['otherParams'][$key]['validation']['type'] == self::TYPE_FLOAT || self::$defaultConfig['otherParams'][$key]['validation']['type'] == self::TYPE_DOUBLE)) ||
 						 (isset(self::$defaultConfig['defaultsOnly'][$key]) && (self::$defaultConfig['defaultsOnly'][$key]['validation']['type'] == self::TYPE_FLOAT || self::$defaultConfig['defaultsOnly'][$key]['validation']['type'] == self::TYPE_DOUBLE))) {
-					wfConfig::set($key, (double) $value);
+					wfConfig::set($key, (float) $value);
 				}
 				else if ((isset(self::$defaultConfig['otherParams'][$key]) && self::$defaultConfig['otherParams'][$key]['validation']['type'] == self::TYPE_STRING) ||
 						 (isset(self::$defaultConfig['defaultsOnly'][$key]) && self::$defaultConfig['defaultsOnly'][$key]['validation']['type'] == self::TYPE_STRING)) {
@@ -1973,11 +2125,11 @@ Options -ExecCGI
 						wfConfig::set('touppPromptNeeded', true);
 					}
 					else {
-						throw new Exception(__("The Wordfence server's response did not contain the expected elements.", 'wordfence'));
+						throw new Exception(wfI18n::__("The Wordfence server's response did not contain the expected elements.", 'wordfence'));
 					}
 				}
 				catch (Exception $e) {
-					throw new wfConfigException(__('Your options have been saved, but you left your license key blank, so we tried to get you a free license key from the Wordfence servers. There was a problem fetching the free key: ', 'wordfence') . wp_kses($e->getMessage(), array()));
+					throw new wfConfigException(wfI18n::__('Your options have been saved, but you left your license key blank, so we tried to get you a free license key from the Wordfence servers. There was a problem fetching the free key: ', 'wordfence') . wp_kses($e->getMessage(), array()));
 				}
 			}
 			else if ($existingAPIKey != $apiKey) { //Key changed, try activating
@@ -1995,11 +2147,11 @@ Options -ExecCGI
 						$ping = true;
 					}
 					else {
-						throw new Exception(__("The Wordfence server's response did not contain the expected elements.", 'wordfence'));
+						throw new Exception(wfI18n::__("The Wordfence server's response did not contain the expected elements.", 'wordfence'));
 					}
 				}
 				catch (Exception $e) {
-					throw new wfConfigException(__('Your options have been saved. However we noticed you changed your license key, and we tried to verify it with the Wordfence servers but received an error: ', 'wordfence') . wp_kses($e->getMessage(), array()));
+					throw new wfConfigException(wfI18n::__('Your options have been saved. However we noticed you changed your license key, and we tried to verify it with the Wordfence servers but received an error: ', 'wordfence') . wp_kses($e->getMessage(), array()));
 				}
 			}
 			else { //Key unchanged, just ping it
@@ -2047,7 +2199,7 @@ Options -ExecCGI
 					wfConfig::set('keyType', $keyType);
 				}
 				catch (Exception $e){
-					throw new wfConfigException(__('Your options have been saved. However we tried to verify your license key with the Wordfence servers and received an error: ', 'wordfence') . wp_kses($e->getMessage(), array()));
+					throw new wfConfigException(wfI18n::__('Your options have been saved. However we tried to verify your license key with the Wordfence servers and received an error: ', 'wordfence') . wp_kses($e->getMessage(), array()));
 				}
 			}
 		}

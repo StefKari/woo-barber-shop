@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\Infrastructure\Search_Console;
 
@@ -12,7 +13,7 @@ class Search_Console_Parameters extends Parameters {
 	/**
 	 * The search dimensions to query.
 	 *
-	 * @var string[] $dimensions
+	 * @var string[]
 	 */
 	private $dimensions;
 

@@ -20,13 +20,10 @@ class FindStringPackagesQueryBuilder implements FindStringPackagesQueryBuilderIn
         sp.translator_note
     ';
 
-	/** @var \SitePress */
 	private $sitepress;
 
-	/** @var SettingsRepository */
 	private $settingsRepository;
 
-	/** @var \wpdb */
 	private $wpdb;
 
 	public function __construct(
@@ -40,10 +37,10 @@ class FindStringPackagesQueryBuilder implements FindStringPackagesQueryBuilderIn
 	}
 
 	public function build( StringPackageCriteria $criteria ): string {
-		$sourceLanguage = $this->getSourceLanguageCode( $criteria );
+		$sourceLanguage = $this->sqlStringLiteral( $this->getSourceLanguageCode( $criteria ) );
 		$targetLanguageCodes = $this->getTargetLanguageCodes( $criteria );
 		$fields = $this->getFields();
-		$stringPackageId = $criteria->getType();
+		$stringPackageId = $this->sqlStringLiteral( $criteria->getType() );
 
 		$sql = "
       SELECT
@@ -52,9 +49,9 @@ class FindStringPackagesQueryBuilder implements FindStringPackagesQueryBuilderIn
       INNER JOIN {$this->wpdb->prefix}icl_translations source_t
           ON source_t.element_id = sp.ID
           AND source_t.element_type = CONCAT('package_', sp.kind_slug)
-          AND source_t.language_code = %s
+		  AND source_t.language_code = {$sourceLanguage}
       {$this->buildTargetLanguageJoins( $targetLanguageCodes )}
-      WHERE sp.kind_slug = %s
+		WHERE sp.kind_slug = {$stringPackageId}
           {$this->buildPostTitleCondition( $criteria )}
           {$this->buildTranslationStatusConditionWrapper( $criteria, $targetLanguageCodes )}
       GROUP BY sp.ID
@@ -62,7 +59,7 @@ class FindStringPackagesQueryBuilder implements FindStringPackagesQueryBuilderIn
       {$this->buildPagination( $criteria )}
     ";
 
-		return $this->wpdb->prepare( $sql, $sourceLanguage, $stringPackageId );
+		return $sql;
 	}
 
 	private function getFields(): string {

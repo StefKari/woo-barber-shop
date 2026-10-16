@@ -32,6 +32,14 @@ function stl_get_settings_array() {
  * @return string[]
  */
 function stl_get_available_scripts() {
+    // Labels are translated only after 'init' to avoid an early textdomain load (WP 6.7+).
+    if ( ! did_action( 'init' ) ) {
+        return array(
+            'cir' => 'Cyrillic',
+            'lat' => 'Latin',
+        );
+    }
+
     return array(
         'cir' => __( 'Cyrillic', 'srbtranslatin' ),
         'lat' => __( 'Latin', 'srbtranslatin' ),

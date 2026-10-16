@@ -41,14 +41,15 @@ class SmartCouponsCmp
             _doing_it_wrong(
                 __FUNCTION__,
                 sprintf(
-                    __(
+                    /* translators: Message about the load order*/
+                    esc_html__(
                         '%1$s should not be called earlier the %2$s action.',
                         'advanced-dynamic-pricing-for-woocommerce'
                     ),
                     'loadRequirements',
                     'plugins_loaded'
                 ),
-                WC_ADP_VERSION
+                esc_html(WC_ADP_VERSION)
             );
         }
 

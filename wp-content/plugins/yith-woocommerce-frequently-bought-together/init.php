@@ -3,22 +3,22 @@
  * Plugin Name: YITH WooCommerce Frequently Bought Together
  * Plugin URI: https://yithemes.com/themes/plugins/yith-woocommerce-frequently-bought-together/
  * Description: The <code><strong>YITH WooCommerce Frequently Bought Together</strong></code> allows increasing the average spent of your store by showing a box with the products purchased together more frequently. In this way, users are encouraged to add more products to their cart just like on Amazon. <a href="https://yithemes.com/" target="_blank">Get more plugins for your e-commerce shop on <strong>YITH</strong></a>.
- * Version: 1.46.0
+ * Version: 1.62.0
  * Author: YITH
  * Author URI: https://yithemes.com/
  * Text Domain: yith-woocommerce-frequently-bought-together
  * Domain Path: /languages/
- * WC requires at least: 9.6
- * WC tested up to: 9.8
+ * WC requires at least: 11.0
+ * WC tested up to: 11.2
  * Requires Plugins: woocommerce
  *
  * @author  YITH <plugins@yithemes.com>
  * @package YITH\FrequentlyBoughtTogether
- * @version 1.46.0
+ * @version 1.62.0
  */
 
 /*
-Copyright 2025  YITH  (email : plugins@yithemes.com)
+Copyright 2026  YITH  (email : plugins@yithemes.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as
@@ -78,7 +78,7 @@ register_activation_hook( __FILE__, 'yith_plugin_registration_hook' );
 
 
 if ( ! defined( 'YITH_WFBT_VERSION' ) ) {
-	define( 'YITH_WFBT_VERSION', '1.46.0' );
+	define( 'YITH_WFBT_VERSION', '1.62.0' );
 }
 
 if ( ! defined( 'YITH_WFBT_FREE_INIT' ) ) {

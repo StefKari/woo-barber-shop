@@ -92,6 +92,16 @@ class Filters {
 	}
 
 	/**
+	 * Apply leadin_forms_v4_script_url filter.
+	 *
+	 * @param string $portal_id The portal ID.
+	 */
+	public static function apply_forms_v4_script_url_filters( $portal_id ) {
+		$hublet_domain = self::resolve_hublet( 'js' );
+		return apply_filters( LEADIN_PREFIX . '_forms_v4_script_url', "https://$hublet_domain.hsforms.net/forms/embed/$portal_id.js" );
+	}
+
+	/**
 	 * Apply leadin_meetings_script_url filter.
 	 */
 	public static function apply_meetings_script_url_filters() {
@@ -111,6 +121,13 @@ class Filters {
 	 */
 	public static function apply_forms_payload_filters() {
 		return apply_filters( LEADIN_PREFIX . '_forms_payload', '' );
+	}
+
+	/**
+	 * Apply leadin_forms_v4_payload filter.
+	 */
+	public static function apply_forms_v4_payload_filters() {
+		return apply_filters( LEADIN_PREFIX . '_forms_v4_payload', '' );
 	}
 
 	/**

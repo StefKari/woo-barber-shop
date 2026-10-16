@@ -3,37 +3,69 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "de_DE"
          },
+         "Sending for translation": [
+            "Wird zur Übersetzung gesendet"
+         ],
+         "The translation could not be started because the server did not answer.": [
+            "Die Übersetzung konnte nicht gestartet werden, da der Server nicht geantwortet hat."
+         ],
+         "This translation cannot be opened right now.": [
+            "Diese Übersetzung kann derzeit nicht geöffnet werden."
+         ],
+         "Refresh this page": [
+            "Aktualisiere diese Seite"
+         ],
+         "Translation Dashboard": [
+            "Übersetzungs-Dashboard"
+         ],
          "WPML Translation Editor": [
-            "WPML Editor für Übersetzungen"
+            "WPML-Übersetzungs-Editor"
          ],
          "WordPress Editor": [
-            "WordPress Editor"
+            "WordPress-Editor"
          ],
-         "Translate with the WordPress Editor when you want to create different designs for translations, or if you're translating content that's incompatible with WPML's Translation Editor.": [
-            "Übersetzen Sie mit dem WordPress-Editor, wenn Sie unterschiedliche Designs für Übersetzungen erstellen möchten oder wenn Sie Inhalte übersetzen, die nicht mit WPMLs Übersetzungs-Editor kompatibel sind."
+         "The WordPress Editor doesn't offer Automatic Translation, <b>Translation Memory</b> and other features that make translation easier.": [
+            "Der WordPress-Editor bietet keine automatische Übersetzung, keinen <b>Übersetzungsspeicher</b> und keine anderen Funktionen, die das Übersetzen erleichtern."
          ],
-         "What do you want to translate with the WordPress Editor?": [
-            "Was möchten Sie mit dem WordPress-Editor übersetzen?"
+         "Also, switching back to WPML's Translation Editor later will require re-translating content that you translated with the WordPress editor.": [
+            "Außerdem erfordert ein späterer Rückwechsel zum WPML-Übersetzungs-Editor die erneute Übersetzung von Inhalten, die Du mit dem WordPress-Editor übersetzt hast."
+         ],
+         "This translation was previously created in the WordPress editor. When you switch to WPML Translation Editor, the structure of the translated post will be updated to match the original, but WPML will use your existing translation as a base so the tone and terminology are preserved.": [
+            "Diese Übersetzung wurde zuvor im WordPress-Editor erstellt. Wenn Du zum WPML-Übersetzungs-Editor wechselst, wird die Struktur des übersetzten Beitrags an das Original angepasst. WPML verwendet jedoch Deine vorhandene Übersetzung als Basis, damit Tonfall und Terminologie erhalten bleiben."
+         ],
+         "This will overwrite content you translated with the WordPress Editor. If you switch now, you'll have to translate selected content again.": [
+            "Dies wird Inhalte überschreiben, die Du mit dem WordPress-Editor übersetzt hast. Wenn Du jetzt wechselst, musst Du ausgewählte Inhalte erneut übersetzen."
          ],
          "I understand, switch to the WordPress Editor": [
             "Ich verstehe, zum WordPress-Editor wechseln"
          ],
-         "What do you want to translate with WPML Translation Editor?": [
-            "Was möchten Sie mit dem WPML-Übersetzungs-Editor übersetzen?"
+         "I understand, switch to %s": [
+            "Ich verstehe, zu %s wechseln"
          ],
-         "I understand, switch to WPML's Translation Editor": [
-            "Ich verstehe, zum WPML-Übersetzungs-Editor wechseln"
+         "I understand, switch to <b>Translation Dashboard</b>": [
+            "Ich verstehe, zum <b>Übersetzungs-Dashboard</b> wechseln"
+         ],
+         "You are about to translate with the %s": [
+            "Du bist dabei, mit dem %s zu übersetzen"
+         ],
+         "Translate with the WordPress Editor if you need different designs per language or if the content isn't compatible with WPML's Translation Editor.": [
+            "Übersetze mit dem WordPress-Editor, wenn Du unterschiedliche Designs pro Sprache benötigst oder wenn der Inhalt nicht mit dem WPML-Übersetzungs-Editor kompatibel ist."
+         ],
+         "What do you want to translate?": [
+            "Was möchtest Du übersetzen?"
          ],
          "Apply": [
-            "Übernehmen"
+            "Anwenden"
          ],
          "Cancel": [
             "Abbrechen"
          ],
          "Only this %s": [
-            "Nur dieses %s"
+            "Nur diesen %s"
          ],
          "Recommended": [
             "Empfohlen"
@@ -42,19 +74,10 @@
             "Alle %s"
          ],
          "All the site's content": [
-            "Den gesamten Inhalt der Website"
+            "Alle Inhalte der Website"
          ],
-         "Are you sure?": [
-            "Sind Sie sicher?"
-         ],
-         "The WordPress Editor doesn't offer Automatic Translation, Translation Memory and other features that make translation easier.": [
-            "Der WordPress-Editor bietet keine automatische Übersetzung, kein Übersetzungsspeicher und andere Funktionen, die das Übersetzen erleichtern."
-         ],
-         "And, if you switch back to WPML's Translation Editor, you will need to translate from scratch what you translated with the WordPress editor.": [
-            "Und wenn Sie zum WPML-Übersetzungs-Editor zurückwechseln, müssen Sie das, was Sie mit dem WordPress-Editor übersetzt haben, von Grund auf neu übersetzen."
-         ],
-         "When you update content that you previously translated with the WordPress Editor, you will need to translate from scratch.": [
-            "Wenn Sie Inhalte aktualisieren, die Sie zuvor mit dem WordPress-Editor übersetzt haben, müssen Sie von Grund auf neu übersetzen."
+         "Translate items in batch after reviewing the cost of AI translation": [
+            "Elemente im Batch übersetzen, nachdem die Kosten für die KI-Übersetzung überprüft wurden"
          ]
       }
    }

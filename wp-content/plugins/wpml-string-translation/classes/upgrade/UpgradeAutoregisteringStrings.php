@@ -5,27 +5,12 @@ namespace WPML\ST\Upgrade\Command;
 use WPML\StringTranslation\Application\Setting\Repository\SettingsRepositoryInterface;
 use WPML\ST\MO\Hooks\PreloadThemeMoFile;
 
-/**
- * Class UpgradeAutoregisteringStrings
- */
 class UpgradeAutoregisteringStrings implements \IWPML_St_Upgrade_Command {
 
-	/**
-	 * @var \wpdb wpdb
-	 */
 	private $wpdb;
 
-	/**
-	 * @var \SitePress $sitepress
-	 */
 	private $sitepress;
 
-	/**
-	 * UpgradeAutoregisteringStrings constructor.
-	 *
-	 * @param \wpdb      $wpdb
-	 * @param \SitePress $sitepress
-	 */
 	public function __construct( \wpdb $wpdb, \SitePress $sitepress ) {
 		$this->wpdb      = $wpdb;
 		$this->sitepress = $sitepress;
@@ -45,8 +30,9 @@ class UpgradeAutoregisteringStrings implements \IWPML_St_Upgrade_Command {
 			$this->sitepress->save_settings();
 		}
 
-		$stringsTableSql   = "SHOW TABLES LIKE '{$this->wpdb->prefix}icl_strings'";
-		$stringsTableExist = $this->wpdb->get_var( $stringsTableSql ) === "{$this->wpdb->prefix}icl_strings";
+		$wpdb              = $this->wpdb;
+		$tableName         = $wpdb->prefix . 'icl_strings';
+		$stringsTableExist = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $tableName ) ) === $tableName;
 
 		if ( ! $stringsTableExist ) {
 			return false;
@@ -60,12 +46,29 @@ class UpgradeAutoregisteringStrings implements \IWPML_St_Upgrade_Command {
 	}
 
 	private function createColumn( $columnName, $createColumnSql, $tableName = 'icl_strings' ) {
-		$columnSql    = "SHOW COLUMNS FROM `{$this->wpdb->prefix}{$tableName}` LIKE '" . $columnName . "'";
-		$columnExists = $this->wpdb->get_var( $columnSql ) === $columnName;
+		$allowedColumns = [
+			'string_type'   => 'TINYINT NOT NULL DEFAULT 0',
+			'component_id'  => 'VARCHAR(500) DEFAULT NULL',
+			'component_type' => 'TINYINT NOT NULL DEFAULT 0',
+		];
+		if ( 'icl_strings' !== $tableName || ! isset( $allowedColumns[ $columnName ] ) || $allowedColumns[ $columnName ] !== $createColumnSql ) {
+			return false;
+		}
+
+		$wpdb         = $this->wpdb;
+		$columnExists = $wpdb->get_var(
+			$wpdb->prepare( "SHOW COLUMNS FROM `{$wpdb->prefix}icl_strings` LIKE %s", $columnName )
+		) === $columnName;
 
 		if ( ! $columnExists ) {
-			$sql = "ALTER TABLE {$this->wpdb->prefix}{$tableName} ADD COLUMN `" . $columnName . "` " . $createColumnSql;
-			return (bool) $this->wpdb->query( $sql );
+			switch ( $columnName ) {
+				case 'string_type':
+					return (bool) $wpdb->query( "ALTER TABLE {$wpdb->prefix}icl_strings ADD COLUMN `string_type` TINYINT NOT NULL DEFAULT 0" );
+				case 'component_id':
+					return (bool) $wpdb->query( "ALTER TABLE {$wpdb->prefix}icl_strings ADD COLUMN `component_id` VARCHAR(500) DEFAULT NULL" );
+				case 'component_type':
+					return (bool) $wpdb->query( "ALTER TABLE {$wpdb->prefix}icl_strings ADD COLUMN `component_type` TINYINT NOT NULL DEFAULT 0" );
+			}
 		} else {
 			return true;
 		}
@@ -78,9 +81,6 @@ class UpgradeAutoregisteringStrings implements \IWPML_St_Upgrade_Command {
 	public function run_frontend() {
 	}
 
-	/**
-	 * @return string
-	 */
 	public static function get_command_id() {
 		return __CLASS__;
 	}

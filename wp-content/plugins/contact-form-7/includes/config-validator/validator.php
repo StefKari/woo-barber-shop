@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 require_once path_join( __DIR__, 'form.php' );
 require_once path_join( __DIR__, 'mail.php' );
 require_once path_join( __DIR__, 'messages.php' );
@@ -43,7 +45,7 @@ class WPCF7_ConfigValidator {
 	use WPCF7_ConfigValidator_Messages;
 	use WPCF7_ConfigValidator_AdditionalSettings;
 
-	private $contact_form;
+	private readonly WPCF7_ContactForm $contact_form;
 	private $errors = array();
 	private $include;
 	private $exclude;
@@ -53,9 +55,7 @@ class WPCF7_ConfigValidator {
 	 * Returns a URL linking to the documentation page for the error type.
 	 */
 	public static function get_doc_link( $child_page = '' ) {
-		$url = __( 'https://contactform7.com/configuration-errors/',
-			'contact-form-7'
-		);
+		$url = 'https://contactform7.com/configuration-errors/';
 
 		if ( '' !== $child_page ) {
 			$child_page = strtr( $child_page, '_', '-' );
@@ -138,9 +138,11 @@ class WPCF7_ConfigValidator {
 				$key = sprintf( 'mail.%s', $matches[1] );
 			}
 
-			if ( $options['section']
-			and $key !== $options['section']
-			and preg_replace( '/\..*$/', '', $key, 1 ) !== $options['section'] ) {
+			if (
+				$options['section'] and
+				$key !== $options['section'] and
+				preg_replace( '/\..*$/', '', $key, 1 ) !== $options['section']
+			) {
 				continue;
 			}
 
@@ -164,7 +166,11 @@ class WPCF7_ConfigValidator {
 	/**
 	 * Collects messages for detected errors.
 	 */
-	public function collect_error_messages() {
+	public function collect_error_messages( $options = '' ) {
+		$options = wp_parse_args( $options, array(
+			'decodes_html_entities' => false,
+		) );
+
 		$error_messages = array();
 
 		foreach ( $this->errors as $section => $errors ) {
@@ -180,6 +186,10 @@ class WPCF7_ConfigValidator {
 						$error['args']['message'],
 						$error['args']['params']
 					);
+				}
+
+				if ( $options['decodes_html_entities'] ) {
+					$message = html_entity_decode( $message, ENT_HTML5 );
 				}
 
 				$link = '';
@@ -226,7 +236,7 @@ class WPCF7_ConfigValidator {
 	 * is not specified.
 	 */
 	public function get_default_message( $code = '' ) {
-		return __( "Configuration error is detected.", 'contact-form-7' );
+		return __( 'Configuration error is detected.', 'contact-form-7' );
 	}
 
 

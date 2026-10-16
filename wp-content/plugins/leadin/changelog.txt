@@ -1,3 +1,67 @@
+= 11.3.75 (2026-09-16) =
+* Fix Elementor HubSpot form and meeting blocks not being selectable in the editor when the embed renders as an iframe
+
+= 11.3.74 (2026-09-16) =
+* Fix HubSpot widgets showing "Unable to load HubSpot" when the embedder script arrives late by waiting for it before failing, and report the failure when it does not arrive
+
+= 11.3.73 (2026-09-07) =
+* Fix HubSpot meeting Gutenberg block preview not rendering in the WordPress 6.3+ block editor
+
+= 11.3.72 (2026-09-04) =
+* Fix HubSpot form Gutenberg block preview not rendering in the WordPress 6.3+ block editor
+
+= 11.3.71 (2026-08-20) =
+* Fix TypeError crash when the HubSpot embedder script has not loaded by guarding against undefined IntegratedAppOptions in the background app
+
+= 11.3.70 (2026-08-12) =
+* Fix reverse proxy returning a 500 "Error retrieving content" error in browsers by not forwarding the client Accept-Encoding header, which caused Brotli responses WordPress cannot decode
+* Fix reverse proxy collapsing multiple Set-Cookie response headers into the literal "Set-Cookie: Array"
+
+= 11.3.69 (2026-07-30) =
+* Fix tracking code script tag ID and async attribute not applied on WordPress 5.7+
+
+= 11.3.64 (2026-07-10) =
+Remove deprecated /leadin/v1/refresh-token endpoint
+
+= 11.3.62 (2026-07-09) =
+* Migrate OAuth token exchange to v2 endpoint with token in request body
+
+= 11.3.61 (2026-07-08) =
+* Security fix: exchange OAuth refresh token server-side so it never reaches the browser (CVE-2026-57736 Phase 3)
+
+= 11.3.56 (2026-07-06) =
+Security fix: remove OAuth refresh token from HTML source to prevent exposure to low-privilege users
+
+= 11.3.53 (2026-06-25) =
+Strip cf-connecting-ip header from reverse proxied requests
+
+= 11.3.52 (2026-06-24) =
+- Forward /events/public/v1/* path to HubSpot via predefined proxy
+
+= 11.3.44 (2026-03-18) =
+* Fixed a trailing comma error on PHP versions lower than 7.3
+
+= 11.3.39 (2026-01-29) =
+* Ensure reverse proxy passes through request/response headers
+
+= 11.3.33 (2025-12-03) =
+* Fix CVE-2025-11762: Remove sensitive plugin data exposure to low-privilege users
+* Replace parse_url with wp_parse_url for WordPress compatibility
+* Remove deprecated load_plugin_textdomain function
+* Update tested up to WordPress 6.9
+
+= 11.3.20 (2025-08-26) =
+* Update error handling to avoid serialization problems
+
+= 11.3.16 (2025-07-15) =
+* Fix bug causing duplicate scheduled cron events
+
+= 11.3.6 (2025-04-22) =
+* Have default embedVersion for elementor
+
+= 11.3.0 (2025-04-07) =
+* Add v4 forms support
+
 = 11.2.8 (2025-03-17) =
 * Move cron schedule action to proxy mapping class
 
@@ -239,65 +303,4 @@
 
 = 8.16.25 (2022-08-19) =
 * Fixes the headers missing issue by tying the script with a hook
-
-= 8.16.6 (2022-08-17) =
-* Revert changes for open upgrade link in new tab
-
-= 8.16.5 (2022-08-17) =
-* Removed newline before/after php tag
-
-= 8.16.2 (2022-08-17) =
-* Fixes the headers already sent error
-
-= 8.16.0 (2022-08-17) =
-* Made upgrade link open up in a new tab instead of the iframe
-
-= 8.15.139 (2022-08-04) =
-* Fix for content type customization
-
-= 8.15.65 (2022-07-22) =
-* Fix encode URL for affiliate link
-
-= 8.15.36 (2022-07-19) =
-* Add validation for content type in meta data
-
-= 8.15.0 (2022-07-15) =
-* Add hubspot sidebar to set content type
-
-= 8.14.24 (2022-07-15) =
-* Add fallback for affiliate link
-* Increase WP tested up to version
-
-= 8.14.0 (2022-07-13) =
-* Add Meetings gutenberg block
-
-= 8.13.56 (2022-06-10) =
-* Use new script to render forms
-
-= 8.13.52 (2022-06-09) =
-* Add defer to forms script
-
-= 8.13.45 (2022-06-08) =
-* Remove char from proxy url
-
-= 8.13.39 (2022-06-07) =
-* Add tracking of events in review banner
-
-= 8.13.0 (2022-06-01) =
-* Add validation to connect method
-
-= 8.12.33 (2022-05-27) =
-* Replaced some whitelisted URLs with regex
-
-= 8.12.0 (2022-05-24) =
-* Added Gutenberg block preview image
-
-= 8.11.221 (2022-05-24) =
-* Update dependencies
-
-= 8.11.150 (2022-05-13) =
-* Update build steps
-
-= 8.11.0 (2022-04-27) =
-* Add option to disable HS analytics tracking for internal WP users
 

@@ -6,10 +6,6 @@
  * @package WooCommerce\Interface
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
  * WC Product Data Store Interface
  *
@@ -53,8 +49,13 @@ interface WC_Product_Data_Store_Interface {
 	 */
 	public function get_product_id_by_sku( $sku );
 
+
 	/**
 	 * Returns an array of IDs of products that have sales starting soon.
+	 *
+	 * Must exclude sales that have already ended, using the same test get_ending_sales()
+	 * matches on. Implement only one of the pair and a product can reach neither queue,
+	 * leaving its price where it is. See get_ending_sales().
 	 *
 	 * @return array
 	 */
@@ -62,6 +63,10 @@ interface WC_Product_Data_Store_Interface {
 
 	/**
 	 * Returns an array of IDs of products that have sales which are due to end.
+	 *
+	 * Paired with get_starting_sales(), which excludes what this matches. Overriding one
+	 * without the other strands products when this is narrowed, and restores the daily
+	 * start/end churn when it is broadened.
 	 *
 	 * @return array
 	 */

@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\Domain\Score_Groups;
 
@@ -31,14 +32,14 @@ interface Score_Groups_Interface {
 	/**
 	 * Gets the minimum score of the score group.
 	 *
-	 * @return int
+	 * @return int|null
 	 */
 	public function get_min_score(): ?int;
 
 	/**
 	 * Gets the maximum score of the score group.
 	 *
-	 * @return int
+	 * @return int|null
 	 */
 	public function get_max_score(): ?int;
 

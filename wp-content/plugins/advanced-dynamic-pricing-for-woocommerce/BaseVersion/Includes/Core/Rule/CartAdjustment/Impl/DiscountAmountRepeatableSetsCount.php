@@ -3,14 +3,14 @@
 namespace ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\Impl;
 
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
-use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartItemsCollection;
-use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartSetCollection;
-use ADP\BaseVersion\Includes\Core\Cart\CouponCart;
-use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\CartAdjustmentsLoader;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCart;
 use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\CartAdjustment;
+use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\CartAdjustmentsLoader;
 use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\Interfaces\CartAdjUsingCollection;
 use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\Interfaces\CouponCartAdj;
 use ADP\BaseVersion\Includes\Core\Rule\Rule;
+use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartItemsCollection;
+use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartSetCollection;
 
 defined('ABSPATH') or exit;
 
@@ -33,7 +33,7 @@ class DiscountAmountRepeatableSetsCount extends AbstractCartAdjustment implement
 
     public static function getLabel()
     {
-        return __('Add fixed discount to each item line affected by rule', 'advanced-dynamic-pricing-for-woocommerce');
+        return __('Add fixed discount to each item line affected by rule *', 'advanced-dynamic-pricing-for-woocommerce');
     }
 
     public static function getTemplatePath()

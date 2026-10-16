@@ -88,6 +88,16 @@ abstract class BaseRule
     protected $dbHash;
 
     /**
+     * @var bool
+     */
+    protected $enabledTimer;
+
+    /**
+     * @var string
+     */
+    protected $timerMessage;
+
+    /**
      * @var string
      */
     protected $discountMessage;
@@ -105,7 +115,24 @@ abstract class BaseRule
     /**
      * @var string
      */
+    protected $messageNoticeDiscount;
+
+    /**
+     * @var string
+     */
     protected $saleBadge;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $dateFrom;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $dateTo;
+
+    protected $blocks;
 
     public function __construct()
     {
@@ -120,10 +147,13 @@ abstract class BaseRule
         $this->autoAddLimit         = INF;
         $this->currency             = null;
         $this->activationCouponCode = null;
+        $this->enabledTimer      = false;
+        $this->timerMessage      = "";
         $this->discountMessage      = "";
         $this->discountMessageCartItem   = "";
         $this->longDiscountMessage       = "";
         $this->saleBadge            = "";
+        $this->blocks = [];
     }
 
     public function __clone()
@@ -447,6 +477,19 @@ abstract class BaseRule
         return $this->dbHash !== null ? $this->dbHash : "";
     }
 
+    public function setEnabledTimer($enabled)
+    {
+        $this->enabledTimer = (new CompareStrategy())->isStringBool($enabled);
+    }
+
+    /**
+     * @param string $message
+     */
+    public function setTimerMessage($message)
+    {
+        $this->timerMessage = is_string($message) ? $message : "";
+    }
+
     /**
      * @param string $message
      */
@@ -469,6 +512,22 @@ abstract class BaseRule
     public function getDiscountMessageCartItem()
     {
         return $this->discountMessageCartItem;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getEnabledTimer()
+    {
+        return $this->enabledTimer;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimerMessage()
+    {
+        return $this->timerMessage;
     }
 
     /**
@@ -510,4 +569,66 @@ abstract class BaseRule
     {
         return $this->saleBadge;
     }
+
+    /**
+     * @param string $message
+     */
+    public function setMessageNoticeDiscount($message)
+    {
+        $this->messageNoticeDiscount = is_string($message) ? esc_html($message) : "";
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessageNoticeDiscount(){
+        return $this->messageNoticeDiscount;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDateFrom()
+    {
+        return $this->dateFrom;
+    }
+
+    /**
+     * @param \DateTime|null $dateFrom
+     */
+    public function setDateFrom(\DateTime $dateFrom)
+    {
+        $this->dateFrom = $dateFrom;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDateTo()
+    {
+        return $this->dateTo;
+    }
+
+    /**
+     * @param \DateTime|null $dateTo
+     */
+    public function setDateTo(\DateTime $dateTo)
+    {
+        $this->dateTo = $dateTo;
+    }
+
+    public function setBlocks($blocks) {
+        $this->blocks = $blocks;
+    }
+
+    public function getBlocks()
+    {
+        return $this->blocks;
+    }
+
+    public function findPossibleMaxDiscountsForProducts(&$maxRate,&$maxAmount)
+    {
+        $maxRate = $maxAmount = 0;
+    }
+
 }

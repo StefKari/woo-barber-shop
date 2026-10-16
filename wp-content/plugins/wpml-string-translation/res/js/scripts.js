@@ -4,18 +4,25 @@ jQuery(function () {
     jQuery('.wpml-colorpicker').wpColorPicker();
 
     jQuery('#icl_st_filter_search_sb').click(icl_st_filter_search);
-	function onDropDownChange() {
-		if (jQuery('[name="icl_st_filter_status"]').val() === ''
-			&& jQuery('[name="icl_st_filter_context"]').val() === ''
-			&& jQuery('[name="icl-st-filter-translation-priority"]').val() === '') {
-			jQuery('#icl_st_filter_search_remove').hide();
-		} else {
-			jQuery('#icl_st_filter_search_remove').show();
-		}
+	function fieldHasValue(selector) {
+		var value = jQuery(selector).val();
+		return typeof value === 'string' && value.trim() !== '';
 	}
-	jQuery('select[name="icl_st_filter_status"]').change(onDropDownChange);
-	jQuery('select[name="icl_st_filter_context"]').change(onDropDownChange);
-	jQuery('select[name="icl-st-filter-translation-priority"]').change(onDropDownChange);
+	function hasActiveFilters() {
+		return fieldHasValue('#icl_st_filter_search')
+			|| fieldHasValue('[name="icl_st_filter_status"]')
+			|| fieldHasValue('[name="icl_st_filter_context"]')
+			|| fieldHasValue('[name="icl-st-filter-translation-priority"]')
+			|| jQuery('#icl_st_filter_search_em').prop('checked')
+			|| jQuery('#search_translation').prop('checked');
+	}
+	function updateClearFilters() {
+		jQuery('#icl_st_filter_search_remove').toggle(hasActiveFilters());
+	}
+	jQuery('select[name="icl_st_filter_status"]').change(updateClearFilters);
+	jQuery('select[name="icl_st_filter_context"]').change(updateClearFilters);
+	jQuery('select[name="icl-st-filter-translation-priority"]').change(updateClearFilters);
+	jQuery('#icl_st_filter_search_em, #search_translation').change(updateClearFilters);
 
     if (filterSearch.length) {
 		updateControls();
@@ -54,7 +61,6 @@ jQuery(function () {
     jQuery('.icl_st_row_cb, .check-column :checkbox').click(icl_st_update_checked_elements);
     iclTMLanguages.find('select').change(icl_st_change_service);
     jQuery('#icl_st_po_form').submit(icl_validate_po_upload);
-    jQuery('#icl_st_send_strings').submit(icl_st_send_strings);
     jQuery('#icl_st_translate_to_all').click(icl_st_select_all);
 
     jQuery('.hndle-wrap').click(function () {
@@ -69,10 +75,21 @@ jQuery(function () {
 		const editUserRoleText = button.attr('data-editUserRoleText');
 		const applyText = button.attr('data-applyText');
 		if (button.val() === editUserRoleText) {
+			// "Edit user roles" → "Apply": the click now submits the
+			// role-selection form, so flip from outlined to filled
+			// primary-blue chrome to signal the active action.
 			button.val(applyText);
+			button.removeClass('wpml-button--outlined button-secondary').addClass('button-primary');
 		} else {
+			// Reverting label → revert chrome.
 			button.val(editUserRoleText);
+			button.removeClass('button-primary').addClass('wpml-button--outlined button-secondary');
 		}
+		// Drop focus so the button doesn't sit in its `:focus` chrome
+		// (the brand `.wpml-button.base-btn:focus` rule paints both
+		// outlined and filled states gray) — purely visual, doesn't
+		// affect the click handler.
+		button.trigger('blur');
 	});
 
     jQuery('#icl_st_track_strings').submit(iclSaveForm);
@@ -109,9 +126,20 @@ jQuery(function () {
 		}
 	});
 
-	// Expand the accordion widget if ID exist in URL hash.
-	if (window.location.hash && jQuery(window.location.hash + '.postbox.closed').size() > 0) {
-		jQuery(window.location.hash).toggleClass('closed opened');
+	// Expand the anchored accordion.
+	//
+	// The <details> arm of this used to live here too, and could not work: this
+	// script is enqueued for the String Translation and Theme Localization
+	// screens only, while the one anchored details section - the scan block -
+	// is rendered by the Admin Texts screen, which is where the recovery link
+	// sends the reader (wpmldev-8513). It now lives in the scan block's own
+	// script, which ships with the section on every admin page
+	// (res/js/theme-plugin-localization/theme-plugin-localization.js).
+	if (window.location.hash) {
+		var hashTarget = jQuery(window.location.hash);
+		if (hashTarget.filter('.postbox.closed').length > 0) {
+			hashTarget.toggleClass('closed opened');
+		}
 	}
 
     // Track strings picker
@@ -165,15 +193,11 @@ jQuery(function () {
 		}
 	);
 	function updateControls() {
-		if (filterSearch[0].value !== '') {
-			jQuery('.wpml-string-translation-filter__checkboxes').show();
-			jQuery('#icl_st_filter_search_remove').show();
-		} else {
-			jQuery('.wpml-string-translation-filter__checkboxes').hide();
-			jQuery('#icl_st_filter_search_remove').hide();
-		}
-		jQuery('#icl_st_filter_search_em').prop('disabled', filterSearch[0].value === '');
-		jQuery('#search_translation').prop('disabled', filterSearch[0].value === '');
+		var hasSearchText = fieldHasValue('#icl_st_filter_search');
+		jQuery('.wpml-string-translation-filter__checkboxes').toggle(hasSearchText);
+		updateClearFilters();
+		jQuery('#icl_st_filter_search_em').prop('disabled', !hasSearchText);
+		jQuery('#search_translation').prop('disabled', !hasSearchText);
 	}
 
     var bulkSelectMsgs = jQuery('.js-wpml-st-table').find('.js-wpml-st-icl-string-translations-bulk-select-msg');
@@ -364,7 +388,24 @@ function icl_st_getUrlParameter(name) {
 }
 
 function icl_st_filter_search_remove(){
-    location.href = WPML_core.sanitize(location.href).replace(/#(.*)$/,'').replace(/&search=(.*)/g,'').replace(/&em=1/g,'');
+	var url = new URL(WPML_core.sanitize(location.href));
+	var filterArguments = [
+		'search',
+		'em',
+		'search_translation',
+		'status',
+		'context',
+		'translation-priority',
+		'paged',
+		'show_results',
+		'updated'
+	];
+
+	filterArguments.forEach(function(argument) {
+		url.searchParams.delete(argument);
+	});
+	url.hash = '';
+	location.href = WPML_core.sanitize(url.toString());
 }
 
 function icl_st_delete_selected() {
@@ -391,6 +432,9 @@ function icl_st_delete_selected() {
                         beforeStart: function() {
                             jQuery('#icl-st-delete-selected').attr('disabled', 'disabled');
                         },
+                        onStop: function() {
+                            jQuery('#icl-st-delete-selected').removeAttr('disabled');
+                        },
                         onComplete: function(data) {
                             jQuery('#icl-st-delete-selected').removeAttr('disabled');
                             jQuery('select[name="icl_st_filter_context"] option:selected').remove();
@@ -408,8 +452,8 @@ function icl_st_delete_selected() {
                 jQuery(this).trigger('click');
             });
             if (delids) {
-                postVars = 'icl_ajx_action=icl_st_delete_strings&value=' + delids.join(',') + '&_icl_nonce=' + jQuery('#_icl_nonce_dstr').val();
-                jQuery.post(icl_ajx_url, postVars, function () {
+                postVars = 'action=wpml_ajx_icl_st_delete_strings&value=' + delids.join(',') + '&_icl_nonce=' + jQuery('#_icl_nonce_dstr').val();
+                jQuery.post(ajaxurl, postVars, function () {
                     var i = 0;
                     for (; i < delids.length; i++) {
                         jQuery('.icl_st_row_cb[value="' + delids[i] + '"]').parent().parent().fadeOut('fast', function () {
@@ -428,24 +472,6 @@ function icl_st_delete_selected() {
     }
 
     return false;
-}
-
-function icl_st_send_strings(){
-    var checkedRows = jQuery('.icl_st_row_cb:checked');
-    if(!checkedRows.length){
-        return false;
-    }
-    var sendids = [];
-    checkedRows.each(function(){
-        sendids.push(jQuery(this).val());
-    });
-
-    if(!sendids.length){
-        return false;
-    }
-    jQuery('#icl_st_send_strings').find('input[name="strings"]').val(sendids.join(','));
-
-    return true;
 }
 
 function icl_st_update_languages() {
@@ -611,15 +637,8 @@ function icl_st_update_checked_elements() {
 
     if (!jQuery('.icl_st_row_cb:checked').length) {
         jQuery('#icl-st-delete-selected, #icl_send_strings').prop('disabled', true);
-        WPML_String_Translation.translation_basket.clear_message();
     } else {
         jQuery('#icl-st-delete-selected').prop('disabled', false);
-        var iclTROpt = jQuery('#icl-tr-opt');
-        if (!iclTROpt.length || iclTROpt.find('input:checked').length) {
-            if (WPML_String_Translation.translation_basket.maybe_enable_button()) {
-                WPML_String_Translation.translation_basket.show_target_languages();
-            }
-        }
     }
     jQuery('.icl_st_estimate_wrap:visible').each(function () {
         var lang = jQuery(this).attr('id').replace(/icl_st_estimate_(.+)_wrap/, '$1');
@@ -783,16 +802,21 @@ function maybeScrollToStImportErrorNotice() {
 
 jQuery(document).ready(function($) {
 	var viewScannedStringInterval = null;
+	const escapeHTML = value => String(value)
+		.replace(/&/g, '&amp;')
+		.replace(/"/g, '&quot;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
 	jQuery('.thickbox').click(function() {
 		clearInterval(viewScannedStringInterval);
-		const newPopupTitle = $(this).data('popup-title');
-		const popupDescription = $(this).data('popup-description');
-		const domainTitle = $(this).data('domain-title');
-		const stringTitle = $(this).data('string-title');
-		const domain = $(this).data('domain');
-		const string = $(this).data('string');
-		const iFrameTitle = $(this).data('iframe-title');
-		const imageURL = $(this).data('image-url');
+		const newPopupTitle = escapeHTML($(this).data('popup-title'));
+		const popupDescription = escapeHTML($(this).data('popup-description'));
+		const domainTitle = escapeHTML($(this).data('domain-title'));
+		const stringTitle = escapeHTML($(this).data('string-title'));
+		const domain = escapeHTML($(this).data('domain'));
+		const string = escapeHTML($(this).data('string'));
+		const iFrameTitle = escapeHTML($(this).data('iframe-title'));
+		const imageURL = escapeHTML($(this).data('image-url'));
 		viewScannedStringInterval = setInterval(function() {
 			$('#TB_overlay').addClass('string-preview-overlay');
 			if($('#TB_window').is(':visible')) {

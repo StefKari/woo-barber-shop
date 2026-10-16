@@ -112,7 +112,14 @@ class SrbTransLatin {
         $this->ml         = new Core\Multi_Language();
 
         if ( $this->is_request( 'admin' ) ) {
-            new Admin_Core();
+            // Deferred to 'init' so the settings labels can be translated without an early textdomain load.
+            add_action(
+                'init',
+                static function () {
+                    new Admin_Core();
+                },
+                0
+            );
         }
 
         new Frontend\Search_Query_Transliterator();

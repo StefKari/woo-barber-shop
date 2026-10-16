@@ -29,9 +29,26 @@ class ConditionsCheckStrategy
      */
     public function check($cart)
     {
+
+        if (adp_context()->getOption('allow_customers_choose_between_discounts')&& $this->rule->isExclusive()) {
+            $session_key = WC()->session->get_customer_id();
+            $transient_key = 'adp_selected_rules_' . $session_key;
+            $selectedRules = get_transient($transient_key) ?: [];
+            foreach ($cart->getItems() as $cartItem) {
+                $productId = $cartItem->getWcItem()->getProduct()->get_id();
+                if (isset($selectedRules[$productId]) && (int)$selectedRules[$productId] != $this->rule->getId()) {
+                    return false;
+                }
+            }
+        }
+
         $conditions = $this->rule->getConditions();
 
         if (count($conditions) === 0) {
+            return true;
+        }
+
+        if( apply_filters("adp_apply_rule_custom_conditions_check", false, $conditions, $cart, $this->rule) ) {
             return true;
         }
 

@@ -99,9 +99,12 @@ class LeadinAdmin {
 
 	/**
 	 * Load the .mo language files.
+	 * Note: As of WordPress 4.6+, translations are automatically loaded from WordPress.org
+	 * for plugins hosted there, so load_plugin_textdomain() is no longer needed.
 	 */
 	public function load_languages() {
-		load_plugin_textdomain( 'leadin', false, '/leadin/languages' );
+		// WordPress automatically loads translations for WordPress.org hosted plugins.
+		// This function is kept for backwards compatibility with the hook.
 	}
 
 	/**

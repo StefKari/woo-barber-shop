@@ -12,31 +12,23 @@ use WPML\StringTranslation\Application\StringCore\Query\FindByDomainValueAndCont
 
 class SaveStringsCommand implements SaveStringsCommandInterface {
 
-	/** @var FindByDomainValueAndContextQueryInterface */
 	private $findByDomainValueAndContextQuery;
 
-	/** @var InsertStringsCommandInterface */
 	private $insertStringsCommand;
 
-	/** @var UpdateStringsCommandInterface */
 	private $updateStringsCommand;
 
 	public function __construct(
 		FindByDomainValueAndContextQueryInterface $findByDomainValueAndContextQuery,
-		InsertStringsCommandInterface             $insertStringsCommand,
-		UpdateStringsCommandInterface             $updateStringsCommand
+		InsertStringsCommandInterface $insertStringsCommand,
+		UpdateStringsCommandInterface $updateStringsCommand
 	) {
 		$this->findByDomainValueAndContextQuery = $findByDomainValueAndContextQuery;
 		$this->insertStringsCommand             = $insertStringsCommand;
 		$this->updateStringsCommand             = $updateStringsCommand;
 	}
 
-	/**
-	 * @param StringItem[] $allStrings
-	 *
-	 * @return StringItem[]
-	 */
-	private function partStringsBySameComponentIdAndType( array $allStrings ): array {
+	private function partStringsBySameComponentIdAndType( array $allStrings ) : array {
 		$strings = [];
 
 		foreach ( $allStrings as $string ) {
@@ -51,63 +43,45 @@ class SaveStringsCommand implements SaveStringsCommandInterface {
 		return $strings;
 	}
 
-	/**
-	 * Same string can come from multiple urls, so we should keep only one copy for each string for correct processing.
-	 *
-	 * @param StringItem[] $allStrings
-	 *
-	 * @return StringItem[]
-	 */
-	private function filterOutStringDuplicates( array $allStrings ): array {
+	private function filterOutStringDuplicates( array $allStrings ) : array {
 		$foundKeys = [];
 		$strings   = [];
 
 		foreach ( $allStrings as $string ) {
 			$key = $string->getDomainValueAndContextKey() . ( $string->getName() ?? '' );
-			if ( in_array( $key, $foundKeys ) ) {
+			if ( isset( $foundKeys[ $key ] ) ) {
 				continue;
 			}
 
-			$foundKeys[] = $key;
-			$strings[]   = $string;
+			$foundKeys[ $key ] = true;
+			$strings[]         = $string;
 		}
 
 		return $strings;
 	}
 
-	/**
-	 * @param StringItem[] $strings
-	 *
-	 * @return StringItem[]
-	 */
-	private function findStringsByDomainValueAndContext( array $strings, array $fields ): array {
+	private function findStringsByDomainValueAndContext( array $strings, array $fields ) : array {
 		$criteria = new DomainValueAndContextCriteria( $strings, $fields );
 		return $this->findByDomainValueAndContextQuery->execute( $criteria );
 	}
 
-	/**
-	 * @param StringItem[] $strings
-	 */
 	public function run( array $strings ) {
 		$strings = $this->filterOutStringDuplicates( $strings );
 
 		$this->insertStringsCommand->run( $strings );
-		$strings = $this->findStringsByDomainValueAndContext( $strings, ['id', 'positions'] );
+		$strings = $this->findStringsByDomainValueAndContext( $strings, [ 'id' ] );
 
 		$this->saveAutoregisterData( $strings );
 	}
 
-	/**
-	 * @param StringItem[] $strings
-	 */
 	private function saveAutoregisterData( array $strings ) {
 		if ( count( $strings ) ) {
-			$this->updateStringsCommand->run( $strings, ['string_type'], [StringItem::STRING_TYPE_AUTOREGISTER] );
+			$this->updateStringsCommand->run( $strings, [ 'string_type' ], [ StringItem::STRING_TYPE_AUTOREGISTER ] );
 			$stringsByCmpIdAndType = $this->partStringsBySameComponentIdAndType( $strings );
 			foreach ( $stringsByCmpIdAndType as $componentIdAndType => $groupStrings ) {
 				$componentId   = substr( $componentIdAndType, 0, -1 );
 				$componentType = substr( $componentIdAndType, -1 );
-				$this->updateStringsCommand->run( $groupStrings, ['component_id', 'component_type'], [ $componentId, $componentType ] );
+				$this->updateStringsCommand->run( $groupStrings, [ 'component_id', 'component_type' ], [ $componentId, $componentType ] );
 			}
 		}
 	}

@@ -126,14 +126,22 @@ class DashboardWidget {
 			'wp-mail-smtp-chart',
 			wp_mail_smtp()->assets_url . '/js/vendor/chart.min.js',
 			[ 'moment' ],
-			'2.9.4.1',
+			'4.4.9',
+			true
+		);
+
+		wp_enqueue_script(
+			'wp-mail-smtp-chart-adapter',
+			wp_mail_smtp()->assets_url . '/js/vendor/chartjs-adapter-moment.min.js',
+			[ 'moment', 'wp-mail-smtp-chart' ],
+			'1.0.1',
 			true
 		);
 
 		wp_enqueue_script(
 			'wp-mail-smtp-dashboard-widget',
 			wp_mail_smtp()->assets_url . "/js/smtp-dashboard-widget{$min}.js",
-			[ 'jquery', 'wp-mail-smtp-chart' ],
+			[ 'jquery', 'wp-mail-smtp-chart', 'wp-mail-smtp-chart-adapter' ],
 			WPMS_PLUGIN_VER,
 			true
 		);
@@ -210,7 +218,7 @@ class DashboardWidget {
 
 		check_admin_referer( 'wp_mail_smtp_' . static::SLUG . '_nonce' );
 
-		if ( ! current_user_can( wp_mail_smtp()->get_capability_manage_options() ) ) {
+		if ( ! current_user_can( wp_mail_smtp()->get_capability_manage_global_options() ) ) {
 			wp_send_json_error();
 		}
 
@@ -328,7 +336,11 @@ class DashboardWidget {
 
 		$hide_summary_report_email_block = (bool) $this->widget_meta( 'get', 'hide_summary_report_email_block' );
 
-		if ( SummaryReportEmail::is_disabled() && ! $hide_summary_report_email_block ) {
+		if (
+			SummaryReportEmail::is_disabled() &&
+			! $hide_summary_report_email_block &&
+			current_user_can( wp_mail_smtp()->get_capability_manage_global_options() )
+		) {
 			$this->show_summary_report_email_block();
 		}
 

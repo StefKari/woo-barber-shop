@@ -11,7 +11,9 @@ class ProductsAdjustmentTotal
 {
     const AVAILABLE_DISCOUNT_TYPES = array(
         Discount::TYPE_AMOUNT,
+        Discount::TYPE_AMOUNT_PER_ITEM,
         Discount::TYPE_FIXED_VALUE,
+        Discount::TYPE_FIXED_VALUE_PER_ITEM,
         Discount::TYPE_PERCENTAGE,
     );
 

@@ -4,8 +4,8 @@ namespace ADP\BaseVersion\Includes\VolumePricingTable;
 
 use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\CartProcessor\CartBuilder;
-use ADP\BaseVersion\Includes\Compatibility\WpcBundleCmp;
 use ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Engine;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
 use ADP\BaseVersion\Includes\Core\CartCalculator;
 use ADP\BaseVersion\Includes\Core\Rule\PersistentRule;
@@ -13,9 +13,10 @@ use ADP\BaseVersion\Includes\Core\Rule\Rule;
 use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Range;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\RangeDiscount;
+use ADP\BaseVersion\Includes\Core\RuleProcessor\BulkDiscount\BulkMeasurementEnum;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\PersistentRuleProcessor;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\SingleItemRuleProcessor;
-use ADP\BaseVersion\Includes\CustomizerExtensions\CategoryBulkTableThemeProperties;
 use ADP\BaseVersion\Includes\CustomizerExtensions\CustomizerExtensions;
 use ADP\BaseVersion\Includes\CustomizerExtensions\ProductBulkTableThemeProperties;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
@@ -25,6 +26,7 @@ use ADP\BaseVersion\Includes\Database\Repository\RuleRepositoryInterface;
 use ADP\BaseVersion\Includes\Database\RulesCollection;
 use ADP\BaseVersion\Includes\Database\RuleStorage;
 use ADP\BaseVersion\Includes\Enums\RuleTypeEnum;
+use ADP\BaseVersion\Includes\PriceDisplay\ProcessedGroupedProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedProductSimple;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedVariableProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\Processor;
@@ -41,6 +43,11 @@ class RangeDiscountTable
      * @var Context
      */
     protected $context;
+
+    /**
+     * @var Engine
+     */
+    protected $engine;
 
     /**
      * @var CustomizerExtensions
@@ -73,7 +80,7 @@ class RangeDiscountTable
     protected $productContextOptions;
 
     /**
-     * @var CategoryBulkTableThemeProperties
+     * @var CategoryVolumePricingTableProperties
      */
     protected $categoryContextOptions;
 
@@ -81,16 +88,17 @@ class RangeDiscountTable
      * @param Context|CustomizerExtensions $contextOrCustomizer
      * @param null $deprecated
      */
-    public function __construct($contextOrCustomizer, $deprecated = null)
+    public function __construct($contextOrCustomizer, $customizerOrEngine, $deprecated = null)
     {
         $this->context                  = adp_context();
         $this->customizer               = $contextOrCustomizer instanceof CustomizerExtensions ? $contextOrCustomizer : $deprecated;
+        $this->engine                   = $customizerOrEngine instanceof Engine ? $customizerOrEngine : $deprecated;
         $this->ruleRepository           = new RuleRepository();
         $this->persistentRuleRepository = new PersistentRuleRepository();
         $this->filtersFormatter         = Factory::get("VolumePricingTable_FiltersFormatter", $this->context);
         $this->priceFunctions           = new PriceFunctions();
 
-        $this->productContextOptions  = new ProductBulkTableThemeProperties();
+        $this->productContextOptions  = new ProductVolumePricingTableProperties();
         $this->categoryContextOptions = new CategoryVolumePricingTableProperties();
     }
 
@@ -115,12 +123,12 @@ class RangeDiscountTable
      *
      * @return string
      */
-    public function getProductTableContent($productId = null, $attributes = array())
+    public function getProductTableContent($productId = null, $attributes = array(), $ruleId = null)
     {
         if ( ! $productId) {
             global $product;
 
-            if ( ! isset($product)) {
+            if ( ! isset($product) || ! is_object($product)) {
                 return "";
             }
 
@@ -136,43 +144,59 @@ class RangeDiscountTable
             $product = CacheHelper::getWcProduct($productId);
         }
 
-        $wpCleverBundleCmp = new WpcBundleCmp();
-        if ($wpCleverBundleCmp->isActive() && $wpCleverBundleCmp->isBundleProduct($product)) {
-            return "";
-        }
+        $tableAttr = '';
 
         if ($product instanceof \WC_Product_Variation && array_filter($attributes)) {
             $product->set_attributes(array_filter($attributes));
-        }
 
-        if ( $product->is_type( 'variable' ) ) {
-            $availableProductsIDs = array_merge( array( $product->get_id() ), $product->get_children() );
-            $content              = '<span class="wdp_bulk_table_content" ';
+            $parentProduct = wc_get_product( $product->get_parent_id() );
+
+            $availableVariationIds = $parentProduct->get_visible_children();
+
+            if (count($availableVariationIds) === 0) {
+                return '';
+            }
+
+            $availableProductsIDs = array_map(
+                'intval',
+                array_merge([$parentProduct->get_id()], $availableVariationIds)
+            );
             if ( $this->context->getOption( 'hide_parent_bulk_table' ) ) {
-                $content .= 'style="display: none" ';
+                $tableAttr .= 'style="display: none" ';
             }
-            $content .= 'data-available-ids="' . json_encode( $availableProductsIDs ) . '">';
+            $tableAttr .= 'data-available-ids="' . json_encode( $availableProductsIDs ) . '"';
+        } else if ( $product instanceof \WC_Product_Variable ) {
+            $availableVariationIds = $product->get_visible_children();
 
-            try {
-                $table = $this->getProductTable( $product );
-                if ( $table ) {
-                    $content .= $table->getHtml();
-                }
-            } catch ( Exception $exception ) {
+            if (count($availableVariationIds) === 0) {
+                return '';
             }
 
-            $content .= '</span>';
-        } else {
-            $content = '<span class="wdp_bulk_table_content"> ';
-            try {
-                $table = $this->getProductTable( $product );
-                if ( $table ) {
-                    $content .= $table->getHtml();
-                }
-            } catch ( Exception $exception ) {
+            $availableProductsIDs = array_map(
+                'intval',
+                array_merge([$product->get_id()], $availableVariationIds)
+            );
+            if ( $this->context->getOption( 'hide_parent_bulk_table' ) ) {
+                $tableAttr .= 'style="display: none" ';
             }
-            $content .= '</span>';
+            $tableAttr .= 'data-available-ids="' . json_encode( $availableProductsIDs ) . '"';
+        } else if ( $product instanceof \WC_Product_Simple ) {
+            $availableProductsIDs = array_map(
+                'intval',
+                [$product->get_id()]
+            );
+            $tableAttr .= 'data-available-ids="' . json_encode( $availableProductsIDs ) . '"';
         }
+
+        $content = '<span class="wdp_bulk_table_content" ' . $tableAttr . '> ';
+        try {
+            $table = $this->getProductTable( $product, $ruleId );
+            if ( $table ) {
+                $content .= $table->getHtml();
+            }
+        } catch ( Exception $exception ) {
+        }
+        $content .= '</span>';
 
         return $content;
     }
@@ -208,70 +232,50 @@ class RangeDiscountTable
      */
     public function findRuleForProductTable($product)
     {
-        if ( ! $product || ! ($product instanceof WC_Product)) {
+        if ( ! $product || ! ($product instanceof WC_Product) || $product instanceof \WC_Product_Grouped) {
             return null;
         }
 
-        $context = $this->context;
-        $cartBuilder = new CartBuilder($context);
-        $cart        = $cartBuilder->create(WC()->customer, WC()->session);
-        $cartBuilder->populateCart($cart, WC()->cart);
+        static $cachedProductId = 0, $cachedRule = null;
+        if($cachedProductId && $cachedProductId == $product->get_id()) {
+            return $cachedRule;
+        }
+        $cachedProductId  = $product->get_id();
 
-        $rule = $this->findProductOnlyRule($cart, $product);
+        $context          = $this->context;
+        $productProcessor = $this->getProductProcessor();
+        $rule             = null;
 
-        if (! $rule) {
-            /** @var SingleItemRuleProcessor[] $ruleProcessors */
-            $ruleProcessors = array();
-            foreach (CacheHelper::loadActiveRules($context)->getRules() as $tmpRule) {
-                // discount table only for 'SingleItem' rule
-                if ($tmpRule instanceof SingleItemRule && $tmpRule->getProductRangeAdjustmentHandler()) {
-                    $ruleProcessors[] = $tmpRule->buildProcessor($context);
-                }
-            }
+        if ($tmpProduct = CacheHelper::getWcProduct($product->get_id())) {
+            $tmpProduct->set_props($product->get_changes());
 
-            $matchedRuleProcessor = null;
-            if ($product->get_children()) {
-                $availableProductsIDs = array_merge(array($product->get_id()), $product->get_children());
-
-                foreach ($availableProductsIDs as $tmpProductId) {
-                    $tmpProduct = CacheHelper::getWcProduct($tmpProductId);
-                    if ( ! $tmpProduct) {
-                        continue;
-                    }
-
-                    foreach ($ruleProcessors as $ruleProcessor) {
-                        if ($ruleProcessor->isProductMatched($cart, $tmpProduct,
-                            ! $context->getOption('discount_table_ignores_conditions'))) {
-                            $matchedRuleProcessor = $ruleProcessor;
-                            break;
-                        }
-                    }
-                }
-            } else {
-                if ($tmpProduct = CacheHelper::getWcProduct($product->get_id())) {
-                    $tmpProduct->set_props($product->get_changes());
-
-                    foreach ($ruleProcessors as $ruleProcessor) {
-                        if ($ruleProcessor->isProductMatched($cart, $tmpProduct,
-                            ! $context->getOption('discount_table_ignores_conditions'))) {
-                            $matchedRuleProcessor = $ruleProcessor;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if ( ! $matchedRuleProcessor) {
+            $processedProduct = $productProcessor->calculateProduct($tmpProduct);
+            if(!$processedProduct) {
                 return null;
             }
 
-            $rule = clone $matchedRuleProcessor->getRule();
+            $childrens = $processedProduct instanceof ProcessedProductSimple ? [$processedProduct] : $processedProduct->getChildren();
+
+            foreach($childrens as $productSimple) {
+                $history = $productSimple->getHistory();
+                $rules = CacheHelper::loadRules(array_keys($history), $context);
+
+                foreach ($history as $ruleId => $value) {
+                    $tmpRule = $rules[$ruleId];
+
+                    // discount table only for 'SingleItem' rule
+                    if($tmpRule instanceof SingleItemRule && $tmpRule->getProductRangeAdjustmentHandler()) {
+                        $rule = clone $tmpRule;
+                        break 2;
+                    }
+                }
+            }
         }
 
-        if ($context->getOption('discount_table_ignores_conditions')) {
-            $rule->setConditions(array());
+        if( ! $rule ) {
+            $cachedRule = null;
+            return null;
         }
-
 
         if ($this->context->isShowBulkTablePricesIncludingCoupons()) {
             //turn OFF checkbox "Don't modify product prices and show discount as coupon"
@@ -279,67 +283,39 @@ class RangeDiscountTable
             $rule->getProductRangeAdjustmentHandler()->setReplaceAsCartAdjustment(false);
         }
 
+        $cachedRule = $rule;
         return $rule;
     }
 
-    /**
-     * @param Cart $cart
-     * @param WC_Product $product
-     * @return Rule|null
-     */
-    protected function findProductOnlyRule($cart, $product)
+    public function getProductProcessor()
     {
-        $context = $this->context;
-        $rule = null;
-
-        if ($product->get_children() && $this->context->isCheckParentsWhenFindingProductOnlyRule()) {
-            $availableProductsIDs = array_merge(array($product->get_id()), $product->get_children());
-
-            foreach ($availableProductsIDs as $tmpProductId) {
-                $tmpProduct = CacheHelper::getWcProduct($tmpProductId);
-                if (!$tmpProduct) {
-                    continue;
-                }
-
-                $objects = $this->persistentRuleRepository->getCacheWithProduct($tmpProduct);
-
-                foreach ($objects as $object) {
-                    if ($object && $object->rule && $object->price !== null && $object->rule->getProductRangeAdjustmentHandler(
-                        )) {
-                        $matchedRuleProcessor = $object->rule->buildProcessor($context);
-                        if ($matchedRuleProcessor->isRuleOptionalMatchedCart(
-                            $cart,
-                            true,
-                            !$context->getOption('discount_table_ignores_conditions')
-                        )
-                        ) {
-                            $rule = $object->rule;
-                            break 2;
-                        }
-                    }
-                }
+        $ignoresConditions = $this->context->getOption('discount_table_ignores_conditions');
+        $newRules = array();
+        foreach (CacheHelper::loadActiveRules()->getRules() as $loopRule) {
+            $newLoopRule = clone $loopRule;
+            if($ignoresConditions) {
+                $newLoopRule->setConditions(array());
             }
-        } else {
-            $objects = $this->persistentRuleRepository->getCacheWithProduct($product);
 
-            foreach ($objects as $object) {
-                if ($object && $object->rule && $object->price !== null && $object->rule->getProductRangeAdjustmentHandler(
-                    )) {
-                    $matchedRuleProcessor = $object->rule->buildProcessor($context);
-                    if ($matchedRuleProcessor->isRuleOptionalMatchedCart(
-                        $cart,
-                        true,
-                        !$context->getOption('discount_table_ignores_conditions')
-                    )
-                    ) {
-                        $rule = $object->rule;
-                        break;
-                    }
-                }
+            if($handler = $newLoopRule->getProductRangeAdjustmentHandler()) {
+                $ranges       = $handler->getRanges();
+                $lastRange    = array_pop($ranges);
+                $newLastRange = new RangeDiscount($lastRange->getFrom(), INF, $lastRange->getData());
+                array_push($ranges, $newLastRange);
+                $handler->setRanges($ranges);
             }
+
+            $newRules[] = $newLoopRule;
         }
 
-        return $rule;
+        /** @var CartCalculator $calc */
+        $calc = Factory::get("Core_CartCalculator", new RulesCollection($newRules));
+
+        $productProcessor = new Processor($calc);
+        $cart = clone $this->engine->getProductProcessor()->getCart();
+        $productProcessor->withCart($cart);
+
+        return $productProcessor;
     }
 
     /**
@@ -351,34 +327,73 @@ class RangeDiscountTable
     {
         $context     = $this->context;
         $cartBuilder = new CartBuilder($context);
+        $cart        = $cartBuilder->create(WC()->customer, WC()->session);
 
         $bulk_table_calculation_mode = $context->getOption('bulk_table_calculation_mode');
 
+        $newRules = [];
         if ($bulk_table_calculation_mode === 'only_bulk_rule_table') {
-            /** @var CartCalculator $calc */
-            $calc           = Factory::get("Core_CartCalculator", new RulesCollection(array($rule)));
-            $priceProcessor = new Processor($calc);
+            $newRule = clone $rule;
+            $newRule->setConditions(array());
+            $newRules[] = $newRule;
         } elseif ($bulk_table_calculation_mode === 'all') {
-            if ( ! $context->getOption('discount_table_ignores_conditions')) {
-                $priceProcessor = new Processor();
-            } else {
-                $newRules = array();
-                foreach (CacheHelper::loadActiveRules()->getRules() as $loopRule) {
-                    $newLoopRule = clone $loopRule;
-                    $newLoopRule->setConditions(array());
-                    $newRules[] = $newLoopRule;
-                }
-
-                /** @var CartCalculator $calc */
-                $calc = Factory::get("Core_CartCalculator", new RulesCollection($newRules));
-
-                $priceProcessor = new Processor($calc);
+            foreach (CacheHelper::loadActiveRules()->getRules() as $loopRule) {
+                $newLoopRule = clone $loopRule;
+                $newLoopRule->setConditions(array());
+                $newRules[] = $newLoopRule;
             }
         } else {
             return null;
         }
 
-        $priceProcessor->withCart($cartBuilder->create(WC()->customer, WC()->session));
+        /** @var CartCalculator $calc */
+        $calc           = Factory::get("Core_CartCalculator", new RulesCollection($newRules));
+        $priceProcessor = new Processor($calc);
+
+        $priceProcessor->withCart($cart);
+
+        return $priceProcessor;
+    }
+
+    /**
+     * @param SingleItemRule $rule
+     *
+     * @return Processor|null
+     */
+    public function makePriceProcessorWithoutBulk($rule)
+    {
+        $context     = $this->context;
+        $cartBuilder = new CartBuilder($context);
+        $cart        = $cartBuilder->create(WC()->customer, WC()->session);
+
+        $bulk_table_calculation_mode = $context->getOption('bulk_table_calculation_mode');
+
+        $newRules = [];
+        if ($bulk_table_calculation_mode === 'only_bulk_rule_table') {
+            $newRule = clone $rule;
+            $newRule->setConditions(array());
+            if ($newRule->getProductRangeAdjustmentHandler()) {
+                $newRule->installProductRangeAdjustmentHandler($newRule->getProductRangeAdjustmentHandler()->setRanges(array()));
+            }
+            $newRules[] = $newRule;
+        } elseif ($bulk_table_calculation_mode === 'all') {
+            foreach (CacheHelper::loadActiveRules()->getRules() as $loopRule) {
+                $newLoopRule = clone $loopRule;
+                $newLoopRule->setConditions(array());
+                if ($newLoopRule instanceof SingleItemRule && $newLoopRule->getProductRangeAdjustmentHandler()) {
+                    $newLoopRule->installProductRangeAdjustmentHandler($newLoopRule->getProductRangeAdjustmentHandler()->setRanges(array()));
+                }
+                $newRules[] = $newLoopRule;
+            }
+        } else {
+            return null;
+        }
+
+        /** @var CartCalculator $calc */
+        $calc           = Factory::get("Core_CartCalculator", new RulesCollection($newRules));
+        $priceProcessor = new Processor($calc);
+
+        $priceProcessor->withCart($cart);
 
         return $priceProcessor;
     }
@@ -408,23 +423,42 @@ class RangeDiscountTable
     }
 
     /**
+     * Apply properties from external source which override theme options e.g. shortcode
+     *
+     * @param ProductVolumePricingTableProperties $contextOptions
+     * @return ProductVolumePricingTableProperties
+     */
+    protected function applyCurrentProductTableProperties($contextOptions)
+    {
+        foreach ($this->productContextOptions as $optionKey => $optionValue) {
+            if ($optionValue !== null) {
+                $contextOptions->$optionKey = $optionValue;
+            }
+        }
+
+        return $contextOptions;
+    }
+
+    /**
      * @param WC_Product $product
      *
      * @return Table|null
      * @throws Exception
      */
-    public function getProductTable($product)
+    public function getProductTable($product, $ruleId = null)
     {
         $contextOptions = $this->buildProductContextOptions();
-        foreach (get_object_vars($this->productContextOptions) as $key => $value) {
-            if ($value !== null) {
-                $contextOptions->$key = $value;
-            }
-        }
+        $contextOptions = $this->applyCurrentProductTableProperties($contextOptions);
 
         $context = $this->context;
 
-        $rule = $this->findRuleForProductTable($product);
+        if(!is_null($ruleId)) {
+            $rules = CacheHelper::loadRules([$ruleId], $context);
+            $rule = reset($rules);
+        } else {
+            $rule = $this->findRuleForProductTable($product);
+        }
+
         if ( ! $rule) {
             return null;
         }
@@ -435,6 +469,8 @@ class RangeDiscountTable
         }
 
         $table = new Table($context);
+        $table->setMeasurement($rule->getProductRangeAdjustmentHandler()->getMeasurement());
+        $table->setLayout($contextOptions->tableLayout);
 
         $handler = $rule->getProductRangeAdjustmentHandler();
         if ( ! $handler) {
@@ -444,8 +480,8 @@ class RangeDiscountTable
         /** HEADER */
         $headerTitle = '';
         if ($contextOptions->isUseMessageAsTitle) {
-            $headerTitle = __(
-                apply_filters('wdp_format_bulk_table_message', $handler->getPromotionalMessage()),
+            //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+            $headerTitle = __( apply_filters('wdp_format_bulk_table_message', $handler->getPromotionalMessage()),
                 'advanced-dynamic-pricing-for-woocommerce'
             );
         } elseif ($handler::TYPE_BULK === $handler->getType()) {
@@ -467,19 +503,30 @@ class RangeDiscountTable
                 $table->addColumn($key, $title);
             }
 
+
+            if ($rule->getProductRangeAdjustmentHandler()->getMeasurement()->equals(BulkMeasurementEnum::SUM())) {
+                $priceProcessorWithoutBulk = $this->makePriceProcessorWithoutBulk($rule);
+                $processedProductWithoutBulk = $priceProcessorWithoutBulk->calculateProduct($product);
+            }
+
             /** ROWS */
             foreach ($ranges as $range) {
                 $row = array();
+                $dataRow = [];
                 foreach (array_keys($columns) as $key) {
                     $value     = $this->calculateColumnValueForProductVerboseTable(
                         $key,
                         $range,
                         $priceProcessor,
-                        $product
+                        $product,
+                        $rule,
+                        $dataRow,
+                        $processedProductWithoutBulk ?? null
                     );
                     $row[$key] = ! is_null($value) ? $value : "-";
                 }
                 $table->addRow($row);
+                $table->addDataRow($dataRow);
             }
         }
 
@@ -508,31 +555,38 @@ class RangeDiscountTable
         /** COLUMNS */
         $columns = array();
         foreach ($ranges as $index => $range) {
-            if ($range->getFrom() == $range->getTo()) {
-                $value = $range->getFrom();
-            } else {
-                if (is_infinite($range->getTo())) {
-                    $value = $range->getFrom() . ' +';
-                } else {
-                    $value = $range->getFrom() . ' - ' . $range->getTo();
-                }
-            }
+            $value = $this->formatRangeValueDependsOnMeasurement(
+                $range,
+                $rule->getProductRangeAdjustmentHandler()->getMeasurement()
+            );
 
-            $table->addColumn($index, apply_filters('adp_simple_discount_product_table_column', $value, $range));
+            $table->addColumn(
+                $index,
+                apply_filters('adp_simple_discount_product_table_column', $value, $range, $rule)
+            );
             $columns[] = $range;
         }
 
         /**ROWS */
         $row = array();
+        $dataRows = array();
         foreach (array_keys($columns) as $index) {
             $range    = $ranges[$index];
             $discount = $range->getData();
 
-            $processedProd = $priceProcessor->calculateProduct($product, $range->getFrom());
+            $dataRows['range'][$index] = [
+                'from' => $range->getFrom(),
+                'to' => $range->getTo(),
+            ];
+            $dataRows['measurement'][$index] = $rule->getProductRangeAdjustmentHandler()->getMeasurement()->getValue();
+            $dataRows['discount_type'][$index] = $discount->getType();
+            $dataRows['discount_value'][$index] = $discount->getValue();
+
+            $processedProd = $this->calculateProductDependsOnMeasurement($rule, $range, $priceProcessor, $product);
 
             $value = null;
             if ( ! is_null($processedProd)) {
-                if ($processedProd instanceof ProcessedVariableProduct) {
+                if ($processedProd instanceof ProcessedVariableProduct || $processedProd instanceof ProcessedGroupedProduct) {
                     $lowestPriceProduct  = $processedProd->getLowestPriceProduct();
                     $highestPriceProduct = $processedProd->getHighestPriceProduct();
 
@@ -547,13 +601,23 @@ class RangeDiscountTable
                             $highestPriceProduct,
                             $highestPriceProduct->getPrice($range->getFrom())
                         );
+
+                        $dataRows['discounted_price'][$index] = [
+                            'lowestPrice' => $lowestPriceToDisplay,
+                            'highestPrice' => $highestPriceToDisplay
+                        ];
+
                         if (
                             $discount->getType() === $discount::TYPE_PERCENTAGE
                             && $contextOptions->isSimpleLayoutForcePercentage
                         ) {
                             $value = "{$discount->getValue()}%";
-                        } elseif ($lowestPriceToDisplay === $highestPriceToDisplay) {
+                        } elseif ($contextOptions->isShowDiscountedPrice && $lowestPriceToDisplay === $highestPriceToDisplay) {
                             $value = $this->priceFunctions->format($lowestPriceToDisplay);
+                        } elseif ($this->context->isShowPriceRangeInBulkTableForVariableProducts()) {
+                            $value = $this->priceFunctions->format($lowestPriceToDisplay) . "-" . $this->priceFunctions->format($highestPriceToDisplay);
+                        } else {
+                            $value = null;
                         }
                     }
                 } elseif ($processedProd instanceof ProcessedProductSimple) {
@@ -562,11 +626,12 @@ class RangeDiscountTable
                         && $contextOptions->isSimpleLayoutForcePercentage
                     ) {
                         $value = "{$discount->getValue()}%";
-                    } else {
+                    } elseif ( $contextOptions->isShowDiscountedPrice ) {
                         $priceToDisplay = $this->priceFunctions->getProcProductPriceToDisplay(
                             $processedProd,
                             $processedProd->getPrice($range->getFrom())
                         );
+                        $dataRows['discounted_price'][$index] = $priceToDisplay;
                         $value          = $this->priceFunctions->format($priceToDisplay);
                     }
                 }
@@ -596,6 +661,10 @@ class RangeDiscountTable
             $row[$index] = $value;
         }
 
+        foreach($dataRows as $key => $dataRow) {
+            $table->addDataRow($dataRow, $key);
+        }
+
         $table->addRow($row);
     }
 
@@ -607,27 +676,24 @@ class RangeDiscountTable
      */
     protected function createColumnsForProductVerboseTable($contextOptions, $rule)
     {
-        $ranges         = $rule->getProductRangeAdjustmentHandler()->getRanges();
+        $handler        = $rule->getProductRangeAdjustmentHandler();
+        $ranges         = $handler->getRanges();
         $columns        = array();
 
-        $columns['qty'] = _x(
-            $contextOptions->quantityColumnTitle,
-            'product bulk table qty column title',
-            'advanced-dynamic-pricing-for-woocommerce'
-        );
+        $columns = $this->fillColumnTitles($columns, $contextOptions, $rule);
 
         $isFixedDiscount = false;
         foreach ($ranges as $index => $range) {
             /** @var Discount $discount */
             $discount = $range->getData();
-            if ($discount->getType() === $discount::TYPE_FIXED_VALUE) {
+            if ($discount->getType() === $discount::TYPE_FIXED_VALUE || $discount->getType() === $discount::TYPE_EXPRESSION_PRICE) {
                 $isFixedDiscount = true;
             }
         }
 
         if ( ! $isFixedDiscount && $contextOptions->isShowDiscountedPrice) {
-            $columns['discount_value'] = _x(
-                $contextOptions->discountColumnTitle,
+            //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+            $columns['discount_value'] = _x( $contextOptions->discountColumnTitle,
                 'product bulk table discount value column title',
                 'advanced-dynamic-pricing-for-woocommerce'
             );
@@ -636,14 +702,14 @@ class RangeDiscountTable
 
         if ($contextOptions->isShowFixedDiscountColumn) {
             if ($isFixedDiscount) {
-                $columns['discounted_price'] = _x(
-                    $contextOptions->discountedPriceColumnTitleForFixedPriceRule,
+                //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                $columns['discounted_price'] = _x( $contextOptions->discountedPriceColumnTitleForFixedPriceRule,
                     'product bulk table discounted price column title for fixed discount',
                     'advanced-dynamic-pricing-for-woocommerce'
                 );
             } else {
-                $columns['discounted_price'] = _x(
-                    $contextOptions->discountedPriceColumnTitle,
+                //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                $columns['discounted_price'] = _x( $contextOptions->discountedPriceColumnTitle,
                     'product bulk table discounted price column title',
                     'advanced-dynamic-pricing-for-woocommerce'
                 );
@@ -654,10 +720,33 @@ class RangeDiscountTable
     }
 
     /**
+     * @param $columns
+     * @param ProductVolumePricingTableProperties $contextOptions
+     * @param SingleItemRule $rule
+     *
+     * @return array
+     */
+    protected function fillColumnTitles($columns, $contextOptions, $rule)
+    {
+        $handler = $rule->getProductRangeAdjustmentHandler();
+
+        if ($handler->getMeasurement()->equals(BulkMeasurementEnum::QTY())) {
+            //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+            $columns['qty'] = _x( $contextOptions->quantityColumnTitle,
+                'product bulk table qty column title',
+                'advanced-dynamic-pricing-for-woocommerce'
+            );
+        }
+
+        return $columns;
+    }
+
+    /**
      * @param string $key
      * @param Range $range
      * @param Processor $priceProcessor
      * @param \WC_Product $product
+     * @param SingleItemRule $rule
      *
      * @return string|null
      */
@@ -665,25 +754,60 @@ class RangeDiscountTable
         $key,
         $range,
         $priceProcessor,
-        $product
+        $product,
+        $rule,
+        &$dataRow,
+        $processedProductWithoutBulk = null
     ) {
         $value    = null;
         $discount = $range->getData();
 
         switch ($key) {
             case 'qty':
-                if ($range->getFrom() == $range->getTo()) {
-                    $value = $range->getFrom();
-                } else {
-                    if (is_infinite($range->getTo())) {
-                        $value = $range->getFrom() . ' +';
-                    } else {
-                        $value = $range->getFrom() . ' - ' . $range->getTo();
-                    }
-                }
+                $value = $this->formatRangeValueDependsOnMeasurement($range, BulkMeasurementEnum::QTY());
 
                 $value = apply_filters('adp_verbose_discount_product_table_cell_qty', $value, $range, $product,
                     $priceProcessor);
+
+                $dataRow['range'] = [
+                    'from' => $range->getFrom(),
+                    'to' => $range->getTo()
+                ];
+                $dataRow['measurement'] = $key;
+                break;
+            case 'sum':
+                $value = $this->formatRangeValueDependsOnMeasurement($range, BulkMeasurementEnum::SUM());
+
+                $value = apply_filters(
+                    'adp_verbose_discount_product_table_cell_sum',
+                    $value,
+                    $range,
+                    $product,
+                    $priceProcessor
+                );
+
+                $dataRow['range'] = [
+                    'from' => $range->getFrom(),
+                    'to' => $range->getTo()
+                ];
+                $dataRow['measurement'] = $key;
+                break;
+            case 'weight':
+                $value = $this->formatRangeValueDependsOnMeasurement($range, BulkMeasurementEnum::WEIGHT());
+
+                $value = apply_filters(
+                    'adp_verbose_discount_product_table_cell_weight',
+                    $value,
+                    $range,
+                    $product,
+                    $priceProcessor
+                );
+
+                $dataRow['range'] = [
+                    'from' => $range->getFrom(),
+                    'to' => $range->getTo(),
+                ];
+                $dataRow['measurement'] = $key;
                 break;
             case 'discount_value':
                 if ($discount->getValue()) {
@@ -696,13 +820,20 @@ class RangeDiscountTable
 
                 $value = apply_filters('adp_verbose_discount_product_table_cell_discount_value', $value, $range,
                     $product, $priceProcessor);
+
+                $dataRow = array_merge($dataRow, [
+                    'discount_type' => $discount->getType(),
+                    'discount_value' => $discount->getValue(),
+                ]);
                 break;
             case 'discounted_price':
-                $processedProd = $priceProcessor->calculateProduct($product, $range->getFrom());
+                $processedProd = $this->calculateProductDependsOnMeasurement($rule, $range, $priceProcessor, $product, $processedProductWithoutBulk);
+                $from = $processedProd->getQty();
+
                 $price         = null;
 
                 if ( ! is_null($processedProd)) {
-                    if ($processedProd instanceof ProcessedVariableProduct) {
+                    if ($processedProd instanceof ProcessedVariableProduct || $processedProd instanceof ProcessedGroupedProduct) {
                         $lowestPriceProduct  = $processedProd->getLowestPriceProduct();
                         $highestPriceProduct = $processedProd->getHighestPriceProduct();
 
@@ -713,7 +844,7 @@ class RangeDiscountTable
                                 $lowestPriceToDisplay = $this->priceFunctions->getPriceIncludingTax(
                                     $lowestPriceProduct->getProduct(),
                                     array(
-                                        'price' => $lowestPriceProduct->getPrice($range->getFrom()),
+                                        'price' => $lowestPriceProduct->getPrice($from),
                                         'qty'   => 1,
                                     )
                                 );
@@ -721,7 +852,7 @@ class RangeDiscountTable
                                 $highestPriceToDisplay = $this->priceFunctions->getPriceIncludingTax(
                                     $highestPriceProduct->getProduct(),
                                     array(
-                                        'price' => $highestPriceProduct->getPrice($range->getFrom()),
+                                        'price' => $highestPriceProduct->getPrice($from),
                                         'qty'   => 1,
                                     )
                                 );
@@ -729,7 +860,7 @@ class RangeDiscountTable
                                 $lowestPriceToDisplay = $this->priceFunctions->getPriceExcludingTax(
                                     $lowestPriceProduct->getProduct(),
                                     array(
-                                        'price' => $lowestPriceProduct->getPrice($range->getFrom()),
+                                        'price' => $lowestPriceProduct->getPrice($from),
                                         'qty'   => 1,
                                     )
                                 );
@@ -737,24 +868,31 @@ class RangeDiscountTable
                                 $highestPriceToDisplay = $this->priceFunctions->getPriceExcludingTax(
                                     $highestPriceProduct->getProduct(),
                                     array(
-                                        'price' => $highestPriceProduct->getPrice($range->getFrom()),
+                                        'price' => $highestPriceProduct->getPrice($from),
                                         'qty'   => 1,
                                     )
                                 );
                             } else {
                                 $lowestPriceToDisplay  = $this->priceFunctions->getProcProductPriceToDisplay(
                                     $lowestPriceProduct,
-                                    $lowestPriceProduct->getPrice($range->getFrom())
+                                    $lowestPriceProduct->getPrice($from)
                                 );
                                 $highestPriceToDisplay = $this->priceFunctions->getProcProductPriceToDisplay(
                                     $highestPriceProduct,
-                                    $highestPriceProduct->getPrice($range->getFrom())
+                                    $highestPriceProduct->getPrice($from)
                                 );
                             }
 
                             if ($lowestPriceToDisplay === $highestPriceToDisplay) {
                                 $price = $lowestPriceToDisplay;
                                 $value = $this->priceFunctions->format($lowestPriceToDisplay);
+                                $dataRow['discounted_price'] = $price;
+                            } elseif ($this->context->isShowPriceRangeInBulkTableForVariableProducts()) {
+                                $value = $this->priceFunctions->format($lowestPriceToDisplay) . "-" . $this->priceFunctions->format($highestPriceToDisplay);
+                                $dataRow['discounted_price'] = [
+                                    'lowestPrice' => $lowestPriceToDisplay,
+                                    'highestPrice' => $highestPriceToDisplay,
+                                ];
                             }
                         }
                     } elseif ($processedProd instanceof ProcessedProductSimple) {
@@ -762,7 +900,7 @@ class RangeDiscountTable
                             $priceToDisplay = $this->priceFunctions->getPriceIncludingTax(
                                 $processedProd->getProduct(),
                                 array(
-                                    'price' => $processedProd->getPrice($range->getFrom()),
+                                    'price' => $processedProd->getPrice($from),
                                     'qty'   => 1,
                                 )
                             );
@@ -770,19 +908,20 @@ class RangeDiscountTable
                             $priceToDisplay = $this->priceFunctions->getPriceExcludingTax(
                                 $processedProd->getProduct(),
                                 array(
-                                    'price' => $processedProd->getPrice($range->getFrom()),
+                                    'price' => $processedProd->getPrice($from),
                                     'qty'   => 1,
                                 )
                             );
                         } else {
                             $priceToDisplay = $this->priceFunctions->getProcProductPriceToDisplay(
                                 $processedProd,
-                                $processedProd->getPrice($range->getFrom())
+                                $processedProd->getPrice($from)
                             );
                         }
 
                         $price = $priceToDisplay;
-                        $value = $this->priceFunctions->format($priceToDisplay);
+                        $value = $this->priceFunctions->format($price);
+                        $dataRow['discounted_price'] = $price;
                     }
                 }
 
@@ -792,7 +931,8 @@ class RangeDiscountTable
                     $price,
                     $range,
                     $product,
-                    $priceProcessor
+                    $priceProcessor,
+                    $processedProd
                 );
                 break;
         }
@@ -899,6 +1039,23 @@ class RangeDiscountTable
     }
 
     /**
+     * Apply properties from external source which override theme options e.g. shortcode
+     *
+     * @param CategoryVolumePricingTableProperties $contextOptions
+     * @return CategoryVolumePricingTableProperties
+     */
+    protected function applyCurrentCatalogTableProperties($contextOptions)
+    {
+        foreach ($this->categoryContextOptions as $optionKey => $optionValue) {
+            if ($optionValue !== null) {
+                $contextOptions->$optionKey = $optionValue;
+            }
+        }
+
+        return $contextOptions;
+    }
+
+    /**
      * @param int|null $termId
      *
      * @return Table|null
@@ -913,18 +1070,13 @@ class RangeDiscountTable
                     $termId = $wp_query->queried_object->term_id;
                 }
             }
-
             if ( ! $termId) {
                 return null;
             }
         }
 
         $contextOptions = $this->buildCategoryContextOptions();
-        foreach (get_object_vars($this->categoryContextOptions) as $key => $value) {
-            if ($value !== null) {
-                $contextOptions->$key = $value;
-            }
-        }
+        $contextOptions = $this->applyCurrentCatalogTableProperties($contextOptions);
 
         $context      = $this->context;
 
@@ -941,8 +1093,8 @@ class RangeDiscountTable
         /** HEADER */
         $headerTitle = '';
         if ($contextOptions->isUseMessageAsTitle) {
-            $headerTitle = __(
-                apply_filters('wdp_format_bulk_table_message', $handler->getPromotionalMessage()),
+            //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+            $headerTitle = __( apply_filters('wdp_format_bulk_table_message', $handler->getPromotionalMessage()),
                 'advanced-dynamic-pricing-for-woocommerce'
             );
         } elseif ($handler::TYPE_BULK === $handler->getType()) {
@@ -955,7 +1107,7 @@ class RangeDiscountTable
         /** COLUMNS AND ROWS */
         $ranges = $rule->getProductRangeAdjustmentHandler()->getRanges();
         if ($contextOptions->tableLayout === $contextOptions::LAYOUT_SIMPLE) {
-            return null;
+            $this->fillSimpleCategoryTable($table, $contextOptions, $rule);
         } elseif ($contextOptions->tableLayout === $contextOptions::LAYOUT_VERBOSE) {
             /** COLUMNS */
             $columns = $this->createColumnsForCategoryVerboseTable($contextOptions, $rule);
@@ -971,6 +1123,16 @@ class RangeDiscountTable
                     $row[$key] = ! is_null($value) ? $value : "-";
                 }
 
+
+                $table->addDataRow([
+                    'range' => [
+                        'from'           => $range->getFrom(),
+                        'to'             => $range->getTo(),
+                    ],
+                    'discount_type'  => $range->getData()->getType(),
+                    'discount_value' => $range->getData()->getValue(),
+                    'measurement'    => $handler->getMeasurement()->getValue(),
+                ]);
                 $table->addRow($row);
             }
         }
@@ -980,6 +1142,70 @@ class RangeDiscountTable
 
 
         return $table;
+    }
+
+    /**
+    * @param Table $table
+    * @param CategoryVolumePricingTableProperties $contextOptions
+    * @param SingleItemRule $rule
+    */
+    protected function fillSimpleCategoryTable(
+        $table,
+        $contextOptions,
+        $rule
+    ) {
+        $ranges = $rule->getProductRangeAdjustmentHandler()->getRanges();
+
+        /** COLUMNS */
+        $columns = array();
+        foreach ($ranges as $index => $range) {
+             if ($range->getFrom() == $range->getTo()) {
+                $value = $range->getFrom();
+            } else {
+                if (is_infinite($range->getTo())) {
+                    $value = $range->getFrom() . ' +';
+                } else {
+                    $value = $range->getFrom() . ' - ' . $range->getTo();
+                }
+            }
+
+            $table->addColumn($index, apply_filters('adp_simple_discount_category_table_cell_qty', $value, $range));
+            $columns[] = $range;
+        }
+
+        /**ROWS */
+        $row = array();
+        $dataRows = array();
+        foreach (array_keys($columns) as $index) {
+            $range    = $ranges[$index];
+            $discount = $range->getData();
+
+            $value = null;
+            if ($discount->getValue()) {
+                if ($discount::TYPE_PERCENTAGE === $discount->getType()) {
+                    $value = "{$discount->getValue()}%";
+                } else {
+                    $value = $this->priceFunctions->format($discount->getValue());
+                }
+            }
+
+            $value = apply_filters('adp_simple_discount_category_table_cell_discount_value', $value, $range);
+
+            $row[$index] = $value;
+            $dataRows['range'][$index] = [
+                'from' => $range->getFrom(),
+                'to'   => $range->getTo(),
+            ];
+            $dataRows['discount_type'][$index]  = $discount->getType();
+            $dataRows['discount_value'][$index] = $discount->getValue();
+            $dataRows['measurement'][$index] = $rule->getProductRangeAdjustmentHandler()->getMeasurement()->getValue();
+        }
+
+        foreach($dataRows as $key => $dataRow) {
+            $table->addDataRow($dataRow, $key);
+        }
+
+        $table->addRow($row);
     }
 
     /**
@@ -1005,14 +1231,14 @@ class RangeDiscountTable
 
         if ($contextOptions->isShowFixedDiscountColumn) {
             if ($isFixedDiscount) {
-                $columns['discount_value'] = _x(
-                    $contextOptions->discountColumnTitleForFixedPriceRule,
+                //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                $columns['discount_value'] = _x( $contextOptions->discountColumnTitleForFixedPriceRule,
                     'category bulk table discount value column title',
                     'advanced-dynamic-pricing-for-woocommerce'
                 );
             } else {
-                $columns['discount_value'] = _x(
-                    $contextOptions->discountColumnTitle,
+                //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                $columns['discount_value'] = _x( $contextOptions->discountColumnTitle,
                     'category bulk table discount value column title',
                     'advanced-dynamic-pricing-for-woocommerce'
                 );
@@ -1095,23 +1321,118 @@ class RangeDiscountTable
         if ($isShowFooter) {
             if ($rule->getProductRangeAdjustmentHandler()->getPromotionalMessage()) {
                 if ( ! $themeOptions->isUseMessageAsTitle) {
-                    $footerText = "<p>" . $rule->getProductRangeAdjustmentHandler()->getPromotionalMessage() . "</p>";
-                }
-            } else {
-                $footerText       = '';
-                $humanizedFilters = $this->filtersFormatter->formatRule($rule);
-                if ($humanizedFilters) {
-                    $footerText = "<div>" . __('Bulk pricing will be applied to package:',
-                            'advanced-dynamic-pricing-for-woocommerce') . "</div>";
-                    $footerText .= "<ul>";
-                    foreach ($humanizedFilters as $filterText) {
-                        $footerText .= "<li>" . $filterText . "</li>";
-                    }
-                    $footerText .= "</ul>";
+                    //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                    $footerText = "<p>" . _x($rule->getProductRangeAdjustmentHandler()->getPromotionalMessage(),
+                            "Bulk table promotional message",
+                            'advanced-dynamic-pricing-for-woocommerce') . "</p>";
                 }
             }
         }
 
         $table->setTableFooter($footerText);
+    }
+
+    /**
+     * @param RangeDiscount $range
+     * @param BulkMeasurementEnum $measurement
+     * @return string
+     */
+    public function formatRangeValueDependsOnMeasurement(RangeDiscount $range, BulkMeasurementEnum $measurement)
+    {
+        $formatValueCallback = self::makeFormatValueCallback(
+            $this->priceFunctions,
+            $this->context,
+            $measurement
+        );
+
+        if ($range->getFrom() == $range->getTo()) {
+            $formattedValue = $formatValueCallback($range->getFrom());
+        } else {
+            if (is_infinite($range->getTo())) {
+                $formattedValue = $formatValueCallback($range->getFrom()) . ' +';
+            } else {
+                $formattedValue = $formatValueCallback($range->getFrom()) . ' - ' . $formatValueCallback($range->getTo());
+            }
+        }
+
+        return $formattedValue;
+    }
+
+    public static function makeFormatValueCallback(
+        PriceFunctions $priceFunctions,
+        Context $context,
+        BulkMeasurementEnum $measurement
+    ): \Closure {
+        if ($measurement->equals(BulkMeasurementEnum::WEIGHT())) {
+            $formatValueCallback = function ($rangeValue) {
+                return wc_format_weight($rangeValue);
+            };
+        } else {
+            if ($measurement->equals(BulkMeasurementEnum::SUM())) {
+                $formatValueCallback = function ($rangeValue) use ($priceFunctions, $context) {
+                    return $priceFunctions->format($rangeValue * $context->currencyController->getRate());
+                };
+            } else {
+                if ($measurement->equals(BulkMeasurementEnum::QTY())) {
+                    $formatValueCallback = function ($rangeValue) {
+                        return $rangeValue;
+                    };
+                } else {
+                    $formatValueCallback = function ($rangeValue) {
+                        return $rangeValue;
+                    };
+                }
+            }
+        }
+
+        return $formatValueCallback;
+    }
+
+    /**
+     * @param SingleItemRule $rule
+     * @param Range $range
+     * @param Processor $priceProcessor
+     * @param WC_Product $product
+     * @return ProcessedProductSimple|ProcessedVariableProduct|ProcessedGroupedProduct|null
+     */
+    protected function calculateProductDependsOnMeasurement(
+        SingleItemRule $rule,
+        $range,
+        Processor $priceProcessor,
+        WC_Product $product,
+        $processedProductWithoutBulk = null
+    ) {
+        $processedProd = null;
+        $measurement = $rule->getProductRangeAdjustmentHandler()->getMeasurement();
+        if ($measurement->equals(BulkMeasurementEnum::QTY())) {
+            $processedProd = $priceProcessor->calculateProduct($product, $range->getFrom());
+        } else {
+            if ($measurement->equals(BulkMeasurementEnum::WEIGHT())) {
+                $weight = floatval($product->get_weight("edit"));
+                if ($weight) {
+                    $processedProd = $priceProcessor->calculateProduct(
+                        $product,
+                        intval(ceil($range->getFrom() / $weight))
+                    );
+                }
+            } else {
+                if ($measurement->equals(BulkMeasurementEnum::SUM())) {
+                    if ($processedProductWithoutBulk) {
+                        $price = $processedProductWithoutBulk->getPrice();
+                    } else {
+                        $price = floatval($product->get_price("edit"));
+                    }
+
+                    if ($price) {
+                        $processedProd = $priceProcessor->calculateProduct(
+                            $product,
+                            ceil($range->getFrom() / $price)
+                        );
+                    }
+                }
+            }
+        }
+
+        return $processedProd;
     }
 }

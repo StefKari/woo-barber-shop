@@ -1,16 +1,2 @@
 <?php
-
-namespace WPML\Core\SharedKernel\Component\Post\Application\Hook;
-
-interface PostTypeFilterInterface {
-
-
-  /**
-   * @param array<string, mixed> $postTypes
-   *
-   * @return array<string, mixed>
-   */
-  public function filter( array $postTypes );
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../../wpml/src/Core/SharedKernel/Component/Post/Application/Hook/PostTypeFilterInterface.php';

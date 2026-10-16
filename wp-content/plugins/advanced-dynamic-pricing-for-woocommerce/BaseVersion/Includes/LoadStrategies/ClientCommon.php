@@ -4,6 +4,7 @@ namespace ADP\BaseVersion\Includes\LoadStrategies;
 
 use ADP\BaseVersion\Includes\Advertising\DiscountMessage;
 use ADP\BaseVersion\Includes\CartExtensions\CartExtensions;
+use ADP\BaseVersion\Includes\Compatibility\Addons\TmExtraOptionsCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\CustomizerExtensions\CustomizerExtensions;
 use ADP\BaseVersion\Includes\Database\Repository\OrderItemRepository;
@@ -21,8 +22,10 @@ use ADP\BaseVersion\Includes\Shortcodes\OnSaleProducts as OnSaleProductsShortCod
 use ADP\BaseVersion\Includes\Shortcodes\ProductRangeDiscountTableShortcode;
 use ADP\BaseVersion\Includes\StatsCollector\WcCartStatsCollector;
 use ADP\BaseVersion\Includes\VolumePricingTable\RangeDiscountTableDisplay;
+use ADP\BaseVersion\Includes\WC\Utils;
 use ADP\BaseVersion\Includes\WC\WcProductCustomAttributesCache;
 use ADP\Factory;
+use ADP\BaseVersion\Includes\Compatibility\Addons\WcffCmp;
 
 defined('ABSPATH') or exit;
 
@@ -58,7 +61,7 @@ class ClientCommon implements LoadStrategy
          * @var StructuredData $structuredData
          */
         $customizer      = Factory::get("CustomizerExtensions_CustomizerExtensions");
-        $discountMessage = Factory::get("Advertising_DiscountMessage");
+        $discountMessage = Factory::get("Advertising_DiscountMessage", $customizer);
         $engine          = Factory::get("Engine", WC()->cart);
         $structuredData  = Factory::get("SEO_StructuredData", $engine);
         $structuredData->install();
@@ -66,9 +69,9 @@ class ClientCommon implements LoadStrategy
 
         $this->engine = $engine;
 
-        $discountTable = new RangeDiscountTableDisplay($customizer);
-        ProductRangeDiscountTableShortcode::register($customizer);
-        CategoryRangeDiscountTableShortcode::register($customizer);
+        $discountTable = new RangeDiscountTableDisplay($customizer, $engine);
+        ProductRangeDiscountTableShortcode::register($customizer, $engine);
+        CategoryRangeDiscountTableShortcode::register($customizer, $engine);
 
         $customizer->register();
 
@@ -108,6 +111,7 @@ class ClientCommon implements LoadStrategy
         $cartExtensions->attachCssClassToGiftedCartItems();
         $cartExtensions->fillCartItemWhenOrderAgain();
         $cartExtensions->forceCartUpdateForShipping();
+        $cartExtensions->readOnlyPriceForFreeProducts();
 
         /** @see Functions::install() */
         Factory::callStaticMethod("Functions", 'install', $engine);
@@ -115,6 +119,14 @@ class ClientCommon implements LoadStrategy
         /** @var WcProductCustomAttributesCache $productAttributesCache */
         $productAttributesCache  = Factory::get("WC_WcProductCustomAttributesCache");
         $productAttributesCache->installHooks();
+
+        $wcffCmp = new WcffCmp();
+        $wcffCmp->installRenderHooks();
+
+        $tmExtraOptions = new TmExtraOptionsCmp($this->context);
+        $tmExtraOptions->installRenderHooks();
+
+        Utils::addPersistentProductsToSaleQuery();
     }
 
     /**

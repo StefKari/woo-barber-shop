@@ -1,4 +1,5 @@
 <?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
@@ -11,8 +12,8 @@ class Response_list extends WP_List_Table {
 	public function __construct() {
 
 		parent::__construct( [
-			'singular' => __( 'Response', 'wpchatbot' ), //singular name of the listed records
-			'plural'   => __( 'Responses', 'wpchatbot' ), //plural name of the listed records
+			'singular' => __( 'Response', 'chatbot' ), //singular name of the listed records
+			'plural'   => __( 'Responses', 'chatbot' ), //plural name of the listed records
 			'ajax'     => false //does this table support ajax?
 		] );
 
@@ -30,24 +31,38 @@ class Response_list extends WP_List_Table {
 	 * @return mixed
 	 */
 	public static function get_responses( $per_page = 5, $page_number = 1 ) {
-
-
 		global $wpdb;
 
-		$order = "id";
-		$orderby = " ASC";
+		// Default order by and order
+		$orderby = 'id';
+		$order   = 'DESC';
 
+		// Allow sorting by column and order if provided and valid
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
-			$orderby .=  sanitize_sql_orderby('ORDER BY ' . esc_sql( $_REQUEST['orderby'] ));
-			$order .= ! empty( $_REQUEST['order'] ) ? '' . sanitize_sql_orderby(esc_sql( $_REQUEST['order'] )) : ' ASC';
-			
+			// Whitelist allowed columns to prevent SQL injection
+			$allowed = array( 'id', 'intent', 'response', 'type' );
+			$orderby_request = esc_sql( wp_unslash($_REQUEST['orderby']) );
+			if ( in_array( $orderby_request, $allowed ) ) {
+				$orderby = $orderby_request;
+			}
+		}
+		if ( ! empty( $_REQUEST['order'] ) ) {
+			$order_request = strtoupper( esc_sql( wp_unslash($_REQUEST['order']) ) );
+			if ( in_array( $order_request, array( 'ASC', 'DESC' ) ) ) {
+				$order = $order_request;
+			}
 		}
 
 		$offset = ( $page_number - 1 ) * $per_page;
 
-		$safe_sql = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wpbot_response ORDER BY %s %s LIMIT %d OFFSET %d", $orderby, $order, $per_page, $offset);
+		// Build the SQL query with validated orderby and order
+		$sql = $wpdb->prepare(
+			"SELECT * FROM {$wpdb->prefix}wpbot_response ORDER BY $orderby $order LIMIT %d OFFSET %d",
+			$per_page,
+			$offset
+		);
 
-		$result = $wpdb->get_results( $safe_sql, 'ARRAY_A' ); //DB Call OK, No Caching OK
+		$result = $wpdb->get_results( $sql, 'ARRAY_A' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
 		return $result;
 	}
@@ -61,11 +76,11 @@ class Response_list extends WP_List_Table {
 	public static function delete_response( $id ) {
 		global $wpdb;
 
-		$wpdb->delete(
+		$wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			"{$wpdb->prefix}wpbot_response",
 			[ 'id' => $id ],
 			[ '%d' ]
-		); //DB Call OK, No Caching OK
+		);
 
 	}
 
@@ -80,13 +95,13 @@ class Response_list extends WP_List_Table {
 
 		$sql = "SELECT COUNT(*) FROM {$wpdb->prefix}wpbot_response";
 
-		return $wpdb->get_var( $sql ); //DB Call OK, No Caching OK
+		return $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 	}
 
 
 	/** Text displayed when no customer data is available */
 	public function no_items() {
-		esc_html_e( 'No responses avaliable.', 'wpchatbot' );
+		esc_html_e( 'No responses avaliable.', 'chatbot' );
 	}
 
 
@@ -159,10 +174,10 @@ class Response_list extends WP_List_Table {
         $edit_nonce = wp_create_nonce( 'wp_edit_query' );
 
 		$title = '<strong>' . $item['query'] . '</strong>';
-
+// var_dump($title);
 		$actions = [
-            'edit'  => sprintf( '<a href="?page=%s&action=%s&query=%s&_wpnonce=%s">Edit</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ), $edit_nonce ),
-			'delete' => sprintf( '<a href="?page=%s&action=%s&query=%s&_wpnonce=%s">Delete</a>', esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['id'] ), $delete_nonce )
+            'edit'  => sprintf( '<a href="?page=%s&action=%s&query=%s&_wpnonce=%s">Edit</a>', esc_attr(wp_unslash($_REQUEST['page'])), 'edit', absint( $item['id'] ), $edit_nonce ),
+			'delete' => sprintf( '<a href="?page=%s&action=%s&query=%s&_wpnonce=%s">Delete</a>', esc_attr(wp_unslash($_REQUEST['page'])), 'delete', absint( $item['id'] ), $delete_nonce )
 		];
 
 		return $title . $this->row_actions( $actions );
@@ -180,20 +195,20 @@ class Response_list extends WP_List_Table {
 		if(class_exists('Qcld_str_pro')){
 			$columns = [
 				'cb'      => '<input type="checkbox" />',
-				'query'    => __( 'Query', 'wpchatbot' ),
-				'keyword'    => __( 'Keyword', 'wpchatbot' ),
-				'responses' => __( 'Response', 'wpchatbot' ),
-				'intent'=> __( 'Intent', 'wpchatbot' ),
-				'category'=> __( 'Category', 'wpchatbot' ),
+				'query'    => __( 'Query', 'chatbot' ),
+				'keyword'    => __( 'Keyword', 'chatbot' ),
+				'responses' => __( 'Response', 'chatbot' ),
+				'intent'=> __( 'Intent', 'chatbot' ),
+				'category'=> __( 'Category', 'chatbot' ),
 				
 			];
 		}else{
 			$columns = [
 				'cb'      => '<input type="checkbox" />',
-				'query'    => __( 'Query', 'wpchatbot' ),
-				'keyword'    => __( 'Keyword', 'wpchatbot' ),
-				'responses' => __( 'Response', 'wpchatbot' ),
-				'intent'=> __( 'Intent', 'wpchatbot' ),
+				'query'    => __( 'Query', 'chatbot' ),
+				'keyword'    => __( 'Keyword', 'chatbot' ),
+				'responses' => __( 'Response', 'chatbot' ),
+				'intent'=> __( 'Intent', 'chatbot' ),
 				
 			];
 		}
@@ -263,13 +278,13 @@ class Response_list extends WP_List_Table {
 		if ( 'delete' === $this->current_action() ) {
 
 			// In our file that handles the request, verify the nonce.
-			$nonce = esc_attr( $_REQUEST['_wpnonce'] );
+			$nonce = esc_attr(wp_unslash($_REQUEST['_wpnonce']));
 
 			if ( ! wp_verify_nonce( $nonce, 'wp_delete_query' ) ) {
 				die( 'Go get a life script kiddies' );
 			}
 			else {
-				self::delete_response( absint( $_GET['query'] ) );
+				self::delete_response( absint( wp_unslash($_GET['query']) ) );
 
 		                // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
 		                // add_query_arg() return the current url
@@ -280,11 +295,11 @@ class Response_list extends WP_List_Table {
 		}
 
 		// If the delete bulk action is triggered
-		if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
-		     || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
+		if ( ( isset($_POST['action']) && wp_unslash($_POST['action']) == 'bulk-delete' )
+		     || ( isset($_POST['action2']) && wp_unslash($_POST['action2']) == 'bulk-delete' )
 		) {
 
-			$delete_ids = esc_sql( $_POST['bulk-delete'] );
+			$delete_ids = esc_sql( wp_unslash($_POST['bulk-delete']) );
 
 
 			// loop over the array of record IDs and delete them
@@ -295,7 +310,7 @@ class Response_list extends WP_List_Table {
 
 			// esc_url_raw() is used to prevent converting ampersand in url to "#038;"
 		        // add_query_arg() return the current url
-		        wp_redirect( esc_url_raw($this->chatbot_admin_page) );
+		        wp_safe_redirect( esc_url_raw($this->chatbot_admin_page) );
 			exit;
 		}
 	}

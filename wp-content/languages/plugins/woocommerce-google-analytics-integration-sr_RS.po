@@ -1,0 +1,257 @@
+# Translation of Plugins - Google Analytics for WooCommerce - Stable (latest release) in Serbian
+# This file is distributed under the same license as the Plugins - Google Analytics for WooCommerce - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-09-30 01:15:29+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: sr_RS\n"
+"Project-Id-Version: Plugins - Google Analytics for WooCommerce - Stable (latest release)\n"
+
+#. translators: %s: Product category name
+#: includes/class-wc-abstract-google-analytics-js.php:158
+msgid "Category: %s"
+msgstr "Категорија: %s"
+
+#: includes/abilities/class-wc-google-analytics-get-tracking-settings-ability.php:123
+msgid "Whether a Google Analytics measurement ID is configured."
+msgstr "Да ли је подешен Google Analytics ИБ мерења."
+
+#: includes/abilities/class-wc-google-analytics-get-tracking-settings-ability.php:131
+msgid "The recognized prefix for the configured measurement ID, or X for an unrecognized prefix."
+msgstr "Препознати префикс подешеног ИБ-а мерења или X за непрепознати префикс."
+
+#: includes/abilities/class-wc-google-analytics-get-tracking-settings-ability.php:127
+msgid "The configured Google Analytics measurement or tag ID."
+msgstr "Подешени Google Analytics ИБ мерења или ознаке."
+
+#. translators: %s: Product tag name
+#: includes/class-wc-abstract-google-analytics-js.php:166
+msgid "Tag: %s"
+msgstr "Ознака: %s"
+
+#: includes/class-wc-abstract-google-analytics-js.php:152
+msgid "Shop"
+msgstr "Продавница"
+
+#: includes/abilities/class-wc-google-analytics-get-tracking-settings-ability.php:36
+msgid "Read the current Google Analytics for WooCommerce tracking configuration and enabled event settings."
+msgstr "Прочитајте тренутна подешавања праћења Google Analytics for WooCommerce и подешавања укључених догађаја."
+
+#: includes/abilities/class-wc-google-analytics-get-tracking-settings-ability.php:96
+msgid "Google Analytics for WooCommerce is not initialized."
+msgstr "Google Analytics for WooCommerce није покренут."
+
+#: includes/abilities/class-wc-google-analytics-get-tracking-settings-ability.php:105
+msgid "Google Analytics for WooCommerce settings are unavailable."
+msgstr "Подешавања Google Analytics for WooCommerce нису доступна."
+
+#: includes/abilities/class-wc-google-analytics-get-tracking-settings-ability.php:35
+msgid "Get Google Analytics tracking settings"
+msgstr "Добави подешавања Google Analytics праћења"
+
+#. translators: 1 is the required component
+#: woocommerce-google-analytics-integration.php:161
+msgid "Google Analytics for WooCommerce requires WooCommerce version %1$s or higher."
+msgstr "Google Analytics for WooCommerce захтева WooCommerce издање %1$s или новије."
+
+#. translators: 1 is the required component, 2 the Woocommerce version
+#: woocommerce-google-analytics-integration.php:158
+msgid "Google Analytics for WooCommerce requires WooCommerce version %1$s or higher. You are using version %2$s"
+msgstr "Google Analytics for WooCommerce захтева WooCommerce издање %1$s или новије. Ви користите издање %2$s"
+
+#: includes/class-wc-google-analytics.php:153
+msgid "Event Tracking"
+msgstr "Праћење догађаја"
+
+#: includes/class-wc-google-analytics.php:117
+msgid "Product SKU with prefixed (#) ID as fallback"
+msgstr "Шифра производа, уз ИБ са префиксом (#) као резервно решење"
+
+#: includes/class-wc-google-analytics.php:116
+msgid "Product ID"
+msgstr "ИБ производа"
+
+#: includes/class-wc-google-analytics.php:112
+msgid "Product Identification"
+msgstr "Препознавање производа"
+
+#: includes/class-wc-google-analytics.php:113
+msgid "Specify how your products will be identified to Google Analytics. Changing this setting may cause issues with historical data if a product was previously identified using a different structure."
+msgstr "Наведите како ће ваши производи бити препознати у Google Analytics-у. Промена овог подешавања може да изазове проблеме са историјским подацима ако је производ раније препознаван помоћу другачије структуре."
+
+#. translators: 1) URL for Google documentation on upgrading from UA to GA4 2)
+#. URL to WooCommerce Google Analytics settings page
+#: includes/class-wc-google-analytics.php:96
+msgid "Your website is configured to use Universal Analytics which Google retired in July of 2023. Update your account using the %1$ssetup assistant%2$s and then update your %3$sWooCommerce settings%4$s."
+msgstr "Ваш веб сајт је подешен да користи Universal Analytics, који је Google повукао у јулу 2023. Ажурирајте свој налог помоћу %1$sпомоћника за подешавање%2$s, а затим ажурирајте своја %3$sWooCommerce подешавања%4$s."
+
+#: includes/class-wc-abstract-google-analytics-js.php:675
+msgid "The formatted product identifier to use in Google Analytics events."
+msgstr "Обликовани идентификатор производа који се користи у Google Analytics догађајима."
+
+#: woocommerce-google-analytics-integration.php:122
+msgid "Documentation"
+msgstr "Документација"
+
+#. translators: 1) HTML anchor open tag 2) HTML anchor closing tag
+#: includes/class-wc-google-analytics.php:264
+msgid "By using this extension, you may be storing personal data or sharing data with an external service. %1$sLearn more about what data is collected by Google and what you may want to include in your privacy policy%2$s."
+msgstr "Коришћењем овог проширења можда чувате личне податке или их делите са спољном услугом. %1$sСазнајте више о томе које податке прикупља Google и шта бисте могли да укључите у своја правила приватности%2$s."
+
+#: includes/class-wc-abstract-google-analytics-js.php:175
+#: assets/js/build/main.js:1
+msgid "Product List"
+msgstr "Списак производа"
+
+#: includes/class-wc-abstract-google-analytics-js.php:172
+msgid "Search Results"
+msgstr "Резултати претраге"
+
+#: includes/class-wc-google-analytics-task.php:50
+msgid "5 minutes"
+msgstr "5 минута"
+
+#: includes/class-wc-google-analytics-task.php:41
+msgid "Provides the integration between WooCommerce and Google Analytics."
+msgstr "Обезбеђује интеграцију између WooCommerce-а и Google Analytics-а."
+
+#: includes/class-wc-google-analytics-task.php:32
+msgid "Set up Google Analytics"
+msgstr "Подеси Google Analytics"
+
+#: includes/class-wc-google-analytics.php:147
+msgid "Enabling this option will allow incoming linker parameters from other websites."
+msgstr "Укључивање ове могућности дозволиће долазне параметре повезивања са других веб сајтова."
+
+#: includes/class-wc-google-analytics.php:146
+msgid "Accept Incoming Linker Parameters"
+msgstr "Прихвати долазне параметре повезивања"
+
+#. translators: Read more link
+#: includes/class-wc-google-analytics.php:203
+msgid "Add a comma separated list of domains for automatic linking. %1$sRead more about Cross Domain Measurement%2$s"
+msgstr "Додајте списак домена раздвојених зарезима за аутоматско повезивање. %1$sПрочитајте више о мерењу између домена%2$s"
+
+#: includes/class-wc-google-analytics.php:201
+msgid "Cross Domain Tracking"
+msgstr "Праћење између домена"
+
+#: includes/class-wc-google-analytics.php:124
+msgid "Log into your Google Analytics account to find your ID. e.g. <code>GT-XXXXX</code> or <code>G-XXXXX</code>"
+msgstr "Пријавите се на свој Google Analytics налог да бисте пронашли свој ИБ. нпр. <code>GT-XXXXX</code> или <code>G-XXXXX</code>"
+
+#: includes/class-wc-google-analytics.php:123
+msgid "Google Analytics Tracking ID"
+msgstr "Google Analytics ИБ праћења"
+
+#. translators: 1: href link to GA pro
+#: woocommerce-google-analytics-integration.php:212
+msgid "Add advanced tracking for your sales funnel, coupons and more. [<a href=\"%s\" target=\"_blank\">Learn more</a> &gt;]"
+msgstr "Додајте напредно праћење свог продајног левка, купона и још много тога. [<a href=\"%s\" target=\"_blank\">Сазнајте више</a> &gt;]"
+
+#: woocommerce-google-analytics-integration.php:209
+msgid "Get detailed insights into your sales with Google Analytics Pro"
+msgstr "Добијте детаљне увиде у своју продају помоћу Google Analytics Pro"
+
+#. translators: Read more link
+#: includes/class-wc-google-analytics.php:140
+msgid "Enable this to find broken or dead links. An \"Event\" with category \"Error\" and action \"404 Not Found\" will be created in Google Analytics for each incoming pageview to a non-existing page. By setting up a \"Custom Goal\" for these events within Google Analytics you can find out where broken links originated from (the referrer). %1$sRead how to set up a goal%2$s."
+msgstr "Укључите ово да бисте пронашли неисправне или мртве везе. „Догађај“ са категоријом „Error“ и радњом „404 Not Found“ биће направљен у Google Analytics-у за сваки долазни преглед непостојеће странице. Подешавањем „произвољног циља“ за ове догађаје у Google Analytics-у можете да сазнате одакле неисправне везе потичу (упућивач). %1$sПрочитајте како да подесите циљ%2$s."
+
+#: includes/class-wc-google-analytics.php:138
+msgid "Track 404 (Not found) Errors"
+msgstr "Прати грешке 404 (није пронађено)"
+
+#: woocommerce-google-analytics-integration.php:121
+msgid "Support"
+msgstr "Подршка"
+
+#: woocommerce-google-analytics-integration.php:120
+msgid "Settings"
+msgstr "Подешавања"
+
+#. Author URI of the plugin
+#: woocommerce-google-analytics-integration.php
+msgid "https://woocommerce.com"
+msgstr "https://woocommerce.com"
+
+#: includes/class-wc-google-analytics.php:221
+msgid "Please note, for transaction tracking to work properly, you will need to use a payment gateway that redirects the customer back to a WooCommerce order received/thank you page."
+msgstr "Имајте на уму да је за исправно праћење трансакција потребно да користите посредника плаћања који купца враћа на WooCommerce страницу примљене поруџбине/захвалнице."
+
+#: includes/class-wc-google-analytics.php:215
+msgid "Please allow Google Analytics 24 hours to start displaying results."
+msgstr "Дајте Google Analytics-у 24 сата да почне да приказује резултате."
+
+#: includes/class-wc-google-analytics.php:181
+msgid "Product Clicks from Listing Pages"
+msgstr "Притисци на производе са страница списка"
+
+#: includes/class-wc-google-analytics.php:188
+msgid "Product Detail Views"
+msgstr "Прегледи детаља производа"
+
+#: includes/class-wc-google-analytics.php:195
+msgid "Checkout Process Initiated"
+msgstr "Покренут поступак плаћања"
+
+#: includes/class-wc-google-analytics.php:174
+msgid "Product Impressions from Listing Pages"
+msgstr "Прикази производа на страницама списка"
+
+#: includes/class-wc-google-analytics.php:167
+msgid "Remove from Cart Events"
+msgstr "Догађаји уклањања из корпе"
+
+#: includes/class-wc-google-analytics.php:161
+msgid "Add to Cart Events"
+msgstr "Догађаји додавања у корпу"
+
+#: includes/class-wc-google-analytics.php:155
+msgid "This requires a payment gateway that redirects to the thank you/order received page after payment. Orders paid with gateways which do not do this will not be tracked."
+msgstr "Ово захтева посредника плаћања који након плаћања преусмерава на страницу захвалнице/примљене поруџбине. Поруџбине плаћене преко посредника који то не раде неће бити праћене."
+
+#: includes/class-wc-google-analytics.php:154
+msgid "Purchase Transactions"
+msgstr "Трансакције куповине"
+
+#. translators: Read more link
+#: includes/class-wc-google-analytics.php:132
+msgid "Set the Google Analytics code to support Display Advertising. %1$sRead more about Display Advertising%2$s."
+msgstr "Подесите Google Analytics кôд за подршку приказном оглашавању. %1$sПрочитајте више о приказном оглашавању%2$s."
+
+#: includes/class-wc-google-analytics.php:130
+msgid "\"Display Advertising\" Support"
+msgstr "Подршка за „приказно оглашавање“"
+
+#. Plugin Name of the plugin
+#: woocommerce-google-analytics-integration.php
+msgid "Google Analytics for WooCommerce"
+msgstr "Google Analytics for WooCommerce"
+
+#. Plugin URI of the plugin
+#: woocommerce-google-analytics-integration.php
+msgid "https://wordpress.org/plugins/woocommerce-google-analytics-integration/"
+msgstr "https://wordpress.org/plugins/woocommerce-google-analytics-integration/"
+
+#: includes/class-wc-google-analytics.php:34
+msgid "Google Analytics is a free service offered by Google that generates detailed statistics about the visitors to a website."
+msgstr "Google Analytics је бесплатна услуга коју нуди Google и која генерише детаљну статистику о посетиоцима веб сајта."
+
+#. Description of the plugin
+#: woocommerce-google-analytics-integration.php
+msgid "Allows Google Analytics tracking code to be inserted into WooCommerce store pages."
+msgstr "Омогућава убацивање Google Analytics кода за праћење у странице WooCommerce продавнице."
+
+#. Author of the plugin
+#: woocommerce-google-analytics-integration.php
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: includes/class-wc-google-analytics.php:33
+msgid "Google Analytics"
+msgstr "Google Analytics"

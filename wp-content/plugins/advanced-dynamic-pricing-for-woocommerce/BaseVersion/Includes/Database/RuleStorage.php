@@ -2,9 +2,9 @@
 
 namespace ADP\BaseVersion\Includes\Database;
 
-use ADP\BaseVersion\Includes\Compatibility\PolylangCmp;
+use ADP\BaseVersion\Includes\Compatibility\Polylang\PolylangCmp;
 use ADP\BaseVersion\Includes\Compatibility\PriceBasedOnCountryCmp;
-use ADP\BaseVersion\Includes\Compatibility\WpmlCmp;
+use ADP\BaseVersion\Includes\Compatibility\Wpml\WpmlCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\CartAdjustmentsLoader;
 use ADP\BaseVersion\Includes\Core\Rule\CartCondition\ConditionsLoader;
@@ -19,7 +19,9 @@ use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAdd;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAddChoice;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\DiscountForRange;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Filter;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\SimpleFilter;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Gift;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\GiftChoice;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\PackageItem;
@@ -27,9 +29,8 @@ use ADP\BaseVersion\Includes\Core\Rule\Structures\PackageItemFilter;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\RangeDiscount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\RoleDiscount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\SetDiscount;
+use ADP\BaseVersion\Includes\Core\RuleProcessor\BulkDiscount\BulkMeasurementEnum;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\OptionsConverter;
-use ADP\BaseVersion\Includes\Enums\AutoAddChoiceTypeEnum;
-use ADP\BaseVersion\Includes\Enums\AutoAddModeEnum;
 use ADP\BaseVersion\Includes\Enums\Exceptions\UnexpectedValueException;
 use ADP\BaseVersion\Includes\Enums\GiftChoiceTypeEnum;
 use ADP\BaseVersion\Includes\Enums\GiftModeEnum;
@@ -98,6 +99,8 @@ class RuleStorage
             $this->wpmlCmp->replaceVariationDataStore();
             $this->wpmlCmp->addFilterPreloadedListLanguages();
             $this->wpmlCmp->modifyContext($this->context);
+        } else if ( $this->wpmlCmp->isActiveWcWpml()) {
+            $this->wpmlCmp->setCurrency($this->context);
         }
         $this->priceBasedOnCountryCmp = new PriceBasedOnCountryCmp();
 
@@ -167,7 +170,13 @@ class RuleStorage
                     $rule = $this->wpmlCmp->changeRuleCurrency($rule);
                 }
 
-                $rule = $this->wpmlCmp->translateRule($rule);
+                if ( $this->wpmlCmp->getObjectInternationalization() && $this->context->isTranslateRules() ) {
+                    $rule = RuleTranslator::translate($rule, $this->wpmlCmp->getObjectInternationalization());
+                }
+            } else if ($this->polylangCmp->isActive() && $this->polylangCmp->shouldTranslate()) {
+                if ( $this->polylangCmp->getObjectInternationalization() && $this->context->isTranslateRules() ) {
+                    $rule = RuleTranslator::translate($rule, $this->polylangCmp->getObjectInternationalization());
+                }
             }
 
             if ( $this->priceBasedOnCountryCmp->isActive() ) {
@@ -180,7 +189,9 @@ class RuleStorage
             }
             $rule->setCurrency($this->context->currencyController->getCurrentCurrency());
 
-            $rules[] = apply_filters('adp_rule_loaded', $rule, $row->getData());
+            $rule->setBlocks($row->additional['blocks'] ?? []);
+
+            $rules[$rule->getId()] = apply_filters('adp_rule_loaded', $rule, $row->getData());
         }
 
         return new RulesCollection($rules);
@@ -209,7 +220,13 @@ class RuleStorage
                     $rule = $this->wpmlCmp->changeRuleCurrency($rule);
                 }
 
-                $rule = $this->wpmlCmp->translateRule($rule);
+                if ( $this->wpmlCmp->getObjectInternationalization() && $this->context->isTranslateRules() ) {
+                    $rule = RuleTranslator::translate($rule, $this->wpmlCmp->getObjectInternationalization());
+                }
+            } else if ($this->polylangCmp->isActive() && $this->polylangCmp->shouldTranslate()) {
+                if ( $this->polylangCmp->getObjectInternationalization() && $this->context->isTranslateRules() ) {
+                    $rule = RuleTranslator::translate($rule, $this->polylangCmp->getObjectInternationalization());
+                }
             }
 
             if ( $this->priceBasedOnCountryCmp->isActive() ) {
@@ -255,6 +272,32 @@ class RuleStorage
             $rule->setActivationCouponCode($ruleData->additional['trigger_coupon_code']);
         }
 
+        if (isset($ruleData->additional['date_from'])) {
+            $dateFrom = \DateTime::createFromFormat(
+                "Y-m-d",
+                $ruleData->additional['date_from'],
+                new \DateTimeZone("UTC")
+            );
+
+            if ( $dateFrom ) {
+                $dateFrom->setTime(0, 0, 0);
+                $rule->setDateFrom($dateFrom);
+            }
+        }
+
+        if (isset($ruleData->additional['date_to'])) {
+            $dateTo = \DateTime::createFromFormat(
+                "Y-m-d",
+                $ruleData->additional['date_to'],
+                new \DateTimeZone("UTC")
+            );
+
+            if ( $dateTo ) {
+                $dateTo->setTime(23, 59, 59);
+                $rule->setDateTo($dateTo);
+            }
+        }
+
         if (isset($ruleData->options['repeat'])) {
             $rule->setItemsCountLimit($ruleData->options['repeat']);
         }
@@ -269,8 +312,16 @@ class RuleStorage
             $filter->setMethod($method);
             $filter->setValue($value);
 
-            if (isset($filterData['product_exclude']['values'])) {
-                $filter->setExcludeProductIds($filterData['product_exclude']['values']);
+            if(isset($filterData['excludes'])){
+                foreach ($filterData['excludes'] as $excludeFilterData) {
+                    if(isset($excludeFilterData['type']) && isset($excludeFilterData['value'])) {
+                        $excludeFilter = new SimpleFilter();
+                        $excludeFilter->setType($excludeFilterData['type'])
+                                    ->setValue($excludeFilterData['value']);
+
+                        $filter->addExcludeFilter($excludeFilter);
+                    }
+                }
             }
 
             if (isset($filterData['product_exclude']['on_wc_sale'])) {
@@ -289,12 +340,15 @@ class RuleStorage
         }
 
         $this->installProductAdjustment($rule, $ruleData);
+        $this->installRoleDiscounts($rule, $ruleData);
 
         $this->installFreeItems($rule, $ruleData);
 
         $this->installConditions($rule, $ruleData);
         $this->installLimits($rule, $ruleData);
         $this->installAdvertising($rule, $ruleData);
+
+        $this->installConditionMessage($rule, $ruleData);
 
         return $rule;
     }
@@ -322,6 +376,32 @@ class RuleStorage
 
         if (isset($ruleData->additional['trigger_coupon_code'])) {
             $rule->setActivationCouponCode($ruleData->additional['trigger_coupon_code']);
+        }
+
+        if (isset($ruleData->additional['date_from'])) {
+            $dateFrom = \DateTime::createFromFormat(
+                "Y-m-d",
+                $ruleData->additional['date_from'],
+                new \DateTimeZone("UTC")
+            );
+
+            if ( $dateFrom ) {
+                $dateFrom->setTime(0, 0, 0);
+                $rule->setDateFrom($dateFrom);
+            }
+        }
+
+        if (isset($ruleData->additional['date_to'])) {
+            $dateTo = \DateTime::createFromFormat(
+                "Y-m-d",
+                $ruleData->additional['date_to'],
+                new \DateTimeZone("UTC")
+            );
+
+            if ( $dateTo ) {
+                $dateTo->setTime(23, 59, 59);
+                $rule->setDateTo($dateTo);
+            }
         }
 
         $this->installCartAdjustments($rule, $ruleData);
@@ -359,6 +439,32 @@ class RuleStorage
             $rule->setActivationCouponCode($ruleData->additional['trigger_coupon_code']);
         }
 
+        if (isset($ruleData->additional['date_from'])) {
+            $dateFrom = \DateTime::createFromFormat(
+                "Y-m-d",
+                $ruleData->additional['date_from'],
+                new \DateTimeZone("UTC")
+            );
+
+            if ( $dateFrom ) {
+                $dateFrom->setTime(0, 0, 0);
+                $rule->setDateFrom($dateFrom);
+            }
+        }
+
+        if (isset($ruleData->additional['date_to'])) {
+            $dateTo = \DateTime::createFromFormat(
+                "Y-m-d",
+                $ruleData->additional['date_to'],
+                new \DateTimeZone("UTC")
+            );
+
+            if ( $dateTo ) {
+                $dateTo->setTime(23, 59, 59);
+                $rule->setDateTo($dateTo);
+            }
+        }
+
         if (isset($ruleData->options['repeat'])) {
             $rule->setPackagesCountLimit($ruleData->options['repeat']);
         }
@@ -382,6 +488,7 @@ class RuleStorage
         $this->installConditions($rule, $ruleData);
         $this->installLimits($rule, $ruleData);
         $this->installAdvertising($rule, $ruleData);
+        $this->installConditionMessage($rule, $ruleData);
 
         return $rule;
     }
@@ -410,8 +517,16 @@ class RuleStorage
         $filter->setMethod($method);
         $filter->setValue($value);
 
-        if (isset($filterData['product_exclude']['values'])) {
-            $filter->setExcludeProductIds($filterData['product_exclude']['values']);
+        if(isset($filterData['excludes'])){
+            foreach ($filterData['excludes'] as $excludeFilterData) {
+                if(isset($excludeFilterData['type']) && isset($excludeFilterData['value'])) {
+                    $excludeFilter = new SimpleFilter();
+                    $excludeFilter->setType($excludeFilterData['type'])
+                                ->setValue($excludeFilterData['value']);
+
+                    $filter->addExcludeFilter($excludeFilter);
+                }
+            }
         }
 
         if (isset($filterData['product_exclude']['on_wc_sale'])) {
@@ -463,6 +578,32 @@ class RuleStorage
             $rule->setActivationCouponCode($ruleData->additional['trigger_coupon_code']);
         }
 
+        if (isset($ruleData->additional['date_from'])) {
+            $dateFrom = \DateTime::createFromFormat(
+                "Y-m-d",
+                $ruleData->additional['date_from'],
+                new \DateTimeZone("UTC")
+            );
+
+            if ( $dateFrom ) {
+                $dateFrom->setTime(0, 0, 0);
+                $rule->setDateFrom($dateFrom);
+            }
+        }
+
+        if (isset($ruleData->additional['date_to'])) {
+            $dateTo = \DateTime::createFromFormat(
+                "Y-m-d",
+                $ruleData->additional['date_to'],
+                new \DateTimeZone("UTC")
+            );
+
+            if ( $dateTo ) {
+                $dateTo->setTime(23, 59, 59);
+                $rule->setDateTo($dateTo);
+            }
+        }
+
         if (isset($ruleData->options['repeat'])) {
             $rule->setItemsCountLimit($ruleData->options['repeat']);
         }
@@ -481,8 +622,15 @@ class RuleStorage
             $filter->setMethod($method);
             $filter->setValue($value);
 
-            if (isset($filterData['product_exclude']['values'])) {
-                $filter->setExcludeProductIds($filterData['product_exclude']['values']);
+            if(isset($filterData['excludes'])){
+                foreach ($filterData['excludes'] as $excludeFilterData) {
+                    if(isset($excludeFilterData['type']) && isset($excludeFilterData['value'])) {
+                        $excludeFilter = new SimpleFilter();
+                        $excludeFilter->setType($excludeFilterData['type'])
+                                ->setValue($excludeFilterData['value']);
+                        $filter->addExcludeFilter($excludeFilter);
+                    }
+                }
             }
 
             if (isset($filterData['product_exclude']['on_wc_sale'])) {
@@ -510,6 +658,7 @@ class RuleStorage
         $this->installConditions($rule, $ruleData);
         $this->installLimits($rule, $ruleData);
         $this->installAdvertising($rule, $ruleData);
+        $this->installConditionMessage($rule, $ruleData);
 
         return $rule;
     }
@@ -529,6 +678,7 @@ class RuleStorage
             $bulkData = $ruleData->bulkAdjustments;
 
             $qty_based = $bulkData['qty_based'];
+            $measurement = $bulkData['measurement'] ?? null;
 
             if ($rule instanceof SingleItemRule) {
                 if ($qty_based === 'all') {
@@ -553,8 +703,12 @@ class RuleStorage
                     $qty_based = SingleItemRule\ProductsRangeAdjustments::GROUP_BY_META_DATA;
                 }
 
-                $productAdjustment = new SingleItemRule\ProductsRangeAdjustments($this->context, $bulkData['type'],
-                    $qty_based);
+                $productAdjustment = new SingleItemRule\ProductsRangeAdjustments(
+                    $this->context,
+                    $bulkData['type'],
+                    $qty_based,
+                    new BulkMeasurementEnum($measurement)
+                );
             } elseif ($rule instanceof PackageRule) {
                 if ($qty_based === 'all') {
                     $qty_based = PackageRule\PackageRangeAdjustments::GROUP_BY_DEFAULT;
@@ -578,8 +732,12 @@ class RuleStorage
                     $qty_based = PackageRule\PackageRangeAdjustments::GROUP_BY_META_DATA;
                 }
 
-                $productAdjustment = new PackageRule\PackageRangeAdjustments($this->context, $bulkData['type'],
-                    $qty_based);
+                $productAdjustment = new PackageRule\PackageRangeAdjustments(
+                    $this->context,
+                    $bulkData['type'],
+                    $qty_based,
+                    new BulkMeasurementEnum($measurement)
+                );
             } else {
                 return;
             }
@@ -596,16 +754,32 @@ class RuleStorage
             foreach ($bulkData['ranges'] as $range) {
                 if ($productAdjustment instanceof SingleItemRule\ProductsRangeAdjustments) {
                     $bulkData['discount_type'] = str_replace('set_', '', $bulkData['discount_type']);
-                    if ($bulkData['discount_type'] === 'price__fixed') {
-                        if ( $range['value'] === '' ) {
-                            $discount = new Discount($this->context, Discount::TYPE_PERCENTAGE, 0);
+                    if (strpos($bulkData['discount_type'], 'range') === false) {
+                        if ($bulkData['discount_type'] === 'price__fixed') {
+                            if ($range['value'] === '') {
+                                $discount = new Discount($this->context, Discount::TYPE_PERCENTAGE, 0);
+                            } else {
+                                $discount = new Discount($this->context, Discount::TYPE_FIXED_VALUE, $range['value']);
+                            }
+                        } elseif ($bulkData['discount_type'] === 'discount__amount') {
+                            $discount = new Discount($this->context, Discount::TYPE_AMOUNT, $range['value']);
+                        } elseif ($bulkData['discount_type'] === 'discount__expression_price') {
+                            $discount = new Discount($this->context, Discount::TYPE_EXPRESSION_PRICE, $range['value']);
                         } else {
-                            $discount = new Discount($this->context, Discount::TYPE_FIXED_VALUE, $range['value']);
+                            $discount = new Discount($this->context, Discount::TYPE_PERCENTAGE, $range['value']);
                         }
-                    } elseif ($bulkData['discount_type'] === 'discount__amount') {
-                        $discount = new Discount($this->context, Discount::TYPE_AMOUNT, $range['value']);
                     } else {
-                        $discount = new Discount($this->context, Discount::TYPE_PERCENTAGE, $range['value']);
+                        if ($bulkData['discount_type'] === 'range_price__fixed') {
+                            if ( $range['value'] === '' ) {
+                                $discount = new DiscountForRange($this->context, DiscountForRange::TYPE_PERCENTAGE, 0);
+                            } else {
+                                $discount = new DiscountForRange($this->context, DiscountForRange::TYPE_FIXED_VALUE, $range['value']);
+                            }
+                        } elseif ($bulkData['discount_type'] === 'range_discount__amount') {
+                            $discount = new DiscountForRange($this->context, DiscountForRange::TYPE_AMOUNT, $range['value']);
+                        } else {
+                            $discount = new DiscountForRange($this->context, DiscountForRange::TYPE_PERCENTAGE, $range['value']);
+                        }
                     }
                 } elseif ($productAdjustment instanceof PackageRule\PackageRangeAdjustments) {
                     if (strpos($bulkData['discount_type'], 'set') === false) {
@@ -684,10 +858,20 @@ class RuleStorage
                     } else {
                         $discount = new Discount($this->context, Discount::TYPE_FIXED_VALUE, $value);
                     }
+                } elseif ($discountType === 'price__fixed_per_item') {
+                    if ( $value === '' ) {
+                        $discount = new Discount($this->context, Discount::TYPE_PERCENTAGE, 0);
+                    } else {
+                        $discount = new Discount($this->context, Discount::TYPE_FIXED_VALUE_PER_ITEM, $value);
+                    }
                 } elseif ($discountType === 'discount__percentage') {
                     $discount = new Discount($this->context, Discount::TYPE_PERCENTAGE, $value);
                 } elseif ($discountType === 'discount__amount') {
                     $discount = new Discount($this->context, Discount::TYPE_AMOUNT, $value);
+                } elseif ($discountType === 'discount__amount_per_item') {
+                    $discount = new Discount($this->context, Discount::TYPE_AMOUNT_PER_ITEM, $value);
+                }elseif ($discountType === 'discount__expression_price') {
+                    $discount = new Discount($this->context, Discount::TYPE_EXPRESSION_PRICE, $value);
                 } else {
                     return;
                 }
@@ -735,8 +919,16 @@ class RuleStorage
                         } else {
                             $discount = new Discount($this->context, Discount::TYPE_FIXED_VALUE, $value);
                         }
+                    } elseif ($discountType === 'price__fixed_per_item') {
+                        if ( $value === '' ) {
+                            $discount = new Discount($this->context, Discount::TYPE_PERCENTAGE, 0);
+                        } else {
+                            $discount = new Discount($this->context, Discount::TYPE_FIXED_VALUE_PER_ITEM, $value);
+                        }
                     } elseif ($discountType === 'discount__amount') {
                         $discount = new Discount($this->context, Discount::TYPE_AMOUNT, $value);
+                    } elseif ($discountType === 'discount__amount_per_item') {
+                        $discount = new Discount($this->context, Discount::TYPE_AMOUNT_PER_ITEM, $value);
                     } else {
                         $discount = new Discount($this->context, Discount::TYPE_PERCENTAGE, $value);
                     }
@@ -793,7 +985,9 @@ class RuleStorage
                 $type = Discount::TYPE_PERCENTAGE;
             } elseif ($type === 'discount__amount') {
                 $type = Discount::TYPE_AMOUNT;
-            } elseif ($type === 'price__fixed') {
+            } elseif ($type === 'discount__expression_price') {
+                $type = Discount::TYPE_EXPRESSION_PRICE;
+            }elseif ($type === 'price__fixed') {
                 if ( $value === '' ) {
                     $type = Discount::TYPE_PERCENTAGE;
                     $value = 0;
@@ -903,15 +1097,18 @@ class RuleStorage
             if ($giftMode === "use_product_from_filter") {
                 $gift->setChoices(array((new GiftChoice())->setType(new GiftChoiceTypeEnum(GiftChoiceTypeEnum::CLONE_ADJUSTED))));
                 $gift->setMode(GiftModeEnum::USE_PRODUCT_FROM_FILTER());
-            } elseif ($giftMode === "giftable_products") {
+            } elseif ($giftMode === "use_only_first_product_from_filter") {
+                $gift->setChoices(array((new GiftChoice())->setType(new GiftChoiceTypeEnum(GiftChoiceTypeEnum::CLONE_ADJUSTED_FIRST))));
+                $gift->setMode(GiftModeEnum::USE_ONLY_FIRST_PRODUCT_FROM_FILTER());
+            }  elseif ($giftMode === "giftable_products") {
                 $gift->setChoices(array((new GiftChoice())->setType(new GiftChoiceTypeEnum(GiftChoiceTypeEnum::PRODUCT))->setValues($giftValues)));
                 $gift->setMode(GiftModeEnum::GIFTABLE_PRODUCTS());
             } elseif ($giftMode === "giftable_products_in_rotation") {
                 $gift->setChoices(array((new GiftChoice())->setType(new GiftChoiceTypeEnum(GiftChoiceTypeEnum::PRODUCT))->setValues($giftValues)));
                 $gift->setMode(GiftModeEnum::GIFTABLE_PRODUCTS_ROTATION());
-            } elseif ($giftMode === "giftable_products_in_random") { // removed
+            } elseif ($giftMode === "giftable_products_in_random") {
                 $gift->setChoices(array((new GiftChoice())->setType(new GiftChoiceTypeEnum(GiftChoiceTypeEnum::PRODUCT))->setValues($giftValues)));
-                $gift->setMode(GiftModeEnum::GIFTABLE_PRODUCTS_ROTATION()); // replaced with "giftable_products_in_rotation"
+                $gift->setMode(GiftModeEnum::GIFTABLE_PRODUCTS_IN_RANDOM());
             } elseif ($giftMode === "allow_to_choose") {
                 $gift->setChoices(array((new GiftChoice())->setType(new GiftChoiceTypeEnum(GiftChoiceTypeEnum::PRODUCT))->setValues($giftValues)));
                 $gift->setMode(GiftModeEnum::ALLOW_TO_CHOOSE());
@@ -957,6 +1154,12 @@ class RuleStorage
      */
     protected function installAdvertising(&$rule, $ruleData)
     {
+        if (isset($ruleData->advertising['enabled_timer'])) {
+            $rule->setEnabledTimer($ruleData->advertising['enabled_timer']);
+        }
+        if (isset($ruleData->advertising['timer_message'])) {
+            $rule->setTimerMessage($ruleData->advertising['timer_message']);
+        }
         if (isset($ruleData->advertising['discount_message'])) {
             $rule->setDiscountMessage($ruleData->advertising['discount_message']);
         }
@@ -968,6 +1171,10 @@ class RuleStorage
         }
         if (isset($ruleData->advertising['sale_badge'])) {
             $rule->setSaleBadge($ruleData->advertising['sale_badge']);
+        }
+
+        if (isset($ruleData->advertising['message_notice_discount'])) {
+            $rule->setMessageNoticeDiscount($ruleData->advertising['message_notice_discount']);
         }
     }
 
@@ -1003,5 +1210,40 @@ class RuleStorage
         }
 
         return $rule;
+    }
+
+    protected function installConditionMessage(&$rule, $ruleData)
+    {
+
+        if (isset($ruleData->conditionMessage, $ruleData->conditionMessage['type'])) {
+            $conditionMessageData = $ruleData->conditionMessage;
+            $beginningMessage   = $conditionMessageData['beginning_message'];
+            $endMessage         = $conditionMessageData['end_message'];
+            $type               = $conditionMessageData['type'];
+
+            if ($type === 'total' and isset($conditionMessageData['total']['message'])) {//check rule for having total adj
+                $message = $conditionMessageData['total']['message'];
+
+                if ($rule instanceof SingleItemRule) {
+                    $conditionMessage = new SingleItemRule\ConditionMessage($beginningMessage, $message, $endMessage);
+                } elseif ($rule instanceof PackageRule) {
+                    $conditionMessage = new PackageRule\ConditionMessageTotal($beginningMessage, $message, $endMessage);
+                } else {
+                    return;
+                }
+
+                $rule->installConditionMessageHandler($conditionMessage);
+            } elseif ($type === 'split' and isset($conditionMessageData['split'][0]['message'])) {//check rule for having split adj
+                if ($rule instanceof SingleItemRule) {
+                    return;
+                }
+
+                $messages = $conditionMessageData['split'];
+
+                $conditionMessage = new PackageRule\ConditionMessageSplit($beginningMessage, $messages, $endMessage);
+
+                $rule->installConditionMessageHandler($conditionMessage);
+            }
+        }
     }
 }

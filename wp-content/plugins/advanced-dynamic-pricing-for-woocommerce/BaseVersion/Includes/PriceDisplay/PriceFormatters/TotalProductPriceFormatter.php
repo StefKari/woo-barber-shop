@@ -34,14 +34,14 @@ class TotalProductPriceFormatter
     {
         $this->context   = adp_context();
         $this->formatter = new Formatter();
-        $this->formatter->setTemplate(
-            htmlspecialchars_decode(
-                $this->context->getOption(
-                    "total_price_for_product_template",
-                    "Total price : {{striked_total}}"
-                )
-            )
+
+        //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+        $template = _x( htmlspecialchars_decode( $this->context->getOption( "total_price_for_product_template",  "Total price : {{striked_total}}")),
+            "Total price for product template",
+            "advanced-dynamic-pricing-for-woocommerce"
         );
+
+        $this->formatter->setTemplate($template);
         $this->priceFunctions = new PriceFunctions();
     }
 
@@ -58,16 +58,24 @@ class TotalProductPriceFormatter
      */
     public function getHtmlAreRulesNotApplied($product, $qty)
     {
-        $price        = $product->get_price('edit');
-        $regularPrice = $product->get_regular_price('edit');
+        $currencySwitcher = $this->context->currencyController;
+        if ($currencySwitcher->isCurrencyChanged()) {
+            $price = $currencySwitcher->getCurrentCurrencyProductPrice($product);
+            $regularPrice = $currencySwitcher->getCurrentCurrencyProductRegularPrice($product);
+            if(!$regularPrice)
+                $regularPrice = $price;
+        } else {
+            $price = $product->get_price('edit');
+            $regularPrice = $product->get_regular_price('edit');
+        }
 
-        if ( $regularPrice === "" ) {
+        if ( is_null($regularPrice) OR $regularPrice === "" OR $regularPrice === "0" ) {
             return "";
         }
 
         $isOnSale     = $product->is_on_sale('edit');
         $amountSaved = $regularPrice - $price;
-        $percentageSaved = round($amountSaved / $regularPrice * 100, 2);
+        $percentageSaved = round($amountSaved / $regularPrice * 100);
 
         $strikedTotal = $isOnSale ?
             $this->priceFunctions->formatSalePrice(
@@ -92,6 +100,16 @@ class TotalProductPriceFormatter
             'amount_saved'     => $this->priceFunctions->format($amountSaved),
             'percentage_saved' => $percentageSaved . '%',
         );
+
+        $replacements = apply_filters(
+            "adp_total_product_price_formatter_replacements",
+            $replacements,
+            null,
+            $product,
+            $qty,
+            $this
+        );
+
 
         return $this->formatter->applyReplacements($replacements);
     }
@@ -122,6 +140,15 @@ class TotalProductPriceFormatter
             'percentage_saved' => $percentageSaved,
         );
 
+        $replacements = apply_filters(
+            "adp_total_product_price_formatter_replacements",
+            $replacements,
+            null,
+            $product,
+            $qty,
+            $this
+        );
+
         return $this->formatter->applyReplacements($replacements);
     }
 
@@ -137,7 +164,11 @@ class TotalProductPriceFormatter
         $origPrice     = $processedProduct->getOriginalPrice() * $qty;
 
         $amountSaved = $origPrice - $subtotal;
-        $percentageSaved = round($amountSaved / $origPrice * 100, 2);
+        if ( $origPrice === 0.0 ) {
+            $percentageSaved = 0.0;
+        } else {
+            $percentageSaved = round($amountSaved / $origPrice * 100);
+        }
 
         /** @var ConcreteProductPriceHtml $prodPriceDisplay */
         $prodPriceDisplay = ProductPriceDisplay::create($this->context, $processedProduct);
@@ -159,6 +190,15 @@ class TotalProductPriceFormatter
             'price_suffix'     => $processedProduct->getProduct()->get_price_suffix($subtotal, 1),
             'amount_saved'     => $this->priceFunctions->format($amountSaved),
             'percentage_saved' => $percentageSaved . '%',
+        );
+
+        $replacements = apply_filters(
+            "adp_total_product_price_formatter_replacements",
+            $replacements,
+            $processedProduct,
+            $processedProduct->getProduct(),
+            $qty,
+            $this
         );
 
         return $this->formatter->applyReplacements($replacements);

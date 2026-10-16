@@ -17,7 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 # Call the core Plugin API
 require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 # Get plugin's metadata
-$disable_blogging = get_plugin_data( __FILE__ );
+// Markup/translation disabled: only the version is needed, and translating here loads the textdomain too early.
+$disable_blogging = get_plugin_data( __FILE__, false, false );
 # If the plugin version is lower or not defined, remove plugin options
 if ( ( get_option( 'factmaven_dsbl_version' ) < $disable_blogging['Version'] ) || ! get_option( 'factmaven_dsbl_version' ) ) {
     # Remove options with the prefix "factmaven_dsbl_"

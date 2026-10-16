@@ -265,11 +265,13 @@ abstract class WPCode_Auto_Insert_Type {
 
 		$this->snippets = array();
 		$args           = array(
-			'post_type'      => wpcode_get_post_type(),
-			'posts_per_page' => - 1,
-			'post_status'    => 'publish',
-			'cache_results'  => false,
+			'post_type'        => wpcode_get_post_type(),
+			'posts_per_page'   => - 1,
+			'post_status'      => 'publish',
 			// We don't want to cache this query ever as it should only run when snippets are preloaded in case of an error it will provide false values if cached.
+			'cache_results'    => false,
+			// We don't want to allow any filters to be applied to this query.
+			'suppress_filters' => true,
 		);
 		$snippets_query = new WP_Query( $args );
 		$snippets       = $snippets_query->posts;
@@ -352,7 +354,8 @@ abstract class WPCode_Auto_Insert_Type {
 		}
 
 		foreach ( $terms as $term ) {
-			$this->locations_terms[ $term->slug ] = $term;
+			$term_slug                           = $term->slug ?? '';
+			$this->locations_terms[ $term_slug ] = $term;
 		}
 	}
 
@@ -367,7 +370,7 @@ abstract class WPCode_Auto_Insert_Type {
 	public function include_term_in_post( $clauses ) {
 		global $wpdb;
 
-		$clauses['fields']  .= ", {$wpdb->term_relationships}.term_taxonomy_id";
+		$clauses['fields'] .= ", {$wpdb->term_relationships}.term_taxonomy_id";
 		$clauses['groupby'] = '';
 
 		return $clauses;

@@ -1,4 +1,4 @@
-/* globals icl_ajx_url */
+/* globals ajaxurl */
 
 /**
  * Created by andrea.
@@ -38,13 +38,13 @@ jQuery( function ( $ ) {
       const post_type = $( '#icl_connect_translations_post_type' ).val()
       const source_language = $( '#icl_connect_translations_language' ).val()
       const nonce = $( '#_icl_nonce_get_orphan_posts' ).val()
-      const data = 'icl_ajx_action=get_orphan_posts&source_language=' + source_language + '&trid=' + trid + '&post_type=' + post_type + '&_icl_nonce=' + nonce
+      const data = 'action=wpml_ajx_get_orphan_posts&source_language=' + source_language + '&trid=' + trid + '&post_type=' + post_type + '&_icl_nonce=' + nonce
 
       postEdit.$ajax_loader.show()
 
       const request = $.ajax( {
         type: 'POST',
-        url: icl_ajx_url,
+        url: ajaxurl,
         dataType: 'json',
         data: data
       } )
@@ -57,9 +57,63 @@ jQuery( function ( $ ) {
           postEdit.$no_posts_found_message.hide()
           $assignPostButton.prop( 'disabled', false )
 
+          // wpmldev-6997 — lazy-load the autocomplete suggestions. The legacy
+          // `source: posts` handed the full array (~40k items on sites with
+          // many orphans) to jQuery UI in one go, which built ~40k <li> in a
+          // single synchronous task and froze the tab. We now render `PAGE`
+          // items initially and append another `PAGE` on each scroll-near-end.
+          // Filter remains local (the AJAX response shape is unchanged).
+          var PAGE = 50
           $connect_translations_dialog_selector.autocomplete( {
             minLength: 0,
-            source: posts,
+            delay: 150,
+            source: function ( request, response ) {
+              if ( !posts || !posts.length ) { response( [] ); return }
+              var term = ( request.term || '' ).toLowerCase()
+              var matches
+              if ( term === '' ) {
+                matches = posts
+              } else {
+                matches = []
+                for ( var i = 0; i < posts.length; i++ ) {
+                  // Defensive: skip rows whose label is missing or non-string.
+                  var label = posts[ i ] && posts[ i ].label
+                  if ( typeof label !== 'string' ) { continue }
+                  if ( label.toLowerCase().indexOf( term ) !== -1 ) {
+                    matches.push( posts[ i ] )
+                  }
+                }
+              }
+              // Stash full filtered set so the scroll handler can extend it.
+              $connect_translations_dialog_selector.data( 'lazy-matches', matches )
+              $connect_translations_dialog_selector.data( 'lazy-rendered', Math.min( PAGE, matches.length ) )
+              response( matches.slice( 0, PAGE ) )
+            },
+            open: function () {
+              var $menu = $( this ).autocomplete( 'widget' )
+              if ( !$menu || !$menu.length ) { return }
+              // Make the dropdown scrollable so the scroll event has something to fire on.
+              $menu.css( { 'max-height': '300px', 'overflow-y': 'auto' } )
+              $menu.off( 'scroll.lazyload' ).on( 'scroll.lazyload', function () {
+                var matches  = $connect_translations_dialog_selector.data( 'lazy-matches' ) || []
+                var rendered = $connect_translations_dialog_selector.data( 'lazy-rendered' ) || 0
+                if ( rendered >= matches.length ) { return }
+                var $m = $( this )
+                if ( !$m.length || !$m[ 0 ] ) { return }
+                var nearEnd = $m.scrollTop() + $m.innerHeight() >= $m[ 0 ].scrollHeight - 50
+                if ( !nearEnd ) { return }
+                // Bail safely if the autocomplete instance has been destroyed
+                // between the scroll event and the handler running, or if a
+                // future jQuery UI version renames `_renderItemData`.
+                var ui = $connect_translations_dialog_selector.data( 'ui-autocomplete' )
+                if ( !ui || !ui.menu || typeof ui._renderItemData !== 'function' ) { return }
+                var next = matches.slice( rendered, rendered + PAGE )
+                for ( var j = 0; j < next.length; j++ ) {
+                  ui._renderItemData( ui.menu.element, next[ j ] )
+                }
+                $connect_translations_dialog_selector.data( 'lazy-rendered', rendered + next.length )
+              } )
+            },
             focus: function ( event, ui ) {
               $connect_translations_dialog_selector.val( ui.item.label )
               return false
@@ -70,7 +124,6 @@ jQuery( function ( $ ) {
               return false
             }
           } )
-            .focus()
             .data( 'ui-autocomplete' )._renderItem = function ( ul, item ) {
               return $( '<li>' )
                 .append( jQuery( '<a></a>' ).text( item.label ) )
@@ -122,11 +175,11 @@ jQuery( function ( $ ) {
       const post_id = $( '#icl_connect_translations_post_id' ).val()
       const nonce = $( '#_icl_nonce_get_posts_from_trid' ).val()
 
-      const data = 'icl_ajx_action=get_posts_from_trid&trid=' + trid + '&post_type=' + post_type + '&_icl_nonce=' + nonce
+      const data = 'action=wpml_ajx_get_posts_from_trid&trid=' + trid + '&post_type=' + post_type + '&_icl_nonce=' + nonce
 
       const request = $.ajax( {
         type: 'POST',
-        url: icl_ajx_url,
+        url: ajaxurl,
         dataType: 'json',
         data: data
       } )
@@ -186,7 +239,7 @@ jQuery( function ( $ ) {
                     const nonce = $( '#_icl_nonce_connect_translations' ).val()
 
                     const data_object = {
-                      icl_ajx_action: 'connect_translations',
+                      action: 'wpml_ajx_connect_translations',
                       post_id: post_id,
                       post_type: post_type,
                       new_trid: trid,
@@ -197,7 +250,7 @@ jQuery( function ( $ ) {
                     const request = $.ajax(
                       {
                         type: 'POST',
-                        url: icl_ajx_url,
+                        url: ajaxurl,
                         dataType: 'json',
                         data: data_object
                       }
@@ -326,8 +379,8 @@ function setupCopyButtons () {
     jQuery( this ).attr( 'disabled', 'disabled' ).after( icl_ajxloaderimg )
     jQuery.ajax( {
       type: 'POST',
-      url: icl_ajx_url,
-      data: 'icl_ajx_action=reset_duplication&post_id=' + jQuery( '#post_ID' ).val() + '&_icl_nonce=' + jQuery( '#_icl_nonce_rd' ).val(),
+      url: ajaxurl,
+      data: 'action=wpml_ajx_reset_duplication&post_id=' + jQuery( '#post_ID' ).val() + '&_icl_nonce=' + jQuery( '#_icl_nonce_rd' ).val(),
       success: function ( msg ) {
         location.reload( true )
       }
@@ -341,9 +394,29 @@ function setupCopyButtons () {
       const post_lang = icl_set_duplicate.data( 'post_lang' )
       jQuery.ajax( {
         type: 'POST',
-        url: icl_ajx_url,
-        data: 'icl_ajx_action=set_duplication&wpml_original_post_id=' + wpml_original_post_id + '&_icl_nonce=' + jQuery( '#_icl_nonce_sd' ).val() + '&post_lang=' + post_lang,
+        url: ajaxurl,
+        data: 'action=wpml_ajx_set_duplication&wpml_original_post_id=' + wpml_original_post_id + '&_icl_nonce=' + jQuery( '#_icl_nonce_sd' ).val() + '&post_lang=' + post_lang,
         success: function ( msg ) {
+          // Two answers reach here without a post to open, and both used to
+          // navigate to `&post=undefined` / `&post=0` and land the editor on
+          // nothing:
+          //
+          //  - the paused refusal (wpmldev-8026): the server answers
+          //    wp_send_json_error with a reason instead of an id. The button is
+          //    not rendered for a paused language, so this is the stale page;
+          //  - id 0 - set_duplicate()'s long-standing "nothing to do" answer,
+          //    reported as a SUCCESS carrying id 0. That case is not new and is
+          //    not about pausing; it is swallowed here for the same reason,
+          //    because 0 is not a post to open either.
+          //
+          // Neither says anything to the user beyond putting the button back:
+          // no new string is minted on this branch, and a refusal the user
+          // cannot have triggered from a current page needs no sentence.
+          if ( !msg || !msg.success || !msg.data || !msg.data.id ) {
+            icl_set_duplicate.next( 'img' ).remove()
+            icl_set_duplicate.removeAttr( 'disabled' )
+            return
+          }
           location.replace(
             location.href.replace( 'post-new.php', 'post.php' ).replace( /&trid=([0-9]+)/, '' ) + '&post=' + msg.data.id + '&action=edit' )
         }

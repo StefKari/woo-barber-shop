@@ -1,7 +1,11 @@
 <?php
 /**
-** A base module for [select] and [select*]
-**/
+ * Drop-down menu
+ *
+ * @link https://contactform7.com/checkboxes-radio-buttons-and-menus/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* form_tag handler */
 
@@ -35,10 +39,7 @@ function wpcf7_select_form_tag_handler( $tag ) {
 	$atts['class'] = $tag->get_class_option( $class );
 	$atts['id'] = $tag->get_id_option();
 	$atts['tabindex'] = $tag->get_option( 'tabindex', 'signed_int', true );
-
-	$atts['autocomplete'] = $tag->get_option(
-		'autocomplete', '[-0-9a-zA-Z]+', true
-	);
+	$atts['autocomplete'] = $tag->get_autocomplete_option();
 
 	if ( $tag->is_required() ) {
 		$atts['aria-required'] = 'true';
@@ -81,8 +82,7 @@ function wpcf7_select_form_tag_handler( $tag ) {
 		'multiple' => $multiple,
 	) );
 
-	if ( $include_blank
-	or empty( $values ) ) {
+	if ( $include_blank or empty( $values ) ) {
 		array_unshift(
 			$labels,
 			__( '&#8212;Please choose an option&#8212;', 'contact-form-7' )
@@ -214,7 +214,7 @@ function wpcf7_swv_add_select_enum_rules( $schema, $contact_form ) {
 				'field' => $field,
 				'accept' => array_values( $field_values ),
 				'error' => $contact_form->filter_message(
-					__( "Undefined value was submitted through this field.", 'contact-form-7' )
+					__( 'Undefined value was submitted through this field.', 'contact-form-7' )
 				),
 			) )
 		);
@@ -240,34 +240,43 @@ function wpcf7_tag_generator_menu( $contact_form, $options ) {
 		'select' => array(
 			'display_name' => __( 'Drop-down menu', 'contact-form-7' ),
 			'heading' => __( 'Drop-down menu form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a <a href="https://contactform7.com/checkboxes-radio-buttons-and-menus/">drop-down menu</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to drop-down menu doc */
+				__( 'Generates a form-tag for a <a href="%s">drop-down menu</a>.', 'contact-form-7' ),
+				'https://contactform7.com/checkboxes-radio-buttons-and-menus/'
+			),
 		),
 	);
 
 	$tgg = new WPCF7_TagGeneratorGenerator( $options['content'] );
 
-?>
-<header class="description-box">
-	<h3><?php
-		echo esc_html( $field_types['select']['heading'] );
-	?></h3>
+	$formatter = new WPCF7_HTMLFormatter();
 
-	<p><?php
-		$description = wp_kses(
-			$field_types['select']['description'],
-			array(
-				'a' => array( 'href' => true ),
-				'strong' => array(),
-			),
-			array( 'http', 'https' )
-		);
+	$formatter->append_start_tag( 'header', array(
+		'class' => 'description-box',
+	) );
 
-		echo $description;
-	?></p>
-</header>
+	$formatter->append_start_tag( 'h3' );
 
-<div class="control-box">
-	<?php
+	$formatter->append_preformatted(
+		esc_html( $field_types['select']['heading'] )
+	);
+
+	$formatter->end_tag( 'h3' );
+
+	$formatter->append_start_tag( 'p' );
+
+	$formatter->append_preformatted(
+		wp_kses_data( $field_types['select']['description'] )
+	);
+
+	$formatter->end_tag( 'header' );
+
+	$formatter->append_start_tag( 'div', array(
+		'class' => 'control-box',
+	) );
+
+	$formatter->call_user_func( static function () use ( $tgg, $field_types ) {
 		$tgg->print( 'field_type', array(
 			'with_required' => true,
 			'select_options' => array(
@@ -282,15 +291,19 @@ function wpcf7_tag_generator_menu( $contact_form, $options ) {
 		$tgg->print( 'selectable_values', array(
 			'first_as_label' => true,
 		) );
-	?>
-</div>
+	} );
 
-<footer class="insert-box">
-	<?php
+	$formatter->end_tag( 'div' );
+
+	$formatter->append_start_tag( 'footer', array(
+		'class' => 'insert-box',
+	) );
+
+	$formatter->call_user_func( static function () use ( $tgg, $field_types ) {
 		$tgg->print( 'insert_box_content' );
 
 		$tgg->print( 'mail_tag_tip' );
-	?>
-</footer>
-<?php
+	} );
+
+	$formatter->print();
 }

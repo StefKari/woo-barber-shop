@@ -7,6 +7,7 @@
  */
 
 use Automattic\Jetpack\Constants;
+use Automattic\WooCommerce\Internal\Admin\Logging\PageController as LoggingPageController;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,6 +15,12 @@ defined( 'ABSPATH' ) || exit;
  * WC_Admin_Status Class.
  */
 class WC_Admin_Status {
+	/**
+	 * An instance of the DB log handler list table.
+	 *
+	 * @var WC_Admin_Log_Table_List
+	 */
+	private static $db_log_list_table;
 
 	/**
 	 * Handles output of the reports page in admin.
@@ -26,6 +33,11 @@ class WC_Admin_Status {
 	 * Handles output of report.
 	 */
 	public static function status_report() {
+		// Used by the report template.
+		if ( ! class_exists( 'WC_Plugin_Updates' ) ) {
+			include_once __DIR__ . '/plugin-updates/class-wc-plugin-updates.php';
+		}
+
 		include_once __DIR__ . '/views/html-admin-page-status-report.php';
 	}
 
@@ -37,23 +49,26 @@ class WC_Admin_Status {
 			wp_die( 'Cannot load the REST API to access WC_REST_System_Status_Tools_Controller.' );
 		}
 
-		$tools = self::get_tools();
+		$tools                 = self::get_tools();
+		$tool_requires_refresh = false;
 
-		if ( ! empty( $_GET['action'] ) && ! empty( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( wp_unslash( $_REQUEST['_wpnonce'] ), 'debug_action' ) ) { // WPCS: input var ok, sanitization ok.
+		if ( ! empty( $_GET['action'] ) && ! empty( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( wp_unslash( $_REQUEST['_wpnonce'] ), 'debug_action' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Tools are allowlisted and nonce-protected; log handles are sanitized and confined.
 			$tools_controller = new WC_REST_System_Status_Tools_Controller();
-			$action           = wc_clean( wp_unslash( $_GET['action'] ) ); // WPCS: input var ok.
+			$action           = wc_clean( wp_unslash( $_GET['action'] ) );
 
 			if ( array_key_exists( $action, $tools ) ) {
 				$response = $tools_controller->execute_tool( $action );
 
-				$tool = $tools[ $action ];
-				$tool = array(
+				$tool                  = $tools[ $action ];
+				$tool_requires_refresh = $tool['requires_refresh'] ?? false;
+				$tool                  = array(
 					'id'          => $action,
 					'name'        => $tool['name'],
 					'action'      => $tool['button'],
 					'description' => $tool['desc'],
+					'disabled'    => $tool['disabled'] ?? false,
 				);
-				$tool = array_merge( $tool, $response );
+				$tool                  = array_merge( $tool, $response );
 
 				/**
 				 * Fires after a WooCommerce system status tool has been executed.
@@ -76,8 +91,12 @@ class WC_Admin_Status {
 		}
 
 		// Display message if settings settings have been saved.
-		if ( isset( $_REQUEST['settings-updated'] ) ) { // WPCS: input var ok.
+		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			echo '<div class="updated inline"><p>' . esc_html__( 'Your changes have been saved.', 'woocommerce' ) . '</p></div>';
+		}
+
+		if ( $tool_requires_refresh ) {
+			$tools = self::get_tools();
 		}
 
 		include_once __DIR__ . '/views/html-admin-page-status-tools.php';
@@ -97,13 +116,7 @@ class WC_Admin_Status {
 	 * Show the logs page.
 	 */
 	public static function status_logs() {
-		$log_handler = Constants::get_constant( 'WC_LOG_HANDLER' );
-
-		if ( 'WC_Log_Handler_DB' === $log_handler ) {
-			self::status_logs_db();
-		} else {
-			self::status_logs_file();
-		}
+		wc_get_container()->get( LoggingPageController::class )->render();
 	}
 
 	/**
@@ -112,15 +125,15 @@ class WC_Admin_Status {
 	public static function status_logs_file() {
 		$logs = self::scan_log_files();
 
-		if ( ! empty( $_REQUEST['log_file'] ) && isset( $logs[ sanitize_title( wp_unslash( $_REQUEST['log_file'] ) ) ] ) ) { // WPCS: input var ok, CSRF ok.
-			$viewed_log = $logs[ sanitize_title( wp_unslash( $_REQUEST['log_file'] ) ) ]; // WPCS: input var ok, CSRF ok.
+		if ( ! empty( $_REQUEST['log_file'] ) && isset( $logs[ sanitize_title( wp_unslash( $_REQUEST['log_file'] ) ) ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tools are allowlisted and nonce-protected; log handles are sanitized and confined.
+			$viewed_log = $logs[ sanitize_title( wp_unslash( $_REQUEST['log_file'] ) ) ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tools are allowlisted and nonce-protected; log handles are sanitized and confined.
 		} elseif ( ! empty( $logs ) ) {
 			$viewed_log = current( $logs );
 		}
 
 		$handle = ! empty( $viewed_log ) ? self::get_log_file_handle( $viewed_log ) : '';
 
-		if ( ! empty( $_REQUEST['handle'] ) ) { // WPCS: input var ok, CSRF ok.
+		if ( ! empty( $_REQUEST['handle'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tools are allowlisted and nonce-protected; log handles are sanitized and confined.
 			self::remove_log();
 		}
 
@@ -131,15 +144,17 @@ class WC_Admin_Status {
 	 * Show the log page contents for db log handler.
 	 */
 	public static function status_logs_db() {
-		if ( ! empty( $_REQUEST['flush-logs'] ) ) { // WPCS: input var ok, CSRF ok.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce handled in flush_db_logs().
+		if ( isset( $_REQUEST['flush-logs'] ) ) {
 			self::flush_db_logs();
 		}
 
-		if ( isset( $_REQUEST['action'] ) && isset( $_REQUEST['log'] ) ) { // WPCS: input var ok, CSRF ok.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce handled in log_table_bulk_actions().
+		if ( isset( $_REQUEST['action'] ) && isset( $_REQUEST['log'] ) ) {
 			self::log_table_bulk_actions();
 		}
 
-		$log_table_list = new WC_Admin_Log_Table_List();
+		$log_table_list = self::get_db_log_list_table();
 		$log_table_list->prepare_items();
 
 		include_once __DIR__ . '/views/html-admin-page-status-logs-db.php';
@@ -196,7 +211,7 @@ class WC_Admin_Status {
 	 * @return array
 	 */
 	public static function scan_template_files( $template_path ) {
-		$files  = @scandir( $template_path ); // @codingStandardsIgnoreLine.
+		$files  = is_string( $template_path ) ? @scandir( $template_path ) : array(); // @codingStandardsIgnoreLine.
 		$result = array();
 
 		if ( ! empty( $files ) ) {
@@ -251,7 +266,7 @@ class WC_Admin_Status {
 		$update_theme_version = 0;
 
 		// Check .org for updates.
-		if ( is_object( $api ) && ! is_wp_error( $api ) ) {
+		if ( is_object( $api ) && ! is_wp_error( $api ) && isset( $api->version ) ) {
 			$update_theme_version = $api->version;
 		} elseif ( strstr( $theme->{'Author URI'}, 'woothemes' ) ) { // Check WooThemes Theme Version.
 			$theme_dir          = substr( strtolower( str_replace( ' ', '', $theme->Name ) ), 0, 45 ); // @codingStandardsIgnoreLine.
@@ -291,13 +306,13 @@ class WC_Admin_Status {
 	 * Remove/delete the chosen file.
 	 */
 	public static function remove_log() {
-		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['_wpnonce'] ), 'remove_log' ) ) { // WPCS: input var ok, sanitization ok.
+		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['_wpnonce'] ), 'remove_log' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Tools are allowlisted and nonce-protected; log handles are sanitized and confined.
 			wp_die( esc_html__( 'Action failed. Please refresh the page and retry.', 'woocommerce' ) );
 		}
 
-		if ( ! empty( $_REQUEST['handle'] ) ) {  // WPCS: input var ok.
+		if ( ! empty( $_REQUEST['handle'] ) ) {
 			$log_handler = new WC_Log_Handler_File();
-			$log_handler->remove( wp_unslash( $_REQUEST['handle'] ) ); // WPCS: input var ok, sanitization ok.
+			$log_handler->remove( wp_unslash( $_REQUEST['handle'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Tools are allowlisted and nonce-protected; log handles are sanitized and confined.
 		}
 
 		wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) );
@@ -305,19 +320,37 @@ class WC_Admin_Status {
 	}
 
 	/**
+	 * Return a stored instance of the DB log list table class.
+	 *
+	 * @return WC_Admin_Log_Table_List
+	 */
+	public static function get_db_log_list_table() {
+		if ( is_null( self::$db_log_list_table ) ) {
+			self::$db_log_list_table = new WC_Admin_Log_Table_List();
+		}
+
+		return self::$db_log_list_table;
+	}
+
+
+	/**
 	 * Clear DB log table.
 	 *
 	 * @since 3.0.0
 	 */
 	private static function flush_db_logs() {
-		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'woocommerce-status-logs' ) ) { // WPCS: input var ok, sanitization ok.
-			wp_die( esc_html__( 'Action failed. Please refresh the page and retry.', 'woocommerce' ) );
+		check_admin_referer( 'bulk-logs' );
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( esc_html__( 'You do not have permission to manage log entries.', 'woocommerce' ) );
 		}
 
 		WC_Log_Handler_DB::flush();
 
-		wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) );
-		exit();
+		$sendback = wp_sanitize_redirect( admin_url( 'admin.php?page=wc-status&tab=logs' ) );
+
+		wp_safe_redirect( $sendback );
+		exit;
 	}
 
 	/**
@@ -326,15 +359,22 @@ class WC_Admin_Status {
 	 * @since 3.0.0
 	 */
 	private static function log_table_bulk_actions() {
-		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'woocommerce-status-logs' ) ) { // WPCS: input var ok, sanitization ok.
-			wp_die( esc_html__( 'Action failed. Please refresh the page and retry.', 'woocommerce' ) );
+		check_admin_referer( 'bulk-logs' );
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( esc_html__( 'You do not have permission to manage log entries.', 'woocommerce' ) );
 		}
 
-		$log_ids = array_map( 'absint', (array) isset( $_REQUEST['log'] ) ? wp_unslash( $_REQUEST['log'] ) : array() ); // WPCS: input var ok, sanitization ok.
+		$log_ids = (array) filter_input( INPUT_GET, 'log', FILTER_CALLBACK, array( 'options' => 'absint' ) );
 
-		if ( ( isset( $_REQUEST['action'] ) && 'delete' === $_REQUEST['action'] ) || ( isset( $_REQUEST['action2'] ) && 'delete' === $_REQUEST['action2'] ) ) { // WPCS: input var ok, sanitization ok.
+		$action = self::get_db_log_list_table()->current_action();
+
+		if ( 'delete' === $action ) {
 			WC_Log_Handler_DB::delete( $log_ids );
-			wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) );
+
+			$sendback = remove_query_arg( array( 'action', 'action2', 'log', '_wpnonce', '_wp_http_referer' ), wp_get_referer() );
+
+			wp_safe_redirect( $sendback );
 			exit();
 		}
 	}
@@ -355,7 +395,7 @@ class WC_Admin_Status {
 			<?php
 				echo esc_html(
 					sprintf(
-					// translators: Comma seperated list of missing tables.
+					// translators: Comma separated list of missing tables.
 						__( 'Missing base tables: %s. Some WooCommerce functionality may not work as expected.', 'woocommerce' ),
 						implode( ', ', $missing_tables )
 					)
@@ -393,7 +433,7 @@ class WC_Admin_Status {
 				$has_newer_version = false;
 				$version_string    = $plugin['version'];
 				$network_string    = '';
-				if ( strstr( $plugin['url'], 'woothemes.com' ) || strstr( $plugin['url'], 'woocommerce.com' ) ) {
+				if ( strstr( $plugin['url'], 'woothemes.com' ) || strstr( $plugin['url'], 'woocommerce.com' ) || strstr( $plugin['url'], 'woo.com' ) ) {
 					if ( ! empty( $plugin['version_latest'] ) && version_compare( $plugin['version_latest'], $plugin['version'], '>' ) ) {
 						/* translators: 1: current version. 2: latest version */
 						$version_string = sprintf( __( '%1$s (update to version %2$s is available)', 'woocommerce' ), $plugin['version'], $plugin['version_latest'] );

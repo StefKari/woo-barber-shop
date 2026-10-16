@@ -24,11 +24,36 @@ class ImporterCSV {
             $ruleRepository->deleteAllRules();
         }
 
-        self::createRules($rules);
+        if( apply_filters("adp_import_merge_rules", true) ) {
+            $newRulesHash = array();
+            foreach ($rules as $rule) {
+                foreach ($rule as $key => $value) {
+                    if ($key !== 'filter') {
+                        $filteredData[$key] = $value;
+                    }
+                }
+                $newRulesHash[] = array (md5(json_encode($filteredData)), $rule);
+            }
+            usort($newRulesHash, function($a, $b) {
+                return strcmp($a[0], $b[0]);
+            });
+
+            $newRules= array();
+            $previosHash = null;
+            for($i = 0; $i < count($newRulesHash); $i++) {
+                if($newRulesHash[$i][0] == $previosHash){
+                    $newRules[count($newRules)-1]['filter']['value'][0] .= '|' . $newRulesHash[$i][1]['filter']['value'][0];
+                }else {
+                    $newRules[] = $newRulesHash[$i][1];
+                    $previosHash = $newRulesHash[$i][0];
+                }
+            }
+        } else //don't merge rules during import
+            $newRules = $rules;
+        self::createRules($newRules);
 
         $ruleObjects = array();
-
-        foreach ($rules as $rawRule) {
+        foreach ($newRules as $pos=>$rawRule) {
             /** Do not allow importing data that does not fit. E.g.: collections */
             if ( ! isset($rawRule['rule_type'])) {
                 continue;
@@ -41,7 +66,7 @@ class ImporterCSV {
             }
 
             if ($rulesCol->getRules()) {
-                $ruleObjects[] = $rulesCol->getRules()[0];
+                $ruleObjects[] = $rulesCol->getFirst();
             }
         }
 
@@ -49,6 +74,7 @@ class ImporterCSV {
             return;
         }
         self::$warnings[] = sprintf(
+            /* translators: Message about the imported rule*/
             _n(
                 '%s rule were imported',
                 '%s  rules were imported',
@@ -61,7 +87,8 @@ class ImporterCSV {
         $ruleCounter      = $ruleRepository->getRulesCount() + 1;
         foreach ($ruleObjects as &$ruleObject) {
             $rule        = $exporter->convertRule($ruleObject);
-            $ruleCounter = self::setRuleTitleAndId($rule, $ruleRepository, $importOption, $ruleCounter);
+            if ($importOption == 'update')
+                self::setId($rule, $ruleRepository);
             $ruleObj     = Rule::fromArray($rule);
             $ruleRepository->storeRule($ruleObj);
         }
@@ -96,21 +123,26 @@ class ImporterCSV {
     }
 
     public static function prepareCSV($file){
+        $separator = apply_filters("adp_import_rules_separator", ",");
+        $enclosure = apply_filters("adp_import_rules_enclosure", "\"");
+        $escape = apply_filters("adp_import_rules_escape", "\\");
+
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
         if (($handle = fopen($file, "r")) !== false) {
             $filterType = '';
-            if (($data = fgetcsv($handle)) !== false && is_array($data)) {
+            if (($data = fgetcsv($handle, null, $separator, $enclosure, $escape)) !== false && is_array($data)) {
                 if (str_contains(strtolower($data[0]), 'type')) {
                     $filterType = self::convertSupportedValueToType($data[1]);
                 }
             }
             $discountType = '';
-            if (($data = fgetcsv($handle)) !== false && is_array($data)) {
+            if (($data = fgetcsv($handle, null, $separator, $enclosure, $escape)) !== false && is_array($data)) {
                 if (str_contains(strtolower($data[0]), 'type')) {
                     $discountType = self::convertSupportedValueToType($data[1]);
                 }
             }
             $ruleBlocksSet = array();
-            while (($data = fgetcsv($handle)) !== false) {
+            while (($data = fgetcsv($handle, null, $separator, $enclosure, $escape)) !== false) {
                 $data = array_map('strtolower', $data);
                 if (in_array($data[0], array('filter', 'discountedprice', 'fromqty', 'toqty', 'role'))) {
                     foreach ($data as $name) {
@@ -134,7 +166,7 @@ class ImporterCSV {
             $ruleBlocksSetLength = count($ruleBlocksSet);
             $rules               = array();
             $newRule             = array();
-            while (($data = fgetcsv($handle)) !== false) {
+            while (($data = fgetcsv($handle, null, $separator, $enclosure, $escape)) !== false) {
                 if (empty($data[0])) {
                     for ($setIter = 1; $setIter < $ruleBlocksSetLength; $setIter++) {
                         if (empty($data[$setIter])) {
@@ -164,6 +196,7 @@ class ImporterCSV {
                 }
             }
             $rules[] = $newRule;
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
             fclose($handle);
 
             return $rules;
@@ -173,62 +206,67 @@ class ImporterCSV {
         return array();
     }
 
-    protected static function setRuleTitleAndId(&$rule, &$ruleRepository, $importOption, $iter){
+    protected static function setRuleTitle(&$rule, $filter_name, $pos){
+        $rule['title'] = array();
+        if($filter_name)
+            $rule['title'][] = $filter_name;
         if ( ! empty($rule['bulk_adjustments'])) {
-            $rule['title'] = __('Bulk ', 'advanced-dynamic-pricing-for-woocommerce');
+            if( $filter_name )
+                $rule['title'][] = "-";
+            $rule['title'][] = __('Bulk', 'advanced-dynamic-pricing-for-woocommerce');
         }
         if ( ! empty($rule['conditions'])) {
-            $rule['title'] .= __('for Role ', 'advanced-dynamic-pricing-for-woocommerce');
+            $rule['title'][] = __('for Roles', 'advanced-dynamic-pricing-for-woocommerce');
         }
         if ( ! empty($rule['role_discounts'])) {
-            $rule['title'] = __('Role ', 'advanced-dynamic-pricing-for-woocommerce');
+            if( $filter_name ) {
+                $rule['title'][] = "-" . __('Roles', 'advanced-dynamic-pricing-for-woocommerce');
+            } else {
+                $rule['title'][] = __('Roles', 'advanced-dynamic-pricing-for-woocommerce');
+            }
         }
         if (empty($rule['role_discounts']) && empty($rule['bulk_adjustments'])) {
-            $rule['title'] = __('Sample Product ', 'advanced-dynamic-pricing-for-woocommerce');
+            //nothing!just product/sku $rule['title'][] = __('Discount', 'advanced-dynamic-pricing-for-woocommerce');
         }
-        $rule['title'] .= __('Discount ', 'advanced-dynamic-pricing-for-woocommerce');
+        if( empty($rule['title']) )
+            $rule['title'][] = __('Imported Rule', 'advanced-dynamic-pricing-for-woocommerce') . ' #' . $pos;
 
-        if ($importOption == 'reset') {
-            $rule['title'] .= $iter;
-
-            return ++$iter;
-        } elseif ($importOption == 'add') {
-            $rule['title'] .= $iter;
-
-            return ++$iter;
-        } elseif ($importOption == 'update') {
-            $rulesLikeFilter = $ruleRepository->getRules(array('filter_types' => array($rule['filters'][0]['type'], 'active_only' => true)));
-            $findRule        = false;
-            foreach ($rulesLikeFilter as $ruleLikeFilter) {
-                if ($rule['filters'][0]['type'] == $ruleLikeFilter->filters[0]['type']
-                    && count($ruleLikeFilter->filters) === 1
-                    && empty(
-                    array_diff(
-                        $ruleLikeFilter->filters[0]['value'],
-                        $rule['filters'][0]['value']
-                    )
-                    )) {
-                    $rule['id']       = $ruleLikeFilter->id;
-                    $rule['priority'] = $ruleLikeFilter->priority;
-                    $rule['title']    = $ruleLikeFilter->title;
-                    $findRule         = true;
-                    break;
-                }
-            }
-            if ( ! $findRule) {
-                $rule['title'] .= $iter;
-
-                return ++$iter;
-            }
-
-            return $iter;
+        $char = array_sum(array_map(function ($str) {
+            return mb_strlen($str, 'UTF-8');
+        }, $rule['title'])) + count($rule['title']) - 1;
+        
+        if ($char > 20) {
+            $excess = $char - 20;
+            $rule['title'][0] = mb_substr($rule['title'][0], 0, -$excess, 'UTF-8');
         }
 
-        return $iter;
+        $rule['title'] = join(" ", $rule['title']);
+        $rule['title'] = apply_filters("adp_import_rules_rule_title", $rule['title'], $rule, $pos);
+    }
+
+    protected static function setId(&$rule, &$ruleRepository){
+        $rulesLikeFilter = $ruleRepository->getRules(array('filter_types' => array($rule['filters'][0]['type'], 'active_only' => true)));
+        foreach ($rulesLikeFilter as $ruleLikeFilter) {
+            if (isset($ruleLikeFilter->filters[0])
+                && $rule['filters'][0]['type'] == $ruleLikeFilter->filters[0]['type']
+                && count($ruleLikeFilter->filters) === 1
+                && empty(
+                array_diff(
+                    $ruleLikeFilter->filters[0]['value'],
+                    $rule['filters'][0]['value']
+                )
+                )) {
+                $rule['id']       = $ruleLikeFilter->id;
+                $rule['priority'] = $ruleLikeFilter->priority;
+                $rule['title']    = $ruleLikeFilter->title;
+                break;
+            }
+        }
     }
 
     private static function createRules(&$rules){
-        foreach ($rules as &$rule) {
+        foreach ($rules as $pos=>&$rule) {
+            $filter_name  = $rule['filter']['value'][0]; // required only to make correct rule title!
             $rule['rule_type'] = 'common';
             $rule['enabled']   = 'on';
             $rule['filters']   = array(
@@ -236,7 +274,7 @@ class ImporterCSV {
                     'qty'    => 1,
                     'type'   => $rule['filter']['type'],
                     'method' => 'in_list',
-                    'value'  => self::convertProductNameToId($rule['filter']['type'], $rule['filter']['value']),
+                    'value'  => self::convertProductNameToId($rule['filter']['type'], explode('|', $rule['filter']['value'][0])),
                 ),
             );
             if (isset($rule['filters'][0]['value'][0]) && $rule['filters'][0]['value'][0] == 'undefined') {
@@ -247,7 +285,7 @@ class ImporterCSV {
                 $rule             = null;
                 continue;
             }
-            if (is_array($rule['fromqty']['value'])) {
+            if (isset($rule['fromqty']['value']) AND is_array($rule['fromqty']['value'])) {
                 $rule['bulk_adjustments'] = array(
                     'type'              => 'bulk',
                     'discount_type'     => $rule['discountedprice']['type'],
@@ -263,7 +301,7 @@ class ImporterCSV {
                     array_map(
                         null,
                         $rule['fromqty']['value'],
-                        $rule['toqty']['value'],
+                        $rule['toqty']['value'] ?? [],
                         $rule['discountedprice']['value']
                     ) as $range
                 ) {
@@ -284,7 +322,7 @@ class ImporterCSV {
                 }else{
                     $rule['role']['value'] = explode('|', $rule['role']['value']);
                 }
-                if (is_array($rule['fromqty']['value'])) {
+                if (isset($rule['fromqty']['value']) AND is_array($rule['fromqty']['value'])) {
                     $rule['conditions'] = array(
                         array(
                             'type'    => 'customer_role',
@@ -298,15 +336,23 @@ class ImporterCSV {
                         'conditions_relationship' => 'and',
                     );
                 } else {
-                    $rule['role_discounts'] = array(
-                        'rows' => array(
-                            array(
+                    $rows = array();
+                    if(count($rule['discountedprice']['value']) ==  count($rule['role']['value']) ) {
+                        for($i=0;$i<count($rule['discountedprice']['value']);$i++ )
+                            $rows[] = array(
+                                'discount_type'  => $rule['discountedprice']['type'],
+                                'discount_value' => $rule['discountedprice']['value'][$i],
+                                'roles'          => array($rule['role']['value'][$i]),
+                            );
+                    } else {
+                        // one discount for all roles
+                        $rows[] = array(
                                 'discount_type'  => $rule['discountedprice']['type'],
                                 'discount_value' => $rule['discountedprice']['value'][0],
                                 'roles'          => $rule['role']['value'],
-                            ),
-                        ),
-                    );
+                        );
+                    }
+                    $rule['role_discounts'] = array('rows' =>$rows);
                 }
             }
             if ( ! isset($rule['bulk_adjustments']) && ! isset($rule['role_discounts'])) {
@@ -322,6 +368,7 @@ class ImporterCSV {
                     ),
                 );
             }
+            self::setRuleTitle($rule,$filter_name,$pos+1);
             unset($rule['discountedprice'], $rule['fromqty'], $rule['toqty'], $rule['filter'], $rule['role']);
         }
     }

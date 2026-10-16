@@ -23,11 +23,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @internal
  */
-function cptui_support_enqueue_scripts() {
+function cptui_support_enqueue_scripts( $hook ) {
 
-	$current_screen = get_current_screen();
-
-	if ( ! is_object( $current_screen ) || 'cpt-ui_page_cptui_support' !== $current_screen->base ) {
+	if ( 'cpt-ui_page_cptui_support' !== $hook ) {
 		return;
 	}
 
@@ -49,6 +47,12 @@ add_action( 'admin_enqueue_scripts', 'cptui_support_enqueue_scripts' );
  */
 function cptui_support() {
 	echo '<div class="wrap cptui-support">';
+		/**
+		 * Fires immediately after wrap div started on all of the cptui admin pages.
+		 *
+		 * @since 1.14.0
+		 */
+		do_action( 'cptui_inside_wrap' );
 
 		/**
 		 * Fires at the top of the FAQ/Support page.
@@ -60,14 +64,18 @@ function cptui_support() {
 		<h1><?php esc_html_e( 'Custom Post Type UI Support', 'custom-post-type-ui' ); ?></h1>
 
 		<p>
-		<?php printf(
-			esc_html__( 'Please note that %s this plugin will not handle display %s of registered post types or taxonomies in your current theme. It simply registers them for you. To display your data, check out %s. %s to see some examples that are available with Custom Post Type UI Extended. If all else fails, visit us on the %s', 'custom-post-type-ui' ),
+		<?php
+		printf(
+			/* translators: Placeholders are just for HTML markup that doesn't need translated */
+			esc_html__( 'Please note that %1$s this plugin will not handle display %2$s of registered post types or taxonomies in your current theme. It simply registers them for you. To display your data, check out %3$s for shortcodes, blocks, layouts, and more. %4$s to see what is available with CPT UI Pro. If all else fails, visit us on the %5$s', 'custom-post-type-ui' ),
 			'<strong>',
 			'</strong>',
-			'<a href="https://pluginize.com/plugins/custom-post-type-ui-extended/?utm_source=faq&utm_medium=text&utm_campaign=cptui">' . esc_html__( 'CPTUI Extended', 'custom-post-type-ui' ) . '</a>',
-			'<a href="https://pluginize.com/cpt-ui-extended-features/?utm_source=faq-layouts&utm_medium=text&utm_campaign=cptui">' . esc_html__( 'View our Layouts page', 'custom-post-type-ui' ) . '</a>',
+			'<a href="https://pluginize.com/plugins/custom-post-type-ui-pro/?utm_source=faq&utm_medium=text&utm_campaign=cptui">' . esc_html__( 'CPT UI Pro', 'custom-post-type-ui' ) . '</a>',
+			'<a href="https://pluginize.com/plugins/custom-post-type-ui-pro/?utm_source=faq-layouts&utm_medium=text&utm_campaign=cptui">' . esc_html__( 'View our features page', 'custom-post-type-ui' ) . '</a>',
 			'<a href="https://www.wordpress.org/support/plugin/custom-post-type-ui/">' . esc_html__( 'Support Forums', 'custom-post-type-ui' ) . '</a>'
-		); ?></p>
+		);
+		?>
+		</p>
 
 		<table id="support" class="form-table cptui-table">
 			<tr>
@@ -94,12 +102,15 @@ function cptui_support() {
 							<div class="answer" id="q4">
 								<?php
 								printf(
+									/* translators: Placeholders are just for HTML markup that doesn't need translated */
 									esc_html__( 'You can have them automatically removed from display via a purchased copy of %s.', 'custom-post-type-ui' ),
-									sprintf( '<a href="%s">%s</a>',
-										'https://pluginize.com/plugins/custom-post-type-ui-extended/?utm_source=faq-remove&utm_medium=text&utm_campaign=cptui',
-										'Custom Post Type UI Extended'
+									sprintf(
+										'<a href="%s">%s</a>',
+										'https://pluginize.com/plugins/custom-post-type-ui-pro/?utm_source=faq-remove&utm_medium=text&utm_campaign=cptui',
+										'Custom Post Type UI Pro'
 									)
-								); ?>
+								);
+								?>
 							</div>
 						</li>
 						<li>
@@ -108,13 +119,13 @@ function cptui_support() {
 							</div>
 						</li>
 						<li>
-							<span tabindex="0" class="question" aria-controls="q6" aria-expanded="false"><?php esc_html_e( 'Do I still need Custom Post Type UI if I purchase and install Custom Post Type UI Extended?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q6"><?php esc_html_e( 'Yes you will. The Custom Post Type UI Extended is not a replacement of the free version with added extra features. It acts based on the data made available through Custom Post Type UI', 'custom-post-type-ui' ); ?>
+							<span tabindex="0" class="question" aria-controls="q6" aria-expanded="false"><?php esc_html_e( 'Do I still need Custom Post Type UI if I purchase and install Custom Post Type UI Pro?', 'custom-post-type-ui' ); ?></span>
+							<div class="answer" id="q6"><?php esc_html_e( 'Yes you will. Custom Post Type UI Pro is not a replacement of the free version. It acts on the post types and taxonomies you register through Custom Post Type UI to add display tools, list table controls, integrations, and more.', 'custom-post-type-ui' ); ?>
 							</div>
 						</li>
 						<li>
-							<span tabindex="0" class="question" aria-controls="q7" aria-expanded="false"><?php esc_html_e( 'Does Custom Post Type UI Extended require multisite?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q7"><?php esc_html_e( 'No it does not. The Shortcode builder is not multisite dependent and will work with either setup.', 'custom-post-type-ui' ); ?>
+							<span tabindex="0" class="question" aria-controls="q7" aria-expanded="false"><?php esc_html_e( 'Does Custom Post Type UI Pro require multisite?', 'custom-post-type-ui' ); ?></span>
+							<div class="answer" id="q7"><?php esc_html_e( 'No it does not. Pro works on single-site installations as well. Multisite/Network support is included as an additional feature for those who run a network of sites.', 'custom-post-type-ui' ); ?>
 							</div>
 						</li>
 					</ol>
@@ -130,36 +141,16 @@ function cptui_support() {
 						<li>
 							<span tabindex="0" class="question" aria-controls="q9" aria-expanded="false"><?php esc_html_e( 'I changed my custom post type name and now I can not get to my posts. How do I get them back?', 'custom-post-type-ui' ); ?></span>
 							<div class="answer" id="q9"><?php esc_html_e( 'You can either change the custom post type name back to the original name or try the Post Type Switcher plugin', 'custom-post-type-ui' ); ?>
-								<a href="https://wordpress.org/plugins/post-type-switcher/" target="_blank">https://wordpress.org/extend/plugins/post-type-switcher/</a>
+								<a href="https://wordpress.org/plugins/post-type-switcher/">https://wordpress.org/plugins/post-type-switcher/</a>
 							</div>
 						</li>
 						<li>
 							<span tabindex="0" class="question" aria-controls="q10" aria-expanded="false"><?php esc_html_e( 'I changed my custom post type or taxonomy slug and now I have duplicates shown. How do I remove the duplicate?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q10"><?php esc_html_e( 'Renaming the slug for a post type or taxonomy creates a new entry in our saved option which gets registered as its own post type or taxonomy. Since the settings will be mirrored from the previous slug, you will just need to delete the previous version\'s entry.', 'custom-post-type-ui' ); ?> <a href="https://wordpress.org/plugins/post-type-switcher/" target="_blank">https://wordpress.org/extend/plugins/post-type-switcher/</a></div>
+							<div class="answer" id="q10"><?php esc_html_e( 'Renaming the slug for a post type or taxonomy creates a new entry in our saved option which gets registered as its own post type or taxonomy. Since the settings will be mirrored from the previous slug, you will just need to delete the previous version\'s entry.', 'custom-post-type-ui' ); ?></div>
 						</li>
 						<li>
 							<span tabindex="0" class="question" aria-controls="q11" aria-expanded="false"><?php esc_html_e( 'I have added post thumbnail and/or post format support to my post type, but those do not appear when adding a post type post.', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q11"><?php esc_html_e( 'Make sure your theme has post "post-thumbnails" theme support enabled.', 'custom-post-type-ui' ); ?> <a href="https://codex.wordpress.org/Function_Reference/add_theme_support" target="_blank">https://codex.wordpress.org/Function_Reference/add_theme_support</a></div>
-						</li>
-						<li>
-							<span tabindex="0" class="question" aria-controls="q12" aria-expanded="false"><?php esc_html_e( 'Do you have any recommendations for an alternative to Visual Composer?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q12"><?php esc_html_e( 'We recommend using VelocityPage.', 'custom-post-type-ui' ); ?>
-								<a href="https://velocitypage.com" target="_blank">https://velocitypage.com</a>
-							</div>
-						</li>
-						<li>
-							<span tabindex="0" class="question" aria-controls="q13" aria-expanded="false"><?php esc_html_e( 'Is there any way to get Custom Post Type UI-registered post types working with Visual Composer Media Grid?', 'custom-post-type-ui' ); ?></span>
-
-							<div class="answer" id="q13"><?php esc_html_e( 'Please see the solution from the following forum support thread.', 'custom-post-type-ui' ); ?>
-								<a href="https://wordpress.org/support/topic/custom-post-type-and-visual-composer-grid-block?replies=11#post-7111458" target="_blank">https://wordpress.org/support/topic/custom-post-type-and-visual-composer-grid-block?replies=11#post-7111458</a>
-							</div>
-						</li>
-						<li>
-							<span tabindex="0" class="question" aria-controls="q14" aria-expanded="false"><?php esc_html_e( 'Why can I not use dashes in post type or taxonomy slugs?', 'custom-post-type-ui' ); ?></span>
-
-							<div class="answer" id="q14"><?php esc_html_e( 'Custom Post Type UI tries to make smart choices for our users, and forcing underscores is one of them. Please see the tutorial at the following URL for how to get dashes in your permalink urls while continuing to use underscores for the actual slug.', 'custom-post-type-ui' ); ?>
-								<a href="http://docs.pluginize.com/article/135-dashes-in-post-type-taxonomy-slugs-for-url-seo" target="_blank">http://docs.pluginize.com/article/135-dashes-in-post-type-taxonomy-slugs-for-url-seo</a>
-							</div>
+							<div class="answer" id="q11"><?php esc_html_e( 'Make sure your theme has post "post-thumbnails" theme support enabled.', 'custom-post-type-ui' ); ?> <a href="https://developer.wordpress.org/reference/functions/add_theme_support/">https://developer.wordpress.org/reference/functions/add_theme_support/</a></div>
 						</li>
 					</ol>
 				</td>
@@ -169,48 +160,67 @@ function cptui_support() {
 					<h2><?php esc_html_e( 'Front-end Display', 'custom-post-type-ui' ); ?></h2>
 					<ol id="questions_front">
 						<li>
-							<span tabindex="0" class="question" aria-controls="q15" aria-expanded="false"><?php esc_html_e( 'What template files should I edit to alter my post type display?', 'custom-post-type-ui' ); ?></span>
+							<span tabindex="0" class="question" aria-controls="q12" aria-expanded="false"><?php esc_html_e( 'What template files should I edit to alter my post type display?', 'custom-post-type-ui' ); ?></span>
+							<div class="answer" id="q12">
+								<?php
+								printf(
+									/* translators: Placeholders are just for HTML markup that doesn't need translated */
+									esc_html__( 'Please visit the %1$sTemplate Hierarchy%2$s page on the WordPress codex for details about available templates.', 'custom-post-type-ui' ),
+									'<a href="https://developer.wordpress.org/themes/classic-themes/basics/template-hierarchy/">',
+									'</a>'
+								);
+								?>
+							</div>
+						</li>
+						<li>
+							<span tabindex="0" class="question" aria-controls="q13" aria-expanded="false"><?php esc_html_e( 'How do I display my custom post type on my site?', 'custom-post-type-ui' ); ?></span>
+							<div class="answer" id="q13">
+								<?php
+								printf(
+									/* translators: Placeholders are just for HTML markup that doesn't need translated */
+									esc_html__( 'We encourage checking out %1$s for easily displaying post type content with a visual Shortcode Builder, a Gutenberg display block, and theme template overrides. If you prefer to handle on your own, you will need to utilize the %2$s class to handle display in custom locations. If you have set the post type to have archives, the archive url should be something like "http://www.mysite.com/post-type-slug"', 'custom-post-type-ui' ),
+									sprintf(
+										'<a href="%s">%s</a>',
+										'https://pluginize.com/plugins/custom-post-type-ui-pro/?utm_source=faq&utm_medium=text&utm_campaign=cptui',
+										'Custom Post Type UI Pro'
+									),
+									'<a href="https://developer.wordpress.org/reference/classes/wp_query/">WP_Query</a>'
+								);
+								?>
+							</div>
+						</li>
+						<li>
+							<span tabindex="0" class="question" aria-controls="q14" aria-expanded="false"><?php esc_html_e( 'I have added categories and tags to my custom post type, but they do not appear in the archives.', 'custom-post-type-ui' ); ?></span>
+							<div class="answer" id="q14">
+								<?php
+								printf(
+									/* translators: Placeholders are just for HTML markup that doesn't need translated */
+									esc_html__( 'You will need to add your newly created post type to the types that the category and tag archives query for. You can see a tutorial on how to do that at %1$s. You can also get this functionality via UI with a purchase of %2$s.', 'custom-post-type-ui' ),
+									'<a href="https://docs.pluginize.com/article/post-types-in-category-tag-archives/">https://docs.pluginize.com/article/post-types-in-category-tag-archives/</a>',
+									'<a href="https://pluginize.com/plugins/custom-post-type-ui-pro/?utm_source=faq&utm_medium=text&utm_campaign=cptui">CPT UI Pro</a>'
+								);
+								?>
+								</div>
+						</li>
+						<li>
+							<span tabindex="0" class="question" aria-controls="q15" aria-expanded="false"><?php esc_html_e( 'How do I add custom post type support for custom templates selection like pages have?', 'custom-post-type-ui' ); ?></span>
 							<div class="answer" id="q15">
 								<?php
 								printf(
-									esc_html__( 'Please visit the %sTemplate Hierarchy%s page on the WordPress codex for details about available templates.', 'custom-post-type-ui' ),
-									'<a href="https://codex.wordpress.org/Template_Hierarchy" target="_blank">',
+									/* translators: Placeholders are just for HTML markup that doesn't need translated */
+									esc_html__( 'Please visit the %1$sPost Type Templates in 4.7%2$s post on the Make WordPress Core blog for details about setting templates for multiple post types.', 'custom-post-type-ui' ),
+									'<a href="https://make.wordpress.org/core/2016/11/03/post-type-templates-in-4-7/">',
 									'</a>'
-								); ?>
+								);
+								?>
 							</div>
 						</li>
 						<li>
-							<span tabindex="0" class="question" aria-controls="q16" aria-expanded="false"><?php esc_html_e( 'How do I display my custom post type on my site?', 'custom-post-type-ui' ); ?></span>
+							<span tabindex="0" class="question" aria-controls="q16" aria-expanded="false"><?php esc_html_e( 'Why are my post types not showing in taxonomy term archives?', 'custom-post-type-ui' ); ?></span>
 							<div class="answer" id="q16">
 								<?php
-								printf(
-									esc_html__( 'We encourage checking out %s for easily displaying post type content wherever you can utilize a shortcode. If you prefer to handle on your own, you will need to utilize the %s class to handle display in custom locations. If you have set the post type to have archives, the archive url should be something like "http://www.mysite.com/post-type-slug"', 'custom-post-type-ui' ),
-									sprintf( '<a href="%s">%s</a>',
-										'https://pluginize.com/plugins/custom-post-type-ui-extended/?utm_source=faq&utm_medium=text&utm_campaign=cptui',
-										'Custom Post Type UI Extended'
-									),
-									'<a href="https://codex.wordpress.org/Class_Reference/WP_Query" target="_blank">WP_Query</a>'
-								); ?>
-							</div>
-						</li>
-						<li>
-							<span tabindex="0" class="question" aria-controls="q17" aria-expanded="false"><?php esc_html_e( 'I have added categories and tags to my custom post type, but they do not appear in the archives.', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q17">
-								<?php
-								printf(
-									esc_html__( 'You will need to add your newly created post type to the types that the category and tag archives query for. You can see a tutorial on how to do that at %s', 'custom-post-type-ui' ),
-									'<a href="http://docs.pluginize.com/article/17-post-types-in-category-tag-archives" target="_blank">http://docs.pluginize.com/article/17-post-types-in-category-tag-archives</a>'
-								); ?> </div>
-						</li>
-						<li>
-							<span tabindex="0" class="question" aria-controls="q18" aria-expanded="false"><?php esc_html_e( 'How do I add custom post type support for custom templates selection like pages have?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q18">
-								<?php
-								printf(
-									esc_html__( 'Please visit the %sPost Type Templates in 4.7%s post on the Make WordPress Core blog for details about setting templates for multiple post types.', 'custom-post-type-ui' ),
-									'<a href="https://make.wordpress.org/core/2016/11/03/post-type-templates-in-4-7/" target="_blank">',
-									'</a>'
-								); ?>
+								esc_html_e( 'If you have set "exclude from search" to True for the pot type, this would be why. If you need the post types in the archives, but still want to exclude them from search, it is recommended to use the "pre_get_posts" hook to unset the post type from considered types.', 'custom-post-type-ui' );
+								?>
 							</div>
 						</li>
 					</ol>
@@ -219,46 +229,45 @@ function cptui_support() {
 					<h2><?php esc_html_e( 'Advanced', 'custom-post-type-ui' ); ?></h2>
 					<ol id="questions_advanced">
 						<li>
-							<span tabindex="0" class="question" aria-controls="q19" aria-expanded="false"><?php esc_html_e( 'How do I add custom metaboxes to my post type?', 'custom-post-type-ui' ); ?></span>
+							<span tabindex="0" class="question" aria-controls="q17" aria-expanded="false"><?php esc_html_e( 'How do I add custom metaboxes to my post type?', 'custom-post-type-ui' ); ?></span>
+							<div class="answer" id="q17">
+								<?php
+								printf(
+									/* translators: Placeholders are just for HTML markup that doesn't need translated */
+									esc_html__( 'We recommend checking out %s, the latest iteration of "CMB2". Both are supported by WebDevStudios.', 'custom-post-type-ui' ),
+									'<a href="https://wordpress.org/plugins/cmb2/">CMB2</a>'
+								);
+								?>
+							</div>
+						</li>
+						<li>
+							<span tabindex="0" class="question" aria-controls="q18" aria-expanded="false"><?php esc_html_e( 'How do I add a newly registered taxonomy to a post type that already exists?', 'custom-post-type-ui' ); ?></span>
+							<div class="answer" id="q18">
+								<?php
+								printf(
+									/* translators: Placeholders are just for HTML markup that doesn't need translated */
+									esc_html__( 'Check out the %s function for documentation and usage examples.', 'custom-post-type-ui' ),
+									'<a href="https://developer.wordpress.org/reference/functions/register_taxonomy_for_object_type/">register_taxonomy_for_object_type()</a>'
+								);
+								?>
+							</div>
+						</li>
+						<li>
+							<span tabindex="0" class="question" aria-controls="q19" aria-expanded="false"><?php esc_html_e( 'Post relationships?', 'custom-post-type-ui' ); ?></span>
 							<div class="answer" id="q19">
 								<?php
 								printf(
-									esc_html__( 'We recommend checking out %s, the latest iteration of "Custom Metaboxes and Fields for WordPress". Both are maintained by WebDevStudios.', 'custom-post-type-ui' ),
-									'<a href="https://wordpress.org/plugins/cmb2/" target="_blank">CMB2</a>'
-								); ?>
-							</div>
-						</li>
-						<li>
-							<span tabindex="0" class="question" aria-controls="q20" aria-expanded="false"><?php esc_html_e( 'How do I add a newly registered taxonomy to a post type that already exists?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q20">
-								<?php
-								printf(
-									esc_html__( 'Check out the %s function for documentation and usage examples.', 'custom-post-type-ui' ),
-									'<a href="https://codex.wordpress.org/Function_Reference/register_taxonomy_for_object_type" target="_blank">register_taxonomy_for_object_type()</a>'
-								); ?>
-							</div>
-						</li>
-						<li>
-							<span tabindex="0" class="question" aria-controls="q21" aria-expanded="false"><?php esc_html_e( 'Post relationships?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q21">
-								<?php
-								printf(
-									esc_html__( '%s has an excellent %spost%s introducing users to the %sPosts 2 Posts%s plugin that should be a good start.', 'custom-post-type-ui' ),
-									'Pippin Williamson',
-									'<a href="https://pippinsplugins.com/introduction-posts-2-posts-plugin/" target="_blank">',
-									'</a>',
-									'<a href="https://wordpress.org/plugins/posts-to-posts/" target="_blank">',
+									/* translators: Placeholders are just for HTML markup that doesn't need translated */
+									esc_html__( 'We recommend the %1$sPosts 2 Posts%2$s plugin.', 'custom-post-type-ui' ),
+									'<a href="https://wordpress.org/plugins/posts-to-posts/">',
 									'</a>'
-								); ?></div>
+								);
+								?>
+								</div>
 						</li>
 						<li>
-							<span tabindex="0" class="question" aria-controls="q22" aria-expanded="false"><?php esc_html_e( 'Is there any function reference list?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q22"><?php printf( esc_html__( '%s has compiled a nice list of functions used by our plugin. Note not all will be useful as they are attached to hooks.', 'custom-post-type-ui' ),
-							'<a href="http://hookr.io/plugins/custom-post-type-ui/" target="_blank">Hookr.io</a>' ); ?></div>
-						</li>
-						<li>
-							<span tabindex="0" class="question" aria-controls="q23" aria-expanded="false"><?php esc_html_e( 'How do I filter the "enter title here" text in the post editor screen?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q23"><p><?php esc_html_e( 'Change text inside the post/page editor title field. Should be able to adapt as necessary.', 'custom-post-type-ui' ); ?></p>
+							<span tabindex="0" class="question" aria-controls="q20" aria-expanded="false"><?php esc_html_e( 'How do I filter the "enter title here" text in the post editor screen?', 'custom-post-type-ui' ); ?></span>
+							<div class="answer" id="q20"><p><?php esc_html_e( 'Change text inside the post/page editor title field. Should be able to adapt as necessary.', 'custom-post-type-ui' ); ?></p>
 <pre><code>function my_custom_title_text( $title ){
 	global $post;
 	if ( 'ENTER POST TYPE SLUG HERE' == $post->post_type )
@@ -269,10 +278,17 @@ add_filter( 'enter_title_here', 'my_custom_title_text' );
 </code></pre></div>
 						</li>
 						<li>
-							<span tabindex="0" class="question" aria-controls="q24" aria-expanded="false"><?php esc_html_e( 'Any help with customizing capabilities?', 'custom-post-type-ui' ); ?></span>
-							<div class="answer" id="q24">
-								<p><?php printf( esc_html__( 'We recommend %s for some extended customization and addition of extra fields regarding roles and capabilities.', 'custom-post-type-ui' ),
-									'<a href="https://github.com/tw2113/custom-post-type-ui-capabilities" target="_blank">Custom Post Type UI Capabilities on GitHub</a>' ); ?></p>
+							<span tabindex="0" class="question" aria-controls="q21" aria-expanded="false"><?php esc_html_e( 'Any help with customizing capabilities?', 'custom-post-type-ui' ); ?></span>
+							<div class="answer" id="q21">
+								<p>
+								<?php
+								printf(
+									/* translators: Placeholders are just for HTML markup that doesn't need translated */
+									esc_html__( 'We recommend %s for some extended customization and addition of extra fields regarding roles and capabilities.', 'custom-post-type-ui' ),
+									'<a href="https://github.com/tw2113/custom-post-type-ui-capabilities">Custom Post Type UI Capabilities on GitHub</a>'
+								);
+								?>
+									</p>
 							</div>
 						</li>
 					</ol>

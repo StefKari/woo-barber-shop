@@ -471,6 +471,7 @@ class Ai extends Library {
 			[
 				'aspectRatio' => $image_data['promptSettings'][ self::ASPECT_RATIO ],
 				'backgroundColor' => $image_data['promptSettings'][ self::IMAGE_BACKGROUND_COLOR ],
+				'featureIdentifier' => $image_data['featureIdentifier'],
 				'context' => wp_json_encode( $context ),
 				'ids' => $request_ids,
 				'api_version' => ELEMENTOR_VERSION,
@@ -786,7 +787,7 @@ class Ai extends Library {
 			$context['features']['subscriptions'] = [ 'Pro' ];
 		}
 
-		if ( Plugin::instance()->experiments->get_active_features()['nested-elements'] ) {
+		if ( Plugin::instance()->experiments->is_feature_active( 'container' ) ) {
 			$context['features']['supportedFeatures'][] = 'Nested';
 		}
 
@@ -872,8 +873,9 @@ class Ai extends Library {
 	}
 
 	public function toggle_favorite_history_item( $id, $context = [] ) {
+		$sanitized_id = str_replace( '%', '%%', $id );
 		return $this->ai_request(
-			'POST', sprintf( 'history/%s/favorite', $id ),
+			'POST', sprintf( 'history/%s/favorite', $sanitized_id ),
 			[
 				'context' => wp_json_encode( $context ),
 				'api_version' => ELEMENTOR_VERSION,

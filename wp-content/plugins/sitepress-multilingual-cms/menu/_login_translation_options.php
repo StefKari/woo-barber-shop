@@ -10,12 +10,11 @@ global $sitepress, $sitepress_settings;
 	<div class="wpml-section-content">
 		<form id="icl_login_page_translation" name="icl_login_page_translation" action="">
 			<?php
-			wp_nonce_field( 'icl_login_page_translation_nonce', '_icl_nonce' );
-			$login_page_documentation_url = 'https://wpml.org/documentation/getting-started-guide/translating-wordpress-login-and-registration-pages/?utm_source=plugin&utm_medium=gui&utm_campaign=wpmlcore';
+			wpml_nonce_field_with_id( 'icl_login_page_translation_nonce', '_icl_nonce', 'icl_login_page_translation_nonce' );
 			?>
 			<p>
-				<label>
-					<input type="checkbox" id="login_page_translation"
+				<label for="login_page_translation">
+					<input class="wpml-checkbox-native" type="checkbox" id="login_page_translation"
 						   name="login_page_translation"
 						<?php checked( get_option( \WPML\UrlHandling\WPLoginUrlConverter::SETTINGS_KEY, false ) ); ?>
 						   value="1"/>
@@ -25,8 +24,8 @@ global $sitepress, $sitepress_settings;
                 <p class="sub-section" id="show_login_page_language_switcher_sub_section"
 				<?php if ( ! get_option( \WPML\UrlHandling\WPLoginUrlConverter::SETTINGS_KEY, false ) ) : ?> style="display: none" <?php endif; ?>
                 >
-                    <label>
-                        <input type="checkbox" id="show_login_page_language_switcher"
+                    <label for="show_login_page_language_switcher">
+                        <input class="wpml-checkbox-native" type="checkbox" id="show_login_page_language_switcher"
                                name="show_login_page_language_switcher"
                             <?php checked( get_option( \WPML\AdminLanguageSwitcher\AdminLanguageSwitcher::LANGUAGE_SWITCHER_KEY, true ) ); ?>
                                value="1"/>
@@ -34,28 +33,29 @@ global $sitepress, $sitepress_settings;
                     </label>
                 </p>
 			</p>
-			<div class="notice-info notice below-h2">
-				<p>
-					<?php
-					esc_html_e( 'You may need to adjust your server settings if your site uses nginx.', 'sitepress' );
-
-					$nginx_documentation_url = 'https://wpml.org/faq/nginx-server-settings/?utm_source=plugin&utm_medium=gui&utm_campaign=core';
-
-					/* translators: "nginx guide" is a link added to the middle of the sentence "See our nginx guide to learn more."  */
-					$link_to_documentation = '<a class="wpml-external-link" target="_blank" href="' . $nginx_documentation_url . '">'
-											 . esc_html__( 'nginx guide', 'sitepress' )
-											 . '</a>';
-
-					/* translators: $s: a link with "nginx guide" as a text  */
-					echo sprintf( esc_html__( ' See our %s to learn more.', 'sitepress' ), $link_to_documentation );
-
-					?>
-				</p>
-			</div>
+			<?php
+			$language_negotiation_type = (int) $sitepress->get_setting( 'language_negotiation_type' );
+			if ( WPML_LANGUAGE_NEGOTIATION_TYPE_DIRECTORY === $language_negotiation_type ) :
+				$nginx_rewrite_rules = '';
+				foreach ( array_keys( $sitepress->get_active_languages() ) as $language_code ) {
+					$nginx_rewrite_rules .= 'rewrite ^/' . $language_code . '/wp-login.php /wp-login.php break;' . "\n";
+				}
+				?>
+				<div class="notice-info notice below-h2">
+					<p>
+						<?php /* translators: Notice on WPML settings. nginx is a product name and stays as it is. */ esc_html_e( 'If your site uses nginx, please add a rewrite rule for each language.', 'sitepress' ); ?>
+						<?php /* translators: Second sentence of the same notice, explaining why the rules are needed. */ esc_html_e( 'nginx does not read the .htaccess file. Without these rules, the login and registration pages return a 404 error in secondary languages.', 'sitepress' ); ?>
+					</p>
+					<details>
+						<summary><?php /* translators: Click target on WPML settings that opens the nginx rewrite rules for this site. It is the user's own question. */ esc_html_e( 'Which rules do I add?', 'sitepress' ); ?></summary>
+						<pre><?php echo esc_html( $nginx_rewrite_rules ); ?></pre>
+					</details>
+				</div>
+			<?php endif; ?>
 			<div class="wpml-section-content-inner">
 				<p class="buttons-wrap">
 					<span class="icl_ajx_response" id="icl_ajx_response_login"></span>
-					<input class="button button-primary" name="save" value="<?php esc_attr_e( 'Save', 'sitepress' ); ?>"
+					<input class="button-primary wpml-button base-btn" name="save" value="<?php /* translators: Button label that keeps what was entered. Verb, imperative. */ esc_attr_e( 'Save', 'sitepress' ); ?>"
 						   type="submit"/>
 				</p>
 			</div>

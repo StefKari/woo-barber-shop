@@ -21,6 +21,12 @@ class OrderItem
     /**
      * @var int
      */
+
+    public $order_item_id;
+
+    /**
+     * @var int
+     */
     public $productId;
 
     /**
@@ -56,6 +62,7 @@ class OrderItem
     public function __construct(
         $id,
         $orderId,
+        $order_item_id,
         $productId,
         $ruleId,
         $qty,
@@ -64,15 +71,16 @@ class OrderItem
         $giftedQty,
         $date
     ) {
-        $this->id           = intval($id);
-        $this->orderId      = intval($orderId);
-        $this->productId    = intval($productId);
-        $this->ruleId       = intval($ruleId);
-        $this->qty          = intval($qty);
-        $this->amount       = floatval($amount);
-        $this->giftedAmount = floatval($giftedAmount);
-        $this->giftedQty    = intval($giftedQty);
-        $this->date         = is_string($date) ? new DateTime($date) : $date;
+        $this->id            = intval($id);
+        $this->orderId       = intval($orderId);
+        $this->order_item_id = intval($order_item_id);
+        $this->productId     = intval($productId);
+        $this->ruleId        = intval($ruleId);
+        $this->qty           = intval($qty);
+        $this->amount        = floatval($amount);
+        $this->giftedAmount  = floatval($giftedAmount);
+        $this->giftedQty     = intval($giftedQty);
+        $this->date          = is_string($date) ? new DateTime($date) : $date;
     }
 
     /**
@@ -83,6 +91,7 @@ class OrderItem
         $orderItemRule = array(
             'id'            => 0,
             'order_id'      => 0,
+            'order_item_id' => 0,
             'product_id'    => 0,
             'rule_id'       => 0,
             'qty'           => 0,
@@ -93,7 +102,7 @@ class OrderItem
         );
         $orderItemRule = array_merge($orderItemRule, $data);
 
-        return new self($orderItemRule['id'], $orderItemRule['order_id'], $orderItemRule['product_id'],
+        return new self($orderItemRule['id'], $orderItemRule['order_id'], $orderItemRule['order_item_id'], $orderItemRule['product_id'],
             $orderItemRule['rule_id'], $orderItemRule['qty'], $orderItemRule['amount'],
             $orderItemRule['gifted_amount'], $orderItemRule['gifted_qty'], $orderItemRule['date']);
     }
@@ -105,6 +114,7 @@ class OrderItem
     {
         $data = array(
             'order_id'      => $this->orderId,
+            'order_item_id' => $this->order_item_id,
             'product_id'    => $this->productId,
             'rule_id'       => $this->ruleId,
             'qty'           => $this->qty,
@@ -130,8 +140,9 @@ class OrderItem
         $sql = /** @lang MySQL */
             "CREATE TABLE {$tableName} (
             id INT NOT NULL AUTO_INCREMENT,
-            order_id INT NOT NULL,
-            product_id INT NOT NULL,
+            order_id bigint(20) unsigned NOT NULL,
+            order_item_id bigint(20) unsigned NOT NULL,
+            product_id bigint(20) unsigned NOT NULL,
             rule_id INT NOT NULL,
             amount DECIMAL(50,2) DEFAULT 0,
             qty INT DEFAULT 0,
@@ -152,6 +163,7 @@ class OrderItem
         global $wpdb;
 
         $tableName = $wpdb->prefix . self::TABLE_NAME;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $wpdb->query("DROP TABLE IF EXISTS $tableName");
     }
 }

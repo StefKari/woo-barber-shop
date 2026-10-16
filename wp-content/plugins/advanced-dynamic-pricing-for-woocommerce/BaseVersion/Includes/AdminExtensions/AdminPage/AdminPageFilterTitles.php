@@ -14,6 +14,7 @@ use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepositoryInterface;
 use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Interfaces\ListComparisonCondition;
 use ADP\BaseVersion\Includes\Helpers\Helpers;
+use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Impl\ProductBrandsAll;
 
 defined('ABSPATH') or exit;
 
@@ -61,6 +62,7 @@ class AdminPageFilterTitles
             'giftable_categories'   => array(),
             'auto_add_products'     => array(),
             'product_tags'          => array(),
+            'product_brands'         => array(),
             'product_categories'    => array(),
             'product_category_slug' => array(),
             'product_attributes'    => array(),
@@ -73,7 +75,7 @@ class AdminPageFilterTitles
             'subscriptions'         => array(),
             'rules_list'            => array(),
         );
-        foreach (array_keys(Helpers::getCustomProductTaxonomies()) as $taxName) {
+        foreach (array_keys(Helpers::getCustomProductTaxonomies(true)) as $taxName) {
             $filtersByType[$taxName] = array();
         }
 
@@ -102,9 +104,14 @@ class AdminPageFilterTitles
                     }
                 }
 
-                if (isset($filter['product_exclude']['values'])) {
-                    foreach ($filter['product_exclude']['values'] as $productId) {
-                        $filtersByType['products'][] = $productId;
+                foreach ($filter['excludes'] ?? [] as $excludeFilter) {
+                    if ( ! empty($excludeFilter['value'])) {
+                        $type  = $excludeFilter['type'];
+                        $value = $excludeFilter['value'];
+
+                        if (isset($filtersByType[$type])) {
+                            $filtersByType[$type] = array_merge($filtersByType[$type], (array)$value);
+                        }
                     }
                 }
             }
@@ -118,6 +125,9 @@ class AdminPageFilterTitles
 
                     $type = "giftable_products";
                     if ($giftMode === "allow_to_choose_from_product_cat") {
+                        $type = "giftable_categories";
+                    }
+                    if ($giftMode === "require_to_choose_from_product_cat") {
                         $type = "giftable_categories";
                     }
 
@@ -181,10 +191,14 @@ class AdminPageFilterTitles
                         $value                         = $condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
                         $filtersByType['product_tags'] = array_merge($filtersByType['product_tags'],
                             (array)$value);
+                    } elseif ($condition['type'] === ProductBrandsAll::getType() && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
+                        $value                         = $condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
+                        $filtersByType['product_brands'] = array_merge($filtersByType['product_brands'],
+                            (array)$value);
                     } elseif ($condition['type'] === ProductsAll::getType() && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
                         $value                     = $condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
                         $filtersByType['products'] = array_merge($filtersByType['products'], (array)$value);
-                    } elseif ($condition['type'] === 'cart_was_rule_applied' && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
+                    } elseif (($condition['type'] === 'cart_was_rule_applied' || $condition['type']  === 'customer_list_rules_aplied') && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
                         $value                       = $condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
                         $filtersByType['rules_list'] = array_merge($filtersByType['rules_list'], (array)$value);
                     } elseif ($condition['type'] === 'cart_coupons' && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
@@ -206,6 +220,9 @@ class AdminPageFilterTitles
             if (isset($rule['cart_adjustments'])) {
                 foreach ($rule['cart_adjustments'] as $cartAdjustment) {
                     if ($cartAdjustment['type'] === 'discount__apply_wc_coupons' && isset($cartAdjustment['options'])) {
+                        $value = $cartAdjustment['options'];
+                        $filtersByType['coupons'] = array_merge($filtersByType['coupons'], (array)$value);
+                    } elseif ($cartAdjustment['type'] === 'discount__disable_wc_coupons' && isset($cartAdjustment['options'])) {
                         $value = $cartAdjustment['options'];
                         $filtersByType['coupons'] = array_merge($filtersByType['coupons'], (array)$value);
                     }
@@ -235,9 +252,10 @@ class AdminPageFilterTitles
         foreach ($filtersByType['products'] as $id) {
             $result['products'][$id] = '#' . $id . ' ' . Helpers::getProductTitle($id);
         }
-
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (isset($_GET['product'])) {
-            $id                      = $_GET['product'];
+            //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $id                      = sanitize_key(wp_unslash($_GET['product']));
             $result['products'][$id] = '#' . $id . ' ' . Helpers::getProductTitle($id);
         }
 
@@ -279,13 +297,19 @@ class AdminPageFilterTitles
         // type 'product_tags'
         $result['product_tags'] = array();
         foreach ($filtersByType['product_tags'] as $id) {
-            $result['product_tags'][$id] = Helpers::getTagTitle($id);
+            $result['product_tags'][$id] = '#' . $id . ' ' . Helpers::getTagTitle($id);
+        }
+
+        // type 'product_brand'
+        $result['product_brands'] = array();
+        foreach ($filtersByType['product_brands'] as $id) {
+            $result['product_brands'][$id] = '#' . $id . ' ' . Helpers::getBrandTitle($id);
         }
 
         // type 'product_categories'
         $result['product_categories'] = array();
         foreach ($filtersByType['product_categories'] as $id) {
-            $result['product_categories'][$id] = Helpers::getCategoryTitle($id);
+            $result['product_categories'][$id] = '#' . $id . ' ' . Helpers::getCategoryTitle($id);
         }
 
         // type 'product_category_slug'
@@ -342,5 +366,10 @@ class AdminPageFilterTitles
         }
 
         return apply_filters('wdp_filter_titles', $result, $filtersByType);
+    }
+
+    public function getLinks($rules)
+    {
+        return [];
     }
 }

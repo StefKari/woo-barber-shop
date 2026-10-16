@@ -1,6 +1,7 @@
 <?php 
 defined('ABSPATH') or die("You can't access this file directly.");
 
+// phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_init, WordPress.WP.AlternativeFunctions.curl_curl_setopt, WordPress.WP.AlternativeFunctions.curl_curl_exec, WordPress.WP.AlternativeFunctions.curl_curl_errno, WordPress.WP.AlternativeFunctions.curl_curl_error, WordPress.WP.AlternativeFunctions.curl_curl_close -- Legacy OpenAI HTTP calls in this module.
 
 add_filter('qc_wpbotpro_floating_openai_filter_for_style', 'qc_wpbotpro_floating_help_openai_filter_for_style', 10, 2);
 if ( ! function_exists( 'qc_wpbotpro_floating_help_openai_filter_for_style' ) ) {
@@ -5012,9 +5013,9 @@ function qc_wpbotpro_floating_help_openai_filter_for_tone($qcld_writing_tone, $q
 }
 }
 
-add_filter('qc_wpbotpro_floating_openai_article_heading_tag', 'qc_wpbotpro_floating_openai_article_heading_tag_callback', 10, 8 );
-if ( ! function_exists( 'qc_wpbotpro_floating_openai_article_heading_tag_callback' ) ) {
-function qc_wpbotpro_floating_openai_article_heading_tag_callback( $allresults, $mylist, $myprompt, $qc_wpbotpro_article_heading_tag, $style_text, $tone_text, $avoid_text, $qc_wpbotpro_article_label_word_to_avoid ){
+add_filter('', '_callback', 10, 8 );
+if ( ! function_exists( 'qcld_wpbotpro_floating_openai_article_heading_tag_callback' ) ) {
+function qcld_wpbotpro_floating_openai_article_heading_tag_callback( $allresults, $mylist, $myprompt, $qc_wpbotpro_article_heading_tag, $style_text, $tone_text, $avoid_text, $qc_wpbotpro_article_label_word_to_avoid ){
     
       
     $OPENAI_API_KEY                     = get_option('open_ai_api_key');
@@ -5037,6 +5038,7 @@ function qc_wpbotpro_floating_openai_article_heading_tag_callback( $allresults, 
             
 
             if( $ai_engines == 'gpt-3.5-turbo' || $ai_engines == 'gpt-4' || $ai_engines == 'gpt-4o' || $ai_engines == 'gpt-4o-mini'){
+                // phpcs:ignore WordPress.WP.AlternativeFunctions
                 $ch     = curl_init();
                 $url    = 'https://api.openai.com/v1/chat/completions';
 
@@ -5084,7 +5086,8 @@ function qc_wpbotpro_floating_openai_article_heading_tag_callback( $allresults, 
                 $url     = "https://api.openai.com/v1/completions";
                 $apt_key = "Authorization: Bearer ". $OPENAI_API_KEY;
 
-                $curl = curl_init($url);
+                // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_init
+            $curl = curl_init($url);
                 curl_setopt($curl, CURLOPT_URL, $url);
                 curl_setopt($curl, CURLOPT_POST, true);
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -5128,9 +5131,9 @@ function qc_wpbotpro_floating_openai_article_heading_tag_callback( $allresults, 
             $result = preg_replace('/[\*]+/', '', $result);
 
 
-            $Parsedown = new Parsedown();
+            $Qcld_Parsedown = new Qcld_Parsedown();
             
-            $allresults = $allresults . $Parsedown->text($result);
+            $allresults = $allresults . $Qcld_Parsedown->text($result);
         }
     }
 
@@ -5153,7 +5156,8 @@ function qc_wpbotpro_floating_openai_article_heading_intro_callback( $allresults
     $gptkeyword = [];
 
     if( $ai_engines == 'gpt-3.5-turbo' || $ai_engines == 'gpt-4' || $ai_engines == 'gpt-4o' || $ai_engines == 'gpt-4o-mini'){
-        $ch     = curl_init();
+        // phpcs:ignore WordPress.WP.AlternativeFunctions
+                $ch     = curl_init();
         $url    = 'https://api.openai.com/v1/chat/completions';
 
         array_push($gptkeyword, array(
@@ -5192,12 +5196,12 @@ function qc_wpbotpro_floating_openai_article_heading_intro_callback( $allresults
         } else {
             $completeintro = isset( $completeintro->choices[0]->message->content ) ? trim($completeintro->choices[0]->message->content) : '';
             // trim the text
-            $Parsedown = new Parsedown();
-            $completeintro = !empty( $completeintro ) ? $Parsedown->text( $completeintro ) : '';
+            $Qcld_Parsedown = new Qcld_Parsedown();
+            $completeintro = !empty( $completeintro ) ? $Qcld_Parsedown->text( $completeintro ) : '';
             // add <h1>Introuction</h1> to the beginning of the text
             $completeintro = "\n"."<h1>" . $introduction . "</h1>" ."\n". $completeintro;
             // add intro to the beginning of the text
-            $allresults = $Parsedown->text($completeintro) . $allresults;
+            $allresults = $Qcld_Parsedown->text($completeintro) . $allresults;
         }
 
     }else{
@@ -5216,7 +5220,8 @@ function qc_wpbotpro_floating_openai_article_heading_intro_callback( $allresults
         $url     = "https://api.openai.com/v1/completions";
         $apt_key = "Authorization: Bearer ". $OPENAI_API_KEY;
 
-        $curl = curl_init($url);
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_init
+            $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -5240,12 +5245,12 @@ function qc_wpbotpro_floating_openai_article_heading_intro_callback( $allresults
 
             $completeintro = isset( $completeintro->choices[0]->text ) ? trim( $completeintro->choices[0]->text ) : '';
             // trim the text
-            $Parsedown = new Parsedown();
-            $completeintro = !empty( $completeintro ) ? $Parsedown->text( $completeintro ) : '';
+            $Qcld_Parsedown = new Qcld_Parsedown();
+            $completeintro = !empty( $completeintro ) ? $Qcld_Parsedown->text( $completeintro ) : '';
             // add <h1>Introuction</h1> to the beginning of the text
             $completeintro = "\n"."<h1>" . $introduction . "</h1>" ."\n". $completeintro;
             // add intro to the beginning of the text
-            $allresults = $Parsedown->text($completeintro) . $allresults;
+            $allresults = $Qcld_Parsedown->text($completeintro) . $allresults;
         }
 
     }
@@ -5269,7 +5274,8 @@ function qc_wpbotpro_floating_openai_article_heading_faq_callback( $allresults, 
     $gptkeyword = [];
 
     if( $ai_engines == 'gpt-3.5-turbo' || $ai_engines == 'gpt-4' || $ai_engines == 'gpt-4o' || $ai_engines == 'gpt-4o-mini'){
-        $ch     = curl_init();
+        // phpcs:ignore WordPress.WP.AlternativeFunctions
+                $ch     = curl_init();
         $url    = 'https://api.openai.com/v1/chat/completions';
 
         array_push($gptkeyword, array(
@@ -5332,7 +5338,8 @@ function qc_wpbotpro_floating_openai_article_heading_faq_callback( $allresults, 
         $url     = "https://api.openai.com/v1/completions";
         $apt_key = "Authorization: Bearer ". $OPENAI_API_KEY;
 
-        $curl = curl_init($url);
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_init
+            $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -5356,8 +5363,8 @@ function qc_wpbotpro_floating_openai_article_heading_faq_callback( $allresults, 
             //$completefaq = $completefaq->choices[0]->text;
             $completefaq = isset( $completefaq->choices[0]->text ) ? trim( $completefaq->choices[0]->text ) : '';
             // trim the text
-            $Parsedown = new Parsedown();
-            $completefaq = !empty( $completefaq ) ? $Parsedown->text( $completefaq ) : '';
+            $Qcld_Parsedown = new Qcld_Parsedown();
+            $completefaq = !empty( $completefaq ) ? $Qcld_Parsedown->text( $completefaq ) : '';
             // add <h1>FAQ</h1> to the beginning of the text
             $completefaq = "\n"."<h2>" . $faq_heading . "</h2>" ."\n". $completefaq;
             // add intro to the beginning of the text
@@ -5385,7 +5392,8 @@ function qc_wpbotpro_floating_openai_article_heading_conclusion_callback( $allre
     $gptkeyword = [];
 
     if( $ai_engines == 'gpt-3.5-turbo' || $ai_engines == 'gpt-4' || $ai_engines == 'gpt-4o' || $ai_engines == 'gpt-4o-mini'){
-        $ch     = curl_init();
+        // phpcs:ignore WordPress.WP.AlternativeFunctions
+                $ch     = curl_init();
         $url    = 'https://api.openai.com/v1/chat/completions';
 
         array_push($gptkeyword, array(
@@ -5427,8 +5435,8 @@ function qc_wpbotpro_floating_openai_article_heading_conclusion_callback( $allre
             //$completeconclusion = $complete->choices[0]->message->content;
             $completeconclusion = isset( $completeconclusion->choices[0]->message->content ) ? trim( $completeconclusion->choices[0]->message->content ) : '';
             // trim the text
-            $Parsedown = new Parsedown();
-            $completeconclusion = !empty( $completeconclusion ) ? $Parsedown->text( $completeconclusion ) : '';
+            $Qcld_Parsedown = new Qcld_Parsedown();
+            $completeconclusion = !empty( $completeconclusion ) ? $Qcld_Parsedown->text( $completeconclusion ) : '';
             // add <h1>Conclusion</h1> to the beginning of the text
             $completeconclusion = "\n"."<h1>" . $conclusion . "</h1>" ."\n". $completeconclusion;
             // add intro to the beginning of the text
@@ -5452,7 +5460,8 @@ function qc_wpbotpro_floating_openai_article_heading_conclusion_callback( $allre
         $url     = "https://api.openai.com/v1/completions";
         $apt_key = "Authorization: Bearer ". $OPENAI_API_KEY;
 
-        $curl = curl_init($url);
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_init
+            $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -5476,8 +5485,8 @@ function qc_wpbotpro_floating_openai_article_heading_conclusion_callback( $allre
             //$completeconclusion = $completeconclusion->choices[0]->text;
             $completeconclusion = isset( $completeconclusion->choices[0]->text ) ? trim( $completeconclusion->choices[0]->text ) : '';
             // trim the text
-            $Parsedown = new Parsedown();
-            $completeconclusion = !empty( $completeconclusion ) ? $Parsedown->text( $completeconclusion ) : '';
+            $Qcld_Parsedown = new Qcld_Parsedown();
+            $completeconclusion = !empty( $completeconclusion ) ? $Qcld_Parsedown->text( $completeconclusion ) : '';
             // add <h1>Conclusion</h1> to the beginning of the text
             $completeconclusion = "\n"."<h1>" . $conclusion . "</h1>" ."\n". $completeconclusion;
             // add intro to the beginning of the text
@@ -5490,9 +5499,9 @@ function qc_wpbotpro_floating_openai_article_heading_conclusion_callback( $allre
 }
 }
 
-add_filter('qc_wpbotpro_floating_openai_article_heading_tagline', 'qc_wpbotpro_floating_openai_article_heading_tagline_callback', 10, 3 );
-if ( ! function_exists( 'qc_wpbotpro_floating_openai_article_heading_tagline_callback' ) ) {
-function qc_wpbotpro_floating_openai_article_heading_tagline_callback( $allresults, $mytagline, $conclusion ){
+add_filter('qcld_wpbotpro_floating_openai_article_heading_tagline', 'qcld_wpbotpro_floating_openai_article_heading_tagline_callback', 10, 3 );
+if ( ! function_exists( 'qcld_wpbotpro_floating_openai_article_heading_tagline_callback' ) ) {
+function qcld_wpbotpro_floating_openai_article_heading_tagline_callback( $allresults, $mytagline, $conclusion ){
     
     $OPENAI_API_KEY                     = get_option('open_ai_api_key');
     $ai_engines                         = get_option('openai_engines');
@@ -5504,7 +5513,8 @@ function qc_wpbotpro_floating_openai_article_heading_tagline_callback( $allresul
     $gptkeyword = [];
 
     if( $ai_engines == 'gpt-3.5-turbo' || $ai_engines == 'gpt-4' || $ai_engines == 'gpt-4o' || $ai_engines == 'gpt-4o-mini'){
-        $ch     = curl_init();
+        // phpcs:ignore WordPress.WP.AlternativeFunctions
+                $ch     = curl_init();
         $url    = 'https://api.openai.com/v1/chat/completions';
 
         array_push($gptkeyword, array(
@@ -5545,8 +5555,8 @@ function qc_wpbotpro_floating_openai_article_heading_tagline_callback( $allresul
         } else {
             $completetagline = isset( $completetagline->choices[0]->message->content ) ? trim( $completetagline->choices[0]->message->content ) : '';
             // trim the text
-            $Parsedown = new Parsedown();
-            $completetagline = !empty($completetagline) ? $Parsedown->text( $completetagline ) : '';
+            $Qcld_Parsedown = new Qcld_Parsedown();
+            $completetagline = !empty($completetagline) ? $Qcld_Parsedown->text( $completetagline ) : '';
             // add <p> to the beginning of the text
             $completetagline = "\n"."<p>" . $completetagline . "</p>"."\n";
             // add intro to the beginning of the text
@@ -5570,7 +5580,8 @@ function qc_wpbotpro_floating_openai_article_heading_tagline_callback( $allresul
         $url     = "https://api.openai.com/v1/completions";
         $apt_key = "Authorization: Bearer ". $OPENAI_API_KEY;
 
-        $curl = curl_init($url);
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_init
+            $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -5594,8 +5605,8 @@ function qc_wpbotpro_floating_openai_article_heading_tagline_callback( $allresul
             //$completetagline = $completetagline->choices[0]->text;
             $completetagline = isset( $completetagline->choices[0]->text ) ? trim( $completetagline->choices[0]->text ) : '';
             // trim the text
-            $Parsedown = new Parsedown();
-            $completetagline = !empty($completetagline) ? $Parsedown->text( $completetagline ) : '';
+            $Qcld_Parsedown = new Qcld_Parsedown();
+            $completetagline = !empty($completetagline) ? $Qcld_Parsedown->text( $completetagline ) : '';
             // add <p> to the beginning of the text
             $completetagline = "\n"."<p>" . $completetagline . "</p>"."\n";
             // add intro to the beginning of the text
@@ -5633,7 +5644,8 @@ function qc_wpbotpro_floating_openai_article_heading_img_callback( $qc_wpbotpro_
     $url     = "https://api.openai.com/v1/images/generations";
     $apt_key = "Authorization: Bearer ". $OPENAI_API_KEY;
 
-    $curl = curl_init($url);
+    // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_init
+            $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -5663,9 +5675,14 @@ function qc_wpbotpro_floating_openai_article_heading_img_callback( $qc_wpbotpro_
         $target_file_name   = $uploaddir['path'] . '/' . $filename;
 
         $contents           = file_get_contents( $imgresult );
-        $savefile           = fopen($target_file_name, 'w');
-        fwrite($savefile, $contents);
-        fclose($savefile);
+        global $wp_filesystem;
+        if ( empty( $wp_filesystem ) ) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            WP_Filesystem();
+        }
+        if ( $wp_filesystem ) {
+            $wp_filesystem->put_contents( $target_file_name, $contents, FS_CHMOD_FILE );
+        }
 
         /* add the image title */
         $image_title        = ucwords( $uniq_name );
@@ -5713,4 +5730,5 @@ function qc_wpbotpro_floating_openai_article_heading_img_callback( $qc_wpbotpro_
     return $imgresult;
     
 }
+// phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_init, WordPress.WP.AlternativeFunctions.curl_curl_setopt, WordPress.WP.AlternativeFunctions.curl_curl_exec, WordPress.WP.AlternativeFunctions.curl_curl_errno, WordPress.WP.AlternativeFunctions.curl_curl_error, WordPress.WP.AlternativeFunctions.curl_curl_close
 }

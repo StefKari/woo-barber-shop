@@ -134,6 +134,15 @@ class ProductStockController
      */
     public function initFromCart($cart)
     {
+        static $last_items = [];
+        static $last_cart_key = "";
+
+        $cart_key = md5(json_encode($cart->expose()));
+        if($cart_key == $last_cart_key) {
+            $this->stockItems = $last_items;
+            return;
+        }
+
         $this->purge();
 
         foreach ($cart->getFreeItems() as $item) {
@@ -160,5 +169,9 @@ class ProductStockController
 
             $this->addItem($stockItem);
         }
+
+        //remember
+        $last_cart_key = $cart_key;
+        $last_items = $this->stockItems;
     }
 }

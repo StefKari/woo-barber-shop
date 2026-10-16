@@ -8,58 +8,46 @@ use WPML\LIB\WP\Option;
 use WPML\UIPage;
 use function WPML\FP\spreadArgs;
 
-/**
- * When user creates post/page while automatic translation is active and ATE is temporarily unavailable,
- * WPML fails to create local translation job for this post/page after checking for languages eligible for automatic translation.
- *
- * So, here we create a notice for the user to inform him about the content that WPML failed to created translation job for,
- * and inform him how he can deal with it to overcome the problem.
- *
- * @class AutomaticTranslationJobCreationFailureNotice
- *
- * @see wpmldev-161
- */
 class AutomaticTranslationJobCreationFailureNotice implements \IWPML_Action {
 	const OPTION_KEY = 'auto-translation-job-creation-error';
-	const NOTICE_ID = 'automatic-job-creation-failed';
+	const NOTICE_ID  = 'automatic-job-creation-failed';
 
-	/** @var array */
+	const ELEMENT_TYPE_POST    = 'post';
+	const ELEMENT_TYPE_PACKAGE = 'package';
+
 	private $jobFailedElements;
 
-	/** @var \WPML_Notices */
 	private $wpmlNotices;
 
-	/** @var \WPML_Translation_Element_Factory */
 	private $wpmlTranslationElementFactory;
 
 	public function __construct( \WPML_Translation_Element_Factory $translationElementFactory, \WPML_Notices $wpmlNotices ) {
-		$optionVal                           = Option::get( self::OPTION_KEY );
-		$this->jobFailedElements             = $optionVal ? json_decode( stripslashes( $optionVal ), true ) : [];
+		$this->jobFailedElements             = $this->readStoredElements();
 		$this->wpmlNotices                   = $wpmlNotices;
 		$this->wpmlTranslationElementFactory = $translationElementFactory;
+	}
 
-		// Update notice when class is constructed so that when user reloads a page or navigates to any other page ...
-		// We check for content that has job created and remove it from 'auto-translation-job-creation-error' in options table
-		$this->updateNotice();
+	private function readStoredElements() {
+		$optionVal = Option::get( self::OPTION_KEY );
+		$decoded   = $optionVal ? json_decode( $optionVal, true ) : [];
+
+		return is_array( $decoded ) ? $decoded : [];
 	}
 
 	public function add_hooks() {
+		Hooks::onAction( 'admin_init' )->then( spreadArgs( [ $this, 'updateNotice' ] ) );
+
 		Hooks::onAction( 'wpml_update_failed_jobs_notice' )
-		     ->then( spreadArgs( [ $this, 'updateNotice' ] ) );
+			->then(
+				spreadArgs(
+					[ $this, 'updateNotice' ]
+				)
+			);
 	}
 
-	/**
-	 * Updates notice about posts that WPML failed to created local translation jobs for.
-	 * First we check if any posts got jobs created, and we remove them from options table.
-	 * Then if we pass a valid element we add it to the options table.
-	 * And finally we update the notice with updated elements or dismiss notice if all elements had local translation job created for them.
-	 *
-	 * @param \WPML_Post_Element $postElement
-	 *
-	 * @return void
-	 */
 	public function updateNotice( $postElement = null ) {
-		$previousJobFailedElements = $this->jobFailedElements;
+		$previousJobFailedElements = $this->readStoredElements();
+		$this->jobFailedElements   = $previousJobFailedElements;
 
 		$this->deleteElementsThatHaveJobsCreated();
 
@@ -72,19 +60,28 @@ class AutomaticTranslationJobCreationFailureNotice implements \IWPML_Action {
 		}
 	}
 
-	/**
-	 * Deletes all post elements from options table that had local translation job created for them and updates the $jobFailedElements property.
-	 *
-	 * @return void
-	 */
 	public function deleteElementsThatHaveJobsCreated() {
-		foreach ( $this->jobFailedElements as $contentId => $contentInfo ) {
-			$postElement = $this->wpmlTranslationElementFactory->create_post( $contentId );
-			if ( Lst::length( $postElement->get_translations() ) > 1 ) {
-				unset( $this->jobFailedElements[ $contentId ] );
+		$this->jobFailedElements = $this->readStoredElements();
 
-				$encodedContent = $this->encodedContent( $this->jobFailedElements );
-				Option::update( self::OPTION_KEY, $encodedContent );
+		$idsToRemove = [];
+		foreach ( $this->jobFailedElements as $contentId => $contentInfo ) {
+			$postElement = $this->createElement( $contentId, $contentInfo );
+			if ( ! $postElement ) {
+				continue;
+			}
+			if ( Lst::length( $postElement->get_translations() ) > 1 ) {
+				$idsToRemove[] = $contentId;
+			}
+		}
+
+		if ( $idsToRemove ) {
+			$this->jobFailedElements = $this->readStoredElements();
+			foreach ( $idsToRemove as $contentId ) {
+				unset( $this->jobFailedElements[ $contentId ] );
+			}
+
+			if ( Lst::length( $this->jobFailedElements ) ) {
+				Option::update( self::OPTION_KEY, $this->encodedContent( $this->jobFailedElements ) );
 			}
 		}
 
@@ -93,28 +90,68 @@ class AutomaticTranslationJobCreationFailureNotice implements \IWPML_Action {
 		}
 	}
 
-	/**
-	 * Adds to options table and $jobFailedElements property the post element that WPML failed to create local translation job for.
-	 *
-	 * @param \WPML_Post_Element $postElement
-	 *
-	 * @return void
-	 */
 	public function addFailedJobPostElement( $postElement ) {
-		$this->jobFailedElements[ $postElement->get_id() ] = [
-			'title' => $postElement->get_wp_object()->post_title,
-			'lang'  => $postElement->get_language_code()
+		$this->jobFailedElements = $this->readStoredElements();
+
+		$this->jobFailedElements[ $this->keyFor( $postElement ) ] = [
+			'title'        => $this->titleOf( $postElement ),
+			'lang'         => $postElement->get_language_code(),
+			'element_type' => $postElement->get_element_type(),
+			'kind_slug'    => self::ELEMENT_TYPE_PACKAGE === $postElement->get_element_type()
+				? $postElement->get_type()
+				: null,
 		];
 
 		$encodedContent = $this->encodedContent( $this->jobFailedElements );
 		Option::update( self::OPTION_KEY, $encodedContent );
 	}
 
-	/**
-	 * Handles updating or dismissing the notice which appears for posts that WPML failed to create local translation job for.
-	 *
-	 * @return void
-	 */
+	private function keyFor( $element ) {
+		return self::ELEMENT_TYPE_PACKAGE === $element->get_element_type()
+			? self::ELEMENT_TYPE_PACKAGE . ':' . $element->get_id()
+			: $element->get_id();
+	}
+
+	private function titleOf( $element ) {
+		$wpObject = $element->get_wp_object();
+		if ( is_object( $wpObject ) && isset( $wpObject->post_title ) ) {
+			return $wpObject->post_title;
+		}
+
+		$package = apply_filters( 'wpml_st_get_string_package', null, $element->get_id() );
+		$title   = is_object( $package ) && ! empty( $package->title ) ? $package->title : '';
+
+		if ( $title ) {
+			return $title;
+		}
+
+		$kind = $element->get_type();
+
+		return $kind
+			/* translators: Names one item in a list of content that could not be sent for translation. %1$s: the kind of item, for example Block, %2$d: the number that stands for it. */
+			? sprintf( __( '%1$s (ID %2$d)', 'sitepress' ), $kind, $element->get_id() )
+			: (string) $element->get_id();
+	}
+
+	private function createElement( $contentId, $contentInfo ) {
+		$elementType = isset( $contentInfo['element_type'] ) ? $contentInfo['element_type'] : self::ELEMENT_TYPE_POST;
+
+		try {
+			if ( self::ELEMENT_TYPE_PACKAGE === $elementType ) {
+				$id = (int) substr( (string) $contentId, strlen( self::ELEMENT_TYPE_PACKAGE ) + 1 );
+
+				return $this->wpmlTranslationElementFactory->create_package(
+					$id,
+					isset( $contentInfo['kind_slug'] ) ? $contentInfo['kind_slug'] : ''
+				);
+			}
+
+			return $this->wpmlTranslationElementFactory->create_post( $contentId );
+		} catch ( \Exception $e ) {
+			return null;
+		}
+	}
+
 	public function updateOrDismissNotice() {
 		if ( Lst::length( $this->jobFailedElements ) ) {
 			$this->displayNotice();
@@ -124,43 +161,28 @@ class AutomaticTranslationJobCreationFailureNotice implements \IWPML_Action {
 		}
 	}
 
-	/**
-	 * Displays the notice which appears for posts that WPML failed to create local translation job for.
-	 *
-	 * @return void
-	 */
 	private function displayNotice() {
 		$message = $this->constructMessage();
 		$notice  = $this->createNotice( $message );
-		$this->wpmlNotices->add_notice( $notice, true );
+		$this->wpmlNotices->add_notice( $notice );
 	}
 
-	/**
-	 * Constructs the notice message.
-	 *
-	 * @return string
-	 */
 	private function constructMessage() {
-		$message = '<h2 id="job_creation_fail_notice">' . __( 'WPML experienced an issue while trying to automatically translating some of your content:', 'sitepress' ) . '</h2>';
+		$message  = '<h2 id="job_creation_fail_notice">' . __( 'WPML experienced an issue while trying to automatically translating some of your content:', 'sitepress' ) . '</h2>';
 		$message .= '<ul>';
 		foreach ( $this->jobFailedElements as $contentInfo ) {
-			$message .= '<li class="job_creation_fail_element">' . $contentInfo['title'] . '</li>';
+			$message .= '<li class="job_creation_fail_element">' . esc_html( (string) $contentInfo['title'] ) . '</li>';
 		}
 
 		$message .= '</ul>';
+		/* translators: Line under a notice about content that could not be translated automatically. %s: the address of the Translation Management screen; it fills the link tag that is already in the text, whose text is the name of that screen. */
 		$message .= '<p id="job_creation_fail_tm_link">' . sprintf( __( 'To translate these items, please go to <a rel="noreferrer" href="%s">Translation Management</a> and send them for translation.', 'sitepress' ), UIPage::getTMDashboard() ) . '</p>';
-		$message .= '<p id="job_creation_fail_support_link">' . sprintf( __( 'If the problem continues, contact <a target="_blank" rel="noreferrer" href="%s">WPML support</a> for assistance.', 'sitepress' ), 'https://wpml.org/forums/forum/english-support/?utm_source=plugin&utm_medium=gui&utm_campaign=wpml-posts' ) . '</p>';
+		/* translators: %s is the URL of the WPML support entry point. */
+		$message .= '<p id="job_creation_fail_support_link">' . sprintf( __( 'If the problem continues, contact <a target="_blank" rel="noreferrer" href="%s">WPML support</a> for assistance.', 'sitepress' ), \WPML\OutboundLinks\OutboundLinks::to( \WPML\UserInterface\Web\Core\SharedKernel\Domain\SupportForumUrl::URL, array( 'medium' => 'notice', 'campaign' => 'support' ) ) ) . '</p>';
 
 		return $message;
 	}
 
-	/**
-	 * Creates the notice which appears for posts that WPML failed to create local translation job for.
-	 *
-	 * @param string $message
-	 *
-	 * @return \WPML_Notice
-	 */
 	private function createNotice( $message ) {
 		$notice = $this->wpmlNotices->create_notice( self::NOTICE_ID, $message );
 		$notice->set_dismissible( true );
@@ -170,11 +192,6 @@ class AutomaticTranslationJobCreationFailureNotice implements \IWPML_Action {
 		return $notice;
 	}
 
-	/**
-	 * Deletes 'auto-translation-job-creation-error' from options table when all posts that were saved before got local translation job created for them.
-	 *
-	 * @return void
-	 */
 	private function deleteOption() {
 		if ( ! Option::get( self::OPTION_KEY ) ) {
 			return;
@@ -183,13 +200,6 @@ class AutomaticTranslationJobCreationFailureNotice implements \IWPML_Action {
 		Option::delete( self::OPTION_KEY );
 	}
 
-	/**
-	 * Creates a JSON encoded string to be saved in the 'auto-translation-job-creation-error' key in options table
-	 *
-	 * @param array $content
-	 *
-	 * @return string
-	 */
 	private function encodedContent( $content ) {
 		return json_encode( $content ) ?: '';
 	}

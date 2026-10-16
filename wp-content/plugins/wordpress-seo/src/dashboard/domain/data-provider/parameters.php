@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\Domain\Data_Provider;
 
@@ -10,35 +11,35 @@ abstract class Parameters {
 	/**
 	 * The start date.
 	 *
-	 * @var string $start_date
+	 * @var string
 	 */
 	private $start_date;
 
 	/**
 	 * The end date.
 	 *
-	 * @var string $end_date
+	 * @var string
 	 */
 	private $end_date;
 
 	/**
 	 * The amount of results.
 	 *
-	 * @var int $limit
+	 * @var int
 	 */
 	private $limit = 0;
 
 	/**
 	 * The compare start date.
 	 *
-	 * @var string $compare_start_date
+	 * @var string
 	 */
 	private $compare_start_date;
 
 	/**
 	 * The compare end date.
 	 *
-	 * @var string $compare_end_date
+	 * @var string
 	 */
 	private $compare_end_date;
 

@@ -8,10 +8,8 @@ class UpdateSettingsAction extends AbstractActionHookHandler {
 	const ACTION_NAME = 'wpml_st_update_settings';
 	const ACTION_ARGS = 3;
 
-	/** @var SettingsRepositoryInterface */
 	private $settingsRepository;
 
-	/** @var UrlRepositoryInterface */
 	private $urlRepository;
 
 	public function __construct(
@@ -33,6 +31,10 @@ class UpdateSettingsAction extends AbstractActionHookHandler {
 			$this->settingsRepository->setIsAutoregistrationEnabled( true );
 		} else if ( $type === 'disableAutoregistration' ) {
 			$this->settingsRepository->setIsAutoregistrationEnabled( false );
+		} else if ( $type === 'setAutoregisterStringsTypeDisabled' ) {
+			$this->settingsRepository->setAutoregisterStringsTypeSetting(
+				SettingsRepositoryInterface::AUTOREGISTER_STRINGS_TYPE_DISABLED
+			);
 		} else if ( $type === 'setMaxQueuedFrontendStringsCount' ) {
 			$this->settingsRepository->setMaxQueuedFrontendStringsCount( $args[1] );
 		} else if ( $type === 'enableStringTracking' ) {

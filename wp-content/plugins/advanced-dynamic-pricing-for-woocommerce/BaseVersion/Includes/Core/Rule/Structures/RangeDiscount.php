@@ -18,6 +18,7 @@ class RangeDiscount extends Range
     public function __construct($from, $to, $discount)
     {
         if ( ! ($discount instanceof Discount)) {
+            //phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_var_export
             throw new Exception(sprintf("Incorrect type %s", var_export($discount, true)));
         }
 

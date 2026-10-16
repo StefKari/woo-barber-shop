@@ -1,1113 +1,1532 @@
-# Translation of Plugins - All-in-One WP Migration - Stable (latest release) in Serbian
-# This file is distributed under the same license as the Plugins - All-in-One WP Migration - Stable (latest release) package.
+# Translation of Plugins - All-in-One WP Migration and Backup - Stable (latest release) in Serbian
+# This file is distributed under the same license as the Plugins - All-in-One WP Migration and Backup - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-10-05 10:35:34+0000\n"
+"PO-Revision-Date: 2026-10-14 02:32:47+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.0-alpha.3\n"
+"X-Generator: GlotPress/4.1.0\n"
 "Language: sr_RS\n"
-"Project-Id-Version: Plugins - All-in-One WP Migration - Stable (latest release)\n"
+"Project-Id-Version: Plugins - All-in-One WP Migration and Backup - Stable (latest release)\n"
 
-#: lib/controller/class-ai1wm-main-controller.php:931
-msgid "<a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">Get unlimited</a>"
-msgstr "<a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">Добијате неограничено</a>"
+#: lib/controller/class-ai1wm-main-controller.php:909
+msgid "Your session has expired. The page will reload so you can log in again."
+msgstr "Ваша сесија је истекла. Страница ће се поново учитати да бисте се поново пријавили."
 
-#: functions.php:68 functions.php:110
-msgid "Your archive file name contains invalid characters. It cannot contain: < > : \" | ? * \\0. <a href=\"https://help.servmask.com/knowledgebase/invalid-archive-name/\" target=\"_blank\">Technical details</a>"
-msgstr "Име ваше архивске датотеке садржи неважеће знакове. Не може да садржи: < > : \" | ? * \\0. <a href=\"https://help.servmask.com/knowledgebase/invalid-archive-name/\" target=\"_blank\">Технички детаљи</a>"
+#: lib/view/backups/backups-list.php:58
+msgid "Select backup %s"
+msgstr "Изабери резервну копију %s"
 
-#: functions.php:43
-msgid "Your storage directory name contains invalid characters. It cannot contain: < > : \" | ? * \\0. <a href=\"https://help.servmask.com/knowledgebase/invalid-storage-name/\" target=\"_blank\">Technical details</a>"
-msgstr "Име вашег директоријума за складиштење садржи неважеће знакове. Не може да садржи: < > : \" | ? * \\0. <a href=\"https://help.servmask.com/knowledgebase/invalid-storage-name/\" target=\"_blank\">Технички детаљи</a>"
+#: lib/view/backups/backups-list.php:39
+msgid "Select all backups"
+msgstr "Изабери све резервне копије"
 
-#: lib/model/import/class-ai1wm-import-check-encryption.php:59
+#: lib/view/backups/backups-bulk-delete.php:37
+msgid "Delete selected"
+msgstr "Избриши изабрано"
+
+#: lib/controller/class-ai1wm-main-controller.php:908
+msgid "Delete (%d selected)"
+msgstr "Избриши (изабрано: %d)"
+
+#: lib/controller/class-ai1wm-main-controller.php:907
+msgid "Are you sure you want to delete %d selected backups?"
+msgstr "Да ли сигурно желите да избришете изабране резервне копије (%d)?"
+
+#: lib/controller/class-ai1wm-main-controller.php:906
+msgid "Are you sure you want to delete %d selected backup?"
+msgstr "Да ли сигурно желите да избришете изабрану резервну копију (%d)?"
+
+#: lib/controller/class-ai1wm-backups-controller.php:133
+msgid "%d backup could not be deleted. Please verify the file permissions of your backups folder."
+msgid_plural "%d backups could not be deleted. Please verify the file permissions of your backups folder."
+msgstr[0] "%d резервна копија није могла да се избрише. Проверите дозволе датотека фасцикле са резервним копијама."
+msgstr[1] "%d резервне копије нису могле да се избришу. Проверите дозволе датотека фасцикле са резервним копијама."
+msgstr[2] "%d резервних копија није могло да се избрише. Проверите дозволе датотека фасцикле са резервним копијама."
+
+#: lib/view/export/find-replace.php:40
+msgid "Replace the database with this text"
+msgstr "Замени у бази података овим текстом"
+
+#: lib/view/export/find-replace.php:38
+msgid "Search the database for this text"
+msgstr "Потражи овај текст у бази података"
+
+#. translators: 1: Max upload file size, 2: Link to Unlimited Extension, 3:
+#. Link to how to article
+#: lib/controller/class-ai1wm-rest-controller.php:1227
+msgid "Your file exceeds the %1$s upload limit set by your host. Our Unlimited Extension bypasses this! %2$s. If you prefer a manual fix, follow our step-by-step guide on raising your upload limit: %3$s"
+msgstr "Ваша датотека премашује ограничење отпремања од %1$s које је поставио ваш хостинг. Наше проширење Unlimited Extension ово заобилази! %2$s. Ако више волите ручно решење, пратите наш водич корак по корак за повећање ограничења отпремања: %3$s"
+
+#: lib/controller/class-ai1wm-rest-controller.php:1039
+msgid "Multisite blog selection is not supported via the REST API. Please use the admin interface."
+msgstr "Избор блога у мрежи сајтова није подржан преко REST API-ја. Користите администраторско сучеље."
+
+#: lib/controller/class-ai1wm-rest-controller.php:1005
+msgid "Preparing..."
+msgstr "Припрема..."
+
+#. translators: 1: Link to Unlimited Extension
+#: lib/controller/class-ai1wm-rest-controller.php:913
+msgid "\"Restore\" functionality is available in our Unlimited Extension (%s). If you would rather go the manual route, you can still restore by downloading your backup and using the import endpoint."
+msgstr "Функционалност „Врати“ доступна је у нашем проширењу Unlimited Extension (%s). Ако више волите ручни начин, и даље можете да вратите сајт тако што ћете преузети резервну копију и користити крајњу тачку за увоз."
+
+#: lib/controller/class-ai1wm-rest-controller.php:886
+msgid "Backups are stored outside the web root on this host and cannot be downloaded via URL."
+msgstr "Резервне копије се на овом хостингу чувају ван корена веба и не могу да се преузму преко URL-а."
+
+#: lib/controller/class-ai1wm-rest-controller.php:795
+#: lib/controller/class-ai1wm-rest-controller.php:824
+#: lib/controller/class-ai1wm-rest-controller.php:856
+#: lib/controller/class-ai1wm-rest-controller.php:880
+msgid "Backup not found."
+msgstr "Резервна копија није пронађена."
+
+#: lib/controller/class-ai1wm-rest-controller.php:746
+msgid "Operation canceled by REST API."
+msgstr "Радњу је отказао REST API."
+
+#: lib/controller/class-ai1wm-rest-controller.php:745
+msgid "Canceled"
+msgstr "Отказано"
+
+#: lib/controller/class-ai1wm-rest-controller.php:667
+msgid "The proceed parameter is required. Use DELETE /imports/{id} to cancel."
+msgstr "Параметар proceed је обавезан. Користите DELETE /imports/{id} за отказивање."
+
+#: lib/controller/class-ai1wm-rest-controller.php:659
+msgid "Import is not waiting for confirmation."
+msgstr "Увоз не чека потврду."
+
+#: lib/controller/class-ai1wm-rest-controller.php:624
+#: lib/controller/class-ai1wm-rest-controller.php:712
+msgid "Importing..."
+msgstr "Увоз..."
+
+#: lib/controller/class-ai1wm-rest-controller.php:588
+msgid "The upload finished without producing a readable file."
+msgstr "Отпремање је завршено, али није направљена читљива датотека."
+
+#: lib/controller/class-ai1wm-rest-controller.php:580
+msgid "The server could not accept the uploaded file. Check the server logs."
+msgstr "Сервер није могао да прихвати отпремљену датотеку. Проверите дневнике сервера."
+
+#: lib/controller/class-ai1wm-rest-controller.php:571
+msgid "The uploaded file was only partially received."
+msgstr "Отпремљена датотека је примљена само делимично."
+
+#: lib/controller/class-ai1wm-rest-controller.php:565
+msgid "No file was uploaded."
+msgstr "Датотека није отпремљена."
+
+#: lib/controller/class-ai1wm-rest-controller.php:550
+msgid "No file attached. Use the \"upload_file\" multipart field."
+msgstr "Није приложена датотека. Користите multipart поље „upload_file“."
+
+#: lib/controller/class-ai1wm-rest-controller.php:474
+msgid "Preparing export..."
+msgstr "Припрема извоза..."
+
+#: lib/controller/class-ai1wm-rest-controller.php:359
+msgid "Label must be 255 characters or fewer."
+msgstr "Натпис мора имати 255 знакова или мање."
+
+#: lib/controller/class-ai1wm-rest-controller.php:342
+msgid "Import job not found."
+msgstr "Посао увоза није пронађен."
+
+#: lib/controller/class-ai1wm-main-controller.php:871
+msgid "Unlock"
+msgstr "Откључај"
+
+#: lib/model/import/class-ai1wm-import-validate-crc.php:129
+msgid "This backup file is damaged and can't be imported.<br />Try downloading or transferring the file again.<br /><br /><strong>Reason:</strong> File integrity check failed (CRC mismatch). <a href=\"https://help.servmask.com/knowledgebase/import-failed-crc-mismatch/\" target=\"_blank\">Technical details</a>"
+msgstr "Ова датотека резервне копије је оштећена и не може да се увезе.<br />Покушајте поново да преузмете или пренесете датотеку.<br /><br /><strong>Разлог:</strong> провера целовитости датотеке није успела (CRC се не подудара). <a href=\"https://help.servmask.com/knowledgebase/import-failed-crc-mismatch/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-validate-crc.php:43
+msgid "Validating archive checksum..."
+msgstr "Провера контролног збира архиве..."
+
+#: lib/model/export/class-ai1wm-export-archive-crc.php:38
+msgid "Calculating archive checksum..."
+msgstr "Израчунавање контролног збира архиве..."
+
+#: lib/view/common/share-buttons.php:56 lib/view/common/share-buttons.php:57
+msgid "Subscribe on YouTube"
+msgstr "Претплатите се на YouTube-у"
+
+#: lib/view/common/share-buttons.php:47 lib/view/common/share-buttons.php:48
+msgid "Share on Facebook"
+msgstr "Подели на Facebook-у"
+
+#: lib/view/common/share-buttons.php:38 lib/view/common/share-buttons.php:39
+msgid "Share on X"
+msgstr "Подели на X"
+
+#: lib/model/import/class-ai1wm-import-validate.php:65
+msgid "Unpacking configuration..."
+msgstr "Распакивање подешавања..."
+
+#: lib/model/import/class-ai1wm-import-database-file.php:118
+msgid "Database unpacked."
+msgstr "База података је распакована."
+
+#: lib/model/import/class-ai1wm-import-check-encryption.php:54
+msgid "Importing an encrypted backup is not supported on this server. The process cannot continue. Technical details: https://help.servmask.com/knowledgebase/unable-to-encrypt-and-decrypt-backups/"
+msgstr "Увоз шифроване резервне копије није подржан на овом серверу. Процес не може да се настави. Технички детаљи: https://help.servmask.com/knowledgebase/unable-to-encrypt-and-decrypt-backups/"
+
+#: lib/model/import/class-ai1wm-import-check-compression.php:69
+msgid "Compressed backup detected. Compression will be handled automatically."
+msgstr "Откривена је сажета резервна копија. Сажимање ће бити обрађено аутоматски."
+
+#: lib/model/import/class-ai1wm-import-check-compression.php:56
+msgid ""
+"Importing a compressed backup is not supported on this server.\n"
+"\t\t\t\t\t\t\tPlease ensure <strong>%s</strong> extension is enabled. <a href=\"https://help.servmask.com/knowledgebase/compressed-backups/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Увоз сажете резервне копије није подржан на овом серверу.\n"
+"\t\t\t\t\t\t\tУверите се да је проширење <strong>%s</strong> укључено. <a href=\"https://help.servmask.com/knowledgebase/compressed-backups/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/export/class-ai1wm-export-config-file.php:37
+msgid "Archiving configuration..."
+msgstr "Архивирање подешавања..."
+
+#: lib/controller/class-ai1wm-backups-controller.php:297
+msgid "Download a file from encrypted backup is not supported on this server. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/unable-to-encrypt-and-decrypt-backups/\" target=\"_blank\">Technical details</a>"
+msgstr "Преузимање датотеке из шифроване резервне копије није подржано на овом серверу. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/unable-to-encrypt-and-decrypt-backups/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/view/common/leave-feedback.php:64
+msgid "I agree to let All-in-One WP Migration use my <strong>email</strong> to respond to my request."
+msgstr "Прихватам да All-in-One WP Migration користи моју <strong>е-адресу</strong> да би одговорио на мој захтев."
+
+#: lib/model/import/class-ai1wm-import-upload.php:186
+msgid ""
+"An unknown error (code: %s) occurred during the file upload. The process cannot continue.\n"
+"\t\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Дошло је до непознате грешке (кôд: %s) током отпремања датотеке. Процес не може да се настави.\n"
+"\t\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-upload.php:171
+msgid ""
+"A PHP extension blocked this file upload. The process cannot continue.\n"
+"\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"PHP проширење је блокирало ово отпремање датотеке. Процес не може да се настави.\n"
+"\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-upload.php:158
+msgid ""
+"Could not save the uploaded file. Please check file permissions and try again.\n"
+"\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Није могуће сачувати отпремљену датотеку. Проверите дозволе датотека и покушајте поново.\n"
+"\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-upload.php:145
+msgid ""
+"No temporary folder is available on the server. The process cannot continue.\n"
+"\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"На серверу није доступна привремена фасцикла. Процес не може да се настави.\n"
+"\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-upload.php:132
+msgid ""
+"The uploaded file is too large for this server. The process cannot continue.\n"
+"\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Отпремљена датотека је превелика за овај сервер. Процес не може да се настави.\n"
+"\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-upload.php:111
+msgid ""
+"Could not upload the file because %s. The process cannot continue.\n"
+"\t\t\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Није могуће отпремити датотеку јер %s. Процес не може да се настави.\n"
+"\t\t\t\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-upload.php:89
+msgid ""
+"Invalid file data. Please ensure your file is a <strong>.wpress</strong> backup created with All-in-One WP Migration.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Неисправни подаци датотеке. Уверите се да је ваша датотека <strong>.wpress</strong> резервна копија направљена помоћу All-in-One WP Migration.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-upload.php:59
+msgid ""
+"The uploaded file is missing an error code. The process cannot continue.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Отпремљеној датотеци недостаје кôд грешке. Процес не може да се настави.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-upload.php:42
+msgid ""
+"The uploaded file is missing a temporary path. The process cannot continue.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Отпремљеној датотеци недостаје привремена путања. Процес не може да се настави.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/upload-file-error/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/view/export/advanced-settings.php:134
+msgid "Exclude plugins"
+msgstr "Изостави додатке"
+
+#: lib/view/export/advanced-settings.php:127
+msgid "Exclude must-use plugins"
+msgstr "Изостави must-use додатке"
+
+#: lib/view/export/advanced-settings.php:118
+msgid "Exclude themes"
+msgstr "Изостави теме"
+
+#: lib/view/export/advanced-settings.php:112
+msgid "Exclude media library"
+msgstr "Изостави библиотеку"
+
+#: lib/view/export/advanced-settings.php:108
+msgid "File Options"
+msgstr "Могућности датотека"
+
+#: lib/view/export/advanced-settings.php:89
+msgid "Exclude database"
+msgstr "Изостави базу података"
+
+#: lib/view/export/advanced-settings.php:73
+msgid "Database Options"
+msgstr "Могућности базе података"
+
+#: lib/view/export/advanced-settings.php:41
+msgid "Security Options"
+msgstr "Безбедносне могућности"
+
+#. translators: 1: Link to archive, 2: Archive title, 3: File name, 4: Archive
+#. title, 5: File size.
+#: lib/model/export/class-ai1wm-export-download.php:73
+msgid ""
+"<a href=\"%1$s\" class=\"ai1wm-button-green ai1wm-emphasize ai1wm-button-download\" title=\"%2$s\" download=\"%3$s\">\n"
+"\t\t\t\t\t\t\t<span>Download %2$s</span>\n"
+"\t\t\t\t\t\t\t<em>Size: %4$s</em>\n"
+"\t\t\t\t\t\t\t</a>"
+msgstr ""
+"<a href=\"%1$s\" class=\"ai1wm-button-green ai1wm-emphasize ai1wm-button-download\" title=\"%2$s\" download=\"%3$s\">\n"
+"\t\t\t\t\t\t\t<span>Преузми %2$s</span>\n"
+"\t\t\t\t\t\t\t<em>Величина: %4$s</em>\n"
+"\t\t\t\t\t\t\t</a>"
+
+#. Plugin Name of the plugin
+#: all-in-one-wp-migration.php
+msgid "All-in-One WP Migration and Backup"
+msgstr "All-in-One WP Migration and Backup"
+
+#. translators: 1: Admin url, 2: Url
+#: lib/view/import/done.php:50
+msgid ""
+"» <a class=\"ai1wm-no-underline\" href=\"%1$s\" target=\"_blank\">Save permalinks structure</a><br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Review your migration experience</a><br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"%2$s\" target=\"_blank\">Protect your site with real-time threat protection</a>"
+msgstr ""
+"» <a class=\"ai1wm-no-underline\" href=\"%1$s\" target=\"_blank\">Сачувајте структуру сталних веза</a><br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Оцените своје искуство са преносом</a><br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"%2$s\" target=\"_blank\">Заштитите свој сајт заштитом од претњи у стварном времену</a>"
+
+#. translators: Url
+#: lib/view/import/avada.php:51
+msgid "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Protect your site with real-time threat protection</a>"
+msgstr "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Заштитите свој сајт заштитом од претњи у стварном времену</a>"
+
+#: lib/view/main/multisite-notice.php:36
+msgid "WordPress Multisite requires our All-in-One WP Migration Multisite Extension. Get it here: "
+msgstr "Вордпресова мрежа сајтова захтева наше проширење All-in-One WP Migration Multisite Extension. Набавите га овде: "
+
+#. translators: Backups folder path.
+#. translators: Storage folder path.
+#: lib/view/main/backups-path-notice.php:39
+#: lib/view/main/storage-path-notice.php:39
+msgid "Could not create <strong>%s</strong> folder. Please ensure the parent folder has read/write/execute permissions (0777)."
+msgstr "Није могуће направити фасциклу <strong>%s</strong>. Уверите се да надређена фасцикла има дозволе за читање/писање/извршавање (0777)."
+
+#. translators: File name.
+#: lib/view/main/backups-htaccess-notice.php:39
+#: lib/view/main/backups-index-html-notice.php:39
+#: lib/view/main/backups-index-php-notice.php:39
+#: lib/view/main/backups-robots-txt-notice.php:39
+#: lib/view/main/backups-webconfig-notice.php:39
+#: lib/view/main/storage-htaccess-notice.php:39
+#: lib/view/main/storage-index-html-notice.php:39
+#: lib/view/main/storage-index-php-notice.php:39
+#: lib/view/main/storage-webconfig-notice.php:39
+#: lib/view/main/wordpress-htaccess-notice.php:39
+msgid "Could not create <strong>%s</strong> file. Please ensure the parent folder has read/write permissions."
+msgstr "Није могуће направити датотеку <strong>%s</strong>. Уверите се да надређена фасцикла има дозволе за читање/писање."
+
+#. translators: Max upload file size
+#: lib/view/import/pro.php:38
+msgid "Your host restricts uploads to <strong>%s</strong>."
+msgstr "Ваш хостинг ограничава отпремања на <strong>%s</strong>."
+
+#. translators: 1: Admin url, 2: Url
+#: lib/view/import/oxygen.php:51
+msgid ""
+"» <a class=\"ai1wm-no-underline\" href=\"%1$s\" target=\"_blank\">Save permalinks structure</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://classic.oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Re-sign Oxygen Builder shortcodes</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Review your migration experience</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"%2$s\" target=\"_blank\">Protect your site with real-time threat protection</a>"
+msgstr ""
+"» <a class=\"ai1wm-no-underline\" href=\"%1$s\" target=\"_blank\">Сачувајте структуру сталних веза</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://classic.oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Поново потпишите кратке кодове Oxygen Builder-а</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Оцените своје искуство са преносом</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"%2$s\" target=\"_blank\">Заштитите свој сајт заштитом од претњи у стварном времену</a>"
+
+#. translators: Url
+#: lib/view/import/oxygen.php:36
+msgid ""
+"» Permalinks are set to default. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Why?</a><br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://classic.oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Re-sign Oxygen Builder shortcodes</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Review your migration experience</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Protect your site with real-time threat protection</a>"
+msgstr ""
+"» Сталне везе су постављене на подразумевано. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Зашто?</a><br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://classic.oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Поново потпишите кратке кодове Oxygen Builder-а</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Оцените своје искуство са преносом</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Заштитите свој сајт заштитом од претњи у стварном времену</a>"
+
+#. translators: Url
+#: lib/view/import/done.php:36
+msgid ""
+"» Permalinks are set to default. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Why?</a><br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Review your migration experience</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Protect your site with real-time threat protection</a>"
+msgstr ""
+"» Сталне везе су постављене на подразумевано. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Зашто?</a><br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Оцените своје искуство са преносом</a>.<br />\n"
+"\t\t\t\t» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Заштитите свој сајт заштитом од претњи у стварном времену</a>"
+
+#: lib/view/import/avada.php:47
+msgid "» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Review your migration experience</a>.<br />"
+msgstr "» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Оцените своје искуство са преносом</a>.<br />"
+
+#. translators: Url
+#: lib/view/import/avada.php:37
+msgid "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Save permalinks structure</a>.<br />"
+msgstr "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Сачувајте структуру сталних веза</a>.<br />"
+
+#: lib/view/export/help-section.php:38
+msgid "Hints"
+msgstr "Савети"
+
+#: lib/view/export/help-section.php:34
+msgid "Use this screen to export your database, media, themes, and plugins into one .wpress file. Later, import that file to another WordPress site."
+msgstr "Користите овај екран да извезете своју базу података, садржај, теме и додатке у једну .wpress датотеку. Касније увезите ту датотеку на други Вордпресов сајт."
+
+#: lib/view/export/find-replace.php:37 lib/view/export/find-replace.php:46
+msgid "Search for"
+msgstr "Потражи"
+
+#: lib/view/export/export-buttons.php:37
+msgid "Export Site To"
+msgstr "Извези сајт у"
+
+#: lib/view/export/advanced-settings.php:83
+msgid "Exclude post revisions"
+msgstr "Изостави ревизије чланака"
+
+#: lib/view/export/advanced-settings.php:77
+msgid "Exclude spam comments"
+msgstr "Изостави непожељне коментаре"
+
+#: lib/view/common/leave-feedback.php:59
+msgid "Describe your issue or feedback..."
+msgstr "Опишите свој проблем или утисак..."
+
+#: lib/view/common/leave-feedback.php:56
+msgid "Email address"
+msgstr "Е-адреса"
+
+#: lib/view/common/leave-feedback.php:49
+msgid "I need help"
+msgstr "Треба ми помоћ"
+
+#: lib/view/common/leave-feedback.php:40
+msgid "I have an idea"
+msgstr "Имам идеју"
+
+#: lib/view/backups/index.php:54
+msgid "No backups found. Create a new one?"
+msgstr "Није пронађена ниједна резервна копија. Направити нову?"
+
+#: lib/view/backups/backups-list.php:96
+msgid "Over 2GB"
+msgstr "Више од 2GB"
+
+#: lib/view/backups/backups-list.php:72
+msgid "Click to label this backup"
+msgstr "Притисните да бисте означили ову резервну копију"
+
+#: lib/model/import/class-ai1wm-import-validate.php:40
+msgid ""
+"Your server uses 32-bit PHP and cannot process files larger than 2GB. Please switch to 64-bit PHP and try again.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Ваш сервер користи 32-битни PHP и не може да обрађује датотеке веће од 2GB. Пређите на 64-битни PHP и покушајте поново.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-users.php:66
+msgid "WordPress users prepared."
+msgstr "Вордпресови корисници су припремљени."
+
+#: lib/model/import/class-ai1wm-import-users.php:40
+msgid "Preparing WordPress users..."
+msgstr "Припрема Вордпресових корисника..."
+
+#: lib/model/import/class-ai1wm-import-upload.php:74
+#: lib/model/import/class-ai1wm-import-validate.php:54
+msgid ""
+"Invalid file type. Please ensure your file is a <strong>.wpress</strong> backup created with All-in-One WP Migration.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Неисправна врста датотеке. Уверите се да је ваша датотека <strong>.wpress</strong> резервна копија направљена помоћу All-in-One WP Migration.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Технички детаљи</a>"
+
+#: lib/model/import/class-ai1wm-import-permalinks.php:44
+msgid "WordPress permalinks settings retrieved."
+msgstr "Преузета су подешавања Вордпресових сталних веза."
+
+#: lib/model/import/class-ai1wm-import-options.php:75
+msgid "WordPress options prepared."
+msgstr "Вордпресове могућности су припремљене."
+
+#: lib/model/import/class-ai1wm-import-options.php:36
+msgid "Preparing WordPress options..."
+msgstr "Припрема Вордпресових могућности..."
+
+#: lib/model/import/class-ai1wm-import-mu-plugins.php:89
+msgid "Mu-plugins activated."
+msgstr "Must-use додаци су укључени."
+
+#: lib/model/import/class-ai1wm-import-enumerate.php:52
+msgid "WordPress files gathered."
+msgstr "Вордпресове датотеке су прикупљене."
+
+#: lib/model/import/class-ai1wm-import-enumerate.php:37
+msgid "Gathering WordPress files..."
+msgstr "Прикупљање Вордпресових датотека..."
+
+#: lib/model/import/class-ai1wm-import-database.php:1016
+msgid "Database restored."
+msgstr "База података је враћена."
+
+#. translators: Link to Unlimited Extension
+#: lib/model/import/class-ai1wm-import-confirm.php:69
+msgid ""
+"Importing this file will only replace matching content. Other items stay unchanged.\n"
+"\t\t\t\t\tNeed a full reset first? Try Reset Hub in our <a href=\"%s\" target=\"_blank\">Unlimited Extension</a>.<br />\n"
+"\t\t\t\t\tEnsure you have a current backup. Proceed?"
+msgstr ""
+"Увоз ове датотеке замениће само одговарајући садржај. Остале ставке остају непромењене.\n"
+"\t\t\t\t\tПрво вам треба потпуно поништавање? Испробајте Reset Hub у нашем проширењу <a href=\"%s\" target=\"_blank\">Unlimited Extension</a>.<br />\n"
+"\t\t\t\t\tУверите се да имате тренутну резервну копију. Наставити?"
+
+#. translators: Link to Unlimited Extension
+#: lib/model/import/class-ai1wm-import-confirm.php:58
+msgid ""
+"Importing this file will only replace matching content. Other items stay unchanged.\n"
+"\t\t\t\t\tNeed a full reset first? Try Reset Hub in our Unlimited Extension (%s).\n"
+"\t\t\t\t\tEnsure you have a current backup. Proceed?"
+msgstr ""
+"Увоз ове датотеке замениће само одговарајући садржај. Остале ставке остају непромењене.\n"
+"\t\t\t\t\tПрво вам треба потпуно поништавање? Испробајте Reset Hub у нашем проширењу Unlimited Extension (%s).\n"
+"\t\t\t\t\tУверите се да имате тренутну резервну копију. Наставити?"
+
+#: lib/controller/class-ai1wm-backups-controller.php:304
+#: lib/model/import/class-ai1wm-import-check-encryption.php:82
+msgid "The decryption password is not valid. The process cannot continue."
+msgstr "Лозинка за дешифровање није исправна. Процес не може да се настави."
+
+#: lib/model/import/class-ai1wm-import-check-encryption.php:77
+msgid "Decryption password validated."
+msgstr "Лозинка за дешифровање је потврђена."
+
+#: lib/model/import/class-ai1wm-import-blogs.php:152
+msgid "Blogs prepared."
+msgstr "Блогови су припремљени."
+
+#: lib/model/import/class-ai1wm-import-blogs.php:142
+msgid "Could not import a WordPress Network into a single WordPress site. The process cannot continue. Please check your import settings."
+msgstr "Није могуће увести Вордпресову мрежу у један Вордпресов сајт. Процес не може да се настави. Проверите подешавања увоза."
+
+#: lib/model/import/class-ai1wm-import-blogs.php:139
+msgid "The archive must contain at least one WordPress site. The process cannot continue. Please check your export settings."
+msgstr "Архива мора да садржи бар један Вордпресов сајт. Процес не може да се настави. Проверите подешавања извоза."
+
+#: lib/model/import/class-ai1wm-import-blogs.php:136
+msgid "The archive must contain only a single WordPress site. The process cannot continue. Please revisit your export settings."
+msgstr "Архива мора да садржи само један Вордпресов сајт. Процес не може да се настави. Поново прегледајте подешавања извоза."
+
+#: lib/model/export/class-ai1wm-export-enumerate-themes.php:108
+msgid "Theme files gathered."
+msgstr "Датотеке тема су прикупљене."
+
+#: lib/model/export/class-ai1wm-export-enumerate-themes.php:53
+msgid "Gathering theme files..."
+msgstr "Прикупљање датотека тема..."
+
+#: lib/model/export/class-ai1wm-export-enumerate-tables.php:89
+msgid "Database tables gathered."
+msgstr "Табеле базе података су прикупљене."
+
+#: lib/model/export/class-ai1wm-export-enumerate-tables.php:48
+msgid "Gathering database tables..."
+msgstr "Прикупљање табела базе података..."
+
+#: lib/model/export/class-ai1wm-export-enumerate-plugins.php:102
+msgid "Plugin files gathered."
+msgstr "Датотеке додатака су прикупљене."
+
+#: lib/model/export/class-ai1wm-export-enumerate-plugins.php:53
+msgid "Gathering plugin files..."
+msgstr "Прикупљање датотека додатака..."
+
+#: lib/model/export/class-ai1wm-export-enumerate-media.php:95
+msgid "Media files gathered."
+msgstr "Датотеке садржаја из библиотеке су прикупљене."
+
+#: lib/model/export/class-ai1wm-export-enumerate-media.php:53
+msgid "Gathering media files..."
+msgstr "Прикупљање датотека из библиотеке..."
+
+#: lib/model/export/class-ai1wm-export-enumerate-content.php:113
+msgid "Content files gathered."
+msgstr "Датотеке садржаја су прикупљене."
+
+#: lib/model/export/class-ai1wm-export-enumerate-content.php:53
+msgid "Gathering content files..."
+msgstr "Прикупљање датотека садржаја..."
+
+#: lib/model/export/class-ai1wm-export-database.php:165
+msgid "Database exported."
+msgstr "База података је извезена."
+
+#: lib/model/export/class-ai1wm-export-database-file.php:107
+msgid "Database archived."
+msgstr "База података је архивирана."
+
+#: lib/model/export/class-ai1wm-export-config.php:199
+msgid "Configuration prepared."
+msgstr "Подешавање је припремљено."
+
+#: lib/model/export/class-ai1wm-export-config-file.php:46
+msgid "Configuration archived."
+msgstr "Подешавање је архивирано."
+
+#: lib/model/export/class-ai1wm-export-compatibility.php:37
+#: lib/model/import/class-ai1wm-import-compatibility.php:38
+msgid "Checking for compatibility..."
+msgstr "Провера усаглашености..."
+
+#: lib/model/export/class-ai1wm-export-archive.php:46
+msgid "Export file created."
+msgstr "Датотека извоза је направљена."
+
+#: lib/model/export/class-ai1wm-export-archive.php:39
+msgid "Creating export file..."
+msgstr "Прављење датотеке извоза..."
+
+#. translators: Error message.
+#: lib/model/class-ai1wm-feedback.php:81
+msgid "An error occurred while submitting your request: %s"
+msgstr "Дошло је до грешке при слању вашег захтева: %s"
+
+#: lib/model/class-ai1wm-feedback.php:63
+msgid "Please check the consent box so we can use your email to respond to you."
+msgstr "Означите кућицу за пристанак да бисмо могли да користимо вашу е-адресу за одговор."
+
+#: lib/model/class-ai1wm-feedback.php:58
+msgid "Please describe your issue or feedback."
+msgstr "Опишите свој проблем или утисак."
+
+#: lib/model/class-ai1wm-feedback.php:53
+msgid "Please select a feedback type."
+msgstr "Изаберите врсту утиска."
+
+#: lib/model/class-ai1wm-feedback.php:48
+msgid "Please enter a valid email address."
+msgstr "Унесите исправну е-адресу."
+
+#. translators: 1: Extension name, 2: Plugins update page.
+#: lib/model/class-ai1wm-compatibility.php:56
+msgid "<strong>%1$s</strong> is out of date. You must <a href=\"%2$s\">update this extension</a> before using it.<br />"
+msgstr "<strong>%1$s</strong> је застарело. Морате <a href=\"%2$s\">ажурирати ово проширење</a> пре употребе.<br />"
+
+#. translators: Extension name.
+#: lib/model/class-ai1wm-compatibility.php:53
+msgid "%s is out of date. Please update this extension before using it."
+msgstr "%s је застарело. Ажурирајте ово проширење пре употребе."
+
+#: lib/controller/class-ai1wm-main-controller.php:870
+msgid "Please enter a password to restore the backup"
+msgstr "Унесите лозинку за враћање резервне копије"
+
+#: lib/controller/class-ai1wm-main-controller.php:849
+msgid "Could not download backup"
+msgstr "Није могуће преузети резервну копију"
+
+#: lib/controller/class-ai1wm-main-controller.php:917
+msgid "Could not read backup content"
+msgstr "Није могуће прочитати садржај резервне копије"
+
+#. translators: Disk space to free up.
+#: lib/controller/class-ai1wm-main-controller.php:878
+msgid "Not enough disk space.<br /> Free up %s before restoring."
+msgstr "Нема довољно простора на диску.<br /> Ослободите %s пре враћања."
+
+#. translators: 1: Link to Unlimited Extension
+#: lib/controller/class-ai1wm-main-controller.php:913
+msgid "\"Restore\" functionality is available in our <a href=\"%s\" target=\"_blank\">Unlimited Extension</a>.<br /> If you would rather go the manual route, you can still restore by downloading your backup and using \"Import from file\"."
+msgstr "Функционалност „Врати“ доступна је у нашем проширењу <a href=\"%s\" target=\"_blank\">Unlimited Extension</a>.<br /> Ако више волите ручни начин, и даље можете да вратите сајт тако што ћете преузети резервну копију и користити „Увези из датотеке“."
+
+#: lib/controller/class-ai1wm-main-controller.php:897
+msgid ""
+"Invalid file type. Please ensure that your file is a <strong>.wpress</strong> file created with All-in-One WP Migration.\n"
+"\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Неисправна врста датотеке. Уверите се да је ваша датотека <strong>.wpress</strong> датотека направљена помоћу All-in-One WP Migration.\n"
+"\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Технички детаљи</a>"
+
+#. translators: 1: Link to Unlimited Extension, 2: Link to how to article
+#: lib/controller/class-ai1wm-main-controller.php:881
+msgid "Your file exceeds the upload limit set by your host web server.<br />%1$s<br />%2$s"
+msgstr "Ваша датотека премашује ограничење отпремања које је поставио веб сервер вашег хостинга.<br />%1$s<br />%2$s"
+
+#: lib/controller/class-ai1wm-main-controller.php:876
+msgid "Upload failed"
+msgstr "Отпремање није успело"
+
+#: lib/controller/class-ai1wm-main-controller.php:875
+msgid "Upload failed - connection lost or timeout. Try uploading the file again."
+msgstr "Отпремање није успело – веза је изгубљена или је истекло време. Покушајте поново да отпремите датотеку."
+
+#: lib/controller/class-ai1wm-main-controller.php:861
+msgid "Stopping the import, please wait..."
+msgstr "Заустављање увоза, сачекајте..."
+
+#: lib/controller/class-ai1wm-main-controller.php:860
+msgid "Could not stop the import. Please refresh and try again."
+msgstr "Није могуће зауставити увоз. Освежите и покушајте поново."
+
+#: lib/controller/class-ai1wm-main-controller.php:859
+msgid "Could not prepare blogs for import. Please refresh and try again."
+msgstr "Није могуће припремити блогове за увоз. Освежите и покушајте поново."
+
+#: lib/controller/class-ai1wm-main-controller.php:858
+msgid "Could not check the decryption password. Please refresh and try again."
+msgstr "Није могуће проверити лозинку за дешифровање. Освежите и покушајте поново."
+
+#: lib/controller/class-ai1wm-main-controller.php:857
+msgid "Could not confirm the import. Please refresh and try again."
+msgstr "Није могуће потврдити увоз. Освежите и покушајте поново."
+
+#: lib/controller/class-ai1wm-main-controller.php:856
+msgid "Could not start the import. Please refresh and try again."
+msgstr "Није могуће покренути увоз. Освежите и покушајте поново."
+
+#: lib/controller/class-ai1wm-main-controller.php:853
+msgid "Are you sure you want to stop the import?"
+msgstr "Да ли сигурно желите да зауставите увоз?"
+
+#. translators: Link to how to article
+#: lib/controller/class-ai1wm-main-controller.php:819
+#: lib/controller/class-ai1wm-main-controller.php:892
+#: lib/view/import/pro.php:61
+msgid "If you prefer a manual fix, follow our step-by-step guide on <a href=\"%s\" target=\"_blank\">raising your upload limit</a>."
+msgstr "Ако више волите ручно решење, пратите наш водич корак по корак за <a href=\"%s\" target=\"_blank\">повећање ограничења отпремања</a>."
+
+#. translators: Link to Unlimited Extension
+#: lib/controller/class-ai1wm-main-controller.php:814
+#: lib/controller/class-ai1wm-main-controller.php:887
+#: lib/view/import/pro.php:49
+msgid "Our <a href=\"%s\" target=\"_blank\">Unlimited Extension</a> bypasses this!"
+msgstr "Наше проширење <a href=\"%s\" target=\"_blank\">Unlimited Extension</a> ово заобилази!"
+
+#. translators: 1: Max upload file size
+#: lib/controller/class-ai1wm-main-controller.php:807
+msgid "Your file exceeds the <strong>%1$s</strong> upload limit set by your host.<br />%2$s<br />%3$s"
+msgstr "Ваша датотека премашује ограничење отпремања од <strong>%1$s</strong> које је поставио ваш хостинг.<br />%2$s<br />%3$s"
+
+#: lib/controller/class-ai1wm-main-controller.php:842
+msgid "Stopping the export, please wait..."
+msgstr "Заустављање извоза, сачекајте..."
+
+#: lib/controller/class-ai1wm-main-controller.php:841
+msgid "Could not stop the export. Please refresh and try again."
+msgstr "Није могуће зауставити извоз. Освежите и покушајте поново."
+
+#: lib/controller/class-ai1wm-main-controller.php:840
+msgid "Could not run the export. Please refresh and try again."
+msgstr "Није могуће покренути извоз. Освежите и покушајте поново."
+
+#: lib/controller/class-ai1wm-main-controller.php:839
+msgid "Could not start the export. Please refresh and try again."
+msgstr "Није могуће започети извоз. Освежите и покушајте поново."
+
+#: lib/controller/class-ai1wm-main-controller.php:836
+msgid "Are you sure you want to stop the export?"
+msgstr "Да ли сигурно желите да зауставите извоз?"
+
+#: lib/controller/class-ai1wm-main-controller.php:829
+msgid "Thank you! We have received your request and will be in touch soon."
+msgstr "Хвала! Примили смо ваш захтев и ускоро ћемо вам се јавити."
+
+#: lib/controller/class-ai1wm-import-controller.php:99
+#: lib/controller/class-ai1wm-import-controller.php:116
+#: lib/controller/class-ai1wm-import-controller.php:140
+#: lib/controller/class-ai1wm-import-controller.php:142
+#: lib/controller/class-ai1wm-import-controller.php:150
+#: lib/controller/class-ai1wm-main-controller.php:855
+msgid "Import failed"
+msgstr "Увоз није успео"
+
+#. translators: Error message.
+#: lib/controller/class-ai1wm-import-controller.php:135
+msgid "Import failed: %s"
+msgstr "Увоз није успео: %s"
+
+#. translators: 1: Error code, 2: Error message.
+#: lib/controller/class-ai1wm-import-controller.php:111
+msgid "Import failed (database error). Code: %1$s. %2$s"
+msgstr "Увоз није успео (грешка базе података). Кôд: %1$s. %2$s"
+
+#. translators: 1: Error code, 2: Error message.
+#: lib/controller/class-ai1wm-import-controller.php:94
+msgid "Import failed. Code: %1$s. %2$s"
+msgstr "Увоз није успео. Кôд: %1$s. %2$s"
+
+#: lib/controller/class-ai1wm-export-controller.php:99
+#: lib/controller/class-ai1wm-export-controller.php:115
+#: lib/controller/class-ai1wm-export-controller.php:122
+#: lib/controller/class-ai1wm-main-controller.php:838
+msgid "Export failed"
+msgstr "Извоз није успео"
+
+#. translators: 1: Error message.
+#: lib/controller/class-ai1wm-export-controller.php:111
+msgid "Export failed: %s"
+msgstr "Извоз није успео: %s"
+
+#. translators: 1: Error code, 2: Error message.
+#: lib/controller/class-ai1wm-export-controller.php:94
+msgid "Export failed (database error). Code: %1$s. Message: %2$s"
+msgstr "Извоз није успео (грешка базе података). Кôд: %1$s. Порука: %2$s"
+
+#: lib/controller/class-ai1wm-backups-controller.php:343
+msgid "Could not list the backup content. Please ensure the backup file is accessible and not corrupted."
+msgstr "Није могуће набројати садржај резервне копије. Уверите се да је датотека резервне копије доступна и да није оштећена."
+
+#: functions.php:2431
+msgid "Could not decrypt data. The process cannot continue."
+msgstr "Није могуће дешифровати податке. Процес не може да се настави."
+
+#: functions.php:2408
+msgid "Could not obtain cipher length. The process cannot continue."
+msgstr "Није могуће добити дужину шифре. Процес не може да се настави."
+
+#: functions.php:2393
+msgid "Could not encrypt data. The process cannot continue."
+msgstr "Није могуће шифровати податке. Процес не може да се настави."
+
+#: functions.php:2387
+msgid "Could not generate random bytes. The process cannot continue."
+msgstr "Није могуће направити насумичне бајтове. Процес не може да се настави."
+
+#: functions.php:1970
+msgid "Could not authenticate the secret key. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/invalid-secret-key/\" target=\"_blank\">Technical details</a>"
+msgstr "Није могуће потврдити тајни кључ. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/invalid-secret-key/\" target=\"_blank\">Технички детаљи</a>"
+
+#. translators: 1: Meta data stream URI.
+#: functions.php:1729
+msgid "Could not get current pointer position of %s. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Technical details</a>"
+msgstr "Није могуће добити тренутни положај показивача за %s. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Технички детаљи</a>"
+
+#. translators: 1: File offset, 2: Meta data stream URI.
+#: functions.php:1706
+msgid "Could not seek to offset %1$d on %2$s. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Technical details</a>"
+msgstr "Није могуће прећи на помак %1$d у %2$s. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Технички детаљи</a>"
+
+#. translators: 1: Meta data stream URI.
+#: functions.php:1678
+msgid "Could not read file: %s. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a>"
+msgstr "Није могуће прочитати датотеку: %s. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a>"
+
+#. translators: 1: Meta data stream URI.
+#: functions.php:1652
+msgid "Out of disk space. Could not write to: %s. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/out-of-disk-space/\" target=\"_blank\">Technical details</a>"
+msgstr "Нема простора на диску. Није могуће уписати у: %s. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/out-of-disk-space/\" target=\"_blank\">Технички детаљи</a>"
+
+#. translators: 1: Meta data stream URI.
+#: functions.php:1640 functions.php:1764
+msgid "Could not write to: %s. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a>"
+msgstr "Није могуће уписати у: %s. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a>"
+
+#. translators: 1: File path, 2: mode
+#: functions.php:1592 functions.php:1615
+msgid "Could not open %1$s with mode %2$s. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a>"
+msgstr "Није могуће отворити %1$s у режиму %2$s. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a>"
+
+#: functions.php:110 functions.php:172
+msgid "Your archive file name contains invalid characters: < > : \" | ? * \\0. It must not include these characters. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/invalid-archive-name/\" target=\"_blank\">Technical details</a>"
+msgstr "Име ваше датотеке архиве садржи неисправне знакове: < > : \" | ? * \\0. Не сме да садржи ове знакове. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/invalid-archive-name/\" target=\"_blank\">Технички детаљи</a>"
+
+#: functions.php:100 functions.php:162
+msgid "Could not locate the archive path. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/invalid-archive-path/\" target=\"_blank\">Technical details</a>"
+msgstr "Није могуће пронаћи путању архиве. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/invalid-archive-path/\" target=\"_blank\">Технички детаљи</a>"
+
+#: functions.php:52
+msgid "Your storage directory name contains invalid characters: < > : \" | ? * \\0. It must not include these characters. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/invalid-storage-name/\" target=\"_blank\">Technical details</a>"
+msgstr "Име ваше фасцикле складишта садржи неисправне знакове: < > : \" | ? * \\0. Не сме да садржи ове знакове. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/invalid-storage-name/\" target=\"_blank\">Технички детаљи</a>"
+
+#: functions.php:42
+msgid "Could not locate the storage path. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/invalid-storage-path/\" target=\"_blank\">Technical details</a>"
+msgstr "Није могуће пронаћи путању складишта. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/invalid-storage-path/\" target=\"_blank\">Технички детаљи</a>"
+
+#. Description of the plugin
+#: all-in-one-wp-migration.php
+msgid "All-in-One WP Migration makes moving your entire WordPress site simple. Export or import your database, media, plugins, and themes with just a few clicks."
+msgstr "All-in-One WP Migration поједностављује премештање целог Вордпресовог сајта. Извезите или увезите своју базу података, садржај, додатке и теме у само неколико притисака."
+
+#: lib/controller/class-ai1wm-main-controller.php:850
+msgid "View Error Log"
+msgstr "Прегледај дневник грешака"
+
+#: functions.php:120 functions.php:182
+msgid "Invalid archive file type. Only .wpress files are allowed. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-type/\" target=\"_blank\">Technical details</a>"
+msgstr "Неисправна врста датотеке архиве. Дозвољене су само .wpress датотеке. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-type/\" target=\"_blank\">Технички детаљи</a>"
+
+#. translators: 1: Archive title, 2: File name, 3: Archive title, 4: File size.
+#: lib/model/export/class-ai1wm-export-download.php:90
+msgid ""
+"<a href=\"#\" class=\"ai1wm-button-green ai1wm-emphasize ai1wm-direct-download\" title=\"%1$s\" download=\"%2$s\">\n"
+"\t\t\t\t\t\t\t<span>Download %3$s</span>\n"
+"\t\t\t\t\t\t\t<em>Size: %4$s</em>\n"
+"\t\t\t\t\t\t\t</a>"
+msgstr ""
+"<a href=\"#\" class=\"ai1wm-button-green ai1wm-emphasize ai1wm-direct-download\" title=\"%1$s\" download=\"%2$s\">\n"
+"\t\t\t\t\t\t\t<span>Преузми %3$s</span>\n"
+"\t\t\t\t\t\t\t<em>Величина: %4$s</em>\n"
+"\t\t\t\t\t\t\t</a>"
+
+#: lib/view/reset/index.php:41
+msgid "Reset Hub Demo"
+msgstr "Демо за Reset Hub"
+
+#: lib/view/reset/index.php:41
+msgid "Upgrade to Premium "
+msgstr "Надогради на Премиум "
+
+#: lib/view/reset/index.php:39
+msgid "Please note, the features displayed below are part of an image showcasing the potential of Reset Hub in its Premium version. To activate and enjoy these advanced features, <a href=\"https://servmask.com/products/unlimited-extension\" title=\"Upgrade to Premium\" target=\"_blank\">upgrade to Premium now</a>! Elevate your website management experience with these exclusive functionalities and priority support."
+msgstr "Имајте на уму да су функционалности приказане испод део слике која показује могућности Reset Hub-а у његовом премијум издању. Да бисте укључили ове напредне функционалности и уживали у њима, <a href=\"https://servmask.com/products/unlimited-extension\" title=\"Надоградите на премијум\" target=\"_blank\">надоградите на премијум сада</a>! Подигните управљање веб сајтом на виши ниво уз ове ексклузивне функционалности и приоритетну подршку."
+
+#: lib/view/reset/index.php:37
+msgid "Experience Full Functionality with Premium!"
+msgstr "Искусите пуну функционалност са Премиум верзијом!"
+
+#: lib/view/reset/index.php:36
+msgid "Star"
+msgstr "Звезда"
+
+#: lib/controller/class-ai1wm-main-controller.php:749
+#: lib/controller/class-ai1wm-main-controller.php:750
+msgid "Reset Hub"
+msgstr "Reset Hub"
+
+#: lib/view/main/premium-badge.php:33
+msgid "Premium"
+msgstr "Премијум"
+
+#: lib/view/schedules/index.php:111
+msgid "Leverage the simplicity of Dropbox for your backup needs. Direct your scheduled backups to be stored in Dropbox. It's secure, straightforward, and keeps your backups at your fingertips."
+msgstr "Искористите једноставност Dropbox-а за своје потребе за резервним копијама. Усмерите своје заказане резервне копије да се чувају у Dropbox-у. Сигурно је, једноставно и увек вам је на дохват руке."
+
+#: lib/view/schedules/index.php:163
+msgid "Tailor your backup schedules to fit the complexity of your WordPress Multisite. Choose to export the entire network or only a selection of subsites according to your requirements. Effortless management for even the most intricate site networks."
+msgstr "Прилагодите распоред прављења резервних копија сложености вашег Вордпрес мреже сајтова. Изаберите да извезете целу мрежу или само одабране подсајтове према вашим захтевима. Лако управљање чак и најсложенијим мрежама сајтова."
+
+#: lib/view/schedules/index.php:150
+msgid "We've got you covered with an array of supported storage providers. Whether you prefer Box, Amazon S3, WebDav or something else, you can choose the one that fits your needs best. Secure your backups exactly where you want them."
+msgstr "Покривамо све ваше потребе са подршком за низ различитих провајдере складишта. Без обзира да ли користите Box, Amazon S3, WebDav или неки други сервис, бирајте онај који вам највише одговара. Осигурајте своје резервне копије на месту које вам највише одговара."
+
+#: lib/view/schedules/index.php:137
+msgid "Enjoy the flexibility of FTP storage. Direct your scheduled backups to your own FTP server. You'll have full control over your data, providing you with a versatile and private storage solution."
+msgstr "Уживајте у флексибилности FTP складишта. Усмерите своје заказане резервне копије на сопствени FTP сервер. Имаћете потпуну контролу над својим подацима, обезбеђујући свестрано и приватно решење за складиштење."
+
+#: lib/view/schedules/index.php:124
+msgid "Harness the power of OneDrive for your backups. Set up your scheduled backups to be saved directly in your OneDrive. It's secure, integrated with your Microsoft account, and keeps your data readily accessible."
+msgstr "Искористите снагу OneDrive-а за своје резервне копије. Подесите заказане резервне копије да се чувају директно у вашем OneDrive-у. Сигурно је, интегрисано са вашим Microsoft налогом и омогућава вам лак приступ вашим подацима."
+
+#: lib/view/schedules/index.php:98
+msgid "Benefit from the robustness of Google Drive. Schedule your backups to be saved directly to your Google Drive account. Simple, secure, and integrated into a platform you already use."
+msgstr "Искористите робустност Google Drive-а. Закажите прављење резервних копија које ће се директно чувати на вашем Google Drive налогу. Једноставно, сигурно и интегрисано у платформу коју већ користите."
+
+#: lib/view/schedules/index.php:85
+msgid "Manage your storage effectively with our flexible retention settings. Decide how many backups you want to keep at a time. Old backups are automatically cleared, keeping your storage neat and efficient."
+msgstr "Ефикасно управљајте својим складиштем уз наше променљиве величине подешавања задржавања. Одлучите колико резервних копија желите да чувате у исто време. Старије копије се аутоматски бришу, одржавајући ваше складиште уредним и ефикасним."
+
+#: lib/view/schedules/index.php:77 lib/view/schedules/index.php:82
+msgid "Retention settings"
+msgstr "Подешавања задржавања"
+
+#: lib/view/schedules/index.php:72
+msgid "Stay informed, not overwhelmed. Tailor your notification preferences to get updates that matter to you. Whether it's the status of each backup, or just critical alerts, control what you want to be notified about."
+msgstr "Останите информисани, али не и преоптерећени. Прилагодите своје ажурирање обавештења како бисте добијали само оне информације које су вам важне. Било да је у питању стање сваке резервне копије или само критични аларми, контролишите о чему желите да будете обавештени."
+
+#: lib/view/schedules/index.php:64 lib/view/schedules/index.php:69
+msgid "Notification settings"
+msgstr "Подешавања обавештења"
+
+#: lib/view/schedules/index.php:59
+msgid "Never worry about forgetting to back up your site again. Choose from various scheduling options, from daily to monthly, and we'll automate the rest. Backups happen like clockwork, giving you peace of mind and a solid safety net"
+msgstr "Никада више не брините око заборављања резервних копија вашег сајта. Изаберите различите могућности заказивања, од дневних до месечних, а ми ћемо аутоматизовати све остало. Резервне копије ће се радити по распореду, пружајући вам мир и сигурну заштиту."
+
+#: lib/view/schedules/index.php:56 lib/view/schedules/index.php:69
+#: lib/view/schedules/index.php:82 lib/view/schedules/index.php:95
+#: lib/view/schedules/index.php:108 lib/view/schedules/index.php:121
+#: lib/view/schedules/index.php:134 lib/view/schedules/index.php:147
+#: lib/view/schedules/index.php:160
+msgid "Enable this feature"
+msgstr "Омогући ову функцију"
+
+#: lib/view/schedules/index.php:51
+msgid "Backup scheduler"
+msgstr "Распоред прављења резервних копија"
+
+#: lib/view/schedules/index.php:45 lib/view/schedules/index.php:155
+#: lib/view/schedules/index.php:160
+msgid "Multisite Schedules"
+msgstr "Распореди за мреже сајтова"
+
+#: lib/view/schedules/index.php:44 lib/view/schedules/index.php:142
+#: lib/view/schedules/index.php:147
+msgid "More Storage Providers"
+msgstr "Више провајдера складишта"
+
+#: lib/view/schedules/index.php:43 lib/view/schedules/index.php:129
+#: lib/view/schedules/index.php:134
+msgid "FTP Storage"
+msgstr "FTP складиште"
+
+#: lib/view/schedules/index.php:42 lib/view/schedules/index.php:116
+#: lib/view/schedules/index.php:121
+msgid "OneDrive Storage"
+msgstr "OneDrive складиште"
+
+#: lib/view/schedules/index.php:41 lib/view/schedules/index.php:103
+#: lib/view/schedules/index.php:108
+msgid "Dropbox Storage"
+msgstr "Dropbox складиште"
+
+#: lib/view/schedules/index.php:40 lib/view/schedules/index.php:90
+#: lib/view/schedules/index.php:95
+msgid "Google Drive Storage"
+msgstr "Google Drive складиште"
+
+#: lib/view/schedules/index.php:39
+msgid "Retention Settings"
+msgstr "Подешавања задржавања"
+
+#: lib/view/schedules/index.php:38
+msgid "Notification Settings"
+msgstr "Подешавања обавештења"
+
+#: lib/view/schedules/index.php:37 lib/view/schedules/index.php:56
+msgid "Backup Scheduler"
+msgstr "Распоред прављења резервних копија"
+
+#: lib/controller/class-ai1wm-main-controller.php:758
+#: lib/controller/class-ai1wm-main-controller.php:759
+msgid "Schedules"
+msgstr "Распореди"
+
+#: lib/model/import/class-ai1wm-import-check-encryption.php:69
 msgid "Backup is encrypted. Please provide decryption password: "
 msgstr "Резервна копија је шифрована. Наведите лозинке за дешифровање: "
 
-#: lib/view/export/advanced-settings.php:64
+#: lib/view/export/advanced-settings.php:66
 msgid "Password-protect and encrypt backups"
 msgstr "Заштите лозинком и шифрујте резерве копије"
 
-#: lib/view/export/advanced-settings.php:51
+#: lib/view/export/advanced-settings.php:53
 msgid "A password is required"
 msgstr "Лозинка је потребна"
 
-#: lib/view/export/advanced-settings.php:43
-msgid "Protect this backup with a password"
-msgstr "Заштитите ову резервну копију лозинком"
+#: lib/view/export/advanced-settings.php:46
+msgid "Encrypt this backup with a password"
+msgstr "Шифруј ову резервну копију лозинком"
 
-#: lib/model/import/class-ai1wm-import-users.php:62
-msgid "Done preparing users."
-msgstr "Готово са припремама корисника."
+#: lib/model/import/class-ai1wm-import-check-encryption.php:56
+msgid "Importing an encrypted backup is not supported on this server. The process cannot continue. <a href=\"https://help.servmask.com/knowledgebase/unable-to-encrypt-and-decrypt-backups/\" target=\"_blank\">Technical details</a>"
+msgstr "Увоз шифроване резервне копије није подржан на овом серверу. Процес не може да се настави. <a href=\"https://help.servmask.com/knowledgebase/unable-to-encrypt-and-decrypt-backups/\" target=\"_blank\">Технички детаљи</a>"
 
-#: lib/model/import/class-ai1wm-import-users.php:38
-msgid "Preparing users..."
-msgstr "Припрема корисника..."
-
-#: lib/model/import/class-ai1wm-import-check-encryption.php:48
-msgid "Importing an encrypted backup is not supported on this server. <a href=\"https://help.servmask.com/knowledgebase/unable-to-encrypt-and-decrypt-backups/\" target=\"_blank\">Technical details</a>"
-msgstr "Увоз шифроване резервне копије није подржан на овом серверу. <a href=\"https://help.servmask.com/knowledgebase/unable-to-encrypt-and-decrypt-backups/\" target=\"_blank\">Технички детаљи</a>"
-
-#: lib/model/import/class-ai1wm-import-check-decryption-password.php:59
-msgid "The decryption password is not valid."
-msgstr "Лозинка за дешифровање није важећа."
-
-#: lib/model/import/class-ai1wm-import-check-decryption-password.php:52
-msgid "Done validating the decryption password."
-msgstr "Провера ваљаности лозинке за дешифровање је завршена."
-
-#: lib/controller/class-ai1wm-main-controller.php:920
-#: lib/controller/class-ai1wm-main-controller.php:1127
-#: lib/view/export/advanced-settings.php:56
+#: lib/controller/class-ai1wm-main-controller.php:874
+#: lib/view/export/advanced-settings.php:58
 msgid "The passwords do not match"
 msgstr "Лозинке се не поклапају"
 
-#: lib/controller/class-ai1wm-main-controller.php:919
-#: lib/controller/class-ai1wm-main-controller.php:1126
-#: lib/view/export/advanced-settings.php:54
+#: lib/controller/class-ai1wm-main-controller.php:873
+#: lib/view/export/advanced-settings.php:56
 msgid "Repeat the password"
 msgstr "Поновите лозинку"
 
-#: lib/controller/class-ai1wm-main-controller.php:917
-#: lib/controller/class-ai1wm-main-controller.php:1124
+#: lib/controller/class-ai1wm-main-controller.php:921
 msgid "Submit"
-msgstr "Пошаљи"
+msgstr "Предај"
 
-#: lib/controller/class-ai1wm-main-controller.php:916
-#: lib/controller/class-ai1wm-main-controller.php:1123
-msgid "Please enter a password to import the file"
-msgstr "Унесите лозинку да бисте увезли датотеку"
-
-#: lib/controller/class-ai1wm-main-controller.php:915
-#: lib/controller/class-ai1wm-main-controller.php:1122
+#: lib/controller/class-ai1wm-main-controller.php:869
 msgid "The backup is encrypted"
 msgstr "Резервна копија је шифрована"
 
-#: lib/controller/class-ai1wm-main-controller.php:900
-msgid "Unable to check decryption password. Refresh the page and try again"
-msgstr "Није могуће проверити лозинку за дешифровање. Освежите страницу и покушајте поново"
-
-#: functions.php:2075
-msgid "Unable to decrypt data."
-msgstr "Није могуће дешифровати податке."
-
-#: functions.php:2053
-msgid "Unable to obtain cipher length."
-msgstr "Није могуће добити дужину шифре."
-
-#: functions.php:2038
-msgid "Unable to encrypt data."
-msgstr "Није могуће шифровати податке."
-
-#: functions.php:2033
-msgid "Unable to generate random bytes."
-msgstr "Није могуће генерисати насумичне бајтове."
-
-#: lib/view/main/whats-new.php:31
-msgid "Notification"
-msgstr "Обавештење"
-
-#: lib/view/backups/backups-list.php:122
+#: lib/view/backups/backups-list.php:137
 msgid "List"
-msgstr "Листа"
+msgstr "Списак"
 
-#: lib/view/backups/backups-list.php:120
+#: lib/view/backups/backups-list.php:135
 msgid "Show backup content"
 msgstr "Прикажи садржај резервне копије"
 
-#: lib/view/backups/backups-list.php:113
+#: lib/view/backups/backups-list.php:128
 msgid "Downloading is not possible because backups directory is not accessible."
 msgstr "Преузимање није могуће јер директоријум резервних копија није доступан."
 
-#: lib/controller/class-ai1wm-main-controller.php:1121
+#: lib/controller/class-ai1wm-main-controller.php:919
 msgid "Reading..."
 msgstr "Читање..."
 
-#: lib/controller/class-ai1wm-main-controller.php:1120
+#: lib/controller/class-ai1wm-main-controller.php:918
 msgid "List the content of the backup"
 msgstr "Наведите садржај резервне копије"
 
-#: lib/controller/class-ai1wm-main-controller.php:1119
-msgid "Error while downloading file"
-msgstr "Грешка при преузимању датотеке"
-
-#: lib/controller/class-ai1wm-main-controller.php:1118
-msgid "Error while reading backup content"
-msgstr "Грешка при читању садржаја резервне копије"
-
-#: lib/controller/class-ai1wm-main-controller.php:1117
+#: lib/controller/class-ai1wm-main-controller.php:916
 msgid "Error"
 msgstr "Грешка"
 
-#: lib/controller/class-ai1wm-main-controller.php:667
-#: lib/controller/class-ai1wm-main-controller.php:668
-msgid "What's new"
-msgstr "Шта је ново"
-
-#: lib/controller/class-ai1wm-backups-controller.php:187
-msgid "Unable to list backup content"
-msgstr "Није могуће навести садржај резервне копије"
-
-#: lib/view/backups/backups-list.php:93
+#: lib/view/backups/backups-list.php:101
 msgid "More"
 msgstr "Више"
 
-#: lib/controller/class-ai1wm-main-controller.php:795
-#: lib/controller/class-ai1wm-main-controller.php:1116
+#. translators: 1: Number of backups.
+#: lib/controller/class-ai1wm-main-controller.php:848
 msgid "You have %d backups"
 msgstr "Имате %d резервне копије"
 
-#: lib/model/import/class-ai1wm-import-confirm.php:83
-msgid "<i class=\"ai1wm-import-info\">Your backup is from a PHP 7 but the site that you are importing to is PHP 8. This could cause the import to fail. <a href=\"https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/\" target=\"_blank\">Technical details</a></i>"
-msgstr "<i class=\"ai1wm-import-info\">Ваша резервна копија је са PHP 7 али је локација на коју увозите PHP 8. Ово може довести до неуспеха увоза. <a href=\"https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/\" target=\"_blank\">Технички детаљи</a></i>"
-
-#: lib/model/import/class-ai1wm-import-confirm.php:78
-msgid "Your backup is from a PHP 7 but the site that you are importing to is PHP 8. This could cause the import to fail. Technical details: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/"
-msgstr "Ваша резервна копија је са PHP 7 али је локација на коју увозите PHP 8. Ово може довести до неуспеха увоза. Технички детаљи: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/"
-
-#: lib/model/import/class-ai1wm-import-confirm.php:70
-msgid "<i class=\"ai1wm-import-info\">Your backup is from a PHP 5 but the site that you are importing to is PHP 8. This could cause the import to fail. <a href=\"https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/\" target=\"_blank\">Technical details</a></i>"
-msgstr "<i class=\"ai1wm-import-info\">Ваша резервна копија је са PHP 5 али је локација на коју увозите PHP 8. Ово може довести до неуспеха увоза. <a href=\"https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/\" target=\"_blank\">Технички детаљи</a></i>"
-
-#: lib/model/import/class-ai1wm-import-confirm.php:65
-msgid "Your backup is from a PHP 5 but the site that you are importing to is PHP 8. This could cause the import to fail. Technical details: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/"
-msgstr "Ваша резервна копија је са PHP 5 али је локација на коју увозите PHP 8. Ово може довести до неуспеха увоза. Технички детаљи: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/"
-
-#: lib/controller/class-ai1wm-main-controller.php:794
-#: lib/controller/class-ai1wm-main-controller.php:1115
-#: lib/view/main/backups.php:31
+#. translators: 1: Number of backups.
+#. translators: Numbers of backups.
+#: lib/controller/class-ai1wm-main-controller.php:846
+#: lib/view/main/backups.php:33
 msgid "You have %d backup"
 msgid_plural "You have %d backups"
 msgstr[0] "Имате %d резервну копију"
 msgstr[1] "Имате %d резервне копије"
 msgstr[2] "Имате %d резервних копија"
 
-#: lib/view/updater/error.php:31
+#. translators: 1: Error message.
+#: lib/view/updater/error.php:33
 msgid "Error: %s"
 msgstr "Грешка: %s"
 
-#: lib/model/export/class-ai1wm-export-themes.php:80
-#: lib/model/export/class-ai1wm-export-themes.php:119
-msgid "Archiving %d theme files...<br />%d%% complete"
-msgstr "Arhiviranje %d дадотека теме...<br />%d%% је успешно"
+#. translators: 1: Number of files, 2: Progress.
+#: lib/model/export/class-ai1wm-export-themes.php:109
+#: lib/model/export/class-ai1wm-export-themes.php:153
+msgid "Archiving %1$d theme files...<br />%2$d%% complete"
+msgstr "Архивирање датотека тема (%1$d)...<br />завршено %2$d%%"
 
-#: lib/model/export/class-ai1wm-export-enumerate-themes.php:106
-msgid "Done retrieving a list of WordPress theme files."
-msgstr "Довршено преузимање списка датотека са Вордпрес темама."
-
-#: lib/model/export/class-ai1wm-export-enumerate-themes.php:51
-msgid "Retrieving a list of WordPress theme files..."
-msgstr "Преузимање листе датотека Вордпрес тема..."
-
-#: lib/model/import/class-ai1wm-import-options.php:36
-msgid "Preparing options..."
-msgstr "Припрема опција..."
-
-#: lib/model/export/class-ai1wm-export-enumerate-plugins.php:100
-msgid "Done retrieving a list of WordPress plugin files."
-msgstr "Довршено преузимање листе датотека додатака за Вордпрес."
-
-#: lib/model/export/class-ai1wm-export-enumerate-plugins.php:51
-msgid "Retrieving a list of WordPress plugin files..."
-msgstr "Преузимање листе датотека додатака за Вордпрес..."
-
-#: lib/view/main/contact-support.php:31
+#: lib/view/main/contact-support.php:33
 msgid "Contact Support"
 msgstr "Контактирајте подршку"
 
-#: lib/model/import/class-ai1wm-import-validate.php:48
-msgid "The file type that you have tried to import is not compatible with this plugin. Please ensure that your file is a <strong>.wpress</strong> file that was created with the All-in-One WP migration plugin. <a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Technical details</a>"
-msgstr "Тип датотеке коју сте покушали да увезете није компатибилан са овом додатком. Уверите се да је ваша датотека <strong>.wpress</strong> датотека која је направљена помоћу All-in-One WP додатка за миграцију. <a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Технички детаљи</a>"
+#: lib/model/import/class-ai1wm-import-permalinks.php:38
+msgid "Retrieving WordPress permalinks settings..."
+msgstr "Преузимање подешавања Вордпресових сталних веза..."
 
-#: lib/controller/class-ai1wm-export-controller.php:77
-msgid "Unable to export. Error code: %s. %s"
-msgstr "Извоз није могућ. Код грешке: %s. %s"
+#: lib/view/import/avada.php:46
+msgid "» <a class=\"ai1wm-no-underline\" href=\"https://theme-fusion.com/documentation/avada/installation-maintenance/important-update-information/#clear-caches\" target=\"_blank\">Reset Avada Fusion Builder cache</a>.<br />"
+msgstr "» <a class=\"ai1wm-no-underline\" href=\"https://theme-fusion.com/documentation/avada/installation-maintenance/important-update-information/#clear-caches\" target=\"_blank\">Поништите оставу Avada Fusion Builder-а</a>.<br />"
 
-#: lib/model/import/class-ai1wm-import-permalinks.php:42
-msgid "Done getting WordPress permalinks settings."
-msgstr "Готово је са подешавањем сталних веза Вордпреса "
-
-#: lib/model/import/class-ai1wm-import-permalinks.php:36
-msgid "Getting WordPress permalinks settings..."
-msgstr "Добијање поставки за сталне везе Вордпреса..."
-
-#: lib/view/import/avada.php:41
-msgid "» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Optionally, review the plugin</a>. (opens a new window)"
-msgstr "» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">По жељи оцените додатак</a>. (отвара нови прозор)"
-
-#: lib/view/import/avada.php:40
-msgid "» <a class=\"ai1wm-no-underline\" href=\"https://theme-fusion.com/documentation/avada/installation-maintenance/important-update-information/#clear-caches\" target=\"_blank\">Reset Avada Fusion Builder cache</a>. (opens a new window)<br />"
-msgstr "» <a class=\"ai1wm-no-underline\" href=\"https://theme-fusion.com/documentation/avada/installation-maintenance/important-update-information/#clear-caches\" target=\"_blank\">Ресетујте кеш меморију Avada Fusion градитеља</a>. (отвара нови прозор)<br />"
-
-#: lib/view/import/avada.php:37
-msgid "» <a class=\"ai1wm-no-underline\" href=\"https://oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Re-sign Oxygen Builder shortcodes</a>. (opens a new window)<br />"
-msgstr "» <a class=\"ai1wm-no-underline\" href=\"https://oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Поново учитајте shortcode за Oxygen градитеља</a>. (отвара нови прозор)<br />"
-
-#: lib/view/import/avada.php:31
-msgid "» Permalinks are set to default. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Why?</a> (opens a new window)<br />"
-msgstr "» Трајне везе су постављене на подразумеване вредности.<a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Зашто?</a> (отвара нови прозор)<br />"
+#: lib/view/import/avada.php:43
+msgid "» <a class=\"ai1wm-no-underline\" href=\"https://classic.oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Re-sign Oxygen Builder shortcodes</a>.<br />"
+msgstr "» <a class=\"ai1wm-no-underline\" href=\"https://classic.oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Поново потпишите кратке кодове Oxygen Builder-а</a>.<br />"
 
 #: lib/view/import/avada.php:33
-msgid "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Save permalinks structure</a>. (opens a new window)<br />"
-msgstr "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">ачувај структуру сталних веза</a>. (отвара нови прозор)<br />"
+msgid "» Permalinks are set to default. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Why?</a><br />"
+msgstr "» Сталне везе су постављене на подразумевано. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Зашто?</a><br />"
 
-#: lib/model/export/class-ai1wm-export-enumerate-tables.php:86
-msgid "Done retrieving a list of WordPress database tables."
-msgstr "Довршено је преузимање листе табела базе података Вордпреса."
-
-#: lib/model/export/class-ai1wm-export-enumerate-tables.php:48
-msgid "Retrieving a list of WordPress database tables..."
-msgstr "Повраћај листе табела базе података Вордпреса ..."
-
-#: lib/view/main/translate.php:31
+#: lib/view/main/translate.php:33
 msgid "Translate"
 msgstr "Преведи"
 
-#: lib/view/import/done.php:31
-msgid "» Permalinks are set to default. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Why?</a> (opens a new window)<br />» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Optionally, review the plugin</a>. (opens a new window)"
-msgstr "» Сталне везе су постављене као подразумеване. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Зашто?</a> (opens a new window)<br />» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Опционо, можете оставити рецензију за додатак</a>. (отвара нови прозор)"
+#. translators: 1: Number of files, 2: Progress.
+#: lib/model/export/class-ai1wm-export-media.php:109
+#: lib/model/export/class-ai1wm-export-media.php:153
+msgid "Archiving %1$d media files...<br />%2$d%% complete"
+msgstr "Архивирање датотека из библиотеке (%1$d)...<br />завршено %2$d%%"
 
-#: lib/view/import/oxygen.php:31
-msgid "» Permalinks are set to default. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Why?</a> (opens a new window)<br />» <a class=\"ai1wm-no-underline\" href=\"https://oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Re-sign Oxygen Builder shortcodes</a>. (opens a new window)<br />» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Optionally, review the plugin</a>. (opens a new window)"
-msgstr "» Сталне везе су постављене као подразумеване. <a class=\"ai1wm-no-underline\" href=\"https://help.servmask.com/knowledgebase/permalinks-are-set-to-default/\" target=\"_blank\">Зашто?</a> (opens a new window)<br />» <a class=\"ai1wm-no-underline\" href=\"https://oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Поново додати Oxygen Builder шорткод</a>. (отвара нови прозор)<br />» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Опционо, можете оставитирецензију за додатак</a>. (отвара нови прозор)"
+#. translators: 1: Number of files, 2: Progress.
+#: lib/model/export/class-ai1wm-export-content.php:109
+#: lib/model/export/class-ai1wm-export-content.php:153
+msgid "Archiving %1$d content files...<br />%2$d%% complete"
+msgstr "Архивирање датотека садржаја (%1$d)...<br />завршено %2$d%%"
 
-#: lib/view/import/oxygen.php:39
-msgid "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Save permalinks structure</a>. (opens a new window)<br />» <a class=\"ai1wm-no-underline\" href=\"https://oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Re-sign Oxygen Builder shortcodes</a>. (opens a new window)<br />» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Optionally, review the plugin</a>. (opens a new window)"
-msgstr "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Запамти структуру сталних веза</a>. (отвара нови прозор)<br />» <a class=\"ai1wm-no-underline\" href=\"https://oxygenbuilder.com/documentation/other/importing-exporting/#resigning\" target=\"_blank\">Поново додати Oxygen Builder шорткод</a>. (отвара нови прозор)<br />» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Опционо, можете оставитирецензију за додатак</a>. (отвара нови прозор)"
-
-#: lib/model/export/class-ai1wm-export-media.php:80
-#: lib/model/export/class-ai1wm-export-media.php:119
-msgid "Archiving %d media files...<br />%d%% complete"
-msgstr "Архивирање %d медија датотека...<br />%d%% је завршено"
-
-#: lib/model/export/class-ai1wm-export-content.php:80
-#: lib/model/export/class-ai1wm-export-content.php:119
-msgid "Archiving %d content files...<br />%d%% complete"
-msgstr "Архивирање %d датотека са садржајем...<br />%d%% је завршено"
-
-#: lib/model/export/class-ai1wm-export-enumerate-content.php:106
-msgid "Done retrieving a list of WordPress content files."
-msgstr "Завршен повраћај листе свих Вордпрес датотека са садржајем."
-
-#: lib/model/export/class-ai1wm-export-enumerate-content.php:51
-msgid "Retrieving a list of WordPress content files..."
-msgstr "Повраћај листе Вордпрес датотека са садржајем"
-
-#: lib/model/export/class-ai1wm-export-enumerate-media.php:93
-msgid "Done retrieving a list of WordPress media files."
-msgstr "Завршен повраћај листе свих Вордпрес медија датотека"
-
-#: lib/model/export/class-ai1wm-export-enumerate-media.php:51
-msgid "Retrieving a list of WordPress media files..."
-msgstr "Повраћај листе свих Вордпрес медија датотека"
-
-#: lib/controller/class-ai1wm-main-controller.php:951
-#: lib/controller/class-ai1wm-main-controller.php:1110
-msgid "There is not enough space available on the disk.<br />Free up %s of disk space."
-msgstr "Немате довољно слободног простора на диску. <br />Ослободите %s слободно простор на диску."
-
-#: lib/controller/class-ai1wm-main-controller.php:908
-#: lib/controller/class-ai1wm-main-controller.php:1100
+#: lib/controller/class-ai1wm-main-controller.php:866
 msgid "I have enough disk space"
 msgstr "Имам довољно простора"
 
-#: lib/model/import/class-ai1wm-import-options.php:81
-msgid "Done preparing options."
-msgstr "Завршене припреме опција."
+#. translators: 1: Source PHP version, 2: Target PHP version.
+#: lib/model/import/class-ai1wm-import-confirm.php:103
+msgid ""
+"Your backup is from a PHP %1$s but the site that you are importing to is PHP %2$s.\n"
+"\t\t\t\t\t\t\tThis could cause the import to fail. Technical details: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/"
+msgstr ""
+"Ваша резервна копија потиче са PHP %1$s, али сајт на који увозите користи PHP %2$s.\n"
+"\t\t\t\t\t\t\tТо може довести до неуспеха увоза. Технички детаљи: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/"
 
-#: lib/model/class-ai1wm-compatibility.php:50
-msgid "%s is not the latest version. You must update the plugin before you can use it. "
-msgstr "%s није последње издање. Морате ажурирати додатак пре коришћења."
-
-#: lib/model/import/class-ai1wm-import-confirm.php:91
-msgid "Your backup is from a PHP 5 but the site that you are importing to is PHP 7. This could cause the import to fail. Technical details: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/"
-msgstr "Ваша резервна копија је са сајта који ради на ПХП верзији 5, а сајт на коме уводите копију је на ПХП верзији 7. Ово може бити узрок неуспелог увоза. Технички детаљи: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/"
-
-#: lib/view/backups/backups-list.php:46 lib/view/backups/index.php:49
+#: lib/view/backups/backups-list.php:51 lib/view/backups/index.php:51
 msgid "Refreshing backup list..."
 msgstr "Освежити листу резервних копија..."
 
-#: lib/view/import/import-permissions.php:34
-msgid "<h3>Site could not be imported</h3><p>Please make sure that storage directory <strong>%s</strong> has read and write permissions.</p><p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a></p>"
-msgstr "<h3>Сајт се није могао увести</h3><p>Проверите да ли директоријум за складиштење <strong>%s</strong> поседује дозволе за упис и читање.</p><p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a></p>"
+#. translators: Storage path
+#: lib/view/import/import-permissions.php:38
+msgid ""
+"<h3>Could not import site</h3>\n"
+"\t\t\t\t<p>Please ensure the directory <strong>%s</strong> has read/write permissions.</p>\n"
+"\t\t\t\t<p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a></p>"
+msgstr ""
+"<h3>Није могуће увести сајт</h3>\n"
+"\t\t\t\t<p>Уверите се да фасцикла <strong>%s</strong> има дозволе за читање/писање.</p>\n"
+"\t\t\t\t<p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a></p>"
 
-#: lib/view/export/export-permissions.php:34
-msgid "<h3>Site could not be exported</h3><p>Please make sure that storage directory <strong>%s</strong> has read and write permissions.</p><p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a></p>"
-msgstr "<h3>Сајт се није могао извести</h3><p>Проверите да ли директоријум за складиштење<strong>%s</strong> поседује дозволе за упис и читање.</p><p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a></p>"
+#. translators: Storage path.
+#: lib/view/export/export-permissions.php:38
+msgid ""
+"<h3>Could not export site</h3>\n"
+"\t\t\t\t<p>Please ensure the directory <strong>%s</strong> has read/write permissions.</p>\n"
+"\t\t\t\t<p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a></p>"
+msgstr ""
+"<h3>Није могуће извести сајт</h3>\n"
+"\t\t\t\t<p>Уверите се да фасцикла <strong>%s</strong> има дозволе за читање/писање.</p>\n"
+"\t\t\t\t<p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a></p>"
 
-#: lib/view/backups/backups-permissions.php:34
-msgid "<h3>Site could not be restored</h3><p>Please make sure that storage directory <strong>%s</strong> has read and write permissions.</p><p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a></p>"
-msgstr "<h3>Сајт се није могао повратити</h3><p>Проверите да ли директоријум за складиштење <strong>%s</strong> поседује дозволе за упис и читање.</p><p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a></p>"
+#. translators: Backups path
+#: lib/view/backups/backups-permissions.php:38
+msgid ""
+"<h3>Could not restore site</h3>\n"
+"\t\t\t\t<p>Please ensure the directory <strong>%s</strong> has read/write permissions.</p>\n"
+"\t\t\t\t<p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a></p>"
+msgstr ""
+"<h3>Није могуће вратити сајт</h3>\n"
+"\t\t\t\t<p>Уверите се да фасцикла <strong>%s</strong> има дозволе за читање/писање.</p>\n"
+"\t\t\t\t<p><a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a></p>"
 
-#: lib/view/main/missing-role-capability-notice.php:34
-msgid "All-in-One WP Migration: Your current profile role does not have Export/Import capabilities enabled. <a href=\"https://help.servmask.com/knowledgebase/how-to-add-import-and-export-capabilities-to-wordpress-users/\" target=\"_blank\">Technical details</a>"
-msgstr "All-in-One WP Migration: Ваш тренутни профил не поседује могућности за увоз/извоз <a href=\"https://help.servmask.com/knowledgebase/how-to-add-import-and-export-capabilities-to-wordpress-users/\" target=\"_blank\">Технички детаљи</a>"
+#: lib/view/main/missing-role-capability-notice.php:37
+msgid ""
+"Your current profile role does not have Export/Import capabilities enabled.\n"
+"\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/how-to-add-import-and-export-capabilities-to-wordpress-users/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Улога вашег тренутног профила нема укључене способности извоза/увоза.\n"
+"\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/how-to-add-import-and-export-capabilities-to-wordpress-users/\" target=\"_blank\">Технички детаљи</a>"
 
-#: lib/view/import/button-file.php:31
+#: lib/view/import/button-file.php:33
 msgid "To choose a file please go inside the link and click on the browse button."
-msgstr "Како бисте одабрали датотеку, молимо вас да унутар везе кликнете на дугме претраживача."
+msgstr "Да бисте изабрали датотеку, уђите у везу и притисните дугме за прегледање."
 
-#: lib/view/import/done.php:38
-msgid "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Save permalinks structure</a>. (opens a new window)<br />» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Optionally, review the plugin</a>. (opens a new window)"
-msgstr "» <a class=\"ai1wm-no-underline\" href=\"%s\" target=\"_blank\">Сачувати структуру сталних веза</a>. (отвара нови прозор)<br />» <a class=\"ai1wm-no-underline\" href=\"https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform\" target=\"_blank\">Опционо, можете оставити рецензију за додатак</a>. (отвара нови прозор)"
-
-#: lib/controller/class-ai1wm-main-controller.php:1109
-msgid "\"Restore\" functionality is available in a <a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">paid extension</a>.<br />You could also download the backup and then use \"Import from file\"."
-msgstr "Фунцкионалност \"Повраћај\" је доступна унутар <a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">плаћене екстензије</a>.<br />Можете такође преузети резервну копију и онда искористите опцију \"Увези из датотеке\"."
-
-#: lib/controller/class-ai1wm-main-controller.php:905
-#: lib/controller/class-ai1wm-main-controller.php:1096
+#: lib/controller/class-ai1wm-main-controller.php:864
 msgid "Finish"
-msgstr "Завршетак"
+msgstr "Заврши"
 
-#: lib/view/backups/backups-list.php:64
-msgid "Click to set a label for this backup"
-msgstr "Кликните да поставите етикету за резервну копију"
+#: lib/model/import/class-ai1wm-import-validate.php:87
+msgid ""
+"Please ensure your file was created with the All-in-One WP Migration plugin.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Technical details</a>"
+msgstr ""
+"Уверите се да је ваша датотека направљена помоћу додатка All-in-One WP Migration.\n"
+"\t\t\t\t\t\t<a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Технички детаљи</a>"
 
-#: lib/model/export/class-ai1wm-export-download.php:64
-msgid "<a href=\"%s\" class=\"ai1wm-button-green ai1wm-emphasize ai1wm-button-download\" title=\"%s\" download=\"%s\"><span>Download %s</span><em>Size: %s</em></a>"
-msgstr "<a href=\"%s\" class=\"ai1wm-button-green ai1wm-emphasize ai1wm-button-download\" title=\"%s\" download=\"%s\"><span>Преузети%s</span><em>Величина: %s</em></a>"
+#: lib/model/import/class-ai1wm-import-validate.php:74
+msgid "The archive file appears to be corrupted. Follow <a href=\"https://help.servmask.com/knowledgebase/corrupted-archive/\" target=\"_blank\">this article</a> for possible fixes."
+msgstr "Изгледа да је датотека архиве оштећена. Пратите <a href=\"https://help.servmask.com/knowledgebase/corrupted-archive/\" target=\"_blank\">овај чланак</a> за могућа решења."
 
-#: lib/controller/class-ai1wm-export-controller.php:86
-msgid "Unable to export: %s"
-msgstr "Немогуће извести: %s"
+#. translators: 1: Source PHP version, 2: Target PHP version.
+#: lib/model/import/class-ai1wm-import-confirm.php:115
+msgid "Your backup is from a PHP %1$s but the site that you are importing to is PHP %2$s. This could cause the import to fail. <a href=\"https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/\" target=\"_blank\">Technical details</a>"
+msgstr "Ваша резервна копија потиче са PHP %1$s, али сајт на који увозите користи PHP %2$s. То може довести до неуспеха увоза. <a href=\"https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/\" target=\"_blank\">Технички детаљи</a>"
 
-#: lib/controller/class-ai1wm-import-controller.php:94
-msgid "Unable to import: %s"
-msgstr "Немогућ увоз %s"
-
-#: lib/controller/class-ai1wm-import-controller.php:77
-#: lib/controller/class-ai1wm-import-controller.php:85
-msgid "Unable to import. Error code: %s. %s"
-msgstr "Немогућ увоз. Код грешке: %s. %s"
-
-#: lib/model/import/class-ai1wm-import-confirm.php:48
-msgid "The import process will overwrite your website including the database, media, plugins, and themes. Are you sure to proceed?"
-msgstr "Процес увоза ће преписати ваш веб сајт укључујући базу података, медију, додатке и теме. Да ли сте сигурни да желите наставити?"
-
-#: lib/model/import/class-ai1wm-import-validate.php:115
-msgid "Please make sure that your file was exported using <strong>All-in-One WP Migration</strong> plugin. <a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Technical details</a>"
-msgstr "Уверите се да је датотека извезена помоћу <strong>All-in-One WP Migration</strong> додатка. <a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Технички детаљи</a>"
-
-#: lib/model/import/class-ai1wm-import-validate.php:92
-msgid "The archive file is corrupted. Follow <a href=\"https://help.servmask.com/knowledgebase/corrupted-archive/\" target=\"_blank\">this article</a> to resolve the problem."
-msgstr "Архивска датотека је оштећена. Следите <a href=\"https://help.servmask.com/knowledgebase/corrupted-archive/\" target=\"_blank\">овај чланак</a> да бисте решили проблем.   "
-
-#: lib/model/import/class-ai1wm-import-validate.php:37
-msgid "Your PHP is 32-bit. In order to import your file, please change your PHP version to 64-bit and try again. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Technical details</a>"
-msgstr "Ваш ПХП је 32-битни. Да бисте увезли датотеку, промените ПХП верзију у 64-битну и покушајте поново. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Технички детаљи</a>"
-
-#: lib/model/import/class-ai1wm-import-confirm.php:96
-msgid "<i class=\"ai1wm-import-info\">Your backup is from a PHP 5 but the site that you are importing to is PHP 7. This could cause the import to fail. <a href=\"https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/\" target=\"_blank\">Technical details</a></i>"
-msgstr "<i class=\"ai1wm-import-info\">Ваша резервна копија је са ПХП 5, али локација на коју увозите је ПХП 7. То може довести до неуспеха увоза. <a href=\"https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/\" target=\"_blank\">Технички детаљи</a></i>"
-
-#: lib/model/import/class-ai1wm-import-confirm.php:54
-msgid "The import process will overwrite your website including the database, media, plugins, and themes. Please ensure that you have a backup of your data before proceeding to the next step."
-msgstr "Процес увоза ће заменити вашу веб локацију, укључујући базу података, медије, додатке и теме. Уверите се да имате резервну копију података пре него што пређете на следећи корак."
-
-#: lib/model/class-ai1wm-compatibility.php:52
-msgid "<strong>%s</strong> is not the latest version. You must <a href=\"%s\">update the plugin</a> before you can use it. <br />"
-msgstr "<strong>%s</strong> није најновија верзија. Морате да <a href=\"%s\">ажурирате додатак</a> да бисте могли да га користите. <br />   "
-
-#: lib/controller/class-ai1wm-main-controller.php:943
-msgid "The file that you are trying to import is over the maximum upload file size limit of <strong>%s</strong>.<br />You can remove this restriction by purchasing our <a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">Unlimited Extension</a>."
-msgstr "Датотека коју покушавате да увезете премашује дозвољену величину датотеке за отпремање од <strong>%s</strong>.<br />Ово ограничење можете уклонити куповином нашег <a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">неограниченог проширења</a>.  "
-
-#: lib/controller/class-ai1wm-main-controller.php:936
-#: lib/model/import/class-ai1wm-import-upload.php:55
-msgid "The file type that you have tried to upload is not compatible with this plugin. Please ensure that your file is a <strong>.wpress</strong> file that was created with the All-in-One WP migration plugin. <a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Technical details</a>"
-msgstr "Тип датотеке коју сте покушали да отпремите није компатибилан са овом додатком. Уверите се да је датотека <strong>.wpress</strong> датотека која је креирана помоћу All-in-One WP додатка за миграцију. <a href=\"https://help.servmask.com/knowledgebase/invalid-backup-file/\" target=\"_blank\">Технички детаљи</a>"
-
-#: lib/view/main/multisite-notice.php:34
-msgid "WordPress Multisite is supported via our All-in-One WP Migration Multisite Extension. You can get a copy of it here"
-msgstr "Вордпрес мултисајт је подржан преко нашег All-in-One WP Migration мултисајт проширења. Копију можете добити овде"
-
-#: lib/view/main/backups-htaccess-notice.php:35
-#: lib/view/main/backups-index-html-notice.php:35
-#: lib/view/main/backups-index-php-notice.php:35
-#: lib/view/main/backups-robots-txt-notice.php:35
-#: lib/view/main/backups-webconfig-notice.php:35
-#: lib/view/main/storage-index-html-notice.php:35
-#: lib/view/main/storage-index-php-notice.php:35
-#: lib/view/main/wordpress-htaccess-notice.php:35
-msgid "All-in-One WP Migration is not able to create <strong>%s</strong> file. Try to change permissions of the parent folder or send us an email at <a href=\"mailto:support@servmask.com\">support@servmask.com</a> for assistance."
-msgstr "All-in-One WP Migration не може да направи <strong>%s</strong> датотеку. Покушајте да промените дозволе надређене фасцикле или нам пошаљите е-пошту на <a href=\"mailto:support@servmask.com\">support@servmask.com</a> за помоћ."
-
-#: lib/view/main/backups-path-notice.php:35
-#: lib/view/main/storage-path-notice.php:35
-msgid "All-in-One WP Migration is not able to create <strong>%s</strong> folder. You will need to create this folder and grant it read/write/execute permissions (0777) for the All-in-One WP Migration plugin to function properly."
-msgstr "All-in-One WP Migration не може да направи <strong>%s</strong> датотеку. Морате да направите ову фасциклу и доделите јој дозволе за читање / писање / извршавање (0777) како би All-in-One WP Migration додатак правилно функционисао. "
-
-#: lib/view/import/pro.php:36
-msgid "or"
-msgstr "или"
-
-#: lib/view/import/pro.php:35
-msgid "How-to: Increase maximum upload file size"
-msgstr "Како да: Повећате највећу величину датотеке за отпремање"
-
-#: lib/view/import/pro.php:32
-msgid "Maximum upload file size: <strong>%s</strong>."
-msgstr "Највећа величина датотеке за отпремање:<strong>%s</strong>."
-
-#: lib/model/import/class-ai1wm-import-upload.php:79
-msgid "The file is too large for this server."
-msgstr "Датотека је превелика за овај сервер."
-
-#: lib/controller/class-ai1wm-main-controller.php:927
-msgid "<a href=\"https://help.servmask.com/2018/10/27/how-to-increase-maximum-upload-file-size-in-wordpress/\" target=\"_blank\">How-to: Increase maximum upload file size</a> or "
-msgstr "<a href=\"https://help.servmask.com/2018/10/27/how-to-increase-maximum-upload-file-size-in-wordpress/\" target=\"_blank\">Како да: Повећате највећу величину датотеке за отпрему</a> или"
-
-#: lib/controller/class-ai1wm-main-controller.php:922
-msgid "Your file exceeds the maximum upload size for this site: <strong>%s</strong><br />%s%s"
-msgstr "Датотека је прекорачила највећи дозвољени лимит за отпрему на овом сајту: <strong>%s</strong><br />%s%s"
-
-#: lib/view/import/import-buttons.php:39
+#: lib/view/import/import-buttons.php:41
 msgid "Drag & Drop a backup to import it"
 msgstr "Превуци и пусти резервну копију за увоз"
 
-#: lib/model/export/class-ai1wm-export-database.php:79
-#: lib/model/export/class-ai1wm-export-database.php:191
-msgid "Exporting database...<br />%d%% complete<br />%s records saved"
-msgstr "Извоз базе података...<br />%d%% успешан<br />%s запамћен запис"
+#. translators: 1: Progress, 2: Number of records.
+#: lib/model/export/class-ai1wm-export-database.php:81
+#: lib/model/export/class-ai1wm-export-database.php:192
+msgid "Exporting database...<br />%1$d%% complete<br />%2$s records saved"
+msgstr "Извоз базе података...<br />завршено %1$d%%<br />сачувано записа: %2$s"
 
-#: lib/controller/class-ai1wm-main-controller.php:1108
-msgid "Restoring a backup is available via Unlimited extension. <a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">Get it here</a>"
-msgstr "Враћање резервне копије је доступно путем неограниченог проширења. <a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">Копију нађите овде</a>"
+#: lib/controller/class-ai1wm-main-controller.php:910
+msgid "Backup restore requires the Unlimited Extension. <a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">Get it here</a>"
+msgstr "Враћање резервне копије захтева проширење Unlimited Extension. <a href=\"https://servmask.com/products/unlimited-extension\" target=\"_blank\">Набавите га овде</a>"
 
-#: lib/controller/class-ai1wm-main-controller.php:265
+#: lib/controller/class-ai1wm-main-controller.php:268
 msgid "All-in-One WP Migration Command"
 msgstr "All-in-One WP Migration команда"
 
-#: lib/controller/class-ai1wm-main-controller.php:782
-#: lib/controller/class-ai1wm-main-controller.php:1080
-#: lib/model/export/class-ai1wm-export-init.php:43
+#: lib/controller/class-ai1wm-main-controller.php:837
+#: lib/model/export/class-ai1wm-export-init.php:47
 msgid "Preparing to export..."
 msgstr "Припрема за извоз..."
 
-#: lib/view/backups/backups-list.php:82
+#. translators: Human time diff
+#: lib/view/backups/backups-list.php:90
 msgid "%s ago"
-msgstr "пре %s"
+msgstr "%s раније"
 
-#: lib/controller/class-ai1wm-main-controller.php:1208
-msgid "Your purchase ID is invalid, please <a href=\"mailto:support@servmask.com\">contact us</a>"
-msgstr "ИД ваше куповине је неважећи, молимо вас контактирајте нас на <a href=\"mailto:support@servmask.com\"> мејл </a>"
+#: lib/controller/class-ai1wm-main-controller.php:833
+msgid "Your purchase ID is invalid. Please <a href=\"mailto:support@servmask.com\">contact us</a>."
+msgstr "Ваш ID куповине није исправан. <a href=\"mailto:support@servmask.com\">Обратите нам се</a>."
 
-#: lib/controller/class-ai1wm-main-controller.php:1107
-msgid "Are you sure you want to delete this file?"
-msgstr "Да ли сте сигурни да желите да избришете ову датотеку?"
+#: lib/controller/class-ai1wm-main-controller.php:905
+msgid "Are you sure you want to delete this backup?"
+msgstr "Да ли сигурно желите да избришете ову резервну копију?"
 
-#: lib/controller/class-ai1wm-main-controller.php:910
-#: lib/controller/class-ai1wm-main-controller.php:1102
+#: lib/controller/class-ai1wm-main-controller.php:868
 msgid "Please do not close this browser window or your import will fail"
 msgstr "Немојте затварати овај прозор прегледача, јер увоз неће успети"
 
-#: lib/controller/class-ai1wm-main-controller.php:909
-#: lib/controller/class-ai1wm-main-controller.php:1101
+#: lib/controller/class-ai1wm-main-controller.php:867
 msgid "Continue"
-msgstr "Наставити"
+msgstr "Настави"
 
-#: lib/controller/class-ai1wm-main-controller.php:907
-#: lib/controller/class-ai1wm-main-controller.php:1099
+#: lib/controller/class-ai1wm-main-controller.php:865
 msgid "Proceed"
-msgstr "Наставити"
+msgstr "Наставак"
 
-#: lib/controller/class-ai1wm-main-controller.php:906
-#: lib/controller/class-ai1wm-main-controller.php:1098
+#: lib/controller/class-ai1wm-main-controller.php:863
 msgid "Stop import"
 msgstr "Заустави увоз"
 
-#: lib/controller/class-ai1wm-main-controller.php:903
-#: lib/controller/class-ai1wm-main-controller.php:1095
-msgid "Please wait, stopping the import..."
-msgstr "Сачекајте, заустављање увоза..."
-
-#: lib/controller/class-ai1wm-main-controller.php:902
-#: lib/controller/class-ai1wm-main-controller.php:1094
-msgid "Unable to stop the import. Refresh the page and try again"
-msgstr "Није могуће зауставити увоз. Освежите страницу и покушајте поново"
-
-#: lib/controller/class-ai1wm-main-controller.php:901
-#: lib/controller/class-ai1wm-main-controller.php:1093
-msgid "Unable to prepare blogs on import. Refresh the page and try again"
-msgstr "Није могуће припремити блогове за увоз. Освежите страницу и покушајте поново"
-
-#: lib/controller/class-ai1wm-main-controller.php:899
-#: lib/controller/class-ai1wm-main-controller.php:1092
-msgid "Unable to confirm the import. Refresh the page and try again"
-msgstr "Није могуће потврдити увоз. Освежите страницу и покушајте поново"
-
-#: lib/controller/class-ai1wm-main-controller.php:898
-#: lib/controller/class-ai1wm-main-controller.php:1091
-msgid "Unable to start the import. Refresh the page and try again"
-msgstr "Није могуће покренути увоз. Освежите страницу и покушајте поново"
-
-#: lib/controller/class-ai1wm-main-controller.php:895
-#: lib/controller/class-ai1wm-main-controller.php:1088
-msgid "You are about to stop importing your website, are you sure?"
-msgstr "Спремате се да зауставите увоз своје веб локације, да ли сте сигурни?"
-
-#: lib/controller/class-ai1wm-main-controller.php:712
-#: lib/controller/class-ai1wm-main-controller.php:793
-#: lib/controller/class-ai1wm-main-controller.php:914
-#: lib/controller/class-ai1wm-main-controller.php:1106
-msgid "Thanks for submitting your request!"
-msgstr "Хвала што сте послали захтев!"
-
-#: lib/controller/class-ai1wm-main-controller.php:711
-#: lib/controller/class-ai1wm-main-controller.php:792
-#: lib/controller/class-ai1wm-main-controller.php:913
-#: lib/controller/class-ai1wm-main-controller.php:1105
-msgid "Thanks for submitting your feedback!"
-msgstr "Хвала што сте послали повратне информације!"
-
-#: lib/controller/class-ai1wm-main-controller.php:710
-#: lib/controller/class-ai1wm-main-controller.php:791
-#: lib/controller/class-ai1wm-main-controller.php:912
-#: lib/controller/class-ai1wm-main-controller.php:1104
-msgid "How may we help you?"
-msgstr "Како вам можемо помоћи?"
-
-#: lib/controller/class-ai1wm-main-controller.php:709
-#: lib/controller/class-ai1wm-main-controller.php:790
-#: lib/controller/class-ai1wm-main-controller.php:911
-#: lib/controller/class-ai1wm-main-controller.php:1103
-msgid "Leave plugin developers any feedback here"
-msgstr "Овде оставите повратне информације програмерима додатака"
-
-#: lib/controller/class-ai1wm-main-controller.php:789
-#: lib/controller/class-ai1wm-main-controller.php:1087
+#: lib/controller/class-ai1wm-main-controller.php:844
 msgid "Stop export"
 msgstr "Зауставите извоз"
 
-#: lib/controller/class-ai1wm-main-controller.php:788
-#: lib/controller/class-ai1wm-main-controller.php:904
-#: lib/controller/class-ai1wm-main-controller.php:1086
-#: lib/controller/class-ai1wm-main-controller.php:1097
+#: lib/controller/class-ai1wm-main-controller.php:843
+#: lib/controller/class-ai1wm-main-controller.php:862
+#: lib/controller/class-ai1wm-main-controller.php:920
 msgid "Close"
 msgstr "Затвори"
 
-#: lib/controller/class-ai1wm-main-controller.php:787
-#: lib/controller/class-ai1wm-main-controller.php:1085
-msgid "Please wait, stopping the export..."
-msgstr "Сачекајте, заустављање извоза ..."
+#: lib/model/export/class-ai1wm-export-config.php:38
+msgid "Preparing configuration..."
+msgstr "Припрема подешавања..."
 
-#: lib/controller/class-ai1wm-main-controller.php:786
-#: lib/controller/class-ai1wm-main-controller.php:1084
-msgid "Unable to stop the export. Refresh the page and try again"
-msgstr "Није могуће зауставити извоз. Освежите страницу и покушајте поново"
-
-#: lib/controller/class-ai1wm-main-controller.php:785
-#: lib/controller/class-ai1wm-main-controller.php:1083
-msgid "Unable to run the export. Refresh the page and try again"
-msgstr "Није могуће покренути извоз. Освежите страницу и покушајте поново"
-
-#: lib/controller/class-ai1wm-main-controller.php:784
-#: lib/controller/class-ai1wm-main-controller.php:1082
-msgid "Unable to start the export. Refresh the page and try again"
-msgstr "Није могуће покренути извоз. Освежите страницу и покушајте поново"
-
-#: lib/controller/class-ai1wm-main-controller.php:781
-#: lib/controller/class-ai1wm-main-controller.php:1079
-msgid "You are about to stop exporting your website, are you sure?"
-msgstr "Спремате се да зауставите извоз своје веб странице, да ли сте сигурни?"
-
-#: functions.php:1678
-msgid "Unable to authenticate the secret key. <a href=\"https://help.servmask.com/knowledgebase/invalid-secret-key/\" target=\"_blank\">Technical details</a>"
-msgstr "Није могуће потврдити идентитет тајног кључа. <a href=\"https://help.servmask.com/knowledgebase/invalid-secret-key/\" target=\"_blank\">Технички детаљи</a>"
-
-#: functions.php:1544
-msgid "Unable to get current pointer position of %s. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Technical details</a>"
-msgstr "Није могуће добити тренутну позицију показивача од %s. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Технички детаљи</a>"
-
-#: functions.php:1527
-msgid "Unable to seek to offset %d on %s. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Technical details</a>"
-msgstr "Није могуће тражити надокнаду %d на %s. <a href=\"https://help.servmask.com/knowledgebase/php-32bit/\" target=\"_blank\">Технички детаљи</a>"
-
-#: functions.php:1505
-msgid "Unable to read file: %s. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a>"
-msgstr "Није могуће прочитати датотеку: %s. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a>"
-
-#: functions.php:1485
-msgid "Out of disk space. Unable to write to: %s. <a href=\"https://help.servmask.com/knowledgebase/out-of-disk-space/\" target=\"_blank\">Technical details</a>"
-msgstr "Нема више простора на диску. Немогуће извршити упис на: %s. <a href=\"https://help.servmask.com/knowledgebase/out-of-disk-space/\" target=\"_blank\">Технички детаљи</a>"
-
-#: functions.php:1479 functions.php:1563
-msgid "Unable to write to: %s. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a>"
-msgstr "Немогуће извршити упис на: %s. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a>"
-
-#: functions.php:1460
-msgid "Unable to open %s with mode %s. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Technical details</a>"
-msgstr "Није могуће отворити %s помоћу режима %s. <a href=\"https://help.servmask.com/knowledgebase/invalid-file-permissions/\" target=\"_blank\">Технички детаљи</a>"
-
-#: functions.php:63 functions.php:105
-msgid "Unable to locate archive path. <a href=\"https://help.servmask.com/knowledgebase/invalid-archive-path/\" target=\"_blank\">Technical details</a>"
-msgstr "Није могуће пронаћи путању архиве. <a href=\"https://help.servmask.com/knowledgebase/invalid-archive-path/\" target=\"_blank\">Технички детаљи</a>"
-
-#: functions.php:38
-msgid "Unable to locate storage path. <a href=\"https://help.servmask.com/knowledgebase/invalid-storage-path/\" target=\"_blank\">Technical details</a>"
-msgstr "Није могуће пронаћи путању складишта. <a href=\"https://help.servmask.com/knowledgebase/invalid-storage-path/\" target=\"_blank\">Технички детаљи</a>"
-
-#: lib/view/common/leave-feedback.php:59
-msgid "I agree that by filling in the contact form with my data, I authorize All-in-One WP Migration to use my <strong>email</strong> to reply to my requests for information. <a href=\"https://www.iubenda.com/privacy-policy/946881\" target=\"_blank\">Privacy policy</a>"
-msgstr "Слажем се да попуњавањем контакт форме са својим подацима, овлашћујем All-in-One WP Migration да користи моју <strong>e-пошту-</strong> да одговори на моје захтеве за информацијама. <a href=\"https://www.iubenda.com/privacy-policy/946881\" target=\"_blank\">Правила о приватности</a>"
-
-#: lib/model/export/class-ai1wm-export-config.php:184
-msgid "Done preparing configuration file."
-msgstr "Завршено са припремом датотеке за конфигурацију"
-
-#: lib/model/export/class-ai1wm-export-config.php:36
-msgid "Preparing configuration file..."
-msgstr "Припрема се конфигурациона датотека ..."
-
-#: lib/model/export/class-ai1wm-export-config-file.php:73
-msgid "Done archiving configuration file."
-msgstr "Архивирање датотеке конфигурације је завршено."
-
-#: lib/model/export/class-ai1wm-export-config-file.php:61
-#: lib/model/export/class-ai1wm-export-config-file.php:96
-msgid "Archiving configuration file...<br />%d%% complete"
-msgstr "Архивирање датотеке конфигурације...<br />%d%% завршено"
-
-#: lib/view/backups/backups-list.php:88
-msgid "2GB+"
-msgstr "2GB+"
-
-#: lib/model/import/class-ai1wm-import-validate.php:119
-msgid "Done unpacking archive."
-msgstr "Готово распакивање архиве."
-
-#: lib/model/import/class-ai1wm-import-validate.php:82
-#: lib/model/import/class-ai1wm-import-validate.php:139
-msgid "Unpacking archive...<br />%d%% complete"
-msgstr "Распакивање архиве...<br />%d%% је завршено"
-
-#: lib/model/export/class-ai1wm-export-database-file.php:78
-msgid "Done archiving database."
-msgstr "Завршено архивирање базе података."
-
-#: lib/model/export/class-ai1wm-export-database-file.php:66
-#: lib/model/export/class-ai1wm-export-database-file.php:101
+#. translators: Progress.
+#: lib/model/export/class-ai1wm-export-database-file.php:95
+#: lib/model/export/class-ai1wm-export-database-file.php:137
 msgid "Archiving database...<br />%d%% complete"
 msgstr "Архивирање базе података...<br />%d%% је завршено"
 
-#: lib/model/import/class-ai1wm-import-database.php:78
-#: lib/model/import/class-ai1wm-import-database.php:1005
+#. translators: Progress.
+#: lib/model/import/class-ai1wm-import-database.php:81
+#: lib/model/import/class-ai1wm-import-database.php:1037
 msgid "Restoring database...<br />%d%% complete"
 msgstr "Враћање базе података...<br />%d%% је завршено"
 
-#: lib/model/export/class-ai1wm-export-compatibility.php:35
-#: lib/model/import/class-ai1wm-import-compatibility.php:35
-msgid "Checking extensions compatibility..."
-msgstr "Провера компатибилности проширења..."
+#. translators: Progress.
+#: lib/model/import/class-ai1wm-import-database-file.php:85
+#: lib/model/import/class-ai1wm-import-database-file.php:142
+msgid "Unpacking database...<br />%d%% complete"
+msgstr "Распакивање базе података...<br />завршено %d%%"
 
-#: lib/model/import/class-ai1wm-import-database.php:985
-msgid "Done restoring database."
-msgstr "Завршено враћање базе података."
-
-#: lib/controller/class-ai1wm-main-controller.php:896
-#: lib/controller/class-ai1wm-main-controller.php:1089
+#: lib/controller/class-ai1wm-main-controller.php:854
 msgid "Preparing to import..."
 msgstr "Припрема за увоз..."
 
-#: lib/controller/class-ai1wm-main-controller.php:1312
+#: lib/controller/class-ai1wm-main-controller.php:1397
 msgid "Monthly"
 msgstr "Месечно"
 
-#: lib/controller/class-ai1wm-main-controller.php:1308
+#: lib/controller/class-ai1wm-main-controller.php:1393
 msgid "Weekly"
 msgstr "Недељно"
 
-#: lib/view/export/advanced-settings.php:98
-msgid "Do <strong>not</strong> export must-use plugins (files)"
-msgstr "<strong>Не извози</strong> додатке који су непходни за коришћење (датотеке)"
-
-#: lib/model/import/class-ai1wm-import-mu-plugins.php:61
-msgid "Done activating mu-plugins."
-msgstr "Завршено је активирање му-додатака."
-
-#: lib/model/import/class-ai1wm-import-mu-plugins.php:35
+#: lib/model/import/class-ai1wm-import-mu-plugins.php:37
 msgid "Activating mu-plugins..."
 msgstr "Активирање му-додатака ..."
 
-#: lib/view/export/advanced-settings.php:122
-msgid "Do <strong>not</strong> replace email domain (sql)"
-msgstr "<strong>Не мењајте</strong> домен е-поште (sql)"
+#: lib/view/export/advanced-settings.php:97
+msgid "Do <strong>not</strong> replace email domain"
+msgstr "<strong>Немој</strong> да замениш домен е-адресе"
 
-#: lib/model/import/class-ai1wm-import-upload.php:91
-msgid "Unrecognized error %s during upload."
-msgstr "Непрепозната грешка %s током отпремања."
-
-#: lib/model/import/class-ai1wm-import-upload.php:88
-msgid "A PHP extension stopped the file upload."
-msgstr "ПХП екстензија зауставила је отпремање датотеке."
-
-#: lib/model/import/class-ai1wm-import-upload.php:85
-msgid "Failed to write file to disk."
-msgstr "Записивање датотеке на диск није успело."
-
-#: lib/model/import/class-ai1wm-import-upload.php:82
-msgid "Missing a temporary folder."
-msgstr "Недостаје привремена фасцикла."
-
-#: lib/model/import/class-ai1wm-import-upload.php:70
-msgid "Unable to upload the file because %s"
-msgstr "Отпремање датотеке није успело јер %s"
-
-#: lib/model/import/class-ai1wm-import-upload.php:42
-msgid "Missing tmp_name in upload file."
-msgstr "Недостаје tmp_name у датотеци за отпремање."
-
-#: lib/model/import/class-ai1wm-import-upload.php:38
-msgid "Missing error key in upload file."
-msgstr "Недостаје кључ грешке у датотеци за отпремање."
-
-#: lib/model/import/class-ai1wm-import-upload.php:34
-msgid "Missing upload file."
-msgstr "Недостаје датотека за отпремање."
-
-#: lib/model/import/class-ai1wm-import-blogs.php:150
-msgid "Done preparing blogs."
-msgstr "Завршена припрема блогова."
-
-#: lib/model/import/class-ai1wm-import-blogs.php:140
-msgid "Unable to import <strong>WordPress Network</strong> into WordPress <strong>Single</strong> site."
-msgstr "Није могуће увести <strong> Вордпрес мрежу </strong> у <strong>појединачну </strong>Вордпрес локацију."
-
-#: lib/model/import/class-ai1wm-import-blogs.php:137
-msgid "At least <strong>one WordPress</strong> site should be presented in the archive."
-msgstr "Најмање <strong> једна Вордпрес</strong> локација треба да буде представљена у архиви."
-
-#: lib/model/import/class-ai1wm-import-blogs.php:134
-msgid "The archive should contain <strong>Single WordPress</strong> site! Please revisit your export settings."
-msgstr "Архива треба да садржи <strong> једну Вордпрес</strong> страницу! Поново прегледајте своја подешавања извоза."
-
-#: lib/model/import/class-ai1wm-import-blogs.php:35
+#: lib/model/import/class-ai1wm-import-blogs.php:37
 msgid "Preparing blogs..."
 msgstr "Припрема блогова..."
 
-#: lib/model/class-ai1wm-feedback.php:78
-msgid "Something went wrong: %s"
-msgstr "Нешто је пошло по злу: %s"
-
-#: lib/model/class-ai1wm-feedback.php:61
-msgid "Please accept feedback term conditions."
-msgstr "Прихватите услове термина повратних информација."
-
-#: lib/model/class-ai1wm-feedback.php:56
-msgid "Please enter comments in the text area."
-msgstr "Молимо унесите коментаре у област за текст."
-
-#: lib/model/class-ai1wm-feedback.php:46
-msgid "Your email is not valid."
-msgstr "Ваша адреса е-поште није важећа."
-
-#: lib/model/class-ai1wm-feedback.php:51
-msgid "Feedback type is not valid."
-msgstr "Тип повратне информације није важећи."
-
-#: lib/view/updater/modal.php:55
-msgid "There is an update available. To update, you must enter your"
-msgstr "Доступно је ажурирање. Да бисте ажурирали, морате унети свој"
-
-#: lib/view/updater/modal.php:48
-msgid "Discard"
-msgstr "Одбаци"
-
-#: lib/view/updater/modal.php:46
-msgid "Save"
-msgstr "Sačuvajte"
-
-#: lib/view/updater/modal.php:42
-msgid "here"
-msgstr "овде"
-
-#: lib/view/updater/modal.php:41
-msgid "Don't have a Purchase ID? You can find your Purchase ID"
-msgstr "Немате ИД куповине? Можете пронаћи свој ИД куповине"
-
-#: lib/view/updater/modal.php:37 lib/view/updater/modal.php:56
-msgid "Purchase ID"
-msgstr "ИД куповине"
-
-#: lib/view/updater/modal.php:34
-msgid "To update your plugin/extension to the latest version, please fill your Purchase ID below."
-msgstr "Да бисте ажурирали свој додатак / екстензију на најновију верзију, попуните свој ИД куповине у наставку."
-
-#: lib/view/updater/modal.php:33
-msgid "Enter your Purchase ID"
-msgstr "Унесите свој ИД куповине"
-
-#: lib/controller/class-ai1wm-main-controller.php:1207
-#: lib/view/updater/check.php:31
+#: lib/controller/class-ai1wm-main-controller.php:832
+#: lib/view/updater/check.php:33
 msgid "Check for updates"
 msgstr "Провери ажурирања"
 
 #. Author of the plugin
+#: all-in-one-wp-migration.php
 msgid "ServMask"
 msgstr "ServMask"
 
-#. Description of the plugin
-msgid "Migration tool for all your blog data. Import or Export your blog content with a single click."
-msgstr "Алат за миграцију за све податке вашег блога. Увезите или извезите садржај блога једним кликом."
-
 #. Plugin URI of the plugin
 #. Author URI of the plugin
+#: all-in-one-wp-migration.php
 msgid "https://servmask.com/"
 msgstr "https://servmask.com/"
 
-#. Plugin Name of the plugin
-msgid "All-in-One WP Migration"
-msgstr "All-in-One WP Migration"
-
-#: lib/view/import/index.php:37
+#: lib/view/import/index.php:39
 msgid "Import Site"
 msgstr "Увези локацију"
 
-#: lib/view/import/pro.php:39
-msgid "Get unlimited"
-msgstr "Неограничено"
-
-#: lib/view/import/import-buttons.php:43
+#: lib/view/import/import-buttons.php:45
 msgid "Import From"
 msgstr "Увоз из"
 
-#: lib/view/export/index.php:37
+#: lib/view/export/index.php:39
 msgid "Export Site"
 msgstr "Извези локацију"
 
-#: lib/view/export/help-section.php:51
+#: lib/view/export/help-section.php:52
 msgid "Once the file is successfully downloaded on your computer, you can import it to any of your WordPress sites."
 msgstr "Након што се датотека успешно преузме на ваш рачунар, можете је увести на било коју од ваших Вордпрес локација."
 
-#: lib/view/export/help-section.php:47
+#: lib/view/export/help-section.php:48
 msgid "Press \"Export\" button and the site archive file will pop up in your browser."
-msgstr "Притисните дугме \"Извези\" и датотека претраживача ће се појавити у вашем прегледачу."
+msgstr "Притисните дугме „Извези“ и датотека претраживача ће се појавити у вашем прегледачу."
 
-#: lib/view/export/help-section.php:43
+#: lib/view/export/help-section.php:44
 msgid "In the advanced settings section you can configure more precisely the way of exporting."
 msgstr "У одељку напредних подешавања можете прецизније конфигурисати начин извоза."
 
-#: lib/view/export/help-section.php:37
-msgid "Quick hints"
-msgstr "Брзи савети"
-
-#: lib/view/export/help-section.php:33
-msgid "You can then use the import functionality provided by this plugin to import the zipped file onto any other WordPress sites that you have administrator access to."
-msgstr "Mожете користитi функцију увоза коју пружа овај додатак за увоз зиповане датотеке на било коју другу Вордпрес веб локацију за којој имате администраторски приступ."
-
-#: lib/view/export/help-section.php:32
-msgid "This screen allows you to export database, media files, themes and plugins as one zipped file."
-msgstr "Овај екран вам омогућава да извезете базу података, медијске датотеке, теме и додатке као једну зиповану датотеку."
-
-#: lib/view/export/find-replace.php:52
+#: lib/view/export/find-replace.php:54
 msgid "Add"
 msgstr "Додај"
 
-#: lib/view/export/find-replace.php:39
+#: lib/view/export/find-replace.php:41
 msgid "in the database"
 msgstr "у бази података"
 
-#: lib/view/export/find-replace.php:38
+#: lib/view/export/find-replace.php:40
 msgid "<another-text>"
 msgstr "<another-text>"
 
-#: lib/view/export/find-replace.php:37 lib/view/export/find-replace.php:45
+#: lib/view/export/find-replace.php:39 lib/view/export/find-replace.php:47
 msgid "Replace with"
 msgstr "Replace with"
 
-#: lib/view/export/find-replace.php:36
+#: lib/view/export/find-replace.php:38
 msgid "<text>"
 msgstr "<text>"
 
-#: lib/view/export/find-replace.php:35 lib/view/export/find-replace.php:44
-msgid "Find"
-msgstr "Пронађи"
-
-#: lib/view/export/export-buttons.php:35
-msgid "Export To"
-msgstr "Извоз у"
-
-#: lib/view/export/button-file.php:31 lib/view/import/button-file.php:32
+#: lib/view/export/button-file.php:33 lib/view/import/button-file.php:34
 msgid "File"
 msgstr "Датотека"
 
-#: lib/view/export/advanced-settings.php:116
-msgid "Do <strong>not</strong> export database (sql)"
-msgstr "<strong>Не</strong> извози базу података (sql)"
-
-#: lib/view/export/advanced-settings.php:105
-msgid "Do <strong>not</strong> export plugins (files)"
-msgstr "<strong>Не</strong> извози додатке (датотеке)"
-
-#: lib/view/export/advanced-settings.php:89
-msgid "Do <strong>not</strong> export themes (files)"
-msgstr "<strong>Не</strong> извози теме (датотеке)"
-
-#: lib/view/export/advanced-settings.php:83
-msgid "Do <strong>not</strong> export media library (files)"
-msgstr "<strong>Не</strong> извози библиотеку медија (датотеке)"
-
-#: lib/view/export/advanced-settings.php:77
-msgid "Do <strong>not</strong> export post revisions"
-msgstr "<strong>Не</strong> извозите ревизије поште"
-
-#: lib/view/export/advanced-settings.php:71
-msgid "Do <strong>not</strong> export spam comments"
-msgstr "<strong>Не</strong> извози нежељене коментаре"
-
-#: lib/view/export/advanced-settings.php:36
+#: lib/view/export/advanced-settings.php:38
 msgid "(click to expand)"
-msgstr "(кликните за проширење)"
+msgstr "(притисните за проширење)"
 
-#: lib/view/export/advanced-settings.php:35
+#: lib/view/export/advanced-settings.php:37
 msgid "Advanced options"
-msgstr "Напредне опције"
+msgstr "Напредне могућности"
 
-#: lib/view/common/share-buttons.php:63
-msgid "Tweet"
-msgstr "Твит"
-
-#: lib/view/common/leave-feedback.php:64
+#: lib/view/common/leave-feedback.php:69
 msgid "Cancel"
-msgstr "Одустани"
+msgstr "Откажи"
 
-#: lib/view/common/leave-feedback.php:67
+#: lib/view/common/leave-feedback.php:72
 msgid "Send"
 msgstr "Пошаљи"
 
-#: lib/view/common/leave-feedback.php:54
-msgid "Leave plugin developers any feedback here.."
-msgstr "Овде оставите повратне информације програмерима додатака"
-
-#: lib/view/common/leave-feedback.php:51
-msgid "Enter your email address.."
-msgstr "Унесите своју адресу е-поште."
-
-#: lib/view/common/leave-feedback.php:44
-msgid "I need help with this plugin"
-msgstr "Треба ми помоћ око овог додатка"
-
-#: lib/view/common/leave-feedback.php:37
-msgid "I have ideas to improve this plugin"
-msgstr "Имам идеје за побољшање овог додатка"
-
-#: lib/controller/class-ai1wm-main-controller.php:918
-#: lib/controller/class-ai1wm-main-controller.php:1125
-#: lib/view/export/advanced-settings.php:49
+#: lib/controller/class-ai1wm-main-controller.php:872
+#: lib/view/export/advanced-settings.php:51
 msgid "Enter a password"
 msgstr "Унесите лозинку"
 
-#: lib/view/common/sidebar-right.php:39
+#: lib/view/common/sidebar-right.php:41
 msgid "Leave Feedback"
 msgstr "Напишите утисак"
 
-#: lib/view/backups/index.php:57
+#: lib/view/backups/index.php:59
 msgid "Create backup"
 msgstr "Створити резервну копију"
 
-#: lib/view/backups/index.php:52
-msgid "There are no backups available at this time, why not create a new one?"
-msgstr "Тренутно нема доступних резервних копија, зашто не направите нову?"
-
-#: lib/view/backups/backups-list.php:127 lib/view/backups/backups-list.php:129
+#: lib/view/backups/backups-list.php:142 lib/view/backups/backups-list.php:144
 msgid "Delete"
-msgstr "Обриши"
+msgstr "Избриши"
 
-#: lib/view/backups/backups-list.php:99 lib/view/backups/backups-list.php:101
+#: lib/view/backups/backups-list.php:107 lib/view/backups/backups-list.php:109
 msgid "Restore"
-msgstr "Врати"
+msgstr "Поврати"
 
-#: lib/view/backups/backups-list.php:106 lib/view/backups/backups-list.php:108
-#: lib/view/backups/backups-list.php:115
+#: lib/view/backups/backups-list.php:115 lib/view/backups/backups-list.php:117
+#: lib/view/backups/backups-list.php:120 lib/view/backups/backups-list.php:122
+#: lib/view/backups/backups-list.php:130
 msgid "Download"
 msgstr "Преузми"
 
-#: lib/view/backups/backups-list.php:38
+#: lib/view/backups/backups-list.php:43
 msgid "Size"
 msgstr "Величина"
 
-#: lib/view/backups/backups-list.php:37
+#: lib/view/backups/backups-list.php:42
 msgid "Date"
 msgstr "Датум"
 
-#: lib/view/backups/backups-list.php:36
+#: lib/view/backups/backups-list.php:41
 msgid "Name"
 msgstr "Име"
 
-#: lib/model/import/class-ai1wm-import-done.php:360
-#: lib/model/import/class-ai1wm-import-done.php:362
-#: lib/model/import/class-ai1wm-import-done.php:364
+#: lib/model/import/class-ai1wm-import-done.php:365
+#: lib/model/import/class-ai1wm-import-done.php:367
+#: lib/model/import/class-ai1wm-import-done.php:369
 msgid "Your site has been imported successfully!"
 msgstr "Ваша локација је успешно увезена!"
 
-#: lib/model/import/class-ai1wm-import-content.php:83
-#: lib/model/import/class-ai1wm-import-content.php:206
-msgid "Restoring %d files...<br />%d%% complete"
-msgstr "Враћање %d датотека...<br />%d%% завршено"
+#. translators: 1: Number of files, 2: Progress.
+#: lib/model/import/class-ai1wm-import-content.php:109
+#: lib/model/import/class-ai1wm-import-content.php:254
+msgid "Restoring %1$d files...<br />%2$d%% complete"
+msgstr "Враћање датотека (%1$d)...<br />завршено %2$d%%"
 
-#: lib/model/export/class-ai1wm-export-download.php:35
-msgid "Renaming exported file..."
-msgstr "Преименовање извезене датотеке..."
+#: lib/model/export/class-ai1wm-export-download.php:43
+msgid "Renaming export file..."
+msgstr "Преименовање датотеке извоза..."
 
-#: lib/model/export/class-ai1wm-export-database.php:165
-msgid "Done exporting database."
-msgstr "Извоз базе података је завршен."
+#. translators: 1: Number of files, 2: Progress.
+#: lib/model/export/class-ai1wm-export-plugins.php:109
+#: lib/model/export/class-ai1wm-export-plugins.php:153
+msgid "Archiving %1$d plugin files...<br />%2$d%% complete"
+msgstr "Архивирање датотека додатака (%1$d)...<br />завршено %2$d%%"
 
-#: lib/model/export/class-ai1wm-export-plugins.php:80
-#: lib/model/export/class-ai1wm-export-plugins.php:119
-msgid "Archiving %d plugin files...<br />%d%% complete"
-msgstr "Архивирање %d датотека додатака... <br />%d%% је завршено"
-
-#: lib/model/import/class-ai1wm-import-enumerate.php:50
-msgid "Done retrieving a list of all WordPress files."
-msgstr "Довршено је преузимање листе свих Вордпрес датотека."
-
-#: lib/model/import/class-ai1wm-import-enumerate.php:35
-msgid "Retrieving a list of all WordPress files..."
-msgstr "Повраћај листе свих Вордпресс датотека..."
-
-#: lib/model/export/class-ai1wm-export-archive.php:42
-msgid "Done creating an empty archive."
-msgstr "Готово је са прављењем празне архиве."
-
-#: lib/model/export/class-ai1wm-export-archive.php:35
-msgid "Creating an empty archive..."
-msgstr "Прављење празне архиве..."
-
-#: lib/controller/class-ai1wm-main-controller.php:657
-#: lib/controller/class-ai1wm-main-controller.php:658
-#: lib/view/backups/index.php:37
+#: lib/controller/class-ai1wm-main-controller.php:739
+#: lib/controller/class-ai1wm-main-controller.php:740
+#: lib/view/backups/index.php:39
 msgid "Backups"
 msgstr "Резервне копије"
 
-#: lib/controller/class-ai1wm-main-controller.php:647
-#: lib/controller/class-ai1wm-main-controller.php:648
+#: lib/controller/class-ai1wm-main-controller.php:730
+#: lib/controller/class-ai1wm-main-controller.php:731
 msgid "Import"
-msgstr "Увоз"
+msgstr "Увези"
 
-#: lib/controller/class-ai1wm-main-controller.php:637
-#: lib/controller/class-ai1wm-main-controller.php:638
+#: lib/controller/class-ai1wm-main-controller.php:721
+#: lib/controller/class-ai1wm-main-controller.php:722
 msgid "Export"
-msgstr "Извоз"
+msgstr "Извези"
 
-#: lib/view/main/multisite-notice.php:42
+#: lib/view/main/multisite-notice.php:43
 msgid "Get multisite"
 msgstr "Нађите више локација"
-
-#: lib/controller/class-ai1wm-import-controller.php:96
-#: lib/controller/class-ai1wm-import-controller.php:97
-#: lib/controller/class-ai1wm-main-controller.php:897
-#: lib/controller/class-ai1wm-main-controller.php:1090
-msgid "Unable to import"
-msgstr "Увоз није могућ"
-
-#: lib/controller/class-ai1wm-export-controller.php:88
-#: lib/controller/class-ai1wm-export-controller.php:89
-#: lib/controller/class-ai1wm-main-controller.php:783
-#: lib/controller/class-ai1wm-main-controller.php:1081
-msgid "Unable to export"
-msgstr "Извоз није могућ"

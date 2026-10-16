@@ -6,6 +6,9 @@
  * @version 3.3.0
  */
 
+use Automattic\WooCommerce\Enums\OrderStatus;
+use Automattic\WooCommerce\Gateways\PayPal\Constants as PayPalConstants;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -42,8 +45,8 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 	 * Check for PayPal IPN Response.
 	 */
 	public function check_response() {
-		if ( ! empty( $_POST ) && $this->validate_ipn() ) { // WPCS: CSRF ok.
-			$posted = wp_unslash( $_POST ); // WPCS: CSRF ok, input var ok.
+		if ( ! empty( $_POST ) && $this->validate_ipn() ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- PayPal posts the IPN from its own servers, so no site nonce exists; validate_ipn() echoes the payload back to PayPal and only a VERIFIED response allows processing to continue.
+			$posted = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- PayPal posts the IPN from its own servers, so no site nonce exists; the payload is only read after validate_ipn() confirms it, and each value is sanitized where it is consumed.
 
 			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			do_action( 'valid-paypal-standard-ipn-request', $posted );
@@ -82,7 +85,7 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 		WC_Gateway_Paypal::log( 'Checking IPN response is valid' );
 
 		// Get received values from post data.
-		$validate_ipn        = wp_unslash( $_POST ); // WPCS: CSRF ok, input var ok.
+		$validate_ipn        = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- The unmodified payload must be echoed back to PayPal for verification, so no site nonce applies and the values cannot be altered here.
 		$validate_ipn['cmd'] = '_notify-validate';
 
 		// Send back post vars to paypal.
@@ -140,7 +143,7 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 			WC_Gateway_Paypal::log( 'Payment error: Currencies do not match (sent "' . $order->get_currency() . '" | returned "' . $currency . '")' );
 
 			/* translators: %s: currency code. */
-			$order->update_status( 'on-hold', sprintf( __( 'Validation error: PayPal currencies do not match (code %s).', 'woocommerce' ), $currency ) );
+			$order->update_status( OrderStatus::ON_HOLD, sprintf( __( 'Validation error: PayPal currencies do not match (code %s).', 'woocommerce' ), $currency ) );
 			exit;
 		}
 	}
@@ -156,7 +159,7 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 			WC_Gateway_Paypal::log( 'Payment error: Amounts do not match (gross ' . $amount . ')' );
 
 			/* translators: %s: Amount. */
-			$order->update_status( 'on-hold', sprintf( __( 'Validation error: PayPal amounts do not match (gross %s).', 'woocommerce' ), $amount ) );
+			$order->update_status( OrderStatus::ON_HOLD, sprintf( __( 'Validation error: PayPal amounts do not match (gross %s).', 'woocommerce' ), $amount ) );
 			exit;
 		}
 	}
@@ -173,7 +176,7 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 			WC_Gateway_Paypal::log( "IPN Response is for another account: {$receiver_email}. Your email is {$this->receiver_email}" );
 
 			/* translators: %s: email address . */
-			$order->update_status( 'on-hold', sprintf( __( 'Validation error: PayPal IPN response from a different email address (%s).', 'woocommerce' ), $receiver_email ) );
+			$order->update_status( OrderStatus::ON_HOLD, sprintf( __( 'Validation error: PayPal IPN response from a different email address (%s).', 'woocommerce' ), $receiver_email ) );
 			exit;
 		}
 	}
@@ -196,8 +199,8 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 		$this->validate_receiver_email( $order, $posted['receiver_email'] );
 		$this->save_paypal_meta_data( $order, $posted );
 
-		if ( 'completed' === $posted['payment_status'] ) {
-			if ( $order->has_status( 'cancelled' ) ) {
+		if ( OrderStatus::COMPLETED === $posted['payment_status'] ) {
+			if ( $order->has_status( OrderStatus::CANCELLED ) ) {
 				$this->payment_status_paid_cancelled_order( $order, $posted );
 			}
 
@@ -234,7 +237,7 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 	 */
 	protected function payment_status_failed( $order, $posted ) {
 		/* translators: %s: payment status. */
-		$order->update_status( 'failed', sprintf( __( 'Payment %s via IPN.', 'woocommerce' ), wc_clean( $posted['payment_status'] ) ) );
+		$order->update_status( OrderStatus::FAILED, sprintf( __( 'Payment %s via IPN.', 'woocommerce' ), wc_clean( $posted['payment_status'] ) ) );
 	}
 
 	/**
@@ -293,7 +296,7 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 		if ( $order->get_total() === wc_format_decimal( $posted['mc_gross'] * -1, wc_get_price_decimals() ) ) {
 
 			/* translators: %s: payment status. */
-			$order->update_status( 'refunded', sprintf( __( 'Payment %s via IPN.', 'woocommerce' ), strtolower( $posted['payment_status'] ) ) );
+			$order->update_status( OrderStatus::REFUNDED, sprintf( __( 'Payment %s via IPN.', 'woocommerce' ), strtolower( $posted['payment_status'] ) ) );
 
 			$this->send_ipn_email_notification(
 				/* translators: %s: order link. */
@@ -312,7 +315,7 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 	 */
 	protected function payment_status_reversed( $order, $posted ) {
 		/* translators: %s: payment status. */
-		$order->update_status( 'on-hold', sprintf( __( 'Payment %s via IPN.', 'woocommerce' ), wc_clean( $posted['payment_status'] ) ) );
+		$order->update_status( OrderStatus::ON_HOLD, sprintf( __( 'Payment %s via IPN.', 'woocommerce' ), wc_clean( $posted['payment_status'] ) ) );
 
 		$this->send_ipn_email_notification(
 			/* translators: %s: order link. */
@@ -345,14 +348,15 @@ class WC_Gateway_Paypal_IPN_Handler extends WC_Gateway_Paypal_Response {
 	 */
 	protected function save_paypal_meta_data( $order, $posted ) {
 		if ( ! empty( $posted['payment_type'] ) ) {
-			update_post_meta( $order->get_id(), 'Payment type', wc_clean( $posted['payment_type'] ) );
+			$order->update_meta_data( 'Payment type', wc_clean( $posted['payment_type'] ) );
 		}
 		if ( ! empty( $posted['txn_id'] ) ) {
-			update_post_meta( $order->get_id(), '_transaction_id', wc_clean( $posted['txn_id'] ) );
+			$order->set_transaction_id( wc_clean( $posted['txn_id'] ) );
 		}
 		if ( ! empty( $posted['payment_status'] ) ) {
-			update_post_meta( $order->get_id(), '_paypal_status', wc_clean( $posted['payment_status'] ) );
+			$order->update_meta_data( PayPalConstants::PAYPAL_ORDER_META_STATUS, wc_clean( $posted['payment_status'] ) );
 		}
+		$order->save();
 	}
 
 	/**

@@ -99,6 +99,10 @@
     color:#962722;
     margin-top: 10px;
 }
+.otgsi_downloads_form .installer-error-box{
+    margin: 0;
+    padding-right: 22px; /* same inset as .installer-table-wrap, so the notice ends where the table ends */
+}
 .installer-error-box p{
     margin: 10px 0 10px 0;
     -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;border:1px solid #962722;background-color:#F5C8C6;
@@ -348,6 +352,27 @@
     color: var(--wpml-red);
 }
 
+.installer-table-wrap table.installer-plugins tbody tr td.installer_version_installed .installer-status-failed {
+    padding: 3px 12px;
+    display: flex;
+    gap: 8px;
+    width: fit-content;
+    border-radius: 100px;
+    background-color: rgba(219, 85, 43, 0.1);
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 500;
+    color: var(--wpml-red);
+    white-space: nowrap;
+}
+
+.installer-table-wrap table.installer-plugins tbody tr td.installer_version_installed .installer-status-failed::after {
+    content: '\f64c';
+    font-family: 'otgs-icons';
+    font-size: 12px;
+    color: var(--wpml-red);
+}
+
 .installer-table-wrap table.installer-plugins tbody tr td .installer_version_installed_wrapper {
     display: flex;
     flex-direction: column;
@@ -366,9 +391,15 @@
     transition: background-color 0.3s ease-out;
 }
 
+/* WP core's .button-secondary:hover / :focus recolour the text and the
+   border in the admin theme colour; only the background was overridden here,
+   which left a dark button with blue text and a blue border (wpmldev-8595).
+   Declare all three, as .wpml-button.base-btn does. */
 .wp-core-ui .button-secondary[type="submit"]:hover,
 .wp-core-ui .button-secondary[type="submit"]:focus {
+    border-color: var(--gray-dark);
     background-color: var(--gray-dark);
+    color: #fff;
 }
 
 label.activate-label {
@@ -602,6 +633,20 @@ tr#repository-wpml_wpml td:nth-of-type(2) p strong {
     width:50%;
 }
 
+.otgs-reset .notification.notification--error {
+    width: auto;
+    max-width: none;
+    margin-bottom: 20px;
+    background: rgba(219, 85, 43, 0.1);
+    border-left-color: var(--wpml-red);
+}
+.otgs-reset .notification.notification--error p {
+    margin: 0;
+    color: var(--gray-dark);
+}
+.otgs-reset .otgs-red{
+    color: var(--wpml-red);
+}
 .otgs-reset .otgs-blue{
     color:#33879E;
 }
@@ -618,4 +663,66 @@ tr#repository-wpml_wpml td:nth-of-type(2) p strong {
 
 .otgs-cursor-pointer{
     cursor:pointer !important;
+}
+
+/* wpmldev-8414: the plugins the next plan up adds, under a group band in the table head's own style */
+.installer-table-wrap table.installer-plugins tbody.installer-plugins-group th {
+    padding: 28px 16px 13px;
+    vertical-align: bottom;
+    border-bottom: 2px solid var(--gray-dark);
+    text-align: left;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--gray-dim);
+}
+.rtl .installer-table-wrap table.installer-plugins tbody.installer-plugins-group th {
+    text-align: right;
+}
+.installer-plugins-group-bar {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.installer-plugins-group-title {
+    color: var(--gray-dark);
+    font-weight: 500;
+}
+.installer-plugins-group-bar a {
+    color: var(--wpml-blue);
+}
+.wp-core-ui .installer-plugins-group-toggle {
+    margin-left: auto;
+    color: var(--wpml-blue);
+    text-decoration: underline;
+    font-size: 13px;
+}
+.rtl .wp-core-ui .installer-plugins-group-toggle {
+    margin-left: 0;
+    margin-right: auto;
+}
+.wp-core-ui .installer-plugins-group-toggle:hover,
+.wp-core-ui .installer-plugins-group-toggle:focus {
+    text-decoration: none;
+}
+.installer-table-wrap table.installer-plugins tbody.installer-plugins-unavailable[hidden] {
+    display: none;
+}
+/* an unavailable row: the same cells, text one shade down */
+.installer-table-wrap table.installer-plugins tbody.installer-plugins-unavailable td.installer_plugin_name span,
+.installer-table-wrap table.installer-plugins tbody.installer-plugins-unavailable td.installer_version,
+.installer-table-wrap table.installer-plugins tbody.installer-plugins-unavailable td.installer_release_date {
+    color: var(--gray-dim);
+}
+/* the status pill: the shape of the installed-version pill, neutral grey */
+.installer-table-wrap table.installer-plugins tbody tr td.installer_version_installed .installer-plan-status {
+    padding: 3px 12px;
+    display: inline-block;
+    border-radius: 100px;
+    background-color: #f0f0f1;
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 500;
+    color: #50575e;
+    white-space: nowrap;
 }

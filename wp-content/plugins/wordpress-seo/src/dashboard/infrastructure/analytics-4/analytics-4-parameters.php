@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\Infrastructure\Analytics_4;
 
@@ -12,7 +13,7 @@ class Analytics_4_Parameters extends Parameters {
 	/**
 	 * The dimensions to query.
 	 *
-	 * @var array<array<string,string>> $dimensions
+	 * @var array<array<string, string>> $dimensions
 	 */
 	private $dimensions = [];
 
@@ -26,14 +27,14 @@ class Analytics_4_Parameters extends Parameters {
 	/**
 	 * The metrics.
 	 *
-	 * @var array<array<string,string>> $metrics
+	 * @var array<array<string, string>> $metrics
 	 */
 	private $metrics = [];
 
 	/**
 	 * The order by.
 	 *
-	 * @var array<array<string,array<string,string>>> $order_by
+	 * @var array<array<string, array<string, string>>> $order_by
 	 */
 	private $order_by = [];
 
@@ -55,7 +56,7 @@ class Analytics_4_Parameters extends Parameters {
 	/**
 	 * Getter for the dimensions.
 	 *
-	 * @return array<array<string,string>>
+	 * @return array<array<string, string>>
 	 */
 	public function get_dimensions(): array {
 		return $this->dimensions;
@@ -99,7 +100,7 @@ class Analytics_4_Parameters extends Parameters {
 	/**
 	 * Getter for the metrics.
 	 *
-	 * @return array<array<string,string>>
+	 * @return array<array<string, string>>
 	 */
 	public function get_metrics(): array {
 		return $this->metrics;
@@ -130,7 +131,7 @@ class Analytics_4_Parameters extends Parameters {
 	/**
 	 * Getter for the order by.
 	 *
-	 * @return array<array<string,array<string,string>>>
+	 * @return array<array<string, array<string, string>>>
 	 */
 	public function get_order_by(): array {
 		return $this->order_by;

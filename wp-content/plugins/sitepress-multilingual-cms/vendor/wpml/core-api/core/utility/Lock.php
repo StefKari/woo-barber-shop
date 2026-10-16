@@ -5,20 +5,17 @@ namespace WPML\Utilities;
 use function WPML\Container\make;
 
 class Lock implements ILock {
+
+	const ADVISORY_TIMEOUT = 1;
+
 	private static $active_locks = [];
 
-	/** @var \wpdb  */
+	private static $advisory_locks_supported = null;
+
 	private $wpdb;
 
-	/** @var string  */
 	protected $name;
 
-	/**
-	 * Lock constructor.
-	 *
-	 * @param \wpdb  $wpdb
-	 * @param string $name
-	 */
 	public function __construct( \wpdb $wpdb, $name ) {
 		$this->wpdb = $wpdb;
 		$this->name = 'wpml.' . $name . '.lock';
@@ -32,75 +29,176 @@ class Lock implements ILock {
 		}
 	}
 
-	/**
-	 * Creates a lock using WordPress options ( Based on WP class WP_Upgrader ).
-	 *
-	 * @param int $release_timeout Optional. The duration in seconds to respect an existing lock.
-	 *                             Default: 1 hour.
-	 * @return bool False if a lock couldn't be created or if the lock is still valid. True otherwise.
-	 */
-	public function create( $release_timeout = null ) {
+	public function create( $release_timeout = null, $retry_limit = 10 ) {
 		if ( ! $release_timeout ) {
 			$release_timeout = HOUR_IN_SECONDS;
 		}
 
 		if ( isset( self::$active_locks[ $this->name ] ) ) {
-			// The lock for this type was already determinated.
-			// No matter if this request has the valid lock or not,
-			// only one task is allowed per type & request.
-			// REPLACE THIS WITH: return self::$active_locks[ $this->name ];
-			// as part of wpmldev-4141.
 			return false;
 		}
 
-		// Try to lock.
-		$lock_result = $this->wpdb->query( $this->wpdb->prepare( "INSERT IGNORE INTO {$this->wpdb->options} ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'no') /* LOCK */", $this->name, time() ) );
+		if ( self::$advisory_locks_supported !== false ) {
+			$advisory = $this->acquireAdvisoryLock();
 
-		if ( ! $lock_result ) {
-			$lock_result = get_option( $this->name );
+			if ( $advisory !== null ) {
+				self::$advisory_locks_supported = true;
 
-			// No lock could be created and found
-			// OR the lock found is still valid (used by another request).
-			// => No lock for this request.
+				if ( ! $advisory ) {
+					self::$active_locks[ $this->name ] = false;
+					return false;
+				}
 
-			if ( ! $this->isValidLockTimeout($lock_result) ) {
-				// avoid to be locked out if the lock is empty in case of key corruption (db error/corruption)
-				// and set it as expired
-				$lock_result = 1;
-			}
-			if ( ! $lock_result || $lock_result > ( time() - $release_timeout ) ) {
-				self::$active_locks[ $this->name ] = false;
-				return false;
+				try {
+					return $this->createSerialized( $release_timeout );
+				} finally {
+					$this->releaseAdvisoryLock();
+				}
 			}
 
-			// There must exist an expired lock, clear it and re-gain it.
-			$this->release();
-			return $this->create( $release_timeout );
+			if ( '' !== (string) $this->wpdb->last_error ) {
+				self::$advisory_locks_supported = false;
+			}
 		}
 
-		// Update the lock, as by this point we've definitely got a lock, just need to fire the actions.
-		update_option( $this->name, time(), false );
+		return $this->createWithOptionsMutex( $release_timeout, $retry_limit );
+	}
+
+	public function isHeld( $release_timeout = null ) {
+		if ( ! $release_timeout ) {
+			$release_timeout = HOUR_IN_SECONDS;
+		}
+
+		if ( isset( self::$active_locks[ $this->name ] ) ) {
+			return true;
+		}
+
+		$timestamp = $this->wpdb->get_var( $this->wpdb->prepare( "SELECT option_value FROM {$this->wpdb->options} WHERE option_name = %s", $this->name ) );
+
+		if ( $this->isValidLockTimeout( $timestamp ) && $timestamp > ( time() - $release_timeout ) ) {
+			return true;
+		}
+
+		return $this->isAdvisoryLockInUse();
+	}
+
+	private function isAdvisoryLockInUse() {
+		if ( self::$advisory_locks_supported === false ) {
+			return false;
+		}
+
+		$holder = $this->wpdb->get_var( $this->wpdb->prepare(
+			"SELECT IS_USED_LOCK(%s)",
+			$this->advisoryLockName()
+		) );
+
+		return null !== $holder && '' !== (string) $holder;
+	}
+
+	private function createSerialized( $release_timeout ) {
+		$timestamp = $this->wpdb->get_var( $this->wpdb->prepare( "SELECT option_value FROM {$this->wpdb->options} WHERE option_name = %s", $this->name ) );
+
+		if ( $this->isValidLockTimeout( $timestamp ) && $timestamp > ( time() - $release_timeout ) ) {
+			self::$active_locks[ $this->name ] = false;
+			return false;
+		}
+
+		if ( ! $this->writeStamp() && ! ( $this->lastErrorIsTransient() && $this->writeStamp() ) ) {
+			self::$active_locks[ $this->name ] = false;
+
+			return false;
+		}
+		wp_cache_delete( $this->name, 'options' );
 
 		self::$active_locks[ $this->name ] = true;
 
 		return true;
 	}
 
-	/**
-	 * Releases an upgrader lock.
-	 *
-	 * @return bool True if the lock was successfully released. False on failure.
-	 */
+	private function writeStamp() {
+		$result = $this->wpdb->query( $this->wpdb->prepare(
+			"INSERT INTO {$this->wpdb->options} ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'no') ON DUPLICATE KEY UPDATE `option_value` = VALUES( `option_value` ) /* LOCK */",
+			$this->name,
+			time()
+		) );
+
+		return false !== $result;
+	}
+
+	private function lastErrorIsTransient() {
+		return (bool) preg_match( '/deadlock found|lock wait timeout/i', (string) $this->wpdb->last_error );
+	}
+
+	private function createWithOptionsMutex( $release_timeout, $retry_limit ) {
+		do {
+			$lock_result = $this->wpdb->query( $this->wpdb->prepare( "INSERT IGNORE INTO {$this->wpdb->options} ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'no') /* LOCK */", $this->name, time() ) );
+
+			if ( $lock_result ) {
+				update_option( $this->name, time(), false );
+
+				self::$active_locks[ $this->name ] = true;
+
+				return true;
+			}
+
+			$lock_result = $this->wpdb->get_var( $this->wpdb->prepare( "SELECT option_value FROM {$this->wpdb->options} WHERE option_name = %s", $this->name ) );
+
+			if ( ! $this->isValidLockTimeout( $lock_result ) ) {
+				$lock_result = 1;
+			}
+			if ( ! $lock_result || $lock_result > ( time() - $release_timeout ) ) {
+				break;
+			}
+
+			if ( $retry_limit <= 0 || ! $this->release() ) {
+				break;
+			}
+
+			$retry_limit --;
+		} while ( true );
+
+		self::$active_locks[ $this->name ] = false;
+
+		return false;
+	}
+
+	private function advisoryLockName() {
+		return 'wpml.lock.' . md5( $this->wpdb->dbname . '|' . $this->wpdb->prefix . '|' . $this->name );
+	}
+
+	private function acquireAdvisoryLock() {
+		$result = $this->wpdb->get_var( $this->wpdb->prepare(
+			"SELECT GET_LOCK(%s, %d)",
+			$this->advisoryLockName(),
+			self::ADVISORY_TIMEOUT
+		) );
+
+		if ( '1' === (string) $result ) {
+			return true;
+		}
+		if ( '0' === (string) $result ) {
+			return false;
+		}
+
+		return null;
+	}
+
+	private function releaseAdvisoryLock() {
+		$this->wpdb->query( $this->wpdb->prepare(
+			"SELECT RELEASE_LOCK(%s)",
+			$this->advisoryLockName()
+		) );
+	}
+
+	public static function resetAdvisoryLockProbe() {
+		self::$advisory_locks_supported = null;
+	}
+
 	public function release() {
 		unset( self::$active_locks[ $this->name ] );
 		return delete_option( $this->name );
 	}
 
-	/**
-	 * Check if the lock result is a valid timeout.
-	 * @param mixed $lock_result
-	 * @return bool
-	 */
 	private function isValidLockTimeout( $lock_result ) {
 
 		return is_numeric( $lock_result ) && $lock_result > 0;

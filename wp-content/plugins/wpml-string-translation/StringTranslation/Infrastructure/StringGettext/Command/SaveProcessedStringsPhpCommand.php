@@ -7,22 +7,20 @@ use WPML\StringTranslation\Application\StringGettext\Command\SaveProcessedString
 
 class SaveProcessedStringsPhpCommand implements SaveProcessedStringsCommandInterface {
 
-	/** @var FilesystemRepositoryInterface */
 	private $filesystemRepository;
 
-	/** @var CreateFileCommand */
 	private $createPhpFile;
 
 	public function __construct(
 		FilesystemRepositoryInterface $filesystemRepository,
-		CreatePhpFileCommand          $createPhpFile
+		CreatePhpFileCommand $createPhpFile
 	) {
 		$this->filesystemRepository = $filesystemRepository;
 		$this->createPhpFile        = $createPhpFile;
 	}
 
-	public function run( string $domain, array $strings ) {
-		$this->createPhpFile->run(
+	public function run( string $domain, array $strings ) : bool {
+		return $this->createPhpFile->run(
 			$strings,
 			$this->filesystemRepository->getProcessedStringsFilepath( $domain, 'php' )
 		);

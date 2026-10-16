@@ -25,6 +25,16 @@ class WPCode_Admin_Page_Loader_Lite extends WPCode_Admin_Page_Loader {
 	}
 
 	/**
+	 * Require lite-specific files.
+	 *
+	 * @return void
+	 */
+	public function require_files() {
+		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/trait-wpcode-library-refresh-button.php';
+		parent::require_files();
+	}
+
+	/**
 	 * Add lite-specific upgrade to pro menu item.
 	 *
 	 * @return void

@@ -5,6 +5,9 @@
  * @package WooCommerce\Gateways
  */
 
+use Automattic\WooCommerce\Enums\OrderStatus;
+use Automattic\WooCommerce\Internal\Admin\Settings\Utils as SettingsUtils;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -22,6 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Gateway_BACS extends WC_Payment_Gateway {
 
 	/**
+	 * Unique ID for this gateway.
+	 *
+	 * @var string
+	 */
+	const ID = 'bacs';
+
+	/**
 	 * Array of locales
 	 *
 	 * @var array
@@ -29,15 +39,29 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 	public $locale;
 
 	/**
+	 * Gateway instructions that will be added to the thank you page and emails.
+	 *
+	 * @var string
+	 */
+	public $instructions;
+
+	/**
+	 * Account details.
+	 *
+	 * @var array
+	 */
+	public $account_details;
+
+	/**
 	 * Constructor for the gateway.
 	 */
 	public function __construct() {
 
-		$this->id                 = 'bacs';
+		$this->id                 = self::ID;
 		$this->icon               = apply_filters( 'woocommerce_bacs_icon', '' );
 		$this->has_fields         = false;
 		$this->method_title       = __( 'Direct bank transfer', 'woocommerce' );
-		$this->method_description = __( 'Take payments in person via BACS. More commonly known as direct bank/wire transfer', 'woocommerce' );
+		$this->method_description = __( 'Take payments in person via BACS. More commonly known as direct bank/wire transfer.', 'woocommerce' );
 
 		// Load the settings.
 		$this->init_form_fields();
@@ -86,7 +110,7 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 			),
 			'title'           => array(
 				'title'       => __( 'Title', 'woocommerce' ),
-				'type'        => 'text',
+				'type'        => 'safe_text',
 				'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce' ),
 				'default'     => __( 'Direct bank transfer', 'woocommerce' ),
 				'desc_tip'    => true,
@@ -109,7 +133,6 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 				'type' => 'account_details',
 			),
 		);
-
 	}
 
 	/**
@@ -129,7 +152,12 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 
 		?>
 		<tr valign="top">
-			<th scope="row" class="titledesc"><?php esc_html_e( 'Account details:', 'woocommerce' ); ?></th>
+			<th scope="row" class="titledesc">
+				<label>
+					<?php esc_html_e( 'Account details:', 'woocommerce' ); ?>
+					<?php echo wp_kses_post( wc_help_tip( __( 'These account details will be displayed within the order thank you page and confirmation email.', 'woocommerce' ) ) ); ?>
+				</label>
+			</th>
 			<td class="forminp" id="bacs_accounts">
 				<div class="wc_input_table_wrapper">
 					<table class="widefat wc_input_table sortable" cellspacing="0">
@@ -149,7 +177,7 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 							$i = -1;
 							if ( $this->account_details ) {
 								foreach ( $this->account_details as $account ) {
-									$i++;
+									++$i;
 
 									echo '<tr class="account">
 										<td class="sort"></td>
@@ -195,7 +223,6 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 		</tr>
 		<?php
 		return ob_get_clean();
-
 	}
 
 	/**
@@ -207,7 +234,7 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verification already handled in WC_Admin_Settings::save()
 		if ( isset( $_POST['bacs_account_name'] ) && isset( $_POST['bacs_account_number'] ) && isset( $_POST['bacs_bank_name'] )
-			 && isset( $_POST['bacs_sort_code'] ) && isset( $_POST['bacs_iban'] ) && isset( $_POST['bacs_bic'] ) ) {
+			&& isset( $_POST['bacs_sort_code'] ) && isset( $_POST['bacs_iban'] ) && isset( $_POST['bacs_bic'] ) ) {
 
 			$account_names   = wc_clean( wp_unslash( $_POST['bacs_account_name'] ) );
 			$account_numbers = wc_clean( wp_unslash( $_POST['bacs_account_number'] ) );
@@ -233,6 +260,7 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 		}
 		// phpcs:enable
 
+		do_action( 'woocommerce_update_option', array( 'id' => 'woocommerce_bacs_accounts' ) );
 		update_option( 'woocommerce_bacs_accounts', $accounts );
 	}
 
@@ -247,7 +275,6 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 			echo wp_kses_post( wpautop( wptexturize( wp_kses_post( $this->instructions ) ) ) );
 		}
 		$this->bank_details( $order_id );
-
 	}
 
 	/**
@@ -258,14 +285,23 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 	 * @param bool     $plain_text Email format: plain text or HTML.
 	 */
 	public function email_instructions( $order, $sent_to_admin, $plain_text = false ) {
-
-		if ( ! $sent_to_admin && 'bacs' === $order->get_payment_method() && $order->has_status( 'on-hold' ) ) {
-			if ( $this->instructions ) {
-				echo wp_kses_post( wpautop( wptexturize( $this->instructions ) ) . PHP_EOL );
+		if ( ! $sent_to_admin && self::ID === $order->get_payment_method() ) {
+			/**
+			 * Filter the email instructions order status.
+			 *
+			 * @since 7.4
+			 *
+			 * @param string $terms The order status.
+			 * @param object $order The order object.
+			 */
+			$instructions_order_status = apply_filters( 'woocommerce_bacs_email_instructions_order_status', OrderStatus::ON_HOLD, $order );
+			if ( $order->has_status( $instructions_order_status ) ) {
+				if ( $this->instructions ) {
+					echo wp_kses_post( wpautop( wptexturize( $this->instructions ) ) . PHP_EOL );
+				}
+				$this->bank_details( $order->get_id() );
 			}
-			$this->bank_details( $order->get_id() );
 		}
-
 	}
 
 	/**
@@ -346,7 +382,6 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 				echo '<section class="woocommerce-bacs-bank-details"><h2 class="wc-bacs-bank-details-heading">' . esc_html__( 'Our bank details', 'woocommerce' ) . '</h2>' . wp_kses_post( PHP_EOL . $account_html ) . '</section>';
 			}
 		}
-
 	}
 
 	/**
@@ -360,21 +395,31 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 		$order = wc_get_order( $order_id );
 
 		if ( $order->get_total() > 0 ) {
+			/**
+			 * Filter the order status for BACS payment.
+			 *
+			 * @since 3.4.0
+			 *
+			 * @param string $default_status The default order status.
+			 * @param object $order          The order object.
+			 */
+			$process_payment_status = apply_filters( 'woocommerce_bacs_process_payment_order_status', OrderStatus::ON_HOLD, $order );
 			// Mark as on-hold (we're awaiting the payment).
-			$order->update_status( apply_filters( 'woocommerce_bacs_process_payment_order_status', 'on-hold', $order ), __( 'Awaiting BACS payment', 'woocommerce' ) );
+			$order->update_status( $process_payment_status, __( 'Awaiting BACS payment.', 'woocommerce' ) );
 		} else {
 			$order->payment_complete();
 		}
 
-		// Remove cart.
-		WC()->cart->empty_cart();
+		// Remove cart if it still matches the order being processed.
+		if ( $order instanceof WC_Order && WC()->cart && $order->has_cart_hash( WC()->cart->get_cart_hash() ) ) {
+			WC()->cart->empty_cart();
+		}
 
 		// Return thankyou redirect.
 		return array(
 			'result'   => 'success',
 			'redirect' => $this->get_return_url( $order ),
 		);
-
 	}
 
 	/**
@@ -436,6 +481,42 @@ class WC_Gateway_BACS extends WC_Payment_Gateway {
 		}
 
 		return $this->locale;
+	}
 
+	/**
+	 * Get the settings URL for the gateway.
+	 *
+	 * @return string The settings page URL for the gateway.
+	 */
+	public function get_settings_url() {
+		$should_use_react_settings_page = $this->is_reactified_settings_page();
+
+		// We must not include both the path and the section query parameter, as this can cause weird behavior.
+		return SettingsUtils::wc_payments_settings_url(
+			$should_use_react_settings_page ? '/' . WC_Settings_Payment_Gateways::OFFLINE_SECTION_NAME . '/' . $this->id : null,
+			$should_use_react_settings_page ? array() : array( 'section' => $this->id )
+		);
+	}
+
+	/**
+	 * Check if the BACS settings page is reactified.
+	 *
+	 * @return bool Whether the BACS settings page is reactified or not.
+	 */
+	private function is_reactified_settings_page(): bool {
+		// Search for a WC_Settings_Payment_Gateways instance in the settings pages.
+		$payments_settings_page = null;
+		foreach ( WC_Admin_Settings::get_settings_pages() as $settings_page ) {
+			if ( $settings_page instanceof WC_Settings_Payment_Gateways ) {
+				$payments_settings_page = $settings_page;
+				break;
+			}
+		}
+		// If no instance found, default to reactified.
+		if ( empty( $payments_settings_page ) ) {
+			return true;
+		}
+
+		return $payments_settings_page->should_render_react_section( WC_Settings_Payment_Gateways::BACS_SECTION_NAME );
 	}
 }

@@ -6,9 +6,11 @@ use WPML\StringTranslation\Infrastructure\StringGettext\Repository\Dto\GettextSt
 
 interface FrontendQueueRepositoryInterface {
 	public function save( array $data );
-	/**
-	 * @return GettextStringsByUrl[]
-	 */
 	public function get(): array;
+
+	public function count(): int;
+
+	public function removeProcessed( int $processed_count );
+
 	public function remove();
 }

@@ -2,26 +2,14 @@
 
 namespace ADP\BaseVersion\Includes\Debug;
 
-use ADP\BaseVersion\Includes\Context;
-use ADP\BaseVersion\Includes\Core\RuleProcessor\Listener;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\RuleProcessor;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedProductSimple;
 use WC_Product;
 
 defined('ABSPATH') or exit;
 
-class ProductCalculatorListener implements Listener
+class ProductCalculatorListener extends Listener
 {
-    /**
-     * @var Context
-     */
-    protected $context;
-
-    /**
-     * @var array
-     */
-    protected $totals;
-
     /**
      * @var array
      */
@@ -29,14 +17,8 @@ class ProductCalculatorListener implements Listener
 
     public function __construct($deprecated = null)
     {
-        $this->context              = adp_context();
-        $this->totals               = array();
+        parent::__construct($deprecated);
         $this->currentProductTotals = array();
-    }
-
-    public function withContext(Context $context)
-    {
-        $this->context = $context;
     }
 
     /**
@@ -49,11 +31,6 @@ class ProductCalculatorListener implements Listener
         if ( ! isset($this->totals[$prodId])) {
             $this->totals[$prodId] = array();
         }
-    }
-
-    public function calcProcessStarted()
-    {
-
     }
 
     /**
@@ -70,14 +47,6 @@ class ProductCalculatorListener implements Listener
             'status'    => $proc->getStatus(),
             'exec_time' => $proc->getLastExecTime(),
         );
-    }
-
-    /**
-     * @param bool $result
-     */
-    public function processResult($result)
-    {
-
     }
 
     /**
@@ -110,10 +79,4 @@ class ProductCalculatorListener implements Listener
         $this->totals[$prodId][]               = $this->currentProductTotals;
         $this->currentProductTotals            = array();
     }
-
-    public function getTotals()
-    {
-        return $this->totals;
-    }
-
 }

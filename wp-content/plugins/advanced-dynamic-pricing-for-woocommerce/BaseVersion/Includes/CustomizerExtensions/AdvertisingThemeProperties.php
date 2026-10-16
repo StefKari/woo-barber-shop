@@ -39,6 +39,6 @@ class AdvertisingThemeProperties
         $this->global       = new GlobalMenu();
         $this->cart         = new CartMenu();
         $this->miniCart     = new MiniCartMenu();
-        $this->checkout = new CheckoutMenu();
+        $this->checkout     = new CheckoutMenu();
     }
 }

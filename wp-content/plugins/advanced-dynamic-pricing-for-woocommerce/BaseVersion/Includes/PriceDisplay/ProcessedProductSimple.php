@@ -3,12 +3,13 @@
 namespace ADP\BaseVersion\Includes\PriceDisplay;
 
 use ADP\BaseVersion\Includes\Context;
-use ADP\BaseVersion\Includes\Core\Cart\CartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\CartItemPriceAdjustment\CartItemPriceUpdateSourceEnum;
 use ADP\BaseVersion\Includes\ProductExtensions\ProductExtension;
 use ADP\BaseVersion\Includes\SpecialStrategies\CompareStrategy;
 use ADP\BaseVersion\Includes\SpecialStrategies\OverrideCentsStrategy;
 use ADP\BaseVersion\Includes\WC\PriceFunctions;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Basic\BasicCartItem;
 use WC_Product;
 
 defined('ABSPATH') or exit;
@@ -46,9 +47,14 @@ class ProcessedProductSimple
     protected $qtyAlreadyInCart;
 
     /**
-     * @var CartItem[]
+     * @var BasicCartItem[]
      */
     protected $cartItems;
+
+    /**
+     * @var FreeCartItem[]
+     */
+    protected $freeCartItems;
 
     /**
      * @var OverrideCentsStrategy
@@ -61,16 +67,35 @@ class ProcessedProductSimple
     protected $originalPriceToDisplay;
 
     /**
-     * @param Context|WC_Product $contextOrProduct
-     * @param WC_Product|array<int, CartItem> $productOrCartItems
-     * @param array<int, CartItem>|null $deprecated
+     * @var array|mixed
      */
-    public function __construct($contextOrProduct, $productOrCartItems, $deprecated = null)
-    {
-        $this->context         = adp_context();
+    protected $listOfFreeCartItemChoices;
+
+    const NOT_CACHED_PROPERTIES = array(
+        'context',
+        'compareStrategy',
+        'priceFunctions',
+        'overrideCentsStrategy',
+    );
+
+    /**
+     * @param Context|WC_Product $contextOrProduct
+     * @param WC_Product|array<int, BasicCartItem> $productOrCartItems
+     * @param array<int, BasicCartItem>|null $deprecated
+     */
+    public function __construct(
+        $contextOrProduct,
+        $productOrCartItems,
+        $deprecated = null,
+        $freeCartItems = [],
+        $listOfFreeCartItemChoices = []
+    ) {
+        $this->context = adp_context();
         $this->compareStrategy = new CompareStrategy();
-        $this->product         = $contextOrProduct instanceof WC_Product ? $contextOrProduct : $productOrCartItems;
-        $this->cartItems       = is_array($productOrCartItems) ? $productOrCartItems : $deprecated;
+        $this->product = $contextOrProduct instanceof WC_Product ? $contextOrProduct : $productOrCartItems;
+        $this->cartItems = is_array($productOrCartItems) ? $productOrCartItems : $deprecated;
+        $this->freeCartItems = $freeCartItems;
+        $this->listOfFreeCartItemChoices = $listOfFreeCartItemChoices;
 
         $qty = floatval(0);
         foreach ($this->cartItems as $cartItem) {
@@ -88,6 +113,34 @@ class ProcessedProductSimple
     public function withContext(Context $context)
     {
         $this->context = $context;
+    }
+
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array_diff_key(get_object_vars($this), array_flip(self::NOT_CACHED_PROPERTIES));
+    }
+
+    /**
+     * @param array $data
+     */
+    public function __unserialize($data)
+    {
+        foreach ($data as $property => $value) {
+            $pos      = strrpos($property, "\0");
+            $property = $pos === false ? $property : substr($property, $pos + 1);
+
+            if ( ! in_array($property, self::NOT_CACHED_PROPERTIES, true)) {
+                $this->$property = $value;
+            }
+        }
+
+        $this->context               = adp_context();
+        $this->compareStrategy       = new CompareStrategy();
+        $this->priceFunctions        = new PriceFunctions();
+        $this->overrideCentsStrategy = new OverrideCentsStrategy();
     }
 
     /**
@@ -114,7 +167,7 @@ class ProcessedProductSimple
             return null;
         }
 
-        $item->setOriginalPriceToDisplay((float)$price);
+        $item->prices()->setOriginalPriceToDisplay((float)$price);
     }
 
     /**
@@ -130,7 +183,7 @@ class ProcessedProductSimple
             return null;
         }
 
-        return isset($item) ? $item->getOriginalPriceToDisplay() : null;
+        return $item->prices()->getOriginalPriceToDisplay();
     }
 
     /**
@@ -138,7 +191,7 @@ class ProcessedProductSimple
      *
      * @return float|null
      */
-    public function getCalculatedPrice($pos = null)
+    public function getCalculatedPrice($pos = null, $dontOverrideCentsForItem = false)
     {
         $item = $this->getItemByPos($pos);
 
@@ -150,10 +203,10 @@ class ProcessedProductSimple
             $totalAdjustments = array_sum(array_map(function ($amounts) {
                 return array_sum($amounts);
             }, $item->getDiscounts()));
-            $price            = $item->getOriginalPrice() - $totalAdjustments;
+            $price = $item->getOriginalPrice() - $totalAdjustments;
         }
 
-        return $this->overrideCentsStrategy->maybeOverrideCentsForItem($price, $item);
+        return $dontOverrideCentsForItem ? $price : $this->overrideCentsStrategy->maybeOverrideCentsForItem($price, $item);
     }
 
     /**
@@ -281,11 +334,7 @@ class ProcessedProductSimple
             return false;
         }
 
-        $totalAdjustments = array_sum(array_map(function ($amounts) {
-            return array_sum($amounts);
-        }, $item->getDiscounts()));
-
-        return $totalAdjustments > 0;
+        return $this->compareStrategy->floatLess($this->getPrice($pos), $this->product->get_regular_price('edit'));
     }
 
     /**
@@ -302,9 +351,11 @@ class ProcessedProductSimple
         }
 
         $affected  = false;
-        $discounts = $item->getObjDiscounts();
+        $discounts = $item->getPriceAdjustments();
         foreach ($discounts as $discount) {
-            if ($discount->isType($discount::SOURCE_SINGLE_ITEM_RANGE) || $discount->isType($discount::SOURCE_PACKAGE_RANGE)) {
+            if ($discount->getSource()->equals(CartItemPriceUpdateSourceEnum::SOURCE_SINGLE_ITEM_RANGE())
+                || $discount->getSource()->equals(CartItemPriceUpdateSourceEnum::SOURCE_PACKAGE_RANGE())
+            ) {
                 $affected = true;
                 break;
             }
@@ -326,7 +377,7 @@ class ProcessedProductSimple
             return null;
         }
 
-        return $item->getPos();
+        return $item->getInitialCartPosition();
     }
 
     /**
@@ -358,21 +409,38 @@ class ProcessedProductSimple
             return null;
         }
 
-        return $item->getMinDiscountRangePrice();
+        return $item->prices()->getMinDiscountRangePrice();
     }
 
     /**
      * @param int|null $pos
      *
-     * @return CartItem|null
+     * @return float|null
+     */
+    public function getMaxDiscountRangePrice($pos = null)
+    {
+        $item = $this->getItemByPos($pos);
+
+        if ( ! isset($item)) {
+            return null;
+        }
+
+        return $item->prices()->getMaxDiscountRangePrice();
+    }
+
+    /**
+     * @param int|null $pos
+     *
+     * @return BasicCartItem|null
      */
     protected function getItemByPos($pos = null)
     {
-        $pos  = is_numeric($pos) ? intval($pos) : null;
+        $pos = is_numeric($pos) ? intval($pos) : null;
         $item = null;
 
         if (is_null($pos)) {
             $item = reset($this->cartItems);
+            $item = $item !== false ? $item : null;
         } else {
             $counter = floatval(0);
             foreach ($this->cartItems as $cartItem) {
@@ -405,11 +473,11 @@ class ProcessedProductSimple
     }
 
     /**
-     * @deprecated use ProductPriceDisplay instead
-     *
      * @param bool $strikethrough
      *
      * @return string
+     * @deprecated use ProductPriceDisplay instead
+     *
      */
     public function getPriceHtml($strikethrough = true)
     {
@@ -417,11 +485,11 @@ class ProcessedProductSimple
     }
 
     /**
-     * @deprecated use ProductPriceDisplay instead
-     *
      * @param bool $strikethrough
      *
      * @return string
+     * @deprecated use ProductPriceDisplay instead
+     *
      */
     public function getSubtotalHtml($strikethrough = true)
     {
@@ -521,5 +589,13 @@ class ProcessedProductSimple
         $productExt = new ProductExtension($this->context, $product);
 
         return $productExt->getCustomPrice() !== null;
+    }
+
+    public function getFreeCartItems() {
+        return $this->freeCartItems;
+    }
+
+    public function getListOfFreeCartItemChoices() {
+        return $this->listOfFreeCartItemChoices;
     }
 }

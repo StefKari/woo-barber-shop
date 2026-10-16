@@ -33,17 +33,30 @@ class DefaultFormatter
     {
         $this->context   = adp_context();
         $this->formatter = new Formatter();
-        $this->formatter->setTemplate(
-            htmlspecialchars_decode(
-                $this->context->getOption("price_html_template","{{price_html}}")
-            )
+
+        //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+        $template = _x( htmlspecialchars_decode( $this->context->getOption("price_html_template","{{price_html}}")),
+            "Product price html template|Output template",
+            "advanced-dynamic-pricing-for-woocommerce"
         );
+
+        $this->formatter->setTemplate($template);
         $this->priceFunctions = new PriceFunctions();
     }
 
     public function withContext(Context $context)
     {
         $this->context = $context;
+    }
+
+    public function getFormatter()
+    {
+        return $this->formatter;
+    }
+
+    public function getPriceFunctions()
+    {
+        return $this->priceFunctions;
     }
 
     /**
@@ -59,7 +72,9 @@ class DefaultFormatter
 
         $index = $processedProduct->getQtyAlreadyInCart() + $processedProduct->getQty();
 
-        return $this->context->getOption("enable_product_html_template", false) && $index > 1;
+        $hasQtyTags = in_array(['Nth_item', 'qty_already_in_cart'], $this->formatter->getAvailableReplacements());
+
+        return $this->context->getOption("enable_product_html_template", false) && (!$hasQtyTags || $index > 1);
     }
 
     /**
@@ -73,16 +88,37 @@ class DefaultFormatter
         $index   = (int)($processedProduct->getQtyAlreadyInCart() + $processedProduct->getQty());
         $product = $processedProduct->getProduct();
 
+        $useRegularPrice = $this->context->getSettings()->getOption('regular_price_for_striked_price');
+        $calcPrice = $processedProduct->calculateSubtotal();
+        $origPrice = $useRegularPrice ? $product->get_regular_price('edit') : $processedProduct->getOriginalPriceToDisplay();
+
         $replacements = array(
             'price_html'            => $priceHtml,
             'Nth_item'              => $this->addSuffixOf($index),
             'qty_already_in_cart'   => $processedProduct->getQtyAlreadyInCart(),
             'price_suffix'          => get_option('woocommerce_price_display_suffix'),
-            'regular_price_striked' => '<del>' . $this->priceFunctions->format(
+            'regular_price_striked' => $calcPrice < $origPrice ? '<del>' . $this->priceFunctions->format(
                     $this->priceFunctions->getPriceToDisplay(
                         $product,
                         array("price" => $product->get_regular_price())
-                    )) . '</del>',
+                    )) . '</del>' : '',
+
+            'discounted_price_inclTax'  => $this->priceFunctions->format(
+                $this->priceFunctions->getPriceIncludingTax($product, ['price' => $calcPrice])
+            ),
+            'discounted_price_exclTax' => $this->priceFunctions->format(
+                $this->priceFunctions->getPriceExcludingTax($product, ['price' => $calcPrice])
+            ),
+
+            'price_inclTax'  => $calcPrice < $origPrice ? '<del>' . $this->priceFunctions->format(
+                $this->priceFunctions->getPriceIncludingTax($product, ['price' => $origPrice]) 
+            ) . '</del>' : '',
+            'price_exclTax' => $calcPrice < $origPrice ? '<del>' . $this->priceFunctions->format(
+                $this->priceFunctions->getPriceExcludingTax($product, ['price' => $origPrice])
+            ). '</del>' : '',
+
+            'calcPrice' => $calcPrice,
+            'origPrice' => $origPrice,
         );
 
         $replacements = apply_filters("adp_default_formatter_replacements", $replacements, $processedProduct, $this);

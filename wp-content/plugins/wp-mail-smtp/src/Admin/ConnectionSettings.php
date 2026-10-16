@@ -3,9 +3,10 @@
 namespace WPMailSMTP\Admin;
 
 use WPMailSMTP\ConnectionInterface;
-use WPMailSMTP\Debug;
+use WPMailSMTP\EmailSendingDebug;
 use WPMailSMTP\Helpers\UI;
 use WPMailSMTP\Options;
+use WPMailSMTP\Providers\OptionsAbstract;
 
 /**
  * Class ConnectionSettings.
@@ -54,17 +55,27 @@ class ConnectionSettings {
 		$mailer             = $this->connection->get_mailer_slug();
 		$connection_options = $this->connection->get_options();
 
-		$disabled_email = in_array( $mailer, [ 'zoho' ], true ) ? 'disabled' : '';
-		$disabled_name  = in_array( $mailer, [ 'outlook' ], true ) ? 'disabled' : '';
+		$hide_from_email = false;
+		$disabled_email  = in_array( $mailer, [ 'zoho' ], true ) ? 'disabled' : '';
+		$disabled_name   = in_array( $mailer, [ 'outlook' ], true ) ? 'disabled' : '';
 
 		if ( empty( $mailer ) || ! in_array( $mailer, Options::$mailers, true ) ) {
 			$mailer = 'mail';
 		}
 
+		if (
+			$mailer === 'sendlayer' &&
+			$connection_options->get( 'sendlayer', 'quick_connect' ) &&
+			$connection_options->get( 'sendlayer', 'is_shared_domain' )
+		) {
+			// For SendLayer, hide the From Email setting since it's managed from the SendLayer dashboard.
+			$hide_from_email = true;
+		}
+
 		$mailer_supported_settings = wp_mail_smtp()->get_providers()->get_options( $mailer )->get_supports();
 		?>
 		<!-- From Email -->
-		<div class="wp-mail-smtp-setting-group js-wp-mail-smtp-setting-from_email" style="display: <?php echo empty( $mailer_supported_settings['from_email'] ) ? 'none' : 'block'; ?>;">
+		<div class="wp-mail-smtp-setting-group js-wp-mail-smtp-setting-from_email" style="display: <?php echo ( empty( $mailer_supported_settings['from_email'] ) || $hide_from_email ) ? 'none' : 'block'; ?>;">
 			<div id="wp-mail-smtp-setting-row-from_email" class="wp-mail-smtp-setting-row wp-mail-smtp-setting-row-email wp-mail-smtp-clear">
 				<div class="wp-mail-smtp-setting-label">
 					<label for="wp-mail-smtp-setting-from_email"><?php esc_html_e( 'From Email', 'wp-mail-smtp' ); ?></label>
@@ -119,6 +130,19 @@ class ConnectionSettings {
 				</div>
 			</div>
 		</div>
+
+		<?php
+		/**
+		 * Fires after the From Email Address setting row.
+		 *
+		 * @since 4.8.0
+		 *
+		 * @param ConnectionInterface $connection         The Connection object.
+		 * @param Options             $connection_options The connection options instance.
+		 * @param string              $mailer             The current mailer slug.
+		 */
+		do_action( 'wp_mail_smtp_admin_connection_settings_display_after_from_email_setting_row', $this->connection, $connection_options, $mailer );
+		?>
 
 		<!-- From Name -->
 		<div class="wp-mail-smtp-setting-group js-wp-mail-smtp-setting-from_name"  style="display: <?php echo empty( $mailer_supported_settings['from_name'] ) ? 'none' : 'block'; ?>;">
@@ -257,7 +281,7 @@ class ConnectionSettings {
 		</div>
 
 		<!-- Mailer Options -->
-		<div class="wp-mail-smtp-setting-group wp-mail-smtp-mailer-options">
+		<div class="wp-mail-smtp-setting-group wp-mail-smtp-mailer-options" id="wp-mail-smtp-mailer-options">
 			<?php foreach ( wp_mail_smtp()->get_providers()->get_options_all( $this->connection ) as $provider ) : ?>
 				<?php $provider_desc = $provider->get_description(); ?>
 				<div class="wp-mail-smtp-mailer-option wp-mail-smtp-mailer-option-<?php echo esc_attr( $provider->get_slug() ); ?> <?php echo $mailer === $provider->get_slug() ? 'active' : 'hidden'; ?>">
@@ -292,7 +316,18 @@ class ConnectionSettings {
 						</div>
 					<?php endif; ?>
 
-					<?php $provider->display_options(); ?>
+					<?php
+					/**
+					 * Fires before a mailer's own settings, inside its options block.
+					 *
+					 * @since 4.10.0
+					 *
+					 * @param OptionsAbstract $provider The mailer's options object.
+					 */
+					do_action( 'wp_mail_smtp_admin_connection_settings_display_mailer_options_before', $provider );
+
+					$provider->display_options();
+					?>
 				</div>
 			<?php endforeach; ?>
 		</div>
@@ -325,6 +360,9 @@ class ConnectionSettings {
 		if ( ! isset( $data['smtp']['auth'] ) ) {
 			$data['smtp']['auth'] = false;
 		}
+		if ( ! isset( $data['mailersend']['has_pro_plan'] ) ) {
+			$data['mailersend']['has_pro_plan'] = false;
+		}
 
 		// When switching mailers.
 		if (
@@ -332,9 +370,6 @@ class ConnectionSettings {
 			! empty( $data['mail']['mailer'] ) &&
 			$old_data['mail']['mailer'] !== $data['mail']['mailer']
 		) {
-			// Remove all debug messages when switching mailers.
-			Debug::clear();
-
 			// Save correct from email address if Zoho mailer is already configured.
 			if (
 				in_array( $data['mail']['mailer'], [ 'zoho' ], true ) &&
@@ -342,6 +377,9 @@ class ConnectionSettings {
 			) {
 				$data['mail']['from_email'] = $old_data[ $data['mail']['mailer'] ]['user_details']['email'];
 			}
+
+			// Clear any cached send failure for this connection — it belongs to the old mailer.
+			EmailSendingDebug::clear( $this->connection->get_id() );
 		}
 
 		// Prevent redirect to setup wizard from settings page after successful auth.

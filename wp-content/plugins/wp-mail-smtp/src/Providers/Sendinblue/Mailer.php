@@ -387,6 +387,26 @@ class Mailer extends MailerAbstract {
 	}
 
 	/**
+	 * Get the error code from the Brevo API response.
+	 *
+	 * @since 4.8.0
+	 *
+	 * @return string
+	 */
+	public function get_response_error_code() {
+
+		if ( ! empty( $this->response ) ) {
+			$body = wp_remote_retrieve_body( $this->response );
+
+			if ( ! empty( $body->code ) ) {
+				return $body->code;
+			}
+		}
+
+		return parent::get_response_error_code();
+	}
+
+	/**
 	 * Check whether the response has `messageId` property.
 	 *
 	 * @since 3.9.0
@@ -430,7 +450,7 @@ class Mailer extends MailerAbstract {
 	 */
 	public function get_debug_info() {
 
-		$mailjet_text[] = '<strong>API Key:</strong> ' . ( $this->is_mailer_complete() ? 'Yes' : 'No' );
+		$mailjet_text[] = '<strong>' . esc_html__( 'API Key:', 'wp-mail-smtp' ) . '</strong> ' . ( $this->is_mailer_complete() ? esc_html__( 'Yes', 'wp-mail-smtp' ) : esc_html__( 'No', 'wp-mail-smtp' ) );
 
 		return implode( '<br>', $mailjet_text );
 	}

@@ -96,6 +96,11 @@ abstract class OriginOption implements OriginOptionInterface
         return $this->valueInstalled ? $this->value : $this->default;
     }
 
+    public function getDefault()
+    {
+        return $this->default;
+    }
+
     public function setTitle($title)
     {
         if (empty($title)) {

@@ -40,14 +40,7 @@ class Avatar extends Base {
 	 *
 	 * @var array<string,string>
 	 */
-	private $_avatar_realtime_gen_dict = array();
-
-	/**
-	 * Summary/status data for last requests.
-	 *
-	 * @var array<string,mixed>
-	 */
-	protected $_summary;
+	private $_avatar_realtime_gen_dict = [];
 
 	/**
 	 * Init.
@@ -55,17 +48,17 @@ class Avatar extends Base {
 	 * @since 1.4
 	 */
 	public function __construct() {
+		$this->_tb = Data::cls()->tb( 'avatar' );
+
 		if ( ! $this->conf( self::O_DISCUSS_AVATAR_CACHE ) ) {
 			return;
 		}
 
 		self::debug2( '[Avatar] init' );
 
-		$this->_tb = $this->cls( 'Data' )->tb( 'avatar' );
-
 		$this->_conf_cache_ttl = $this->conf( self::O_DISCUSS_AVATAR_CACHE_TTL );
 
-		add_filter( 'get_avatar_url', array( $this, 'crawl_avatar' ) );
+		add_filter( 'get_avatar_url', [ $this, 'crawl_avatar' ] );
 
 		$this->_summary = self::get_summary();
 	}
@@ -94,6 +87,12 @@ class Avatar extends Base {
 
 		self::debug( '[Avatar] is avatar request' );
 
+		// No generation for any request when avatar cache is off — fall through to the regular WP 404, same as the no-matched-record path below.
+		if ( ! $this->conf( self::O_DISCUSS_AVATAR_CACHE ) ) {
+			self::debug( '[Avatar] bypassed serving as avatar cache is off' );
+			return;
+		}
+
 		if ( strlen( $md5 ) !== 32 ) {
 			self::debug( '[Avatar] wrong md5 ' . $md5 );
 			return;
@@ -101,7 +100,7 @@ class Avatar extends Base {
 
 		$url = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
-				'SELECT url FROM `' . $this->_tb . '` WHERE md5 = %s', // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				'SELECT url FROM `' . $this->_tb . '` WHERE md5 = %s',  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$md5
 			)
 		);
@@ -111,9 +110,13 @@ class Avatar extends Base {
 			return;
 		}
 
-		$url = $this->_generate( $url );
+		$generated_url = $this->_generate( $url );
+		if ( $generated_url === $url ) {
+			self::debug( '[Avatar] generation failed; bypassing redirect' );
+			return;
+		}
 
-		wp_safe_redirect( $url );
+		wp_safe_redirect( $generated_url );
 		exit;
 	}
 
@@ -139,7 +142,7 @@ class Avatar extends Base {
 		$realpath = $this->_realpath( $url );
 		$mtime    = file_exists( $realpath ) ? filemtime( $realpath ) : false;
 
-		if ( $mtime && time() - $mtime <= $this->_conf_cache_ttl ) {
+		if ( $mtime && time() - (int) $mtime <= $this->_conf_cache_ttl ) {
 			self::debug2( '[Avatar] cache file exists [url] ' . $url );
 			return $this->_rewrite( $url, $mtime );
 		}
@@ -150,7 +153,7 @@ class Avatar extends Base {
 		}
 
 		// Throttle generation.
-		if ( ! empty( $this->_summary['curr_request'] ) && time() - $this->_summary['curr_request'] < 300 ) {
+		if ( ! empty( $this->_summary['curr_request'] ) && time() - (int) $this->_summary['curr_request'] < 300 ) {
 			self::debug2( '[Avatar] Bypass generating due to interval limit [url] ' . $url );
 			return $url;
 		}
@@ -171,9 +174,13 @@ class Avatar extends Base {
 	public function queue_count() {
 		global $wpdb;
 
-		// If var not exists, means table not exists // todo: not true.
-		if ( ! $this->_tb ) {
-			return false;
+		// Avatar cache option is the module-level switch: no queue and no table creation side effect when off.
+		if ( ! $this->conf( self::O_DISCUSS_AVATAR_CACHE ) ) {
+			return 0;
+		}
+
+		if ( ! Data::cls()->tb_exist( 'avatar' ) ) {
+			Data::cls()->tb_create( 'avatar' );
 		}
 
 		$cnt = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -238,6 +245,12 @@ class Avatar extends Base {
 		global $wpdb;
 
 		$_instance = self::cls();
+
+		if ( ! $_instance->conf( self::O_DISCUSS_AVATAR_CACHE ) ) {
+			self::debug( '[Avatar] bypassed cron as avatar cache is off' );
+			return;
+		}
+
 		if ( ! $_instance->queue_count() ) {
 			self::debug( '[Avatar] no queue' );
 			return;
@@ -245,7 +258,7 @@ class Avatar extends Base {
 
 		// For cron, need to check request interval too.
 		if ( ! $force ) {
-			if ( ! empty( $_instance->_summary['curr_request'] ) && time() - $_instance->_summary['curr_request'] < 300 ) {
+			if ( ! empty( $_instance->_summary['curr_request'] ) && time() - (int) $_instance->_summary['curr_request'] < 300 ) {
 				self::debug( '[Avatar] curr_request too close' );
 				return;
 			}
@@ -283,42 +296,31 @@ class Avatar extends Base {
 
 		// Mark request start
 		self::save_summary(
-			array(
+			[
 				'curr_request' => time(),
-			)
+			]
 		);
 
-		// Ensure cache directory exists
-		$this->_maybe_mk_cache_folder( 'avatar' );
-
-		$response = wp_safe_remote_get(
-			$url,
-			array(
-				'timeout'  => 180,
-				'stream'   => true,
-				'filename' => $file,
-			)
-		);
-
+		$temp = File::download( $url, $file, 180 );
 		self::debug( '[Avatar] _generate [url] ' . $url );
-
-		// Parse response data
-		if ( is_wp_error( $response ) ) {
-			$error_message = $response->get_error_message();
-			if ( file_exists( $file ) ) {
-				wp_delete_file( $file );
-			}
-			self::debug( '[Avatar] failed to get: ' . $error_message );
+		if ( is_wp_error( $temp ) ) {
+			self::debug( '[Avatar] failed to get: ' . $temp->get_error_code() );
+			return $url;
+		}
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( false === @getimagesize( $temp ) || ! File::publish_temp_file( $temp, $file ) ) {
+			wp_delete_file( $temp );
+			self::debug( '[Avatar] failed to validate or save the image.' );
 			return $url;
 		}
 
 		// Save summary data
 		self::save_summary(
-			array(
-				'last_spent'   => time() - $this->_summary['curr_request'],
+			[
+				'last_spent'   => time() - (int) $this->_summary['curr_request'],
 				'last_request' => $this->_summary['curr_request'],
 				'curr_request' => 0,
-			)
+			]
 		);
 
 		// Update/insert DB record

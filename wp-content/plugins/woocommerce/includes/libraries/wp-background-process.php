@@ -66,7 +66,7 @@ abstract class WP_Background_Process extends WP_Async_Request {
 	 * Dispatch
 	 *
 	 * @access public
-	 * @return void
+	 * @return array|WP_Error
 	 */
 	public function dispatch() {
 		// Schedule the cron healthcheck.
@@ -370,7 +370,7 @@ abstract class WP_Background_Process extends WP_Async_Request {
 			$memory_limit = '32000M';
 		}
 
-		return intval( $memory_limit ) * 1024 * 1024;
+		return wp_convert_hr_to_bytes( $memory_limit );
 	}
 
 	/**
@@ -420,6 +420,7 @@ abstract class WP_Background_Process extends WP_Async_Request {
 		// Adds every 5 minutes to the existing schedules.
 		$schedules[ $this->identifier . '_cron_interval' ] = array(
 			'interval' => MINUTE_IN_SECONDS * $interval,
+			/* translators: %d: Number of minutes between cron runs. */
 			'display'  => sprintf( __( 'Every %d minutes', 'woocommerce' ), $interval ),
 		);
 

@@ -67,7 +67,7 @@ class WcProductPageExtensions
         <li class="edit_rules_tab">
             <a href="#edit_rules_data">
                 <span>
-                    <?php _e('Pricing Rules', 'advanced-dynamic-pricing-for-woocommerce'); ?>
+                    <?php esc_html_e('Pricing Rules', 'advanced-dynamic-pricing-for-woocommerce'); ?>
                 </span>
             </a>
         </li>
@@ -92,7 +92,7 @@ class WcProductPageExtensions
         if ( ! $product) {
             ?>
             <div id="edit_rules_data" class="panel woocommerce_options_panel">
-                <h4><?php _e('Product wasn\'t returned', 'advanced-dynamic-pricing-for-woocommerce'); ?></h4>
+                <h4><?php esc_html_e('Product wasn\'t returned', 'advanced-dynamic-pricing-for-woocommerce'); ?></h4>
             </div>
             <?php
             return;
@@ -180,14 +180,20 @@ class WcProductPageExtensions
         ?>
         <div id="edit_rules_data" class="panel woocommerce_options_panel">
             <?php if (count($rules) != 0): ?>
-                <button type="button" class="button" onclick="window.open('<?php echo $listRulesUrl ?>')"
+                <button type="button" class="button" onclick="window.open('<?php
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo $listRulesUrl ?>')"
                         style="margin: 5px;">
-                    <?php printf(__('View %s rules for the product', 'advanced-dynamic-pricing-for-woocommerce'),
-                        $countRules); ?></button>
+                    <?php
+                    /* translators: Count rules for the product*/
+                    printf(esc_html__('View %s rules for the product', 'advanced-dynamic-pricing-for-woocommerce'),
+                        esc_html($countRules)); ?></button>
             <?php endif; ?>
-            <button type="button" class="button" onclick="window.open('<?php echo $addRulesUrl ?>')"
+            <button type="button" class="button" onclick="window.open('<?php
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    echo $addRulesUrl ?>')"
                     style="margin: 5px;">
-                <?php _e('Add rule for the product', 'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <?php esc_html_e('Add rule for the product', 'advanced-dynamic-pricing-for-woocommerce'); ?></button>
         </div>
         <?php
     }
@@ -198,6 +204,11 @@ class WcProductPageExtensions
      */
     public function dropCacheAfterProductSave($product, $dataStore)
     {
+        CacheHelper::cacheFlushGroup( CacheHelper::GROUP_WC_PRODUCT );
+        CacheHelper::cacheDelete( CacheHelper::KEY_ALREADY_LOADED_VARIABLES );
+        CacheHelper::cacheFlushGroup( CacheHelper::GROUP_VARIATION_PROD_DATA_CACHE );
+        CacheHelper::cacheFlushGroup( CacheHelper::GROUP_PROCESSED_PRODUCTS_TO_DISPLAY );
+
         $this->persistentRuleRepository->recalculateCacheForProduct($this->context, $product);
     }
 }

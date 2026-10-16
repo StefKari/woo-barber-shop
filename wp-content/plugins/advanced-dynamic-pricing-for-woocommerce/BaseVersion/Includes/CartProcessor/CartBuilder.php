@@ -2,16 +2,12 @@
 
 namespace ADP\BaseVersion\Includes\CartProcessor;
 
-use ADP\BaseVersion\Includes\Compatibility\WcSubscriptionsCmp;
-use ADP\BaseVersion\Includes\Compatibility\WpcBundleCmp;
+use ADP\BaseVersion\Includes\CartProcessor\ToPricingCartItemAdapter\ToPricingCartItemAdapter;
+use ADP\BaseVersion\Includes\Compatibility\PointsAndRewardsForWoocommerceCmp;
+use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
 use ADP\BaseVersion\Includes\Core\Cart\CartContext;
-use ADP\BaseVersion\Includes\Core\Cart\CartCustomer;
-use ADP\BaseVersion\Includes\Context;
-use ADP\BaseVersion\Includes\Compatibility\SomewhereWarmBundlesCmp;
-use ADP\BaseVersion\Includes\Compatibility\SomewhereWarmCompositesCmp;
-use ADP\BaseVersion\Includes\Database\Repository\OrderRepository;
-use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
+use ADP\BaseVersion\Includes\WC\WcAdpMergedCouponHelper;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 use ADP\BaseVersion\Includes\WC\WcCouponFacade;
 use ADP\BaseVersion\Includes\WC\WcCustomerConverter;
@@ -31,37 +27,16 @@ class CartBuilder
     protected $context;
 
     /**
-     * @var SomewhereWarmBundlesCmp
-     */
-    protected $bundlesCmp;
-
-    /**
-     * @var WpcBundleCmp
-     */
-    protected $wpcBundlesCmp;
-
-    /**
-     * @var SomewhereWarmCompositesCmp
-     */
-    protected $compositeCmp;
-
-    /**
      * @param null $deprecated
      */
     public function __construct($deprecated = null)
     {
         $this->context = adp_context();
-        $this->bundlesCmp = new SomewhereWarmBundlesCmp();
-        $this->wpcBundlesCmp = new WpcBundleCmp();
-        $this->compositeCmp = new SomewhereWarmCompositesCmp();
     }
 
     public function withContext(Context $context)
     {
         $this->context = $context;
-        $this->bundlesCmp->withContext($context);
-        $this->wpcBundlesCmp->withContext($context);
-        $this->compositeCmp->withContext($context);
     }
 
     /**
@@ -75,8 +50,22 @@ class CartBuilder
         $context = $this->context;
         /** @var WcCustomerConverter $converter */
         $converter = Factory::get("WC_WcCustomerConverter", $context);
-        $customer  = $converter->convertFromWcCustomer($wcCustomer, $wcSession);
-        $userMeta = get_user_meta($customer->getId());
+        $customer = $converter->convertFromWcCustomer($wcCustomer, $wcSession);
+        $customerId = $customer->getId();
+        //in case account was created during checkout
+        if ($customerId === 0 && is_user_logged_in()) {
+            $newWcCustomer = new \WC_Customer($wcSession->get_customer_id());
+
+            $reflection = new \ReflectionClass($newWcCustomer);
+            $property = $reflection->getProperty('changes');
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+            $property->setValue($newWcCustomer, $wcCustomer->get_changes());
+
+            $customer = $converter->convertFromWcCustomer($newWcCustomer, $wcSession);
+        }
+        $userMeta = get_user_meta($customerId);
         $customer->setMetaData($userMeta ? $userMeta : array());
 
         $cartContext = new CartContext($customer, $context);
@@ -99,6 +88,7 @@ class CartBuilder
     {
         $pos = 0;
 
+        $adapter = new ToPricingCartItemAdapter();
         foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
             $wrapper = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
             $wrapper->withContext($this->context);
@@ -107,37 +97,8 @@ class CartBuilder
                 continue;
             }
 
-            $item = $wrapper->createItem();
-            if ($item) {
-                $item->setPos($pos);
-
-                if ($this->bundlesCmp->isBundled($wrapper)) {
-                    $item->addAttr($item::ATTR_IMMUTABLE);
-                }
-
-                if ($this->wpcBundlesCmp->isBundled($wrapper)) {
-                    $item->addAttr($item::ATTR_IMMUTABLE);
-                }
-
-                if ($this->wpcBundlesCmp->isSmartBundle($wrapper)) {
-                    $item->addAttr($item::ATTR_IMMUTABLE);
-                }
-
-                if ((new WcSubscriptionsCmp())->isRenewalSubscription($wrapper)) {
-                    $item->addAttr($item::ATTR_IMMUTABLE);
-                }
-
-                if ($this->compositeCmp->isCompositeItem($wrapper)) {
-                    if ($this->compositeCmp->isAllowToProcessPricedIndividuallyItems()) {
-                        if ($this->compositeCmp->isCompositeItemNotPricedIndividually($wrapper, $wcCart)) {
-                            $item->addAttr($item::ATTR_IMMUTABLE);
-                        }
-                    } else {
-                        $item->addAttr($item::ATTR_IMMUTABLE);
-                    }
-                }
-
-                $cart->addToCart($item);
+            if ( ! $adapter->adaptFacadeAndPutIntoCart($cart, $wrapper, $pos) ) {
+                continue;
             }
 
             $pos++;
@@ -153,20 +114,42 @@ class CartBuilder
      */
     public function addOriginCoupons($cart, $wcCart)
     {
-        if ( ! ($wcCart instanceof WC_Cart)) {
+        if (!($wcCart instanceof WC_Cart)) {
             return;
         }
 
         $adpCoupons = $cart->getContext()->getSession()->getAdpCoupons();
+        $adpApliedCoupons = $cart->getContext()->getSession()->getAdpApliedCoupons();
 
-        foreach ($wcCart->get_coupons() as $code => $coupon) {
-            /** @var $coupon WC_Coupon */
+        $pointAndRewardsCmp = new PointsAndRewardsForWoocommerceCmp();
 
-            if ($coupon->is_valid()) {
-                if ($coupon->get_discount_type('edit') === WcCouponFacade::TYPE_ADP_RULE_TRIGGER) {
-                    $cart->addRuleTriggerCoupon($coupon->get_code('edit'));
-                } elseif (!$coupon->get_meta('adp', true) && !in_array($code, $adpCoupons)) {
-                    $cart->addOriginCoupon($code);
+        foreach ($wcCart->get_coupons() as $codeAsKey => $wcCoupon) {
+            /** @var $wcCoupon WC_Coupon */
+            $couponCode = $wcCoupon->get_code('edit');
+
+            if ($pointAndRewardsCmp->isActive()
+                && $pointAndRewardsCmp->isPointsAndRewardsCoupon($codeAsKey, $wcCoupon)
+            ) {
+                $couponCode = $pointAndRewardsCmp->getPointsAndRewardsCoupon($codeAsKey, $wcCoupon);
+            }
+
+            if ($this->context->isUseMergedCoupons()) {
+                $mergedCoupon = WcAdpMergedCouponHelper::loadOfCoupon($wcCoupon);
+
+                if ((new \WC_Discounts(WC()->cart))->is_coupon_valid($wcCoupon)) {
+                    if ($mergedCoupon->hasRuleTriggerPart()) {
+                        $cart->addRuleTriggerCoupon($couponCode);
+                    } elseif (!$mergedCoupon->hasAdpPart() && !in_array($couponCode, $adpApliedCoupons)) {
+                        $cart->addOriginCoupon($couponCode);
+                    }
+                }
+            } else {
+                if ($wcCoupon->is_valid()) {
+                    if ($wcCoupon->get_discount_type('edit') === WcCouponFacade::TYPE_ADP_RULE_TRIGGER) {
+                        $cart->addRuleTriggerCoupon($couponCode);
+                    } elseif (!$wcCoupon->get_meta('adp', true) && !in_array($couponCode, $adpCoupons)) {
+                        $cart->addOriginCoupon($couponCode);
+                    }
                 }
             }
         }

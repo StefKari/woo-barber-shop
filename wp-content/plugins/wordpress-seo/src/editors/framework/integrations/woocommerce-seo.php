@@ -1,4 +1,5 @@
 <?php
+
 // @phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- This namespace should reflect the namespace of the original class.
 namespace Yoast\WP\SEO\Editors\Framework\Integrations;
 
@@ -38,7 +39,7 @@ class WooCommerce_SEO implements Integration_Data_Provider_Interface {
 	/**
 	 * Return this object represented by a key value array.
 	 *
-	 * @return array<string,bool> Returns the name and if the addon is enabled.
+	 * @return array<string, bool> Returns the name and if the addon is enabled.
 	 */
 	public function to_array(): array {
 		return [ 'isWooCommerceSeoActive' => $this->is_enabled() ];
@@ -47,7 +48,7 @@ class WooCommerce_SEO implements Integration_Data_Provider_Interface {
 	/**
 	 * Returns this object represented by a key value structure that is compliant with the script data array.
 	 *
-	 * @return array<string,bool> Returns the legacy key and if the feature is enabled.
+	 * @return array<string, bool> Returns the legacy key and if the feature is enabled.
 	 */
 	public function to_legacy_array(): array {
 		return [ 'isWooCommerceSeoActive' => $this->is_enabled() ];

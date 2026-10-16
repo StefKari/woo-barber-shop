@@ -3,19 +3,18 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "de_DE"
          },
-         "Clean up the String Translation table by removing untranslated strings by domain.": [
-            "Bereinigen Sie die String-Übersetzungstabelle, indem Sie unübersetzte Strings nach Domäne entfernen."
-         ],
-         "Translated with PTC": [
-            "Mit PTC übersetzt"
+         "Clean up the <b>String Translation</b> table by removing <strong>untranslated</strong> strings by domain.": [
+            "Bereinigen Sie die <b>String-Übersetzung</b>-Tabelle, indem Sie <strong>nicht übersetzte</strong> Strings nach Domain entfernen."
          ],
          "Remove strings by domain": [
-            "Strings nach Domäne entfernen"
+            "Strings nach Domain entfernen"
          ],
          "Remove strings": [
-            "Zeichenketten entfernen"
+            "Strings entfernen"
          ],
          "Cancel": [
             "Abbrechen"
@@ -23,38 +22,44 @@
          "Remove": [
             "Entfernen"
          ],
-         "The String Translation table currently contains strings from the domains listed below. If you do not plan to translate strings from a particular domain, select it below to remove its untranslated strings from the String Translation table. Any strings that already have translations will still be available.": [
-            "Die Tabelle Zeichenfolgenübersetzung enthält derzeit Zeichenfolgen aus den unten aufgeführten Bereichen. Wenn Sie nicht vorhaben, Zeichenfolgen aus einer bestimmten Domäne zu übersetzen, wählen Sie diese unten aus, um die nicht übersetzten Zeichenfolgen aus der Tabelle Zeichenfolgenübersetzung zu entfernen. Alle Zeichenfolgen, für die bereits Übersetzungen vorliegen, sind weiterhin verfügbar."
+         "The <b>String Translation</b> table currently contains strings from the domains listed below. If you do not plan to translate strings from a particular domain, select it below to remove its <strong>untranslated</strong> strings from the <b>String Translation</b> table. Any strings that already have translations will still be available.": [
+            "Die <b>String-Übersetzung</b>-Tabelle enthält derzeit Strings aus den unten aufgeführten Domains. Wenn Sie nicht planen, Strings aus einer bestimmten Domain zu übersetzen, wählen Sie diese unten aus, um deren <strong>nicht übersetzte</strong> Strings aus der <b>String-Übersetzung</b>-Tabelle zu entfernen. Alle Strings, die bereits Übersetzungen haben, bleiben weiterhin verfügbar."
          ],
          "Search": [
             "Suchen"
          ],
-         "Removing strings from String Translation table": [
-            "Strings aus der String-Übersetzungstabelle entfernen"
+         "Strings that are queued for translation, in progress, or waiting for a retry.": [
+            "Strings, die für die Übersetzung in der Warteschlange stehen, in Bearbeitung sind oder auf eine Wiederholung warten."
          ],
-         "To add strings back to the String Translation table, you may need to rescan translation files or register strings as translatable.": [
-            "Um Zeichenketten wieder in die Zeichenketten-Übersetzungstabelle aufzunehmen, müssen Sie möglicherweise die Übersetzungsdateien erneut durchsuchen oder Zeichenketten als übersetzbar registrieren."
+         "Also remove strings waiting for translation": [
+            "Auch auf Übersetzung wartende Strings entfernen"
          ],
-         "Read more about ": [
-            "Lesen Sie mehr über "
+         "Removing strings from <b>String Translation</b> table": [
+            "Strings werden aus der <b>String-Übersetzung</b>-Tabelle entfernt"
          ],
-         "scanning your site for strings and registering them as translatable.": [
-            "Ihre Website nach Zeichenketten durchsucht und diese als übersetzbar registriert."
+         "To add strings back to the <b>String Translation</b> table, you may need to rescan translation files or register strings as translatable.": [
+            "Um Strings wieder zur <b>String-Übersetzung</b>-Tabelle hinzuzufügen, musst Du möglicherweise die Übersetzungsdateien neu durchsuchen oder Strings als übersetzbar registrieren."
+         ],
+         "Read more about <a>scanning your site for strings and registering them as translatable</a>.": [
+            "Erfahre mehr über das <a>Durchsuchen Deiner Website nach Strings und deren Registrierung als übersetzbar</a>."
          ],
          "Successfully removed strings": [
-            "Erfolgreich entfernte Strings"
+            "Strings erfolgreich entfernt"
          ],
          "OK, Great": [
-            "OK, toll"
+            "OK, super"
          ],
          "Domain": [
             "Domain"
          ],
          "Strings count": [
-            "Strings zählen"
+            "Anzahl der Strings"
          ],
          "Translated strings": [
-            "Übersetzte Zeichenfolgen"
+            "Übersetzte Strings"
+         ],
+         "Removing strings stopped before it finished. The strings that were not removed are still in the table. Try again to remove them.": [
+            "Das Entfernen der Strings wurde abgebrochen, bevor es abgeschlossen war. Die Strings, die nicht entfernt wurden, befinden sich noch in der Tabelle. Versuchen Sie erneut, sie zu entfernen."
          ]
       }
    }

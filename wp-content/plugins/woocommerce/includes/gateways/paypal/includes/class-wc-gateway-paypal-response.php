@@ -5,6 +5,8 @@
  * @package WooCommerce\Gateways
  */
 
+use Automattic\WooCommerce\Enums\OrderStatus;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -32,7 +34,7 @@ abstract class WC_Gateway_Paypal_Response {
 		$custom = json_decode( $raw_custom );
 		if ( $custom && is_object( $custom ) ) {
 			$order_id  = $custom->order_id;
-			$order_key = $custom->order_key;
+			$order_key = is_string( $custom->order_key ) ? $custom->order_key : '';
 		} else {
 			// Nothing was found.
 			WC_Gateway_Paypal::log( 'Order ID and key were not found in "custom".', 'error' );
@@ -63,7 +65,7 @@ abstract class WC_Gateway_Paypal_Response {
 	 * @param  string   $note Payment note.
 	 */
 	protected function payment_complete( $order, $txn_id = '', $note = '' ) {
-		if ( ! $order->has_status( array( 'processing', 'completed' ) ) ) {
+		if ( ! $order->has_status( array( OrderStatus::PROCESSING, OrderStatus::COMPLETED ) ) ) {
 			$order->add_order_note( $note );
 			$order->payment_complete( $txn_id );
 
@@ -80,7 +82,7 @@ abstract class WC_Gateway_Paypal_Response {
 	 * @param  string   $reason Reason why the payment is on hold.
 	 */
 	protected function payment_on_hold( $order, $reason = '' ) {
-		$order->update_status( 'on-hold', $reason );
+		$order->update_status( OrderStatus::ON_HOLD, $reason );
 
 		if ( isset( WC()->cart ) ) {
 			WC()->cart->empty_cart();

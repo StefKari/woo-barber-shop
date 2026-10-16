@@ -10,6 +10,8 @@
  * @version 3.9.0
  */
 
+use Automattic\WooCommerce\Enums\DefaultCustomerAddress;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -45,10 +47,10 @@ class WC_Geolocation {
 	 * @var array
 	 */
 	private static $ip_lookup_apis = array(
-		'ipify'             => 'http://api.ipify.org/',
-		'ipecho'            => 'http://ipecho.net/plain',
-		'ident'             => 'http://ident.me',
-		'whatismyipaddress' => 'http://bot.whatismyipaddress.com',
+		'ipify'  => 'https://api64.ipify.org',
+		'ipecho' => 'https://ipecho.net/plain',
+		'ident'  => 'https://ident.me',
+		'tnedi'  => 'https://tnedi.me',
 	);
 
 	/**
@@ -58,7 +60,7 @@ class WC_Geolocation {
 	 */
 	private static $geoip_apis = array(
 		'ipinfo.io'  => 'https://ipinfo.io/%s/json',
-		'ip-api.com' => 'http://ip-api.com/json/%s',
+		'country.is' => 'https://api.country.is/%s',
 	);
 
 	/**
@@ -69,7 +71,7 @@ class WC_Geolocation {
 	 * @return bool
 	 */
 	private static function is_geolocation_enabled( $current_settings ) {
-		return in_array( $current_settings, array( 'geolocation', 'geolocation_ajax' ), true );
+		return in_array( $current_settings, array( DefaultCustomerAddress::GEOLOCATION, DefaultCustomerAddress::GEOLOCATION_AJAX ), true );
 	}
 
 	/**
@@ -83,9 +85,15 @@ class WC_Geolocation {
 		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 			// Proxy servers can send through this header like this: X-Forwarded-For: client1, proxy1, proxy2
 			// Make sure we always only send through the first IP in the list which should always be the client IP.
-			return (string) rest_is_ip_address( trim( current( preg_split( '/,/', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ) ) ) );
+			$value = trim( current( preg_split( '/,/', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ) ) );
+			// Account for the '<IPv4 address>:<port>', '[<IPv6>]' and '[<IPv6>]:<port>' cases, removing the port.
+			// The regular expression is oversimplified on purpose, later 'rest_is_ip_address' will do the actual IP address validation.
+			$value = preg_replace( '/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\:.*|\[([^]]+)\].*/', '$1$2', $value );
+			return (string) rest_is_ip_address( $value );
 		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-			return sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
+			// Make sure we always only send through the first IP in the list which should always be the client IP.
+			$value = trim( current( preg_split( '/,/', sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) ) ) );
+			return (string) rest_is_ip_address( $value );
 		}
 		return '';
 	}
@@ -113,7 +121,13 @@ class WC_Geolocation {
 
 			foreach ( $ip_lookup_services_keys as $service_name ) {
 				$service_endpoint = $ip_lookup_services[ $service_name ];
-				$response         = wp_safe_remote_get( $service_endpoint, array( 'timeout' => 2 ) );
+				$response         = wp_safe_remote_get(
+					$service_endpoint,
+					array(
+						'timeout'    => 2,
+						'user-agent' => 'WooCommerce/' . wc()->version,
+					)
+				);
 
 				if ( ! is_wp_error( $response ) && rest_is_ip_address( $response['body'] ) ) {
 					$external_ip_address = apply_filters( 'woocommerce_geolocation_ip_lookup_api_response', wc_clean( $response['body'] ), $service_name );
@@ -121,7 +135,7 @@ class WC_Geolocation {
 				}
 			}
 
-			set_transient( $transient_name, $external_ip_address, WEEK_IN_SECONDS );
+			set_transient( $transient_name, $external_ip_address, DAY_IN_SECONDS );
 		}
 
 		return $external_ip_address;
@@ -136,7 +150,16 @@ class WC_Geolocation {
 	 * @return array
 	 */
 	public static function geolocate_ip( $ip_address = '', $fallback = false, $api_fallback = true ) {
-		// Filter to allow custom geolocation of the IP address.
+		/**
+		 * Filter to allow custom geolocation of the IP address.
+		 *
+		 * @since 3.9.0
+		 * @param string $geolocation Country code.
+		 * @param string $ip_address IP Address.
+		 * @param bool $fallback If true, fallbacks to alternative IP detection (can be slower).
+		 * @param bool $api_fallback If true, uses geolocation APIs if the database file doesn't exist (can be slower).
+		 * @return string
+		 */
 		$country_code = apply_filters( 'woocommerce_geolocate_ip', false, $ip_address, $fallback, $api_fallback );
 
 		if ( false !== $country_code ) {
@@ -149,10 +172,9 @@ class WC_Geolocation {
 		}
 
 		if ( empty( $ip_address ) ) {
-			$ip_address = self::get_ip_address();
+			$ip_address   = self::get_ip_address();
+			$country_code = self::get_country_code_from_headers();
 		}
-
-		$country_code = self::get_country_code_from_headers();
 
 		/**
 		 * Get geolocation filter.
@@ -161,10 +183,10 @@ class WC_Geolocation {
 		 * @param array  $geolocation Geolocation data, including country, state, city, and postcode.
 		 * @param string $ip_address  IP Address.
 		 */
-		$geolocation  = apply_filters(
+		$geolocation = apply_filters(
 			'woocommerce_get_geolocation',
 			array(
-				'country'  => $country_code,
+				'country'  => $country_code ? $country_code : '',
 				'state'    => '',
 				'city'     => '',
 				'postcode' => '',
@@ -277,15 +299,23 @@ class WC_Geolocation {
 
 			foreach ( $geoip_services_keys as $service_name ) {
 				$service_endpoint = $geoip_services[ $service_name ];
-				$response         = wp_safe_remote_get( sprintf( $service_endpoint, $ip_address ), array( 'timeout' => 2 ) );
+				$response         = wp_safe_remote_get(
+					sprintf( $service_endpoint, $ip_address ),
+					array(
+						'timeout'    => 2,
+						'user-agent' => 'WooCommerce/' . wc()->version,
+					)
+				);
 
 				if ( ! is_wp_error( $response ) && $response['body'] ) {
 					switch ( $service_name ) {
 						case 'ipinfo.io':
+						case 'country.is':
 							$data         = json_decode( $response['body'] );
 							$country_code = isset( $data->country ) ? $data->country : '';
 							break;
 						case 'ip-api.com':
+							// Not a default provider (HTTP-only), but retained so extensions that re-add it via the woocommerce_geolocation_geoip_apis filter keep working.
 							$data         = json_decode( $response['body'] );
 							$country_code = isset( $data->countryCode ) ? $data->countryCode : ''; // @codingStandardsIgnoreLine
 							break;
@@ -302,7 +332,7 @@ class WC_Geolocation {
 				}
 			}
 
-			set_transient( 'geoip_' . $ip_address, $country_code, WEEK_IN_SECONDS );
+			set_transient( 'geoip_' . $ip_address, $country_code, DAY_IN_SECONDS );
 		}
 
 		return $country_code;
@@ -331,7 +361,7 @@ class WC_Geolocation {
 		wc_deprecated_function( 'WC_Geolocation::disable_geolocation_on_legacy_php', '3.9.0' );
 
 		if ( self::is_geolocation_enabled( $default_customer_address ) ) {
-			$default_customer_address = 'base';
+			$default_customer_address = DefaultCustomerAddress::BASE;
 		}
 
 		return $default_customer_address;

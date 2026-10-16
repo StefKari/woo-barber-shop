@@ -7,7 +7,6 @@ use WPML\StringTranslation\Infrastructure\Factory;
 
 class SaveProcessedStringsCommand implements SaveProcessedStringsCommandInterface {
 
-	/** @var Factory */
 	private $factory;
 
 	public function __construct(
@@ -16,7 +15,7 @@ class SaveProcessedStringsCommand implements SaveProcessedStringsCommandInterfac
 		$this->factory = $factory;
 	}
 
-	public function run( string $domain, array $strings ) {
-		$this->factory->getSaveProcessedStringsCommand()->run( $domain, $strings );
+	public function run( string $domain, array $strings ) : bool {
+		return $this->factory->getSaveProcessedStringsCommand()->run( $domain, $strings );
 	}
 }

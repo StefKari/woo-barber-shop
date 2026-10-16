@@ -9,19 +9,16 @@ use WPML\StringTranslation\Application\StringCore\Domain\StringTranslation;
 
 class TranslationsRepository implements TranslationsRepositoryInterface {
 
-	/* @var SettingsRepositoryInterface */
 	private $settingsRepository;
 
 	public function __construct( SettingsRepositoryInterface $settingsRepository ) {
 		$this->settingsRepository = $settingsRepository;
 	}
 
-	public function isTranslationAvailable( string $text, string $domain, string $context = null ): bool {
-		// Use WP i18n global to determine if the string is translated
+	public function isTranslationAvailable( string $text, string $domain, ?string $context = null ): bool {
 		global $l10n;
 		$translations = get_translations_for_domain( $domain );
 
-		// WP_Translation_Controller is for WP 6.5.
 		if ( class_exists('\WP_Translation_Controller') || method_exists( $translations, 'translate' ) ) {
 			$translation = $translations->translate( $text, $context );
 			return $translation !== $text;
@@ -38,13 +35,7 @@ class TranslationsRepository implements TranslationsRepositoryInterface {
 		}
 	}
 
-	/*
-	 * @param Translations|NOOP_Translations $translations
-	 *
-	 * @return string|null
-	 */
-	private function getTranslatedStringText( $translations, string $text, string $context = null ) {
-		// WP_Translation_Controller is for WP 6.5.
+	private function getTranslatedStringText( $translations, string $text, ?string $context = null ) {
 		if ( class_exists('\WP_Translation_Controller') || method_exists( $translations, 'translate' ) ) {
 			$translation = $translations->translate( $text, $context );
 			return ( $translation === $text ) ? null : $translation;
@@ -65,24 +56,87 @@ class TranslationsRepository implements TranslationsRepositoryInterface {
 		}
 	}
 
-	/**
-	 * @param StringItem[] $strings
-	 *
-	 * @return StringTranslation[]
-	 */
 	public function createEntitiesForExistingTranslations( array $strings ) {
 		if ( count( $strings ) === 0 ) {
 			return [];
 		}
 
 		$stringTranslations = [];
-		$activeLocales      = $this->settingsRepository->getActiveSecondaryLanguageLocales();
-		$defaultLanguage    = $this->settingsRepository->getDefaultLanguageCode();
-		if ( $defaultLanguage !== 'en' ) {
-			array_unshift( $activeLocales, $this->settingsRepository->getDefaultLanguageLocaleCode() );
+
+		foreach ( $this->settingsRepository->getStringHarvestLanguageLocalePairs() as $pair ) {
+			if (
+				! isset( $pair['languageCode'], $pair['locale'] )
+				|| ! is_string( $pair['languageCode'] )
+				|| ! is_string( $pair['locale'] )
+			) {
+				continue;
+			}
+
+			$stringTranslations = array_merge(
+				$stringTranslations,
+				$this->createEntitiesForExistingTranslationsForLocaleInternal(
+					$strings,
+					$pair['locale'],
+					true,
+					$pair['languageCode']
+				)
+			);
 		}
 
-		$domains = array_values(
+		return $stringTranslations;
+	}
+
+	public function createEntitiesForExistingTranslationsForLocale( array $strings, string $locale, string $languageCode ) {
+		return $this->createEntitiesForExistingTranslationsForLocaleInternal(
+			$strings,
+			$locale,
+			false,
+			$languageCode
+		);
+	}
+
+	private function createEntitiesForExistingTranslationsForLocaleInternal(
+		array $strings,
+		string $locale,
+		bool $attachTranslations,
+		string $languageCode
+	) {
+		if ( count( $strings ) === 0 || '' === $languageCode ) {
+			return [];
+		}
+
+		$domains = $this->getDomains( $strings );
+		$this->settingsRepository->switchToLocale( $locale, $domains, $languageCode );
+
+		try {
+			if ( \WPML\LIB\WP\WordPress::versionCompare( '<', '6.2.000' ) && determine_locale() !== $locale ) {
+				return [];
+			}
+
+			load_default_textdomain( $locale );
+			foreach ( $this->getTranslationFilepathsByDomainForLocale( $strings, $locale ) as $domain => $filepaths ) {
+				foreach ( $filepaths as $filepath ) {
+					load_textdomain( $domain, $filepath, $locale );
+				}
+			}
+
+			return $this->getTranslations( $strings, $languageCode, $attachTranslations );
+		} finally {
+			$this->settingsRepository->restorePreviousLocale();
+		}
+	}
+
+	public function getTranslationFilepathsForLocale( array $strings, string $locale ): array {
+		$filepaths = [];
+		foreach ( $this->getTranslationFilepathsByDomainForLocale( $strings, $locale ) as $domainFilepaths ) {
+			$filepaths = array_merge( $filepaths, $domainFilepaths );
+		}
+
+		return array_values( array_unique( $filepaths ) );
+	}
+
+	private function getDomains( array $strings ): array {
+		return array_values(
 			array_unique(
 				array_map(
 					function( $string ) {
@@ -92,47 +146,29 @@ class TranslationsRepository implements TranslationsRepositoryInterface {
 				)
 			)
 		);
-
-		foreach ( $activeLocales as $activeLocale ) {
-			$this->settingsRepository->switchToLocale(
-				$activeLocale,
-				$domains
-			);
-			/**
-			 * This is required because before WP 6.2 sitepress functions called in switchToLocale did not set up
-			 * proper locale and we can get incorrect translations loaded, like for Japanese $activeLocale we could
-			 * load English translations.
-			 */
-			if ( \WPML\LIB\WP\WordPress::versionCompare( '<', '6.2.000') ) {
-				$currentLocale = determine_locale();
-				if ( $currentLocale !== $activeLocale ) {
-					$this->settingsRepository->restorePreviousLocale();
-					continue;
-				}
-			}
-			load_default_textdomain( $activeLocale );
-			array_map(
-				function( $domain ) use ( $activeLocale ) {
-					$filepathes = apply_filters( 'wpml_st_get_filepathes_for_translation_files', $domain, $activeLocale );
-					if ( is_iterable( $filepathes ) ) {
-						foreach ( $filepathes as $filepath ) {
-							load_textdomain( $domain, $filepath, $activeLocale );
-						}
-					}
-				},
-				$domains
-			);
-			$stringTranslations = array_merge(
-				$stringTranslations,
-				$this->getTranslations( $strings, explode( '_', $activeLocale )[0] )
-			);
-			$this->settingsRepository->restorePreviousLocale();
-		}
-
-		return $stringTranslations;
 	}
 
-	private function getTranslations( array $strings, string $language ): array {
+	private function getTranslationFilepathsByDomainForLocale( array $strings, string $locale ): array {
+		$filepathsByDomain = [];
+		foreach ( $this->getDomains( $strings ) as $domain ) {
+			$filteredFilepaths = apply_filters( 'wpml_st_get_filepathes_for_translation_files', $domain, $locale );
+			$filepaths         = [];
+
+			if ( is_array( $filteredFilepaths ) || $filteredFilepaths instanceof \Traversable ) {
+				foreach ( $filteredFilepaths as $filepath ) {
+					if ( is_string( $filepath ) && strlen( $filepath ) > 0 ) {
+						$filepaths[] = $filepath;
+					}
+				}
+			}
+
+			$filepathsByDomain[ $domain ] = array_values( array_unique( $filepaths ) );
+		}
+
+		return $filepathsByDomain;
+	}
+
+	private function getTranslations( array $strings, string $language, bool $attachTranslations = true ): array {
 		$stringTranslations   = [];
 		$translationsByDomain = [];
 
@@ -149,13 +185,15 @@ class TranslationsRepository implements TranslationsRepositoryInterface {
 			);
 			if ( $translation ) {
 				$stringTranslation = new StringTranslation(
-					$string,
 					$language,
-					$translation
+					$translation,
+					$string
 				);
 
 				$stringTranslations[] = $stringTranslation;
-				$string->addTranslation( $stringTranslation );
+				if ( $attachTranslations ) {
+					$string->addTranslation( $stringTranslation );
+				}
 			}
 		}
 

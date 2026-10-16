@@ -99,4 +99,12 @@ class RemovedFreeItems
     {
         $this->removed = array();
     }
+
+    public function toArray() 
+    {
+        return [
+            'associatedGiftHash' => $this->associatedGiftHash,
+            'removed' => array_filter($this->removed),
+        ];
+    }
 }

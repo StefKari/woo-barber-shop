@@ -5,6 +5,7 @@ namespace ADP\BaseVersion\Includes\Core\Rule;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAdd;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAddsCollection;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Gift;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\GiftsCollection;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\PackageItem;
@@ -13,6 +14,8 @@ use ADP\BaseVersion\Includes\Core\RuleProcessor\PackageRuleProcessor;
 use ADP\BaseVersion\Includes\Core\Rule\PackageRule\ProductsAdjustmentSplit;
 use ADP\BaseVersion\Includes\Core\Rule\PackageRule\ProductsAdjustmentTotal;
 use ADP\BaseVersion\Includes\Core\Rule\PackageRule\PackageRangeAdjustments;
+use ADP\BaseVersion\Includes\Core\Rule\PackageRule\ConditionMessageSplit;
+use ADP\BaseVersion\Includes\Core\Rule\PackageRule\ConditionMessageTotal;
 use Exception;
 
 defined('ABSPATH') or exit;
@@ -28,6 +31,11 @@ class PackageRule extends BaseRule implements Rule
      * @var ProductsAdjustmentTotal|ProductsAdjustmentSplit
      */
     protected $productAdjustmentHandler;
+
+    /**
+     * @var ConditionMessageTotal|ConditionMessageSplit
+     */
+    protected $conditionMessageHandler;
 
     /**
      * @var PackageRangeAdjustments
@@ -100,6 +108,11 @@ class PackageRule extends BaseRule implements Rule
     protected $autoAddRemoveDisable = false;
 
     /**
+     * @var bool
+     */
+    protected $autoAddShowAsRecommended = false;
+
+    /**
      * @var string
      */
     protected $autoAddStrategy;
@@ -144,6 +157,16 @@ class PackageRule extends BaseRule implements Rule
      */
     protected $maxAmountForGifts;
 
+    /**
+     * @var Discount|null
+     */
+    protected $itemGiftsDiscount;
+
+    /**
+     * @var bool
+     */
+    protected $isGiftsBelowCheapestItem;
+
     const APPLY_FIRST_TO_EXPENSIVE = 'expensive';
     const APPLY_FIRST_TO_CHEAP = 'cheap';
     const APPLY_FIRST_AS_APPEAR = 'appeared';
@@ -170,6 +193,8 @@ class PackageRule extends BaseRule implements Rule
         $this->itemGiftSubtotalDivider = null;
         $this->roleDiscounts           = array();
         $this->maxAmountForGifts       = null;
+        $this->itemGiftsDiscount       = null;
+        $this->isGiftsBelowCheapestItem = false;
     }
 
     public function __clone()
@@ -179,6 +204,10 @@ class PackageRule extends BaseRule implements Rule
         }, $this->packages);
 
         $this->itemGiftsCollection = clone $this->itemGiftsCollection;
+
+        if ($this->itemGiftsDiscount) {
+            $this->itemGiftsDiscount = clone $this->itemGiftsDiscount;
+        }
 
         $this->roleDiscounts = array_map(function ($item) {
             return clone $item;
@@ -190,6 +219,10 @@ class PackageRule extends BaseRule implements Rule
 
         if ($this->productRangeAdjustmentHandler) {
             $this->productRangeAdjustmentHandler = clone $this->productRangeAdjustmentHandler;
+        }
+
+        if ($this->conditionMessageHandler) {
+            $this->conditionMessageHandler = clone $this->conditionMessageHandler;
         }
     }
 
@@ -271,6 +304,16 @@ class PackageRule extends BaseRule implements Rule
     }
 
     /**
+     * @param ConditionMessageTotal|ConditionMessageSplit $handler
+     */
+    public function installConditionMessageHandler($handler)
+    {
+        if ($handler instanceof ConditionMessageTotal || $handler instanceof ConditionMessageSplit) {
+            $this->conditionMessageHandler = $handler;
+        }
+    }
+
+    /**
      * @return ProductsAdjustmentTotal|ProductsAdjustmentSplit
      */
     public function getProductAdjustmentHandler()
@@ -287,6 +330,14 @@ class PackageRule extends BaseRule implements Rule
     }
 
     /**
+     * @param ConditionMessageTotal|ConditionMessageSplit $handler
+     */
+    public function getConditionMessageHandler()
+    {
+        return $this->conditionMessageHandler;
+    }
+
+    /**
      * @return bool
      */
     public function hasProductAdjustment()
@@ -300,6 +351,14 @@ class PackageRule extends BaseRule implements Rule
     public function hasProductRangeAdjustment()
     {
         return isset($this->productRangeAdjustmentHandler) && $this->productRangeAdjustmentHandler->isValid();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasConditionMessage()
+    {
+        return isset($this->conditionMessageHandler) && $this->conditionMessageHandler->isValid();
     }
 
     /**
@@ -561,6 +620,22 @@ class PackageRule extends BaseRule implements Rule
     }
 
     /**
+     * @return bool
+     */
+    public function getAutoAddShowAsRecommended()
+    {
+        return $this->autoAddShowAsRecommended;
+    }
+
+    /**
+     * @param bool $autoAddShowAsRecommended
+     */
+    public function setAutoAddShowAsRecommended($autoAddShowAsRecommended)
+    {
+        $this->autoAddShowAsRecommended = boolval($autoAddShowAsRecommended);
+    }
+
+    /**
      * @return array<int, RoleDiscount>
      */
     public function getRoleDiscounts()
@@ -667,5 +742,37 @@ class PackageRule extends BaseRule implements Rule
     public function getMaxAmountForGifts()
     {
         return $this->maxAmountForGifts;
+    }
+
+    /**
+     * @param Discount|null $discount
+     */
+    public function setItemGiftsDiscount($discount)
+    {
+        $this->itemGiftsDiscount = $discount instanceof Discount ? $discount : null;
+    }
+
+    /**
+     * @return Discount|null
+     */
+    public function getItemGiftsDiscount()
+    {
+        return $this->itemGiftsDiscount;
+    }
+
+    /**
+     * @param bool $isGiftsBelowCheapestItem
+     */
+    public function setGiftsBelowCheapestItem($isGiftsBelowCheapestItem)
+    {
+        $this->isGiftsBelowCheapestItem = $isGiftsBelowCheapestItem;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGiftsBelowCheapestItem()
+    {
+        return $this->isGiftsBelowCheapestItem;
     }
 }

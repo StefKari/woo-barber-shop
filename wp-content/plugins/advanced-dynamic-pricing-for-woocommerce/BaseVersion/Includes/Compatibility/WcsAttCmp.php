@@ -43,11 +43,40 @@ class WcsAttCmp
     public function loadRequirements()
     {
         if ( ! did_action('plugins_loaded')) {
-            _doing_it_wrong(__FUNCTION__, sprintf(__('%1$s should not be called earlier the %2$s action.',
-                'advanced-dynamic-pricing-for-woocommerce'), 'loadRequirements', 'plugins_loaded'), WC_ADP_VERSION);
+            /* translators: Message about the load order*/
+            _doing_it_wrong(__FUNCTION__, sprintf(esc_html__('%1$s should not be called earlier the %2$s action.',
+                'advanced-dynamic-pricing-for-woocommerce'), 'loadRequirements', 'plugins_loaded'), esc_html(WC_ADP_VERSION));
         }
 
         $this->wcsAtt = class_exists("\WCS_ATT") ? \WCS_ATT::instance() : null;
+
+        if ($this->isActive() && class_exists('\WCS_ATT_Display_Cart')) {
+            remove_filter('woocommerce_cart_item_price', array('\WCS_ATT_Display_Cart', 'show_cart_item_subscription_options'), 1000);
+            add_filter('woocommerce_cart_item_price', array('\WCS_ATT_Display_Cart', 'show_cart_item_subscription_options'), 10001, 3);
+        }
+
+        if ($this->isActive() && isset($this->wcsAtt->product_data) ) {
+            ADP_WCS_ATT_Product_Data_Wrapper::init();
+            $this->wcsAtt->product_data = new ADP_WCS_ATT_Product_Data_Wrapper();
+            $this->pinProductData($this->wcsAtt->product_data);
+        }
+    }
+
+    protected function pinProductData($wrapper)
+    {
+        if ( ! class_exists('\WCS_ATT_Product_Data')) {
+            return;
+        }
+
+        try {
+            $property = new \ReflectionProperty('WCS_ATT_Product_Data', '_instance');
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+            $property->setValue(null, $wrapper);
+        } catch (\ReflectionException $e) {
+
+        }
     }
 
     /**
@@ -56,5 +85,57 @@ class WcsAttCmp
     public function isActive()
     {
         return ! is_null($this->wcsAtt) && ($this->wcsAtt instanceof \WCS_ATT);
+    }
+}
+
+if (!class_exists('ADP_WCS_ATT_Product_Data_Wrapper')) {
+    class ADP_WCS_ATT_Product_Data_Wrapper {
+        private static $key = '_adp_wcsatt_';
+        public static function init() {
+            self::add_hooks();
+        }
+
+        private static function add_hooks() {
+            add_action( 'add_post_metadata', array( __CLASS__, 'ignore_adp_wcsatt_runtime_meta' ), 10, 3 );
+            add_action( 'update_post_metadata', array( __CLASS__, 'ignore_adp_wcsatt_runtime_meta' ), 10, 3 );
+        }
+
+        public function get($product, $key, $default = null) {
+            if (method_exists($product, 'get_meta')) {
+                $data = $product->get_meta(self::$key, true);
+                if( is_array($data) AND isset($data[$key]) ) {
+                    return $data[$key];
+                }
+            }
+            return $default;
+        }
+
+        public function set($product, $key, $value) {
+            $data = $product->get_meta(self::$key, true);
+            if( empty($data) )
+                $data = array();
+            $data[$key] = $value;
+            if (method_exists($product, 'update_meta_data')) {
+                $product->add_meta_data(self::$key, $data);
+            }
+        }
+
+        public function delete($product, $key) {
+            $data = $product->get_meta(self::$key, true);
+            if( empty($data) )
+                $data = array();
+            unset( $data[$key] );
+            if (method_exists($product, 'update_meta_data')) {
+                $product->add_meta_data(self::$key, $data);
+            }
+            return false;
+        }
+
+        public static function ignore_adp_wcsatt_runtime_meta( $check, $object_id, $meta_key ) {
+            if ( self::$key !== $meta_key ) {
+                return $check;
+            }
+            return 0;
+        }
     }
 }

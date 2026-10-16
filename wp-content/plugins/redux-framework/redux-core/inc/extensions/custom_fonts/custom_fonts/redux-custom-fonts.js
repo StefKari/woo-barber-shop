@@ -159,7 +159,8 @@
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'redux_custom_font_timer'
+					action: 'redux_custom_font_timer',
+					nonce: el.find( '.media_add_font' ).attr( 'data-nonce' ),
 				},
 				beforeSend: function () {
 
@@ -248,12 +249,11 @@
 					nonce: nonce,
 					attachment_id: attachment.id,
 					title: attachment.attributes.title,
-					mime: attachment.attributes.mime,
 					filename: attachment.attributes.filename,
 					conversion: Boolean( conversion )
 				};
 
-				if ( 'application/zip ' === data.mime ) {
+				if ( 'application/zip' === attachment.attributes.mime ) {
 					status = l10n.unzip;
 				} else {
 					status = l10n.convert;

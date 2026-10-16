@@ -1,16 +1,16 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\Infrastructure\Endpoints;
 
 use Exception;
-use Yoast\WP\SEO\Dashboard\Domain\Endpoint\Endpoint_Interface;
 use Yoast\WP\SEO\Dashboard\User_Interface\Scores\Abstract_Scores_Route;
 use Yoast\WP\SEO\Dashboard\User_Interface\Scores\Readability_Scores_Route;
 
 /**
  * Represents the readability scores endpoint.
  */
-class Readability_Scores_Endpoint implements Endpoint_Interface {
+class Readability_Scores_Endpoint implements Dashboard_Endpoint_Interface {
 
 	/**
 	 * Gets the name.
@@ -33,8 +33,9 @@ class Readability_Scores_Endpoint implements Endpoint_Interface {
 	/**
 	 * Gets the route.
 	 *
-	 * @throws Exception If the route prefix is not overwritten this throws.
 	 * @return string
+	 *
+	 * @throws Exception If the route prefix is not overwritten this throws.
 	 */
 	public function get_route(): string {
 		return Readability_Scores_Route::get_route_prefix();

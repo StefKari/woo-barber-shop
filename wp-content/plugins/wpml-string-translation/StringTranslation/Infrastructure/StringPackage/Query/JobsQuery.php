@@ -4,10 +4,8 @@ namespace WPML\StringTranslation\Infrastructure\StringPackage\Query;
 
 class JobsQuery {
 
-	/** @var \wpdb */
 	private $wpdb;
 
-	/** @var \SitePress */
 	private $sitepress;
 
 	public function __construct(
@@ -19,6 +17,7 @@ class JobsQuery {
 	}
 
 	public function get( array $packages ) {
+		$wpdb = $this->wpdb;
 		$rids = [];
 
 		foreach ( $packages as $package ) {
@@ -36,40 +35,38 @@ class JobsQuery {
 		if ( empty( $rids ) ) {
 			return null;
 		}
-		$sql = "
-            SELECT
-                tj.rid,
-                tj.job_id,
-                tj.translator_id,
-                ts.status,
-                ts.review_status,
-                ts.needs_update,
-                tj.automatic,
-                ts.translation_service,
-                tj.editor,
-                tj.translated
-            FROM {$this->wpdb->prefix}icl_translate_job tj
-            LEFT JOIN {$this->wpdb->prefix}icl_translation_status ts
-                ON tj.rid = ts.rid
-            INNER JOIN (
-            SELECT
-              rid,
-              MAX(job_id) AS max_job_id
-            FROM {$this->wpdb->prefix}icl_translate_job
-            WHERE rid IN (" . wpml_prepare_in( $rids, '%d' ) . ")
-            GROUP BY rid
-            ) latest_jobs
-            ON tj.rid = latest_jobs.rid
-            AND tj.job_id = latest_jobs.max_job_id
-       ";
+		$ridList = implode( ', ', array_map( 'intval', $rids ) );
 
-		return $this->wpdb->get_results( $sql, ARRAY_A );
+		return $wpdb->get_results(
+			sprintf(
+				"SELECT
+					tj.rid,
+					tj.job_id,
+					tj.translator_id,
+					ts.status,
+					ts.review_status,
+					ts.needs_update,
+					tj.automatic,
+					ts.translation_service,
+					tj.editor,
+					tj.translated,
+					tj.editor_job_id
+				 FROM {$wpdb->prefix}icl_translate_job tj
+				 LEFT JOIN {$wpdb->prefix}icl_translation_status ts ON tj.rid = ts.rid
+				 INNER JOIN (
+					SELECT rid, MAX(job_id) AS max_job_id
+					FROM {$wpdb->prefix}icl_translate_job
+					WHERE rid IN (%s)
+					GROUP BY rid
+				 ) latest_jobs
+					ON tj.rid = latest_jobs.rid
+					AND tj.job_id = latest_jobs.max_job_id",
+				esc_sql( $ridList )
+			),
+			ARRAY_A
+		);
 	}
 
-	/**
-	 * @param string $translationStatus
-	 * @return int|null
-	 */
 	private function getRidFromTranslationStatus( string $translationStatus ) {
 		$matches = [];
 		preg_match( '/rid:(\d+)/', $translationStatus, $matches );

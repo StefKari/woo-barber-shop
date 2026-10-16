@@ -22,11 +22,6 @@ class PackageItem
     protected $filters;
 
     /**
-     * @var array<int,Filter>
-     */
-    protected $excludes;
-
-    /**
      * @var string
      */
     protected $limitation;
@@ -52,7 +47,6 @@ class PackageItem
     public function __construct()
     {
         $this->filters    = array();
-        $this->excludes   = array();
         $this->qty        = floatval(0);
         $this->limitation = self::LIMITATION_NONE;
     }
@@ -119,36 +113,6 @@ class PackageItem
     public function getFilters()
     {
         return $this->filters;
-    }
-
-    /**
-     * @param Filter $filter
-     */
-    public function addExclude($filter)
-    {
-        if ($filter instanceof Filter) {
-            $this->excludes[] = $filter;
-        }
-    }
-
-    /**
-     * @param array<int,Filter> $filters
-     */
-    public function setExcludes($filters)
-    {
-        $this->excludes = array();
-
-        foreach ($filters as $filter) {
-            $this->addExclude($filter);
-        }
-    }
-
-    /**
-     * @return array<int,Filter>
-     */
-    public function getExcludes()
-    {
-        return $this->excludes;
     }
 
     /**

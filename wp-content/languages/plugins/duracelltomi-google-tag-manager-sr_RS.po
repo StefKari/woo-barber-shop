@@ -1,0 +1,1492 @@
+# Translation of Plugins - GTM4WP &#8211; A Google Tag Manager (GTM) plugin for WordPress - Stable (latest release) in Serbian
+# This file is distributed under the same license as the Plugins - GTM4WP &#8211; A Google Tag Manager (GTM) plugin for WordPress - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-10-13 23:29:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: sr_RS\n"
+"Project-Id-Version: Plugins - GTM4WP &#8211; A Google Tag Manager (GTM) plugin for WordPress - Stable (latest release)\n"
+
+#: src/RestCors.php:93
+msgid "JSONP is not supported by this API."
+msgstr "JSONP није подржан овим API-јем."
+
+#: src/Modules/UserEvents/AdminSchema.php:100
+msgid "Check this option to include a Tag Manager event when a new user registration has been completed on the frontend of your site (a user created by a logged-in administrator does not count)"
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када је регистрација новог корисника завршена на предњем делу вашег сајта (корисник кога је направио пријављени администратор се не рачуна)"
+
+#: src/Modules/WooCommerce/AdminSchema.php:358
+msgid "Turn this on if some purchases are missing. When the customer lands on a heavily customized thank-you page, or on the order-pay page instead of the order received page, the purchase event is emitted on the next page they view in the same browser session instead. An order that is still Pending payment when the customer reaches the order received page, because the payment provider confirms the payment a moment later (Stripe with webhooks, for example), is re-checked on the next page views for a day and reported once its status becomes one of the tracked statuses. The order tracked flag and browser cookie still prevent double counting. Note: this cannot capture orders where the buyer pays via an asynchronous gateway and never returns to the site - that case needs server side tracking."
+msgstr "Укључите ово ако неке куповине недостају. Када купац стигне на знатно прилагођену страницу захвалности или на страницу за плаћање поруџбине уместо на страницу примљене поруџбине, догађај куповине се уместо тога шаље на следећој страници коју прегледа у истој сесији прегледача. Поруџбина која још увек има стање „Плаћање на чекању“ када купац стигне на страницу примљене поруџбине, зато што пружалац плаћања потврђује плаћање тренутак касније (на пример, Stripe са веб-кукама), поново се проверава на следећим прегледима страница током једног дана и пријављује се чим њено стање постане једно од праћених стања. Ознака праћене поруџбине и колачић прегледача и даље спречавају двоструко бројање. Напомена: ово не може да ухвати поруџбине где купац плаћа преко асинхроног пролаза и никада се не врати на сајт – за тај случај је потребно праћење на страни сервера."
+
+#: src/Admin/SettingsPage.php:138
+msgid "This screen is built in the browser by a JavaScript file loaded from the plugin folder (build/admin.js), and that file did not run. The most likely cause is an ad or privacy blocker: some filter lists block everything under the folder of this plugin, and that also blocks the file this screen is built from."
+msgstr "Овај екран се гради у прегледачу помоћу JavaScript датотеке учитане из фасцикле додатка (build/admin.js), а та датотека се није покренула. Највероватнији узрок је блокатор реклама или приватности: неки спискови филтера блокирају све у фасцикли овог додатка, а то блокира и датотеку од које се гради овај екран."
+
+#: src/Admin/SettingsPage.php:139
+msgid "Please pause the blocker for the admin area of this site, or add an exception for it, and reload this page. If the screen still stays empty, please check the browser console for errors, check on the Network tab whether admin.js loads from the plugin folder, and verify that all plugin files were uploaded completely."
+msgstr "Паузирајте блокатор за административни део овог сајта или додајте изузетак за њега и поново учитајте ову страницу. Ако екран и даље остане празан, проверите конзолу прегледача због грешака, проверите на језичку „Network“ да ли се admin.js учитава из фасцикле додатка и уверите се да су све датотеке додатка у потпуности отпремљене."
+
+#: src/Admin/SettingsPage.php:137
+msgid "The GTM4WP settings screen could not start."
+msgstr "Екран подешавања GTM4WP није могао да се покрене."
+
+#: src/Modules/WooCommerce/StoreApiData.php:152
+msgid "GA4 ecommerce item data for the cart line, JSON encoded."
+msgstr "GA4 подаци о ставци е-трговине за ред корпе, кодирани у JSON."
+
+#: src/Modules/WooCommerce/StoreApiData.php:136
+msgid "GA4 ecommerce item data for the product."
+msgstr "GA4 подаци о ставци е-трговине за производ."
+
+#: src/Modules/WooCommerce/ListTracking.php:346
+msgid "Product Collection"
+msgstr "Колекција производа"
+
+#: src/Modules/WooCommerce/ListTracking.php:343
+msgid "Cart Contents"
+msgstr "Садржај корпе"
+
+#: src/Modules/WooCommerce/ListTracking.php:340
+msgid "Products By Brand"
+msgstr "Производи по бренду"
+
+#: src/Modules/WooCommerce/ListTracking.php:337
+msgid "Products By Tag"
+msgstr "Производи по ознаци"
+
+#: src/Modules/WooCommerce/ListTracking.php:334
+msgid "Product Category List"
+msgstr "Списак категорија производа"
+
+#: src/Modules/WooCommerce/ListTracking.php:331
+msgid "Handpicked Products"
+msgstr "Ручно изабрани производи"
+
+#: src/Modules/WooCommerce/ListTracking.php:328
+msgid "New Products"
+msgstr "Нови производи"
+
+#: src/Modules/WooCommerce/AdminSchema.php:427
+msgid "WooCommerce 5.0 or newer needs to be installed and activated to use this module."
+msgstr "WooCommerce 5.0 или новији мора бити постављен и укључен да бисте користили овај модул."
+
+#. translators: 1: opening anchor tag linking to the CheckoutWC website. 2:
+#. closing anchor tag.
+#: src/Modules/WooCommerce/AdminSchema.php:407
+msgid "Enable this if your store uses %1$sCheckoutWC%2$s, which replaces the standard WooCommerce checkout with its own multi-step template. The classic checkout markers the tracker relies on are not reliably present there, so the add_shipping_info and add_payment_info events are missed. With this on, the tracker also binds those events to CheckoutWC's own cfw_step_changed event."
+msgstr "Укључите ово ако ваша продавница користи %1$sCheckoutWC%2$s, који замењује стандардно WooCommerce плаћање сопственим шаблоном у више корака. Класичне ознаке плаћања на које се пратилац ослања тамо нису поуздано присутне, па се догађаји add_shipping_info и add_payment_info пропуштају. Када је ово укључено, пратилац те догађаје везује и за сопствени догађај cfw_step_changed додатка CheckoutWC."
+
+#: src/Modules/WooCommerce/AdminSchema.php:396
+msgid "When a user clicks on a product in a list, the select_item event uses a callback function with Google Tag Manager (GTM). This ensures that GTM can fire all related tags before the browser navigates to the product detail page. You can customize a timeout period (in milliseconds). This timeout only comes into play if a tag fails to fire within the specified time for some reason. Set this to 0 to open the product immediately without waiting for GTM: the select_item event is still pushed to the data layer, but the click is no longer held back. Use 0 (or a lower value than 2000) if product links feel slow to open - for example when a consent tool blocks GTM so the callback never returns."
+msgstr "Када корисник притисне производ на списку, догађај select_item користи функцију повратног позива са Google Tag Manager-ом (GTM). Ово обезбеђује да GTM може да покрене све повезане ознаке пре него што прегледач пређе на страницу детаља производа. Можете прилагодити временско ограничење (у милисекундама). Ово временско ограничење се примењује само ако се ознака из неког разлога не покрене у задатом времену. Поставите ово на 0 да бисте производ отворили одмах без чекања на GTM: догађај select_item се и даље шаље у слој података, али се притисак више не задржава. Користите 0 (или вредност мању од 2000) ако се везе производа споро отварају – на пример када алат за пристанак блокира GTM па се повратни позив никада не врати."
+
+#: src/Modules/WooCommerce/AdminSchema.php:404
+msgid "CheckoutWC compatibility"
+msgstr "Сагласност са CheckoutWC"
+
+#: src/Modules/WooCommerce/AdminSchema.php:368
+msgid "If your theme or another plugin shows the order confirmation on a custom page instead of the standard WooCommerce order received endpoint, select it here so the purchase event fires on it. The order is resolved from the current browser session."
+msgstr "Ако ваша тема или неки други додатак приказује потврду поруџбине на произвољној страници уместо на стандардној WooCommerce крајњој тачки примљене поруџбине, изаберите је овде да би се догађај куповине покренуо на њој. Поруџбина се одређује из тренутне сесије прегледача."
+
+#: src/Modules/WooCommerce/AdminSchema.php:367
+msgid "Custom order received (thank-you) page"
+msgstr "Произвољна страница примљене поруџбине (захвалности)"
+
+#: src/Modules/WooCommerce/AdminSchema.php:357
+msgid "Reliable purchase tracking"
+msgstr "Поуздано праћење куповина"
+
+#: src/Modules/WooCommerce/AdminSchema.php:346
+msgid "Order statuses that trigger the purchase event"
+msgstr "Стања поруџбине која покрећу догађај куповине"
+
+#: src/Modules/WooCommerce/AdminSchema.php:347
+msgid "The purchase event is sent when an order first reaches one of these statuses, i.e. at order placement - not when payment physically clears. This is why Cash on Delivery (Processing) and bank transfer (On hold) orders are tracked at checkout even though the money arrives later. Leave Failed, Cancelled and Pending payment unchecked so unpaid orders are not counted as sales."
+msgstr "Догађај куповине се шаље када поруџбина први пут достигне једно од ових стања, тј. приликом постављања поруџбине – не када плаћање заиста буде обрађено. Зато се поруџбине са плаћањем поузећем (Обрада) и банковним преносом (На чекању) прате при плаћању иако новац стиже касније. Оставите Неуспело, Отказано и Плаћање на чекању неоштиклираним да се неплаћене поруџбине не би рачунале као продаје."
+
+#: src/Modules/WooCommerce/AdminSchema.php:329
+msgid "Text to prepend to the transaction_id sent with the purchase event, for example to tell several stores apart in one GA4 property or to match the order id format of another system. Leave this empty to send the WooCommerce order number unchanged. Only the purchase event is affected: the order number in the orderData variable and the duplicate tracking guards of the plugin keep using the raw order number."
+msgstr "Текст који се додаје на почетак transaction_id који се шаље са догађајем куповине, на пример да бисте разликовали више продавница у једном GA4 својству или ускладили облик ИБ-а поруџбине са другим системом. Оставите ово празно да бисте слали WooCommerce број поруџбине непромењен. Утиче се само на догађај куповине: број поруџбине у променљивој orderData и заштите додатка од двоструког праћења и даље користе необрађени број поруџбине."
+
+#: src/Modules/WooCommerce/AdminSchema.php:328
+msgid "Transaction ID prefix"
+msgstr "Префикс ИБ-а трансакције"
+
+#: src/Modules/WooCommerce/AdminSchema.php:292
+msgid "Enable this to add all order attributes into the data layer on the order received page regardless and independently from ecommerce tracking"
+msgstr "Укључите ово да бисте додали све атрибуте поруџбине у слој података на страници примљене поруџбине, без обзира на праћење е-трговине и независно од њега"
+
+#: src/Modules/WooCommerce/AdminSchema.php:274
+msgid "Enable this option to include the content of the cart in the data layer on each page. Especially useful for site personalization tools."
+msgstr "Укључите ову могућност да бисте садржај корпе укључили у слој података на свакој страници. Нарочито корисно за алате за прилагођавање сајта."
+
+#: src/Modules/WooCommerce/AdminSchema.php:264
+msgid "When a visitor clicks a product in a list, remember which list it was (item_list_name / item_list_id) in a first-party cookie and carry it onto the later view_item, add_to_cart, begin_checkout, add_shipping_info, add_payment_info and purchase events, so GA4 can attribute the whole funnel to the originating list. On a product page the list is merged in by the browser rather than by the server, so the attribution also works when the page is served from a full-page cache. Only enable this if you are NOT already doing the same with custom JavaScript in Google Tag Manager, otherwise the attribution would be set twice."
+msgstr "Када посетилац притисне производ на списку, запамти са ког је списка био (item_list_name / item_list_id) у колачићу прве стране и пренеси то на касније догађаје view_item, add_to_cart, begin_checkout, add_shipping_info, add_payment_info и purchase, тако да GA4 може да припише цео ток изворном списку. На страници производа, списак спаја прегледач уместо сервера, па приписивање ради и када се страница служи из кеша целе странице. Укључите ово само ако НЕ радите већ исто помоћу произвољног JavaScript-а у Google Tag Manager-у, иначе би приписивање било постављено двапут."
+
+#: src/Modules/WooCommerce/AdminSchema.php:145
+msgid "(use the standard WooCommerce order received page)"
+msgstr "(користи стандардну WooCommerce страницу примљене поруџбине)"
+
+#: src/Modules/WooCommerce/AdminSchema.php:263
+msgid "Persist product list attribution across the funnel"
+msgstr "Задржи приписивање списку производа кроз цео ток"
+
+#: src/Modules/WooCommerce/AdminSchema.php:172
+msgid "Choose this option if you would like to track e-commerce data with GA4 ecommerce tracking."
+msgstr "Изаберите ову могућност ако желите да пратите податке е-трговине помоћу GA4 праћења е-трговине."
+
+#: src/Modules/WooCommerce/AdminSchema.php:139
+msgid "Failed"
+msgstr "Није успело"
+
+#: src/Modules/WooCommerce/AdminSchema.php:138
+msgid "Refunded"
+msgstr "Враћено"
+
+#: src/Modules/WooCommerce/AdminSchema.php:137
+msgid "Cancelled"
+msgstr "Отказано"
+
+#: src/Modules/WooCommerce/AdminSchema.php:136
+msgid "Completed"
+msgstr "Завршено"
+
+#: src/Modules/WooCommerce/AdminSchema.php:133
+msgid "Pending payment"
+msgstr "Плаћање на чекању"
+
+#: src/Modules/WooCommerce/AdminSchema.php:134
+msgid "Processing"
+msgstr "У обради"
+
+#: src/Modules/WooCommerce/AdminSchema.php:101
+msgid "(not used)"
+msgstr "(не користи се)"
+
+#: src/Modules/WooCommerce/AdminSchema.php:89
+msgid "Purchase tracking"
+msgstr "Праћење куповина"
+
+#: src/Modules/WooCommerce/AdminSchema.php:88
+msgid "Data layer content"
+msgstr "Садржај слоја података"
+
+#: src/Modules/WooCommerce/AdminSchema.php:87
+msgid "Product data"
+msgstr "Подаци о производу"
+
+#: src/Modules/VisitorData/AdminSchema.php:80
+msgid "Enable cache-safe data layer"
+msgstr "Укључи слој података безбедан за кеш"
+
+#: src/Modules/VisitorData/AdminSchema.php:46
+#: src/Modules/VisitorData/AdminSchema.php:65
+msgid "Cache-safe data layer"
+msgstr "Слој података безбедан за кеш"
+
+#. translators: 1: anchor element linking to GA4 Ecommerce docs. 2: closing
+#. anchor element. 3: anchor element linking to GTM4WP setup guide for Google
+#. Analytics 4. 4: closing anchor element.
+#: src/Modules/WooCommerce/AdminSchema.php:68
+msgid "Track e-commerce data using %1$sGA4 ecommerce tracking%2$s. Use the plugin's %3$sofficial guides%4$s to setup your Google Tag Manager container. WooCommerce 5.0+ is required to use this integration."
+msgstr "Пратите податке е-трговине помоћу %1$sGA4 праћења е-трговине%2$s. Користите %3$sзваничне водиче%4$s додатка да бисте подесили свој Google Tag Manager спремник. За коришћење ове интеграције потребан је WooCommerce 5.0+."
+
+#: src/Modules/VisitorData/AdminSchema.php:81
+msgid "Enable this if your site uses full-page caching and you want to avoid leaking one visitor's data (IP, logged-in user email/username/role, WooCommerce customer and cart) to another visitor through the cached HTML. When on, these visitor/session values are kept out of the cached HTML and delivered in the browser instead, under the same data layer variable names, so your Google Tag Manager tags keep working: the referrer and search term are computed by the browser itself; the visitor IP, Cloudflare country and logged-in user data come from a first-party endpoint that returns only the current visitor's own data (the IP/country fetched once per session, the user data only when the login state changes, so anonymous visitors never fetch it); and the WooCommerce customer and cart ride WooCommerce's own cart-refresh request, adding no extra page request. Because the values now arrive after the page view, point the tags that read them at the matching Custom Event trigger: gtm4wp.visitorData for the visitor and logged-in user variables, gtm4wp.customerData for the WooCommerce customer variables and gtm4wp.cartData for the cart content. Each of the three fires only when its own data changed, and only when you have the option that produces it enabled. The two WooCommerce one-shot events (an add_to_cart after the cart \"Undo\" and the reliable-purchase fallback) are delivered client-side too, each fired exactly once. Off by default."
+msgstr "Укључите ово ако ваш сајт користи кеширање целе странице и желите да избегнете да подаци једног посетиоца (IP, е-адреса/корисничко име/улога пријављеног корисника, WooCommerce купац и корпа) процуре другом посетиоцу кроз кеширани HTML. Када је укључено, ове вредности посетиоца/сесије се држе ван кешираног HTML-а и уместо тога достављају у прегледачу, под истим називима променљивих слоја података, тако да ваше ознаке у Google Tag Manager-у настављају да раде: упућивача и појам претраге израчунава сам прегледач; IP посетиоца, Cloudflare држава и подаци пријављеног корисника долазе са крајње тачке прве стране која враћа само податке тренутног посетиоца (IP/држава се дохватају једном по сесији, кориснички подаци само када се стање пријаве промени, тако да их анонимни посетиоци никада не дохватају); а WooCommerce купац и корпа се преносе сопственим WooCommerce захтевом за освежавање корпе, без додатног захтева странице. Пошто вредности сада стижу после прегледа странице, усмерите ознаке које их читају на одговарајући окидач Custom Event: gtm4wp.visitorData за променљиве посетиоца и пријављеног корисника, gtm4wp.customerData за променљиве WooCommerce купца и gtm4wp.cartData за садржај корпе. Сваки од њих три се покреће само када су се његови подаци променили и само када имате укључену могућност која их производи. Два једнократна WooCommerce догађаја (add_to_cart после „Undo“ у корпи и резервни поуздани догађај куповине) такође се достављају на страни клијента, сваки покренут тачно једном. Подразумевано искључено."
+
+#: src/Modules/VisitorData/AdminSchema.php:55
+msgid "On sites with full-page caching (LiteSpeed, WP Rocket, Varnish, Cloudflare APO), the HTML built for one visitor is served to everyone. Any visitor-specific value baked into the data layer would then leak to other visitors. This mode keeps those values out of the cached HTML."
+msgstr "На сајтовима са кеширањем целе странице (LiteSpeed, WP Rocket, Varnish, Cloudflare APO), HTML направљен за једног посетиоца служи се свима. Свака вредност специфична за посетиоца уграђена у слој података би тада процурела другим посетиоцима. Овај режим држи те вредности ван кешираног HTML-а."
+
+#: src/Modules/UserEvents/AdminSchema.php:89
+msgid "Check this option to push gtm4wp.formElementLeave only for a field that was empty when the visitor entered it and holds a value when they leave it, so that tabbing through a form without typing no longer produces an event for every field. Text inputs, textareas and dropdowns are checked this way; checkboxes, radio buttons and buttons are always reported, because they carry no \"empty\" state. A field that was already filled in when the visitor entered it, for example one your theme pre-fills, reports nothing when they leave it unchanged. gtm4wp.formElementEnter is never affected and keeps firing for every field."
+msgstr "Штиклирајте ову могућност да бисте gtm4wp.formElementLeave слали само за поље које је било празно када је посетилац ушао у њега и садржи вредност када га напусти, тако да прелажење кроз образац табулатором без куцања више не производи догађај за свако поље. Текстуални уноси, текстуална поља и падајући спискови се проверавају на овај начин; поља за штиклирање, радио-дугмад и дугмад се увек пријављују, јер немају „празно“ стање. Поље које је већ било попуњено када је посетилац ушао у њега, на пример оно које ваша тема унапред попуњава, ништа не пријављује када га напусти непромењено. На gtm4wp.formElementEnter ово никада не утиче и он наставља да се покреће за свако поље."
+
+#: src/Modules/WooCommerce/AdminSchema.php:135
+msgid "On hold"
+msgstr "Задржано"
+
+#: src/Modules/UserEvents/AdminSchema.php:88
+msgid "Only report fields the visitor filled in"
+msgstr "Пријављуј само поља која је посетилац попунио"
+
+#: src/Modules/UserEvents/AdminSchema.php:79
+msgid "Form fill events"
+msgstr "Догађаји попуњавања образаца"
+
+#: src/Modules/UserEvents/AdminSchema.php:45
+msgid "User events"
+msgstr "Кориснички догађаји"
+
+#: src/Modules/UserEvents/AdminSchema.php:80
+msgid "Check this option to include a Tag Manager event when a visitor moves between elements of a form (comment, contact, etc). Each event describes the field in inputID, inputName and inputClass and its form in formID, formName and formClass, and also populates Google Tag Manager's built-in Form variables: Form ID, Form Classes, Form URL (the form's action, resolved to an absolute URL) and Form Target. Google publishes no built-in Form Name variable, so the form's name attribute stays available on formName only. Note that the keys behind those built-ins are the ones Google Tag Manager's Clicks category reads, so on these events Click ID and Click Classes resolve to the form as well. No field value is ever included."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када се посетилац креће између елемената обрасца (коментар, контакт итд). Сваки догађај описује поље у inputID, inputName и inputClass, а његов образац у formID, formName и formClass, и такође попуњава уграђене Form променљиве Google Tag Manager-а: Form ID, Form Classes, Form URL (action обрасца, разрешен у апсолутну адресу) и Form Target. Google не објављује уграђену променљиву Form Name, па атрибут name обрасца остаје доступан само у formName. Имајте на уму да су кључеви иза тих уграђених променљивих они које чита категорија Clicks у Google Tag Manager-у, па се на овим догађајима Click ID и Click Classes такође односе на образац. Вредност поља се никада не укључује."
+
+#: src/Modules/PageVariables/AdminSchema.php:442
+msgid "The IP addresses or CIDR ranges of the reverse proxies, load balancers and CDNs that sit in front of this site - one per line, or comma separated. This is what makes the custom header above trustworthy: with it set, an X-Forwarded-For list is read from the right (skipping your own hops) and a single-value header such as CF-Connecting-IP is only used when the request really did arrive through one of these addresses. Leave it empty if nothing sits in front of your site. Cloudflare publishes its ranges at cloudflare.com/ips; for a load balancer inside your own network the address is usually a private range such as 10.0.0.0/8."
+msgstr "IP адресе или CIDR опсези обрнутих посредника, уравнотеживача оптерећења и CDN-ова који се налазе испред овог сајта – по један у реду или раздвојени зарезом. То је оно што произвољно заглавље изнад чини поузданим: када је ово подешено, списак X-Forwarded-For се чита здесна (прескачући ваше сопствене скокове), а заглавље са једном вредношћу као што је CF-Connecting-IP користи се само када је захтев заиста стигао преко једне од ових адреса. Оставите празно ако се ништа не налази испред вашег сајта. Cloudflare објављује своје опсеге на cloudflare.com/ips; за уравнотеживач оптерећења унутар ваше сопствене мреже адреса је обично приватни опсег као што је 10.0.0.0/8."
+
+#: src/Modules/PageVariables/AdminSchema.php:441
+msgid "Visitor IP - Trusted proxy addresses"
+msgstr "IP посетиоца - Адресе поузданих посредника"
+
+#: src/Modules/PageVariables/AdminSchema.php:358
+msgid "Check this option to include whether there is a logged in user on your website, in the visitorLoginState data layer variable. The value is either logged-in or logged-out."
+msgstr "Штиклирајте ову могућност да бисте у променљиву слоја података visitorLoginState укључили да ли на вашем сајту постоји пријављени корисник. Вредност је или logged-in или logged-out."
+
+#: src/Modules/PageVariables/AdminSchema.php:340
+msgid "Check this option to include the language code of the current page, detected from WPML or Polylang and falling back to the site locale. Useful to segment behavior on multilingual sites."
+msgstr "Штиклирајте ову могућност да бисте укључили кôд језика тренутне странице, откривен из WPML-а или Polylang-а, уз враћање на локалитет сајта. Корисно за разврставање понашања на вишејезичним сајтовима."
+
+#: src/Modules/PageVariables/AdminSchema.php:339
+msgid "Page language"
+msgstr "Језик странице"
+
+#: src/Modules/PageVariables/AdminSchema.php:330
+msgid "Primary category"
+msgstr "Примарна категорија"
+
+#: src/Modules/PageVariables/AdminSchema.php:322
+msgid "Check this option to include whether the current post is marked as sticky."
+msgstr "Штиклирајте ову могућност да бисте укључили да ли је тренутни чланак означен као закачен."
+
+#: src/Modules/PageVariables/AdminSchema.php:321
+msgid "Sticky post"
+msgstr "Закачени чланак"
+
+#: src/Modules/PageVariables/AdminSchema.php:313
+msgid "Check this option to include the parent post ID and the depth of the current post in the page hierarchy (0 for top level pages)."
+msgstr "Штиклирајте ову могућност да бисте укључили ИБ родитељског чланка и дубину тренутног чланка у хијерархији страница (0 за странице највишег нивоа)."
+
+#: src/Modules/PageVariables/AdminSchema.php:312
+msgid "Page hierarchy"
+msgstr "Хијерархија странице"
+
+#: src/Modules/PageVariables/AdminSchema.php:304
+msgid "Check this option to include whether the current post has a featured image set."
+msgstr "Штиклирајте ову могућност да бисте укључили да ли тренутни чланак има постављену истакнуту слику."
+
+#: src/Modules/PageVariables/AdminSchema.php:303
+msgid "Featured image presence"
+msgstr "Присуство истакнуте слике"
+
+#: src/Modules/PageVariables/AdminSchema.php:295
+msgid "Check this option to include the template file assigned to the current post or page (returns \"default\" when no custom template is used). Useful to segment behavior by page layout."
+msgstr "Штиклирајте ову могућност да бисте укључили датотеку шаблона додељену тренутном чланку или страници (враћа „default“ када се не користи произвољни шаблон). Корисно за разврставање понашања према распореду странице."
+
+#: src/Modules/PageVariables/AdminSchema.php:421
+msgid "By default, the plugin will check the so called REMOTE_ADDR system variable for IP addresses. In some cases, this might not include the correct address. You may specify a custom header to read the IP address from. Important: an HTTP header is sent by the visitor, so on its own it is a claim and not a fact - anyone can put any address in it. Fill in the trusted proxy addresses below to make this header trustworthy. Without them the plugin keeps reading the header the way it always has, but the value can be chosen by the visitor, so do not use it for anything but analytics."
+msgstr "Подразумевано, додатак проверава такозвану системску променљиву REMOTE_ADDR за IP адресе. У неким случајевима, она можда не садржи тачну адресу. Можете навести произвољно заглавље из ког ће се читати IP адреса. Важно: HTTP заглавље шаље посетилац, па је само по себи тврдња, а не чињеница – било ко може да стави било коју адресу у њега. Попуните адресе поузданих посредника испод да бисте ово заглавље учинили поузданим. Без њих додатак наставља да чита заглавље као и увек, али вредност може да изабере посетилац, па је не користите ни за шта осим за аналитику."
+
+#: src/Modules/PageVariables/AdminSchema.php:367
+msgid "Check this option to include the role of the logged in user in the visitorType data layer variable. Roles are reported by their slug, a user with several roles reports them comma separated, and a visitor who is not logged in reports visitor-logged-out."
+msgstr "Штиклирајте ову могућност да бисте улогу пријављеног корисника укључили у променљиву слоја података visitorType. Улоге се пријављују према својој подложници, корисник са више улога их пријављује раздвојене зарезом, а посетилац који није пријављен пријављује visitor-logged-out."
+
+#: src/Modules/PageVariables/AdminSchema.php:331
+msgid "Check this option to include the primary category of the current post as chosen in Yoast SEO or Rank Math (falls back to the first assigned category). This adds two data layer variables: pagePrimaryCategory holds the category slug and pagePrimaryCategoryName holds its display name. Useful as a single content grouping dimension."
+msgstr "Штиклирајте ову могућност да бисте укључили примарну категорију тренутног чланка како је изабрана у Yoast SEO или Rank Math (враћа се на прву додељену категорију). Ово додаје две променљиве слоја података: pagePrimaryCategory садржи подложницу категорије, а pagePrimaryCategoryName садржи њено име за приказ. Корисно као једна димензија груписања садржаја."
+
+#: src/Modules/PageVariables/AdminSchema.php:294
+msgid "Page template"
+msgstr "Шаблон странице"
+
+#: src/Modules/PageVariables/AdminSchema.php:286
+msgid "Check this option to include the number of comments on the current post and whether commenting is open or closed."
+msgstr "Штиклирајте ову могућност да бисте укључили број коментара на тренутном чланку и да ли је коментарисање отворено или затворено."
+
+#: src/Modules/PageVariables/AdminSchema.php:285
+msgid "Comment count"
+msgstr "Број коментара"
+
+#: src/Modules/PageVariables/AdminSchema.php:277
+msgid "Check this option to include the number of days elapsed since the current post was published. Useful to segment engagement by fresh versus evergreen content."
+msgstr "Штиклирајте ову могућност да бисте укључили број дана протеклих од објављивања тренутног чланка. Корисно за разврставање ангажовања на свеж и трајан садржај."
+
+#: src/Modules/PageVariables/AdminSchema.php:276
+msgid "Content age in days"
+msgstr "Старост садржаја у данима"
+
+#: src/Modules/PageVariables/AdminSchema.php:268
+msgid "Check this option to include the last modified date of the current post. This will include the same set of date variables as the post date option (full date, year, month, day, day name, hour, minute, ISO and Unix timestamp)."
+msgstr "Штиклирајте ову могућност да бисте укључили датум последње измене тренутног чланка. Ово ће укључити исти скуп променљивих датума као могућност датума чланка (цео датум, година, месец, дан, назив дана, сат, минут, ISO и Unix временска ознака)."
+
+#: src/Modules/PageVariables/AdminSchema.php:267
+msgid "Last modified date"
+msgstr "Датум последње измене"
+
+#: src/Modules/PageVariables/AdminSchema.php:259
+msgid "Check this option to include the estimated reading time of the current post in minutes (based on 200 words per minute, adjustable with the gtm4wp_reading_time_wpm filter)."
+msgstr "Штиклирајте ову могућност да бисте укључили процењено време читања тренутног чланка у минутима (на основу 200 речи у минути, подесиво филтером gtm4wp_reading_time_wpm)."
+
+#: src/Modules/PageVariables/AdminSchema.php:250
+msgid "Check this option to include the number of words in the current post content. Useful to normalize scroll depth and engagement metrics against the length of the content."
+msgstr "Штиклирајте ову могућност да бисте укључили број речи у садржају тренутног чланка. Корисно за усклађивање дубине померања и мерила ангажовања са дужином садржаја."
+
+#: src/Modules/PageVariables/AdminSchema.php:258
+msgid "Estimated reading time"
+msgstr "Процењено време читања"
+
+#: src/Modules/PageVariables/AdminSchema.php:249
+msgid "Content word count"
+msgstr "Број речи садржаја"
+
+#: src/Modules/PageVariables/AdminSchema.php:219
+msgid "The names of the custom fields you actually want in the data layer - one per line, or comma separated. Leave it empty to keep publishing every custom field whose name does not start with an underscore and is not otherwise protected or skipped, which is what the option above does on its own. Filling it in is the safer way to use that option: your Google Tag Manager container only ever needs a handful of keys, and naming them means a field added later by a plugin, a theme or an editor cannot start appearing on your public pages without you deciding it. Protected fields and the gtm4wp_post_meta_in_datalayer filter still apply on top of this list, so naming a field here cannot publish one that is held back for those reasons - a name starting with an underscore is never published however you list it. A field name that contains a comma cannot be listed at all, because commas separate the entries."
+msgstr "Називи произвољних поља која заиста желите у слоју података – по један у реду или раздвојени зарезом. Оставите празно да бисте наставили да објављујете свако произвољно поље чији назив не почиње доњом цртом и које није на други начин заштићено или прескочено, што могућност изнад ради сама по себи. Попуњавање је безбеднији начин коришћења те могућности: вашем Google Tag Manager спремнику је икада потребно само неколико кључева, а њихово именовање значи да поље које касније дода додатак, тема или уредник не може почети да се појављује на вашим јавним страницама а да ви то не одлучите. Заштићена поља и филтер gtm4wp_post_meta_in_datalayer се и даље примењују поврх овог списка, па навођење поља овде не може објавити оно које је задржано из тих разлога – назив који почиње доњом цртом се никада не објављује како год да га наведете. Назив поља који садржи зарез уопште не може бити наведен, јер зарези раздвајају ставке."
+
+#: src/Modules/PageVariables/AdminSchema.php:218
+msgid "Post custom fields - publish only these keys"
+msgstr "Произвољна поља чланка - објави само ове кључеве"
+
+#: src/Modules/PageVariables/AdminSchema.php:201
+msgid "Check this option to include taxonomy values associated with a given post, in the pagePostTerms data layer variable. Custom fields are a separate option below."
+msgstr "Штиклирајте ову могућност да бисте вредности таксономија повезане са датим чланком укључили у променљиву слоја података pagePostTerms. Произвољна поља су засебна могућност испод."
+
+#: src/Modules/PageVariables/AdminSchema.php:209
+msgid "Post custom fields (meta)"
+msgstr "Произвољна поља чланка (мета)"
+
+#: src/Modules/PageVariables/AdminSchema.php:192
+msgid "Check this option to include the format of the current post in the postFormat data layer variable. The format is reported by its slug (aside, gallery, video and so on), and posts with no format set report standard."
+msgstr "Штиклирајте ову могућност да бисте облик тренутног чланка укључили у променљиву слоја података postFormat. Облик се пријављује према својој подложници (aside, gallery, video итд.), а чланци без подешеног облика пријављују standard."
+
+#: src/Modules/PageVariables/AdminSchema.php:147
+msgid "Check this option to include the display name of the author on the current post or author page in the pagePostAuthor data layer variable. On a post with several authors (PublishPress Authors) the full list is added as pagePostAuthors as well."
+msgstr "Штиклирајте ову могућност да бисте име за приказ аутора тренутног чланка или странице аутора укључили у променљиву слоја података pagePostAuthor. На чланку са више аутора (PublishPress Authors) цео списак се додаје и као pagePostAuthors."
+
+#: src/Modules/PageVariables/AdminSchema.php:210
+msgid "Check this option to include the custom fields (post meta) of the current post in the pagePostTerms.meta data layer variable. Read this before enabling it: this publishes EVERY custom field whose name does not start with an underscore, together with its value, into the data layer of the public page, where any visitor can read it. That includes fields created by other plugins and themes - Advanced Custom Fields stores its values this way - so it may expose internal notes, ids, prices or contact details you did not intend to make public. Review your custom fields first, and use the key list below to name only the ones you need (or the gtm4wp_post_meta_in_datalayer filter to exclude individual keys in code). Custom fields that hold a structured value rather than plain text are skipped: plugins store those in a packed internal format that no Google Tag Manager variable can read. Fields that a plugin or your own site marks as protected are skipped too. Until 2.0 this data was sent as part of the \"Post Terms\" option above; if you had that enabled, this option was turned on for you during the upgrade so your Google Tag Manager setup keeps working."
+msgstr "Штиклирајте ову могућност да бисте произвољна поља (мета-податке чланка) тренутног чланка укључили у променљиву слоја података pagePostTerms.meta. Прочитајте ово пре укључивања: ово објављује СВАКО произвољно поље чији назив не почиње доњом цртом, заједно са његовом вредношћу, у слој података јавне странице, где га сваки посетилац може прочитати. То укључује поља које су направили други додаци и теме – Advanced Custom Fields чува своје вредности на овај начин – па може открити интерне белешке, ИБ-ове, цене или контакт податке које нисте намеравали да учините јавним. Прво прегледајте своја произвољна поља и користите списак кључева испод да бисте навели само она која су вам потребна (или филтер gtm4wp_post_meta_in_datalayer да бисте у коду искључили појединачне кључеве). Произвољна поља која садрже структурирану вредност уместо обичног текста се прескачу: додаци их чувају у сажетом интерном облику који ниједна променљива Google Tag Manager-а не може да прочита. Поља која додатак или ваш сајт означи као заштићена се такође прескачу. До издања 2.0 ови подаци су слати као део могућности „Post Terms“ изнад; ако сте је имали укључену, ова могућност вам је укључена током надоградње да би ваше подешавање Google Tag Manager-а наставило да ради."
+
+#: src/Modules/PageVariables/AdminSchema.php:156
+msgid "Check this option to include the date of the current post. This will include 9 dataLayer variables: full date, year, month, day, day name, hour, minute, ISO 8601 date and Unix timestamp. On date based archive pages only the parts the archive covers are included."
+msgstr "Штиклирајте ову могућност да бисте укључили датум тренутног чланка. Ово ће укључити 9 променљивих dataLayer: цео датум, година, месец, дан, назив дана, сат, минут, ISO 8601 датум и Unix временска ознака. На страницама архива по датуму укључују се само делови које архива обухвата."
+
+#: src/Modules/PageVariables/AdminSchema.php:138
+msgid "Check this option to include the ID of the author on the current post or author page in the pagePostAuthorID data layer variable. On a post with several authors (PublishPress Authors) the full list is added as pagePostAuthorIDs as well."
+msgstr "Штиклирајте ову могућност да бисте ИБ аутора тренутног чланка или странице аутора укључили у променљиву слоја података pagePostAuthorID. На чланку са више аутора (PublishPress Authors) цео списак се додаје и као pagePostAuthorIDs."
+
+#: src/Modules/PageVariables/AdminSchema.php:129
+msgid "Check this option to include the tags of the current post in the pageAttributes data layer variable. Tags are listed by their slug (for example black-friday), not by their display name."
+msgstr "Штиклирајте ову могућност да бисте ознаке тренутног чланка укључили у променљиву слоја података pageAttributes. Ознаке се наводе према својој подложници (на пример black-friday), а не према имену за приказ."
+
+#: src/Modules/PageVariables/AdminSchema.php:118
+msgid "Check this option to also add the parent (ancestor) categories to the pageCategory data layer variable. When off, only the categories directly assigned to the current post or archive are listed. Requires the \"Category list of current post/archive\" option above to be enabled."
+msgstr "Штиклирајте ову могућност да бисте у променљиву слоја података pageCategory додали и родитељске (претходне) категорије. Када је искључено, наводе се само категорије директно додељене тренутном чланку или архиви. Захтева да могућност „Списак категорија тренутног чланка/архиве“ изнад буде укључена."
+
+#: src/Modules/PageVariables/AdminSchema.php:117
+msgid "Include parent categories in the category list"
+msgstr "Укључи родитељске категорије у списак категорија"
+
+#: src/Modules/PageVariables/AdminSchema.php:109
+msgid "Check this option to include the categories of the current post or archive page in the pageCategory data layer variable. Categories are listed by their slug (for example news-and-events), not by their display name."
+msgstr "Штиклирајте ову могућност да бисте категорије тренутног чланка или странице архиве укључили у променљиву слоја података pageCategory. Категорије се наводе према својој подложници (на пример news-and-events), а не према имену за приказ."
+
+#: src/Modules/PageVariables/AdminSchema.php:84
+msgid "Site data"
+msgstr "Подаци о сајту"
+
+#: src/Modules/PageVariables/AdminSchema.php:81
+msgid "Content & engagement data"
+msgstr "Подаци о садржају и ангажовању"
+
+#: src/Modules/PageVariables/AdminSchema.php:83
+msgid "Visitor data"
+msgstr "Подаци о посетиоцу"
+
+#: src/Modules/PageVariables/AdminSchema.php:80
+msgid "Post data"
+msgstr "Подаци о чланку"
+
+#: src/Modules/PageVariables/AdminSchema.php:61
+msgid "Page variables"
+msgstr "Променљиве странице"
+
+#: src/Modules/MediaEvents/AdminSchema.php:211
+msgid "By default the media trackers on the Media players tab only wire players that are present when the page loads. Check this option to also track players inserted after page load — e.g. opened in a popup/lightbox or loaded via AJAX — by watching the page for new embeds. This adds a single shared MutationObserver on the page, which has a small per-change cost, so leave it off unless your site injects media players at runtime."
+msgstr "Подразумевано, пратиоци медија на језичку „Медијски плејери“ повезују само плејере који су присутни када се страница учита. Штиклирајте ову могућност да бисте пратили и плејере уметнуте после учитавања странице — нпр. отворене у искачућем прозору/lightbox-у или учитане преко AJAX-а — праћењем странице због нових уградњи. Ово додаје један заједнички MutationObserver на страницу, што има мали трошак по свакој промени, па ово оставите искљученим осим ако ваш сајт убацује медијске плејере током рада."
+
+#: src/Modules/MediaEvents/AdminSchema.php:210
+msgid "Track dynamically inserted players"
+msgstr "Прати динамички уметнуте плејере"
+
+#: src/Modules/MediaEvents/AdminSchema.php:201
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Twitch stream or video embedded on your site. Each event also populates Google Tag Manager's built-in Video variables. Note: current time and duration are only available for videos (VODs), not live streams."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са Twitch преносом или видео снимком уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а. Напомена: тренутно време и трајање су доступни само за видео снимке (VOD), не и за преносе уживо."
+
+#: src/Modules/MediaEvents/AdminSchema.php:200
+msgid "Twitch events"
+msgstr "Twitch догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:191
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Spotify track, episode or playlist embedded on your site. Each event also populates Google Tag Manager's built-in Video variables. Note: the Spotify embed only reports periodic playback updates, so play, pause and finished states are derived from those updates, and it reports no title at all - the title is read from the embed on the page, and only when the embed carries none is it looked up once from Spotify's public oEmbed endpoint."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са Spotify песмом, епизодом или плејлистом уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а. Напомена: Spotify уградња пријављује само периодична ажурирања репродукције, па се стања пуштања, паузе и завршетка изводе из тих ажурирања, а наслов уопште не пријављује – наслов се чита из уградње на страници, и само када уградња нема наслов, он се једном тражи са Spotify-јеве јавне oEmbed крајње тачке."
+
+#: src/Modules/MediaEvents/AdminSchema.php:181
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a VideoPress (Jetpack/WordPress.com) video embedded on your site. Each event also populates Google Tag Manager's built-in Video variables."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са VideoPress (Jetpack/WordPress.com) видео снимком уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а."
+
+#: src/Modules/MediaEvents/AdminSchema.php:190
+msgid "Spotify events"
+msgstr "Spotify догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:180
+msgid "VideoPress video events"
+msgstr "VideoPress видео догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:171
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a JW Player video embedded on your site. Each event also populates Google Tag Manager's built-in Video variables."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са JW Player видео снимком уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а."
+
+#: src/Modules/MediaEvents/AdminSchema.php:170
+msgid "JW Player video events"
+msgstr "JW Player видео догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:161
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Wistia video embedded on your site. Each event also populates Google Tag Manager's built-in Video variables."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са Wistia видео снимком уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а."
+
+#: src/Modules/MediaEvents/AdminSchema.php:160
+msgid "Wistia video events"
+msgstr "Wistia видео догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:151
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Cloudflare Stream video embedded on your site. Each event also populates Google Tag Manager's built-in Video variables."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са Cloudflare Stream видео снимком уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а."
+
+#: src/Modules/MediaEvents/AdminSchema.php:150
+msgid "Cloudflare Stream video events"
+msgstr "Cloudflare Stream видео догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:141
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Mixcloud show embedded on your site. Each event also populates Google Tag Manager's built-in Video variables."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са Mixcloud емисијом уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а."
+
+#: src/Modules/MediaEvents/AdminSchema.php:140
+msgid "Mixcloud events"
+msgstr "Mixcloud догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:130
+msgid "Optional. The ID of the player configuration to load, found in the Players tab of your Dailymotion Studio account. Leave it empty to use Dailymotion's default player, which needs no account. Filling it in is also what removes Dailymotion's \"initialized without a player id\" console warning. If an embed code already names a player of its own, that one is used for that embed regardless of this setting."
+msgstr "Необавезно. ИБ подешавања плејера које треба учитати, који се налази на језичку Players вашег Dailymotion Studio налога. Оставите празно да бисте користили подразумевани Dailymotion плејер, за који није потребан налог. Попуњавањем се такође уклања Dailymotion упозорење у конзоли „initialized without a player id“. Ако кôд за уградњу већ наводи сопствени плејер, тај се користи за ту уградњу без обзира на ово подешавање."
+
+#: src/Modules/MediaEvents/AdminSchema.php:129
+msgid "Dailymotion player ID"
+msgstr "ИБ Dailymotion плејера"
+
+#: src/Modules/MediaEvents/AdminSchema.php:119
+msgid "Dailymotion video events"
+msgstr "Dailymotion видео догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:120
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Dailymotion video embedded on your site. Each event also populates Google Tag Manager's built-in Video variables. Note: Dailymotion no longer lets any script listen to a video it did not create itself, so tracking works by rebuilding each embed with Dailymotion's current player. The video keeps the size WordPress gave it and plays as before, but the player your visitors see is the one Dailymotion builds - see the player ID setting below. If the player library cannot be loaded, the embed is left exactly as it was and simply goes untracked."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са Dailymotion видео снимком уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а. Напомена: Dailymotion више не дозвољава ниједној скрипти да слуша видео који није сам направио, па праћење ради тако што се свака уградња поново гради помоћу тренутног Dailymotion плејера. Видео задржава величину коју му је дао Вордпрес и пушта се као и раније, али плејер који виде ваши посетиоци је онај који гради Dailymotion – погледајте подешавање ИБ-а плејера испод. Ако библиотека плејера не може да се учита, уградња остаје тачно онаква каква је била и једноставно се не прати."
+
+#: src/Modules/MediaEvents/AdminSchema.php:110
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a native HTML5 <video> or <audio> player embedded on your site. Each event also populates Google Tag Manager's built-in Video variables. Note: the tracker binds to the native media element, so a theme or player library that wraps or replaces it, or a live/streamed source with no fixed duration, can change which events fire and what they report."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са изворним HTML5 <video> или <audio> плејером уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а. Напомена: пратилац се везује за изворни медијски елемент, па тема или библиотека плејера која га обмотава или замењује, или извор уживо/пренос без утврђеног трајања, може да промени који се догађаји покрећу и шта пријављују."
+
+#: src/Modules/MediaEvents/AdminSchema.php:109
+msgid "HTML5 video and audio events"
+msgstr "HTML5 видео и аудио догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:101
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Soundcloud media embedded on your site. Each event also populates Google Tag Manager's built-in Video variables."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са Soundcloud медијем уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а."
+
+#: src/Modules/MediaEvents/AdminSchema.php:92
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a Vimeo video embedded on your site. Each event also populates Google Tag Manager's built-in Video variables."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са Vimeo видео снимком уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а."
+
+#: src/Modules/MediaEvents/AdminSchema.php:65
+msgid "Media players"
+msgstr "Медијски плејери"
+
+#: src/Modules/MediaEvents/AdminSchema.php:82
+msgid "Check this option to include a Tag Manager event when a visitor interacts with a YouTube video embedded on your site. Each event also populates Google Tag Manager's built-in Video variables (Video Status, Video URL, Video Title, Video Provider, Video Duration, Video Current Time, Video Percent). Deprecated: Google Tag Manager now ships its own native YouTube Video trigger, which is the recommended way to measure YouTube playback going forward."
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када посетилац ступи у интеракцију са YouTube видео снимком уграђеним на вашем сајту. Сваки догађај такође попуњава уграђене Video променљиве Google Tag Manager-а (Video Status, Video URL, Video Title, Video Provider, Video Duration, Video Current Time, Video Percent). Застарело: Google Tag Manager сада има сопствени изворни окидач YouTube Video, што је препоручени начин мерења YouTube репродукције убудуће."
+
+#: src/Modules/MediaEvents/AdminSchema.php:55
+msgid "Fire tags in Google Tag Manager when visitors interact with embedded media players on your website."
+msgstr "Покрените ознаке у Google Tag Manager-у када посетиоци ступе у интеракцију са уграђеним медијским плејерима на вашем веб сајту."
+
+#. translators: %s: the environment type reported by WordPress, always
+#. "production" here.
+#: src/Modules/Container/AdminSchema.php:483
+msgid "On this site WordPress currently reports the environment type \"%s\", so with this option turned on the GTM container is still loaded here."
+msgstr "На овом сајту Вордпрес тренутно пријављује врсту окружења „%s“, па се са укљученом овом могућношћу GTM спремник овде и даље учитава."
+
+#. translators: %s: the environment type reported by WordPress, e.g. "staging".
+#: src/Modules/Container/AdminSchema.php:477
+msgid "On this site WordPress currently reports the environment type \"%s\", so with this option turned on the GTM container is NOT loaded here (the data layer stays active)."
+msgstr "На овом сајту Вордпрес тренутно пријављује врсту окружења „%s“, па се са укљученом овом могућношћу GTM спремник овде НЕ учитава (слој података остаје активан)."
+
+#: src/Modules/Container/AdminSchema.php:487
+msgid "On this site WP_ENVIRONMENT_TYPE is not set, so WordPress falls back to the environment type \"production\" and the GTM container is still loaded here even with this option turned on. Set WP_ENVIRONMENT_TYPE to \"staging\", \"development\" or \"local\" on your non-production copies for this option to take effect there."
+msgstr "На овом сајту WP_ENVIRONMENT_TYPE није подешен, па се Вордпрес враћа на врсту окружења „production“ и GTM спремник се овде и даље учитава чак и када је ова могућност укључена. Подесите WP_ENVIRONMENT_TYPE на „staging“, „development“ или „local“ на својим непродукционим копијама да би ова могућност тамо ступила на снагу."
+
+#: src/Modules/Container/AdminSchema.php:461
+msgid "When turned on, the GTM container code is only output when WordPress reports the environment type as \"production\". On any other environment (local, development, staging) the container is suppressed while the data layer stays active - so a cloned or staging copy of your site does not send hits to your live Google Tag Manager container without deactivating the plugin. This relies on the WP_ENVIRONMENT_TYPE constant (or WP_ENVIRONMENT_TYPE environment variable) being set on non-production copies; it defaults to \"production\" when unset. For host-based control without an option, return false from the gtm4wp_output_container filter."
+msgstr "Када је укључено, кôд GTM спремника се исписује само када Вордпрес пријави врсту окружења као „production“. У сваком другом окружењу (local, development, staging) спремник се потискује док слој података остаје активан – тако клонирана или пробна копија вашег сајта не шаље поготке у ваш активни Google Tag Manager спремник, без искључивања додатка. Ово се ослања на то да је константа WP_ENVIRONMENT_TYPE (или променљива окружења WP_ENVIRONMENT_TYPE) подешена на непродукционим копијама; подразумевано је „production“ када није подешена. За контролу на основу домаћина без могућности, вратите false из филтера gtm4wp_output_container."
+
+#: src/Modules/Container/AdminSchema.php:437
+msgid "Both environment parameters are hard coded, therefore only the first container is loaded."
+msgstr "Оба параметра окружења су чврсто кодирана, па се учитава само први спремник."
+
+#: src/Modules/Container/AdminSchema.php:433
+msgid "The affected columns are read-only and show the values that are actually used. The values you saved for them are kept untouched and are used again as soon as the constants are removed from wp-config.php."
+msgstr "Колоне на које се ово односи су само за читање и приказују вредности које се заиста користе. Вредности које сте за њих сачували остају нетакнуте и поново се користе чим се константе уклоне из wp-config.php."
+
+#: src/Modules/Container/AdminSchema.php:431
+msgid "Those constants also decide which containers are loaded, so the whole table is read-only and shows the containers that are actually running. The container list you saved here is kept untouched and is used again as soon as the constants are removed from wp-config.php."
+msgstr "Те константе такође одлучују који се спремници учитавају, па је цела табела само за читање и приказује спремнике који заиста раде. Списак спремника који сте овде сачували остаје нетакнут и поново се користи чим се константе уклоне из wp-config.php."
+
+#. translators: %s: comma separated list of wp-config.php constant names, e.g.
+#. GTM4WP_HARDCODED_GTM_ID.
+#: src/Modules/Container/AdminSchema.php:426
+msgid "Part of this setting is fixed in your wp-config.php file by %s and cannot be changed here."
+msgstr "Део овог подешавања је утврђен у вашој датотеци wp-config.php помоћу %s и не може се овде променити."
+
+#: src/Modules/Container/AdminSchema.php:406
+msgid ""
+"Add one row for each Google Tag Manager container you want to load.<br />\n"
+"\t\t\t\tThe environment parameters (gtm_auth and gtm_preview) activate a specific container environment; both values are required to activate an environment, leave both empty to load the live version.<br />\n"
+"\t\t\t\tEnter a custom domain name (without the https:// prefix) and a custom path if you are using a server side GTM container for tracking. Leave them empty to use www.googletagmanager.com and gtm.js.<br />\n"
+"\t\t\t\tWhen a custom path is set you can also turn on \"Omit container ID\" so that the container ID is left out of the loader URL - use this when your server side GTM container is selected by its path and expects no id parameter."
+msgstr ""
+"Додајте по један ред за сваки Google Tag Manager спремник који желите да учитате.<br />\n"
+"\t\t\t\tПараметри окружења (gtm_auth и gtm_preview) укључују одређено окружење спремника; обе вредности су потребне за укључивање окружења, оставите обе празне да бисте учитали активно издање.<br />\n"
+"\t\t\t\tУнесите произвољни назив домена (без префикса https://) и произвољну путању ако користите GTM спремник на страни сервера за праћење. Оставите их празне да бисте користили www.googletagmanager.com и gtm.js.<br />\n"
+"\t\t\t\tКада је подешена произвољна путања, можете укључити и „Изостави ИБ спремника“ тако да ИБ спремника буде изостављен из адресе учитавача – користите ово када се ваш GTM спремник на страни сервера бира према путањи и не очекује параметар id."
+
+#: src/Modules/Container/AdminSchema.php:368
+msgid "Do not load the GTM container on the frontend when the logged in user has any of the checked roles."
+msgstr "Не учитавај GTM спремник на предњем делу када пријављени корисник има било коју од штиклираних улога."
+
+#: src/Modules/Container/AdminSchema.php:357
+msgid "Only output the container on production environments"
+msgstr "Исписуј спремник само у продукционим окружењима"
+
+#: src/Modules/Container/AdminSchema.php:327
+msgid "Invalid dataLayer variable name. It has to be a valid JavaScript variable name: start with a letter, '_' or '$', followed by letters, digits, '_' or '$'. A hyphen is not allowed."
+msgstr "Неисправан назив променљиве dataLayer. Мора бити исправан назив JavaScript променљиве: да почиње словом, '_' или '$', након чега следе слова, цифре, '_' или '$'. Цртица није дозвољена."
+
+#: src/Modules/Container/AdminSchema.php:291
+msgid "Off - container code turned off, data layer only"
+msgstr "Искључено - кôд спремника искључен, само слој података"
+
+#: src/Modules/Container/AdminSchema.php:290
+msgid "Automatically after the opening body tag (theme must support wp_body_open)"
+msgstr "Аутоматски после почетне ознаке body (тема мора да подржава wp_body_open)"
+
+#: src/Modules/Container/AdminSchema.php:289
+msgid "Manually coded after the opening body tag"
+msgstr "Ручно кодирано после почетне ознаке body"
+
+#: src/Modules/Container/AdminSchema.php:288
+msgid "Footer of the page (compatible with all WP themes, no Search Console verification)"
+msgstr "Подножје странице (сагласно са свим WP темама, без провере у Search Console)"
+
+#: src/Modules/Container/AdminSchema.php:274
+msgid ""
+"Decides where to put the second, so called <code>&lt;noscript&gt;</code> part of the GTM container code. The main GTM container code will always be placed into the <code>&lt;head&gt;</code> section of your webpages.<br />\n"
+"\t\t\t\t\t\tIf you select \"Manually coded\", add the following code just after the opening &lt;body&gt; tag in your template:<br />\n"
+"\t\t\t\t\t\t<code>&lt;?php if ( function_exists( 'gtm4wp_the_gtm_tag' ) ) { gtm4wp_the_gtm_tag(); } ?&gt;</code><br />\n"
+"\t\t\t\t\t\tSelecting \"Off\" removes both parts of the container code but leaves data layer codes working."
+msgstr ""
+"Одређује где ће се поставити други, такозвани <code>&lt;noscript&gt;</code> део кôда GTM спремника. Главни кôд GTM спремника ће увек бити постављен у одељак <code>&lt;head&gt;</code> ваших веб страница.<br />\n"
+"\t\t\t\t\t\tАко изаберете „Ручно кодирано“, додајте следећи кôд одмах после почетне ознаке &lt;body&gt; у свом шаблону:<br />\n"
+"\t\t\t\t\t\t<code>&lt;?php if ( function_exists( 'gtm4wp_the_gtm_tag' ) ) { gtm4wp_the_gtm_tag(); } ?&gt;</code><br />\n"
+"\t\t\t\t\t\tИзбор „Искључено“ уклања оба дела кôда спремника, али кодови слоја података настављају да раде."
+
+#. translators: %s: the container ID of the row with the invalid value.
+#: src/Modules/Container/AdminSchema.php:246
+msgid "Invalid custom domain path in the row of container %s. Value can include anything between a-z, A-Z, 0-9 or any of the characters . - _ /"
+msgstr "Неисправна путања произвољног домена у реду спремника %s. Вредност може да садржи било шта између a-z, A-Z, 0-9 или било који од знакова . - _ /"
+
+#. translators: %s: the container ID of the row with the invalid value.
+#: src/Modules/Container/AdminSchema.php:232
+msgid "Invalid custom domain name in the row of container %s. Enter a valid domain name without the https:// prefix."
+msgstr "Неисправан назив произвољног домена у реду спремника %s. Унесите исправан назив домена без префикса https://."
+
+#. translators: %s: the container ID of the row with the invalid value.
+#: src/Modules/Container/AdminSchema.php:215
+msgid "Invalid gtm_preview environment parameter value in the row of container %s. It should have the format 'env-NN' where NN is an integer number."
+msgstr "Неисправна вредност параметра окружења gtm_preview у реду спремника %s. Треба да буде у облику 'env-NN' где је NN цео број."
+
+#. translators: %s: the container ID of the row with the invalid value.
+#: src/Modules/Container/AdminSchema.php:204
+msgid "Invalid gtm_auth environment parameter value in the row of container %s. It should only contain letters, numbers or the '-' and '_' characters."
+msgstr "Неисправна вредност параметра окружења gtm_auth у реду спремника %s. Треба да садржи само слова, бројеве или знакове '-' и '_'."
+
+#. translators: %s: the invalid container ID as entered by the user.
+#: src/Modules/Container/AdminSchema.php:181
+msgid "Invalid or missing Google Tag Manager ID in one of the container rows: \"%s\". Valid ID format: GTM-XXXXX."
+msgstr "Неисправан или недостајући Google Tag Manager ИБ у једном од редова спремника: „%s“. Исправан облик ИБ-а: GTM-XXXXX."
+
+#. translators: %s: the duplicated container ID.
+#: src/Modules/Container/AdminSchema.php:192
+msgid "The Google Tag Manager ID \"%s\" is listed more than once. Every container ID can only be entered in one row."
+msgstr "Google Tag Manager ИБ „%s“ је наведен више пута. Сваки ИБ спремника може бити унет само у један ред."
+
+#: src/Modules/Container/AdminSchema.php:133
+msgid "Omit container ID"
+msgstr "Изостави ИБ спремника"
+
+#: src/Modules/Container/AdminSchema.php:150
+msgid "Google Tag Manager containers"
+msgstr "Google Tag Manager спремници"
+
+#: src/Modules/Container/AdminSchema.php:128
+msgid "Custom path"
+msgstr "Произвољна путања"
+
+#: src/Modules/Container/AdminSchema.php:123
+msgid "Custom domain"
+msgstr "Произвољни домен"
+
+#: src/Modules/Container/AdminSchema.php:118
+msgid "Environment gtm_preview"
+msgstr "Окружење gtm_preview"
+
+#: src/Modules/Container/AdminSchema.php:113
+msgid "Environment gtm_auth"
+msgstr "Окружење gtm_auth"
+
+#: src/Modules/Container/AdminSchema.php:108
+msgid "Container ID"
+msgstr "ИБ спремника"
+
+#: src/Modules/Container/AdminSchema.php:51
+msgid "Google Tag Manager container"
+msgstr "Google Tag Manager спремник"
+
+#: src/Modules/ContactForm7/AdminSchema.php:104
+msgid "In addition to the gtm4wp.contactForm7* events, push Google Analytics 4 recommended form events: form_start (on first field interaction), form_submit (on submit) and generate_lead (on a successful send). Each carries form_id, form_name and form_destination. Like GA4 Enhanced Measurement, form_submit fires on every submission attempt, including one Contact Form 7 rejects, so form_submit and generate_lead also carry form_status with the Contact Form 7 status (mail_sent, validation_failed, spam and so on) to tell the two apart. Useful because GA4 Enhanced Measurement does not reliably capture Contact Form 7 AJAX submissions on its own."
+msgstr "Поред догађаја gtm4wp.contactForm7*, шаљи и препоручене догађаје образаца за Google Analytics 4: form_start (при првој интеракцији са пољем), form_submit (при слању) и generate_lead (при успешном слању). Сваки носи form_id, form_name и form_destination. Као и GA4 Enhanced Measurement, form_submit се покреће при сваком покушају слања, укључујући и онај који Contact Form 7 одбије, па form_submit и generate_lead носе и form_status са стањем Contact Form 7 (mail_sent, validation_failed, spam итд.) да би се то двоје разликовало. Корисно јер GA4 Enhanced Measurement сам по себи не хвата поуздано AJAX слања Contact Form 7."
+
+#: src/Modules/ContactForm7/AdminSchema.php:103
+msgid "Also push GA4 recommended events"
+msgstr "Шаљи и препоручене GA4 догађаје"
+
+#: src/Modules/ContactForm7/AdminSchema.php:95
+msgid "None: do not include submitted fields"
+msgstr "Ништа: не укључуј послата поља"
+
+#: src/Modules/ContactForm7/AdminSchema.php:94
+msgid "Field names only (no values)"
+msgstr "Само називи поља (без вредности)"
+
+#: src/Modules/ContactForm7/AdminSchema.php:93
+msgid "Full: field names and submitted values (default)"
+msgstr "Потпуно: називи поља и послате вредности (подразумевано)"
+
+#: src/Modules/ContactForm7/AdminSchema.php:90
+msgid "Controls how submitted Contact Form 7 field values are exposed in the data layer. Submitted values may contain personal data; whether it is forwarded to analytics or advertising tools is the responsibility of the tag/container manager. Choose \"Field names only\" or \"None\" to keep personal data out of the data layer."
+msgstr "Одређује како се послате вредности поља Contact Form 7 излажу у слоју података. Послате вредности могу да садрже личне податке; да ли се они прослеђују алатима за аналитику или оглашавање је одговорност управника ознака/спремника. Изаберите „Само називи поља“ или „Ништа“ да бисте личне податке држали ван слоја података."
+
+#: src/Modules/ContactForm7/AdminSchema.php:89
+msgid "Submitted field values in the data layer"
+msgstr "Послате вредности поља у слоју података"
+
+#: src/Modules/ContactForm7/AdminSchema.php:81
+msgid "Check this to fire dataLayer events for Contact Form 7 submissions (supported events: before submit, invalid input, unaccepted terms, spam detected, submission aborted, form submitted, mail sent, mail send failed). Each event carries the form ID, unit tag, container post ID, locale and submission status."
+msgstr "Штиклирајте ово да бисте покретали dataLayer догађаје за слања Contact Form 7 (подржани догађаји: пре слања, неисправан унос, неприхваћени услови, откривена непожељна порука, слање прекинуто, образац послат, порука послата, слање поруке није успело). Сваки догађај носи ИБ обрасца, ознаку јединице, ИБ чланка спремника, локалитет и стање слања."
+
+#: src/Modules/ConsentMode/AdminSchema.php:247
+msgid "The cookies version (cookiesVersion) loaded by the SDK. The list is fetched automatically from your Axeptio project once a valid Project ID is set above."
+msgstr "Издање колачића (cookiesVersion) које учитава SDK. Списак се аутоматски дохвата из вашег Axeptio пројекта чим се изнад подеси исправан ИБ пројекта."
+
+#: src/Modules/ConsentMode/AdminSchema.php:258
+msgid "Enable Google Consent Mode v2"
+msgstr "Укључи Google Consent Mode v2"
+
+#: src/Modules/ConsentMode/AdminSchema.php:246
+msgid "Cookies version"
+msgstr "Издање колачића"
+
+#: src/Modules/ConsentMode/AdminSchema.php:235
+msgid "Your Axeptio project identifier, passed to the SDK as the clientId. You can find it in your Axeptio dashboard."
+msgstr "Идентификатор вашег Axeptio пројекта, прослеђен SDK-у као clientId. Можете га пронаћи на својој Axeptio контролној табли."
+
+#: src/Modules/ConsentMode/AdminSchema.php:234
+msgid "Axeptio Project ID"
+msgstr "ИБ Axeptio пројекта"
+
+#: src/Modules/ConsentMode/AdminSchema.php:223
+msgid "Enable this to let GTM4WP load the Axeptio CMP SDK directly. No separate Axeptio plugin is required. Enter your Axeptio project ID and cookies version below."
+msgstr "Укључите ово да бисте дозволили GTM4WP да директно учита Axeptio CMP SDK. Није потребан посебан Axeptio додатак. Унесите ИБ свог Axeptio пројекта и издање колачића испод."
+
+#: src/Modules/ConsentMode/AdminSchema.php:259
+msgid "When enabled, Axeptio drives Google Consent Mode v2: it fires both the \"default\" (everything denied) and the \"update\" commands using its certified vendor mapping. Use this instead of the plugin's own \"Google Consent Mode\" feature, and do not enable both. A dedicated dataLayer event (gtm4wp.axeptioConsentUpdate) is also pushed whenever the visitor updates their choices."
+msgstr "Када је укључено, Axeptio управља режимом Google Consent Mode v2: покреће и наредбу „default“ (све одбијено) и наредбу „update“ помоћу свог сертификованог мапирања добављача. Користите ово уместо сопствене функције додатка „Google Consent Mode“ и немојте укључити обе. Посебан dataLayer догађај (gtm4wp.axeptioConsentUpdate) такође се шаље кад год посетилац ажурира своје изборе."
+
+#: src/Modules/ConsentMode/AdminSchema.php:222
+msgid "Enable Axeptio"
+msgstr "Укључи Axeptio"
+
+#. translators: 1: opening anchor tag linking to CookieYes' consent banner
+#. action API documentation. 2: Closing anchor tag.
+#: src/Modules/ConsentMode/AdminSchema.php:207
+msgid "Enable this to push a GTM data layer event (cookie_consent_update) whenever CookieYes reports a consent choice. It listens for the %1$sCookieYes consent banner action API%2$s events (cookieyes_consent_update and cookieyes_banner_load) and forwards the accepted/rejected categories to the data layer, giving your container a defined consent signal to sequence tags on. It does not defer any events - rely on Google Consent Mode v2 to gate tags regardless of push order."
+msgstr "Укључите ово да бисте слали GTM догађај слоја података (cookie_consent_update) кад год CookieYes пријави избор пристанка. Он слуша догађаје %1$sCookieYes API-ја радњи траке пристанка%2$s (cookieyes_consent_update и cookieyes_banner_load) и прослеђује прихваћене/одбијене категорије у слој података, дајући вашем спремнику одређен сигнал пристанка за редослед ознака. Не одлаже ниједан догађај – ослоните се на Google Consent Mode v2 за условљавање ознака без обзира на редослед слања."
+
+#: src/Modules/ConsentMode/AdminSchema.php:204
+msgid "CookieYes consent bridge"
+msgstr "CookieYes мост пристанка"
+
+#: src/Modules/ConsentMode/AdminSchema.php:192
+msgid "Enabling this feature will fire a GTM event (cookie_consent_update) when the consent banner has been closed with consents being set or during pageload when previously set consents have been found. Deprecated: this integration only targets the long-outdated WebToffee GDPR Cookie Consent v2.x product line. You do not need it with v3.x or above, which ships all the necessary code to integrate the consent banner with Google Tag Manager natively - please upgrade the WebToffee plugin instead of using this option."
+msgstr "Укључивање ове функције ће покренути GTM догађај (cookie_consent_update) када се трака пристанка затвори уз подешене пристанке или током учитавања странице када се пронађу раније подешени пристанци. Застарело: ова интеграција је намењена само одавно застарелој линији производа WebToffee GDPR Cookie Consent v2.x. Није вам потребна уз v3.x или новије, које садржи сав потребан кôд за изворну интеграцију траке пристанка са Google Tag Manager-ом – надоградите WebToffee додатак уместо коришћења ове могућности."
+
+#: src/Modules/ConsentMode/AdminSchema.php:79
+msgid "Axeptio"
+msgstr "Axeptio"
+
+#: src/Modules/ConsentMode/AdminSchema.php:78
+msgid "CookieYes"
+msgstr "CookieYes"
+
+#: src/Modules/ConsentMode/AdminSchema.php:65
+msgid "Configure Google consent mode default values and integrations with consent management tools."
+msgstr "Подесите подразумеване вредности режима пристанка Google и интеграције са алатима за управљање пристанком."
+
+#: src/Modules/ConsentMode/AdminSchema.php:56
+msgid "Consent mode & consent tools"
+msgstr "Режим пристанка и алати за пристанак"
+
+#: src/Modules/ClientDeviceData/AdminSchema.php:98
+msgid "Check this option to include the type of device the user is currently using (desktop or mobile) including model data where available."
+msgstr "Штиклирајте ову могућност да бисте укључили врсту уређаја који корисник тренутно користи (рачунар или мобилни), укључујући податке о моделу где су доступни."
+
+#: src/Modules/ClientDeviceData/AdminSchema.php:88
+msgid "OS data"
+msgstr "Подаци о ОС-у"
+
+#: src/Modules/ClientDeviceData/AdminSchema.php:80
+msgid "Check this option to include the name and version of the browser the visitor uses."
+msgstr "Штиклирајте ову могућност да бисте укључили назив и издање прегледача који посетилац користи."
+
+#: src/Modules/ClientDeviceData/AdminSchema.php:64
+msgid "Collected data"
+msgstr "Прикупљени подаци"
+
+#: src/Modules/ClientDeviceData/AdminSchema.php:54
+msgid "Data is collected in the browser using User-Agent Client Hints and pushed into the data layer as a gtm4wp.deviceData event shortly after page load. Browsers without Client Hints support (Safari, Firefox) provide less detail."
+msgstr "Подаци се прикупљају у прегледачу помоћу User-Agent Client Hints и шаљу у слој података као догађај gtm4wp.deviceData убрзо после учитавања странице. Прегледачи без подршке за Client Hints (Safari, Firefox) пружају мање детаља."
+
+#: src/Modules/Blacklist/AdminSchema.php:302
+msgid "Entity groups"
+msgstr "Групе ентитета"
+
+#: src/Modules/Blacklist/AdminSchema.php:298
+msgid "Variables"
+msgstr "Променљиве"
+
+#: src/Modules/ClientDeviceData/AdminSchema.php:45
+msgid "Browser, OS & device data"
+msgstr "Подаци о прегледачу, ОС-у и уређају"
+
+#: src/Modules/Blacklist/AdminSchema.php:294
+msgid "Triggers"
+msgstr "Окидачи"
+
+#: src/Modules/Blacklist/AdminSchema.php:290
+msgid "Tags"
+msgstr "Ознаке"
+
+#: src/Modules/Blacklist/AdminSchema.php:272
+msgid "Select the tag, trigger, variable and entity group types affected by the restriction mode above."
+msgstr "Изаберите врсте ознака, окидача, променљивих и група ентитета на које утиче режим ограничења изнад."
+
+#: src/Modules/Blacklist/AdminSchema.php:254
+msgid "Allowlist selected entities"
+msgstr "Дозволи изабране ентитете"
+
+#: src/Modules/Blacklist/AdminSchema.php:253
+msgid "Blocklist selected entities"
+msgstr "Блокирај изабране ентитете"
+
+#: src/Modules/Blacklist/AdminSchema.php:271
+msgid "Restricted entities"
+msgstr "Ограничени ентитети"
+
+#: src/Modules/Blacklist/AdminSchema.php:245
+msgid "Select whether the checked entities below should be blocklisted (blocked) or allowlisted (everything else blocked)."
+msgstr "Изаберите да ли штиклирани ентитети испод треба да буду на списку блокираних (блокирани) или на списку дозвољених (све остало блокирано)."
+
+#: src/Modules/Blacklist/AdminSchema.php:216
+msgid "Entities"
+msgstr "Ентитети"
+
+#: src/Modules/Blacklist/AdminSchema.php:215
+#: src/Modules/Blacklist/AdminSchema.php:244
+msgid "Restriction mode"
+msgstr "Режим ограничења"
+
+#: src/Modules/Blacklist/AdminSchema.php:252
+msgid "Disabled"
+msgstr "Искључено"
+
+#: src/Modules/Blacklist/AdminSchema.php:194
+msgid "Tag restrictions"
+msgstr "Ограничења ознака"
+
+#: src/Modules/Blacklist/AdminSchema.php:184
+msgid "Sandboxed custom template scripts"
+msgstr "Скрипте произвољних шаблона у изолованом окружењу"
+
+#: src/Modules/Amp/AdminSchema.php:44 src/Modules/Amp/AdminSchema.php:63
+msgid "AMP"
+msgstr "AMP"
+
+#: src/Admin/RestController.php:376
+msgid "The uploaded file is not a valid GTM4WP settings export."
+msgstr "Отпремљена датотека није исправан извоз подешавања GTM4WP."
+
+#: src/Admin/RestController.php:362
+msgid "The settings file is too large to be a GTM4WP export."
+msgstr "Датотека подешавања је превелика да би била GTM4WP извоз."
+
+#: src/Admin/RestController.php:354
+msgid "No settings file was uploaded."
+msgstr "Ниједна датотека подешавања није отпремљена."
+
+#. translators: 1: the configured dataLayer variable name that was rejected. 2:
+#. opening anchor element pointing to the GTM4WP options page. 3: closing
+#. anchor element.
+#: src/Admin/Notices.php:195
+msgid "The configured dataLayer variable name \"%1$s\" is not a valid JavaScript variable name, so Google Tag Manager for WordPress is using the default name \"dataLayer\" instead. Please %2$scorrect it on the settings page%3$s."
+msgstr "Подешени назив променљиве dataLayer „%1$s“ није исправан назив JavaScript променљиве, па Google Tag Manager for WordPress уместо тога користи подразумевани назив „dataLayer“. %2$sИсправите га на страници подешавања%3$s."
+
+#. translators: 1: required PHP version, 2: required WordPress version, 3:
+#. current PHP version, 4: current WordPress version.
+#: duracelltomi-google-tag-manager-for-wordpress.php:69
+msgid "GTM4WP 2.x requires PHP %1$s and WordPress %2$s or newer. Your site runs PHP %3$s and WordPress %4$s, therefore the plugin is currently inactive. Please update your environment or downgrade to GTM4WP 1.x."
+msgstr "GTM4WP 2.x захтева PHP %1$s и Вордпрес %2$s или новије. Ваш сајт ради на PHP %3$s и Вордпресу %4$s, па је додатак тренутно неактиван. Ажурирајте своје окружење или се вратите на GTM4WP 1.x."
+
+#. translators: 1: opening anchor element pointing to the GTM4WP options page.
+#. 2: closing anchor element.
+#: src/Admin/Notices.php:172
+msgid "Google Tag Manager for WordPress is reading the visitor IP address from a custom HTTP header, but no trusted proxy addresses are configured. HTTP headers are sent by the visitor, so the reported IP address can be chosen by them. Please %1$sadd the addresses of your reverse proxy, load balancer or CDN%2$s, or turn the custom header off."
+msgstr "Google Tag Manager for WordPress чита IP адресу посетиоца из произвољног HTTP заглавља, али ниједна адреса поузданог посредника није подешена. HTTP заглавља шаље посетилац, па пријављену IP адресу он може да изабере. %1$sДодајте адресе свог обрнутог посредника, уравнотеживача оптерећења или CDN-а%2$s или искључите произвољно заглавље."
+
+#. translators: %s: comma separated list of wp-config.php constant names that
+#. hold an invalid value.
+#: src/Admin/Notices.php:146
+msgid "The value of %s in your wp-config.php file is invalid and has been ignored. Please correct it, otherwise your Google Tag Manager container will not use the setting you configured there."
+msgid_plural "The values of %s in your wp-config.php file are invalid and have been ignored. Please correct them, otherwise your Google Tag Manager container will not use the settings you configured there."
+msgstr[0] "Вредност за %s у вашој датотеци wp-config.php је неисправна и занемарена је. Исправите је, иначе ваш Google Tag Manager спремник неће користити подешавања која сте тамо подесили."
+msgstr[1] "Вредности за %s у вашој датотеци wp-config.php су неисправне и занемарене су. Исправите их, иначе ваш Google Tag Manager спремник неће користити подешавања која сте тамо подесили."
+msgstr[2] "Вредности за %s у вашој датотеци wp-config.php су неисправне и занемарене су. Исправите их, иначе ваш Google Tag Manager спремник неће користити подешавања која сте тамо подесили."
+
+#: src/Admin/PluginRow.php:60
+msgid "Important Upgrade Notice:"
+msgstr "Важно обавештење о надоградњи:"
+
+#: src/Modules/WooCommerce/AdminSchema.php:395
+msgid "Set maximum timeout for select_item event"
+msgstr "Подеси највеће временско ограничење за догађај select_item"
+
+#: src/Modules/ConsentMode/AdminSchema.php:191
+msgid "WebToffee GDPR Cookie Consent (v2.x)"
+msgstr "WebToffee GDPR Cookie Consent (v2.x)"
+
+#: src/Modules/WooCommerce/AdminSchema.php:255
+msgid "If this option is turned on, the view_item event will be also fired during page load of a variable product using parent product data."
+msgstr "Ако је ова могућност укључена, догађај view_item ће се покренути и током учитавања странице променљивог производа помоћу података родитељског производа."
+
+#: src/Modules/WooCommerce/AdminSchema.php:254
+msgid "Fire view_item on parent product"
+msgstr "Покрени view_item на родитељском производу"
+
+#: src/Modules/WooCommerce/AdminSchema.php:181
+msgid "If you have many products shown on product category pages and/or on your site home, you could miss pageviews in Google Analytics due to the amount of data that is needed to be sent. To prevent this, you can split product impression data into multiple Google Analytics events by entering a number here (minimum 10-15 recommended). Leave this value 0 to include product impression data in your pageview hit."
+msgstr "Ако имате много производа приказаних на страницама категорија производа и/или на почетној страници сајта, можете пропустити прегледе страница у Google Analytics због количине података које треба послати. Да бисте ово спречили, можете поделити податке о приказима производа на више Google Analytics догађаја уносом броја овде (препоручено најмање 10-15). Оставите ову вредност на 0 да бисте податке о приказима производа укључили у поготак прегледа странице."
+
+#: src/Modules/ConsentMode/AdminSchema.php:77
+msgid "WebToffee GDPR Cookie Consent"
+msgstr "WebToffee GDPR Cookie Consent"
+
+#: src/Modules/ConsentMode/AdminSchema.php:139
+msgid "Select this checkbox to make the ad_personalization flag \"granted\" by default."
+msgstr "Штиклирајте ово поље да би ознака ad_personalization подразумевано била „granted“."
+
+#: src/Modules/ConsentMode/AdminSchema.php:138
+msgid "Ad Personalization"
+msgstr "Прилагођавање огласа"
+
+#: src/Modules/ConsentMode/AdminSchema.php:130
+msgid "Select this checkbox to make the ad_user_data flag \"granted\" by default."
+msgstr "Штиклирајте ово поље да би ознака ad_user_data подразумевано била „granted“."
+
+#: src/Modules/ConsentMode/AdminSchema.php:129
+msgid "Ad User Data"
+msgstr "Кориснички подаци за огласе"
+
+#: src/Modules/WooCommerce/AdminSchema.php:171
+msgid "Track e-commerce"
+msgstr "Прати е-трговину"
+
+#: src/Modules/PageVariables/AdminSchema.php:420
+msgid "Visitor IP - Read from custom header."
+msgstr "IP посетиоца - Читај из произвољног заглавља."
+
+#. Plugin Name of the plugin
+#: duracelltomi-google-tag-manager-for-wordpress.php
+msgid "GTM4WP - A Google Tag Manager (GTM) plugin for WordPress"
+msgstr "GTM4WP - Google Tag Manager (GTM) додатак за Вордпрес"
+
+#. translators: 1: opening anchor tag linking to Google's documentation about
+#. the consent mode command. 2: Closing anchor tag.
+#: src/Modules/ConsentMode/AdminSchema.php:97
+msgid "Enable this checkbox if you wish to execute the \"default\" command of %1$sGoogle Consent Mode%2$s before the container loads. The \"update\" command needs to be executed from your consent management tool. DO NOT enable this feature if your consent manager tool supports firing both the \"default\" and the \"update\" command."
+msgstr "Штиклирајте ово поље ако желите да извршите наредбу „default“ режима %1$sGoogle Consent Mode%2$s пре учитавања спремника. Наредба „update“ мора да се изврши из вашег алата за управљање пристанком. НЕ укључујте ову функцију ако ваш алат за управљање пристанком подржава покретање и наредбе „default“ и наредбе „update“."
+
+#: src/Modules/ConsentMode/AdminSchema.php:166
+msgid "Select this checkbox to make the security_storage flag \"granted\" by default."
+msgstr "Штиклирајте ово поље да би ознака security_storage подразумевано била „granted“."
+
+#: src/Modules/ConsentMode/AdminSchema.php:148
+msgid "Select this checkbox to make the functionality_storage flag \"granted\" by default."
+msgstr "Штиклирајте ово поље да би ознака functionality_storage подразумевано била „granted“."
+
+#: src/Modules/ConsentMode/AdminSchema.php:157
+msgid "Select this checkbox to make the personalization_storage flag \"granted\" by default."
+msgstr "Штиклирајте ово поље да би ознака personalization_storage подразумевано била „granted“."
+
+#: src/Modules/ConsentMode/AdminSchema.php:112
+msgid "Select this checkbox to make the analytics_storage flag \"granted\" by default."
+msgstr "Штиклирајте ово поље да би ознака analytics_storage подразумевано била „granted“."
+
+#: src/Modules/ConsentMode/AdminSchema.php:165
+msgid "Security Storage"
+msgstr "Складиште безбедности"
+
+#: src/Modules/ConsentMode/AdminSchema.php:147
+msgid "Functionality Storage"
+msgstr "Складиште функционалности"
+
+#: src/Modules/ConsentMode/AdminSchema.php:111
+msgid "Analytics Storage"
+msgstr "Складиште аналитике"
+
+#: src/Modules/ConsentMode/AdminSchema.php:156
+msgid "Personalization Storage"
+msgstr "Складиште прилагођавања"
+
+#: src/Modules/ConsentMode/AdminSchema.php:121
+msgid "Select this checkbox to make the ad_storage flag \"granted\" by default."
+msgstr "Штиклирајте ово поље да би ознака ad_storage подразумевано била „granted“."
+
+#: src/Modules/ConsentMode/AdminSchema.php:120
+msgid "Ad Storage"
+msgstr "Складиште огласа"
+
+#: src/Modules/ConsentMode/AdminSchema.php:75
+#: src/Modules/ConsentMode/AdminSchema.php:94
+msgid "Google Consent Mode"
+msgstr "Google Consent Mode"
+
+#. translators: 1: anchor element linking to the official GA4 doc about
+#. clearing the ecommerce object. 2: closing anchor element.
+#: src/Modules/WooCommerce/AdminSchema.php:381
+msgid "Clear the ecommerce object before any new event being pushed into the data layer. Although it is %1$srecommended by Google%2$s, it is not mandatory to activate this feature as the GA4 event tag reads only the last pushed ecommerce data on any new event. Use it if you encounter issues with your GTM implementation."
+msgstr "Очисти објекат е-трговине пре слања сваког новог догађаја у слој података. Иако то %1$sпрепоручује Google%2$s, није обавезно укључити ову функцију јер ознака GA4 догађаја чита само последње послате податке е-трговине при сваком новом догађају. Користите ово ако наиђете на проблеме са својом GTM применом."
+
+#: src/Modules/WooCommerce/AdminSchema.php:378
+msgid "Clear ecommerce object before new event"
+msgstr "Очисти објекат е-трговине пре новог догађаја"
+
+#: src/Modules/Container/AdminSchema.php:349
+msgid "GTM4WP puts several useful messages into the console of your browser which can also help give proper support in some cases. If you see any issues regarding this functionality, you can disable it here."
+msgstr "GTM4WP поставља неколико корисних порука у конзолу вашег прегледача, које у неким случајевима могу помоћи у пружању одговарајуће подршке. Ако приметите било какве проблеме у вези са овом функционалношћу, можете је искључити овде."
+
+#: src/Modules/Container/AdminSchema.php:348
+msgid "Do not use console.log() messages on frontend"
+msgstr "Не користи console.log() поруке на предњем делу"
+
+#. translators: 1: opening anchor tag linking to GTM's developer doc homepage.
+#. 2: Closing anchor tag.
+#: src/Modules/Container/AdminSchema.php:62
+msgid "This plugin is intended to be used by IT and marketing staff. Please be sure you read the %1$sGoogle Tag Manager Help Center%2$s before you start using this plugin."
+msgstr "Овај додатак је намењен IT и маркетиншком особљу. Обавезно прочитајте %1$sGoogle Tag Manager центар за помоћ%2$s пре него што почнете да користите овај додатак."
+
+#. translators: 1: opening anchor tag linking to Cookiebot's documentation
+#. about the automatic cookie blocking feature. 2: Closing anchor tag.
+#: src/Modules/ConsentMode/AdminSchema.php:177
+msgid "Enable this checkbox if you wish to use the %1$sautomatic cookie blocking mode of Cookiebot with Google Tag Manager%2$s."
+msgstr "Штиклирајте ово поље ако желите да користите %1$sрежим аутоматског блокирања колачића Cookiebot-а са Google Tag Manager-ом%2$s."
+
+#. translators: 1: anchor element linking to GTM4WP setup guide for Google Ads
+#. dynamic remarketing. 2: closing anchor element.
+#: src/Modules/WooCommerce/AdminSchema.php:230
+msgid "Select which vertical category to add next to each product to utilize dynamic remarketing for Google Ads. Use the plugin's %1$sofficial setup guide for dynamic remarketing%2$s to setup your Google Tag Manager container."
+msgstr "Изаберите коју вертикалну категорију треба додати уз сваки производ ради коришћења динамичког поновног оглашавања за Google Ads. Користите %1$sзванични водич додатка за подешавање динамичког поновног оглашавања%2$s да бисте подесили свој Google Tag Manager спремник."
+
+#: src/Modules/Container/AdminSchema.php:367
+msgid "User roles to exclude"
+msgstr "Корисничке улоге за искључивање"
+
+#: src/Modules/WooCommerce/AdminSchema.php:338
+msgid "Turn this on to prevent the plugin from flagging orders as being already tracked. Leaving this unchecked ensures that no order data will be tracked multiple times in any ad or measurement system. Please only turn this feature on if you really need it!"
+msgstr "Укључите ово да бисте спречили да додатак означава поруџбине као већ праћене. Ако ово оставите неоштиклирано, обезбеђује се да ниједан податак о поруџбини не буде праћен више пута ни у једном систему за оглашавање или мерење. Укључите ову функцију само ако вам је заиста потребна!"
+
+#: src/Modules/ConsentMode/AdminSchema.php:76
+msgid "Cookiebot"
+msgstr "Cookiebot"
+
+#: src/Modules/ConsentMode/AdminSchema.php:174
+msgid "Cookiebot auto blocking"
+msgstr "Cookiebot аутоматско блокирање"
+
+#: src/Modules/WooCommerce/AdminSchema.php:227
+msgid "Google Ads Business Vertical"
+msgstr "Пословна вертикала за Google Ads"
+
+#: src/Modules/WooCommerce/AdminSchema.php:301
+msgid "To prevent duplicate transaction tracking at the order received page, enter the maximum age (in minutes) of the order or its payment for the transaction to be measured. Viewing the order received page of older orders will be ignored from transaction tracking, as it is considered to be measured in an earlier session."
+msgstr "Да бисте спречили двоструко праћење трансакција на страници примљене поруџбине, унесите највећу старост (у минутима) поруџбине или њеног плаћања да би трансакција била измерена. Прегледи странице примљене поруџбине за старије поруџбине биће занемарени у праћењу трансакција, јер се сматра да су измерени у ранијој сесији."
+
+#: src/Modules/WooCommerce/AdminSchema.php:300
+msgid "Only track orders younger than"
+msgstr "Прати само поруџбине млађе од"
+
+#: src/Modules/Blacklist/AdminSchema.php:205
+msgid "For example blocklisting everything and only allowlisting the Google Analytics tag without allowlisting the URL variable type will cause your Google Analytics tags to be blocked anyway since the attached triggers (Page View) can not fire!"
+msgstr "На пример, ако блокирате све и дозволите само ознаку Google Analytics без дозвољавања врсте променљиве URL, ваше Google Analytics ознаке ће свеједно бити блокиране јер придружени окидачи (Page View) не могу да се покрену!"
+
+#: src/Modules/WooCommerce/ListTracking.php:349
+msgid "Grouped Product Detail Page"
+msgstr "Страница детаља груписаног производа"
+
+#: src/Modules/WooCommerce/AdminSchema.php:291
+msgid "Order data in data layer"
+msgstr "Подаци о поруџбини у слоју података"
+
+#: src/Modules/WooCommerce/AdminSchema.php:319
+msgid "Exclude shipping from revenue"
+msgstr "Искључи доставу из прихода"
+
+#: src/Modules/WooCommerce/AdminSchema.php:320
+msgid "Enable this to exclude shipping costs from the revenue variable while generating the purchase data"
+msgstr "Укључите ово да бисте трошкове доставе искључили из променљиве прихода при стварању података о куповини"
+
+#: src/Modules/WooCommerce/AdminSchema.php:199
+msgid "Select which custom taxonomy is being used to add the brand of products"
+msgstr "Изаберите која се произвољна таксономија користи за додавање бренда производа"
+
+#: src/Modules/WooCommerce/AdminSchema.php:198
+msgid "Taxonomy to be used for product brands"
+msgstr "Таксономија која се користи за брендове производа"
+
+#: src/Modules/WooCommerce/AdminSchema.php:273
+msgid "Cart content in data layer"
+msgstr "Садржај корпе у слоју података"
+
+#: src/Modules/PageVariables/AdminSchema.php:467
+msgid "Add the country code of the user provided by Cloudflare (if Cloudflare is used with your site)"
+msgstr "Додајте кôд државе корисника који пружа Cloudflare (ако се Cloudflare користи са вашим сајтом)"
+
+#: src/Modules/PageVariables/AdminSchema.php:466
+msgid "Cloudflare country code"
+msgstr "Cloudflare кôд државе"
+
+#: src/Modules/PageVariables/AdminSchema.php:200
+msgid "Post Terms"
+msgstr "Појмови чланка"
+
+#: src/Modules/Amp/AdminSchema.php:103
+msgid "Invalid AMP Google Tag Manager Container ID. Valid ID format: GTM-XXXXX. Use comma without additional space (,) to enter more than one ID."
+msgstr "Неисправан ИБ AMP Google Tag Manager спремника. Исправан облик ИБ-а: GTM-XXXXX. Користите зарез без додатног размака (,) да бисте унели више од једног ИБ-а."
+
+#: src/Modules/Container/AdminSchema.php:340
+msgid "Turning on this option will load your Google Tag Manager container as early as possible during page load. This can cause issues if you are using jQuery in your custom HTML tags that fire on 'Page View' events."
+msgstr "Укључивање ове могућности ће учитати ваш Google Tag Manager спремник што је раније могуће током учитавања странице. Ово може изазвати проблеме ако користите jQuery у својим произвољним HTML ознакама које се покрећу на догађајима 'Page View'."
+
+#. translators: 1: opening anchor tag for a link pointing to the official GTM
+#. help center article about the AMP container snippet 2: Closing anchor tag.
+#: src/Modules/Amp/AdminSchema.php:81
+msgid "Enter a comma separated list of Google Tag Manager container IDs that you would like to use on your site. This plugin will add the %1$sAMP GTM snippet%2$s to your AMP pages."
+msgstr "Унесите зарезом раздвојен списак ИБ-ова Google Tag Manager спремника које желите да користите на свом сајту. Овај додатак ће додати %1$sAMP GTM исечак%2$s на ваше AMP странице."
+
+#: src/Modules/Container/AdminSchema.php:339
+msgid "Load GTM container as early as possible"
+msgstr "Учитај GTM спремник што је раније могуће"
+
+#: src/Modules/Amp/AdminSchema.php:78
+msgid "Google Tag Manager 'AMP' Container ID"
+msgstr "ИБ Google Tag Manager 'AMP' спремника"
+
+#: src/Modules/WooCommerce/AdminSchema.php:337
+msgid "Do not flag orders as being tracked"
+msgstr "Не означавај поруџбине као праћене"
+
+#: src/Modules/WooCommerce/AdminSchema.php:180
+msgid "Products per impression"
+msgstr "Производа по приказу"
+
+#: src/Modules/WooCommerce/AdminSchema.php:311
+msgid "Enable this to exclude tax from the revenue variable while generating the purchase data"
+msgstr "Укључите ово да бисте порез искључили из променљиве прихода при стварању података о куповини"
+
+#: src/Modules/WooCommerce/AdminSchema.php:310
+msgid "Exclude tax from revenue"
+msgstr "Искључи порез из прихода"
+
+#: src/Modules/UserEvents/AdminSchema.php:109
+msgid "Check this option to include a Tag Manager event when an existing user has been logged in on the frontend of your site (admin events not included)"
+msgstr "Штиклирајте ову могућност да бисте укључили догађај за Tag Manager када се постојећи корисник пријави на предњем делу вашег сајта (административни догађаји нису укључени)"
+
+#: src/Modules/UserEvents/AdminSchema.php:108
+msgid "User logged in"
+msgstr "Корисник се пријавио"
+
+#: src/Modules/UserEvents/AdminSchema.php:99
+msgid "New user registration"
+msgstr "Регистрација новог корисника"
+
+#: src/Modules/PageVariables/AdminSchema.php:412
+msgid "Check this option to include the IP address of the visitor. You might use this to filter internal traffic inside your GTM container. Please be aware that per GDPR its not allowed to transmit this full IP address to Google Analytics or to any other measurement system without explicit consent from the visitor."
+msgstr "Штиклирајте ову могућност да бисте укључили IP адресу посетиоца. Ово можете користити за филтрирање интерног саобраћаја унутар свог GTM спремника. Имајте на уму да према GDPR-у није дозвољено преносити ову пуну IP адресу у Google Analytics или било који други систем за мерење без изричитог пристанка посетиоца."
+
+#: src/Modules/PageVariables/AdminSchema.php:411
+msgid "Visitor IP"
+msgstr "IP посетиоца"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: duracelltomi-google-tag-manager-for-wordpress.php
+msgid "https://gtm4wp.com/"
+msgstr "https://gtm4wp.com/"
+
+#. translators: %s: the Google Tag Manager container ID with the incomplete
+#. environment configuration.
+#: src/Admin/Notices.php:124
+msgid "Incomplete Google Tag Manager environment configuration of container %s: either the gtm_preview or the gtm_auth parameter value is missing!"
+msgstr "Непотпуно подешавање Google Tag Manager окружења спремника %s: недостаје вредност параметра gtm_preview или gtm_auth!"
+
+#: src/Modules/WooCommerce/AdminSchema.php:219
+msgid "Check this to include the full category path of each product in ecommerce tracking. WARNING! This can lead to performance issues on large sites with lots of traffic!"
+msgstr "Штиклирајте ово да бисте укључили пуну путању категорија сваког производа у праћење е-трговине. УПОЗОРЕЊЕ! Ово може довести до проблема са перформансама на великим сајтовима са много саобраћаја!"
+
+#: src/Modules/WooCommerce/AdminSchema.php:218
+msgid "Include full category path."
+msgstr "Укључи пуну путању категорија."
+
+#: src/Modules/WooCommerce/AdminSchema.php:283
+msgid "Enable this to add all customer data (billing and shipping data, total number of orders and order value) into the data layer"
+msgstr "Укључите ово да бисте све податке о купцу (подаци за наплату и доставу, укупан број поруџбина и вредност поруџбина) додали у слој података"
+
+#: src/Modules/WooCommerce/AdminSchema.php:282
+msgid "Customer data in data layer"
+msgstr "Подаци о купцу у слоју података"
+
+#: src/Modules/PageVariables/AdminSchema.php:385
+msgid "Check this option to include the username of the logged in user."
+msgstr "Штиклирајте ову могућност да бисте укључили корисничко име пријављеног корисника."
+
+#: src/Modules/PageVariables/AdminSchema.php:384
+msgid "Logged in user name"
+msgstr "Корисничко име пријављеног корисника"
+
+#: src/Modules/PageVariables/AdminSchema.php:191
+msgid "Post Format"
+msgstr "Облик чланка"
+
+#: src/Modules/WooCommerce/ListTracking.php:310
+msgid "Upsell Products"
+msgstr "Производи за додатну продају"
+
+#: src/Modules/WooCommerce/ListTracking.php:307
+msgid "Cross-Sell Products"
+msgstr "Производи за унакрсну продају"
+
+#: src/Modules/PageVariables/AdminSchema.php:403
+msgid "Check this option to include the date of creation (registration) of the logged in user."
+msgstr "Штиклирајте ову могућност да бисте укључили датум прављења (регистрације) пријављеног корисника."
+
+#: src/Modules/PageVariables/AdminSchema.php:402
+msgid "Logged in user creation date"
+msgstr "Датум прављења пријављеног корисника"
+
+#: src/Modules/WooCommerce/AdminSchema.php:246
+msgid "Some product feed generator plugins prefix product IDs with a fixed text like 'woocommerce_gpf'. You can enter this prefix here so that tags in your website include this prefix as well."
+msgstr "Неки додаци за стварање довода производа ИБ-овима производа додају утврђени префикс као што је 'woocommerce_gpf'. Овај префикс можете унети овде тако да га укључују и ознаке на вашем веб сајту."
+
+#: src/Modules/WooCommerce/AdminSchema.php:245
+msgid "Product ID prefix"
+msgstr "Префикс ИБ-а производа"
+
+#: src/Modules/PageVariables/AdminSchema.php:394
+msgid "Check this option to include the email address of the logged in user."
+msgstr "Штиклирајте ову могућност да бисте укључили е-адресу пријављеног корисника."
+
+#: src/Modules/WooCommerce/AdminSchema.php:190
+msgid "Check this to use product SKU instead of the ID of the products for remarketing and ecommerce tracking. Will fallback to ID if no SKU is set."
+msgstr "Штиклирајте ово да бисте за поновно оглашавање и праћење е-трговине користили шифру производа уместо ИБ-а производа. Користиће се ИБ ако шифра није подешена."
+
+#: src/Modules/PageVariables/AdminSchema.php:393
+msgid "Logged in user email"
+msgstr "Е-адреса пријављеног корисника"
+
+#: src/Modules/PageVariables/AdminSchema.php:486
+msgid "Name of the current site in a WordPress Multisite environment"
+msgstr "Назив тренутног сајта у окружењу Вордпрес мреже"
+
+#: src/Modules/PageVariables/AdminSchema.php:485
+msgid "Site name"
+msgstr "Назив сајта"
+
+#: src/Modules/PageVariables/AdminSchema.php:476
+msgid "Site ID"
+msgstr "ID сајта"
+
+#: src/Modules/PageVariables/AdminSchema.php:477
+msgid "ID of the current site in a WordPress Multisite environment"
+msgstr "ИБ тренутног сајта у окружењу Вордпрес мреже"
+
+#: src/Modules/PageVariables/AdminSchema.php:137
+msgid "Post author ID"
+msgstr "ИБ аутора чланка"
+
+#: src/Modules/WooCommerce/ListTracking.php:325
+msgid "Featured Products"
+msgstr "Истакнути производи"
+
+#: src/Modules/WooCommerce/ListTracking.php:322
+msgid "Top Rated Products"
+msgstr "Најбоље оцењени производи"
+
+#: src/Modules/WooCommerce/ListTracking.php:319
+msgid "Best Selling Products"
+msgstr "Најпродаванији производи"
+
+#: src/Modules/WooCommerce/ListTracking.php:429
+msgid " (widget)"
+msgstr " (виџет)"
+
+#: src/Modules/WooCommerce/ListTracking.php:316
+msgid "Sale Products"
+msgstr "Производи на снижењу"
+
+#: src/Modules/WooCommerce/ListTracking.php:313
+msgid "Recent Products"
+msgstr "Недавни производи"
+
+#: src/Modules/WooCommerce/ListTracking.php:304
+msgid "Related Products"
+msgstr "Сродни производи"
+
+#: src/Modules/WooCommerce/ListTracking.php:353
+msgid "General Product List"
+msgstr "Општи списак производа"
+
+#: src/Modules/WooCommerce/ListTracking.php:301
+msgid "Search Results"
+msgstr "Резултати претраге"
+
+#: src/Modules/PageVariables/AdminSchema.php:182
+msgid "Post ID"
+msgstr "ИБ чланка"
+
+#: src/Modules/PageVariables/AdminSchema.php:183
+msgid "Check this option to include the post id."
+msgstr "Штиклирајте ову могућност да бисте укључили ИБ чланка."
+
+#. Author of the plugin
+#: duracelltomi-google-tag-manager-for-wordpress.php
+msgid "Thomas Geiger"
+msgstr "Thomas Geiger"
+
+#. Description of the plugin
+#: duracelltomi-google-tag-manager-for-wordpress.php
+msgid "The first Google Tag Manager plugin for WordPress with business goals in mind"
+msgstr "Први Google Tag Manager додатак за Вордпрес направљен са пословним циљевима на уму"
+
+#: src/Admin/Notices.php:212
+msgid "Notice: you should deactivate the plugin \"Google Analytics for WordPress by MonsterInsights\" if you are using Google Analytics tags inside Google Tag Manager!"
+msgstr "Обавештење: требало би да искључите додатак „Google Analytics for WordPress by MonsterInsights“ ако користите Google Analytics ознаке унутар Google Tag Manager-а!"
+
+#. translators: 1: opening anchor element pointing to the GTM4WP options page.
+#. 2: closing anchor element.
+#: src/Admin/Notices.php:104
+msgid "To start using Google Tag Manager for WordPress, please %1$senter your GTM ID%2$s"
+msgstr "Да бисте почели да користите Google Tag Manager for WordPress, %1$sунесите свој GTM ИБ%2$s"
+
+#: src/Modules/MediaEvents/AdminSchema.php:46
+msgid "Media events"
+msgstr "Медијски догађаји"
+
+#: src/Modules/WooCommerce/AdminSchema.php:57
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: src/Admin/SettingsPage.php:110
+msgid "Google Tag Manager"
+msgstr "Google Tag Manager"
+
+#: src/Admin/SettingsPage.php:109
+msgid "Google Tag Manager for WordPress settings"
+msgstr "Подешавања за Google Tag Manager for WordPress"
+
+#: src/Admin/SettingsPage.php:134
+msgid "Google Tag Manager for WordPress options"
+msgstr "Могућности за Google Tag Manager for WordPress"
+
+#: src/Modules/Container/AdminSchema.php:309
+msgid "In some cases you need to rename the dataLayer variable. You can enter your name here. Leave blank for default name: dataLayer"
+msgstr "У неким случајевима је потребно преименовати променљиву dataLayer. Овде можете унети свој назив. Оставите празно за подразумевани назив: dataLayer"
+
+#: src/Modules/Container/AdminSchema.php:79
+#: src/Modules/MediaEvents/AdminSchema.php:66
+#: src/Modules/WooCommerce/AdminSchema.php:90
+msgid "Advanced"
+msgstr "Напредно"
+
+#: src/Modules/UserEvents/AdminSchema.php:64
+msgid "Events"
+msgstr "Догађаји"
+
+#: src/Modules/Container/AdminSchema.php:272
+msgid "Container code placement"
+msgstr "Положај кôда спремника"
+
+#: src/Modules/Blacklist/AdminSchema.php:204
+msgid "Do not modify if you do not know what to do, since it can cause issues with your tag deployment!"
+msgstr "Не мењајте ако не знате шта радите, јер то може изазвати проблеме са применом ваших ознака!"
+
+#: src/Modules/Container/AdminSchema.php:78
+#: src/Modules/WooCommerce/AdminSchema.php:86
+msgid "General"
+msgstr "Опште"
+
+#: src/Modules/Blacklist/AdminSchema.php:203
+msgid "Here you can control which types of tags, triggers and variables can be executed on your site regardless of what tags are included in your container on the Google Tag Manager site. Use this to increase security!"
+msgstr "Овде можете одредити које врсте ознака, окидача и променљивих могу да се изврше на вашем сајту без обзира на то које су ознаке укључене у ваш спремник на сајту Google Tag Manager. Користите ово за повећање безбедности!"
+
+#: src/Modules/UserEvents/AdminSchema.php:54
+msgid "Fire tags in Google Tag Manager on special events on your website"
+msgstr "Покрените ознаке у Google Tag Manager-у на посебним догађајима на вашем веб сајту"
+
+#: src/Modules/PageVariables/AdminSchema.php:70
+msgid "Here you can check what data is needed to be included in the dataLayer to be able to access them in Google Tag Manager"
+msgstr "Овде можете штиклирати које податке треба укључити у dataLayer да бисте им могли приступити у Google Tag Manager-у"
+
+#: src/Modules/ContactForm7/AdminSchema.php:46
+#: src/Modules/ContactForm7/AdminSchema.php:65
+#: src/Modules/ContactForm7/AdminSchema.php:80
+msgid "Contact Form 7"
+msgstr "Contact Form 7"
+
+#: src/Modules/WooCommerce/AdminSchema.php:189
+msgid "Use SKU instead of ID"
+msgstr "Користи шифру уместо ИБ-а"
+
+#: src/Modules/MediaEvents/AdminSchema.php:100
+msgid "Soundcloud events"
+msgstr "Soundcloud догађаји"
+
+#: src/Modules/MediaEvents/AdminSchema.php:91
+msgid "Vimeo video events"
+msgstr "Vimeo видео догађаји"
+
+#: src/Modules/ClientDeviceData/AdminSchema.php:97
+msgid "Device data"
+msgstr "Подаци о уређају"
+
+#: src/Modules/MediaEvents/AdminSchema.php:81
+msgid "YouTube video events"
+msgstr "YouTube видео догађаји"
+
+#: src/Modules/ClientDeviceData/AdminSchema.php:89
+msgid "Check this option to include the name and version of the operating system the visitor uses."
+msgstr "Штиклирајте ову могућност да бисте укључили назив и издање оперативног система који посетилац користи."
+
+#: src/Modules/ClientDeviceData/AdminSchema.php:79
+msgid "Browser data"
+msgstr "Подаци о прегледачу"
+
+#: src/Modules/PageVariables/AdminSchema.php:375
+msgid "Logged in user ID"
+msgstr "ИБ пријављеног корисника"
+
+#: src/Modules/PageVariables/AdminSchema.php:376
+msgid "Check this option to include the ID of the logged in user."
+msgstr "Штиклирајте ову могућност да бисте укључили ИБ пријављеног корисника."
+
+#: src/Modules/PageVariables/AdminSchema.php:357
+msgid "Logged in status"
+msgstr "Стање пријаве"
+
+#: src/Modules/PageVariables/AdminSchema.php:366
+msgid "Logged in user role"
+msgstr "Улога пријављеног корисника"
+
+#: src/Modules/PageVariables/AdminSchema.php:349
+msgid "Check this option to include the search term, referring page URL and number of results on the search page."
+msgstr "Штиклирајте ову могућност да бисте укључили појам претраге, адресу упућујуће странице и број резултата на страници претраге."
+
+#: src/Modules/PageVariables/AdminSchema.php:82
+#: src/Modules/PageVariables/AdminSchema.php:348
+msgid "Search data"
+msgstr "Подаци о претрази"
+
+#: src/Modules/PageVariables/AdminSchema.php:174
+msgid "Check this option to include the count of the posts currently shown on the page and the total number of posts in the category/tag/any taxonomy."
+msgstr "Штиклирајте ову могућност да бисте укључили број чланака тренутно приказаних на страници и укупан број чланака у категорији/ознаци/било којој таксономији."
+
+#: src/Modules/PageVariables/AdminSchema.php:173
+msgid "Post count"
+msgstr "Број чланака"
+
+#: src/Modules/PageVariables/AdminSchema.php:165
+msgid "Check this option to include the title of the current post."
+msgstr "Штиклирајте ову могућност да бисте укључили наслов тренутног чланка."
+
+#: src/Modules/PageVariables/AdminSchema.php:164
+msgid "Post title"
+msgstr "Наслов чланка"
+
+#: src/Modules/PageVariables/AdminSchema.php:146
+msgid "Post author name"
+msgstr "Име аутора чланка"
+
+#: src/Modules/PageVariables/AdminSchema.php:155
+msgid "Post date"
+msgstr "Датум чланка"
+
+#: src/Modules/PageVariables/AdminSchema.php:128
+msgid "Tags of current post"
+msgstr "Ознаке тренутног чланка"
+
+#: src/Modules/PageVariables/AdminSchema.php:108
+msgid "Category list of current post/archive"
+msgstr "Списак категорија тренутног чланка/архиве"
+
+#: src/Modules/PageVariables/AdminSchema.php:100
+msgid "Check this option to include the type of the current post or archive page (post, page or any custom post type)."
+msgstr "Штиклирајте ову могућност да бисте укључили врсту тренутног чланка или странице архиве (post, page или било која произвољна врста чланка)."
+
+#: src/Modules/PageVariables/AdminSchema.php:99
+msgid "Posttype of current post/archive"
+msgstr "Врста чланка тренутног чланка/архиве"
+
+#: src/Modules/Container/AdminSchema.php:308
+msgid "dataLayer variable name"
+msgstr "назив променљиве dataLayer"
+
+#: src/Admin/Notices.php:208
+msgid "Notice: you should deactivate the plugin \"Google Analytics for WooCommerce\" if you are using Google Analytics tags inside Google Tag Manager!"
+msgstr "Напомена: требало би да искључите додатак „Google Analytics for WooCommerce“ ако користите Google Analytics ознаке унутар услуге Google Tag Manager!"
+
+#: src/Admin/PluginRow.php:44
+msgid "Settings"
+msgstr "Подешавања"

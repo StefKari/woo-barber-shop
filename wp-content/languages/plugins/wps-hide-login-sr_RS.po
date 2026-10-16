@@ -1,0 +1,141 @@
+# Translation of Plugins - WPS Hide Login - Stable (latest release) in Serbian
+# This file is distributed under the same license as the Plugins - WPS Hide Login - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-09-28 09:40:11+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: sr_RS\n"
+"Project-Id-Version: Plugins - WPS Hide Login - Stable (latest release)\n"
+
+#: classes/plugin.php:900
+msgid "Dashboard"
+msgstr "Контролна табла"
+
+#: classes/plugin.php:393
+msgid "WPBoutik"
+msgstr "WPBoutik"
+
+#: classes/plugin.php:393
+msgid "You want to find out how to simplify ecommerce with WordPress, try"
+msgstr "Ако желите да сазнате како да поједноставите е-трговину уз Вордпрес, испробајте"
+
+#: classes/plugin.php:867
+msgid "WPS Hide Login : Please note that the comment_registration option “Users must be registered and logged in to comment” is activated on your site, the connection link will not be hidden on the comments block."
+msgstr "WPS Hide Login : имајте на уму да је на вашем сајту укључена могућност comment_registration „Корисници морају бити регистровани и пријављени да би коментарисали“, па веза за пријављивање неће бити сакривена у блоку коментара."
+
+#: classes/plugin.php:840
+msgid "WPS Hide Login : Please note, if you check the comment_registration option \"Users must be registered and logged in to comment\", the login link will not be hidden on the comment block."
+msgstr "WPS Hide Login : имајте на уму да, ако штиклирате могућност comment_registration „Корисници морају бити регистровани и пријављени да би коментарисали“, веза за пријављивање неће бити сакривена у блоку коментара."
+
+#. Author of the plugin
+#: wps-hide-login.php
+msgid "WPServeur, NicolasKulka, wpformation"
+msgstr "WPServeur, NicolasKulka, wpformation"
+
+#: classes/plugin.php:390
+msgid "WPS Bidouille"
+msgstr "WPS Bidouille"
+
+#: classes/plugin.php:392
+msgid "and"
+msgstr "и"
+
+#: classes/plugin.php:437
+msgid "Redirect URL when someone tries to access the wp-login.php page and the wp-admin directory while not logged in."
+msgstr "URL преусмеравања када неко покуша да приступи страници wp-login.php и директоријуму wp-admin без пријаве."
+
+#: classes/plugin.php:422
+msgid "Protect your website by changing the login URL and preventing access to the wp-login.php page and the wp-admin directory to non-connected people."
+msgstr "Заштитите свој веб сајт променом URL-а за пријављивање и спречавањем приступа страници wp-login.php и директоријуму wp-admin особама које нису пријављене."
+
+#: classes/plugin.php:392
+msgid "WPS Limit Login"
+msgstr "WPS Limit Login"
+
+#: classes/plugin.php:391
+msgid "WPS Cleaner"
+msgstr "WPS Cleaner"
+
+#: classes/plugin.php:390 classes/plugin.php:391
+msgid "the plugin"
+msgstr "додатак"
+
+#: classes/plugin.php:389
+msgid "Discover our other plugins:"
+msgstr "Откријте наше друге додатке:"
+
+#: classes/plugin.php:253
+msgid "Redirection url default"
+msgstr "Подразумевани URL преусмеравања"
+
+#: classes/plugin.php:304
+msgid "Redirection url"
+msgstr "URL преусмеравања"
+
+#: classes/plugin.php:388
+msgid "WordPress specialized hosting"
+msgstr "Хостинг специјализован за Вордпрес"
+
+#. Author URI of the plugin
+#: wps-hide-login.php
+msgid "https://wpserveur.net"
+msgstr "https://wpserveur.net"
+
+#: classes/plugin.php:533
+msgid "This has been disabled"
+msgstr "Ово је онемогућено"
+
+#. Description of the plugin
+#: wps-hide-login.php
+msgid "Protect your website by changing the login URL and preventing access to wp-login.php page and wp-admin directory while not logged-in"
+msgstr "Заштитите свој веб сајт тако што ћете променити УРЛ адресу за пријављивање и спречити приступ wp-login.php страни и wp-admin директоријуму док нисте пријављени"
+
+#: classes/plugin.php:462 classes/plugin.php:466
+msgid "Settings"
+msgstr "Podešavanja"
+
+#: classes/plugin.php:915
+msgid "This feature is not enabled."
+msgstr "Ова функција није омогућена"
+
+#: classes/plugin.php:296
+msgid "Login url"
+msgstr "URL за prijavu"
+
+#. Plugin Name of the plugin
+#: wps-hide-login.php classes/plugin.php:223 classes/plugin.php:246
+#: classes/plugin.php:727 classes/plugin.php:736
+msgid "WPS Hide Login"
+msgstr "WPS Hide Login"
+
+#: classes/plugin.php:251
+msgid "Networkwide default"
+msgstr "Подразумевана мрежа"
+
+#: classes/plugin.php:247
+msgid "This option allows you to set a networkwide default, which can be overridden by individual sites. Simply go to to the site’s permalink settings to change the url."
+msgstr "Ова могућност вам омогућава да поставите подразумевану мрежну вредност, која може бити промењена код појединачних сајтова. Једноставно идите на страницу поставке сталних веза како бисте променили урл."
+
+#: classes/plugin.php:229
+msgid "WPS Hide Login could not be activated because you already have Rename wp-login.php active. Please uninstall rename wp-login.php to use WPS Hide Login"
+msgstr "WPS Hide Login се не може укључити јер већ имате укључен Rename wp-login.php. Да деинсталирате rename wp-login.php да бисте користили WPS Hide Login"
+
+#: classes/plugin.php:223
+msgid "Please upgrade to the latest version of WordPress to activate"
+msgstr "Надоградите Вордпрес на најновију верзију како би сте успешно активирали"
+
+#: classes/plugin.php:451
+msgid "Your login page is now here: <strong><a href=\"%1$s\">%2$s</a></strong>. Bookmark this page!"
+msgstr "Ваша страница за пријављивање је сада овде: <strong><a href=\"%1$s\">%2$s</a></strong>. Сачувајте ову страницу у обележивачима!"
+
+#: classes/plugin.php:248 classes/plugin.php:388
+msgid "Need help? Try the <a href=\"%1$s\" target=\"_blank\">support forum</a>. This plugin is kindly brought to you by <a href=\"%2$s\" target=\"_blank\">WPServeur</a>"
+msgstr "Потребна вам је помоћ? Посетите <a href=\"%1$s\" target=\"_blank\">форум подршке</a>. Овај додатак вам љубазно доноси <a href=\"%2$s\" target=\"_blank\">WPServeur</a>"
+
+#: classes/plugin.php:402
+msgid "To set a networkwide default, go to <a href=\"%s\">Network Settings</a>."
+msgstr "Да бисте подесили подразумевану вредност за целу мрежу, идите на <a href=\"%s\">подешавања мреже</a>."

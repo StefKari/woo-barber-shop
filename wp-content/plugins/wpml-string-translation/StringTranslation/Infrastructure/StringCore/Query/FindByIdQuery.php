@@ -9,25 +9,25 @@ use WPML\StringTranslation\Application\StringCore\Query\FindByIdQueryInterface;
 
 class FindByIdQuery implements FindByIdQueryInterface {
 
-	/** @var \wpdb */
 	private $wpdb;
 
 	public function __construct( $wpdb ) {
 		$this->wpdb = $wpdb;
 	}
 
-	/**
-	 * @return StringItem[]
-	 */
 	public function execute( array $ids ): array {
 		if ( count( $ids ) === 0 ) {
 			return [];
 		}
 
-		$query  = "SELECT id, context, gettext_context, value, name FROM {$this->wpdb->prefix}icl_strings WHERE ";
-		$query .= 'id IN (' . wpml_prepare_in( $ids, '%d' ) . ')';
-
-		$res = $this->wpdb->get_results( $query, ARRAY_A );
+		$wpdb = $this->wpdb;
+		$res  = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT id, context, gettext_context, value, name FROM {$wpdb->prefix}icl_strings WHERE id IN (" . implode( ', ', array_fill( 0, count( $ids ), '%d' ) ) . ')',
+				array_map( 'intval', $ids )
+			),
+			ARRAY_A
+		);
 
 		$strings = [];
 

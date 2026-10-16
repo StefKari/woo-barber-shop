@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Dashboard\Domain\Score_Results;
 
@@ -44,7 +45,7 @@ class Score_Result {
 	/**
 	 * Return this object represented by a key value array.
 	 *
-	 * @return array<string,array<array<string, string|int|array<string, string>>>|float|bool> Returns the name and if the feature is enabled.
+	 * @return array<string, array<array<string, string|int|array<string, string>>>|float|bool> Returns the name and if the feature is enabled.
 	 */
 	public function to_array(): array {
 		return [

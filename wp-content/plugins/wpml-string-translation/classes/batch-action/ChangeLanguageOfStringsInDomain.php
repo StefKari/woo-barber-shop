@@ -12,18 +12,12 @@ use WPML\ST\StringsRepository;
 
 class ChangeLanguageOfStringsInDomain implements IHandler {
 
-	/** @var \SitePress $sitepress */
 	private $sitepress;
 
-	/** @var StringsRepository $stringsRepository */
 	private $stringsRepository;
 
-	/** @var \WPML_Change_String_Domain_Language_Dialog */
 	private $changeLangDialog;
 
-	/**
-	 * @param \SitePress $sitepress
-	 */
 	public function __construct(
 		\SitePress                                 $sitepress,
 		StringsRepository                          $stringsRepository,
@@ -35,12 +29,21 @@ class ChangeLanguageOfStringsInDomain implements IHandler {
 	}
 
 	public function run( Collection $data ) {
+		if ( ! current_user_can( 'wpml_manage_string_translation' ) && ! current_user_can( 'manage_translations' ) ) {
+			return Either::left( 'not allowed' );
+		}
+
 		$domain         = $data->get( 'domain', false );
 		$batchSize      = $data->get( 'batchSize', 1 );
 		$targetLanguage = $data->get( 'targetLanguage', $this->sitepress->get_default_language() );
 
 		if ( $domain === false ) {
 			return Either::left( __( 'Error: please try again', 'wpml-string-translation' ) );
+		}
+
+		$targetLanguage = \WPML\Language\RequestedLanguage::validate( $targetLanguage, \WPML\Language\RequestedLanguage::SCOPE_CONFIGURED );
+		if ( null === $targetLanguage ) {
+			return Either::left( 'invalid language' );
 		}
 
 		$langs     = $this->stringsRepository->getLanguagesUsedInDomains( [ $domain ], [ $targetLanguage ] );
@@ -52,7 +55,7 @@ class ChangeLanguageOfStringsInDomain implements IHandler {
 
 		return Either::of(
 			[
-				'completedCount' => count( $stringIds ),
+				'completedCount' => count( $stringIds ) - $this->stringsRepository->countIdsNotInLanguage( $stringIds, $targetLanguage ),
 			]
 		);
 	}

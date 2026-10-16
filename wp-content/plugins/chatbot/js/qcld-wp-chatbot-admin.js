@@ -1,6 +1,34 @@
 jQuery(function ($) {
 
 $(document).ready(function () {
+    var wpChatbotTabSections = {
+        started: '#section-flip-1',
+        general: '#section-flip-2',
+        themes: '#section-flip-3',
+        social: '#section-flip-51',
+        language: '#section-flip-5',
+        support: '#section-flip-4',
+        startmenu: '#section-flip-6',
+        ai: '#section-flip-7',
+        rpl: '#section-flip-9',
+        custom_css: '#section-flip-13'
+    };
+
+    function wpChatbotShowTabSection(tabData, fallbackIndex, sectionSelector) {
+        $(".content-wrap section").removeClass('content-current');
+
+        if (sectionSelector) {
+            $(sectionSelector).addClass('content-current');
+            return;
+        }
+
+        if (wpChatbotTabSections[tabData]) {
+            $(wpChatbotTabSections[tabData]).addClass('content-current');
+            return;
+        }
+
+        $(".content-wrap section").eq(fallbackIndex).addClass('content-current');
+    }
    
     var sbdstoredNoticeId = localStorage.getItem('qcld_wpbot_Notice_set');
     var qcld_chatbot_Notice_time_set = localStorage.getItem('qcld_wpbot_Notice_time_set');
@@ -27,15 +55,13 @@ $(document).ready(function () {
 
     if(localStorage.getItem('tabData')){
 
-        $(".content-wrap section").removeClass('content-current');
-
         $(".wp-chatbot-tabs nav ul li").each(function (index, elm) {
 
             if(localStorage.getItem('tabData')==$(this).attr('tab-data')){
 
                 $(this).addClass('tab-current');
 
-                $(".content-wrap section").eq(index).addClass('content-current');
+                wpChatbotShowTabSection($(this).attr('tab-data'), index, $(this).attr('data-section'));
 
             }else{
 
@@ -59,13 +85,11 @@ $(document).ready(function () {
 
         $(".wp-chatbot-tabs nav ul li").removeClass('tab-current');
 
-        $(".content-wrap section").removeClass('content-current');
-
         // add current tab and contents
 
         $(this).parent().addClass('tab-current');
 
-        $(".content-wrap section").eq($(".wp-chatbot-tabs nav ul li a ").index(this)).addClass('content-current');
+        wpChatbotShowTabSection($(this).parent().attr('tab-data'), $(".wp-chatbot-tabs nav ul li a ").index(this), $(this).parent().attr('data-section'));
 
         //Change action url , set add localStorge and url change.
 
@@ -98,22 +122,65 @@ $(document).ready(function () {
 	
 	$('#wp_chatbot_floatingiconbg_color').wpColorPicker();
     if( (document.getElementById('skip_wp_greetings') != null)){
-        console.log('hello world');  
+        
+       if (document.getElementById('ask_email_wp_greetings') != null) {
+           if (document.getElementById('skip_wp_greetings').checked || document.getElementById('skip_wp_greetings_donot_show_menu').checked) {
+               document.getElementById("ask_email_wp_greetings").checked = false;
+               document.getElementById("ask_email_wp_greetings").disabled = true;
+           }
+       }
+       if (document.getElementById('enable_asking_for_email') != null) {
+           if (document.getElementById('skip_wp_greetings').checked || document.getElementById('skip_wp_greetings_donot_show_menu').checked) {
+               document.getElementById("enable_asking_for_email").checked = false;
+               document.getElementById("enable_asking_for_email").disabled = true;
+           }
+       }
+        
        document.getElementById('skip_wp_greetings').addEventListener('change', (event) => {
-         if (event.currentTarget.checked) {
-           document.getElementById("skip_wp_greetings_donot_show_menu").checked = false;
-           document.getElementById("show_menu_after_greetings").checked = false;
-           var intetns = document.getElementsByClassName("qc_wp_intent_select");
-           Array.prototype.map.call(intetns, (x) => x.style = "display:none" )
-         }
+          if (event.currentTarget.checked) {
+            document.getElementById("skip_wp_greetings_donot_show_menu").checked = false;
+            document.getElementById("show_menu_after_greetings").checked = false;
+            var intetns = document.getElementsByClassName("qc_wp_intent_select");
+            Array.prototype.map.call(intetns, (x) => x.style = "display:none" )
+            if (document.getElementById("ask_email_wp_greetings") != null) {
+                document.getElementById("ask_email_wp_greetings").checked = false;
+                document.getElementById("ask_email_wp_greetings").disabled = true;
+            }
+            if (document.getElementById("enable_asking_for_email") != null) {
+                document.getElementById("enable_asking_for_email").checked = false;
+                document.getElementById("enable_asking_for_email").disabled = true;
+            }
+          } else {
+            if (document.getElementById("ask_email_wp_greetings") != null && !document.getElementById("skip_wp_greetings_donot_show_menu").checked) {
+                document.getElementById("ask_email_wp_greetings").disabled = false;
+            }
+            if (document.getElementById("enable_asking_for_email") != null && !document.getElementById("skip_wp_greetings_donot_show_menu").checked) {
+                document.getElementById("enable_asking_for_email").disabled = false;
+            }
+          }
        })
        document.getElementById('skip_wp_greetings_donot_show_menu').addEventListener('change', (event) => {
-         if (event.currentTarget.checked) {
-             document.getElementById("skip_wp_greetings").checked = false;
-             document.getElementById("show_menu_after_greetings").checked = false;
-             var intetns = document.getElementsByClassName("qc_wp_intent_select");
-             Array.prototype.map.call(intetns, (x) => x.style = "display:none" )
-         }
+          if (event.currentTarget.checked) {
+              document.getElementById("skip_wp_greetings").checked = false;
+              document.getElementById("show_menu_after_greetings").checked = false;
+              var intetns = document.getElementsByClassName("qc_wp_intent_select");
+              Array.prototype.map.call(intetns, (x) => x.style = "display:none" )
+              if (document.getElementById("ask_email_wp_greetings") != null) {
+                  document.getElementById("ask_email_wp_greetings").checked = false;
+                  document.getElementById("ask_email_wp_greetings").disabled = true;
+              }
+              if (document.getElementById("enable_asking_for_email") != null) {
+                  document.getElementById("enable_asking_for_email").checked = false;
+                  document.getElementById("enable_asking_for_email").disabled = true;
+              }
+          } else {
+              if (document.getElementById("ask_email_wp_greetings") != null && !document.getElementById("skip_wp_greetings").checked) {
+                  document.getElementById("ask_email_wp_greetings").disabled = false;
+              }
+              if (document.getElementById("enable_asking_for_email") != null && !document.getElementById("skip_wp_greetings").checked) {
+                  document.getElementById("enable_asking_for_email").disabled = false;
+              }
+          }
        })
        document.getElementById('show_menu_after_greetings').addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
@@ -121,10 +188,31 @@ $(document).ready(function () {
           var intetns = document.getElementsByClassName("qc_wp_intent_select");
           Array.prototype.map.call(intetns, (x) => x.style = "display:none" )
           document.getElementById("skip_wp_greetings_donot_show_menu").checked = false;
+          if (document.getElementById("ask_email_wp_greetings") != null && !document.getElementById("skip_wp_greetings").checked && !document.getElementById("skip_wp_greetings_donot_show_menu").checked) {
+              document.getElementById("ask_email_wp_greetings").disabled = false;
+          }
+          if (document.getElementById("enable_asking_for_email") != null && !document.getElementById("skip_wp_greetings").checked && !document.getElementById("skip_wp_greetings_donot_show_menu").checked) {
+              document.getElementById("enable_asking_for_email").disabled = false;
+          }
         }
       })
-           
+            
      }
+    $('#disable_wp_chatbot_site_search').on('change', function() {
+        
+        if($(this).is(':checked')) {
+            $('#enable_wp_chatbot_post_content').prop('checked', false);
+        }
+    });
+    jQuery("#qcld-show-more-wrapper-box").on('click','.qcld-show-more-show-more', function () {
+            if(jQuery(".qcld-show-more-text").hasClass("qcld-show-more-show-more-height")) {
+                jQuery(this).html('<div class="Collapsemore">Collapse Options</div>');
+            } else {
+                jQuery(this).html('<div class="Expandmore">Expand for More Options<span>+</span></div>');
+            }
+
+            jQuery(".qcld-show-more-text").toggleClass("qcld-show-more-show-more-height");
+    }); 
 });
 
 /*
@@ -143,15 +231,15 @@ $("#add-more-support-query").on('click',function () {
         var firsBlock='<div class="row">'+
 
             '<div class="col-xs-12">'+
-            '<button type="button"  class="btn btn-danger btn-sm wp-chatbot-remove-support pull-right"><i class="fa fa-times" aria-hidden="true"></i></button>'+
+            '<button type="button"  class="btn btn-danger btn-sm wp-chatbot-remove-support pull-right"><i class="dashicons dashicons dashicons-remove" aria-hidden="true"></i></button>'+
         
             '<div class="cxsc-settings-blocks">'+
 
-            '<p class="qc-opt-dcs-font">Support query </p>'+
+            '<p class="qc-opt-dcs-font qc-opt-dcs-font-faq">FAQ Query </p>'+
 
-            '<input type="text" class="form-control" name="support_query[]"  placeholder="Support query">'+
+            '<input type="text" class="form-control" name="support_query[]"  placeholder="FAQ Query">'+
 
-            '<p class="qc-opt-dcs-font"><br><strong>Support answer</strong></p>'+
+            '<p class="qc-opt-dcs-font"><br><strong>FAQ answer</strong></p>'+
 
             '<textarea id="'+textarea_id+'" name="support_ans[]" class="form-control chatbot-query-builder" cols="30" rows="2"></textarea>'+
 
@@ -189,9 +277,9 @@ $(document).on('click','.wp-chatbot-remove-support',function () {
             {
               type: 'POST', // 'POST' here so that _upload_ progress _also_ makes sense; 
                             // Change to 'GET' if you need. 
-              url: ajax_object.ajax_url, data: {
+              url: qcld_gemini_admin_data.ajax_url, data: {
                   'action': 'qcld_wp_chatbot_gc_client_download',
-                  'nonce': ajax_object.ajax_nonce,
+                  'nonce': qcld_gemini_admin_data.ajax_nonce,
               },
               beforeSend: function()
               {
@@ -206,9 +294,9 @@ $(document).on('click','.wp-chatbot-remove-support',function () {
                         {
                             type: 'POST', // 'POST' here so that _upload_ progress _also_ makes sense; 
                                         // Change to 'GET' if you need. 
-                            url: ajax_object.ajax_url, data: {
+                            url: qcld_gemini_admin_data.ajax_url, data: {
                                 'action': 'qcld_wp_chatbot_gc_client_extract',
-                                'nonce': ajax_object.ajax_nonce
+                                'nonce': qcld_gemini_admin_data.ajax_nonce
                             },
                             beforeSend: function()
                             {
@@ -249,7 +337,7 @@ $(document).on('click','.wp-chatbot-remove-support',function () {
 
             '<div class="col-xs-12">'+
 
-            '<button type="button"  class="btn btn-danger btn-sm wp-chatbot-remove-notification pull-right"><i class="fa fa-times" aria-hidden="true"></i></button><br>'+
+            '<button type="button"  class="btn btn-danger btn-sm wp-chatbot-remove-notification pull-right"><i class="dashicons dashicons-remove" aria-hidden="true"></i></button><br>'+
 
             '<div class="cxsc-settings-blocks">'+
 
@@ -385,10 +473,10 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
             var data = {
 
                 'action': 'qcld_wb_chatboot_delete_all_options',
-                'wpnonce': ajax_object.ajax_nonce,
+                'wpnonce': qcld_gemini_admin_data.ajax_nonce,
             };
 
-            jQuery.post(ajax_object.ajax_url, data, function (response) {
+            jQuery.post(qcld_gemini_admin_data.ajax_url, data, function (response) {
 
                 alert(response);
 
@@ -469,7 +557,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
 
     //Custom Icon
 
-    $('.wp_chatbot_custom_icon_button').click(function(e) {
+    $('.qcld_chatbot_custom_icon_button').click(function(e) {
 
         e.preventDefault();
 
@@ -506,15 +594,15 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
 	
 	$('#qc_wpbot_df_status').on('click', function(e){
         e.preventDefault();
-        console.log('dftest')
+        
         $.ajax(
             {
               type: 'POST', // 'POST' here so that _upload_ progress _also_ makes sense; 
                             // Change to 'GET' if you need. 
-              url: ajax_object.ajax_url, data: {
+              url: qcld_gemini_admin_data.ajax_url, data: {
                 'action': 'qcld_wp_df_api_call',
                 'dfquery': 'hi',
-                'nonce': ajax_object.ajax_nonce,
+                'nonce': qcld_gemini_admin_data.ajax_nonce,
                 'sessionid': 'wpwBot_df_201sdf8071'
               },
               beforeSend: function()
@@ -735,7 +823,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
 
 
 
-        wpChatbotIndexLoader.html('<img class="wp-chatbot-comment-loader" src="'+ajax_object.image_path+'comment.gif" alt="..." />');
+        wpChatbotIndexLoader.html('<img class="wp-chatbot-comment-loader" src="'+qcld_gemini_admin_data.image_path+'comment.gif" alt="..." />');
 
         wpChatbotIndexProcess.html( wpChatbotIndexProcessed + '%' );
 
@@ -759,12 +847,12 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
 
             type: 'POST',
 
-            url: ajax_object.ajax_url,
+            url: qcld_gemini_admin_data.ajax_url,
 
             data: {
 
                 action: 'qcld-wp-chabot-reindex',
-                'nonce': ajax_object.ajax_nonce
+                'nonce': qcld_gemini_admin_data.ajax_nonce
 
             },
 
@@ -866,10 +954,10 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
     function qcld_wb_chatbot_cancelSync() {
         $.ajax( {
             method: 'post',
-            url: ajax_object.ajax_url,
+            url: qcld_gemini_admin_data.ajax_url,
             data: {
                 action: 'qcld-wp-chabot-cancel-index',
-                'nonce': ajax_object.ajax_nonce
+                'nonce': qcld_gemini_admin_data.ajax_nonce
             }
         });
     }
@@ -911,7 +999,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
             '</div>'+
             '<div class="wp-chatbot-hours-remove">'+
             '<button type="button" class="btn btn-danger btn-sm wp-chatbot-hours-remove-btn ">'+
-            '<i class="fa fa-times" aria-hidden="true"></i>'+
+            '<i class="dashicons dashicons-remove" aria-hidden="true"></i>'+
             '</button>'+
             '</div>'+
             '</div>';
@@ -1004,7 +1092,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
           var droppable = $(this);
           var draggable = ui.draggable;
           // Move draggable into droppable
-          draggable.clone().removeClass("qc_draggable_item").addClass("qc_draggable_item_remove").appendTo(droppable);
+          draggable.clone().removeClass("qc_draggable_item").addClass("qc_draggable_item_remove").removeAttr("style").appendTo(droppable);
           jQuery('#qc_wpbot_menu_order').val(jQuery('#qc_menu_area').html().trim());
         }
       });
@@ -1073,7 +1161,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 $('.success-message').html('File is Proccesing');
                 $('.success-message').show();
                 $.ajax({
-                    url: ajax_object.ajax_url,
+                    url: qcld_gemini_admin_data.ajax_url,
                     type: 'post',
                     contentType: false,
                     processData: false,
@@ -1113,7 +1201,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                         jQuery('.error-message').hide();
                     },5000); 
                 $.ajax({
-                    url:  ajax_object.ajax_url,
+                    url:  qcld_gemini_admin_data.ajax_url,
                     type: 'POST',
                     dataType: "JSON",
                     data:  {
@@ -1127,7 +1215,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 
             });
             $.ajax({
-                url:  ajax_object.ajax_url,				
+                url:  qcld_gemini_admin_data.ajax_url,				
                 type: "POST",
                 dataType: "JSON",
                 data: {
@@ -1153,7 +1241,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 $('#qcld-ft-modal').modal();
             })
             $.ajax({
-                url: ajax_object.ajax_url,					
+                url: qcld_gemini_admin_data.ajax_url,					
                 type: "POST",
                 dataType: "JSON",
                 data: {
@@ -1177,7 +1265,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 return this.value;
             }).get();
             $.ajax({
-                url: ajax_object.ajax_url,					
+                url: qcld_gemini_admin_data.ajax_url,					
                 type: "POST",
                 dataType: "JSON",
                 data: {
@@ -1202,9 +1290,9 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 var file_id = $("input[name='file_id']" ).val();
                 
                 $.ajax({
-                    url:  ajax_object.ajax_url,
+                    url:  qcld_gemini_admin_data.ajax_url,
                     type:'POST',
-                    data:    ({action  : '',nonce: ajax_object.ajax_nonce,file_id:file_id}),
+                    data:    ({action  : '',nonce: qcld_gemini_admin_data.ajax_nonce,file_id:file_id}),
                     success: function(data){
                         $('#result').html(data);
                         location.reload();
@@ -1215,30 +1303,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
         }
         var settingsOpenAi = document.getElementById("save_setting");
         if(settingsOpenAi){
-            document.getElementById("temperature").onchange = function() {
-                var x = document.getElementById("temperature");
-                x.value = x.value.toUpperCase();
-                updateTemp( x.value);
-            };
-            function updateTemp(n){
-                document.getElementById('temperatureout').textContent=n; 
-            };
-            document.getElementById("frequency_penalty").onchange = function() {
-                var x = document.getElementById("frequency_penalty");
-                x.value = x.value.toUpperCase();
-                updateFpenalty( x.value);
-            };
-            function updateFpenalty(n){
-                document.getElementById('frequency_penalty_out').textContent=n; 
-            };
-            document.getElementById("presence_penalty").onchange = function() {
-                var x = document.getElementById("presence_penalty");
-                x.value = x.value.toUpperCase();
-                updatePpenalty( x.value);
-            };
-            function updatePpenalty(n){
-                document.getElementById('presence_penalty_out').textContent=n; 
-            };
+
         
             $('.qcl-openai').on('change','#qcld_openai_prompt', function() {
               
@@ -1258,9 +1323,40 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                   
                     $('#custom_prompt_wrapper').html('<input type="field" id="qcld_openai_prompt_custom" class="form-control my-2" />');
                     $('#qcld_openai_prompt_custom').val(custom_promt_value)
-                   
+
                 }
             }, 500);
+            $('.qcl-openai').on('change', 'input[name="qcld_openai_system_content_preset"]', function(){
+                var systemContent = $(this).closest('.qcld-openai-system-preset').find('.qcld-openai-system-preset-value').val();
+                $('.qcld-openai-system-preset').removeClass('is-selected');
+                $(this).closest('.qcld-openai-system-preset').addClass('is-selected');
+                $('#qcld_openai_system_content').val(systemContent).trigger('input');
+            });
+
+            if (!$('input[name="qcld_openai_system_content_preset"]:checked').length) {
+                $('.qcld-openai-system-preset').first().find('input[name="qcld_openai_system_content_preset"]').prop('checked', true).trigger('change');
+            }
+            $('.qcl-openai').on('input', '#qcld_openai_system_content', function(){
+                var normalizeSpace = function(str) { return (str || '').replace(/\s+/g, ' ').trim(); };
+                var currentSystemContent = normalizeSpace($(this).val());
+                var hasMatchingPreset = false;
+
+                $('input[name="qcld_openai_system_content_preset"]').each(function(){
+                    var systemContent = normalizeSpace($(this).closest('.qcld-openai-system-preset').find('.qcld-openai-system-preset-value').val());
+                    if (systemContent === currentSystemContent) {
+                        $(this).prop('checked', true);
+                        $('.qcld-openai-system-preset').removeClass('is-selected');
+                        $(this).closest('.qcld-openai-system-preset').addClass('is-selected');
+                        hasMatchingPreset = true;
+                        return false;
+                    }
+                });
+
+                if (!hasMatchingPreset) {
+                    $('input[name="qcld_openai_system_content_preset"]').prop('checked', false);
+                    $('.qcld-openai-system-preset').removeClass('is-selected');
+                }
+            });
             $('.qcl-openai').on('click', '#save_setting', function(){
                 if ($('#is_ai_enabled').is(":checked")){
                     var is_ai_enabled = 1;
@@ -1287,6 +1383,22 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 }else{
                     var is_page_suggestion_enabled = 0;
                 }
+                if($('#is_context_awareness_enabled').is(":checked")){
+                    var is_context_awareness_enabled = 1; 
+                }else{
+                    var is_context_awareness_enabled = 0;
+                }
+                if($('#is_page_rag_enabled').is(":checked")){
+                    var is_page_rag_enabled = 1;
+                }else{
+                    var is_page_rag_enabled = 0;
+                }
+                if($('#is_stream_enabled').is(":checked")){
+                    var is_stream_enabled = 1;
+                }else{
+                    var is_stream_enabled = 0;
+                }
+                var post_types = $.map($('input[name="site_search_posttypes[]"]:checked'), function(c){return c.value; });
                 var api_key = $( "input[name='api_key']" ).val();
                 var openai_engines = $("[id*='openai_engines'] :selected").val();
                 var qcld_openai_prompt = $("[id*='qcld_openai_prompt'] :selected").val();
@@ -1297,27 +1409,60 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 var openai_exclude_keyword = jQuery('#qcld_openai_exclude_keyword').val();
                 var openai_include_keyword = jQuery('#qcld_openai_include_keyword').val();
                 var qcld_openai_system_content = jQuery('#qcld_openai_system_content').val();
+                var qcld_openai_append_content = jQuery('#qcld_openai_append_content').val();
                 if(qcld_openai_prompt == "custom_prompt"){
                     var qcld_openai_prompt_custom =  $("#qcld_openai_prompt_custom").val();
                 }
                 var frequency_penalty = $("input[name='frequency_penalty']" ).val();
+                var openai_post_type = $("input[name='site_search_posttypes[]']:checked").map(function () {
+                    return this.value;
+                }).get();
+
+                Swal.fire({
+                    html: '<div class="qcld-save-settings-spinner"></div>',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    background: 'transparent',
+                    customClass: {
+                        popup: 'qcld-swal-loading-only'
+                    }
+                });
+
                 $.ajax({
-                    url:  ajax_object.ajax_url,
+                    url:  qcld_gemini_admin_data.ajax_url,
                     type:'POST',
-                    data:    ({action  : 'openai_settings_option',nonce: ajax_object.ajax_nonce,api_key: api_key,openai_engines:openai_engines,qcld_openai_prompt: qcld_openai_prompt,max_tokens:max_tokens,file_id:file_id,temperature:temperature,presence_penalty:presence_penalty,frequency_penalty:frequency_penalty,qcld_openai_prompt_custom: qcld_openai_prompt_custom,openai_exclude_keyword:openai_exclude_keyword,is_relevant_enabled:is_relevant_enabled,openai_include_keyword:openai_include_keyword,ai_enabled:is_ai_enabled,is_page_suggestion_enabled:is_page_suggestion_enabled,qcld_openai_system_content:qcld_openai_system_content,ai_only_mode: is_ai_only_mode,conversation_continuity:conversation_continuity}),
-                    
+                    data:    ({action  : 'openai_settings_option',nonce: qcld_gemini_admin_data.ajax_nonce,api_key: api_key,openai_engines:openai_engines,qcld_openai_prompt: qcld_openai_prompt,max_tokens:max_tokens,file_id:file_id,temperature:temperature,presence_penalty:presence_penalty,frequency_penalty:frequency_penalty,qcld_openai_prompt_custom: qcld_openai_prompt_custom,openai_exclude_keyword:openai_exclude_keyword,is_relevant_enabled:is_relevant_enabled,openai_include_keyword:openai_include_keyword,ai_enabled:is_ai_enabled,is_page_suggestion_enabled:is_page_suggestion_enabled,is_context_awareness_enabled:is_context_awareness_enabled,qcld_openai_system_content:qcld_openai_system_content,qcld_openai_append_content:qcld_openai_append_content,ai_only_mode: is_ai_only_mode,conversation_continuity:conversation_continuity,openai_post_type:openai_post_type,is_page_rag_enabled:is_page_rag_enabled,is_stream_enabled:is_stream_enabled}),
+
                     success: function(data){
                         $('#result').html(data);
+                        if(data.icon == "success"){
+                            var color = "color: green";
+                        }else if(data.icon == "error"){
+                            var color = "color: red";
+                        }
                         Swal.fire({
                             title: 'Your settings are saved.',
-                                html: '<p style=font-size:14px>Please clear your browser <b>cache</b> and <b>cookies</b> both and reload the front end before testing. Alternatively, you can launch a new browser window in <b>Incognito</b>/Private mode (Ctrl+Shift+N in chrome) to test.</p>',
+                                html: '<p style=font-size:14px>Please clear your browser <b>cache</b> and <b>cookies</b> both and reload the front end before testing. Alternatively, you can launch a new browser window in <b>Incognito</b>/Private mode (Ctrl+Shift+N in chrome) to test.</p></b><p><span style="'+ color +'">'+ data.msg+'</span></p>',
                                 width: 450,
                                 icon: 'success',
                                 confirmButtonText: 'Got it',
                                 confirmButtonWidth: 100,
                                 confirmButtonClass: 'btn btn-lg'     
-                            })
-                            location.reload();
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        url: qcld_gemini_admin_data.ajax_url,
+                                        type: 'POST',
+                                        data: {
+                                            action: 'update_settings_option',
+                                            nonce: qcld_gemini_admin_data.ajax_nonce,
+                                            disable_ss: 1
+                                        },
+                              
+                                    });
+                                }
+                            });
                     }
 				});
     
@@ -1354,6 +1499,11 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 }else{
                     var is_page_suggestion_enabled = 0;
                 }
+                if($('#is_context_awareness_enabled').is(":checked")){
+                    var is_context_awareness_enabled = 1; 
+                }else{
+                    var is_context_awareness_enabled = 0;
+                }
 
                 var api_key = $( "input[name='api_key']" ).val();
                 var openai_engines = $("[id*='openai_engines'] :selected").val();
@@ -1370,9 +1520,9 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 var frequency_penalty = $("input[name='frequency_penalty']" ).val();
 
                 $.ajax({
-                    url:  ajax_object.ajax_url,
+                    url:  qcld_gemini_admin_data.ajax_url,
                     type:'POST',
-                    data:    ({action  : 'openai_settings_option',nonce: ajax_object.ajax_nonce,api_key: api_key,openai_engines:openai_engines,qcld_openai_prompt: qcld_openai_prompt,max_tokens:max_tokens,file_id:file_id,temperature:temperature,presence_penalty:presence_penalty,frequency_penalty:frequency_penalty,qcld_openai_prompt_custom: qcld_openai_prompt_custom,openai_exclude_keyword:openai_exclude_keyword,is_relevant_enabled:is_relevant_enabled,openai_include_keyword:openai_include_keyword,ai_enabled:is_ai_enabled,is_page_suggestion_enabled:is_page_suggestion_enabled,ai_only_mode: is_ai_only_mode,conversation_continuity:conversation_continuity, disable_ss: 1}),
+                    data:    ({action  : 'openai_settings_option',nonce: qcld_gemini_admin_data.ajax_nonce,api_key: api_key,openai_engines:openai_engines,qcld_openai_prompt: qcld_openai_prompt,max_tokens:max_tokens,file_id:file_id,temperature:temperature,presence_penalty:presence_penalty,frequency_penalty:frequency_penalty,qcld_openai_prompt_custom: qcld_openai_prompt_custom,openai_exclude_keyword:openai_exclude_keyword,is_relevant_enabled:is_relevant_enabled,openai_include_keyword:openai_include_keyword,ai_enabled:is_ai_enabled,is_page_suggestion_enabled:is_page_suggestion_enabled,is_context_awareness_enabled:is_context_awareness_enabled,ai_only_mode: is_ai_only_mode,conversation_continuity:conversation_continuity, disable_ss: 1,openai_post_type:post_types}),
                     success: function(data){
                         $('#result').html(data);
                         location.reload();
@@ -1383,26 +1533,417 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
 
             }) //Additional Code - 04-12-2023 ends here
         }
+                var settingsRag = document.getElementById("save_rag_setting");
+        if (settingsRag) {
+            $('.qcl-openai').on('change', '.rag_auto_sync_enabled', function () {
+                $('.rag_auto_sync_enabled').prop('checked', this.checked);
+            });
+
+            $('.qcl-openai').on('click', '#save_rag_setting', function () {
+
+                var rag_embed_pages = $('#rag_embed_pages').is(':checked') ? 1 : 0;
+                var rag_embed_posts = $('#rag_embed_posts').is(':checked') ? 1 : 0;
+                var rag_auto_sync_enabled = $('.rag_auto_sync_enabled').first().is(':checked') ? 1 : 0;
+                var rag_embed_str = $('#rag_embed_str').is(':checked') ? 1 : 0;
+                
+                var rag_embed_cpts = [];
+                $('.rag_embed_cpts_checkbox:checked').each(function() {
+                    rag_embed_cpts.push($(this).val());
+                });
+
+                $.ajax({
+                    url: qcld_gemini_admin_data.ajax_url,
+                    type: 'POST',
+                    data: ({ 
+                        action: 'qcld_rag_settings_option', 
+                        nonce: qcld_gemini_admin_data.ajax_nonce, 
+                        rag_embed_pages: rag_embed_pages,
+                        rag_embed_posts: rag_embed_posts,
+                        rag_auto_sync_enabled: rag_auto_sync_enabled,
+                        rag_embed_str: rag_embed_str,
+                        rag_embed_cpts: rag_embed_cpts
+                    }),
+                    success: function (data) {
+                        $('#result').html(data);
+                        Swal.fire({
+                            title: 'Your settings are saved.',
+                            html: '<p style=font-size:14px>Please clear your browser <b>cache</b> and <b>cookies</b> both and reload the front end before testing. Alternatively, you can launch a new browser window in <b>Incognito</b>/Private mode (Ctrl+Shift+N in chrome) to test.</p>',
+                            width: 450,
+                            icon: 'success',
+                            confirmButtonText: 'Got it',
+                            confirmButtonWidth: 100,
+                            confirmButtonClass: 'btn btn-lg'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: qcld_gemini_admin_data.ajax_url,
+                                    type: 'POST',
+                                    data: {
+                                        action: '',
+                                        nonce: qcld_gemini_admin_data.ajax_nonce,
+                                        disable_ss: 1
+                                    },
+
+                                });
+                            }
+                        });
+
+                        location.reload();
+                    }
+                });
+            })
+            
+            $('.qcl-openai').on('click', '#rag_embed_btn', function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var originalText = btn.text();
+                btn.text('Saving settings...');
+
+                var rag_embed_pages = $('#rag_embed_pages').is(':checked') ? 1 : 0;
+                var rag_embed_posts = $('#rag_embed_posts').is(':checked') ? 1 : 0;
+                var rag_auto_sync_enabled = $('.rag_auto_sync_enabled').first().is(':checked') ? 1 : 0;
+                var rag_embed_str = $('#rag_embed_str').is(':checked') ? 1 : 0;
+                
+                var rag_embed_cpts = [];
+                $('.rag_embed_cpts_checkbox:checked').each(function() {
+                    rag_embed_cpts.push($(this).val());
+                });
+
+                $.ajax({
+                    url: qcld_gemini_admin_data.ajax_url,
+                    type: 'POST',
+                    data: ({
+                        action: 'qcld_rag_settings_option', 
+                        nonce: qcld_gemini_admin_data.ajax_nonce, 
+                        rag_embed_pages: rag_embed_pages,
+                        rag_embed_posts: rag_embed_posts,
+                        rag_auto_sync_enabled: rag_auto_sync_enabled,
+                        rag_embed_str: rag_embed_str,
+                        rag_embed_cpts: rag_embed_cpts
+                    }),
+                    success: function (data) {
+                        console.log(data);
+                        btn.text('Embedding...');
+                        $('#rag_embed_form').submit();
+                    }
+                });
+            })
+
+            // Delete Document
+            $('.qcl-openai').on('click', '.rag-delete-doc', function () {
+                var id = $(this).data('id');
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: qcld_gemini_admin_data.ajax_url,
+                            type: 'POST',
+                            data: {
+                                action: 'qcld_rag_delete_document',
+                                nonce: qcld_gemini_admin_data.ajax_nonce,
+                                id: id
+                            },
+                            success: function (res) {
+                                if (res.success) {
+                                    $('#rag-doc-' + id).remove();
+                                    Swal.fire('Deleted!', res.data, 'success');
+                                } else {
+                                    Swal.fire('Error', res.data, 'error');
+                                }
+                            }
+                        });
+                    }
+                })
+            });
+
+            // Select All Checkbox
+            $('.qcl-openai').on('change', '#rag-select-all', function() {
+                $('.rag-doc-checkbox').prop('checked', $(this).prop('checked'));
+            });
+
+            // Bulk Actions (Apply)
+            $('.qcl-openai').on('click', '#rag-apply-bulk-action', function() {
+                var action = $('#rag-bulk-action-selector').val();
+                if (action !== 'delete') {
+                    Swal.fire('Info', 'Please select a valid bulk action.', 'info');
+                    return;
+                }
+
+                var selectedIds = [];
+                $('.rag-doc-checkbox:checked').each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                if (selectedIds.length === 0) {
+                    Swal.fire('Warning', 'Please select at least one document.', 'warning');
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Delete " + selectedIds.length + " selected documents? This cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete selected!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: qcld_gemini_admin_data.ajax_url,
+                            type: 'POST',
+                            data: {
+                                action: 'qcld_rag_bulk_delete_documents',
+                                nonce: qcld_gemini_admin_data.ajax_nonce,
+                                ids: selectedIds
+                            },
+                            success: function(res) {
+                                if (res.success) {
+                                    selectedIds.forEach(function(id) {
+                                        $('#rag-doc-' + id).remove();
+                                    });
+                                    $('#rag-select-all').prop('checked', false);
+                                    $('#rag-bulk-action-selector').val('-1');
+                                    Swal.fire('Deleted!', res.data, 'success');
+                                } else {
+                                    Swal.fire('Error', res.data, 'error');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Delete All Documents
+            $('.qcl-openai').on('click', '#rag-delete-all', function() {
+                Swal.fire({
+                    title: 'CRITICAL WARNING!',
+                    text: "This will delete ALL documents in your Knowledge Base. This action is IRREVERSIBLE!",
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'YES, DELETE EVERYTHING!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: qcld_gemini_admin_data.ajax_url,
+                            type: 'POST',
+                            data: {
+                                action: 'qcld_rag_delete_all_documents',
+                                nonce: qcld_gemini_admin_data.ajax_nonce
+                            },
+                            success: function(res) {
+                                if (res.success) {
+                                    $('#rag-knowledge-base-list').html('<tr><td colspan="6">No documents found in knowledge base.</td></tr>');
+                                    $('#rag-select-all').prop('checked', false);
+                                    Swal.fire('Cleared!', res.data, 'success');
+                                } else {
+                                    Swal.fire('Error', res.data, 'error');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Edit Document - Open Modal
+            $('.qcl-openai').on('click', '.rag-edit-doc', function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: qcld_gemini_admin_data.ajax_url,
+                    type: 'POST',
+                    data: {
+                        action: 'qcld_rag_get_document',
+                        nonce: qcld_gemini_admin_data.ajax_nonce,
+                        id: id
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            $('#edit-doc-id').val(res.data.id);
+                            $('#edit-doc-title').val(res.data.title);
+                            $('#edit-doc-content').val(res.data.content);
+                            $('#rag-edit-modal').show();
+                        } else {
+                            Swal.fire('Error', res.data, 'error');
+                        }
+                    }
+                });
+            });
+
+            // Close Edit Modal
+            $(document).on('click', '#close-edit-modal', function () {
+                $('#rag-edit-modal').hide();
+            });
+
+            // Manual Sync Document
+        $(document).on('click', '.rag-sync-doc', function(e) {
+            e.preventDefault();
+            var btn = $(this);
+            var docId = btn.data('id');
+            
+            if (!confirm('Are you sure you want to re-sync this document from its source?')) {
+                return;
+            }
+            
+            btn.prop('disabled', true).text('Syncing...');
+            
+            $.post(qcld_gemini_admin_data.ajax_url, {
+                action: 'qcld_rag_manual_sync',
+                nonce: qcld_gemini_admin_data.ajax_nonce,
+                id: docId
+            }, function(response) {
+                btn.prop('disabled', false).text('Sync');
+                if (response.success) {
+                    alert(response.data.message);
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.data.message);
+                }
+            });
+        });
+
+            // Save Edit Document
+            $(document).on('click', '#save-edit-doc', function () {
+                var id = $('#edit-doc-id').val();
+                var title = $('#edit-doc-title').val();
+                var content = $('#edit-doc-content').val();
+                var btn = $(this);
+                
+                btn.prop('disabled', true).text('Saving...');
+                
+                $.ajax({
+                    url: qcld_gemini_admin_data.ajax_url,
+                    type: 'POST',
+                    data: {
+                        action: 'qcld_rag_update_document',
+                        nonce: qcld_gemini_admin_data.ajax_nonce,
+                        id: id,
+                        title: title,
+                        content: content
+                    },
+                    success: function (res) {
+                        btn.prop('disabled', false).text('Save Changes');
+                        if (res.success) {
+                            $('#rag-edit-modal').hide();
+                            Swal.fire('Updated!', res.data, 'success').then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error', res.data, 'error');
+                        }
+                    }
+                });
+            });
+        }
+                    // Delete Document
+            $('.qcl-openai').on('click', '.rag-delete-doc', function () {
+                var id = $(this).data('id');
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: qcld_gemini_admin_data.ajax_url,
+                            type: 'POST',
+                            data: {
+                                action: 'qcld_rag_delete_document',
+                                nonce: qcld_gemini_admin_data.ajax_nonce,
+                                id: id
+                            },
+                            success: function (res) {
+                                if (res.success) {
+                                    $('#rag-doc-' + id).remove();
+                                    Swal.fire('Deleted!', res.data, 'success');
+                                } else {
+                                    Swal.fire('Error', res.data, 'error');
+                                }
+                            }
+                        });
+                    }
+                })
+            });
+
         $('.qcl-openai').on('click', '#qcld_check_connection', function(){
             jQuery('#rotationloader').css('display','inline-block'); 
             $.ajax({
-                url: ajax_object.ajax_url,
+                url: qcld_gemini_admin_data.ajax_url,
                 type:'POST',
-                data:    ({action  : 'openai_troubleshooting',nonce:ajax_object.ajax_nonce}),
+                data:    ({action  : 'openai_troubleshooting',nonce:qcld_gemini_admin_data.ajax_nonce}),
                 success: function(data){
+                    
                     $('#result').html(data);
                     Swal.fire({
                         title: data.title,
                         html: data.msg,
                         width: 450,
-                        icon: data.icon,   
+                        icon: data.icon,
+                        confirmButtonText: 'Got it',
+                        customClass: 'connection-modal',
                     })
-                  //  jQuery('#qcld_openAI_trubleshooter').html('<div class="'+data.icon+'">'+data.msg+'</div>')
                     jQuery('#rotationloader').css('display','none'); 
                  //   location.reload();
                 }
             });
         })
+        $(document).on('click', '.ai-provider-card', function () {
+            var selected = $(this).data('provider');
+            console.log('Provider changed to: ' + selected);
+            $('.ai-provider-card').removeClass('active');
+            $(this).addClass('active');
+            $('#ai-provider-selector').val(selected);
+            $('.ai-settings-provider').hide();
+            $('#' + selected + '-settings').show();
+            $('#rag-settings').hide(); // Ensure RAG is hidden when switching providers
+        });
+
+        // Avatar Location card click handler
+        $(document).on('click', '.avatar-location-card', function () {
+            var location = $(this).data('location');
+            $('.avatar-location-card').removeClass('active');
+            $(this).addClass('active');
+            $('#qcld-avatar-location').val(location);
+        });
+
+        if (window.location.hash.indexOf('#ai-knowledge-base-tab') === 0) {
+            $('.ai-settings-provider').hide();
+            $('#rag-settings').show();
+        }
+
+        $('#ai-knowledge-base-tab').on('click', function (e) {
+            e.preventDefault();
+            $('.ai-settings-provider').hide();
+            $('#rag-settings').show();
+            if (history.pushState) { history.pushState(null, null, '#ai-knowledge-base-tab'); }
+        });
+        // common Ai settings tab
+        $('#qcld-common-ai-settings').on('click', function (e) {
+            e.preventDefault();
+            $('.ai-settings-provider').hide();
+            $('#common-ai-settings').show();
+            if (history.pushState) { history.pushState(null, null, '#common-ai-settings'); }
+        });
+        $('#ai-knowledge-base-tab-openai').on('click', function (e) {
+            e.preventDefault();
+            $('.ai-settings-provider').hide();
+            $('#rag-settings').show();
+            if (history.pushState) { history.pushState(null, null, '#ai-knowledge-base-tab'); }
+        });
         });
         
     $(document).on('click', '.qcld_botopenai_generate_image', function (e) {
@@ -1444,11 +1985,11 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                 qcld_seo_img_size: qcld_seo_img_size,
                 qcld_seo_num_images: qcld_seo_num_images,
                 action: 'qcld_openai_image_generate',
-                nonce: ajax_object.ajax_url,
+                nonce: qcld_gemini_admin_data.ajax_url,
             };
          
             $.ajax({
-                url: ajax_object.ajax_url,
+                url: qcld_gemini_admin_data.ajax_url,
                 data: data,
                 type: 'POST',
                 dataType: 'JSON',
@@ -1495,7 +2036,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
                     action                          : 'qcld_openai_image_generate_url' 
                 };
                 $.ajax({
-                    url: ajax_object.ajax_url,
+                    url: qcld_gemini_admin_data.ajax_url,
                     data: data,
                     type: 'POST',
                     dataType: 'JSON',
@@ -1553,7 +2094,7 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
         $('#qcld_article_keyword_suggestion').prop("disabled",true);
         $('#linkbait_article_keyword_data').html('');
         $.ajax({
-          url: ajax_object.ajax_url,
+          url: qcld_gemini_admin_data.ajax_url,
           method: 'POST',
           data: {
               'action': 'openai_keyword_suggestion_content',
@@ -1592,8 +2133,129 @@ $(document).on('click','.wp-chatbot-lng-item-remove',function () {
           }
         });
 
+
+
     });
    
+    $(document).on('click', '.ai-provider-card', function() {
+        var selected = $(this).data('provider');
+        $('.ai-provider-card').removeClass('active');
+        $(this).addClass('active');
+        $('#ai-provider-selector').val(selected);
+        $('.ai-settings-provider').hide();
+        $('#' + selected + '-settings').show();
+    });
 
+    $('#is_rate_limiting_enabled').on('change', function () {
+        if ($(this).is(":checked")) {
+            $('#rate_limit_settings').show();
+            $('.rate-limit-input').prop('disabled', false);
+            $('.rate-limit-timeframe').prop('disabled', false);
+        } else {
+            $('#rate_limit_settings').hide();
+            $('.rate-limit-input').prop('disabled', true);
+            $('.rate-limit-timeframe').prop('disabled', true);
+        }
+    });
+    $('.qcl-openai').on('click', '#qcld_openai_rate_limit_save_setting', function () {
+        console.log('Saving rate limit settings...');
+        if ($('#is_rate_limiting_enabled').is(":checked")) {
+            var is_rate_limiting_enabled = 1;
+        } else {
+            var is_rate_limiting_enabled = 0;
+        }
+        var rate_limits = {};
+        var rate_limit_timeframes = {};
+        // Collect rate limits for each role
+        $('.rate-limit-input').each(function () {
+            var role = $(this).attr('id').replace('rate_limit_', '');
+            var limit = $(this).val();
+            rate_limits[role] = limit;
+            rate_limit_timeframes[role] = $('#rate_limit_timeframe_' + role).val();
+        });
+        $.ajax({
+            url: ajax_object.ajax_url,
+            type: 'POST',
+            data: ({
+                action: 'rate_limit_settings_option',
+                nonce: ajax_object.ajax_nonce,
+                is_rate_limiting_enabled: is_rate_limiting_enabled,
+                rate_limits: rate_limits,
+                rate_limit_timeframes: rate_limit_timeframes
+            }),
+            success: function (data) {
+                $('#result').html(data);
+                Swal.fire({
+                    title: 'Your settings are saved.',
+                    html: '<p style=font-size:14px>Please clear your browser <b>cache</b> and <b>cookies</b> both and reload the front end before testing. Alternatively, you can launch a new browser window in <b>Incognito</b>/Private mode (Ctrl+Shift+N in chrome) to test.</p>',
+                    width: 450,
+                    icon: 'success',
+                    confirmButtonText: 'Got it',
+                    confirmButtonWidth: 100,
+                    confirmButtonClass: 'btn btn-lg'
+                })
+                // location.reload();
+            }
+        });
+    })
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    if(localStorage.getItem('qcld_general_settings_notice_closed') === '1') {
+      var notice = document.querySelector('.qcld-general-settings-connection-notic');
+      if(notice) notice.style.display = 'none';
+    }
+  });
+
+
+
+
+ function qcld_wpbot_languageChange_from_center(langCode) {
+        switch (langCode) {
+            case "not_mine":
+                setTimeout(() => {
+                     jQuery("#waring-message").show()
+                     jQuery("#waring-message").html('<span style="padding: 7px; color: #fff; background: #dc3545;border-radius:5px"> ** Please change the texts below to your language manually so that the ChatBot can speak in your language</span><br>')
+                }, 500);
+                
+                break;
+            default:
+                setTimeout(() => {
+                    jQuery("#waring-message").hide()
+                }, 500);
+                jQuery.ajax({
+                    url: qcld_gemini_admin_data.ajax_url, // e.g., 'wp-admin/admin-ajax.php'
+                    type: 'POST',
+                    data: {
+                        'action': 'qcld_change_language_from_center',
+                        'language'  : langCode,
+                        'nonce': qcld_gemini_admin_data.ajax_nonce, // Include nonce for security
+                    },// Expecting JSON response from PHP
+                })
+                .done(function(response) {
+                    // If PHP returns a JSON object
+                    if (response.success === false || response.error) {
+                    } else {
+                        jQuery.each( response.data.data, function(key, value) {
+                            if (Array.isArray( value )) {
+                                const textareas = jQuery('.wp-chatbot-lng-items').find('input[name="' + key + '[]"]');
+                                textareas.each(function(index) {
+                                    if (index < value.length) {
+                                        jQuery(this).val(value[index]);
+                                    }
+                                });
+                            }else{
+                                jQuery('input[name="' + key + '"]').val(value);
+                            }
+                        });
+                        jQuery("#submit-language").click();
+                    //   processResponse(response.data); 
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX Fail:', textStatus, errorThrown);
+                });
+        }
+    }
+ 
 

@@ -62,7 +62,9 @@ class GeneratorGroupPosts extends AbstractGeneratorGroup {
         if (count($post_meta) && is_array($post_meta) && !empty($post_meta)) {
             $excluded_metas = array(
                 'hc-editor-mode',
-                'techline-sidebar'
+                'techline-sidebar',
+                'amazonS3_cache',
+                '_tribe_modified_fields'
             );
 
             foreach ($excluded_metas as $excluded_meta) {
@@ -237,6 +239,22 @@ class GeneratorGroupPosts extends AbstractGeneratorGroup {
             $record['category_name_0'] = $record['category_name'];
             $record['category_link_0'] = $record['category_link'];
             $record['category_slug_0'] = $record['category_slug'];
+        }
+
+        return $record;
+    }
+
+    public static function getTagData($postID) {
+        $record = array();
+
+        $tags = wp_get_post_tags($postID);
+        if (is_array($tags) && count($tags) > 1) {
+            $j = 1;
+            foreach ($tags as $tag) {
+                $record['tag_' . $j]      = $tag->name;
+                $record['tag_link_' . $j] = get_tag_link($tag->term_id);
+                $j++;
+            }
         }
 
         return $record;

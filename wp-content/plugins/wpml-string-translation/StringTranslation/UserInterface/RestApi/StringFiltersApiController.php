@@ -7,7 +7,6 @@ use WPML\StringTranslation\Application\StringCore\Query\FetchFiltersQueryInterfa
 
 class StringFiltersApiController extends AbstractStringItemApiController {
 
-	/** @var FetchFiltersQueryInterface */
 	private $findFilterDataQuery;
 
 	public function __construct(
@@ -18,9 +17,6 @@ class StringFiltersApiController extends AbstractStringItemApiController {
 		$this->findFilterDataQuery = $findFilterDataQuery;
 	}
 
-	/**
-	 * @return array
-	 */
 	function get_routes() {
 		return [
 			[
@@ -35,13 +31,9 @@ class StringFiltersApiController extends AbstractStringItemApiController {
 	}
 
 	protected function getValidParametersForItems( array $extend = [] ) {
-		return $extend;
+		return parent::getValidParametersForItems( $extend );
 	}
 
-	/**
-	 * @return array
-	 * @throws \WPML\Auryn\InjectionException
-	 */
 	public function get( \WP_REST_Request $request ) {
 		$criteria = new FetchFiltersCriteria(
 			$request->get_param( 'kind' ),

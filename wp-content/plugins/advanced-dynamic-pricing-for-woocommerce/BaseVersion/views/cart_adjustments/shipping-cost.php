@@ -7,7 +7,7 @@ defined('ABSPATH') or exit;
         <select
             data-list="all_shipping_methods"
             data-field="preloaded"
-            data-placeholder="<?php _e("Select values", "advanced-dynamic-pricing-for-woocommerce") ?>"
+            data-placeholder="<?php esc_attr_e("Select values", "advanced-dynamic-pricing-for-woocommerce") ?>"
             name="rule[cart_adjustments][{ca}][options][0]"
             class="adjustment-value"
         >

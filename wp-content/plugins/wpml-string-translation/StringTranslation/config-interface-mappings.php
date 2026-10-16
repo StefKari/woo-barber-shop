@@ -3,10 +3,21 @@
 use WPML\StringTranslation\Application\StringCore\Command\InsertStringsCommandInterface;
 use WPML\StringTranslation\Application\StringCore\Command\InsertStringPositionsCommandInterface;
 use WPML\StringTranslation\Application\StringCore\Command\InsertStringTranslationsCommandInterface;
+use WPML\StringTranslation\Application\StringCore\Command\InsertStringTranslationsCheckedCommandInterface;
+use WPML\StringTranslation\Application\StringCore\Command\InsertStringTranslationsGuardedCommandInterface;
+use WPML\StringTranslation\Infrastructure\StringCore\Command\InsertStringTranslationsGuardedCommand;
 use WPML\StringTranslation\Application\StringCore\Command\LoadExistingStringTranslationsCommandInterface;
+use WPML\StringTranslation\Application\StringCore\Command\LoadExistingStringTranslationsForLocaleCommandInterface;
 use WPML\StringTranslation\Application\StringCore\Command\LoadExistingStringTranslationsForAllStringsCommandInterface;
+use WPML\StringTranslation\Application\StringCore\Command\LoadExistingStringTranslationsForNewLocalesCommandInterface;
+use WPML\StringTranslation\Application\StringCore\Command\UpdateStringTranslationStatusesFromDatabaseCommandInterface;
 use WPML\StringTranslation\Application\StringCore\Command\UpdateStringsCommandInterface;
 use WPML\StringTranslation\Application\StringCore\Command\SaveStringsCommandInterface;
+use WPML\StringTranslation\Application\StringCore\Command\SaveStringsGuardedCommandInterface;
+use WPML\StringTranslation\Application\StringGettext\Command\CreateFileCommandInterface;
+use WPML\StringTranslation\Application\StringGettext\Repository\StringQuarantineRepositoryInterface;
+use WPML\StringTranslation\Infrastructure\StringCore\Command\SaveStringsGuardedCommand;
+use WPML\StringTranslation\Infrastructure\StringGettext\Repository\StringQuarantineRepository;
 use WPML\StringTranslation\Application\StringCore\Command\SaveStringPositionsCommandInterface;
 use WPML\StringTranslation\Application\StringCore\Query\FetchFiltersQueryInterface;
 use WPML\StringTranslation\Application\StringCore\Query\FindCountBySearchCriteriaQueryInterface;
@@ -34,6 +45,7 @@ use WPML\StringTranslation\Application\StringHtml\Repository\HtmlStringsReposito
 use WPML\StringTranslation\Application\StringHtml\Repository\JsonStringsRepositoryInterface;
 use WPML\StringTranslation\Application\StringHtml\Validator\IsExcludedHtmlStringValidatorInterface;
 use WPML\StringTranslation\Application\Setting\Repository\FilesystemRepositoryInterface;
+use WPML\StringTranslation\Application\Setting\Repository\PluginRepositoryInterface;
 use WPML\StringTranslation\Application\Setting\Repository\SettingsRepositoryInterface;
 use WPML\StringTranslation\Application\Setting\Repository\UrlRepositoryInterface;
 use WPML\StringTranslation\Application\Translation\Query\FindTranslationDetailsQueryInterface;
@@ -46,7 +58,10 @@ use WPML\StringTranslation\Infrastructure\StringCore\Command\InsertStringsComman
 use WPML\StringTranslation\Infrastructure\StringCore\Command\InsertStringPositionsCommand;
 use WPML\StringTranslation\Infrastructure\StringCore\Command\InsertStringTranslationsCommand;
 use WPML\StringTranslation\Infrastructure\StringCore\Command\LoadExistingStringTranslationsCommand;
+use WPML\StringTranslation\Infrastructure\StringCore\Command\LoadExistingStringTranslationsForLocaleCommand;
 use WPML\StringTranslation\Infrastructure\StringCore\Command\LoadExistingStringTranslationsForAllStringsCommand;
+use WPML\StringTranslation\Infrastructure\StringCore\Command\LoadExistingStringTranslationsForNewLocalesCommand;
+use WPML\StringTranslation\Infrastructure\StringCore\Command\UpdateStringTranslationStatusesFromDatabaseCommand;
 use WPML\StringTranslation\Infrastructure\StringCore\Command\UpdateStringsCommand;
 use WPML\StringTranslation\Infrastructure\StringCore\Command\SaveStringsCommand;
 use WPML\StringTranslation\Infrastructure\StringCore\Command\SaveStringPositionsCommand;
@@ -76,6 +91,7 @@ use WPML\StringTranslation\Infrastructure\StringHtml\Repository\HtmlStringsRepos
 use WPML\StringTranslation\Infrastructure\StringHtml\Repository\JsonStringsRepository;
 use WPML\StringTranslation\Infrastructure\StringHtml\Validator\IsExcludedHtmlStringValidator;
 use WPML\StringTranslation\Infrastructure\Setting\Repository\FilesystemRepository;
+use WPML\StringTranslation\Infrastructure\Setting\Repository\PluginRepository;
 use WPML\StringTranslation\Infrastructure\Setting\Repository\SettingsRepository;
 use WPML\StringTranslation\Infrastructure\Setting\Repository\UrlRepository;
 use WPML\StringTranslation\Infrastructure\StringPackage\Query\SearchPopulatedKindsQuery;
@@ -84,45 +100,54 @@ use WPML\StringTranslation\Application\StringPackage\Repository\WidgetPackageRep
 use WPML\StringTranslation\Infrastructure\StringPackage\Repository\WidgetPackageRepository;
 
 return [
-	InsertStringsCommandInterface::class => InsertStringsCommand::class,
-	InsertStringPositionsCommandInterface::class => InsertStringPositionsCommand::class,
-	InsertStringTranslationsCommandInterface::class => InsertStringTranslationsCommand::class,
-	LoadExistingStringTranslationsCommandInterface::class => LoadExistingStringTranslationsCommand::class,
+	InsertStringsCommandInterface::class                   => InsertStringsCommand::class,
+	InsertStringPositionsCommandInterface::class           => InsertStringPositionsCommand::class,
+	InsertStringTranslationsCommandInterface::class        => InsertStringTranslationsCommand::class,
+	InsertStringTranslationsCheckedCommandInterface::class => InsertStringTranslationsCommand::class,
+	InsertStringTranslationsGuardedCommandInterface::class => InsertStringTranslationsGuardedCommand::class,
+	LoadExistingStringTranslationsCommandInterface::class  => LoadExistingStringTranslationsCommand::class,
+	LoadExistingStringTranslationsForLocaleCommandInterface::class => LoadExistingStringTranslationsForLocaleCommand::class,
 	LoadExistingStringTranslationsForAllStringsCommandInterface::class => LoadExistingStringTranslationsForAllStringsCommand::class,
-	UpdateStringsCommandInterface::class => UpdateStringsCommand::class,
-	SaveStringsCommandInterface::class => SaveStringsCommand::class,
-	SaveStringPositionsCommandInterface::class => SaveStringPositionsCommand::class,
-	FetchFiltersQueryInterface::class => FetchFiltersQuery::class,
-	FindCountBySearchCriteriaQueryInterface::class => FindCountBySearchCriteriaQuery::class,
-	FindAllStringsCountQueryInterface::class => FindAllStringsCountQuery::class,
-	FindAllStringsQueryInterface::class => FindAllStringsQuery::class,
-	FindBySearchCriteriaQueryInterface::class => FindBySearchCriteriaQuery::class,
-	FindByDomainValueAndContextQueryInterface::class => FindByDomainValueAndContextQuery::class,
-	FindByIdQueryInterface::class => FindByIdQuery::class,
-	ComponentRepositoryInterface::class => ComponentRepository::class,
-	TranslationsRepositoryInterface::class => TranslationsRepository::class,
-	ClearAllStoragesCommandInterface::class => ClearAllStoragesCommand::class,
-	ProcessPendingStringsCommandInterface::class => ProcessPendingStringsCommand::class,
-	DeletePendingStringsCommandInterface::class => DeletePendingStringsCommand::class,
-	InitStorageCommandInterface::class => InitStorageCommand::class,
-	SavePendingStringsCommandInterface::class => SavePendingStringsCommand::class,
-	SaveProcessedStringsCommandInterface::class => SaveProcessedStringsCommand::class,
-	FrontendQueueRepositoryInterface::class => FrontendQueueRepository::class,
-	QueueRepositoryInterface::class => QueueRepository::class,
-	LoadedTextdomainRepositoryInterface::class => LoadedTextdomainRepository::class,
-	IsExcludedDomainStringValidatorInterface::class => IsExcludedDomainStringValidator::class,
+	LoadExistingStringTranslationsForNewLocalesCommandInterface::class => LoadExistingStringTranslationsForNewLocalesCommand::class,
+	UpdateStringTranslationStatusesFromDatabaseCommandInterface::class => UpdateStringTranslationStatusesFromDatabaseCommand::class,
+	UpdateStringsCommandInterface::class                   => UpdateStringsCommand::class,
+	SaveStringsCommandInterface::class                     => SaveStringsCommand::class,
+	SaveStringsGuardedCommandInterface::class              => SaveStringsGuardedCommand::class,
+	StringQuarantineRepositoryInterface::class             => StringQuarantineRepository::class,
+	CreateFileCommandInterface::class                      => \WPML\StringTranslation\Infrastructure\StringGettext\Command\CreatePhpFileCommand::class,
+	SaveStringPositionsCommandInterface::class             => SaveStringPositionsCommand::class,
+	FetchFiltersQueryInterface::class                      => FetchFiltersQuery::class,
+	FindCountBySearchCriteriaQueryInterface::class         => FindCountBySearchCriteriaQuery::class,
+	FindAllStringsCountQueryInterface::class               => FindAllStringsCountQuery::class,
+	FindAllStringsQueryInterface::class                    => FindAllStringsQuery::class,
+	FindBySearchCriteriaQueryInterface::class              => FindBySearchCriteriaQuery::class,
+	FindByDomainValueAndContextQueryInterface::class       => FindByDomainValueAndContextQuery::class,
+	FindByIdQueryInterface::class                          => FindByIdQuery::class,
+	ComponentRepositoryInterface::class                    => ComponentRepository::class,
+	TranslationsRepositoryInterface::class                 => TranslationsRepository::class,
+	ClearAllStoragesCommandInterface::class                => ClearAllStoragesCommand::class,
+	ProcessPendingStringsCommandInterface::class           => ProcessPendingStringsCommand::class,
+	DeletePendingStringsCommandInterface::class            => DeletePendingStringsCommand::class,
+	InitStorageCommandInterface::class                     => InitStorageCommand::class,
+	SavePendingStringsCommandInterface::class              => SavePendingStringsCommand::class,
+	SaveProcessedStringsCommandInterface::class            => SaveProcessedStringsCommand::class,
+	FrontendQueueRepositoryInterface::class                => FrontendQueueRepository::class,
+	QueueRepositoryInterface::class                        => QueueRepository::class,
+	LoadedTextdomainRepositoryInterface::class             => LoadedTextdomainRepository::class,
+	IsExcludedDomainStringValidatorInterface::class        => IsExcludedDomainStringValidator::class,
 	QueueGettextStringsToBeSetAsFrontendCommandInterface::class => QueueGettextStringsToBeSetAsFrontendCommand::class,
-	GettextStringsRepositoryInterface::class => GettextStringsRepository::class,
-	HtmlStringsFromScriptTagRepositoryInterface::class => HtmlStringsFromScriptTagRepository::class,
-	HtmlStringsRepositoryInterface::class => HtmlStringsRepository::class,
-	JsonStringsRepositoryInterface::class => JsonStringsRepository::class,
-	IsExcludedHtmlStringValidatorInterface::class => IsExcludedHtmlStringValidator::class,
-	FilesystemRepositoryInterface::class => FilesystemRepository::class,
-	SettingsRepositoryInterface::class => SettingsRepository::class,
-	UrlRepositoryInterface::class => UrlRepository::class,
-	FindTranslationDetailsQueryInterface::class => FindTranslationDetailsQuery::class,
+	GettextStringsRepositoryInterface::class               => GettextStringsRepository::class,
+	HtmlStringsFromScriptTagRepositoryInterface::class     => HtmlStringsFromScriptTagRepository::class,
+	HtmlStringsRepositoryInterface::class                  => HtmlStringsRepository::class,
+	JsonStringsRepositoryInterface::class                  => JsonStringsRepository::class,
+	IsExcludedHtmlStringValidatorInterface::class          => IsExcludedHtmlStringValidator::class,
+	FilesystemRepositoryInterface::class                   => FilesystemRepository::class,
+	PluginRepositoryInterface::class                       => PluginRepository::class,
+	SettingsRepositoryInterface::class                     => SettingsRepository::class,
+	UrlRepositoryInterface::class                          => UrlRepository::class,
+	FindTranslationDetailsQueryInterface::class            => FindTranslationDetailsQuery::class,
 
-	FindStringPackagesQueryInterface::class => FindStringPackagesQuery::class,
-	SearchPopulatedKindsQueryInterface::class => SearchPopulatedKindsQuery::class,
-	WidgetPackageRepositoryInterface::class => WidgetPackageRepository::class,
+	FindStringPackagesQueryInterface::class                => FindStringPackagesQuery::class,
+	SearchPopulatedKindsQueryInterface::class              => SearchPopulatedKindsQuery::class,
+	WidgetPackageRepositoryInterface::class                => WidgetPackageRepository::class,
 ];

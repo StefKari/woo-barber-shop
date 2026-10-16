@@ -1,9 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\Translation\Domain\Sender;
-
-use WPML\PHP\Exception\Exception;
-
-class SendBatchException extends Exception {
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/Translation/Domain/Sender/SendBatchException.php';

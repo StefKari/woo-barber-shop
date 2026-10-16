@@ -14,7 +14,7 @@ class GiftsCollection
     protected $rule;
 
     /**
-     * @var array<int,Gift>
+     * @var array<string,Gift>
      */
     protected $gifts;
 
@@ -47,7 +47,7 @@ class GiftsCollection
     }
 
     /**
-     * @param array<int,Gift> ...$gifts
+     * @param array<string,Gift> ...$gifts
      */
     public function bulkAdd(...$gifts)
     {
@@ -74,7 +74,7 @@ class GiftsCollection
     }
 
     /**
-     * @return array<int,Gift>
+     * @return array<string,Gift>
      */
     public function asArray()
     {

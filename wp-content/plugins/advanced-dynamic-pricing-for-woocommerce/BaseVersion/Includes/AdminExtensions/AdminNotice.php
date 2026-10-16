@@ -14,7 +14,8 @@ class AdminNotice
     const activationNoticeOption = 'advanced-dynamic-pricing-for-woocommerce-activation-notice-shown';
     const disabledRulesOption = 'wdp_rules_disabled_notify';
     const dismissedPersistenceRulesNoticeOption = 'wdp_dismissed_persistence_rules_notice';
-    const persistenceRulesNoticeThreshold = 30;
+    const persistenceRulesNoticeThreshold = 50;
+    const dismissedNoticeOption = 'wdp_dismissed_notice_';
 
     /**
      * @var Context
@@ -28,13 +29,23 @@ class AdminNotice
 
     public function register()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (isset($_GET['page']) && $_GET['page'] == 'wdp_settings') {
+            //phpcs:disable WordPress.Security.NonceVerification.Recommended
             if (isset($_GET['from_notify'])) {
                 $this->clearOutOfTimeNotices();
             }
         }
-
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (isset($_GET['page']) && $_GET['page'] == 'wdp_settings') {
+            //phpcs:disable WordPress.Security.NonceVerification.Recommended
+            if (isset($_GET['from_enable_persistence_rules_notice'])) {
+                $this->dismissPersistenceRulesNotice();
+            }
+        }
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if (isset($_GET['wp-']) && $_GET['page'] == 'wdp_settings') {
+            //phpcs:ignore WordPress.Security.NonceVerification.Recommended
             if (isset($_GET['from_enable_persistence_rules_notice'])) {
                 $this->dismissPersistenceRulesNotice();
             }
@@ -44,12 +55,27 @@ class AdminNotice
         add_action('admin_notices', array($this, 'notifyRuleDisabled'), 10);
 //        add_action('admin_notices', array($this, 'notifyCouponsDisabled'), 10);
         add_action('admin_notices', array($this, 'notifyAboutPersistenceRules'), 10);
+
+        add_action('wp_ajax_adp_notice_dismiss', array( $this, 'noticeDismiss'));
     }
 
     public static function cleanUp()
     {
         delete_option(self::activationNoticeOption);
         delete_option(self::disabledRulesOption);
+    }
+
+    public static function isDismissedNotice($key)
+    {
+        return get_option(self::dismissedNoticeOption.$key, false);
+    }
+
+    public function noticeDismiss()
+    {
+        //phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput
+        $key = htmlspecialchars($_POST['key'] ?? "", ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);
+        update_option(self::dismissedNoticeOption.$key, true);
+        wp_send_json_success();
     }
 
     public function addActivationNotice()
@@ -98,8 +124,8 @@ class AdminNotice
         ?>
         <div class="notice notice-success is-dismissible">
             <p><?php printf(
-                            __('Advanced Dynamic Pricing for WooCommerce is available', 'advanced-dynamic-pricing-for-woocommerce')
-                            .'<a href="%s">' .__('on this page', 'advanced-dynamic-pricing-for-woocommerce') .'</a>.',
+                    esc_html__('Advanced Dynamic Pricing for WooCommerce is available', 'advanced-dynamic-pricing-for-woocommerce')
+                            .'<a href="%s">' .esc_html__('on this page', 'advanced-dynamic-pricing-for-woocommerce') .'</a>.',
                             'admin.php?page=wdp_settings'); ?></p>
         </div>
         <?php
@@ -148,6 +174,7 @@ class AdminNotice
 
                 $noticeMessage .= '</div>';
 
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 echo $noticeMessage;
             }
 
@@ -165,7 +192,7 @@ class AdminNotice
                         __("Edit rule", 'advanced-dynamic-pricing-for-woocommerce'));
                 }
                 $noticeMessage .= '</div>';
-
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 echo $noticeMessage;
             }
         }
@@ -180,6 +207,7 @@ class AdminNotice
                 'advanced-dynamic-pricing-for-woocommerce'
             );
             $noticeMessage .= '</p></div>';
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo $noticeMessage;
         }
     }
@@ -206,7 +234,8 @@ class AdminNotice
 
     public function notifyAboutPersistenceRules()
     {
-        if ($this->isDismissedPersistenceRulesNotice()) {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if ($this->isDismissedPersistenceRulesNotice() || !(isset($_GET['page']) && $_GET['page'] == 'wdp_settings')) {
           return;
         }
 
@@ -223,9 +252,11 @@ class AdminNotice
         <div class="notice notice-success is-dismissible">
             <p>
                 <?php
-                printf( 
-                    __( 'You have more than %s rules. You need to ', 'advanced-dynamic-pricing-for-woocommerce')
-                        .'<a href="%s">' .__('enable the "Product only" rules', 'advanced-dynamic-pricing-for-woocommerce').'</a>',
+                printf(
+                    /* translators: Recommendation for enabling persistence rules */
+                    esc_html__( 'You have more than %s rules. If you found out the site’s slow performance, we recommend to ', 'advanced-dynamic-pricing-for-woocommerce')
+                        .'<a href="%s">' .esc_html__('enable the "Product only" rules', 'advanced-dynamic-pricing-for-woocommerce').'</a>',
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     self::persistenceRulesNoticeThreshold, $ruleEditUrl);
                 ?>
             </p>

@@ -6,6 +6,13 @@
  * @version 2.2.0
  */
 
+use Automattic\WooCommerce\Enums\OrderStatus;
+use Automattic\WooCommerce\Enums\TaxDisplayMode;
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
+use Automattic\WooCommerce\StoreApi\Utilities\LocalPickupUtils;
+use Automattic\WooCommerce\Utilities\NumberUtil;
+use Automattic\WooCommerce\Internal\Orders\OrderNoteGroup;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -30,25 +37,25 @@ class WC_Order extends WC_Abstract_Order {
 	 */
 	protected $data = array(
 		// Abstract order props.
-		'parent_id'            => 0,
-		'status'               => '',
-		'currency'             => '',
-		'version'              => '',
-		'prices_include_tax'   => false,
-		'date_created'         => null,
-		'date_modified'        => null,
-		'discount_total'       => 0,
-		'discount_tax'         => 0,
-		'shipping_total'       => 0,
-		'shipping_tax'         => 0,
-		'cart_tax'             => 0,
-		'total'                => 0,
-		'total_tax'            => 0,
+		'parent_id'                    => 0,
+		'status'                       => '',
+		'currency'                     => '',
+		'version'                      => '',
+		'prices_include_tax'           => false,
+		'date_created'                 => null,
+		'date_modified'                => null,
+		'discount_total'               => 0,
+		'discount_tax'                 => 0,
+		'shipping_total'               => 0,
+		'shipping_tax'                 => 0,
+		'cart_tax'                     => 0,
+		'total'                        => 0,
+		'total_tax'                    => 0,
 
 		// Order props.
-		'customer_id'          => 0,
-		'order_key'            => '',
-		'billing'              => array(
+		'customer_id'                  => 0,
+		'order_key'                    => '',
+		'billing'                      => array(
 			'first_name' => '',
 			'last_name'  => '',
 			'company'    => '',
@@ -61,7 +68,7 @@ class WC_Order extends WC_Abstract_Order {
 			'email'      => '',
 			'phone'      => '',
 		),
-		'shipping'             => array(
+		'shipping'                     => array(
 			'first_name' => '',
 			'last_name'  => '',
 			'company'    => '',
@@ -71,18 +78,50 @@ class WC_Order extends WC_Abstract_Order {
 			'state'      => '',
 			'postcode'   => '',
 			'country'    => '',
+			'phone'      => '',
 		),
-		'payment_method'       => '',
-		'payment_method_title' => '',
-		'transaction_id'       => '',
-		'customer_ip_address'  => '',
-		'customer_user_agent'  => '',
-		'created_via'          => '',
-		'customer_note'        => '',
-		'date_completed'       => null,
-		'date_paid'            => null,
-		'cart_hash'            => '',
+		'payment_method'               => '',
+		'payment_method_title'         => '',
+		'transaction_id'               => '',
+		'customer_ip_address'          => '',
+		'customer_user_agent'          => '',
+		'created_via'                  => '',
+		'customer_note'                => '',
+		'date_completed'               => null,
+		'date_paid'                    => null,
+		'cart_hash'                    => '',
+
+		// Operational data.
+		'order_stock_reduced'          => false,
+		'download_permissions_granted' => false,
+		'new_order_email_sent'         => false,
+		'recorded_sales'               => false,
+		'recorded_coupon_usage_counts' => false,
 	);
+
+	/**
+	 * List of properties that were earlier managed by data store. However, since DataStore is a not a stored entity in itself, they used to store data in metadata of the data object.
+	 * With custom tables, some of these are moved from metadata to their own columns, but existing code will still try to add them to metadata. This array is used to keep track of such properties.
+	 *
+	 * Only reason to add a property here is that you are moving properties from DataStore instance to data object. Otherwise, if you are adding a new property, consider adding it to $data array instead.
+	 *
+	 * @var array
+	 */
+	protected $legacy_datastore_props = array(
+		'_recorded_sales',
+		'_recorded_coupon_usage_counts',
+		'_download_permissions_granted',
+		'_order_stock_reduced',
+		'_new_order_email_sent',
+	);
+
+	/**
+	 * Refunds for an order. Use {@see get_refunds()} instead.
+	 *
+	 * @deprecated 2.2.0
+	 * @var WC_Order_Refund[]
+	 */
+	public $refunds = array();
 
 	/**
 	 * When a payment is complete this function is called.
@@ -102,25 +141,51 @@ class WC_Order extends WC_Abstract_Order {
 		}
 
 		try {
-			do_action( 'woocommerce_pre_payment_complete', $this->get_id() );
+			do_action( 'woocommerce_pre_payment_complete', $this->get_id(), $transaction_id );
 
 			if ( WC()->session ) {
 				WC()->session->set( 'order_awaiting_payment', false );
 			}
 
-			if ( $this->has_status( apply_filters( 'woocommerce_valid_order_statuses_for_payment_complete', array( 'on-hold', 'pending', 'failed', 'cancelled' ), $this ) ) ) {
+			/**
+			 * Filters the valid order statuses for payment complete.
+			 *
+			 * @param array    $valid_completed_statuses Array of valid order statuses for payment complete.
+			 * @param WC_Order $this                     Order object.
+			 * @since 2.7.0
+			 */
+			$valid_completed_statuses = apply_filters( 'woocommerce_valid_order_statuses_for_payment_complete', OrderStatus::PAYMENT_COMPLETE_STATUSES, $this );
+			if ( $this->has_status( $valid_completed_statuses ) ) {
 				if ( ! empty( $transaction_id ) ) {
 					$this->set_transaction_id( $transaction_id );
 				}
 				if ( ! $this->get_date_paid( 'edit' ) ) {
 					$this->set_date_paid( time() );
 				}
-				$this->set_status( apply_filters( 'woocommerce_payment_complete_order_status', $this->needs_processing() ? 'processing' : 'completed', $this->get_id(), $this ) );
+
+				/**
+				 * Filters the order status to set after payment complete.
+				 *
+				 * @param string   $status        Order status.
+				 * @param int      $order_id      Order ID.
+				 * @param WC_Order $this          Order object.
+				 * @since 2.7.0
+				 */
+				$next_status = apply_filters( 'woocommerce_payment_complete_order_status', $this->needs_processing() ? OrderStatus::PROCESSING : OrderStatus::COMPLETED, $this->get_id(), $this );
+
+				$transaction_id = $this->get_transaction_id();
+				$payment_method = $this->get_payment_method_title();
+
+				// translators: %1$s is the payment method, %2$s is the transaction id.
+				$payment_complete_note = $payment_method && $transaction_id ? sprintf( __( 'Payment via %1$s (%2$s).', 'woocommerce' ), $payment_method, $transaction_id ) : __( 'Payment complete.', 'woocommerce' );
+
+				$this->set_status( $next_status, false );
+				$this->add_order_note( $payment_complete_note, false, false, array( 'note_group' => OrderNoteGroup::PAYMENT ) );
 				$this->save();
 
-				do_action( 'woocommerce_payment_complete', $this->get_id() );
+				do_action( 'woocommerce_payment_complete', $this->get_id(), $transaction_id );
 			} else {
-				do_action( 'woocommerce_payment_complete_order_status_' . $this->get_status(), $this->get_id() );
+				do_action( 'woocommerce_payment_complete_order_status_' . $this->get_status(), $this->get_id(), $transaction_id );
 			}
 		} catch ( Exception $e ) {
 			/**
@@ -137,7 +202,7 @@ class WC_Order extends WC_Abstract_Order {
 					'error' => $e,
 				)
 			);
-			$this->add_order_note( __( 'Payment complete event failed.', 'woocommerce' ) . ' ' . $e->getMessage() );
+			$this->add_order_note( __( 'Payment complete event failed.', 'woocommerce' ) . ' ' . $e->getMessage(), false, false, array( 'note_group' => OrderNoteGroup::ERROR ) );
 			return false;
 		}
 		return true;
@@ -158,17 +223,17 @@ class WC_Order extends WC_Abstract_Order {
 		$tax_string      = '';
 
 		// Tax for inclusive prices.
-		if ( wc_tax_enabled() && 'incl' === $tax_display ) {
+		if ( wc_tax_enabled() && TaxDisplayMode::INCLUSIVE === $tax_display ) {
 			$tax_string_array = array();
 			$tax_totals       = $this->get_tax_totals();
 
 			if ( 'itemized' === get_option( 'woocommerce_tax_total_display' ) ) {
 				foreach ( $tax_totals as $code => $tax ) {
-					$tax_amount         = ( $total_refunded && $display_refunded ) ? wc_price( WC_Tax::round( $tax->amount - $this->get_total_tax_refunded_by_rate_id( $tax->rate_id ) ), array( 'currency' => $this->get_currency() ) ) : $tax->formatted_amount;
+					$tax_amount         = ( $total_refunded && $display_refunded ) ? wc_price( WC_Tax::round( (float) $tax->amount - (float) $this->get_total_tax_refunded_by_rate_id( $tax->rate_id ) ), array( 'currency' => $this->get_currency() ) ) : $tax->formatted_amount;
 					$tax_string_array[] = sprintf( '%s %s', $tax_amount, $tax->label );
 				}
 			} elseif ( ! empty( $tax_totals ) ) {
-				$tax_amount         = ( $total_refunded && $display_refunded ) ? $this->get_total_tax() - $this->get_total_tax_refunded() : $this->get_total_tax();
+				$tax_amount         = ( $total_refunded && $display_refunded ) ? (float) $this->get_total_tax() - (float) $this->get_total_tax_refunded() : $this->get_total_tax();
 				$tax_string_array[] = sprintf( '%s %s', wc_price( $tax_amount, array( 'currency' => $this->get_currency() ) ), WC()->countries->tax_or_vat() );
 			}
 
@@ -179,7 +244,7 @@ class WC_Order extends WC_Abstract_Order {
 		}
 
 		if ( $total_refunded && $display_refunded ) {
-			$formatted_total = '<del>' . wp_strip_all_tags( $formatted_total ) . '</del> <ins>' . wc_price( $order_total - $total_refunded, array( 'currency' => $this->get_currency() ) ) . $tax_string . '</ins>';
+			$formatted_total = '<del aria-hidden="true">' . wp_strip_all_tags( $formatted_total ) . '</del> <ins>' . wc_price( (float) $order_total - (float) $total_refunded, array( 'currency' => $this->get_currency() ) ) . $tax_string . '</ins>';
 		} else {
 			$formatted_total .= $tax_string;
 		}
@@ -229,6 +294,7 @@ class WC_Order extends WC_Abstract_Order {
 	 * @param Exception $e Exception object.
 	 * @param string    $message Message regarding exception thrown.
 	 * @since 3.7.0
+	 * @return void
 	 */
 	protected function handle_exception( $e, $message = 'Error' ) {
 		wc_get_logger()->error(
@@ -238,16 +304,16 @@ class WC_Order extends WC_Abstract_Order {
 				'error' => $e,
 			)
 		);
-		$this->add_order_note( $message . ' ' . $e->getMessage() );
+		$this->add_order_note( $message . ' ' . $e->getMessage(), false, false, array( 'note_group' => OrderNoteGroup::ERROR ) );
 	}
 
 	/**
 	 * Set order status.
 	 *
 	 * @since 3.0.0
-	 * @param string $new_status    Status to change the order to. No internal wc- prefix is required.
-	 * @param string $note          Optional note to add.
-	 * @param bool   $manual_update Is this a manual order status change?.
+	 * @param string       $new_status    Status to change the order to. No internal wc- prefix is required.
+	 * @param string|false $note          Optional note to add. False will skip adding a note entirely.
+	 * @param bool         $manual_update Is this a manual order status change?.
 	 * @return array
 	 */
 	public function set_status( $new_status, $note = '', $manual_update = false ) {
@@ -284,17 +350,26 @@ class WC_Order extends WC_Abstract_Order {
 	 * `payment_complete` method.
 	 *
 	 * @since 3.0.0
+	 * @return void
 	 */
 	public function maybe_set_date_paid() {
 		// This logic only runs if the date_paid prop has not been set yet.
 		if ( ! $this->get_date_paid( 'edit' ) ) {
-			$payment_completed_status = apply_filters( 'woocommerce_payment_complete_order_status', $this->needs_processing() ? 'processing' : 'completed', $this->get_id(), $this );
+			/**
+			 * Filters the order status to set after payment complete.
+			 *
+			 * @param string   $status        Order status.
+			 * @param int      $order_id      Order ID.
+			 * @param WC_Order $this          Order object.
+			 * @since 2.7.0
+			 */
+			$payment_completed_status = apply_filters( 'woocommerce_payment_complete_order_status', $this->needs_processing() ? OrderStatus::PROCESSING : OrderStatus::COMPLETED, $this->get_id(), $this );
 
 			if ( $this->has_status( $payment_completed_status ) ) {
 				// If payment complete status is reached, set paid now.
 				$this->set_date_paid( time() );
 
-			} elseif ( 'processing' === $payment_completed_status && $this->has_status( 'completed' ) ) {
+			} elseif ( OrderStatus::PROCESSING === $payment_completed_status && $this->has_status( OrderStatus::COMPLETED ) ) {
 				// If payment complete status was processing, but we've passed that and still have no date, set it now.
 				$this->set_date_paid( time() );
 			}
@@ -307,9 +382,10 @@ class WC_Order extends WC_Abstract_Order {
 	 * Sets the date completed variable when transitioning to completed status.
 	 *
 	 * @since 3.0.0
+	 * @return void
 	 */
 	protected function maybe_set_date_completed() {
-		if ( $this->has_status( 'completed' ) ) {
+		if ( $this->has_status( OrderStatus::COMPLETED ) ) {
 			$this->set_date_completed( time() );
 		}
 	}
@@ -317,7 +393,7 @@ class WC_Order extends WC_Abstract_Order {
 	/**
 	 * Updates status of order immediately.
 	 *
-	 * @uses WC_Order::set_status()
+	 * @uses self::set_status()
 	 * @param string $new_status    Status to change the order to. No internal wc- prefix is required.
 	 * @param string $note          Optional note to add.
 	 * @param bool   $manual        Is this a manual order status change?.
@@ -343,7 +419,7 @@ class WC_Order extends WC_Abstract_Order {
 					'error' => $e,
 				)
 			);
-			$this->add_order_note( __( 'Update status event failed.', 'woocommerce' ) . ' ' . $e->getMessage() );
+			$this->add_order_note( __( 'Update status event failed.', 'woocommerce' ) . ' ' . $e->getMessage(), false, false, array( 'note_group' => OrderNoteGroup::ERROR ) );
 			return false;
 		}
 		return true;
@@ -351,6 +427,8 @@ class WC_Order extends WC_Abstract_Order {
 
 	/**
 	 * Handle the status transition.
+	 *
+	 * @return void
 	 */
 	protected function status_transition() {
 		$status_transition = $this->status_transition;
@@ -360,23 +438,56 @@ class WC_Order extends WC_Abstract_Order {
 
 		if ( $status_transition ) {
 			try {
-				do_action( 'woocommerce_order_status_' . $status_transition['to'], $this->get_id(), $this );
+				/**
+				 * Fires when order status is changed.
+				 *
+				 * @since 1.0.0
+				 *
+				 * @param int Order ID.
+				 * @param WC_Order $order Order object.
+				 * @param array $status_transition {
+				 *      Status transition data.
+				 *
+				 *      @type string $from Order status from.
+				 *      @type string $to Order status to
+				 *      @type string|false $note Order note. False will skip adding a note entirely.
+				 *      @type boolean $manual True if the order is manually changed.
+				 * }
+				 */
+				do_action( 'woocommerce_order_status_' . $status_transition['to'], $this->get_id(), $this, $status_transition );
+
+				// Add a status transition note unless `note` was explicitly set to false.
+				if ( false !== $status_transition['note'] ) {
+					if ( ! empty( $status_transition['from'] ) ) {
+						// Skip notes if the from status was a draft.
+						if ( ! in_array( $status_transition['from'], array( OrderStatus::DRAFT, OrderStatus::AUTO_DRAFT, OrderStatus::NEW, 'checkout-draft' ), true ) ) {
+							/* translators: 1: old order status 2: new order status */
+							$this->add_status_transition_note( sprintf( __( 'Order status changed from %1$s to %2$s.', 'woocommerce' ), wc_get_order_status_name( $status_transition['from'] ), wc_get_order_status_name( $status_transition['to'] ) ), $status_transition );
+						}
+					} else {
+						/* translators: %s: new order status */
+						$transition_note = sprintf( __( 'Order status set to %s.', 'woocommerce' ), wc_get_order_status_name( $status_transition['to'] ) );
+
+						// Note the transition occurred.
+						$this->add_status_transition_note( $transition_note, $status_transition );
+					}
+				}
 
 				if ( ! empty( $status_transition['from'] ) ) {
-					/* translators: 1: old order status 2: new order status */
-					$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', 'woocommerce' ), wc_get_order_status_name( $status_transition['from'] ), wc_get_order_status_name( $status_transition['to'] ) );
-
-					// Note the transition occurred.
-					$this->add_status_transition_note( $transition_note, $status_transition );
-
 					do_action( 'woocommerce_order_status_' . $status_transition['from'] . '_to_' . $status_transition['to'], $this->get_id(), $this );
 					do_action( 'woocommerce_order_status_changed', $this->get_id(), $status_transition['from'], $status_transition['to'], $this );
 
+					/**
+					 * Filter the valid order statuses for payment.
+					 *
+					 * @param array    $valid_order_statuses Array of valid order statuses for payment.
+					 * @param WC_Order $order                Order object.
+					 * @since 4.0.0
+					 */
+					$valid_order_statuses_for_payment = apply_filters( 'woocommerce_valid_order_statuses_for_payment', array( OrderStatus::PENDING, OrderStatus::FAILED ), $this );
+
 					// Work out if this was for a payment, and trigger a payment_status hook instead.
-					if (
-						in_array( $status_transition['from'], apply_filters( 'woocommerce_valid_order_statuses_for_payment', array( 'pending', 'failed' ), $this ), true )
-						&& in_array( $status_transition['to'], wc_get_is_paid_statuses(), true )
-					) {
+					if ( in_array( $status_transition['from'], $valid_order_statuses_for_payment, true ) && in_array( $status_transition['to'], wc_get_is_paid_statuses(), true ) ) {
 						/**
 						 * Fires when the order progresses from a pending payment status to a paid one.
 						 *
@@ -386,12 +497,6 @@ class WC_Order extends WC_Abstract_Order {
 						 */
 						do_action( 'woocommerce_order_payment_status_changed', $this->get_id(), $this );
 					}
-				} else {
-					/* translators: %s: new order status */
-					$transition_note = sprintf( __( 'Order status set to %s.', 'woocommerce' ), wc_get_order_status_name( $status_transition['to'] ) );
-
-					// Note the transition occurred.
-					$this->add_status_transition_note( $transition_note, $status_transition );
 				}
 			} catch ( Exception $e ) {
 				$logger = wc_get_logger();
@@ -405,7 +510,7 @@ class WC_Order extends WC_Abstract_Order {
 						'error' => $e,
 					)
 				);
-				$this->add_order_note( __( 'Error during status transition.', 'woocommerce' ) . ' ' . $e->getMessage() );
+				$this->add_order_note( __( 'Error during status transition.', 'woocommerce' ) . ' ' . $e->getMessage(), false, false, array( 'note_group' => OrderNoteGroup::ERROR ) );
 			}
 		}
 	}
@@ -454,6 +559,8 @@ class WC_Order extends WC_Abstract_Order {
 
 	/**
 	 * Expands the shipping and billing information in the changes array.
+	 *
+	 * @return array
 	 */
 	public function get_changes() {
 		$changed_props = parent::get_changes();
@@ -525,18 +632,27 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @since  3.0.0
 	 * @param  string $prop Name of prop to get.
-	 * @param  string $address billing or shipping.
+	 * @param  string $address_type Type of address; 'billing' or 'shipping'.
 	 * @param  string $context What the value is for. Valid values are view and edit.
 	 * @return mixed
 	 */
-	protected function get_address_prop( $prop, $address = 'billing', $context = 'view' ) {
+	protected function get_address_prop( $prop, $address_type = 'billing', $context = 'view' ) {
 		$value = null;
 
-		if ( array_key_exists( $prop, $this->data[ $address ] ) ) {
-			$value = isset( $this->changes[ $address ][ $prop ] ) ? $this->changes[ $address ][ $prop ] : $this->data[ $address ][ $prop ];
+		if ( array_key_exists( $prop, $this->data[ $address_type ] ) ) {
+			$value = isset( $this->changes[ $address_type ][ $prop ] ) ? $this->changes[ $address_type ][ $prop ] : $this->data[ $address_type ][ $prop ];
 
 			if ( 'view' === $context ) {
-				$value = apply_filters( $this->get_hook_prefix() . $address . '_' . $prop, $value, $this );
+				/**
+				 * Filter: 'woocommerce_order_get_[billing|shipping]_[prop]'
+				 *
+				 * Allow developers to change the returned value for any order address property.
+				 *
+				 * @since 3.6.0
+				 * @param string   $value The address property value.
+				 * @param WC_Order $order The order object being read.
+				 */
+				$value = apply_filters( $this->get_hook_prefix() . $address_type . '_' . $prop, $value, $this );
 			}
 		}
 		return $value;
@@ -743,6 +859,17 @@ class WC_Order extends WC_Abstract_Order {
 	}
 
 	/**
+	 * Get shipping phone.
+	 *
+	 * @since  5.6.0
+	 * @param  string $context What the value is for. Valid values are view and edit.
+	 * @return string
+	 */
+	public function get_shipping_phone( $context = 'view' ) {
+		return $this->get_address_prop( 'phone', 'shipping', $context );
+	}
+
+	/**
 	 * Get the payment method.
 	 *
 	 * @param  string $context What the value is for. Valid values are view and edit.
@@ -763,7 +890,7 @@ class WC_Order extends WC_Abstract_Order {
 	}
 
 	/**
-	 * Get transaction d.
+	 * Get transaction id.
 	 *
 	 * @param  string $context What the value is for. Valid values are view and edit.
 	 * @return string
@@ -831,7 +958,16 @@ class WC_Order extends WC_Abstract_Order {
 	public function get_date_paid( $context = 'view' ) {
 		$date_paid = $this->get_prop( 'date_paid', $context );
 
-		if ( 'view' === $context && ! $date_paid && version_compare( $this->get_version( 'edit' ), '3.0', '<' ) && $this->has_status( apply_filters( 'woocommerce_payment_complete_order_status', $this->needs_processing() ? 'processing' : 'completed', $this->get_id(), $this ) ) ) {
+		if ( 'view' === $context && ! $date_paid && version_compare( $this->get_version( 'edit' ), '3.0', '<' )
+			/**
+			 * Filters the order status to set after payment complete.
+			 *
+			 * @param string   $status        Order status.
+			 * @param int      $order_id      Order ID.
+			 * @param WC_Order $this          Order object.
+			 * @since 3.0.0
+			 */
+			&& $this->has_status( apply_filters( 'woocommerce_payment_complete_order_status', $this->needs_processing() ? OrderStatus::PROCESSING : OrderStatus::COMPLETED, $this->get_id(), $this ) ) ) {
 			// In view context, return a date if missing.
 			$date_paid = $this->get_date_created( 'edit' );
 		}
@@ -853,11 +989,20 @@ class WC_Order extends WC_Abstract_Order {
 	 * Note: Merges raw data with get_prop data so changes are returned too.
 	 *
 	 * @since  2.4.0
-	 * @param  string $type Billing or shipping. Anything else besides 'billing' will return shipping address.
+	 * @param  string $address_type Type of address; 'billing' or 'shipping'.
 	 * @return array The stored address after filter.
 	 */
-	public function get_address( $type = 'billing' ) {
-		return apply_filters( 'woocommerce_get_order_address', array_merge( $this->data[ $type ], $this->get_prop( $type, 'view' ) ), $type, $this );
+	public function get_address( $address_type = 'billing' ) {
+		/**
+		 * Filter: 'woocommerce_get_order_address'
+		 *
+		 * Allow developers to change the returned value for an order's billing or shipping address.
+		 *
+		 * @since 2.4.0
+		 * @param array  $address_data The raw address data merged with the data from get_prop.
+		 * @param string $address_type Type of address; 'billing' or 'shipping'.
+		 */
+		return apply_filters( 'woocommerce_get_order_address', array_merge( $this->data[ $address_type ], $this->get_prop( $address_type, 'view' ) ), $address_type, $this );
 	}
 
 	/**
@@ -869,7 +1014,7 @@ class WC_Order extends WC_Abstract_Order {
 		$address = $this->get_address( 'shipping' );
 
 		// Remove name and company before generate the Google Maps URL.
-		unset( $address['first_name'], $address['last_name'], $address['company'] );
+		unset( $address['first_name'], $address['last_name'], $address['company'], $address['phone'] );
 
 		$address = apply_filters( 'woocommerce_shipping_address_map_url_parts', $address, $this );
 
@@ -907,7 +1052,7 @@ class WC_Order extends WC_Abstract_Order {
 		$address     = WC()->countries->get_formatted_address( $raw_address );
 
 		/**
-		 * Filter orders formatterd billing address.
+		 * Filter orders formatted billing address.
 		 *
 		 * @since 3.8.0
 		 * @param string   $address     Formatted billing address string.
@@ -933,11 +1078,11 @@ class WC_Order extends WC_Abstract_Order {
 		}
 
 		/**
-		 * Filter orders formatterd shipping address.
+		 * Filter orders formatted shipping address.
 		 *
 		 * @since 3.8.0
-		 * @param string   $address     Formatted billing address string.
-		 * @param array    $raw_address Raw billing address.
+		 * @param string   $address     Formatted shipping address string.
+		 * @param array    $raw_address Raw shipping address.
 		 * @param WC_Order $order       Order data. @since 3.9.0
 		 */
 		return apply_filters( 'woocommerce_order_get_formatted_shipping_address', $address ? $address : $empty_content, $raw_address, $this );
@@ -963,6 +1108,50 @@ class WC_Order extends WC_Abstract_Order {
 		return $this->get_shipping_address_1() || $this->get_shipping_address_2();
 	}
 
+	/**
+	 * Gets information about whether stock was reduced.
+	 *
+	 * @since 7.0.0
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 * @return bool
+	 */
+	public function get_order_stock_reduced( string $context = 'view' ) {
+		return wc_string_to_bool( $this->get_prop( 'order_stock_reduced', $context ) );
+	}
+
+	/**
+	 * Gets information about whether permissions were generated yet.
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return bool True if permissions were generated, false otherwise.
+	 */
+	public function get_download_permissions_granted( string $context = 'view' ) {
+		return wc_string_to_bool( $this->get_prop( 'download_permissions_granted', $context ) );
+	}
+
+	/**
+	 * Whether email have been sent for this order.
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return bool
+	 */
+	public function get_new_order_email_sent( string $context = 'view' ) {
+		return wc_string_to_bool( $this->get_prop( 'new_order_email_sent', $context ) );
+	}
+
+	/**
+	 * Gets information about whether sales were recorded.
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return bool True if sales were recorded, false otherwise.
+	 */
+	public function get_recorded_sales( string $context = 'view' ) {
+		return wc_string_to_bool( $this->get_prop( 'recorded_sales', $context ) );
+	}
+
 	/*
 	|--------------------------------------------------------------------------
 	| Setters
@@ -980,19 +1169,70 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @since 3.0.0
 	 * @param string $prop Name of prop to set.
-	 * @param string $address Name of address to set. billing or shipping.
+	 * @param string $address_type Type of address; 'billing' or 'shipping'.
 	 * @param mixed  $value Value of the prop.
+	 * @return void
 	 */
-	protected function set_address_prop( $prop, $address, $value ) {
-		if ( array_key_exists( $prop, $this->data[ $address ] ) ) {
+	protected function set_address_prop( $prop, $address_type, $value ) {
+		if ( array_key_exists( $prop, $this->data[ $address_type ] ) ) {
 			if ( true === $this->object_read ) {
-				if ( $value !== $this->data[ $address ][ $prop ] || ( isset( $this->changes[ $address ] ) && array_key_exists( $prop, $this->changes[ $address ] ) ) ) {
-					$this->changes[ $address ][ $prop ] = $value;
+				if ( $value !== $this->data[ $address_type ][ $prop ] || ( isset( $this->changes[ $address_type ] ) && array_key_exists( $prop, $this->changes[ $address_type ] ) ) ) {
+					$this->changes[ $address_type ][ $prop ] = $value;
 				}
 			} else {
-				$this->data[ $address ][ $prop ] = $value;
+				$this->data[ $address_type ][ $prop ] = $value;
 			}
 		}
+	}
+
+	/**
+	 * Setter for billing address, expects the $address parameter to be key value pairs for individual address props.
+	 *
+	 * @param array $address Address to set.
+	 *
+	 * @return void
+	 */
+	public function set_billing_address( array $address ) {
+		foreach ( $address as $key => $value ) {
+			$this->set_address_prop( $key, 'billing', $value );
+		}
+	}
+
+	/**
+	 * Shortcut for calling set_billing_address.
+	 *
+	 * This is useful in scenarios where set_$prop_name is invoked, and since we store the billing address as 'billing' prop in data, it can be called directly.
+	 *
+	 * @param array $address Address to set.
+	 *
+	 * @return void
+	 */
+	public function set_billing( array $address ) {
+		$this->set_billing_address( $address );
+	}
+
+	/**
+	 * Setter for shipping address, expects the $address parameter to be key value pairs for individual address props.
+	 *
+	 * @param array $address Address to set.
+	 *
+	 * @return void
+	 */
+	public function set_shipping_address( array $address ) {
+		foreach ( $address as $key => $value ) {
+			$this->set_address_prop( $key, 'shipping', $value );
+		}
+	}
+
+	/**
+	 * Shortcut for calling set_shipping_address. This is useful in scenarios where set_$prop_name is invoked, and since we store the shipping address as 'shipping' prop in data, it can be called directly.
+	 *
+	 * @param array $address Address to set.
+	 *
+	 * @return void
+	 */
+	public function set_shipping( array $address ) {
+		$this->set_shipping_address( $address );
 	}
 
 	/**
@@ -1000,6 +1240,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Max length 22 chars.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_order_key( $value ) {
 		$this->set_prop( 'order_key', substr( $value, 0, 22 ) );
@@ -1010,6 +1251,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param int $value Customer ID.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_customer_id( $value ) {
 		$this->set_prop( 'customer_id', absint( $value ) );
@@ -1020,6 +1262,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing first name.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_first_name( $value ) {
 		$this->set_address_prop( 'first_name', 'billing', $value );
@@ -1030,6 +1273,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing last name.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_last_name( $value ) {
 		$this->set_address_prop( 'last_name', 'billing', $value );
@@ -1040,6 +1284,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing company.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_company( $value ) {
 		$this->set_address_prop( 'company', 'billing', $value );
@@ -1050,6 +1295,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing address line 1.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_address_1( $value ) {
 		$this->set_address_prop( 'address_1', 'billing', $value );
@@ -1060,6 +1306,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing address line 2.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_address_2( $value ) {
 		$this->set_address_prop( 'address_2', 'billing', $value );
@@ -1070,6 +1317,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing city.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_city( $value ) {
 		$this->set_address_prop( 'city', 'billing', $value );
@@ -1080,6 +1328,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing state.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_state( $value ) {
 		$this->set_address_prop( 'state', 'billing', $value );
@@ -1090,6 +1339,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing postcode.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_postcode( $value ) {
 		$this->set_address_prop( 'postcode', 'billing', $value );
@@ -1100,6 +1350,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing country.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_country( $value ) {
 		$this->set_address_prop( 'country', 'billing', $value );
@@ -1107,6 +1358,8 @@ class WC_Order extends WC_Abstract_Order {
 
 	/**
 	 * Maybe set empty billing email to that of the user who owns the order.
+	 *
+	 * @return void
 	 */
 	protected function maybe_set_user_billing_email() {
 		$user = $this->get_user();
@@ -1124,6 +1377,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing email.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_email( $value ) {
 		if ( $value && ! is_email( $value ) ) {
@@ -1137,6 +1391,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Billing phone.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_billing_phone( $value ) {
 		$this->set_address_prop( 'phone', 'billing', $value );
@@ -1147,6 +1402,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Shipping first name.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_shipping_first_name( $value ) {
 		$this->set_address_prop( 'first_name', 'shipping', $value );
@@ -1157,6 +1413,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Shipping last name.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_shipping_last_name( $value ) {
 		$this->set_address_prop( 'last_name', 'shipping', $value );
@@ -1167,6 +1424,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Shipping company.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_shipping_company( $value ) {
 		$this->set_address_prop( 'company', 'shipping', $value );
@@ -1177,6 +1435,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Shipping address line 1.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_shipping_address_1( $value ) {
 		$this->set_address_prop( 'address_1', 'shipping', $value );
@@ -1187,6 +1446,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Shipping address line 2.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_shipping_address_2( $value ) {
 		$this->set_address_prop( 'address_2', 'shipping', $value );
@@ -1197,6 +1457,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Shipping city.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_shipping_city( $value ) {
 		$this->set_address_prop( 'city', 'shipping', $value );
@@ -1207,6 +1468,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Shipping state.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_shipping_state( $value ) {
 		$this->set_address_prop( 'state', 'shipping', $value );
@@ -1217,6 +1479,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Shipping postcode.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_shipping_postcode( $value ) {
 		$this->set_address_prop( 'postcode', 'shipping', $value );
@@ -1227,9 +1490,22 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Shipping country.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_shipping_country( $value ) {
 		$this->set_address_prop( 'country', 'shipping', $value );
+	}
+
+	/**
+	 * Set shipping phone.
+	 *
+	 * @since 5.6.0
+	 * @param string $value Shipping phone.
+	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
+	 */
+	public function set_shipping_phone( $value ) {
+		$this->set_address_prop( 'phone', 'shipping', $value );
 	}
 
 	/**
@@ -1237,6 +1513,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $payment_method Supports WC_Payment_Gateway for bw compatibility with < 3.0.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_payment_method( $payment_method = '' ) {
 		if ( is_object( $payment_method ) ) {
@@ -1255,6 +1532,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Payment method title.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_payment_method_title( $value ) {
 		$this->set_prop( 'payment_method_title', $value );
@@ -1265,6 +1543,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Transaction id.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_transaction_id( $value ) {
 		$this->set_prop( 'transaction_id', $value );
@@ -1275,6 +1554,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Customer ip address.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_customer_ip_address( $value ) {
 		$this->set_prop( 'customer_ip_address', $value );
@@ -1285,6 +1565,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Customer user agent.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_customer_user_agent( $value ) {
 		$this->set_prop( 'customer_user_agent', $value );
@@ -1295,6 +1576,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Created via.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_created_via( $value ) {
 		$this->set_prop( 'created_via', $value );
@@ -1305,6 +1587,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Customer note.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_customer_note( $value ) {
 		$this->set_prop( 'customer_note', $value );
@@ -1315,6 +1598,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param  string|integer|null $date UTC timestamp, or ISO 8601 DateTime. If the DateTime string has no timezone or offset, WordPress site timezone will be assumed. Null if their is no date.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_date_completed( $date = null ) {
 		$this->set_date_prop( 'date_completed', $date );
@@ -1325,6 +1609,7 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param  string|integer|null $date UTC timestamp, or ISO 8601 DateTime. If the DateTime string has no timezone or offset, WordPress site timezone will be assumed. Null if their is no date.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_date_paid( $date = null ) {
 		$this->set_date_prop( 'date_paid', $date );
@@ -1335,9 +1620,54 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param string $value Cart hash.
 	 * @throws WC_Data_Exception Throws exception when invalid data is found.
+	 * @return void
 	 */
 	public function set_cart_hash( $value ) {
 		$this->set_prop( 'cart_hash', $value );
+	}
+
+	/**
+	 * Stores information about whether stock was reduced.
+	 *
+	 * @param bool|string $value True if stock was reduced, false if not.
+	 *
+	 * @return void
+	 */
+	public function set_order_stock_reduced( $value ) {
+		$this->set_prop( 'order_stock_reduced', wc_string_to_bool( $value ) );
+	}
+
+	/**
+	 * Stores information about whether permissions were generated yet.
+	 *
+	 * @param bool|string $value True if permissions were generated, false if not.
+	 *
+	 * @return void
+	 */
+	public function set_download_permissions_granted( $value ) {
+		$this->set_prop( 'download_permissions_granted', wc_string_to_bool( $value ) );
+	}
+
+	/**
+	 * Stores information about whether email was sent.
+	 *
+	 * @param bool|string $value True if email was sent, false if not.
+	 *
+	 * @return void
+	 */
+	public function set_new_order_email_sent( $value ) {
+		$this->set_prop( 'new_order_email_sent', wc_string_to_bool( $value ) );
+	}
+
+	/**
+	 * Stores information about whether sales were recorded.
+	 *
+	 * @param bool|string $value True if sales were recorded, false if not.
+	 *
+	 * @return void
+	 */
+	public function set_recorded_sales( $value ) {
+		$this->set_prop( 'recorded_sales', wc_string_to_bool( $value ) );
 	}
 
 	/*
@@ -1375,7 +1705,14 @@ class WC_Order extends WC_Abstract_Order {
 	 * @return bool
 	 */
 	public function is_editable() {
-		return apply_filters( 'wc_order_is_editable', in_array( $this->get_status(), array( 'pending', 'on-hold', 'auto-draft' ), true ), $this );
+		/**
+		 * Filter to check if an order is editable.
+		 *
+		 * @param bool     $is_editable Is the order editable.
+		 * @param WC_Order $this        Order object.
+		 * @since 2.7.0
+		 */
+		return apply_filters( 'wc_order_is_editable', in_array( $this->get_status(), array( OrderStatus::PENDING, OrderStatus::ON_HOLD, OrderStatus::AUTO_DRAFT ), true ), $this );
 	}
 
 	/**
@@ -1394,7 +1731,14 @@ class WC_Order extends WC_Abstract_Order {
 	 * @return bool
 	 */
 	public function is_download_permitted() {
-		return apply_filters( 'woocommerce_order_is_download_permitted', $this->has_status( 'completed' ) || ( 'yes' === get_option( 'woocommerce_downloads_grant_access_after_payment' ) && $this->has_status( 'processing' ) ), $this );
+		/**
+		 * Filter to check if an order is downloadable.
+		 *
+		 * @param bool     $is_download_permitted Is the order downloadable.
+		 * @param WC_Order $this                  Order object.
+		 * @since 2.7.0
+		 */
+		return apply_filters( 'woocommerce_order_is_download_permitted', $this->has_status( OrderStatus::COMPLETED ) || ( 'yes' === get_option( 'woocommerce_downloads_grant_access_after_payment' ) && $this->has_status( OrderStatus::PROCESSING ) ), $this );
 	}
 
 	/**
@@ -1407,7 +1751,14 @@ class WC_Order extends WC_Abstract_Order {
 			return false;
 		}
 
-		$hide          = apply_filters( 'woocommerce_order_hide_shipping_address', array( 'local_pickup' ), $this );
+		/**
+		 * Filter to hide the shipping address for an order.
+		 *
+		 * @param array    $hide The shipping methods to hide the shipping address for.
+		 * @param WC_Order $this The order object.
+		 * @since 2.7.0
+		 */
+		$hide          = apply_filters( 'woocommerce_order_hide_shipping_address', LocalPickupUtils::get_local_pickup_method_ids(), $this );
 		$needs_address = false;
 
 		foreach ( $this->get_shipping_methods() as $shipping_method ) {
@@ -1495,7 +1846,14 @@ class WC_Order extends WC_Abstract_Order {
 	 * @return bool
 	 */
 	public function needs_payment() {
-		$valid_order_statuses = apply_filters( 'woocommerce_valid_order_statuses_for_payment', array( 'pending', 'failed' ), $this );
+		/**
+		 * Filter the valid order statuses for payment.
+		 *
+		 * @param array    $valid_order_statuses Array of valid order statuses for payment.
+		 * @param WC_Order $order                Order object.
+		 * @since 2.7.0
+		 */
+		$valid_order_statuses = apply_filters( 'woocommerce_valid_order_statuses_for_payment', array( OrderStatus::PENDING, OrderStatus::FAILED ), $this );
 		return apply_filters( 'woocommerce_order_needs_payment', ( $this->has_status( $valid_order_statuses ) && $this->get_total() > 0 ), $this, $valid_order_statuses );
 	}
 
@@ -1505,39 +1863,47 @@ class WC_Order extends WC_Abstract_Order {
 	 * Orders which only contain virtual, downloadable items do not need admin
 	 * intervention.
 	 *
-	 * Uses a transient so these calls are not repeated multiple times, and because
-	 * once the order is processed this code/transient does not need to persist.
-	 *
+	 * @since 10.8.0 the method no longer uses transients.
 	 * @since 3.0.0
+	 *
 	 * @return bool
 	 */
 	public function needs_processing() {
-		$transient_name   = 'wc_order_' . $this->get_id() . '_needs_processing';
-		$needs_processing = get_transient( $transient_name );
-
+		$order_id         = $this->get_id();
+		$cache_key        = 'order-needs-processing-' . $order_id;
+		$needs_processing = wp_cache_get( $cache_key, 'orders' );
 		if ( false === $needs_processing ) {
 			$needs_processing = 0;
 
-			if ( count( $this->get_items() ) > 0 ) {
-				foreach ( $this->get_items() as $item ) {
+			$line_items = $this->get_items();
+			if ( count( $line_items ) > 0 ) {
+				foreach ( $line_items as $item ) {
 					if ( $item->is_type( 'line_item' ) ) {
 						$product = $item->get_product();
-
-						if ( ! $product ) {
-							continue;
-						}
-
-						$virtual_downloadable_item = $product->is_downloadable() && $product->is_virtual();
-
-						if ( apply_filters( 'woocommerce_order_item_needs_processing', ! $virtual_downloadable_item, $product, $this->get_id() ) ) {
-							$needs_processing = 1;
-							break;
+						if ( $product ) {
+							$virtual_downloadable_item = $product->is_downloadable() && $product->is_virtual();
+							/**
+							 * Filters whether an order line item requires processing. By default, only
+							 * virtual downloadable items do not require processing; all other items do.
+							 *
+							 * @since 2.7.0
+							 *
+							 * @param bool        $needs_processing
+							 * @param \WC_Product $product
+							 * @param int         $order_id
+							 * @return bool
+							 */
+							$custom_needs_processing = (bool) apply_filters( 'woocommerce_order_item_needs_processing', ! $virtual_downloadable_item, $product, $order_id );
+							if ( $custom_needs_processing ) {
+								$needs_processing = 1;
+								break;
+							}
 						}
 					}
 				}
 			}
 
-			set_transient( $transient_name, $needs_processing, DAY_IN_SECONDS );
+			wp_cache_set( $cache_key, $needs_processing, 'orders', DAY_IN_SECONDS );
 		}
 
 		return 1 === absint( $needs_processing );
@@ -1592,6 +1958,15 @@ class WC_Order extends WC_Abstract_Order {
 	 * @return string
 	 */
 	public function get_cancel_order_url( $redirect = '' ) {
+		/**
+		 * Filter the URL to cancel the order in the frontend.
+		 *
+		 * @since 2.2.0
+		 *
+		 * @param string $url
+		 * @param WC_Order $order Order data.
+		 * @param string $redirect Redirect URL.
+		 */
 		return apply_filters(
 			'woocommerce_get_cancel_order_url',
 			wp_nonce_url(
@@ -1605,7 +1980,9 @@ class WC_Order extends WC_Abstract_Order {
 					$this->get_cancel_endpoint()
 				),
 				'woocommerce-cancel_order'
-			)
+			),
+			$this,
+			$redirect
 		);
 	}
 
@@ -1616,6 +1993,15 @@ class WC_Order extends WC_Abstract_Order {
 	 * @return string The unescaped cancel-order URL.
 	 */
 	public function get_cancel_order_url_raw( $redirect = '' ) {
+		/**
+		 * Filter the raw URL to cancel the order in the frontend.
+		 *
+		 * @since 2.2.0
+		 *
+		 * @param string $url
+		 * @param WC_Order $order Order data.
+		 * @param string $redirect Redirect URL.
+		 */
 		return apply_filters(
 			'woocommerce_get_cancel_order_url_raw',
 			add_query_arg(
@@ -1627,7 +2013,9 @@ class WC_Order extends WC_Abstract_Order {
 					'_wpnonce'     => wp_create_nonce( 'woocommerce-cancel_order' ),
 				),
 				$this->get_cancel_endpoint()
-			)
+			),
+			$this,
+			$redirect
 		);
 	}
 
@@ -1665,7 +2053,13 @@ class WC_Order extends WC_Abstract_Order {
 	 * @return string
 	 */
 	public function get_edit_order_url() {
-		return apply_filters( 'woocommerce_get_edit_order_url', get_admin_url( null, 'post.php?post=' . $this->get_id() . '&action=edit' ), $this );
+		$edit_url = \Automattic\WooCommerce\Utilities\OrderUtil::get_order_admin_edit_url( $this->get_id() );
+		/**
+		 * Filter the URL to edit the order in the backend.
+		 *
+		 * @since 3.3.0
+		 */
+		return apply_filters( 'woocommerce_get_edit_order_url', $edit_url, $this );
 	}
 
 	/*
@@ -1680,9 +2074,10 @@ class WC_Order extends WC_Abstract_Order {
 	 * @param  string $note              Note to add.
 	 * @param  int    $is_customer_note  Is this a note for the customer?.
 	 * @param  bool   $added_by_user     Was the note added by a user?.
+	 * @param  array  $meta_data         Optional meta data to add to the note. Key value pairs.
 	 * @return int                       Comment ID.
 	 */
-	public function add_order_note( $note, $is_customer_note = 0, $added_by_user = false ) {
+	public function add_order_note( $note, $is_customer_note = 0, $added_by_user = false, $meta_data = array() ) {
 		if ( ! $this->get_id() ) {
 			return 0;
 		}
@@ -1694,7 +2089,7 @@ class WC_Order extends WC_Abstract_Order {
 		} else {
 			$comment_author        = __( 'WooCommerce', 'woocommerce' );
 			$comment_author_email  = strtolower( __( 'WooCommerce', 'woocommerce' ) ) . '@';
-			$comment_author_email .= isset( $_SERVER['HTTP_HOST'] ) ? str_replace( 'www.', '', sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) ) : 'noreply.com'; // WPCS: input var ok.
+			$comment_author_email .= isset( $_SERVER['HTTP_HOST'] ) ? str_replace( 'www.', '', sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) ) : 'noreply.com';
 			$comment_author_email  = sanitize_email( $comment_author_email );
 		}
 		$commentdata = apply_filters(
@@ -1730,6 +2125,14 @@ class WC_Order extends WC_Abstract_Order {
 			);
 		}
 
+		if ( ! empty( $meta_data ) && is_array( $meta_data ) ) {
+			foreach ( $meta_data as $key => $value ) {
+				if ( is_scalar( $value ) ) {
+					update_comment_meta( $comment_id, sanitize_key( $key ), sanitize_text_field( $value ) );
+				}
+			}
+		}
+
 		/**
 		 * Action hook fired after an order note is added.
 		 *
@@ -1747,13 +2150,13 @@ class WC_Order extends WC_Abstract_Order {
 	 * Add an order note for status transition
 	 *
 	 * @since 3.9.0
-	 * @uses WC_Order::add_order_note()
+	 * @uses self::add_order_note()
 	 * @param string $note          Note to be added giving status transition from and to details.
 	 * @param bool   $transition    Details of the status transition.
 	 * @return int                  Comment ID.
 	 */
 	private function add_status_transition_note( $note, $transition ) {
-		return $this->add_order_note( trim( $transition['note'] . ' ' . $note ), 0, $transition['manual'] );
+		return $this->add_order_note( trim( $transition['note'] . ' ' . $note ), 0, $transition['manual'], array( 'note_group' => OrderNoteGroup::ORDER_UPDATE ) );
 	}
 
 	/**
@@ -1793,28 +2196,57 @@ class WC_Order extends WC_Abstract_Order {
 	*/
 
 	/**
-	 * Get order refunds.
+	 * Returns an array of WC_Order_Refund objects for the order.
 	 *
+	 * Utilizes object cache to store refunds to avoid extra DB calls.
+	 *
+	 * @see Abstract_WC_Order_Data_Store_CPT::prime_refund_caches_for_orders()
 	 * @since 2.2
-	 * @return array of WC_Order_Refund objects
+	 *
+	 * @return WC_Order_Refund[]
 	 */
 	public function get_refunds() {
-		$cache_key   = WC_Cache_Helper::get_cache_prefix( 'orders' ) . 'refunds' . $this->get_id();
-		$cached_data = wp_cache_get( $cache_key, $this->cache_group );
+		$cache_key  = WC_Cache_Helper::get_cache_prefix( 'orders' ) . 'refund_ids' . $this->get_id();
+		$refund_ids = wp_cache_get( $cache_key, $this->cache_group );
 
-		if ( false !== $cached_data ) {
-			return $cached_data;
+		if ( false === $refund_ids ) {
+			$refunds    = (array) wc_get_orders(
+				array(
+					'type'   => 'shop_order_refund',
+					'parent' => $this->get_id(),
+					'limit'  => -1,
+				)
+			);
+			$refund_ids = array();
+			foreach ( $refunds as $refund ) {
+				if ( $refund instanceof WC_Order_Refund ) {
+					$refund_ids[] = $refund->get_id();
+				}
+			}
+			wp_cache_set( $cache_key, $refund_ids, $this->cache_group );
+		} else {
+			$refunds = ! empty( $refund_ids )
+				? wc_get_orders(
+					array(
+						'type'          => 'shop_order_refund',
+						'post__in'      => $refund_ids,
+						'orderby'       => 'post__in',
+						'limit'         => -1,
+						'no_found_rows' => true,
+					)
+				)
+				: array();
 		}
 
-		$this->refunds = wc_get_orders(
-			array(
-				'type'   => 'shop_order_refund',
-				'parent' => $this->get_id(),
-				'limit'  => -1,
-			)
-		);
+		$this->refunds = array();
 
-		wp_cache_set( $cache_key, $this->refunds, $this->cache_group );
+		if ( ! empty( $refunds ) && is_array( $refunds ) ) {
+			foreach ( $refunds as $refund ) {
+				if ( $refund instanceof WC_Order_Refund ) {
+					$this->refunds[] = $refund;
+				}
+			}
+		}
 
 		return $this->refunds;
 	}
@@ -1859,6 +2291,31 @@ class WC_Order extends WC_Abstract_Order {
 		wp_cache_set( $cache_key, $total_refunded, $this->cache_group );
 
 		return $total_refunded;
+	}
+
+	/**
+	 * Get the total shipping tax refunded.
+	 *
+	 * @since  10.2.0
+	 * @return float
+	 */
+	public function get_total_shipping_tax_refunded() {
+		$cache_key   = WC_Cache_Helper::get_cache_prefix( 'orders' ) . 'total_shipping_tax_refunded' . $this->get_id();
+		$cached_data = wp_cache_get( $cache_key, $this->cache_group );
+
+		if ( false !== $cached_data ) {
+			return $cached_data;
+		}
+
+		$total_shipping_tax_refunded = 0;
+
+		if ( method_exists( $this->data_store, 'get_total_shipping_tax_refunded' ) ) {
+			$total_shipping_tax_refunded = $this->data_store->get_total_shipping_tax_refunded( $this );
+		}
+
+		wp_cache_set( $cache_key, $total_shipping_tax_refunded, $this->cache_group );
+
+		return $total_shipping_tax_refunded;
 	}
 
 	/**
@@ -1945,22 +2402,45 @@ class WC_Order extends WC_Abstract_Order {
 	}
 
 	/**
+	 * Get the "refunded cost" (the combined Cost of Goods Sold of the refunded items) for a line item.
+	 *
+	 * @param  int    $item_id   ID of the item we're checking.
+	 * @param  string $item_type Type of the item we're checking, if not a line_item.
+	 * @return float
+	 */
+	public function get_cogs_refunded_for_item( $item_id, $item_type = 'line_item' ) {
+		if ( ! $this->cogs_is_enabled() || ! $this->has_cogs() ) {
+			return 0;
+		}
+
+		$cogs_value = 0;
+		foreach ( $this->get_refunds() as $refund ) {
+			foreach ( $refund->get_items( $item_type ) as $refunded_item ) {
+				if ( absint( $refunded_item->get_meta( '_refunded_item_id' ) ) === $item_id ) {
+					$cogs_value += $refunded_item->has_cogs() ? $refunded_item->get_cogs_value() : 0;
+				}
+			}
+		}
+		return $cogs_value;
+	}
+
+	/**
 	 * Get the refunded amount for a line item.
 	 *
 	 * @param  int    $item_id   ID of the item we're checking.
 	 * @param  string $item_type Type of the item we're checking, if not a line_item.
-	 * @return int
+	 * @return float
 	 */
 	public function get_total_refunded_for_item( $item_id, $item_type = 'line_item' ) {
 		$total = 0;
 		foreach ( $this->get_refunds() as $refund ) {
 			foreach ( $refund->get_items( $item_type ) as $refunded_item ) {
 				if ( absint( $refunded_item->get_meta( '_refunded_item_id' ) ) === $item_id ) {
-					$total += $refunded_item->get_total();
+					$total += (float) $refunded_item->get_total();
 				}
 			}
 		}
-		return $total * -1;
+		return NumberUtil::round( $total * -1, wc_get_price_decimals() );
 	}
 
 	/**
@@ -2011,7 +2491,7 @@ class WC_Order extends WC_Abstract_Order {
 	 * @return string
 	 */
 	public function get_remaining_refund_amount() {
-		return wc_format_decimal( $this->get_total() - $this->get_total_refunded(), wc_get_price_decimals() );
+		return wc_format_decimal( (float) $this->get_total() - (float) $this->get_total_refunded(), wc_get_price_decimals() );
 	}
 
 	/**
@@ -2020,7 +2500,7 @@ class WC_Order extends WC_Abstract_Order {
 	 * @return int
 	 */
 	public function get_remaining_refund_items() {
-		return absint( $this->get_item_count() - $this->get_item_count_refunded() );
+		return absint( (int) $this->get_item_count() - (int) $this->get_item_count_refunded() );
 	}
 
 	/**
@@ -2028,12 +2508,21 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param array  $total_rows  Total rows.
 	 * @param string $tax_display Tax to display.
+	 * @return void
 	 */
 	protected function add_order_item_totals_payment_method_row( &$total_rows, $tax_display ) {
-		if ( $this->get_total() > 0 && $this->get_payment_method_title() && 'other' !== $this->get_payment_method_title() ) {
+		if ( $this->get_total() > 0 && $this->get_payment_method_title() && 'other' !== $this->get_payment_method() ) {
+			$value = $this->get_payment_method_title();
+
+			$card_info = $this->get_payment_card_info();
+			if ( isset( $card_info['last4'] ) && $card_info['last4'] ) {
+				$value .= ' - ' . $card_info['last4'];
+			}
+
 			$total_rows['payment_method'] = array(
+				'type'  => 'payment_method',
 				'label' => __( 'Payment method:', 'woocommerce' ),
-				'value' => $this->get_payment_method_title(),
+				'value' => $value,
 			);
 		}
 	}
@@ -2043,14 +2532,22 @@ class WC_Order extends WC_Abstract_Order {
 	 *
 	 * @param array  $total_rows  Total rows.
 	 * @param string $tax_display Tax to display.
+	 * @return void
 	 */
 	protected function add_order_item_totals_refund_rows( &$total_rows, $tax_display ) {
 		$refunds = $this->get_refunds();
 		if ( $refunds ) {
 			foreach ( $refunds as $id => $refund ) {
+				$reason = trim( $refund->get_reason() );
+
+				if ( strlen( $reason ) > 0 ) {
+					$reason = "<br><small>$reason</small>";
+				}
+
 				$total_rows[ 'refund_' . $id ] = array(
-					'label' => $refund->get_reason() ? $refund->get_reason() : __( 'Refund', 'woocommerce' ) . ':',
-					'value' => wc_price( '-' . $refund->get_amount(), array( 'currency' => $this->get_currency() ) ),
+					'type'  => 'refund',
+					'label' => __( 'Refund', 'woocommerce' ) . ':',
+					'value' => wc_price( '-' . $refund->get_amount(), array( 'currency' => $this->get_currency() ) ) . $reason,
 				);
 			}
 		}
@@ -2066,14 +2563,21 @@ class WC_Order extends WC_Abstract_Order {
 		$tax_display = $tax_display ? $tax_display : get_option( 'woocommerce_tax_display_cart' );
 		$total_rows  = array();
 
+		$email_improvements_enabled = FeaturesUtil::feature_is_enabled( 'email_improvements' );
+
 		$this->add_order_item_totals_subtotal_row( $total_rows, $tax_display );
 		$this->add_order_item_totals_discount_row( $total_rows, $tax_display );
 		$this->add_order_item_totals_shipping_row( $total_rows, $tax_display );
 		$this->add_order_item_totals_fee_rows( $total_rows, $tax_display );
 		$this->add_order_item_totals_tax_rows( $total_rows, $tax_display );
-		$this->add_order_item_totals_payment_method_row( $total_rows, $tax_display );
+		if ( ! $email_improvements_enabled ) {
+			$this->add_order_item_totals_payment_method_row( $total_rows, $tax_display );
+		}
 		$this->add_order_item_totals_refund_rows( $total_rows, $tax_display );
 		$this->add_order_item_totals_total_row( $total_rows, $tax_display );
+		if ( $email_improvements_enabled ) {
+			$this->add_order_item_totals_payment_method_row( $total_rows, $tax_display );
+		}
 
 		return apply_filters( 'woocommerce_get_order_item_totals', $total_rows, $this, $tax_display );
 	}
@@ -2087,5 +2591,47 @@ class WC_Order extends WC_Abstract_Order {
 	 */
 	public function is_created_via( $modus ) {
 		return apply_filters( 'woocommerce_order_is_created_via', $modus === $this->get_created_via(), $this, $modus );
+	}
+
+	/**
+	 * Attempts to restore the specified order back to its original status (after having been trashed).
+	 *
+	 * @return bool If the operation was successful.
+	 */
+	public function untrash(): bool {
+		return (bool) $this->data_store->untrash_order( $this );
+	}
+
+	/**
+	 * Indicates that regular orders have an associated Cost of Goods Sold value.
+	 * Note that this is true even if the order has no line items with COGS values (in that case the COGS value for the order will be zero)-
+	 *
+	 * @return bool Always true.
+	 */
+	public function has_cogs() {
+		return true;
+	}
+
+	/**
+	 * Calculate the Cost of Goods Sold value for this order
+	 * as the base cost minus the cost of the refunded items.
+	 *
+	 * @return float The calculated value.
+	 */
+	protected function calculate_cogs_total_value_core(): float {
+		$value = parent::calculate_cogs_total_value_core();
+
+		$refunds = $this->get_refunds();
+		foreach ( $refunds as $refund ) {
+			$refund_items = $refund->get_items();
+			foreach ( $refund_items as $refund_item ) {
+				if ( $refund_item->has_cogs() ) {
+					$refund_item->calculate_cogs_value();
+					$value -= abs( $refund_item->get_cogs_value() );
+				}
+			}
+		}
+
+		return $value;
 	}
 }

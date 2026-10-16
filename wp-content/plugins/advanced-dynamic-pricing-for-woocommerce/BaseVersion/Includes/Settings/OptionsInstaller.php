@@ -32,7 +32,7 @@ class OptionsInstaller
 
         $optionsList->register(
             $builder::boolean('show_unmodified_price_if_discounts_with_coupon',
-                false,
+                true,
                 __('Show unmodified price if product discounts added as coupon', 'advanced-dynamic-pricing-for-woocommerce')
             ),
 
@@ -179,7 +179,7 @@ class OptionsInstaller
             $builder::boolean(
                 'discount_table_ignores_conditions',
                 false,
-                __('Show bulk table regardless to conditions', 'advanced-dynamic-pricing-for-woocommerce')
+                __('Show bulk table regardless of conditions', 'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::boolean(
                 'use_first_range_as_min_qty',
@@ -188,14 +188,20 @@ class OptionsInstaller
                     'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::boolean(
+                'force_displaying_variation_price',
+                false,
+                __('Force displaying variation price',
+                    'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
                 'show_message_after_add_free_product',
                 false,
-                __('Show message after adding free product|Enable', 'advanced-dynamic-pricing-for-woocommerce')
+                __('Show message after adding gift|Enable', 'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::shortText(
                 'message_template_after_add_free_product',
                 __("Added {{qty}} free {{product_name}}", 'advanced-dynamic-pricing-for-woocommerce'),
-                __('Show message after adding free product|Output template', 'advanced-dynamic-pricing-for-woocommerce')
+                __('Show message after adding gift|Output template', 'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::boolean(
                 'is_calculate_based_on_wc_precision',
@@ -224,13 +230,8 @@ class OptionsInstaller
             ),
             $builder::boolean(
                 'update_prices_while_doing_rest_api',
-                false,
+                true,
                 __('Apply pricing rules while doing REST API', 'advanced-dynamic-pricing-for-woocommerce')
-            ),
-            $builder::boolean(
-                'allow_to_edit_prices_in_po',
-                false,
-                __('Allow to edit prices in Phone Orders', 'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::boolean(
                 'suppress_other_pricing_plugins',
@@ -238,11 +239,10 @@ class OptionsInstaller
                 __('Suppress other pricing plugins in frontend', 'advanced-dynamic-pricing-for-woocommerce')
             ),
 
-
             $builder::boolean(
-                'allow_to_exclude_products',
-                true,
-                __('Allow to exclude products in filters', 'advanced-dynamic-pricing-for-woocommerce')
+                'create_blank_rule',
+                false,
+                __('Hide rules wizard', 'advanced-dynamic-pricing-for-woocommerce')
             ),
 
             $builder::boolean(
@@ -284,6 +284,75 @@ class OptionsInstaller
                 __('Hide "Coupon" word in cart totals', 'advanced-dynamic-pricing-for-woocommerce')
             ),
 
+            $builder::boolean(
+                'individual_wc_coupon_suppress_coupons',
+                false,
+                __('"Individual use" WC coupon suppress coupons added by rules', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+
+
+            $builder::selective(
+                "process_product_strategy",
+                __('When the striked price should be shown', 'advanced-dynamic-pricing-for-woocommerce'),
+                array(
+                    "when" => __(
+                        "Before matching condition",
+                        'advanced-dynamic-pricing-for-woocommerce'
+                    ),
+                    "after" => __(
+                        "After matching condition",
+                        'advanced-dynamic-pricing-for-woocommerce'
+                    ),
+                ),
+                "when"
+            ),
+
+            $builder::selective(
+                "process_product_strategy_after_use_price",
+                __('In "After matching condition" mode - use product price from cart', 'advanced-dynamic-pricing-for-woocommerce'),
+                array(
+                    "first" => __(
+                        "First matched",
+                        'advanced-dynamic-pricing-for-woocommerce'
+                    ),
+                    "last" => __(
+                        "Last matched",
+                        'advanced-dynamic-pricing-for-woocommerce'
+                    ),
+                    "cheapest" => __(
+                        "Cheapest",
+                        'advanced-dynamic-pricing-for-woocommerce'
+                    ),
+                    "most_expensive" => __(
+                        "Most expensive",
+                        'advanced-dynamic-pricing-for-woocommerce'
+                    ),
+                ),
+                "first"
+            ),
+
+            $builder::boolean(
+                'is_enable_cart_amount_saved',
+                false,
+                __('Show Amount saved in the cart', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
+                'is_enable_minicart_amount_saved',
+                false,
+                __('Show Amount saved in the mini cart', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
+                'is_enable_checkout_amount_saved',
+                false,
+                __('Show Amount saved on the checkout page', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+
+            $builder::boolean(
+                'is_enable_backend_order_amount_saved',
+                false,
+                __('Show Amount saved in in the order backend', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+
             // rewrite 'external_coupons_behavior' option
             $builder::selective(
                 "external_cart_coupons_behavior",
@@ -292,6 +361,10 @@ class OptionsInstaller
                     "apply"                                => __("Apply", 'advanced-dynamic-pricing-for-woocommerce'),
                     "apply_to_unmodified_only"             => __(
                         "Apply to unmodified cart",
+                        'advanced-dynamic-pricing-for-woocommerce'
+                    ),
+                    "best_between_coupon_and_rule"         => __(
+                        "Best between coupon and rule",
                         'advanced-dynamic-pricing-for-woocommerce'
                     ),
                     "disable_if_any_rule_applied"          => __(
@@ -328,6 +401,11 @@ class OptionsInstaller
                 "apply"
             ),
 
+            $builder::boolean('admin_footer_text_rated',
+                false,
+                __('Has the administrator visited the plugin review page', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+
             // deprecated
             $builder::selective(
                 'disable_external_coupons',
@@ -356,10 +434,25 @@ class OptionsInstaller
                 __("From {{price}} {{price_suffix}}", 'advanced-dynamic-pricing-for-woocommerce'),
                 __('Replace price with lowest bulk price|Output template', 'advanced-dynamic-pricing-for-woocommerce')
             ),
+            $builder::integer(
+                'req_variations_for_optimization_at_shop',
+                10,
+                __('Show approximate price range if product has X variations or more', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
             $builder::boolean(
                 'disable_shipping_calc_during_process',
                 false,
                 __('Disable shipping calculation', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
+                'dont_recalculate_cart_on_page_load',
+                false,
+                __('Don\'t recalculate cart on page load', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
+                'dont_recalculate_cart_if_not_changed',
+                true,
+                __('Don\'t recalculate  cart if cart items don\'t have changed', 'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::boolean(
                 'support_persistence_rules',
@@ -377,6 +470,21 @@ class OptionsInstaller
                         'advanced-dynamic-pricing-for-woocommerce'),
                 ),
                 "apply"
+            ),
+            $builder::boolean(
+                'readonly_price_for_free_products',
+                true,
+                __('Read-only quantity for gifts', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
+                'highlight_range_qty_changed',
+                false,
+                __('Highlight selected range when qty changed', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
+                'clickable_bulk_rows',
+                false,
+                __('Highlight rows (on hover) and set qty on click', 'advanced-dynamic-pricing-for-woocommerce')
             )
         );
 

@@ -2,9 +2,9 @@
 
 namespace ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\Impl;
 
-use ADP\BaseVersion\Includes\Core\Cart\CouponCart;
-use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\CartAdjustmentsLoader;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCart;
 use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\CartAdjustment;
+use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\CartAdjustmentsLoader;
 use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\Interfaces\CouponCartAdj;
 
 defined('ABSPATH') or exit;

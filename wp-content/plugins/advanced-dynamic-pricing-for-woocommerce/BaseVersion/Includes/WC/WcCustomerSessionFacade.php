@@ -3,15 +3,17 @@
 namespace ADP\BaseVersion\Includes\WC;
 
 use ADP\BaseVersion\Includes\Core\Cart\CartCustomer;
+use ADP\BaseVersion\Includes\Core\Cart\CartCustomer\AddedRecommendedAutoAddItems;
 use ADP\BaseVersion\Includes\Core\Cart\CartCustomer\RemovedAutoAddItems;
 use ADP\BaseVersion\Includes\Core\Cart\CartCustomer\RemovedFreeItems;
-use ADP\BaseVersion\Includes\Core\Cart\Coupon;
-use ADP\BaseVersion\Includes\Core\Cart\CouponCart;
-use ADP\BaseVersion\Includes\Core\Cart\CouponInterface;
+use ADP\BaseVersion\Includes\Core\Cart\CartCustomer\RemovedRecommendedPromotions;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCart;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponInterface;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\WcCouponCart;
 use ADP\BaseVersion\Includes\Core\Cart\CustomerTax;
 use ADP\BaseVersion\Includes\Core\Cart\Fee;
 use ADP\BaseVersion\Includes\Core\Cart\ShippingAdjustment;
-use ADP\BaseVersion\Includes\Core\Cart\WcCouponCart;
 use WC_Session_Handler;
 
 defined('ABSPATH') or exit;
@@ -25,6 +27,8 @@ class WcCustomerSessionFacade
 
     const ADP_KEY_REMOVED_FREE_ITEMS_LIST = 'removed_free_items_list';
     const ADP_KEY_REMOVED_AUTO_ADD_ITEMS_LIST = 'removed_auto_add_items_list';
+    const ADP_KEY_ADDED_RECOMMENDED_AUTO_ADD_ITEMS_LIST = 'added_recommended_auto_add_items_list';
+    const ADP_KEY_REMOVED_RECOMMENDED_PROMOTIONS_LIST = 'remove_recommended_promotions';
 
     const ADP_KEY_TOTALS = 'totals';
 
@@ -62,6 +66,16 @@ class WcCustomerSessionFacade
     protected $removedAutoAddItemsList;
 
     /**
+     * @var array<int,AddedRecommendedAutoAddItems>
+     */
+    protected $addedRecommendedAutoAddItemsList;
+
+    /**
+     * @var array<int,CartCustomer\RemovedRecommendedPromotions>
+     */
+    protected $removedRecommendedPromotions;
+
+    /**
      * @var array
      */
     protected $totals;
@@ -93,6 +107,8 @@ class WcCustomerSessionFacade
 
         $this->setRemovedFreeItemsList($customer->getRemovedFreeItemsList());
         $this->setRemovedAutoAddItemsList($customer->getRemovedAutoAddItemsList());
+        $this->setAddedRecommendedAutoAddItemsList($customer->getAddedRecommendedAutoAddItemsList());
+        $this->setRemovedRecommendedPromotions($customer->getRemovedRecommendedPromotionsList());
     }
 
     /**
@@ -214,11 +230,45 @@ class WcCustomerSessionFacade
         $this->removedAutoAddItemsList = $removedAutoAddItemsList;
     }
 
+    /**
+     * @return array<int, AddedRecommendedAutoAddItems>
+     */
+    public function getAddedRecommendedAutoAddItemsList()
+    {
+        return $this->addedRecommendedAutoAddItemsList;
+    }
+
+    /**
+     * @param array<int, AddedRecommendedAutoAddItems> $addedRecommendedAutoAddItemsList
+     */
+    public function setAddedRecommendedAutoAddItemsList($addedRecommendedAutoAddItemsList)
+    {
+        $this->addedRecommendedAutoAddItemsList = $addedRecommendedAutoAddItemsList;
+    }
+
+    /**
+     * @return array<int, RemovedRecommendedPromotions>
+     */
+    public function getRemovedRecommendedPromotions()
+    {
+        return $this->removedRecommendedPromotions;
+    }
+
+    /**
+     * @param array<int, RemovedRecommendedPromotions> $removedRecommendedPromotions
+     */
+    public function setRemovedRecommendedPromotions($removedRecommendedPromotions)
+    {
+        $this->removedRecommendedPromotions = $removedRecommendedPromotions;
+    }
+
     protected function initAdpProps()
     {
-        $this->removedFreeItemsList    = array();
+        $this->removedFreeItemsList = array();
         $this->removedAutoAddItemsList = array();
-        $this->totals                  = array();
+        $this->addedRecommendedAutoAddItemsList = array();
+        $this->removedRecommendedPromotions = array();
+        $this->totals = array();
     }
 
     public function flush() {
@@ -238,6 +288,12 @@ class WcCustomerSessionFacade
         if (isset($adpData[self::ADP_KEY_REMOVED_AUTO_ADD_ITEMS_LIST])) {
             $this->removedAutoAddItemsList = $adpData[self::ADP_KEY_REMOVED_AUTO_ADD_ITEMS_LIST];
         }
+        if (isset($adpData[self::ADP_KEY_ADDED_RECOMMENDED_AUTO_ADD_ITEMS_LIST])) {
+            $this->addedRecommendedAutoAddItemsList = $adpData[self::ADP_KEY_ADDED_RECOMMENDED_AUTO_ADD_ITEMS_LIST];
+        }
+        if (isset($adpData[self::ADP_KEY_REMOVED_RECOMMENDED_PROMOTIONS_LIST])) {
+            $this->removedRecommendedPromotions = $adpData[self::ADP_KEY_REMOVED_RECOMMENDED_PROMOTIONS_LIST];
+        }
         if (isset($adpData[self::ADP_KEY_TOTALS])) {
             $this->totals = $adpData[self::ADP_KEY_TOTALS];
         }
@@ -249,9 +305,11 @@ class WcCustomerSessionFacade
     protected function prepareAdpPropsToPush()
     {
         return array(
-            self::ADP_KEY_REMOVED_FREE_ITEMS_LIST     => $this->removedFreeItemsList,
+            self::ADP_KEY_REMOVED_FREE_ITEMS_LIST => $this->removedFreeItemsList,
             self::ADP_KEY_REMOVED_AUTO_ADD_ITEMS_LIST => $this->removedAutoAddItemsList,
-            self::ADP_KEY_TOTALS                      => $this->totals,
+            self::ADP_KEY_ADDED_RECOMMENDED_AUTO_ADD_ITEMS_LIST => $this->addedRecommendedAutoAddItemsList,
+            self::ADP_KEY_REMOVED_RECOMMENDED_PROMOTIONS_LIST => $this->removedRecommendedPromotions,
+            self::ADP_KEY_TOTALS => $this->totals,
         );
     }
 
@@ -307,7 +365,7 @@ class WcCustomerSessionFacade
      * @param array<string, CouponInterface>             $singleCoupons
      * @param array<string, CouponInterface>             $wcSingleCoupons
      */
-    public function insertCouponsData($groupedCoupons, $singleCoupons, $wcSingleCoupons)
+    public function insertCouponsData($groupedCoupons, $singleCoupons, $wcSingleCoupons, $adpCoupons = [])
     {
         $groupCouponsData    = array();
         $singleCouponsData   = array();
@@ -339,6 +397,7 @@ class WcCustomerSessionFacade
             'group'     => $groupCouponsData,
             'single'    => $singleCouponsData,
             'wc_single' => $wcSingleCouponsData,
+            'adpCoupons' => $adpCoupons,
         );
     }
 
@@ -356,7 +415,7 @@ class WcCustomerSessionFacade
                 'value'  => $coupon->getValue(),
                 'ruleId' => $coupon->getRuleId(),
             );
-        } elseif ($coupon instanceof Coupon) {
+        } elseif ($coupon instanceof CouponCartItem) {
             return array(
                 'type'             => $coupon->getType(),
                 'code'             => $coupon->getCode(),
@@ -391,7 +450,7 @@ class WcCustomerSessionFacade
 
         if (in_array($type, CouponCart::AVAILABLE_TYPES)) {
             $coupon = new CouponCart($context, $type, $data['code'], $data['value'], $data['ruleId']);
-        } elseif (in_array($type, Coupon::AVAILABLE_TYPES)) {
+        } elseif (in_array($type, CouponCartItem::AVAILABLE_TYPES)) {
             if (isset($this->wcCart->cart_contents[$data['affectedCartItem']])) {
                 $affectedCartItem = new WcCartItemFacade(
                     $context, $this->wcCart->cart_contents[$data['affectedCartItem']], $data['affectedCartItem']
@@ -401,7 +460,7 @@ class WcCustomerSessionFacade
                 $affectedCartItem = null;
             }
 
-            $coupon = new Coupon(
+            $coupon = new CouponCartItem(
                 $context, $type, $data['code'], $data['value'], $data['ruleId'], $affectedCartItem
             );
         } else {
@@ -514,6 +573,22 @@ class WcCustomerSessionFacade
                 array_keys($this->totals[self::ADP_KEY_COUPONS]['wc_single'])
             )
         );
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getAdpApliedCoupons()
+    {
+        if ( ! isset($this->totals[self::ADP_KEY_COUPONS])) {
+            return array();
+        }
+
+        if ( ! array_key_exists('adpCoupons', $this->totals[self::ADP_KEY_COUPONS])) {
+            return array();
+        }
+
+        return $this->totals[self::ADP_KEY_COUPONS]['adpCoupons'];
     }
 
     /**

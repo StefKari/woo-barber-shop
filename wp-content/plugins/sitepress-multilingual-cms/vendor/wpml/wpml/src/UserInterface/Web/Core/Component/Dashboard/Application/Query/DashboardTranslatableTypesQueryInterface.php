@@ -1,10 +1,2 @@
 <?php
-
-namespace WPML\UserInterface\Web\Core\Component\Dashboard\Application\Query;
-
-use WPML\Core\SharedKernel\Component\Post\Application\Query\TranslatableTypesQueryInterface;
-
-interface DashboardTranslatableTypesQueryInterface extends TranslatableTypesQueryInterface
-{
-
-}
+require_once __DIR__ . '/../../../../../../../../../../../wpml/src/UserInterface/Web/Core/Component/Dashboard/Application/Query/DashboardTranslatableTypesQueryInterface.php';

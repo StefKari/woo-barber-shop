@@ -1,11 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\TranslationProxy\Application\Query;
-
-interface RemoteJobsQueryInterface {
-
-
-  public function getCount( int $currentTranslationServiceId ): int;
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/TranslationProxy/Application/Query/RemoteJobsQueryInterface.php';

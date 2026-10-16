@@ -66,33 +66,35 @@
 
 	<div class="mb-dashboard__main">
 
-		<section class="mb-dashboard__intro" data-utm="intro">
-			<div class="mb-dashboard__intro__subtitle">
-				<?php
-				// Translators: %s - current user display name.
-				echo esc_html( sprintf( __( 'Hello %s,', 'meta-box' ), wp_get_current_user()->display_name ) );
-				?>
-			</div>
-			<div class="mb-dashboard__intro__title">
-				<?php
-				// Translators: %s - Meta Box (plugin name).
-				echo esc_html( sprintf( __( 'Welcome to %s,', 'meta-box' ), 'Meta Box' ) );
-				?>
-			</div>
-			<div class="mb-dashboard__intro__text">
-				<?php
-				// Translators: %s - Meta Box (plugin name).
-				echo esc_html( sprintf( __( '%s is a powerful, lightweight WordPress plugin for creating custom post types, fields, relationships, and more. With a user-friendly interface and flexible options, it simplifies dynamic content creation without complex coding. Free and reliable, it\'s perfect for beginners and experts alike.', 'meta-box' ), 'Meta Box' ) );
-				?>
-			</div>
+		<?php if ( ! $this->is_aio ) : ?>
+			<section class="mb-dashboard__intro" data-utm="intro">
+				<div class="mb-dashboard__intro__subtitle">
+					<?php
+					// Translators: %s - current user display name.
+					echo esc_html( sprintf( __( 'Hello %s,', 'meta-box' ), wp_get_current_user()->display_name ) );
+					?>
+				</div>
+				<div class="mb-dashboard__intro__title">
+					<?php
+					// Translators: %s - Meta Box (plugin name).
+					echo esc_html( sprintf( __( 'Welcome to %s,', 'meta-box' ), 'Meta Box' ) );
+					?>
+				</div>
+				<div class="mb-dashboard__intro__text">
+					<?php
+					// Translators: %s - Meta Box (plugin name).
+					echo esc_html( sprintf( __( '%s is a powerful, lightweight WordPress plugin for creating custom post types, fields, relationships, and more. With a user-friendly interface and flexible options, it simplifies dynamic content creation without complex coding. Free and reliable, it\'s perfect for beginners and experts alike.', 'meta-box' ), 'Meta Box' ) );
+					?>
+				</div>
 
-			<?php if ( ! $this->has_actions ) : ?>
-				<a class="mb-dashboard__external mb-dashboard__button" href="https://docs.metabox.io/introduction/" target="_blank">
-					<?php esc_html_e( 'Get started', 'meta-box' ); ?>
-					<svg><use xlink:href="#external-link"></use></svg>
-				</a>
-			<?php endif; ?>
-		</section>
+				<?php if ( ! $this->has_actions ) : ?>
+					<a class="mb-dashboard__external mb-dashboard__button" href="https://docs.metabox.io/introduction/" target="_blank">
+						<?php esc_html_e( 'Get started', 'meta-box' ); ?>
+						<svg><use xlink:href="#external-link"></use></svg>
+					</a>
+				<?php endif; ?>
+			</section>
+		<?php endif; ?>
 
 		<?php if ( $this->has_actions ) : ?>
 			<section class="mb-dashboard__actions">
@@ -414,7 +416,7 @@
 								<td align="center"><svg><use xlink:href="#check-circle"></use></svg></td>
 							</tr>
 							<tr>
-								<td><?php esc_html_e( 'Intergrations with Elementor, Divi, FacetWP, Yoast SEO,...', 'meta-box' ); ?></td>
+								<td><?php esc_html_e( 'Integrations with Elementor, Divi, FacetWP, Yoast SEO,...', 'meta-box' ); ?></td>
 								<td align="center"><svg><use xlink:href="#check-circle"></use></svg></td>
 								<td align="center"><svg><use xlink:href="#check-circle"></use></svg></td>
 							</tr>
@@ -484,7 +486,7 @@
 								<td align="center"><svg><use xlink:href="#check-circle"></use></svg></td>
 							</tr>
 							<tr>
-								<td><?php esc_html_e( 'Toogle fields or field groups with conditional logic', 'meta-box' ); ?></td>
+								<td><?php esc_html_e( 'Toggle fields or field groups with conditional logic', 'meta-box' ); ?></td>
 								<td align="center"><svg><use xlink:href="#x-circle"></use></svg></td>
 								<td align="center"><svg><use xlink:href="#check-circle"></use></svg></td>
 							</tr>
@@ -565,6 +567,79 @@
 	</div>
 
 	<aside class="mb-dashboard__sidebar" data-utm="sidebar">
+		<?php
+		$utc_timezone = new \DateTimeZone( 'UTC' );
+		$now          = new \DateTime( 'now', $utc_timezone );
+		$sale_end1    = new \DateTime( '2025-11-29 00:00:00', $utc_timezone );
+		$sale_end2    = new \DateTime( '2025-12-02 00:00:00', $utc_timezone );
+		if ( $now < $sale_end2 ) :
+			?>
+			<div class="mb-dashboard__widget mb-dashboard__sale" data-utm="sale">
+				<div class="mb-dashboard__widget-title">
+					<?php esc_html_e( 'Black Friday Sale', 'meta-box' ); ?>
+					<span class="mb-dashboard__sale__badge"><?php esc_html_e( 'Hot', 'meta-box' ); ?></span>
+				</div>
+				<div class="mb-dashboard__widget-body">
+					<p><?php esc_html_e( 'Upgrade your package and optimize the workflow at the best price!', 'meta-box' ); ?></p>
+					<a class="mb-dashboard__sale__button" href="https://metabox.io/black-friday/" target="_blank">
+						<?php if ( $now < $sale_end1 ) : ?>
+							<span class="mb-dashboard__sale__button-text--large"><?php esc_html_e( 'Get 40% OFF now', 'meta-box' ); ?></span>
+						<?php else : ?>
+							<span class="mb-dashboard__sale__button-text--large"><?php esc_html_e( 'Get 25% OFF now', 'meta-box' ); ?></span>
+						<?php endif; ?>
+						<span class="mb-dashboard__sale__button-text--small"><?php esc_html_e( 'on annual plans', 'meta-box' ); ?></span>
+					</a>
+					<ul class="mb-dashboard__countdown" data-end="<?php echo esc_attr( $now < $sale_end1 ? '2025-11-29T00:00:00+00:00' : '2025-12-02T00:00:00+00:00' ); ?>">
+						<li>
+							<div class="mb-dashboard__countdown-number" data-type="days">0</div>
+							<div class="mb-dashboard__countdown-label">Days</div>
+						</li>
+						<li>
+							<div class="mb-dashboard__countdown-number" data-type="hours">0</div>
+							<div class="mb-dashboard__countdown-label">Hours</div>
+						</li>
+						<li>
+							<div class="mb-dashboard__countdown-number" data-type="minutes">0</div>
+							<div class="mb-dashboard__countdown-label">Min.</div>
+						</li>
+						<li>
+							<div class="mb-dashboard__countdown-number" data-type="seconds">0</div>
+							<div class="mb-dashboard__countdown-label">Sec.</div>
+						</li>
+					</ul>
+					<script>
+						document.querySelectorAll( '.mb-dashboard__countdown' ).forEach( el => {
+							const days = el.querySelector( '[data-type="days"]' );
+							const hours = el.querySelector( '[data-type="hours"]' );
+							const minutes = el.querySelector( '[data-type="minutes"]' );
+							const seconds = el.querySelector( '[data-type="seconds"]' );
+
+							const countdown = () => {
+								const time = new Date( el.dataset.end ).getTime();
+								const now = new Date().getTime();
+								const distance = ( time - now ) / 1000;
+
+								if ( distance < 0 ) {
+									days.innerHTML = '0';
+									hours.innerHTML = '0';
+									minutes.innerHTML = '0';
+									seconds.innerHTML = '0';
+									clearInterval( timer );
+									return;
+								}
+
+								days.innerHTML = Math.floor( distance / 86400 );
+								hours.innerHTML = Math.floor( ( distance % 86400 ) / 3600 );
+								minutes.innerHTML = Math.floor( ( distance % 3600 ) / 60 );
+								seconds.innerHTML = Math.floor( distance % 60 );
+							};
+
+							const timer = setInterval( countdown, 1000 );
+						} );
+					</script>
+				</div>
+			</div>
+		<?php endif; ?>
 		<?php if ( $this->upgradable ) : ?>
 			<div class="mb-dashboard__widget mb-dashboard__upgrade" data-utm="cta">
 				<div class="mb-dashboard__widget-title"><?php esc_html_e( 'Wanna advanced features?', 'meta-box' ); ?></div>
@@ -588,10 +663,10 @@
 				<div class="mb-dashboard__widget-title"><?php esc_html_e( 'Premium support', 'meta-box' ); ?></div>
 				<div class="mb-dashboard__widget-body">
 					<p><?php esc_html_e( 'If you have any questions, need a hand with a technical issue, or just want to say hi, we\'ve got you covered. Get in touch with us and we\'ll be happy to assist you!', 'meta-box' ); ?><p>
-					<a class="mb-dashboard__external" target="_blank" href="https://support.metabox.io">
-						<?php esc_html_e( 'Go to the support forum', 'meta-box' ); ?>
+						<a class="mb-dashboard__external" target="_blank" href="https://support.metabox.io">
+							<?php esc_html_e( 'Go to the support forum', 'meta-box' ); ?>
 						<svg><use xlink:href="#external-link"></use></svg>
-					</a>
+						</a>
 				</div>
 			</div>
 		<?php endif; ?>
@@ -612,7 +687,7 @@
 						'title'       => 'Falcon',
 						'slug'        => 'falcon',
 						'description' => __( 'WordPress Optimizations & Tweaks', 'meta-box' ),
-						'url'         => 'https://wordpress.org/plugins/falcon/',
+						'url'         => 'https://wpfalcon.pro',
 					],
 				];
 				?>
@@ -661,7 +736,7 @@
 <div
 	class="mb-dashboard__news"
 	data-empty="<?php esc_html_e( 'No items available', 'meta-box' ); ?>"
-	data-fetching="<?php esc_html_e( 'Gettings news...', 'meta-box' ); ?>"
+	data-fetching="<?php esc_html_e( 'Getting news...', 'meta-box' ); ?>"
 >
 	<div class="mb-dashboard__news__header">
 		<div class="mb-dashboard__news__heading"><?php esc_html_e( 'What\'s new?', 'meta-box' ); ?></div>

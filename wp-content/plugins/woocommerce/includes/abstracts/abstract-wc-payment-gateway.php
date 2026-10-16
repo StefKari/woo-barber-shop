@@ -2,7 +2,7 @@
 /**
  * Abstract payment gateway
  *
- * Hanldes generic payment gateway functionality which is extended by idividual payment gateways.
+ * Handles generic payment gateway functionality which is extended by individual payment gateways.
  *
  * @class WC_Payment_Gateway
  * @version 2.1.0
@@ -10,6 +10,9 @@
  */
 
 use Automattic\Jetpack\Constants;
+use Automattic\WooCommerce\Enums\PaymentGatewayFeature;
+use Automattic\WooCommerce\Internal\Admin\Settings\Utils as SettingsUtils;
+use Automattic\WooCommerce\Internal\Utilities\HtmlSanitizer;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -33,6 +36,22 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @var string
 	 */
 	public $order_button_text;
+
+	/**
+	 * Whether the gateway provides a custom place order button.
+	 *
+	 * When true, the default "Place order" button will be hidden on page load
+	 * if this gateway is pre-selected. The gateway must register its custom
+	 * button via JavaScript using wc.customPlaceOrderButton.register().
+	 *
+	 * Note: This property is purely for UX (preventing flash of default button).
+	 * It does NOT affect security or functionality - the JS registration is what
+	 * actually enables the custom button.
+	 *
+	 * @since 10.6.0
+	 * @var bool
+	 */
+	public $has_custom_place_order_button = false;
 
 	/**
 	 * Yes or no based on whether the method is enabled.
@@ -158,7 +177,7 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 			return $this->tokens;
 		}
 
-		if ( is_user_logged_in() && $this->supports( 'tokenization' ) ) {
+		if ( is_user_logged_in() && $this->supports( PaymentGatewayFeature::TOKENIZATION ) ) {
 			$this->tokens = WC_Payment_Tokens::get_customer_tokens( get_current_user_id(), $this->id );
 		}
 
@@ -171,6 +190,14 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @return string
 	 */
 	public function get_method_title() {
+		/**
+		 * Filter the method title.
+		 *
+		 * @since 2.6.0
+		 * @param string $title Method title.
+		 * @param WC_Payment_Gateway $this Payment gateway instance.
+		 * @return string
+		 */
 		return apply_filters( 'woocommerce_gateway_method_title', $this->method_title, $this );
 	}
 
@@ -180,6 +207,14 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @return string
 	 */
 	public function get_method_description() {
+		/**
+		 * Filter the method description.
+		 *
+		 * @since 2.6.0
+		 * @param string $description Method description.
+		 * @param WC_Payment_Gateway $this Payment gateway instance.
+		 * @return string
+		 */
 		return apply_filters( 'woocommerce_gateway_method_description', $this->method_description, $this );
 	}
 
@@ -187,9 +222,21 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * Output the gateway settings screen.
 	 */
 	public function admin_options() {
-		echo '<h2>' . esc_html( $this->get_method_title() );
-		wc_back_link( __( 'Return to payments', 'woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=checkout' ) );
-		echo '</h2>';
+		$offline_payment_gateways = array( WC_Gateway_BACS::ID, WC_Gateway_Cheque::ID, WC_Gateway_COD::ID );
+		$is_offline_gateway       = in_array( $this->id, $offline_payment_gateways, true );
+
+		$return_path = null;
+		if ( $is_offline_gateway ) {
+			// For offline gateways, we return to the offline settings section which is a Reactified page,
+			// hence the use of `path` parameter.
+			$offline_section = class_exists( 'WC_Settings_Payment_Gateways' )
+				? WC_Settings_Payment_Gateways::OFFLINE_SECTION_NAME
+				: 'offline';
+			$return_path     = '/' . $offline_section;
+		}
+
+		wc_back_header( $this->get_method_title(), esc_html__( 'Return to payments', 'woocommerce' ), SettingsUtils::wc_payments_settings_url( $return_path ) );
+
 		echo wp_kses_post( wpautop( $this->get_method_description() ) );
 		parent::admin_options();
 	}
@@ -228,6 +275,14 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 			$return_url = wc_get_endpoint_url( 'order-received', '', wc_get_checkout_url() );
 		}
 
+		/**
+		 * Filter the return url.
+		 *
+		 * @since 2.4.0
+		 * @param string $return_url Return URL.
+		 * @param WC_Order|null $order Order object.
+		 * @return string
+		 */
 		return apply_filters( 'woocommerce_get_return_url', $return_url, $order );
 	}
 
@@ -246,6 +301,14 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 			$return_url = sprintf( $this->view_transaction_url, $transaction_id );
 		}
 
+		/**
+		 * Filter the transaction url.
+		 *
+		 * @since 2.2.0
+		 * @param string $return_url Transaction URL.
+		 * @param WC_Order|null $order Order object.
+		 * @return string
+		 */
 		return apply_filters( 'woocommerce_get_transaction_url', $return_url, $order, $this );
 	}
 
@@ -262,7 +325,9 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 		// Gets order total from "pay for order" page.
 		if ( 0 < $order_id ) {
 			$order = wc_get_order( $order_id );
-			$total = (float) $order->get_total();
+			if ( $order ) {
+				$total = (float) $order->get_total();
+			}
 
 			// Gets order total from cart/checkout.
 		} elseif ( 0 < WC()->cart->total ) {
@@ -275,13 +340,17 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	/**
 	 * Check if the gateway is available for use.
 	 *
+	 * @since 10.7.0 Added early return when gateway is disabled.
 	 * @return bool
 	 */
 	public function is_available() {
-		$is_available = ( 'yes' === $this->enabled );
+		$is_available = 'yes' === $this->enabled;
 
-		if ( WC()->cart && 0 < $this->get_order_total() && 0 < $this->max_amount && $this->max_amount < $this->get_order_total() ) {
-			$is_available = false;
+		if ( $is_available && WC()->cart ) {
+			$order_total = $this->get_order_total();
+			if ( 0 < $order_total && 0 < $this->max_amount && $order_total > $this->max_amount ) {
+				$is_available = false;
+			}
 		}
 
 		return $is_available;
@@ -302,7 +371,17 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @return string
 	 */
 	public function get_title() {
-		return apply_filters( 'woocommerce_gateway_title', $this->title, $this->id );
+		$title = wc_get_container()->get( HtmlSanitizer::class )->sanitize( (string) $this->title, HtmlSanitizer::LOW_HTML_BALANCED_TAGS_NO_LINKS );
+
+		/**
+		 * Filter the gateway title.
+		 *
+		 * @since 1.5.8
+		 * @param string $title Gateway title.
+		 * @param string $id Gateway ID.
+		 * @return string
+		 */
+		return apply_filters( 'woocommerce_gateway_title', $title, $this->id );
 	}
 
 	/**
@@ -311,7 +390,19 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @return string
 	 */
 	public function get_description() {
-		return apply_filters( 'woocommerce_gateway_description', $this->description, $this->id );
+		/**
+		 * Filters the gateway description.
+		 *
+		 * Descriptions can be overridden by extending this method or through the use of `woocommerce_gateway_description`
+		 * To avoid breaking custom HTML that may be returned we cannot enforce KSES at render time, so we run it here.
+		 *
+		 * @since 1.5.8
+		 * @since 9.0.0 wp_kses_post() is used to sanitize the description before passing it to the filter.
+		 * @param string $description Gateway description.
+		 * @param string $id Gateway ID.
+		 * @return string
+		 */
+		return apply_filters( 'woocommerce_gateway_description', wp_kses_post( $this->description ), $this->id );
 	}
 
 	/**
@@ -320,9 +411,15 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @return string
 	 */
 	public function get_icon() {
-
-		$icon = $this->icon ? '<img src="' . WC_HTTPS::force_https_url( $this->icon ) . '" alt="' . esc_attr( $this->get_title() ) . '" />' : '';
-
+		$icon = $this->icon ? '<img src="' . esc_url( WC_HTTPS::force_https_url( $this->icon ) ) . '" alt="' . esc_attr( $this->get_title() ) . '" />' : '';
+		/**
+		 * Filter the gateway icon.
+		 *
+		 * @since 1.5.8
+		 * @param string $icon Gateway icon.
+		 * @param string $id Gateway ID.
+		 * @return string
+		 */
 		return apply_filters( 'woocommerce_gateway_icon', $icon, $this->id );
 	}
 
@@ -372,7 +469,7 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @param  int        $order_id Order ID.
 	 * @param  float|null $amount Refund amount.
 	 * @param  string     $reason Refund reason.
-	 * @return boolean True or false based on success, or a WP_Error object.
+	 * @return bool|\WP_Error True or false based on success, or a WP_Error object.
 	 */
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		return false;
@@ -390,16 +487,21 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	}
 
 	/**
-	 * If There are no payment fields show the description if set.
-	 * Override this in your gateway if you have some.
+	 * Default payment fields display. Override this in your gateway to customize displayed fields.
+	 *
+	 * By default this renders the payment gateway description.
+	 *
+	 * @since 1.5.7
 	 */
 	public function payment_fields() {
 		$description = $this->get_description();
+
 		if ( $description ) {
-			echo wpautop( wptexturize( $description ) ); // @codingStandardsIgnoreLine.
+			// KSES is ran within get_description, but not here since there may be custom HTML returned by extensions.
+			echo wpautop( wptexturize( $description ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
-		if ( $this->supports( 'default_credit_card_form' ) ) {
+		if ( $this->supports( PaymentGatewayFeature::DEFAULT_CREDIT_CARD_FORM ) ) {
 			$this->credit_card_form(); // Deprecated, will be removed in a future version.
 		}
 	}
@@ -415,7 +517,16 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @since 1.5.7
 	 */
 	public function supports( $feature ) {
-		return apply_filters( 'woocommerce_payment_gateway_supports', in_array( $feature, $this->supports ), $feature, $this );
+		/**
+		 * Filter the gateway supported features.
+		 *
+		 * @since 1.5.7
+		 * @param boolean $supports If the gateway supports the feature.
+		 * @param string $feature Feature to check.
+		 * @param WC_Payment_Gateway $this Payment gateway instance.
+		 * @return string
+		 */
+		return apply_filters( 'woocommerce_payment_gateway_supports', in_array( $feature, $this->supports, true ), $feature, $this );
 	}
 
 	/**
@@ -427,7 +538,7 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @return bool If false, the automatic refund button is hidden in the UI.
 	 */
 	public function can_refund_order( $order ) {
-		return $order && $this->supports( 'refunds' );
+		return $order && $this->supports( PaymentGatewayFeature::REFUNDS );
 	}
 
 	/**
@@ -454,7 +565,8 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 			'woocommerce-tokenization-form',
 			plugins_url( '/assets/js/frontend/tokenization-form' . ( Constants::is_true( 'SCRIPT_DEBUG' ) ? '' : '.min' ) . '.js', WC_PLUGIN_FILE ),
 			array( 'jquery' ),
-			WC()->version
+			WC()->version,
+			false
 		);
 
 		wp_localize_script(
@@ -504,6 +616,15 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 			checked( $token->is_default(), true, false )
 		);
 
+		/**
+		 * Filter the saved payment method HTML.
+		 *
+		 * @since 2.6.0
+		 * @param string $html HTML for the saved payment methods.
+		 * @param string $token Token.
+		 * @param WC_Payment_Gateway $this Payment gateway instance.
+		 * @return string
+		 */
 		return apply_filters( 'woocommerce_payment_gateway_get_saved_payment_method_option_html', $html, $token, $this );
 	}
 
@@ -514,6 +635,14 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 	 * @since 2.6.0
 	 */
 	public function get_new_payment_method_option_html() {
+		/**
+		 * Filter the saved payment method label.
+		 *
+		 * @since 2.6.0
+		 * @param string $label Label.
+		 * @param WC_Payment_Gateway $this Payment gateway instance.
+		 * @return string
+		 */
 		$label = apply_filters( 'woocommerce_payment_gateway_get_new_payment_method_option_html_label', $this->new_method_label ? $this->new_method_label : __( 'Use a new payment method', 'woocommerce' ), $this );
 		$html  = sprintf(
 			'<li class="woocommerce-SavedPaymentMethods-new">
@@ -523,7 +652,14 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 			esc_attr( $this->id ),
 			esc_html( $label )
 		);
-
+		/**
+		 * Filter the saved payment method option.
+		 *
+		 * @since 2.6.0
+		 * @param string $html Option HTML.
+		 * @param WC_Payment_Gateway $this Payment gateway instance.
+		 * @return string
+		 */
 		return apply_filters( 'woocommerce_payment_gateway_get_new_payment_method_option_html', $html, $this );
 	}
 
@@ -541,7 +677,14 @@ abstract class WC_Payment_Gateway extends WC_Settings_API {
 			esc_attr( $this->id ),
 			esc_html__( 'Save to account', 'woocommerce' )
 		);
-
+		/**
+		 * Filter the saved payment method checkbox HTML
+		 *
+		 * @since 2.6.0
+		 * @param string $html Checkbox HTML.
+		 * @param WC_Payment_Gateway $this Payment gateway instance.
+		 * @return string
+		 */
 		echo apply_filters( 'woocommerce_payment_gateway_save_new_payment_method_option_html', $html, $this ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 

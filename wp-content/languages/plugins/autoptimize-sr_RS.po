@@ -2,122 +2,1452 @@
 # This file is distributed under the same license as the Plugins - Autoptimize - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-05-11 09:23:25+0000\n"
+"PO-Revision-Date: 2026-10-14 02:32:48+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.0-alpha.1\n"
+"X-Generator: GlotPress/4.1.0\n"
 "Language: sr_RS\n"
 "Project-Id-Version: Plugins - Autoptimize - Stable (latest release)\n"
 
-#: classes/autoptimizeExtra.php:508 classes/autoptimizeExtra.php:530
-msgid "Extra"
-msgstr "Екстра"
+#: classes/autoptimizeImages.php:1425
+msgid "%1$sImportant caveat%2$s; although it %5$scan result in even smaller image sizes for lossy images%4$s it should be taken into account that %3$s%1$sAVIF can require more resources%2$s to decode/ display%4$s and as such %1$smight be slower%2$s on low-end (mobile) devices."
+msgstr "%1$sВажна ограда%2$s; иако %5$sможе дати још мање величине слика за слике са губицима%4$s, треба имати у виду да %3$s%1$sAVIF може захтевати више ресурса%2$s за декодирање/ приказ%4$s и да због тога %1$sможе бити спорији%2$s на слабијим (мобилним) уређајима."
 
-#: classes/autoptimizeExtra.php:548
-msgid "Leave as is"
-msgstr "Оставите како јесте"
+#: classes/autoptimizeImages.php:1420
+msgid "Your Image optimization quality is set to \"lossless\", but AVIF files can end up being bigger than jpeg or webp for lossless images, so consider choosing a different quality or disable the AVIF option."
+msgstr "Квалитет оптимизације слика постављен је на \"lossless\", али AVIF датотеке могу бити веће од jpeg или webp за слике без губитака, па размислите о избору другог квалитета или искључите могућност AVIF."
 
-#: classes/autoptimizeExtra.php:546
-msgid "Google Fonts"
-msgstr "Google Фонтови"
+#: classes/critcss-inc/admin_settings_explain.php:45
+msgid "%1$sFix render-blocking CSS!%2$s%3$sSignificantly improve your first-paint times by making CSS non-render-blocking.%4$s%3$sThe %5$snext step is to sign up at %7$shttps://criticalcss.com%8$s%6$s (this is a premium service, priced 2 GBP/month for membership and 5 GBP/month per domain) %5$sand get the API key%6$s, which you can copy from %7$sthe API-keys page%8$s and paste below.%4$s%3$sIf you have any questions or need support, head on over to %9$sour support forum%10$s and we'll help you get up and running in no time!%4$s"
+msgstr "%1$sИсправите CSS који блокира приказ!%2$s%3$sЗнатно побољшајте време првог исцртавања тако што ћете CSS учинити неблокирајућим.%4$s%3$s%5$sСледећи корак је да се пријавите на %7$shttps://criticalcss.com%8$s%6$s (ово је премијум услуга, по цени од 2 GBP месечно за чланство и 5 GBP месечно по домену) %5$sи добијете API кључ%6$s, који можете умножити са %7$sстранице API кључева%8$s и убацити испод.%4$s%3$sАко имате питања или вам је потребна подршка, посетите %9$sнаш форум подршке%10$s и брзо ћемо вам помоћи да почнете!%4$s"
 
-#: classes/autoptimizeExtra.php:558
-msgid "Remove emojis"
-msgstr "Уклоните емотиконе"
+#: classes/autoptimizePartners.php:56
+msgid "Have a look at %1$sAutoptimize Pro%2$s to power-up your site!"
+msgstr "Погледајте %1$sAutoptimize Pro%2$s да бисте убрзали свој сајт!"
+
+#. translators: strong tags.
+#: classes/autoptimizeMain.php:822
+msgid " which not only has page caching but also image optimization, critical CSS and advanced booster options %1$sto make your site significantly faster%2$s!"
+msgstr " који нема само кеширање страница, већ и оптимизацију слика, кључни CSS и напредне booster могућности %1$sда би ваш сајт био знатно бржи%2$s!"
+
+#. translators: strong tags.
+#: classes/autoptimizeMain.php:822
+msgid "or consider "
+msgstr "или размислите о "
+
+#. translators: h2, strong but also 2 links.
+#: classes/autoptimizeProTab.php:108
+msgid "%1$sAdd more power to Autoptimize with Pro!%2$s%3$sAs a user of Autoptimize you understand %5$sthe importance of having a fast site%6$s. Autoptimize Pro is a premium Power-Up extending AO by adding %5$simage optimization, CDN, automatic critical CSS rules generation and page caching but also providing extra “booster” options%6$s, all in one handy subscription to make your site even faster!%4$s%3$sHave a look at %7$shttps://autoptimize.com/pro/%8$s for more info or %9$sclick here to buy now%10$s!%4$s"
+msgstr "%1$sДодајте Autoptimize-у више снаге уз Pro!%2$s%3$sКао корисник Autoptimize-а разумете %5$sважност брзог сајта%6$s. Autoptimize Pro је премијум проширење које AO допуњује %5$sоптимизацијом слика, CDN-ом, самосталним прављењем правила кључног CSS-а и кеширањем страница, али и додатним „booster“ могућностима%6$s, све у једној згодној претплати да би ваш сајт био још бржи!%4$s%3$sПогледајте %7$shttps://autoptimize.com/pro/%8$s за више података или %9$sпритисните овде да бисте купили одмах%10$s!%4$s"
+
+#. translators: strong tags and a break.
+#: classes/autoptimizeMain.php:820
+msgid "It looks like your site might not have %1$spage caching%2$s which is a %1$smust-have for performance%2$s. If you are sure you have a page cache, you can close this notice.%3$sWhen in doubt check with your host if they offer this or install a free page caching plugin like for example KeyCDN Cache Enabler"
+msgstr "Изгледа да ваш сајт можда нема %1$sкеширање страница%2$s, што је %1$sнеопходно за перформансе%2$s. Ако сте сигурни да имате кеш страница, можете затворити ово обавештење.%3$sАко нисте сигурни, проверите са хостингом да ли то нуде или поставите бесплатни додатак за кеширање страница, као што је на пример KeyCDN Cache Enabler"
+
+#. translators: link points to shortpixel FAQ.
+#: classes/autoptimizeImages.php:1367
+msgid "%3$sQuestions%4$s? Take a look at the %1$sAutoptimize + ShortPixel FAQ%2$s!"
+msgstr "%3$sПитања%4$s? Погледајте %1$sAutoptimize + ShortPixel ЧПП%2$s!"
+
+#: classes/autoptimizeExtra.php:620
+msgid "Async Javascript-files (advanced users)"
+msgstr "Асинхроне Javascript датотеке (напредни корисници)"
+
+#. Translators; link to a page on keycdn blog about preconnecting.
+#: classes/autoptimizeExtra.php:608
+msgid "Add 3rd party domains you want the browser to %1$spreconnect%2$s to, separated by comma's. Make sure to include the correct protocol (HTTP or HTTPS)."
+msgstr "Додајте домене трећих страна са којима желите да се прегледач %1$sунапред повеже%2$s, раздвојене запетама. Обавезно наведите исправан протокол (HTTP или HTTPS)."
 
 #: classes/autoptimizeExtra.php:576
-msgid "Preconnect to 3rd party domains <em>(advanced users)</em>"
-msgstr "Преконекција са 3rd party доменима <em>(напредни корисници)</em>"
+msgid "Combine and load fonts asynchronously with %1$swebfont.js%2$s"
+msgstr "Спој и асинхроно учитавај словне ликове помоћу %1$swebfont.js%2$s"
+
+#. Translators: link to criticalcss.com page.
+#: classes/autoptimizeCriticalCSSCore.php:465
+msgid "Please enter a valid %1$scriticalcss.com%2$s API key to start."
+msgstr "Унесите исправан %1$scriticalcss.com%2$s API кључ да бисте почели."
+
+#. Translators: link to criticalcss.com page.
+#: classes/autoptimizeCriticalCSSCore.php:434
+#: classes/autoptimizeCriticalCSSCore.php:453
+msgid "Your API key is invalid. Please enter a valid %1$scriticalcss.com%2$s key."
+msgstr "Ваш API кључ није исправан. Унесите исправан %1$scriticalcss.com%2$s кључ."
+
+#. translators: link to the AO FAQ.
+#: classes/autoptimizeConfig.php:539
+msgid "Need help? %1$sCheck out the FAQ here%2$s."
+msgstr "Потребна вам је помоћ? %1$sПогледајте ЧПП овде%2$s."
+
+#. translators: a link to rapidload + strong tags
+#: classes/autoptimizeConfig.php:367
+msgid "If Google Pagespeed Insights detects unused CSS, consider using %1$sthe premium Rapidload service%2$s to %3$sreduce your site's CSS size to up to 90&#37;%4$s, resulting in a slimmer, faster site!"
+msgstr "Ако Google Pagespeed Insights открије некоришћени CSS, размислите о коришћењу %1$sпремијум услуге Rapidload%2$s да бисте %3$sсмањили величину CSS-а сајта до 90&#37;%4$s, што даје лакши и бржи сајт!"
+
+#. Translators: first two variables are strong tags, 3rd is link to the AO FAQ
+#. and the 4th closes that tag.
+#: classes/autoptimizeCacheChecker.php:93
+msgid "%1$sAutoptimize's cache size is getting big%2$s, consider purging the cache. Have a look at %3$sthe Autoptimize FAQ%4$s to see how you can keep the cache size under control."
+msgstr "%1$sВеличина кеша Autoptimize-а постаје велика%2$s, размислите о чишћењу кеша. Погледајте %3$sAutoptimize ЧПП%4$s да видите како можете држати величину кеша под контролом."
+
+#: classes/autoptimizeConfig.php:503
+msgid "Autoptimize applies extra \"compatibility logic\" to prevent issues with JS optimization (for e.g. Gutenberg blocks, Revolution Slider, jQuery-heavy plugins, ...) but may sometimes be a bit too careful. If you have render-blocking JS issues, you can try disabling this logic here. Make sure to test your site thoroughly though!"
+msgstr "Autoptimize примењује додатну \"логику сагласности\" да би спречио проблеме са JS оптимизацијом (нпр. за Gutenberg блокове, Revolution Slider, додатке који много користе jQuery, ...), али понекад може бити превише опрезан. Ако имате проблема са JS-ом који блокира приказ, овде можете покушати да искључите ову логику. Ипак, обавезно темељно тестирајте свој сајт!"
+
+#: classes/autoptimizeProTab.php:129
+msgid "Pro Boosters"
+msgstr "Pro Boosters"
+
+#: classes/autoptimizeProTab.php:127
+msgid "Page Cache"
+msgstr "Кеш страница"
+
+#. translators: the variables contain opening and closing <a> tags to link to
+#. the settings page.
+#: classes/autoptimizeMain.php:761
+msgid "Thank you for installing and activating Autoptimize. Your site is being optimized immediately, please test the frontend to ensure everything still works as expected. If needed you can change JavaScript or CSS optimization settings under %1$sSettings -> Autoptimize%2$s ."
+msgstr "Хвала што сте поставили и укључили Autoptimize. Ваш сајт се одмах оптимизује, тестирајте предњи део да бисте се уверили да све и даље ради како се очекује. По потреби можете променити подешавања оптимизације JavaScript-а или CSS-а у %1$sПодешавања -> Autoptimize%2$s ."
+
+#. Translators: the URL added points to the Autopmize Extra settings.
+#: classes/autoptimizeMain.php:792
+msgid "Shortpixel reports it cannot always reach your site, which might mean some images are not optimized. You can %1$sread more about why this happens and how you can fix that problem here%2$s."
+msgstr "Shortpixel пријављује да не може увек да приступи вашем сајту, што може значити да неке слике нису оптимизоване. Можете %1$sпрочитати више о томе зашто се ово дешава и како да решите тај проблем овде%2$s."
+
+#. translators: "add more credits" will appear in a "a href".
+#: classes/autoptimizeImages.php:1500
+msgid "Your ShortPixel image optimization and CDN quota has been exhausted, %1$sadd more credits%2$s to continue to quickly deliver optimized images on your website %4$sor consider using %3$sAutoptimize Pro%2$s which comes with (nearly) unlimited image optimization%5$s but also automated critical CSS and extra booster options."
+msgstr "Ваша квота ShortPixel оптимизације слика и CDN-а је потрошена, %1$sдодајте још кредита%2$s да бисте наставили да брзо испоручујете оптимизоване слике на свом сајту %4$sили размислите о коришћењу %3$sAutoptimize Pro%2$s који долази са (готово) неограниченом оптимизацијом слика%5$s, али и самосталним кључним CSS-ом и додатним booster могућностима."
+
+#. translators: "add more credits" will appear in a "a href".
+#: classes/autoptimizeImages.php:1497
+msgid "Your ShortPixel image optimization and CDN quota is almost used, make sure you %1$sadd more credits%2$s to avoid slowing down your website %4$sor consider using %3$sAutoptimize Pro%2$s which comes with (nearly) unlimited image optimization%5$s but also automated critical CSS and extra booster options."
+msgstr "Ваша квота ShortPixel оптимизације слика и CDN-а скоро је потрошена, обавезно %1$sдодајте још кредита%2$s да не бисте успорили свој сајт %4$sили размислите о коришћењу %3$sAutoptimize Pro%2$s који долази са (готово) неограниченом оптимизацијом слика%5$s, али и самосталним кључним CSS-ом и додатним booster могућностима."
+
+#. translators: 1st link points to autoptimize.com.pro, 2nd to shortpixel.
+#: classes/autoptimizeImages.php:1362
+msgid "For (nearly) %5$sunlimited image optimizations %1$sbuy Autoptimize Pro%2$s%6$s which also includes Critical CSS and extra \"booster\" options or %3$ssign up at Shortpixel%4$s."
+msgstr "За (готово) %5$sнеограничене оптимизације слика %1$sкупите Autoptimize Pro%2$s%6$s, који обухвата и Critical CSS и додатне \"booster\" могућности, или се %3$sпријавите на Shortpixel%4$s."
+
+#: classes/autoptimizeImages.php:1334
+msgid "On-the-fly image optimization and fast delivery via the Shortpixel global CDN."
+msgstr "Оптимизација слика у ходу и брза испорука преко Shortpixel глобалног CDN-а."
+
+#: classes/autoptimizeImages.php:1332
+msgid "Image optimization & CDN"
+msgstr "Оптимизација слика и CDN"
+
+#: classes/autoptimizeImages.php:1329
+msgid "Make your site significantly faster by simply ticking a few boxes and start serving CDN powered, optimized images in the next-gen WebP image format! No additional plugins or services needed."
+msgstr "Учините свој сајт знатно бржим једноставним штиклирањем неколико поља и почните да служите оптимизоване слике преко CDN-а у облику слике нове генерације WebP! Нису потребни додатни додаци или услуге."
+
+#: classes/autoptimizeImages.php:1299
+msgid "The image optimization service does not work on locally hosted sites or when the server is on a private network."
+msgstr "Услуга оптимизације слика не ради на локално хостованим сајтовима или када је сервер у приватној мрежи."
+
+#: classes/autoptimizeCriticalCSSSettings.php:145
+msgid "The Critical CSS service does not work on locally hosted sites or when the server is on a private network."
+msgstr "Услуга Critical CSS не ради на локално хостованим сајтовима или када је сервер у приватној мрежи."
+
+#. Translators: before the 1st word a number + a space will be displayed, as in
+#. e.g. "2 of above rules".
+#: classes/critcss-inc/admin_settings_rules.js.php:116
+msgid "of the above rules got flagged by criticalcss.com as possibly needing review. This is often due to font-related issues which can be safely ignored, but in case of doubt do a visual test or check for Cumulative Layout Shift issues in e.g. Pagespeed Insights."
+msgstr "од горњих правила criticalcss.com је означио као правила која можда треба прегледати. То је често због проблема у вези са словним ликовима који се могу безбедно занемарити, али ако нисте сигурни, урадите визуелни тест или проверите проблеме Cumulative Layout Shift у нпр. Pagespeed Insights."
+
+#. translators: the variable contains a string describing the insterval.
+#: classes/autoptimizeCriticalCSSBase.php:363
+msgid "Every %s (Autoptimize Crit. CSS)"
+msgstr "Сваких %s (Autoptimize Crit. CSS)"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:304
+msgid "Path validation error:\\n\\nThe path contains characters that are not permitted, remove or encode the unsafe characters."
+msgstr "Грешка провере путање:\\n\\nПутања садржи недозвољене знакове, уклоните или кодирајте небезбедне знакове."
+
+#: classes/critcss-inc/admin_settings_rules.js.php:302
+msgid "Rule validation error:\\n\\nType based rules requires a minified critical CSS."
+msgstr "Грешка провере правила:\\n\\nПравила заснована на врсти захтевају смањени кључни CSS."
+
+#: classes/critcss-inc/admin_settings_rules.js.php:300
+msgid "Rule validation error:\\n\\nBased on your rule type, you should set a path or conditional tag."
+msgstr "Грешка провере правила:\\n\\nНа основу врсте правила, треба да поставите путању или условну ознаку."
+
+#: classes/autoptimizeConfig.php:501
+msgid "Disable extra compatibility logic?"
+msgstr "Искључити додатну логику сагласности?"
+
+#: classes/autoptimizeConfig.php:383
+msgid "Enable this if you want inline JS or CSS to be minified as well."
+msgstr "Укључите ово ако желите да се и уметнути JS или CSS смањи."
+
+#: classes/autoptimizeConfig.php:381
+msgid "Also minify inline JS/ CSS?"
+msgstr "Смањити и уметнути JS/ CSS?"
+
+#: classes/autoptimizeExitSurvey.php:42
+msgid "We would appreciate if you let us know why you're deactivating Autoptimize!"
+msgstr "Били бисмо вам захвални ако бисте нам рекли зашто искључујете Autoptimize!"
+
+#: classes/autoptimizeExitSurvey.php:56
+msgid "Ouch, sorry about that! But almost all problems can be fixed with the right configuration, have a look at <a href=\"https://blog.futtta.be/2022/05/05/what-to-do-when-autoptimize-breaks-your-site/\" target=\"_blank\">this short troubleshooting howto</a> or create a topic on <a href=\"https://wordpress.org/support/plugin/autoptimize/#new-topic-0\" target=\"_blank\">the support forum here</a>!"
+msgstr "Јао, жао нам је због тога! Али скоро сви проблеми могу се решити исправним подешавањем, погледајте <a href=\"https://blog.futtta.be/2022/05/05/what-to-do-when-autoptimize-breaks-your-site/\" target=\"_blank\">ово кратко упутство за решавање проблема</a> или отворите тему на <a href=\"https://wordpress.org/support/plugin/autoptimize/#new-topic-0\" target=\"_blank\">форуму подршке овде</a>!"
+
+#: classes/autoptimizeExitSurvey.php:77
+msgid "I would like be contacted about my experience with Autoptimize."
+msgstr "Желим да ме контактирате у вези са мојим искуством са Autoptimize-ом."
+
+#: classes/autoptimizeExitSurvey.php:39
+msgid "Sorry to see you go!"
+msgstr "Жао нам је што одлазите!"
+
+#: classes/autoptimizeMetabox.php:129
+msgid "LCP Image to preload"
+msgstr "LCP слика за унапред учитавање"
+
+#: classes/autoptimizeExtra.php:599
+msgid "WordPress adds block CSS and global styles to improve easy styling of block-based sites, but which can add a significant amount of CSS and SVG. If you are sure your site can do without the block CSS and \"global styles\", you can disable them here."
+msgstr "Вордпрес додаје CSS блокова и глобалне стилове ради лакшег обликовања сајтова заснованих на блоковима, али то може додати значајну количину CSS-а и SVG-а. Ако сте сигурни да ваш сајт може без CSS-а блокова и \"глобалних стилова\", можете их овде искључити."
+
+#: classes/autoptimizeExtra.php:597
+msgid "Remove WordPress block CSS"
+msgstr "Уклони Вордпресов CSS блокова"
+
+#: classes/autoptimizeCriticalCSSSettings.php:168
+msgid "To be able to use Critical CSS you will have to enable CSS optimization and make sure \"eliminate render-blocking CSS\" is active on the main Autoptimize settings page."
+msgstr "Да бисте могли да користите Critical CSS, морате укључити CSS оптимизацију и уверити се да је \"eliminate render-blocking CSS\" активно на главној страници подешавања Autoptimize-а."
+
+#. translators: links "autoptimize critical CSS" tab.
+#: classes/autoptimizeConfig.php:326
+msgid "You can manually create rules for different types of pages or have this done fully automated on the %s tab."
+msgstr "Можете ручно правити правила за различите врсте страница или то урадити потпуно самостално на језичку %s."
+
+#: classes/autoptimizeExitSurvey.php:91
+msgid "Selected reason from the above survey"
+msgstr "Изабрани разлог из горње анкете"
+
+#: classes/autoptimizeExitSurvey.php:91
+msgid "Uninstall reason"
+msgstr "Разлог уклањања"
+
+#: classes/autoptimizeExitSurvey.php:90
+msgid "Current website:"
+msgstr "Тренутни сајт:"
+
+#: classes/autoptimizeExitSurvey.php:89
+msgid "WordPress version"
+msgstr "Верзија Вордпреса"
+
+#: classes/autoptimizeExitSurvey.php:88
+msgid "Plugin version"
+msgstr "Издање додатка"
+
+#: classes/autoptimizeExitSurvey.php:86
+msgid "Below is a detailed view of all data that Optimizing Matters will receive if you fill in this survey. Your email address is only shared if you explicitly fill it in, your IP addres is never sent."
+msgstr "Испод је детаљан приказ свих података које ће Optimizing Matters примити ако попуните ову анкету. Ваша е-адреса дели се само ако је изричито унесете, а ваша IP адреса се никад не шаље."
+
+#: classes/autoptimizeExitSurvey.php:85
+msgid "What info do we collect?"
+msgstr "Које податке прикупљамо?"
+
+#: classes/autoptimizeExitSurvey.php:70
+msgid "Other (please specify below)"
+msgstr "Друго (наведите испод)"
+
+#: classes/autoptimizeExitSurvey.php:65
+msgid "I'm just disabling temporarily."
+msgstr "Само привремено искључујем."
+
+#: classes/autoptimizeExitSurvey.php:60
+msgid "I found a better solution."
+msgstr "Пронађено је боље решење."
+
+#: classes/autoptimizeExitSurvey.php:54
+msgid "It broke my site."
+msgstr "Покварио је мој сајт."
+
+#: classes/autoptimizeExitSurvey.php:49
+msgid "As Autoptimize does not do page caching, you might have to install e.g. KeyCDN Cache Enabler or WP Super Cache as well. Feel free to create a topic on <a href=\"https://wordpress.org/support/plugin/autoptimize/#new-topic-0\" target=\"_blank\">the support forum here</a> to get pointers on how get the most out of Autoptimize!"
+msgstr "Пошто Autoptimize не ради кеширање страница, можда ћете морати да поставите и нпр. KeyCDN Cache Enabler или WP Super Cache. Слободно отворите тему на <a href=\"https://wordpress.org/support/plugin/autoptimize/#new-topic-0\" target=\"_blank\">форуму подршке овде</a> да бисте добили смернице како да на најбољи начин искористите Autoptimize!"
+
+#: classes/autoptimizeExitSurvey.php:47
+msgid "I don't see a performance improvement."
+msgstr "Не видим побољшање перформанси."
+
+#: classes/critcss-inc/admin_settings_key.php:26
+msgid "API Key provided by a filter, no need to enter anything here."
+msgstr "API кључ пружа филтер, овде није потребно ништа уносити."
+
+#: classes/autoptimizeToolbar.php:96
+msgid "CSS/ JS Cache Info"
+msgstr "Подаци о CSS/ JS кешу"
+
+#: classes/autoptimizeToolbar.php:117
+msgid "Clear CSS/ JS Cache"
+msgstr "Очисти CSS/ JS кеш"
+
+#: classes/autoptimizeConfig.php:732 classes/autoptimizeToolbar.php:82
+msgid "Autoptimize Pro"
+msgstr "Autoptimize Pro"
+
+#: classes/autoptimizeConfig.php:548
+msgid "Autoptimize news"
+msgstr "Autoptimize новости"
+
+#: classes/autoptimizeConfig.php:407
+msgid "Enter your CDN root URL to enable CDN for Autoptimized files. The URL can be http, https or protocol-relative. This is not needed for Cloudflare."
+msgstr "Унесите основну CDN адресу да бисте укључили CDN за датотеке које је обрадио Autoptimize. Адреса може бити http, https или релативна у односу на протокол. Ово није потребно за Cloudflare."
+
+#: classes/autoptimizeConfig.php:406
+msgid "example: //cdn.yoursite.com/"
+msgstr "пример: //cdn.yoursite.com/"
+
+#: classes/autoptimizeConfig.php:194
+#: classes/autoptimizeCriticalCSSSettings.php:135
+#: classes/autoptimizeExtra.php:554 classes/autoptimizeImages.php:1294
+#: classes/autoptimizePartners.php:144 classes/autoptimizeProTab.php:83
+msgid "Autoptimize Pro Settings"
+msgstr "Autoptimize Pro подешавања"
+
+#: classes/autoptimizeConfig.php:402
+msgid "The CDN has automatically been set to make use of the image optimization CDN."
+msgstr "CDN је самостално подешен да користи CDN за оптимизацију слика."
+
+#: classes/critcss-inc/admin_settings_rules.php:169
+msgid "How To Use Autoptimize CriticalCSS Rules"
+msgstr "Како користити Autoptimize CriticalCSS правила"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:447
+msgid "For path based rules, paste your specific and minified critical CSS. If you want to create a rule to exclude from critical CSS injection, enter \\\"none\\\""
+msgstr "За правила заснована на путањи, убаците свој конкретни и смањени кључни CSS. Ако желите да направите правило за изузимање из убацивања кључног CSS-а, унесите \\\"none\\\""
+
+#: classes/critcss-inc/admin_settings_queue.php:56
+msgid "How To Use Autoptimize CriticalCSS Queue"
+msgstr "Како користити Autoptimize CriticalCSS ред чекања"
+
+#: classes/autoptimizeMetabox.php:224
+msgid "Sorry, something went wrong."
+msgstr "Нажалост, нешто није у реду."
+
+#: classes/autoptimizeMetabox.php:221
+msgid "Could not add to CCSS job queue."
+msgstr "Није могуће додати у ред чекања CCSS задатака."
+
+#: classes/autoptimizeMetabox.php:219
+msgid "Added to CCSS job queue."
+msgstr "Додато у ред чекања CCSS задатака."
+
+#: classes/autoptimizeMetabox.php:167
+msgid "Generate Critical CSS"
+msgstr "Направи Critical CSS"
+
+#. Translators: some strong tags + the sentence will be finished with the name
+#. of the offending plugin and a final stop.
+#: classes/autoptimizeMain.php:841
+msgid "It looks like you have %1$sanother plugin also doing CSS and/ or JS optimization%2$s, which can result in hard to troubleshoot %1$sconflicts%2$s. For this reason it is recommended to disable this functionality in"
+msgstr "Изгледа да имате %1$sдруги додатак који такође ради CSS и/ или JS оптимизацију%2$s, што може довести до %1$sсукоба%2$s које је тешко решити. Због тога се препоручује да искључите ову функционалност у"
+
+#: classes/autoptimizeCriticalCSSSettings.php:181
+msgid "The \"Eliminate render-blocking CSS\" option was activated to allow critical CSS to be used."
+msgstr "Могућност \"Eliminate render-blocking CSS\" је укључена да би се омогућило коришћење кључног CSS-а."
+
+#: classes/critcss-inc/admin_settings_queue.php:85
+msgid "Manually process the job queue"
+msgstr "Ручно обради ред чекања задатака"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:236
+msgid "Could not process queue."
+msgstr "Није могуће обрадити ред чекања."
+
+#: classes/critcss-inc/admin_settings_queue.js.php:231
+msgid "Queue processed, reloading page."
+msgstr "Ред чекања је обрађен, поновно учитавање странице."
+
+#: classes/critcss-inc/admin_settings_queue.js.php:234
+msgid "The queue is locked, retry in a couple of minutes. If this problem persists and the queue is not moving at all remove the <code>wp-content/uploads/ao_ccss/queue.lock</code> file."
+msgstr "Ред чекања је закључан, покушајте поново за неколико минута. Ако се овај проблем настави и ред чекања се уопште не помера, уклоните датотеку <code>wp-content/uploads/ao_ccss/queue.lock</code>."
+
+#: classes/critcss-inc/admin_settings_adv.php:114
+msgid "<b>This functionality will be removed in a next major version of Autoptimize</b>, being replaced by the combination of the \"do not aggregate but defer JS\" + \"defer inline JS\" options on the main settings page."
+msgstr "<b>Ова функционалност биће уклоњена у следећем великом издању Autoptimize-а</b> и замењена комбинацијом могућности \"do not aggregate but defer JS\" + \"defer inline JS\" на главној страници подешавања."
+
+#: classes/critcss-inc/admin_settings_adv.php:108
+msgid "Defer jQuery and other non-aggregated JS-files? (deprecated)"
+msgstr "Одложити jQuery и друге несједињене JS датотеке? (застарело)"
+
+#: classes/autoptimizeMetabox.php:117
+msgid "Lazyload images?"
+msgstr "Лењо учитавати слике?"
+
+#: classes/autoptimizeMetabox.php:90
+msgid "Optimize CSS?"
+msgstr "Оптимизовати CSS?"
+
+#: classes/autoptimizeMetabox.php:105
+msgid "Inline critical CSS?"
+msgstr "Уметнути кључни CSS?"
+
+#: classes/autoptimizeMetabox.php:78
+msgid "Optimize JS?"
+msgstr "Оптимизовати JS?"
+
+#: classes/autoptimizeMetabox.php:37
+msgid "Autoptimize this page"
+msgstr "Autoptimize обрада ове странице"
+
+#: classes/autoptimizeMetabox.php:66
+msgid "Optimize this page?"
+msgstr "Оптимизовати ову страницу?"
+
+#: classes/autoptimizeImages.php:1425
+msgid "Automatically serve AVIF image format to any browser that supports it."
+msgstr "Самостално служи облик слике AVIF сваком прегледачу који га подржава."
+
+#: classes/autoptimizeConfig.php:497
+msgid "Add a \"meta box\" to the post/ page edit screen allowing different optimizations to be turned off on a per post/ page level?"
+msgstr "Додати \"мета оквир\" на екран уређивања чланка/ странице који омогућава искључивање различитих оптимизација по чланку/ страници?"
+
+#: classes/autoptimizeConfig.php:361
+msgid "Remove Unused CSS?"
+msgstr "Уклонити некоришћени CSS?"
+
+#: classes/autoptimizeConfig.php:495
+msgid "Enable configuration per post/ page?"
+msgstr "Укључити подешавање по чланку/ страници?"
+
+#: classes/autoptimizeConfig.php:319
+msgid "Eliminate render-blocking CSS?"
+msgstr "Уклонити CSS који блокира приказ?"
+
+#: classes/autoptimizeCriticalCSSSettings.php:192
+msgid "You have \"defer jQuery and other non-aggregated JS-files\" active (under Advanced Settings), but that functionality is deprecated and will be removed in the next major version of Autoptimize. Consider using the new \"Do not aggregate but defer\" and \"Also defer inline JS\" options on the main settings page instead."
+msgstr "Имате активно \"defer jQuery and other non-aggregated JS-files\" (у напредним подешавањима), али је та функционалност застарела и биће уклоњена у следећем великом издању Autoptimize-а. Размислите о коришћењу нових могућности \"Do not aggregate but defer\" и \"Also defer inline JS\" на главној страници подешавања."
+
+#: classes/autoptimizeConfig.php:279
+msgid "Autoptimize combines your theme & plugins' JavaScript, but does not know what is used and what is not. If Google Pagespeed Insights detects unused JavaScript, consider using a plugin like \"Plugin Organizer\" or similar to manage what JavaScript is added where."
+msgstr "Autoptimize спаја JavaScript ваше теме и додатака, али не зна шта се користи, а шта не. Ако Google Pagespeed Insights открије некоришћени JavaScript, размислите о коришћењу додатка као што је \"Plugin Organizer\" или сличног да бисте управљали тиме који се JavaScript где додаје."
+
+#: classes/autoptimizeConfig.php:278
+msgid "Remove Unused JavaScript?"
+msgstr "Уклонити некоришћени JavaScript?"
+
+#: classes/autoptimizeConfig.php:255
+msgid "Also defer inline JS. Generally this will allow all JS to be deferred, so you should remove default exclusions, test and only exclude specific items if still needed."
+msgstr "Одложи и уметнути JS. Ово углавном омогућава одлагање целог JS-а, па треба да уклоните подразумевана изузимања, тестирате и изузмете само одређене ставке ако је и даље потребно."
+
+#: classes/autoptimizeConfig.php:273
+msgid "A comma-separated list of scripts you do not want optimized, for example 'whatever.js, my_var' (without the quotes)."
+msgstr "Списак скрипти раздвојених запетама које не желите да се оптимизују, на пример 'whatever.js, my_var' (без наводника)."
+
+#: classes/autoptimizeConfig.php:273
+msgid "Important: when \"aggregate JS-files\" is on, excluded non-minified files are still minified by Autoptimize unless that option under \"misc\" is disabled."
+msgstr "Важно: када је \"aggregate JS-files\" укључено, изузете несмањене датотеке Autoptimize и даље смањује осим ако та могућност у \"misc\" није искључена."
+
+#: classes/autoptimizeConfig.php:253
+msgid "Also defer inline JS?"
+msgstr "Одложити и уметнути JS?"
+
+#: classes/autoptimizeConfig.php:250
+msgid "Individual JS-files will be minified and deferred, making them non-render-blocking."
+msgstr "Појединачне JS датотеке биће смањене и одложене, тако да неће блокирати приказ."
+
+#: classes/autoptimizeConfig.php:245
+msgid "If your aggregated scripts break because of a JS-error, you might want to try this, but generally discouraged."
+msgstr "Ако ваше спојене скрипте престану да раде због JS грешке, можете покушати ово, али се углавном не препоручује."
+
+#: classes/autoptimizeConfig.php:240
+msgid "Load JavaScript early (discouraged as it makes the JS render blocking)"
+msgstr "Учитавај JavaScript рано (не препоручује се јер JS тада блокира приказ)"
+
+#: classes/autoptimizeConfig.php:235
+msgid "Let Autoptimize also extract JS from the HTML (discouraged as it can make Autoptimize's cache size grow quickly)"
+msgstr "Дозволи Autoptimize-у да издваја JS и из HTML-а (не препоручује се јер може брзо повећати величину кеша Autoptimize-а)"
+
+#: classes/autoptimizeConfig.php:230
+msgid "Aggregate all linked JS-files to have them loaded non-render blocking?"
+msgstr "Спојити све повезане JS датотеке да би се учитавале без блокирања приказа?"
+
+#. translators: "here to refresh" links to the Autoptimize Extra page and
+#. forces a refresh of the img opt stats.
+#: classes/autoptimizeImages.php:1528
+msgid "you can click %1$shere to refresh your quota status%2$s"
+msgstr "можете притиснути %1$sовде да бисте освежили стање квоте%2$s"
+
+#. translators: link points to shortpixel.
+#: classes/autoptimizeImages.php:1357
+msgid "Get more Google love by speeding up your website. Start serving on-the-fly optimized images (also in the \"next-gen\" %4$sWebP%5$s image format) by %1$sShortPixel%2$s. No additional image optimization plugins are needed: your images are optimized, cached and served from %3$sShortPixel's global CDN%2$s."
+msgstr "Добијте више наклоности Google-а убрзавањем свог сајта. Почните да служите слике оптимизоване у ходу (и у облику слике „нове генерације“ %4$sWebP%5$s) уз %1$sShortPixel%2$s. Нису потребни додатни додаци за оптимизацију слика: ваше слике се оптимизују, кеширају и служе са %3$sShortPixel глобалног CDN-а%2$s."
+
+#: classes/autoptimizeImages.php:1451
+msgid "Don't lazyload the first X images, '1' lazyloads all."
+msgstr "Не учитавај лење првих X слика, '1' лење учитава све."
+
+#: classes/autoptimizeImages.php:1449
+msgid "Lazy-load from nth image"
+msgstr "Лењо учитавање од n-те слике"
+
+#: classes/autoptimizeImages.php:1378
+msgid "Comma-separated list of image classes or filenames that should not be optimized."
+msgstr "Списак класа слика или имена датотека раздвојених запетама које не треба оптимизовати."
+
+#: classes/autoptimizeImages.php:1376
+msgid "Optimization exclusions"
+msgstr "Изузеци од оптимизације"
+
+#: classes/autoptimizeCriticalCSSSettings.php:279
+msgid "It looks like the amount of Critical CSS rules is very high, it is recommended to reconfigure Autoptimize (e.g. by manually creating broader rules) to ensure less rules are created."
+msgstr "Изгледа да је број правила кључног CSS-а веома велики, препоручује се да поново подесите Autoptimize (нпр. ручним прављењем ширих правила) да би се правило мање правила."
+
+#: classes/autoptimizeConfig.php:248
+msgid "Do not aggregate but defer?"
+msgstr "Не спајати, већ одложити?"
+
+#: classes/autoptimizeCriticalCSSSettings.php:255
+msgid "In the meantime you might want to <strong>edit default rule CSS now</strong>, to avoid all CSS being inlined when no (applicable) rules are found."
+msgstr "У међувремену можда желите да <strong>одмах уредите CSS подразумеваног правила</strong>, да бисте избегли уметање целог CSS-а када се не пронађу (применљива) правила."
+
+#: classes/critcss-inc/admin_settings_adv.php:68
+msgid "The cronned queue processing is an asynchronous process triggerd by (WordPress) cron. To avoid this process from running too long and potentially getting killed, you can set the number of seconds here, 0 means no limit."
+msgstr "Cron обрада реда чекања је асинхрони поступак који покреће (Вордпрес) cron. Да би се избегло предуго трајање овог поступка и његово могуће прекидање, овде можете поставити број секунди, 0 значи без ограничења."
+
+#: classes/critcss-inc/admin_settings_adv.php:63
+msgid "Queue processing time limit"
+msgstr "Временско ограничење обраде реда чекања"
+
+#. translators: "associate your domain" will appear in a "a href".
+#: classes/autoptimizeImages.php:1502
+msgid "If you have enough CDN quota remaining, then you may need to %1$sassociate your domain%2$s to your Shortpixel account."
+msgstr "Ако вам је преостало довољно CDN квоте, можда ћете морати да %1$sповежете свој домен%2$s са својим Shortpixel налогом."
+
+#: classes/autoptimizeConfig.php:468
+msgid "Enable 404 fallbacks?"
+msgstr "Укључити 404 резервне могућности?"
+
+#: classes/critcss-inc/admin_settings_adv.php:126
+msgid "In rare cases the critical CSS needs to be removed once the full CSS loads, this option makes it so!"
+msgstr "У ретким случајевима кључни CSS треба уклонити када се учита цео CSS, ова могућност то омогућава!"
+
+#: classes/critcss-inc/admin_settings_adv.php:121
+msgid "Unload critical CSS after page load?"
+msgstr "Уклонити кључни CSS после учитавања странице?"
+
+#: classes/autoptimizeCriticalCSSCore.php:455
+msgid "Something went wrong when checking your API key, make sure you server can communicate with https://criticalcss.com and/ or try again later."
+msgstr "Нешто није у реду при провери вашег API кључа, уверите се да ваш сервер може да комуницира са https://criticalcss.com и/ или покушајте поново касније."
+
+#: classes/autoptimizeCriticalCSSCore.php:431
+#: classes/autoptimizeCriticalCSSCore.php:449
+msgid "Invalid"
+msgstr "Неисправан"
+
+#: classes/autoptimizeCriticalCSSCore.php:424
+#: classes/autoptimizeCriticalCSSCore.php:443
+msgid "Valid"
+msgstr "Исправно"
+
+#. translators; just 2 opening and closing <code> tags.
+#: classes/autoptimizeConfig.php:472
+msgid "Sometimes Autoptimized JS/ CSS is referenced in cached HTML but is already removed, resulting in broken sites. With this option on, Autoptimize will try to redirect those not-found files to \"fallback\"-versions, keeping the page/ site somewhat intact. In some cases, this will require extra web-server level configuration to ensure %1$swp-content/autoptimize_404_handler.php%2$s is set to handle 404's in %1$swp-content/cache/autoptimize%2$s."
+msgstr "Понекад се на JS/ CSS који је обрадио Autoptimize упућује у кешираном HTML-у, али је већ уклоњен, што доводи до покварених сајтова. Када је ова могућност укључена, Autoptimize ће покушати да те непронађене датотеке преусмери на \"резервна\" издања, чувајући страницу/ сајт донекле исправним. У неким случајевима ово ће захтевати додатно подешавање на нивоу веб сервера да би се %1$swp-content/autoptimize_404_handler.php%2$s подесио да обрађује 404 грешке у %1$swp-content/cache/autoptimize%2$s."
+
+#: classes/autoptimizeConfig.php:337
+msgid "Inlining all CSS is an easy way to stop the CSS from being render-blocking, but is generally not recommended because the size of the HTML increases significantly. Additionally, it might push meta-tags down to a position where e.g. Facebook and Whatsapp will not find them anymore, breaking thumbnails when sharing."
+msgstr "Уметање целог CSS-а је лак начин да CSS престане да блокира приказ, али се углавном не препоручује јер се величина HTML-а знатно повећава. Уз то, може померити мета ознаке на место где их нпр. Facebook и Whatsapp више неће пронаћи, што квари сличице при дељењу."
+
+#: classes/critcss-inc/admin_settings_rules.php:201
+msgid "Remove all rules"
+msgstr "Уклони сва правила"
+
+#: classes/critcss-inc/admin_settings_rules.php:198
+msgid "Add CSS To All Rules"
+msgstr "Додај CSS свим правилима"
+
+#: classes/critcss-inc/admin_settings_rules.php:197
+msgid "Edit Default Rule CSS"
+msgstr "Уреди CSS подразумеваног правила"
+
+#: classes/critcss-inc/admin_settings_rules.php:196
+msgid "Add New Rule"
+msgstr "Додај ново правило"
+
+#: classes/critcss-inc/admin_settings_rules.php:183
+msgid "At any time you can delete an <span class=\"badge auto\">AUTO</span> or <span class=\"badge manual\">MANUAL</span> rule by cliking on \"Remove\" button of the desired rule and saving your changes."
+msgstr "У било ком тренутку можете избрисати правило <span class=\"badge auto\">AUTO</span> или <span class=\"badge manual\">MANUAL</span> притиском на дугме \"Remove\" жељеног правила и чувањем измена."
+
+#: classes/critcss-inc/admin_settings_rules.php:182
+msgid "You can create <span class=\"badge manual\">MANUAL</span> rules for specific page paths (URL). Longer, more specific paths have higher priority over shorter ones, which in turn have higher priority over <span class=\"badge auto\">AUTO</span> rules. Also, critical CSS files from <span class=\"badge manual\">MANUAL</span> <strong>rules are NEVER updated automatically.</strong>"
+msgstr "Можете направити <span class=\"badge manual\">MANUAL</span> правила за одређене путање страница (URL). Дуже, конкретније путање имају већи приоритет од краћих, које заузврат имају већи приоритет од <span class=\"badge auto\">AUTO</span> правила. Такође, датотеке кључног CSS-а из <span class=\"badge manual\">MANUAL</span> <strong>правила се НИКАД не ажурирају самостално.</strong>"
+
+#: classes/critcss-inc/admin_settings_rules.php:181
+msgid "If you want to make any fine tunning in the critical CSS file of an <span class=\"badge auto\">AUTO</span> rule, click on \"Edit\" button of that rule, change what you need, submit and save it. The rule you've just edited becomes a <span class=\"badge manual\">MANUAL</span> rule then."
+msgstr "Ако желите да фино подесите датотеку кључног CSS-а <span class=\"badge auto\">AUTO</span> правила, притисните дугме \"Edit\" тог правила, промените шта је потребно, пошаљите и сачувајте. Правило које сте управо уредили тада постаје <span class=\"badge manual\">MANUAL</span> правило."
+
+#: classes/critcss-inc/admin_settings_rules.php:180
+msgid "These requests also creates an <span class=\"badge auto\">AUTO</span> rule for you. The critical CSS files from <span class=\"badge auto\">AUTO</span> <strong>rules are updated automatically</strong> when a CSS file in your theme or frontend plugins changes."
+msgstr "Ови захтеви такође праве <span class=\"badge auto\">AUTO</span> правило за вас. Датотеке кључног CSS-а из <span class=\"badge auto\">AUTO</span> <strong>правила самостално се ажурирају</strong> када се промени CSS датотека у вашој теми или додацима предњег дела."
+
+#: classes/critcss-inc/admin_settings_rules.php:179
+msgid "Upon a request to any of the frontend pages made by a <strong>not logged in user</strong>, it will <strong>asynchronously</strong> fetch and update the critical CSS from <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> for conditional tags you have on your site (e.g. is_page, is_single, is_archive etc.)"
+msgstr "При захтеву за било којом страницом предњег дела који упути <strong>непријављени корисник</strong>, <strong>асинхроно</strong> ће преузети и ажурирати кључни CSS са <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> за условне ознаке које имате на сајту (нпр. is_page, is_single, is_archive итд.)"
+
+#: classes/critcss-inc/admin_settings_rules.php:178
+msgid "When a valid <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> API key is in place, Autoptimize starts to operate <strong>automatically</strong>."
+msgstr "Када је постављен исправан <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> API кључ, Autoptimize почиње да ради <strong>самостално</strong>."
+
+#: classes/critcss-inc/admin_settings_rules.php:176
+msgid "TL;DR:<br />Critical CSS files from <span class='badge auto'>AUTO</span> <strong>rules are updated automatically</strong> while from <span class='badge manual'>MANUAL</span> <strong>rules are not.</strong>"
+msgstr "Укратко:<br />Датотеке кључног CSS-а из <span class='badge auto'>AUTO</span> <strong>правила самостално се ажурирају</strong>, а из <span class='badge manual'>MANUAL</span> <strong>правила не.</strong>"
+
+#: classes/critcss-inc/admin_settings_rules.php:163
+msgid "Paste your minified additional critical CSS here and hit submit to save. This is the CSS to be added AT THE END of every critical CSS provided by a matching rule, or the default one."
+msgstr "Овде убаците свој смањени додатни кључни CSS и притисните „пошаљи“ да бисте сачували. Ово је CSS који се додаје НА КРАЈ сваког кључног CSS-а који пружа одговарајуће правило или подразумевано правило."
+
+#: classes/critcss-inc/admin_settings_rules.php:158
+msgid "Paste your minified default critical CSS here and hit submit to save. This is the critical CSS to be used for every page not matching any rule."
+msgstr "Овде убаците свој смањени подразумевани кључни CSS и притисните „пошаљи“ да бисте сачували. Ово је кључни CSS који се користи за сваку страницу која не одговара ниједном правилу."
+
+#: classes/critcss-inc/admin_settings_rules.php:153
+msgid "All Critical CSS rules will be deleted immediately and cannot be recovered.<br /><br /><strong>Are you sure?</strong>"
+msgstr "Сва правила кључног CSS-а биће одмах избрисана и не могу се вратити.<br /><br /><strong>Да ли сте сигурни?</strong>"
+
+#: classes/critcss-inc/admin_settings_rules.php:152
+msgid "Delete all Rules and Jobs"
+msgstr "Избриши сва правила и задатке"
+
+#: classes/critcss-inc/admin_settings_rules.php:148
+msgid "This Critical CSS rule will be deleted immediately and cannot be recovered.<br /><br /><strong>Are you sure?</strong>"
+msgstr "Ово правило кључног CSS-а биће одмах избрисано и не може се вратити.<br /><br /><strong>Да ли сте сигурни?</strong>"
+
+#: classes/critcss-inc/admin_settings_rules.php:147
+msgid "Delete Rule"
+msgstr "Избриши правило"
+
+#: classes/critcss-inc/admin_settings_rules.php:135
+msgid "Custom Critical CSS"
+msgstr "Произвољни кључни CSS"
+
+#: classes/critcss-inc/admin_settings_rules.php:138
+msgid "Paste your specific critical CSS here and hit submit to save."
+msgstr "Овде убаците свој конкретни кључни CSS и притисните „пошаљи“ да бисте сачували."
+
+#: classes/critcss-inc/admin_settings_rules.php:100
+msgid "WooCommerce Conditional Tags"
+msgstr "WooCommerce условне ознаке"
+
+#: classes/critcss-inc/admin_settings_rules.php:96
+msgid "Easy Digital Downloads Conditional Tags"
+msgstr "Easy Digital Downloads условне ознаке"
+
+#: classes/critcss-inc/admin_settings_rules.php:92
+msgid "BuddyPress Conditional Tags"
+msgstr "BuddyPress условне ознаке"
+
+#: classes/critcss-inc/admin_settings_rules.php:88
+msgid "BBPress Conditional Tags"
+msgstr "BBPress условне ознаке"
+
+#: classes/critcss-inc/admin_settings_rules.php:84
+msgid "Page Templates"
+msgstr "Шаблони страница"
+
+#: classes/critcss-inc/admin_settings_rules.php:80
+msgid "Custom Post Types"
+msgstr "Прилагођене врсте чланака"
+
+#: classes/critcss-inc/admin_settings_rules.php:58
+msgid "Standard Conditional Tags"
+msgstr "Стандардне условне ознаке"
+
+#: classes/critcss-inc/admin_settings_rules.php:57
+msgid "Select from the list below..."
+msgstr "Изаберите са списка испод..."
+
+#: classes/critcss-inc/admin_settings_rules.php:53
+msgid "Conditional Tag, Custom Post Type or Page Template"
+msgstr "Условна ознака, произвољна врста чланка или шаблон странице"
+
+#: classes/critcss-inc/admin_settings_rules.php:48
+msgid "Enter a part of the URL that identifies the page(s) you're targetting."
+msgstr "Унесите део адресе који означава странице које циљате."
+
+#: classes/critcss-inc/admin_settings_rules.php:45
+msgid "String in Path"
+msgstr "Ниска у путањи"
+
+#: classes/critcss-inc/admin_settings_rules.php:39
+msgid "Conditional Tag"
+msgstr "Условна ознака"
+
+#: classes/critcss-inc/admin_settings_rules.php:38
+msgid "Path"
+msgstr "Путања"
+
+#: classes/critcss-inc/admin_settings_rules.php:34
+msgid "Rule Type"
+msgstr "Врста правила"
+
+#: classes/critcss-inc/admin_settings_rules.php:26
+msgid "<strong>Rules or Queue changed!</strong> Don't forget to save your changes!"
+msgstr "<strong>Правила или ред чекања су промењени!</strong> Не заборавите да сачувате измене!"
+
+#: classes/critcss-inc/admin_settings_rules.php:21
+msgid "Rules"
+msgstr "Правила"
+
+#: classes/critcss-inc/admin_settings_impexp.js.php:35
+msgid "Export settings result"
+msgstr "Резултат извоза подешавања"
+
+#: classes/critcss-inc/admin_settings_debug.php:81
+msgid "WP-Cron Scheduled Events"
+msgstr "WP-Cron заказани догађаји"
+
+#: classes/critcss-inc/admin_settings_debug.php:78
+msgid "WP-Cron Intervals"
+msgstr "WP-Cron интервали"
+
+#: classes/critcss-inc/admin_settings_debug.php:45
+msgid "Options"
+msgstr "Могућности"
+
+#: classes/critcss-inc/admin_settings_debug.php:39
+msgid "Debug Information"
+msgstr "Подаци за отклањање грешака"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:347
+msgid "Additional Critical CSS"
+msgstr "Додатни кључни CSS"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:325
+msgid "Default Critical CSS"
+msgstr "Подразумевани кључни CSS"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:264
+msgid "Add Critical CSS Rule"
+msgstr "Додај правило кључног CSS-а"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:276
+msgid "For type based rules, paste your specific and minified critical CSS here and hit submit to save. If you want to create a rule to exclude from critical CSS injection, enter \\\"none\\\"."
+msgstr "За правила заснована на врсти, овде убаците свој конкретни и смањени кључни CSS и притисните „пошаљи“ да бисте сачували. Ако желите да направите правило за изузимање из убацивања кључног CSS-а, унесите \\\"none\\\"."
+
+#: classes/critcss-inc/admin_settings_rules.js.php:280
+msgid "For path based rules, paste your specific and minified critical CSS here or leave this empty to fetch it from criticalcss.com and hit submit to save. If you want to create a rule to exclude from critical CSS injection, enter \\\"none\\\""
+msgstr "За правила заснована на путањи, овде убаците свој конкретни и смањени кључни CSS или оставите празно да би се преузео са criticalcss.com и притисните „пошаљи“ да бисте сачували. Ако желите да направите правило за изузимање из убацивања кључног CSS-а, унесите \\\"none\\\""
+
+#: classes/critcss-inc/admin_settings_rules.js.php:223
+msgid "Edit Critical CSS Rule"
+msgstr "Уреди правило кључног CSS-а"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:234
+msgid "Loading critical CSS..."
+msgstr "Учитавање кључног CSS-а..."
+
+#: classes/critcss-inc/admin_settings_rules.js.php:158
+msgid "Delete All"
+msgstr "Избриши све"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:102
+msgid "Remove"
+msgstr "Уклони"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:102
+msgid "Edit"
+msgstr "Уреди"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:74
+msgid "AUTO"
+msgstr "AUTO"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:71
+msgid "MANUAL"
+msgstr "MANUAL"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:68
+msgid "To be fetched from criticalcss.com in the next queue run..."
+msgstr "Биће преузето са criticalcss.com при следећем покретању реда чекања..."
+
+#: classes/critcss-inc/admin_settings_rules.js.php:49
+msgid "Critical CSS File"
+msgstr "Датотека кључног CSS-а"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:49
+msgid "Target"
+msgstr "Одредиште"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:49
+msgid "Type"
+msgstr "Врста"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:45
+msgid "Conditional Tags, Custom Post Types and Page Templates Rules"
+msgstr "Правила за условне ознаке, произвољне врсте чланака и шаблоне страница"
+
+#: classes/critcss-inc/admin_settings_rules.js.php:43
+msgid "Path Based Rules"
+msgstr "Правила заснована на путањи"
+
+#: classes/critcss-inc/admin_settings_adv.php:149
+msgid "<strong>CAUTION! Only use debug mode on production/live environments for ad-hoc troubleshooting and remember to turn it back off after</strong>, as this generates a lot of log-data.<br />Check the box above to enable Autoptimize CriticalCSS Power-Up debug mode. It provides debug facilities in this screen, to the browser console and to this file: "
+msgstr "<strong>ОПРЕЗ! Режим отклањања грешака користите у производним/активним окружењима само за повремено решавање проблема и не заборавите да га после искључите</strong>, јер прави много података у дневнику.<br />Штиклирајте поље изнад да бисте укључили режим отклањања грешака Autoptimize CriticalCSS Power-Up. Пружа могућности отклањања грешака на овом екрану, у конзоли прегледача и у овој датотеци: "
+
+#: classes/critcss-inc/admin_settings_rules.js.php:292
+#: classes/critcss-inc/admin_settings_rules.js.php:328
+#: classes/critcss-inc/admin_settings_rules.js.php:350
+msgid "Submit"
+msgstr "Предај"
+
+#: classes/critcss-inc/admin_settings_adv.php:143
+msgid "Debug Mode"
+msgstr "Режим отклањања грешака"
+
+#: classes/critcss-inc/admin_settings_adv.php:137
+msgid "Only requests from this domain will be sent for Critical CSS generation (pricing is per domain/ month)."
+msgstr "За прављење кључног CSS-а шаљу се само захтеви са овог домена (цена је по домену/ месецу)."
+
+#: classes/critcss-inc/admin_settings_adv.php:135
+msgid "Don't leave this empty, put e.g. https://example.net/ or simply 'none' to disable domain binding."
+msgstr "Не остављајте ово празно, унесите нпр. https://example.net/ или једноставно 'none' да бисте искључили везивање за домен."
+
+#: classes/critcss-inc/admin_settings_adv.php:132
+msgid "Bound domain"
+msgstr "Везани домен"
+
+#: classes/critcss-inc/admin_settings_adv.php:113
+msgid "Defer all non-aggregated JS, including jQuery and inline JS to fix remaining render-blocking issues. Make sure to test your site thoroughly when activating this option!"
+msgstr "Одложи сав несједињени JS, укључујући jQuery и уметнути JS, да би се решили преостали проблеми блокирања приказа. Обавезно темељно тестирајте сајт када укључите ову могућност!"
+
+#: classes/critcss-inc/admin_settings_adv.php:101
+msgid "By default for each page a separate rule is generated. If your pages have (semi-)identical above the fold look and feel and you want to keep the rules lean, you can disable that so one rule is created to all pages."
+msgstr "Подразумевано се за сваку страницу прави засебно правило. Ако ваше странице имају (скоро) исти изглед изнад прелома и желите да правила буду сажета, ово можете искључити тако да се за све странице прави једно правило."
+
+#: classes/critcss-inc/admin_settings_adv.php:96
+msgid "Force path-based rules to be generated for pages?"
+msgstr "Принудно правити правила заснована на путањи за странице?"
+
+#: classes/critcss-inc/admin_settings_adv.php:90
+msgid "Critical CSS is generated by criticalcss.com from your pages as seen by an \"anonymous visitor\". Disable this option if you don't want the \"visitor\" critical CSS to be used for logged in users."
+msgstr "Кључни CSS прави criticalcss.com од ваших страница онако како их види \"анониман посетилац\". Искључите ову могућност ако не желите да се кључни CSS за \"посетиоце\" користи за пријављене кориснике."
+
+#: classes/critcss-inc/admin_settings_adv.php:85
+msgid "Add CCSS for logged in users?"
+msgstr "Додати CCSS за пријављене кориснике?"
+
+#: classes/critcss-inc/admin_settings_adv.php:79
+msgid "In some (rare) cases the generation of critical CSS works better with the original CSS instead of the Autoptimized one, this option enables that behavior."
+msgstr "У неким (ретким) случајевима прављење кључног CSS-а боље ради са изворним CSS-ом уместо оног који је обрадио Autoptimize, ова могућност омогућава такво понашање."
+
+#: classes/critcss-inc/admin_settings_adv.php:57
+msgid "Force include CSS selectors can be used to style dynamic content that is not part of the HTML that is seen during the Critical CSS generation. To use this feature, add comma separated values with both simple strings and/or regular expressions to match the desired selectors. Regular expressions must be preceeded by two forward slashes. For instance: <code>.button-special,//#footer</code>. In this example <code>.button-special</code> will match <code>.button-special</code> selector only, while <code>//#footer</code> will match <code>#footer</code>, <code>#footer-address</code> and <code>#footer-phone</code> selectors in case they exist.<br />Do take into account that changing this setting will only affect new/ updated rules, so you might want to remove old rules and clear your page cache to expedite the forceIncludes becoming used."
+msgstr "Принудно укључени CSS селектори могу се користити за обликовање динамичког садржаја који није део HTML-а видљивог током прављења кључног CSS-а. Да бисте користили ову функцију, додајте вредности раздвојене запетама са једноставним нискама и/или регуларним изразима за подударање жељених селектора. Испред регуларних израза морају стајати две косе црте. На пример: <code>.button-special,//#footer</code>. У овом примеру <code>.button-special</code> ће се подударати само са селектором <code>.button-special</code>, док ће се <code>//#footer</code> подударати са селекторима <code>#footer</code>, <code>#footer-address</code> и <code>#footer-phone</code> ако постоје.<br />Имајте у виду да промена овог подешавања утиче само на нова/ ажурирана правила, па ћете можда желети да уклоните стара правила и очистите кеш страница да би се forceIncludes брже почели да користе."
+
+#: classes/critcss-inc/admin_settings_adv.php:74
+msgid "Fetch Original CSS"
+msgstr "Преузми изворни CSS"
+
+#: classes/critcss-inc/admin_settings_adv.php:55
+msgid ".button-special,//#footer"
+msgstr ".button-special,//#footer"
+
+#: classes/critcss-inc/admin_settings_adv.php:52
+msgid "Force Include CSS selectors"
+msgstr "Принудно укључени CSS селектори"
+
+#: classes/critcss-inc/admin_settings_adv.php:46
+msgid "<a href=\"https://criticalcss.com/account/api-keys?aff=1\" target=\"_blank\">criticalcss.com</a> default viewport size is 1400x1080 pixels (width x height). You can change this size by typing a desired width and height values above. Allowed value ranges are from 800 to 4096 for width and from 600 to 2160 for height."
+msgstr "<a href=\"https://criticalcss.com/account/api-keys?aff=1\" target=\"_blank\">criticalcss.com</a> подразумевана величина видног поља је 1400x1080 пиксела (ширина x висина). Ову величину можете променити уносом жељених вредности ширине и висине изнад. Дозвољени опсези вредности су од 800 до 4096 за ширину и од 600 до 2160 за висину."
+
+#: classes/critcss-inc/admin_settings_adv.php:44
+msgid "Height"
+msgstr "Висина"
+
+#: classes/critcss-inc/admin_settings_adv.php:43
+msgid "Width"
+msgstr "Ширина"
+
+#: classes/critcss-inc/admin_settings_adv.php:40
+msgid "Viewport Size"
+msgstr "Величина видног поља"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:186
+msgid "Retry"
+msgstr "Покушај поново"
+
+#: classes/critcss-inc/admin_settings_adv.php:32
+msgid "Advanced Settings"
+msgstr "Напредна подешавања"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:166
+msgid "Delete all jobs?"
+msgstr "Избрисати све задатке?"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:153
+#: classes/critcss-inc/admin_settings_queue.js.php:171
+#: classes/critcss-inc/admin_settings_queue.js.php:201
+#: classes/critcss-inc/admin_settings_rules.js.php:145
+#: classes/critcss-inc/admin_settings_rules.js.php:165
+#: classes/critcss-inc/admin_settings_rules.js.php:310
+#: classes/critcss-inc/admin_settings_rules.js.php:333
+#: classes/critcss-inc/admin_settings_rules.js.php:355
+msgid "Cancel"
+msgstr "Одустани"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:125
+msgid "Job status is "
+msgstr "Стање задатка је "
+
+#: classes/critcss-inc/admin_settings_queue.js.php:148
+#: classes/critcss-inc/admin_settings_rules.js.php:140
+msgid "Delete"
+msgstr "Обриши"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:119
+msgid "N/A"
+msgstr "-"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:111
+msgid "UNKNOWN"
+msgstr "НЕПОЗНАТО"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:103
+#: classes/critcss-inc/admin_settings_queue.js.php:112
+msgid "Get Help"
+msgstr "Потражи помоћ"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:102
+msgid "ERROR"
+msgstr "ГРЕШКА"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:95
+msgid "DONE"
+msgstr "ГОТОВО"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:88
+#: classes/critcss-inc/admin_settings_queue.js.php:102
+#: classes/critcss-inc/admin_settings_queue.js.php:111
+msgid "- Validation: "
+msgstr "- Провера: "
+
+#: classes/critcss-inc/admin_settings_queue.js.php:88
+#: classes/critcss-inc/admin_settings_queue.js.php:102
+#: classes/critcss-inc/admin_settings_queue.js.php:111
+msgid "- Result: "
+msgstr "- Резултат: "
+
+#: classes/critcss-inc/admin_settings_queue.js.php:88
+#: classes/critcss-inc/admin_settings_queue.js.php:102
+#: classes/critcss-inc/admin_settings_queue.js.php:111
+msgid "- Status: "
+msgstr "- Стање: "
+
+#: classes/critcss-inc/admin_settings_queue.js.php:88
+#: classes/critcss-inc/admin_settings_queue.js.php:102
+#: classes/critcss-inc/admin_settings_queue.js.php:111
+msgid "- Job ID: "
+msgstr "- ИБ задатка: "
+
+#: classes/critcss-inc/admin_settings_queue.js.php:88
+msgid "REVIEW"
+msgstr "ПРЕГЛЕД"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:88
+#: classes/critcss-inc/admin_settings_queue.js.php:102
+#: classes/critcss-inc/admin_settings_queue.js.php:111
+msgid "Info from criticalcss.com:"
+msgstr "Подаци са criticalcss.com:"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:82
+msgid "PENDING"
+msgstr "НА ЧЕКАЊУ"
+
+#: classes/autoptimizeCriticalCSSCore.php:462
+#: classes/critcss-inc/admin_settings_queue.js.php:77
+#: classes/critcss-inc/admin_settings_queue.js.php:83
+msgid "None"
+msgstr "Нема"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:76
+msgid "New"
+msgstr "Ново"
+
+#: classes/critcss-inc/admin_settings_queue.php:78
+#: classes/critcss-inc/admin_settings_rules.js.php:49
+msgid "Actions"
+msgstr "Радње"
+
+#: classes/critcss-inc/admin_settings_queue.php:88
+msgid "Remove all jobs"
+msgstr "Уклони све задатке"
+
+#: classes/critcss-inc/admin_settings_queue.php:78
+msgid "Creation Date"
+msgstr "Датум настанка"
+
+#: classes/critcss-inc/admin_settings_queue.php:78
+msgid "Finish Date"
+msgstr "Датум завршетка"
+
+#: classes/critcss-inc/admin_settings_queue.php:78
+msgid "Page Type"
+msgstr "Врста странице"
+
+#: classes/critcss-inc/admin_settings_queue.php:78
+msgid "Page Path"
+msgstr "Путања странице"
+
+#: classes/critcss-inc/admin_settings_queue.php:78
+msgid "Status"
+msgstr "Стање"
+
+#: classes/critcss-inc/admin_settings_queue.php:78
+msgid "Target Rule"
+msgstr "Циљно правило"
+
+#: classes/critcss-inc/admin_settings_queue.php:70
+msgid "Sometimes an unknown condition can happen. In this case, the job status becomes <span class=\"badge unknown\">U</span> and you may want to ask <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> for help or just delete it."
+msgstr "Понекад може доћи до непознатог стања. У том случају стање задатка постаје <span class=\"badge unknown\">U</span> и можда ћете желети да затражите помоћ од <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> или га једноставно избришете."
+
+#: classes/critcss-inc/admin_settings_queue.php:69
+msgid "When things go wrong, a job is marked as <span class=\"badge error\">E</span>. You can retry faulty jobs, delete them or get in touch with <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> for assistance."
+msgstr "Када нешто пође наопако, задатак се означава као <span class=\"badge error\">E</span>. Неисправне задатке можете поново покушати, избрисати или се обратити <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> за помоћ."
+
+#: classes/critcss-inc/admin_settings_queue.php:68
+msgid "As soon as <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> returns a valid critical CSS file, the job is then finished and removed from the queue."
+msgstr "Чим <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> врати исправну датотеку кључног CSS-а, задатак је завршен и уклања се из реда чекања."
+
+#: classes/critcss-inc/admin_settings_queue.php:72
+msgid "<strong>A word about WordPress cron:</strong> Autoptimize watches the queue by using WordPress Cron (or WP-Cron for short.) It <a href=\"https://www.smashingmagazine.com/2013/10/schedule-events-using-wordpress-cron/#limitations-of-wordpress-cron-and-solutions-to-fix-em\" target=\"_blank\">could be faulty</a> on very light or very heavy loads. If your site receives just a few or thousands visits a day, it might be a good idea to <a href=\"https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/\" target=\"_blank\">turn WP-Cron off and use your system task scheduler</a> to fire it instead."
+msgstr "<strong>Реч о Вордпрес cron-у:</strong> Autoptimize прати ред чекања помоћу Вордпрес Cron-а (или скраћено WP-Cron). Он <a href=\"https://www.smashingmagazine.com/2013/10/schedule-events-using-wordpress-cron/#limitations-of-wordpress-cron-and-solutions-to-fix-em\" target=\"_blank\">може бити непоуздан</a> при веома малим или веома великим оптерећењима. Ако ваш сајт добија само неколико или хиљаде посета дневно, можда је добра идеја да <a href=\"https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/\" target=\"_blank\">искључите WP-Cron и користите системски распоређивач задатака</a> да га покреће."
+
+#: classes/critcss-inc/admin_settings_queue.php:71
+msgid "To get more information about jobs statuses, specially the ones with <span class=\"badge error\">E</span> and <span class=\"badge unknown\">U</span> status, hover your mouse in the status badge of that job. This information might be crucial when contacting <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> for assistance."
+msgstr "Да бисте добили више података о стањима задатака, нарочито оних са стањем <span class=\"badge error\">E</span> и <span class=\"badge unknown\">U</span>, поставите показивач миша на ознаку стања тог задатка. Ови подаци могу бити кључни када се обратите <a href=\"https://criticalcss.com/?aff=1\" target=\"_blank\">criticalcss.com</a> за помоћ."
+
+#: classes/critcss-inc/admin_settings_queue.php:67
+msgid "Autoptimize constantly queries the queue for <span class='badge new'>N</span> jobs. When it finds one, gears spins and jobs becomes <span class='badge pending'>P</span> while they are running and <a href='https://criticalcss.com/?aff=1' target='_blank'>criticalcss.com</a> doesn't return a result."
+msgstr "Autoptimize стално проверава ред чекања за <span class='badge new'>N</span> задатке. Када пронађе неки, зупчаници се окрећу и задаци постају <span class='badge pending'>P</span> док раде и док <a href='https://criticalcss.com/?aff=1' target='_blank'>criticalcss.com</a> не врати резултат."
+
+#: classes/critcss-inc/admin_settings_queue.php:66
+msgid "When the conditions to create a job are met (i.e. user not logged in, no matching <span class=\"badge manual\">MANUAL</span> rule or CSS files has changed for an <span class=\"badge auto\">AUTO</span> rule), a <span class=\"badge new\">N</span> job is created in the queue."
+msgstr "Када се испуне услови за прављење задатка (тј. корисник није пријављен, нема одговарајућег <span class=\"badge manual\">MANUAL</span> правила или су се CSS датотеке промениле за <span class=\"badge auto\">AUTO</span> правило), у реду чекања се прави <span class=\"badge new\">N</span> задатак."
+
+#: classes/critcss-inc/admin_settings_queue.php:65
+msgid "The queue operates <strong>automatically, asynchronously and on regular intervals of 10 minutes.</strong> To view updated queue status, refresh this page."
+msgstr "Ред чекања ради <strong>самостално, асинхроно и у редовним интервалима од 10 минута.</strong> Да бисте видели ажурирано стање реда чекања, освежите ову страницу."
+
+#: classes/critcss-inc/admin_settings_queue.php:63
+msgid "TL;DR:<br /><strong>Queue runs every 10 minutes.</strong> Job statuses are <span class=\"badge new\">N</span> for NEW, <span class=\"badge pending\">P</span> for PENDING, <span class=\"badge error\">E</span> for ERROR and <span class=\"badge unknown\">U</span> for UNKOWN."
+msgstr "Укратко:<br /><strong>Ред чекања ради сваких 10 минута.</strong> Стања задатака су <span class=\"badge new\">N</span> за НОВ, <span class=\"badge pending\">P</span> за НА ЧЕКАЊУ, <span class=\"badge error\">E</span> за ГРЕШКУ и <span class=\"badge unknown\">U</span> за НЕПОЗНАТО."
+
+#: classes/critcss-inc/admin_settings_queue.php:57
+#: classes/critcss-inc/admin_settings_rules.php:170
+msgid "Click the side arrow to toggle instructions"
+msgstr "Притисните бочну стрелицу да бисте приказали/сакрили упутства"
+
+#: classes/critcss-inc/admin_settings_queue.php:49
+msgid "This will delete all jobs, are you sure?"
+msgstr "Ово ће избрисати све задатке, да ли сте сигурни?"
+
+#: classes/critcss-inc/admin_settings_queue.php:48
+msgid "Delete all jobs"
+msgstr "Избриши све задатке"
+
+#: classes/critcss-inc/admin_settings_queue.php:44
+msgid "Are you sure you want to delete this job?"
+msgstr "Да ли сигурно желите да избришете овај задатак?"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:89
+#: classes/critcss-inc/admin_settings_queue.js.php:96
+#: classes/critcss-inc/admin_settings_queue.js.php:103
+#: classes/critcss-inc/admin_settings_queue.js.php:112
+#: classes/critcss-inc/admin_settings_queue.php:43
+msgid "Delete Job"
+msgstr "Избриши задатак"
+
+#: classes/critcss-inc/admin_settings_queue.php:39
+msgid "Are you sure you want to retry this job?"
+msgstr "Да ли сигурно желите да поново покушате овај задатак?"
+
+#: classes/critcss-inc/admin_settings_queue.php:24
+msgid "Job Queue"
+msgstr "Ред чекања задатака"
+
+#: classes/critcss-inc/admin_settings_queue.js.php:103
+#: classes/critcss-inc/admin_settings_queue.php:38
+msgid "Retry Job"
+msgstr "Поново покушај задатак"
+
+#: classes/critcss-inc/admin_settings_key.php:58
+msgid "Enter your <a href=\"https://criticalcss.com/account/api-keys?aff=1\" target=\"_blank\">criticalcss.com</a> API key above. The key is revalidated every time a new job is sent to it.<br />To obtain your API key, go to <a href=\"https://criticalcss.com/account/api-keys?aff=1\" target=\"_blank\">criticalcss.com</a> > Account > API Keys.<br />Requests to generate a critical CSS via the API are priced at £5 per domain per month.<br /><strong>Not sure yet? With the <a href=\"https://criticalcss.com/faq/?aff=1#trial\" target=\"_blank\">30 day money back guarantee</a>, you have nothing to lose!</strong>"
+msgstr "Унесите свој <a href=\"https://criticalcss.com/account/api-keys?aff=1\" target=\"_blank\">criticalcss.com</a> API кључ изнад. Кључ се поново проверава сваки пут када му се пошаље нови задатак.<br />Да бисте добили API кључ, идите на <a href=\"https://criticalcss.com/account/api-keys?aff=1\" target=\"_blank\">criticalcss.com</a> > Account > API Keys.<br />Захтеви за прављење кључног CSS-а преко API-ја коштају £5 по домену месечно.<br /><strong>Још нисте сигурни? Уз <a href=\"https://criticalcss.com/faq/?aff=1#trial\" target=\"_blank\">гаранцију поврата новца у року од 30 дана</a> немате шта да изгубите!</strong>"
+
+#: classes/critcss-inc/admin_settings_key.php:56
+msgid "Please enter your criticalcss.com API key here."
+msgstr "Овде унесите свој criticalcss.com API кључ."
+
+#: classes/critcss-inc/admin_settings_key.php:32
+msgid "API Key"
+msgstr "API кључ"
+
+#: classes/autoptimizeCriticalCSSSettings.php:365
+msgid "Export Settings"
+msgstr "Извези подешавања"
+
+#: classes/critcss-inc/admin_settings_key.php:53
+msgid "Your API Key"
+msgstr "Ваш API кључ"
+
+#: classes/critcss-inc/admin_settings_key.php:24
+msgid "API key provided by your host/ WordPress administrator, no need to enter anything here. In case of problems with the API key, contact your host/ WordPress administrator."
+msgstr "API кључ пружа ваш хостинг/ Вордпрес администратор, овде није потребно ништа уносити. У случају проблема са API кључем, обратите се свом хостингу/ Вордпрес администратору."
+
+#: classes/autoptimizeCriticalCSSSettings.php:366
+msgid "Import Settings"
+msgstr "Увези подешавања"
+
+#. translators: the placesholder is for a line of code in wp-config.php.
+#: classes/autoptimizeCriticalCSSSettings.php:300
+msgid "<p>Critical CSS settings cannot be set at network level as critical CSS is specific to each sub-site.</p><p>You can however provide the critical CSS API key for use by all sites by adding this your wp-config.php as %s</p>"
+msgstr "<p>Подешавања кључног CSS-а не могу се поставити на нивоу мреже јер је кључни CSS посебан за сваки подсајт.</p><p>Међутим, API кључ за кључни CSS можете обезбедити за све сајтове додавањем овога у wp-config.php као %s</p>"
+
+#: classes/autoptimizeCriticalCSSSettings.php:266
+msgid "The critical CSS service has been reported to be down. Although no new rules will be created for now, this does not prevent existing rules from being applied."
+msgstr "Пријављено је да услуга кључног CSS-а не ради. Иако за сада неће бити прављена нова правила, то не спречава примену постојећих правила."
+
+#: classes/autoptimizeCriticalCSSSettings.php:253
+msgid "Great, Autoptimize will now automatically start creating new critical CSS rules, you should see those appearing below in the next couple of hours."
+msgstr "Одлично, Autoptimize ће сада самостално почети да прави нова правила кључног CSS-а, требало би да их видите испод у наредних неколико сати."
+
+#: classes/autoptimizeCriticalCSSSettings.php:245
+msgid "It looks like there might be a problem with WordPress cron (task scheduling). Have a look at <a href=\"https://blog.futtta.be/2023/03/17/how-to-fix-autoptimize-critical-css-cron-issue/\" target=\"_blank\">the FAQ</a> or the info in the Job Queue instructions if all jobs remain in \"N\" status and no rules are created."
+msgstr "Изгледа да можда постоји проблем са Вордпрес cron-ом (заказивањем задатака). Погледајте <a href=\"https://blog.futtta.be/2023/03/17/how-to-fix-autoptimize-critical-css-cron-issue/\" target=\"_blank\">ЧПП</a> или податке у упутствима за ред чекања задатака ако сви задаци остану у стању \"N\" и не праве се правила."
+
+#: classes/autoptimizeCriticalCSSSettings.php:157
+msgid "Could not create the required directory. Make sure the webserver can write to the wp-content/uploads directory."
+msgstr "Није могуће направити потребни директоријум. Уверите се да веб сервер може да уписује у директоријум wp-content/uploads."
+
+#: classes/autoptimizeExtra.php:616
+msgid "Comma-separated list with full URL's of to to-be-preloaded resources. To be used sparingly!"
+msgstr "Списак пуних адреса ресурса за унапред учитавање, раздвојених запетама. Користите умерено!"
+
+#: classes/autoptimizeExtra.php:614
+msgid "Preload specific requests (advanced users)"
+msgstr "Унапред учитавај одређене захтеве (напредни корисници)"
+
+#. translators: "display:swap" should remain untranslated, will be shown in
+#. code tags.
+#: classes/autoptimizeExtra.php:573 classes/autoptimizeExtra.php:575
+msgid "includes %1$sdisplay:swap%2$s."
+msgstr "обухвата %1$sdisplay:swap%2$s."
+
+#: classes/autoptimizeCriticalCSSSettings.php:59
+#: classes/autoptimizeCriticalCSSSettings.php:131
+#: classes/critcss-inc/admin_settings_explain.php:15
+msgid "Critical CSS"
+msgstr "Кључни CSS"
+
+#: classes/autoptimizeConfig.php:479
+msgid "By default Autoptimize is also active for logged-on editors/ administrators, uncheck this option if you don't want Autoptimize to optimize when logged in e.g. to use a page builder."
+msgstr "Autoptimize је подразумевано активан и за пријављене уреднике/ администраторе, одштиклирајте ову могућност ако не желите да Autoptimize оптимизује док сте пријављени, нпр. ради коришћења градитеља страница."
+
+#: classes/autoptimizeConfig.php:477
+msgid "Also optimize for logged in editors/ administrators?"
+msgstr "Оптимизовати и за пријављене уреднике/ администраторе?"
+
+#: classes/autoptimizeConfig.php:332
+msgid "Paste the above the fold CSS here. You can leave this empty when using the automated Critical CSS integration."
+msgstr "Овде убаците CSS изнад прелома. Ово можете оставити празно када користите самостално спајање са Critical CSS."
+
+#: classes/autoptimizeConfig.php:343
+msgid "Important: excluded non-minified files are still minified by Autoptimize unless that option under \"misc\" is disabled."
+msgstr "Важно: изузете несмањене датотеке Autoptimize и даље смањује осим ако та могућност у \"misc\" није искључена."
+
+#: classes/autoptimizeConfig.php:212
+msgid "Enable Autoptimize configuration per site."
+msgstr "Укључи подешавање Autoptimize-а по сајту."
+
+#: classes/autoptimizeConfig.php:207
+msgid "Multisite Options"
+msgstr "Могућности мреже сајтова"
+
+#: classes/autoptimizeConfig.php:210
+msgid "Enable site configuration?"
+msgstr "Укључити подешавање сајта?"
+
+#: classes/autoptimizeConfig.php:96
+msgid "Autoptimize is enabled and configured on a WordPress network level. Please contact your network administrator if you need Autoptimize settings changed."
+msgstr "Autoptimize је укључен и подешен на нивоу Вордпрес мреже. Обратите се администратору мреже ако треба да се промене подешавања Autoptimize-а."
+
+#. translators: "check the documentation here" will appear in a "a href".
+#: classes/autoptimizeImages.php:1505
+msgid "It seems ShortPixel image optimization is not able to fetch images from your site, %1$scheck the documentation here%2$s for more information"
+msgstr "Изгледа да ShortPixel оптимизација слика не може да преузме слике са вашег сајта, %1$sпогледајте документацију овде%2$s за више података"
+
+#: classes/autoptimizeImages.php:1368
+msgid "Only works for websites and images that are publicly available."
+msgstr "Ради само за сајтове и слике који су јавно доступни."
+
+#: classes/autoptimizeConfig.php:977
+msgid "JS, CSS  &amp; HTML"
+msgstr "JS, CSS  &amp; HTML"
+
+#: classes/autoptimizeConfig.php:465
+msgid "When aggregating JS or CSS, excluded files that are not minified (based on filename) are by default minified by Autoptimize despite being excluded. Uncheck this option if anything breaks despite excluding."
+msgstr "При спајању JS-а или CSS-а, изузете датотеке које нису смањене (на основу имена датотеке) Autoptimize подразумевано смањује иако су изузете. Одштиклирајте ову могућност ако се нешто поквари упркос изузимању."
+
+#: classes/autoptimizeConfig.php:463
+msgid "Minify excluded CSS and JS files?"
+msgstr "Смањити изузете CSS и JS датотеке?"
+
+#: classes/autoptimizeImages.php:1445
+msgid "Comma-separated list of to be excluded image classes or filenames."
+msgstr "Списак класа слика или имена датотека за изузимање, раздвојених запетама."
+
+#: classes/autoptimizeImages.php:1443
+msgid "Lazy-load exclusions"
+msgstr "Изузеци од лењог учитавања"
+
+#: classes/autoptimizeImages.php:1439
+msgid "Image lazy-loading will delay the loading of non-visible images to allow the browser to optimally load all resources for the \"above the fold\"-page first."
+msgstr "Лењо учитавање слика одложиће учитавање невидљивих слика да би прегледач прво оптимално учитао све ресурсе за део странице \"изнад прелома\"."
+
+#: classes/autoptimizeImages.php:1437
+msgid "Lazy-load images?"
+msgstr "Лењо учитавати слике?"
+
+#: classes/autoptimizeImages.php:1414
+msgid "Load AVIF in supported browsers?"
+msgstr "Учитавати AVIF у подржаним прегледачима?"
+
+#: classes/autoptimizeImages.php:1328
+msgid "Image optimization"
+msgstr "Оптимизација слика"
+
+#. translators: "disable  Jetpack's site accelerator for images" will appear in
+#. a "a href" linking to the jetpack settings page.
+#: classes/autoptimizeImages.php:1322
+msgid "Please %1$sdisable Jetpack's site accelerator for images%2$s to be able to use Autoptomize's advanced image optimization features below."
+msgstr "%1$sИскључите Jetpack-ов убрзивач сајта за слике%2$s да бисте могли да користите напредне функције оптимизације слика Autoptimize-а испод."
+
+#: classes/autoptimizeImages.php:1267 classes/autoptimizeImages.php:1292
+msgid "Images"
+msgstr "Слике"
+
+#. Description of the plugin
+#: autoptimize.php
+msgid "Makes your site faster by optimizing CSS, JS, Images, Google fonts and more."
+msgstr "Убрзава ваш сајт оптимизацијом CSS-а, JS-а, слика, Google словних ликова и још много тога."
+
+#: classes/autoptimizeImages.php:1524
+msgid "based on previously fetched data"
+msgstr "на основу претходно преузетих података"
+
+#: classes/autoptimizeImages.php:1522
+msgid "based on status at "
+msgstr "на основу стања у "
+
+#. Translators: the URL added points to the Autopmize Extra settings.
+#: classes/autoptimizeMain.php:775
+msgid "Did you know that Autoptimize offers on-the-fly image optimization (with support for WebP and AVIF) and CDN via ShortPixel? Check out the %1$sAutoptimize Image settings%2$s to enable this option."
+msgstr "Да ли сте знали да Autoptimize нуди оптимизацију слика у ходу (уз подршку за WebP и AVIF) и CDN преко ShortPixel-а? Погледајте %1$sAutoptimize подешавања слика%2$s да бисте укључили ову могућност."
+
+#. translators: link points Async Javascript settings page.
+#: classes/autoptimizeExtra.php:625
+msgid "You have \"Async JavaScript\" installed, %1$sconfiguration of async javascript is best done there%2$s."
+msgstr "Имате постављен \"Async JavaScript\", %1$sподешавање асинхроног javascript-а најбоље је урадити тамо%2$s."
+
+#. translators: link points to shortpixel image test page.
+#: classes/autoptimizeImages.php:1404
+msgid "You can %1$stest compression levels here%2$s."
+msgstr "Можете %1$sтестирати нивое сажимања овде%2$s."
+
+#. translators: links points to shortpixel TOS & Privacy Policy.
+#: classes/autoptimizeImages.php:1370
+msgid "Usage of this feature is subject to Shortpixel's %1$sTerms of Use%2$s and %3$sPrivacy policy%4$s."
+msgstr "Коришћење ове функције подлеже Shortpixel %1$sусловима коришћења%2$s и %3$sполитици приватности%4$s."
+
+#: classes/autoptimizeImages.php:1382
+msgid "Image Optimization quality"
+msgstr "Квалитет оптимизације слика"
+
+#: classes/autoptimizeImages.php:1359
+msgid "For a limited time only, this service is offered free for all Autoptimize users, %1$sdon't miss the chance to test it%2$s and see how much it could improve your site's speed."
+msgstr "Само ограничено време ова услуга је бесплатна за све кориснике Autoptimize-а, %1$sне пропустите прилику да је испробате%2$s и видите колико може да побољша брзину вашег сајта."
+
+#: classes/autoptimizeImages.php:1354
+msgid "Shortpixel status: "
+msgstr "Shortpixel стање: "
+
+#. translators: "display:swap" should remain untranslated, will be shown in
+#. code tags.
+#: classes/autoptimizeExtra.php:575
+msgid "Combine and link deferred in head (fonts load late, but are not render-blocking)"
+msgstr "Спој и повежи одложено у head (словни ликови се учитавају касно, али не блокирају приказ)"
+
+#: classes/autoptimizeImages.php:1314
+msgid "The image optimization service is launching, but not yet available for this domain, it should become available in the next couple of days."
+msgstr "Услуга оптимизације слика се покреће, али још није доступна за овај домен, требало би да постане доступна у наредних неколико дана."
+
+#. translators: "display:swap" should remain untranslated, will be shown in
+#. code tags.
+#: classes/autoptimizeExtra.php:573
+msgid "Combine and link in head (fonts load fast but are render-blocking)"
+msgstr "Спој и повежи у head (словни ликови се учитавају брзо, али блокирају приказ)"
+
+#: classes/autoptimizeExtra.php:558
+msgid "Most of below Extra optimizations require at least one of HTML, JS, CSS or Image autoptimizations being active."
+msgstr "Већина додатних оптимизација испод захтева да бар једна од HTML, JS, CSS или оптимизација слика буде активна."
+
+#. translators: "Autoptimize support forum" will appear in a "a href".
+#: classes/autoptimizeImages.php:1307
+msgid "The image optimization service is currently down, image optimization will be skipped until further notice. Check the %1$sAutoptimize support forum%2$s for more info."
+msgstr "Услуга оптимизације слика тренутно не ради, оптимизација слика биће прескакана до даљег. Погледајте %1$sAutoptimize форум подршке%2$s за више података."
+
+#. translators: "log in to check your account" will appear in a "a href".
+#: classes/autoptimizeImages.php:1509
+msgid "Your ShortPixel image optimization and CDN quota are in good shape, %1$slog in to check your account%2$s."
+msgstr "Ваша квота ShortPixel оптимизације слика и CDN-а је у добром стању, %1$sпријавите се да бисте проверили налог%2$s."
+
+#: classes/autoptimizeConfig.php:294
+msgid "Aggregate all linked CSS-files? If this option is off, the individual CSS-files will remain in place but will be minified."
+msgstr "Спојити све повезане CSS датотеке? Ако је ова могућност искључена, појединачне CSS датотеке остаће на месту, али ће бити смањене."
+
+#: classes/autoptimizeConfig.php:228
+msgid "Aggregate JS-files?"
+msgstr "Спојити JS датотеке?"
+
+#: classes/autoptimizeConfig.php:292
+msgid "Aggregate CSS-files?"
+msgstr "Спојити CSS датотеке?"
+
+#: autoptimize.php:33
+msgid "Autoptimize requires PHP 5.6 (or higher) to function properly. Please upgrade PHP. The Plugin has been auto-deactivated."
+msgstr "Autoptimize захтева PHP 5.6 (или новији) да би исправно радио. Надоградите PHP. Додатак је самостално искључен."
+
+#: classes/autoptimizePartners.php:84
+msgid "More info"
+msgstr "Више података"
+
+#: classes/autoptimizeExtra.php:647
+msgid "Click here to configure it."
+msgstr "Притисните овде да бисте га подесили."
+
+#. translators: %s will be replaced by a link to "wp youtube lyte" plugin.
+#: classes/autoptimizeExtra.php:650
+msgid "%s allows you to “lazy load” your videos, by inserting responsive “Lite YouTube Embeds\". "
+msgstr "%s вам омогућава да „лењо учитавате“ видео записе убацивањем прилагодљивих „Lite YouTube Embeds\". "
+
+#: classes/autoptimizeExtra.php:645
+msgid "Great, you have WP YouTube Lyte installed."
+msgstr "Одлично, имате постављен WP YouTube Lyte."
+
+#: classes/autoptimizeExtra.php:641
+msgid "Optimize YouTube videos"
+msgstr "Оптимизуј YouTube видео записе"
+
+#: classes/autoptimizeExtra.php:635 classes/autoptimizeExtra.php:652
+msgid "Click here to install and activate it."
+msgstr "Притисните овде да бисте га поставили и укључили."
+
+#. translators: %s will be replaced by a link to the "async javascript" plugin.
+#: classes/autoptimizeExtra.php:633
+msgid "Configuration of async javascript is easier and more flexible using the %s plugin."
+msgstr "Подешавање асинхроног javascript-а лакше је и прилагодљивије помоћу додатка %s."
+
+#: classes/autoptimizeExtra.php:530 classes/autoptimizeExtra.php:552
+msgid "Extra"
+msgstr "Додатно"
+
+#: classes/autoptimizeExtra.php:631
+msgid "Comma-separated list of local or 3rd party JS-files that should loaded with the %1$sasync%2$s flag. JS-files from your own site will be automatically excluded if added here. "
+msgstr "Списак локалних JS датотека или JS датотека трећих страна, раздвојених запетама, које треба учитавати уз ознаку %1$sasync%2$s. JS датотеке са вашег сајта биће самостално изузете ако се овде додају. "
+
+#: classes/autoptimizeExtra.php:603
+msgid "Preconnect to 3rd party domains (advanced users)"
+msgstr "Унапред се повежи са доменима трећих страна (напредни корисници)"
+
+#. translators: just a code tag around "ver" which is the parameter added to
+#. CSS/ JS URL's by wordpress.
+#: classes/autoptimizeExtra.php:591
+msgid "Removing query strings (or more specifically the %1$sver%2$s parameter) will not improve load time, but might improve performance scores."
+msgstr "Уклањање ниски упита (тачније параметра %1$sver%2$s) неће побољшати време учитавања, али може побољшати оцене перформанси."
+
+#: classes/autoptimizeExtra.php:570
+msgid "Leave as is"
+msgstr "Остави како јесте"
+
+#: classes/autoptimizeExtra.php:568
+msgid "Google Fonts"
+msgstr "Google словни ликови"
+
+#: classes/autoptimizeExtra.php:586
+msgid "Remove query strings from static resources"
+msgstr "Уклони ниске упита из статичних ресурса"
+
+#: classes/autoptimizeExtra.php:580
+msgid "Remove emojis"
+msgstr "Уклони емоџије"
+
+#: classes/autoptimizeExtra.php:565
+msgid "The following settings can improve your site's performance even more."
+msgstr "Следећа подешавања могу још више побољшати перформансе вашег сајта."
 
 #: classes/autoptimizeExtra.php:564
-msgid "Remove query strings from static resources"
-msgstr "Уклањањe низа упита статичних resursa"
-
-#: classes/autoptimizeExtra.php:560
-msgid "Removes WordPress' core emojis' inline CSS, inline JavaScript, and an otherwise un-autoptimized JavaScript file."
-msgstr "Уклањање Вордпресових ”системских емотикона” инлајн CSS, инлајн JavaScript и других неоптимизованих JavaScript датотека."
-
-#: classes/autoptimizeExtra.php:543
-msgid "The following settings can improve your site's performance even more."
-msgstr "Подешавања у наставку могу побољшати перформансе вашег веб сајта још више."
-
-#: classes/autoptimizeExtra.php:542
 msgid "Extra Auto-Optimizations"
-msgstr "Додатна Ауто-Подешавања"
-
-#: classes/autoptimizeCLI.php:30
-msgid "Cache flushed."
-msgstr "Кеш испражњен."
+msgstr "Додатне самосталне оптимизације"
 
 #: classes/autoptimizeCLI.php:28
 msgid "Flushing the cache..."
-msgstr "Пражњење кеша..."
+msgstr "Чишћење кеша..."
 
-#: classes/autoptimizeExtra.php:588
-msgid "Async Javascript-files <em>(advanced users)</em>"
-msgstr "Async Javascript-датотека <em>(напредни корисници)</em>"
+#: classes/autoptimizeCLI.php:30
+msgid "Cache flushed."
+msgstr "Кеш је очишћен."
 
-#: classes/autoptimizeExtra.php:578
-msgid "Add 3rd party domains you want the browser to <a href=\"https://www.keycdn.com/support/preconnect/#primary\" target=\"_blank\">preconnect</a> to, separated by comma's. Make sure to include the correct protocol (HTTP or HTTPS)."
-msgstr "Додавање 3rd party домена на које желите да се прегледач <a href=\"https://www.keycdn.com/support/preconnect/#primary\" target=\"_blank\">повеже</a> раздвојено зарезима. Будите сигурни да означите исправан протокол (HTTP или HTTPS)."
+#: classes/autoptimizeExtra.php:582
+msgid "Removes WordPress' core emojis' inline CSS, inline JavaScript, and an otherwise un-autoptimized JavaScript file."
+msgstr "Уклања уметнути CSS, уметнути JavaScript и иначе необрађену JavaScript датотеку емоџија из језгра Вордпреса."
 
-#: classes/autoptimizeExtra.php:554
-msgid "Combine and load fonts asynchronously with <a href=\"https://github.com/typekit/webfontloader#readme\" target=\"_blank\">webfont.js</a>"
-msgstr "Комбиновање и учитавање фонтова асинхроно уз <a href=\"https://github.com/typekit/webfontloader#readme\" target=\"_blank\">webfont.js</a>"
-
-#: classes/autoptimizeConfig.php:268 classes/autoptimizeConfig.php:317
-#: classes/autoptimizeExtra.php:554
+#: classes/autoptimizeConfig.php:262 classes/autoptimizeConfig.php:311
+#: classes/autoptimizeExtra.php:576
 msgid "(deprecated)"
 msgstr "(застарело)"
 
-#: classes/autoptimizeConfig.php:526
-msgid "Need help? <a href='https://wordpress.org/plugins/autoptimize/faq/'>Check out the FAQ here</a>."
-msgstr "Требате помоћ? <a href='https://wordpress.org/plugins/autoptimize/faq/'>Прочитајте нека од најчешће постављаних питања овде</a>."
-
-#: classes/autoptimizeConfig.php:475
-msgid "By default Autoptimize is also active on your shop's cart/ checkout, uncheck not to optimize those."
-msgstr "Autoptimize је подразумевано активан и на вашим страницама корпе/благајне, искључите ову опцију уколико не желите да их оптимизујете."
-
-#: classes/autoptimizeConfig.php:473
-msgid "Also optimize shop cart/ checkout?"
-msgstr "Оптимизација страница корпе/благајне?"
-
-#: classes/autoptimizeConfig.php:441
+#: classes/autoptimizeConfig.php:449
 msgid "Misc Options"
-msgstr "Остале могућности"
+msgstr "Разне могућности"
+
+#. translators: links to the Autoptimize settings page.
+#: classes/autoptimizeToolbar.php:152
+msgid "Your Autoptimize cache might not have been purged successfully, please check on the %1$sAutoptimize settings page%2$s."
+msgstr "Кеш Autoptimize-а можда није успешно очишћен, проверите на %1$sстраници подешавања Autoptimize-а%2$s."
+
+#. translators: Kilobytes + timestamp shown.
+#: classes/autoptimizeConfig.php:440
+msgid "%1$s files, totaling %2$s (calculated at %3$s)"
+msgstr "%1$s датотека, укупно %2$s (израчунато %3$s)"
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
-msgid "https://autoptimize.com/"
-msgstr "http://autoptimize.com/"
+#: autoptimize.php
+msgid "https://autoptimize.com/pro/"
+msgstr "https://autoptimize.com/pro/"
+
+#: classes/autoptimizeConfig.php:485
+msgid "Also optimize shop cart/ checkout?"
+msgstr "Оптимизовати и корпу/ плаћање продавнице?"
+
+#: classes/autoptimizeConfig.php:487
+msgid "By default Autoptimize is also active on your shop's cart/ checkout, uncheck not to optimize those."
+msgstr "Autoptimize је подразумевано активан и на корпи/ плаћању ваше продавнице, одштиклирајте да их не бисте оптимизовали."
 
 #. Translators: %s is the cache directory location.
-#: classes/autoptimizeMain.php:738
+#: classes/autoptimizeMain.php:753
 msgid "Autoptimize cannot write to the cache directory (%s), please fix to enable CSS/ JS optimization!"
-msgstr "Autoptimize не може да уписује у кеш директоријум (%s), молимо решите овај проблем како би омогућили CSS/ JS оптимизацију!"
-
-#: classes/autoptimizePartners.php:56
-msgid "Have a look at <a href=\"http://optimizingmatters.com/\">optimizingmatters.com</a> for Autoptimize power-ups!"
-msgstr "Посетите <a href=\"http://optimizingmatters.com/\">optimizingmatters.com</a> за још више Autoptimize додатака!"
-
-#: classes/autoptimizePartners.php:146
-msgid "These Autoptimize power-ups and related services will improve your site's performance even more!"
-msgstr "Ови Autoptimize додаци и остали сервиси ће побољшати перформансе вашег веб сајта још више!"
+msgstr "Autoptimize не може да уписује у директоријум кеша (%s), решите ово да бисте укључили CSS/ JS оптимизацију!"
 
 #: classes/autoptimizePartners.php:40 classes/autoptimizePartners.php:142
 msgid "Optimize More!"
 msgstr "Оптимизујте још више!"
-
-#: classes/autoptimizeCacheChecker.php:66
-msgid "Autoptimize cache size warning"
-msgstr "Упозорење величине Autoptimize кеша"
-
-#. translators: links to the Autoptimize settings page.
-#: classes/autoptimizeToolbar.php:153
-msgid "Dismiss this notice."
-msgstr "Одбаците ово обавештење."
 
 #: classes/autoptimizeToolbar.php:107
 msgid "Files"
@@ -127,205 +1457,220 @@ msgstr "Датотеке"
 msgid "Size"
 msgstr "Величина"
 
+#: classes/autoptimizePartners.php:146
+msgid "These Autoptimize power-ups and related services will improve your site's performance even more!"
+msgstr "Ова Autoptimize проширења и повезане услуге додатно ће побољшати перформансе вашег сајта!"
+
 #: classes/autoptimizeCacheChecker.php:67
 msgid "Autoptimize's cache size is getting big, consider purging the cache. Have a look at https://wordpress.org/plugins/autoptimize/faq/ to see how you can keep the cache size under control."
-msgstr "Autoptimize кеш постаје превелик, размислите о чишћењу кеша. Посетите https://wordpress.org/plugins/autoptimize/faq/ како би сазнали више о контролисању величине кеша."
+msgstr "Величина кеша Autoptimize-а постаје велика, размислите о чишћењу кеша. Погледајте https://wordpress.org/plugins/autoptimize/faq/ да бисте видели како да величину кеша држите под контролом."
 
-#: classes/autoptimizeConfig.php:380
+#: classes/autoptimizeCacheChecker.php:66
+msgid "Autoptimize cache size warning"
+msgstr "Упозорење о величини кеша Autoptimize-а"
+
+#: classes/autoptimizeToolbar.php:153
+msgid "Dismiss this notice."
+msgstr "Одбаци ово обавештење."
+
+#: classes/autoptimizeConfig.php:388
 msgid "Enable this if you want HTML comments to remain in the page."
-msgstr "Укључите ову опцију уколико желите да остану HTML коментари на страници."
-
-#: classes/autoptimizeConfig.php:936
-msgid "No items"
-msgstr "Нема елемената"
-
-#: classes/autoptimizeConfig.php:239
-msgid "Also aggregate inline JS?"
-msgstr "Агрегација инлајн JS?"
-
-#: classes/autoptimizeConfig.php:303
-msgid "Also aggregate inline CSS?"
-msgstr "Агрегација и инлајн CSS-а?"
-
-#: classes/autoptimizeConfig.php:305
-msgid "Check this option for Autoptimize to also aggregate CSS in the HTML."
-msgstr "Укључите ову опцију уколико желите да Autoptimize одради агрегацију CSS-а у HTML-у."
-
-#: classes/autoptimizeConfig.php:527
-msgid "Happy with Autoptimize?"
-msgstr "Задовољни сте са Autoptimize?"
-
-#: classes/autoptimizeConfig.php:527
-msgid "Try my other plugins!"
-msgstr "Испробајте и моје друге додатке!"
+msgstr "Укључите ово ако желите да HTML коментари остану на страници."
 
 #. translators: the variable contains a date.
-#: classes/autoptimizeConfig.php:942
+#: classes/autoptimizeConfig.php:963
 msgid "Posted %s"
 msgstr "Објављено %s"
 
-#: classes/autoptimizeExtra.php:549
-msgid "Remove Google Fonts"
-msgstr "Избаците Гугл Фонтове?"
+#: classes/autoptimizeConfig.php:957
+msgid "No items"
+msgstr "Нема ставки"
 
-#: classes/autoptimizeConfig.php:418
+#: classes/autoptimizeConfig.php:233
+msgid "Also aggregate inline JS?"
+msgstr "Спојити и уметнути JS?"
+
+#: classes/autoptimizeConfig.php:297
+msgid "Also aggregate inline CSS?"
+msgstr "Спојити и уметнути CSS?"
+
+#: classes/autoptimizeConfig.php:542
+msgid "Happy with Autoptimize?"
+msgstr "Задовољни сте Autoptimize-ом?"
+
+#: classes/autoptimizeConfig.php:542
+msgid "Try my other plugins!"
+msgstr "Испробајте моје друге додатке!"
+
+#: classes/autoptimizeExtra.php:571
+msgid "Remove Google Fonts"
+msgstr "Уклони Google словне ликове"
+
+#: classes/autoptimizeConfig.php:299
+msgid "Check this option for Autoptimize to also aggregate CSS in the HTML."
+msgstr "Штиклирајте ову могућност да би Autoptimize спојио и CSS у HTML-у."
+
+#: classes/autoptimizeConfig.php:426
 msgid "No"
 msgstr "Не"
 
-#: classes/autoptimizeConfig.php:94 classes/autoptimizeConfig.php:200
-#: classes/autoptimizeCriticalCSSSettings.php:128
-#: classes/autoptimizeExtra.php:532 classes/autoptimizeImages.php:1195
-#: classes/autoptimizePartners.php:144
+#: classes/autoptimizeConfig.php:94 classes/autoptimizeConfig.php:194
+#: classes/autoptimizeCriticalCSSSettings.php:135
+#: classes/autoptimizeExtra.php:554 classes/autoptimizeImages.php:1294
+#: classes/autoptimizePartners.php:144 classes/autoptimizeProTab.php:83
 msgid "Autoptimize Settings"
 msgstr "Autoptimize подешавања"
 
-#: classes/autoptimizeConfig.php:366
-msgid "HTML Options"
-msgstr "HTML Опције"
-
-#: classes/autoptimizeConfig.php:378
-msgid "Keep HTML comments?"
-msgstr "Задржите HTML коментаре?"
-
-#: classes/autoptimizeConfig.php:244
-msgid "Force JavaScript in &lt;head&gt;?"
-msgstr "Приморај JavaScript у &lt;head&gt;?"
-
-#: classes/autoptimizeConfig.php:291
-msgid "CSS Options"
-msgstr "CSS Опције"
-
-#: classes/autoptimizeConfig.php:308
-msgid "Generate data: URIs for images?"
-msgstr "Генерисање података: URI за слике?"
-
-#: classes/autoptimizeConfig.php:501
-#: classes/autoptimizeCriticalCSSSettings.php:342
-#: classes/autoptimizeExtra.php:626 classes/autoptimizeImages.php:1338
-msgid "Save Changes"
-msgstr "Сачувајте измене"
-
-#: classes/autoptimizeConfig.php:789 classes/autoptimizeConfig.php:795
-msgid "Settings"
-msgstr "Подешавања"
-
-#: classes/autoptimizeConfig.php:294
-msgid "Optimize CSS Code?"
-msgstr "Оптимизација CSS кода?"
-
-#: classes/autoptimizeConfig.php:369
-msgid "Optimize HTML Code?"
-msgstr "Оптимизација HTML кода?"
-
-#: classes/autoptimizeConfig.php:227
-msgid "JavaScript Options"
-msgstr "JavaScript опције"
-
-#: classes/autoptimizeConfig.php:230
-msgid "Optimize JavaScript Code?"
-msgstr "Оптимизација JavaScript кода?"
-
-#: classes/autoptimizeConfig.php:267
-msgid "Look for scripts only in &lt;head&gt;?"
-msgstr "Тражење скрипте само у &lt;head&gt;?"
-
-#: classes/autoptimizeConfig.php:276
-msgid "Exclude scripts from Autoptimize:"
-msgstr "Изузети скрипте из Autoptimize:"
-
 #. Author of the plugin
+#: autoptimize.php
 msgid "Frank Goossens (futtta)"
 msgstr "Frank Goossens (futtta)"
 
-#: classes/autoptimizeConfig.php:720 classes/autoptimizeConfig.php:723
-#: classes/autoptimizeConfig.php:726
+#: classes/autoptimizeConfig.php:741 classes/autoptimizeConfig.php:744
+#: classes/autoptimizeConfig.php:747
 msgid "Autoptimize Options"
 msgstr "Autoptimize могућности"
 
-#: classes/autoptimizeConfig.php:542
+#: classes/autoptimizeConfig.php:557
 msgid "Do not donate for this plugin!"
 msgstr "Немојте да донирате за овај додатак!"
 
 #. Plugin Name of the plugin
-#: classes/autoptimizeCacheChecker.php:110 classes/autoptimizeConfig.php:717
-#: classes/autoptimizeToolbar.php:82
+#: autoptimize.php classes/autoptimizeCacheChecker.php:111
+#: classes/autoptimizeConfig.php:732 classes/autoptimizeToolbar.php:82
 msgid "Autoptimize"
 msgstr "Autoptimize"
 
-#: classes/autoptimizeConfig.php:502
+#: classes/autoptimizeConfig.php:512
 msgid "Save Changes and Empty Cache"
 msgstr "Сачувај измене и испразни кеш"
 
-#: classes/autoptimizeConfig.php:446
-msgid "By default files saved are static css/js, uncheck this option if your webserver doesn't properly handle the compression and expiry."
-msgstr "Подразумевано је да су сачувани фајлови статични css/js, онемогућите ову могућност уколико ваш веб сервер не подноси исправно компресију и време истицања."
-
-#: classes/autoptimizeConfig.php:444
-msgid "Save aggregated script/css as static files?"
-msgstr "Сачувајте накупљене script/css као статичне датотеке?"
-
-#: classes/autoptimizeConfig.php:421
+#: classes/autoptimizeConfig.php:429
 msgid "Cached styles and scripts"
 msgstr "Кеширани стилови и скрипте"
 
-#: classes/autoptimizeConfig.php:418
+#: classes/autoptimizeConfig.php:426
 msgid "Yes"
 msgstr "Да"
 
-#: classes/autoptimizeConfig.php:417
-msgid "Can we write?"
-msgstr "Да ли можемо писати?"
-
-#: classes/autoptimizeConfig.php:413
-msgid "Cache folder"
-msgstr "Кеш фасцикла"
-
-#: classes/autoptimizeConfig.php:410
-msgid "Cache Info"
-msgstr "Кеш информације"
-
-#: classes/autoptimizeConfig.php:389
-msgid "CDN Base URL"
-msgstr "CDN базни URL"
-
-#: classes/autoptimizeConfig.php:386
+#: classes/autoptimizeConfig.php:394
 msgid "CDN Options"
 msgstr "CDN могућности"
 
-#: classes/autoptimizeConfig.php:349
+#: classes/autoptimizeConfig.php:221
+msgid "JavaScript Options"
+msgstr "JavaScript могућности"
+
+#: classes/autoptimizeConfig.php:511
+#: classes/autoptimizeCriticalCSSSettings.php:346
+#: classes/autoptimizeExtra.php:658 classes/autoptimizeImages.php:1455
+msgid "Save Changes"
+msgstr "Сачувај измене"
+
+#: classes/autoptimizeConfig.php:322
+msgid "Inline \"above the fold CSS\" while loading the main autoptimized CSS only after page load. <a href=\"https://wordpress.org/plugins/autoptimize/faq/\" target=\"_blank\">Check the FAQ</a> for more info."
+msgstr "Уметни \"CSS изнад прелома\", а главни CSS који је обрадио Autoptimize учитавај тек после учитавања странице. <a href=\"https://wordpress.org/plugins/autoptimize/faq/\" target=\"_blank\">Погледајте ЧПП</a> за више података."
+
+#: classes/autoptimizeConfig.php:304
+msgid "Enable this to include small background images in the CSS itself instead of as separate downloads."
+msgstr "Укључите ово да бисте мале позадинске слике укључили у сам CSS уместо као засебна преузимања."
+
+#: classes/autoptimizeMain.php:768
+msgid "Autoptimize has just been updated. Please %1$stest your site now%2$s and adapt Autoptimize config if needed."
+msgstr "Autoptimize је управо ажуриран. %1$sТестирајте свој сајт одмах%2$s и по потреби прилагодите подешавања Autoptimize-а."
+
+#: classes/autoptimizeConfig.php:386
+msgid "Keep HTML comments?"
+msgstr "Задржати HTML коментаре?"
+
+#: classes/autoptimizeConfig.php:238
+msgid "Force JavaScript in &lt;head&gt;?"
+msgstr "Принудно ставити JavaScript у &lt;head&gt;?"
+
+#: classes/autoptimizeConfig.php:302
+msgid "Generate data: URIs for images?"
+msgstr "Правити data: URI за слике?"
+
+#: classes/autoptimizeConfig.php:288
+msgid "Optimize CSS Code?"
+msgstr "Оптимизовати CSS кôд?"
+
+#: classes/autoptimizeConfig.php:377
+msgid "Optimize HTML Code?"
+msgstr "Оптимизовати HTML кôд?"
+
+#: classes/autoptimizeConfig.php:224
+msgid "Optimize JavaScript Code?"
+msgstr "Оптимизовати JavaScript кôд?"
+
+#: classes/autoptimizeConfig.php:261
+msgid "Look for scripts only in &lt;head&gt;?"
+msgstr "Тражити скрипте само у &lt;head&gt;?"
+
+#: classes/autoptimizeConfig.php:270
+msgid "Exclude scripts from Autoptimize:"
+msgstr "Изузми скрипте из Autoptimize-а:"
+
+#: classes/autoptimizeConfig.php:454
+msgid "By default files saved are static css/js, uncheck this option if your webserver doesn't properly handle the compression and expiry."
+msgstr "Сачуване датотеке су подразумевано статични css/js, одштиклирајте ову могућност ако ваш веб сервер не рукује исправно сажимањем и истеком."
+
+#: classes/autoptimizeConfig.php:452
+msgid "Save aggregated script/css as static files?"
+msgstr "Сачувати спојене script/css као статичне датотеке?"
+
+#: classes/autoptimizeConfig.php:425
+msgid "Can we write?"
+msgstr "Можемо ли да уписујемо?"
+
+#: classes/autoptimizeConfig.php:418
+msgid "Cache Info"
+msgstr "Подаци о кешу"
+
+#: classes/autoptimizeConfig.php:421
+msgid "Cache folder"
+msgstr "Фасцикла кеша"
+
+#: classes/autoptimizeConfig.php:397
+msgid "CDN Base URL"
+msgstr "CDN основна адреса"
+
+#: classes/autoptimizeConfig.php:343
 msgid "A comma-separated list of CSS you want to exclude from being optimized."
-msgstr "CSS листа одвојена зарезима које желите да искључите из оптимизације."
+msgstr "Списак CSS-а раздвојен запетама који желите да изузмете из оптимизације."
 
-#: classes/autoptimizeConfig.php:346
+#: classes/autoptimizeConfig.php:340
 msgid "Exclude CSS from Autoptimize:"
-msgstr "Искључите CSS из Autoptimize"
+msgstr "Изузми CSS из Autoptimize-а:"
 
-#: classes/autoptimizeConfig.php:341
+#: classes/autoptimizeConfig.php:335
 msgid "Inline all CSS?"
-msgstr "Inline целокупног CSS?"
+msgstr "Уметнути цео CSS?"
 
-#: classes/autoptimizeConfig.php:321
+#: classes/autoptimizeConfig.php:315
 msgid "Don't autoptimize CSS outside the head-section. If the cache gets big, you might want to enable this."
-msgstr "Без оптимизације CSS који се налази изван head одељка. Уколико кеш постане превелик, размислите о омогућавању ове могућности."
-
-#: classes/autoptimizeConfig.php:316
-msgid "Look for styles only in &lt;head&gt;?"
-msgstr "Тражење стилова само у &lt;head&gt;?"
+msgstr "Не обрађуј CSS ван одељка head. Ако кеш постане велики, можда ћете желети да ово укључите."
 
 #: classes/autoptimizeConfig.php:310
-msgid "Enable this to include small background-images in the CSS itself instead of as separate downloads."
-msgstr "Омогућите како би укључили и мале позадинске слике у сам CSS уместо да се засебно скидају."
+msgid "Look for styles only in &lt;head&gt;?"
+msgstr "Тражити стилове само у &lt;head&gt;?"
 
-#: classes/autoptimizeConfig.php:249
+#: classes/autoptimizeConfig.php:243
 msgid "Add try-catch wrapping?"
-msgstr "Покушајте са кеш wrapping?"
+msgstr "Додати try-catch омотавање?"
 
-#: classes/autoptimizeConfig.php:272
+#: classes/autoptimizeConfig.php:266
 msgid "Mostly useful in combination with previous option when using jQuery-based templates, but might help keeping cache size under control."
-msgstr ""
-"Углавном корисно у комбинацији са претходном могућношћу, када се користе \n"
-" jQuery-based шаблони, може помоћи и код контроле величине кеша."
+msgstr "Углавном корисно у комбинацији са претходном могућношћу при коришћењу шаблона заснованих на jQuery-ју, али може помоћи и у држању величине кеша под контролом."
 
-#: classes/autoptimizeMain.php:752
-msgid "Autoptimize has just been updated. Please <strong>test your site now</strong> and adapt Autoptimize config if needed."
-msgstr "Autoptimize је ажуриран. Молимо вас да <strong>тестирате свој веб сајт</strong>  и измените Autoptimize подешавања уколико је потребно."
+#: classes/autoptimizeConfig.php:374
+msgid "HTML Options"
+msgstr "HTML могућности"
+
+#: classes/autoptimizeConfig.php:285
+msgid "CSS Options"
+msgstr "CSS могућности"
+
+#: classes/autoptimizeConfig.php:810 classes/autoptimizeConfig.php:816
+msgid "Settings"
+msgstr "Подешавања"

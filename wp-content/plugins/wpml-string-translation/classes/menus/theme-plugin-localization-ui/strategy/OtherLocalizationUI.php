@@ -4,21 +4,12 @@ namespace WPML\ST\ThemePluginLocalization;
 
 class OtherLocalizationUI implements \IWPML_Theme_Plugin_Localization_UI_Strategy {
 
-	/** @var \WPML_Localization */
 	private $localization;
 
-	/** @var \WPML\ST\TranslationFile\FilesToScanRepository */
 	private $filesToScanRepository;
 
-	/** @var string */
 	private $base_st_url;
 
-	/**
-	 * WPML_ST_Other_Localization_UI constructor.
-	 *
-	 * @param \WPML_Localization                             $localization
-	 * @param \WPML\ST\TranslationFile\FilesToScanRepository $filesToScanRepository
-	 */
 	public function __construct(
 		\WPML_Localization $localization,
 		\WPML\ST\TranslationFile\FilesToScanRepository $filesToScanRepository
@@ -28,9 +19,6 @@ class OtherLocalizationUI implements \IWPML_Theme_Plugin_Localization_UI_Strateg
 		$this->base_st_url           = admin_url( 'admin.php?page=' . WPML_ST_FOLDER . '/menu/string-translation.php' );
 	}
 
-	/**
-	 * @return array
-	 */
 	public function get_model() {
 		$filesToScanData = $this->filesToScanRepository->getFilesToScanData();
 		$renderSection   = in_array( 'WordPress', $filesToScanData['other'] );
@@ -40,11 +28,15 @@ class OtherLocalizationUI implements \IWPML_Theme_Plugin_Localization_UI_Strateg
 			'scan_button_label'  => __( 'Scan selected plugins for strings', 'wpml-string-translation' ),
 			'completed_title'    => __( 'Completely translated strings', 'wpml-string-translation' ),
 			'needs_update_title' => __( 'Strings in need of translation', 'wpml-string-translation' ),
+			/* translators: Name of the group on the Theme and plugins localization page that holds WordPress itself, as opposed to themes and plugins. */
 			'component'          => __( 'Core', 'wpml-string-translation' ),
+			/* translators: Column heading on the Theme and plugins localization page: the text domain, the short name a theme or plugin uses for its texts. */
 			'domain'             => __( 'Textdomain', 'wpml-string-translation' ),
+			/* translators: Link on the Theme and plugins localization page that shows the text domain of each theme or plugin. Verb, imperative, lower case in the source. */
 			'show_textdomains'   => __( 'show textdomains', 'wpml-string-translation' ),
+			/* translators: Link on the Theme and plugins localization page that hides the text domain of each theme or plugin. Verb, imperative, lower case in the source. */
 			'hide_textdomains'   => __( 'hide textdomains', 'wpml-string-translation' ),
-			'download_po'        => __( 'Download .po file', 'wpml_string_translation' ),
+			'download_po'        => __( 'Download .po file', 'wpml-string-translation' ),
 			'type'               => 'other',
 			'components'         => $this->get_components(),
 			'stats_id'           => 'wpml_plugin_scan_stats',
@@ -61,9 +53,6 @@ class OtherLocalizationUI implements \IWPML_Theme_Plugin_Localization_UI_Strateg
 		return $model;
 	}
 
-	/**
-	 * @return array
-	 */
 	private function get_components() {
 		$components = [];
 
@@ -86,7 +75,6 @@ class OtherLocalizationUI implements \IWPML_Theme_Plugin_Localization_UI_Strateg
 		return $components;
 	}
 
-	/** @return string */
 	public function get_template() {
 		return 'theme-plugin-localization-ui.twig';
 	}

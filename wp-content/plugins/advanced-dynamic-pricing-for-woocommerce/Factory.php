@@ -2,11 +2,22 @@
 
 namespace ADP;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Factory
 {
     const PROJECT_NAMESPACE = __NAMESPACE__;
     const BASE_VERSION_NAMESPACE = self::PROJECT_NAMESPACE . "\\BaseVersion";
     const PRO_VERSION_NAMESPACE = self::PROJECT_NAMESPACE . "\\ProVersion";
+
+    private static $forceBaseVersion = false;
+
+    public static function forceBaseVersion(bool $value)
+    {
+        self::$forceBaseVersion = $value;
+    }
 
     protected static function convertAlias($name)
     {
@@ -20,13 +31,16 @@ class Factory
      */
     public static function getClassName($name)
     {
+        static $paths= array();
+        if(isset($paths[$name])) return $paths[$name];
+
         $className    = self::BASE_VERSION_NAMESPACE . "\\" . self::convertAlias($name);
         $proClassName = self::PRO_VERSION_NAMESPACE . "\\" . self::convertAlias($name);
 
-        if (class_exists($proClassName)) {
+        if ( ! self::$forceBaseVersion && class_exists($proClassName)) {
             $className = $proClassName;
         }
-
+        $paths[$name] = $className;
         return $className;
     }
 
@@ -52,6 +66,7 @@ class Factory
         try {
             $class = new \ReflectionClass($className);
         } catch (\ReflectionException $e) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo $e->getMessage();
 
             return null;
@@ -83,14 +98,19 @@ class Factory
 
     public static function getClassNames($name)
     {
-        $result = [];
         $baseClassNames = self::getClassNamesInNameSpace(
             self::BASE_VERSION_NAMESPACE . "\\" . self::convertAlias($name)
         );
+
+        if (self::$forceBaseVersion) {
+            return $baseClassNames;
+        }
+
         $proClassNames = self::getClassNamesInNameSpace(
             self::PRO_VERSION_NAMESPACE . "\\" . self::convertAlias($name)
         );
 
+        $result = [];
         foreach ($baseClassNames as $className) {
             if (!in_array(
                 str_replace(self::BASE_VERSION_NAMESPACE, self::PRO_VERSION_NAMESPACE, $className),
@@ -112,4 +132,8 @@ class Factory
             return false;
         }
     }
+}
+
+if (!class_exists('\ADPFactory')) {
+    class_alias(__NAMESPACE__ . '\Factory', '\ADPFactory');
 }

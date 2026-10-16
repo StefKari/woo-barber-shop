@@ -1,5 +1,5 @@
 /* jslint browser: true, nomen: true, laxbreak: true */
-/* global WPML_core, ajaxurl, iclSaveForm, iclSaveForm_success_cb, jQuery, alert, confirm, icl_ajx_url, icl_ajx_saved, icl_ajxloaderimg, icl_default_mark, icl_ajx_error, fadeInAjxResp */
+/* global WPML_core, ajaxurl, iclSaveForm, iclSaveForm_success_cb, jQuery, alert, confirm, icl_ajx_url, icl_ajx_saved, icl_ajxloaderimg, icl_default_mark, icl_ajx_error, icl_ajx_domains_not_validated, icl_ajx_domains_duplicate, fadeInAjxResp */
 
 (function () {
   jQuery(function () {
@@ -11,7 +11,6 @@
     jQuery('#icl_cancel_default_button').click(doneEditingDefaultLanguage)
     jQuery('#icl_add_remove_button').click(showLanguagePicker)
     jQuery('#icl_cancel_language_selection').click(hideLanguagePicker)
-    jQuery('#icl_save_language_selection').click(saveLanguageSelection)
     jQuery('#icl_enabled_languages').find('input').prop('disabled', true)
     jQuery('#icl_save_language_negotiation_type').submit(iclSaveLanguageNegotiationType)
     jQuery('#icl_admin_language_options').submit(iclSaveForm)
@@ -35,7 +34,7 @@
 
     jQuery('input[name="show_on_root"]').change(iclToggleShowOnRoot)
     jQuery('#wpml_show_page_on_root_details').find('a').click(function () {
-      if (!jQuery('#wpml_show_on_root_page').hasClass('active')) {
+      if (!jQuery('#wpml_show_on_root_page').is(':checked')) {
         alert(jQuery('#wpml_show_page_on_root_x').html())
         return false
       }
@@ -51,10 +50,10 @@
 
     jQuery('#icl_promote_form').submit(iclSaveForm)
 
-    jQuery(':radio[name=icl_translation_option]').change(function () {
-      jQuery('#icl_enable_content_translation').prop('disabled', false)
-    })
-    jQuery('#icl_enable_content_translation, .icl_noenable_content_translation').click(iclEnableContentTranslation)
+    // wpmldev-7978: the `toggle_content_translation` wizard emitter was removed —
+    // no server-side handler for it has existed in the product for a long time
+    // (dead legacy `icl_ajx_action` branch; no UI renders
+    // #icl_enable_content_translation any more).
 
     jQuery(document).on('click', '#installer_registration_form :submit', function () {
       jQuery('#installer_registration_form').find('input[name=button_action]').val(jQuery(this).attr('name'))
@@ -64,14 +63,24 @@
       jQuery('#installer_recommendations_form').find('input[name=button_action]').val(jQuery(this).attr('name'))
     })
 
-    jQuery(document).on('click', '#sso_information', function (e) {
-      e.preventDefault()
-      jQuery('#language_per_domain_sso_description').dialog({
-        modal: true,
-        width: 'auto',
-        height: 'auto'
-      })
+    // Root-url and URL-format submit-button help tooltips share the common
+    // pointer-tooltip behavior (res/js/tooltip/tooltip.js).
+    WPMLCore.createHoverableTooltip({
+      trigger:      '.js-wpml-root-url-tooltip-open',
+      popover:      '.js-wpml-root-url-tooltip',
+      activeClass:  'js-wpml-root-url-active-tooltip',
+      pointerClass: 'js-wpml-root-url-tooltip wpml-ls-tooltip'
     })
+    WPMLCore.createHoverableTooltip({
+      trigger:      '.js-wpml-url-format-submit-button-tooltip-open',
+      popover:      '.js-wpml-url-format-submit-button-tooltip',
+      activeClass:  'js-wpml-url-format-submit-button-active-tooltip',
+      pointerClass: 'js-wpml-url-format-submit-button-tooltip wpml-ls-tooltip',
+      marginLeft:   '-25px'
+    })
+
+    checkLanguageDirectorySettings()
+    jQuery('#icl_use_directory_wrap').click(checkLanguageDirectorySettings)
   })
 
   function iclHandleToggle() {
@@ -178,52 +187,6 @@
     jQuery('#icl_change_default_button').fadeIn()
   }
 
-  function saveLanguageSelection() {
-    wpml_fadeIn('#icl_ajx_response', icl_ajxloaderimg)
-    const arr = jQuery('#icl_avail_languages_picker').find('ul input[type="checkbox"]');
-    const sel_lang = []
-    jQuery.each(arr, function () {
-      if (this.checked) {
-        sel_lang.push(this.value)
-      }
-    })
-    jQuery.ajax({
-      type: 'POST',
-      url: ajaxurl,
-      data: {
-        action: 'wpml_set_active_languages',
-        nonce: jQuery('#set_active_languages_nonce').val(),
-        languages: sel_lang
-      },
-      success: function (response) {
-        if (response.success) {
-          if (!response.data.noLanguages) {
-            wpml_fadeIn('#icl_ajx_response', icl_ajx_saved)
-            jQuery('#icl_enabled_languages').html(response.data.enabledLanguages)
-            location.href = WPML_core.sanitize(location.href).replace(/#[\w\W]*/, '')
-          } else {
-            wpml_fadeOut('#icl_ajx_response');
-            location.href = WPML_core.sanitize(location.href).replace(/(#|&)[\w\W]*/, '')
-          }
-        } else {
-          wpml_fadeIn('#icl_ajx_response', icl_ajx_error)
-          console.error(response);
-          location.href = WPML_core.sanitize(location.href).replace(/(#|&)[\w\W]*/, '')
-        }
-      },
-      error: function (response){
-        wpml_fadeIn('#icl_ajx_response', icl_ajx_error)
-        console.error(response);
-        setTimeout(()=>{
-          location.href = WPML_core.sanitize(location.href).replace(/(#|&)[\w\W]*/, '')
-        },3000)
-
-      }
-
-    })
-    hideLanguagePicker()
-  }
-
   function iclLntDomains() {
     let language_negotiation_type, icl_lnt_domains_box, icl_lnt_domains_options, icl_lnt_xdomain_options
     icl_lnt_domains_box = jQuery('#icl_lnt_domains_box')
@@ -237,8 +200,8 @@
       language_negotiation_type.prop('disabled', true)
       jQuery.ajax({
         type: 'POST',
-        url: icl_ajx_url,
-        data: 'icl_ajx_action=language_domains' + '&_icl_nonce=' + jQuery('#_icl_nonce_ldom').val(),
+        url: ajaxurl,
+        data: 'action=wpml_ajx_language_domains' + '&_icl_nonce=' + jQuery('#_icl_nonce_ldom').val(),
         success: function (resp) {
           icl_lnt_domains_box.html(resp)
           language_negotiation_type.prop('disabled', false)
@@ -281,16 +244,15 @@
     let ajaxResponse
     let usedUrls
     let formErrors
+    let duplicateDomain
     let formName
 
     let languageNegotiationType
     let rootHtmlFile
     let showOnRoot
     let useDirectories
-    let validatedDomains
     let domainsToValidateCount
     let domainsToValidate
-    let validDomains
 
     const form = jQuery('#icl_save_language_negotiation_type')
 
@@ -311,9 +273,22 @@
       rootHtmlFile = form.find('[name=root_html_file_path]').val()
 
       if (useDirectories) {
-        if (showOnRoot === 'html' && !rootHtmlFile) {
+        if (showOnRoot === 'html_file' && !rootHtmlFile) {
           validSettings = false
           useDirectoryWrapper.find('.icl_error_text.icl_error_1').fadeIn()
+        } else if (showOnRoot === 'page') {
+          // The screen renders this error only when the save would be rejected:
+          // the configured root page is missing, trashed or not published. The
+          // server makes that decision and chooses the wording, so the client only
+          // shows it. Nothing to sniff from the link's href or its translated label.
+          // "No option chosen" needs no branch here: checkLanguageDirectorySettings()
+          // disables the Save button in that state, and the server still rejects
+          // callers that are not this screen.
+          const rootPageError = jQuery('#wpml_show_page_on_root_missing')
+          if (rootPageError.length) {
+            validSettings = false
+            rootPageError.fadeIn()
+          }
         }
       }
 
@@ -327,74 +302,171 @@
     }
 
     if (languageNegotiationType === 2) {
-      domainsToValidate = jQuery('.validate_language_domain')
-      domainsToValidateCount = domainsToValidate.length
-      validatedDomains = 0
-      validDomains = 0
+      domainsToValidate = []
 
-      if (domainsToValidateCount > 0) {
-        domainsToValidate.filter(':visible').each(function (index, element) {
-          let languageDomainURL
-          const domainValidationCheckbox = jQuery(element)
-          let langDomainInput, lang, languageDomain
-          lang = domainValidationCheckbox.attr('value')
-          languageDomain = jQuery('.spinner.spinner-' + lang)
-          langDomainInput = jQuery('#language_domain_' + lang)
-          const validation = new WpmlDomainValidation(langDomainInput, domainValidationCheckbox)
-          validation.run()
-          const subdirMatches = langDomainInput.parent().html().match(/<code>\/(.+)<\/code>/)
-          languageDomainURL = langDomainInput.parent().html().match(/<code>(.+)<\/code>/)[1] + langDomainInput.val() + '/' + (subdirMatches !== null ? subdirMatches[1] : '')
-          if (domainValidationCheckbox.prop('checked')) {
-            languageDomain.addClass('is-active')
-            if (usedUrls.indexOf(languageDomainURL) !== -1) {
-              languageDomain.empty()
-              formErrors = true
-            } else {
-              usedUrls.push(languageDomainURL)
-              langDomainInput.css('color', '#000')
-              jQuery.ajax({
-                method: 'POST',
-                url: ajaxurl,
-                data: {
-                  url: languageDomainURL,
-                  action: 'validate_language_domain',
-                  nonce: jQuery('#validate_language_domain_nonce').val()
-                },
-                success: function (resp) {
-                  const ajaxLanguagePlaceholder = jQuery('#ajx_ld_' + lang)
-                  ajaxLanguagePlaceholder.html(resp.data)
-                  ajaxLanguagePlaceholder.removeClass('icl_error_text')
-                  ajaxLanguagePlaceholder.removeClass('icl_valid_text')
-                  if (resp.success) {
-                    ajaxLanguagePlaceholder.addClass('icl_valid_text')
-                    validDomains++
-                  } else {
-                    ajaxLanguagePlaceholder.addClass('icl_error_text')
-                  }
-                  validatedDomains++
-                },
-                error: function (jqXHR, textStatus) {
-                  jQuery('#ajx_ld_' + lang).html('')
-                  if (jqXHR === '0') {
-                    fadeInAjxResp('#' + textStatus, icl_ajx_error, true)
-                  }
-                },
-                complete: function () {
-                  languageDomain.removeClass('is-active')
-                  if (domainsToValidateCount === validDomains) {
-                    saveLanguageForm()
-                  }
-                }
-              })
-            }
-          } else {
-            saveLanguageForm()
-          }
-        })
+      // Every visible row drops the verdict the previous save wrote into it
+      // before the queue is built. A row whose "Validate on save" box is
+      // unticked never enters the queue, so without this it kept a stale
+      // "Not valid" (or "Valid") from an earlier submit while the form saved
+      // (wpmldev-8439, ruling: an unvalidated row shows no verdict).
+      jQuery('.validate_language_domain').filter(':visible').each(function (index, element) {
+        jQuery('#ajx_ld_' + jQuery(element).attr('value')).html('').removeClass('icl_error_text').removeClass('icl_valid_text')
+      })
+
+      jQuery('.validate_language_domain').filter(':visible').each(function (index, element) {
+        const domainValidationCheckbox = jQuery(element)
+        const lang = domainValidationCheckbox.attr('value')
+        const langDomainInput = jQuery('#language_domain_' + lang)
+
+        // Sanitises the field, and un-checks the box when it sanitises to empty,
+        // so the checked state is only meaningful once this has run.
+        new WpmlDomainValidation(langDomainInput, domainValidationCheckbox).run()
+
+        if (!domainValidationCheckbox.prop('checked')) {
+          return
+        }
+
+        const parentHtml = langDomainInput.parent().html()
+        const subdirMatches = parentHtml.match(/<code>\/(.+)<\/code>/)
+        const languageDomainURL = parentHtml.match(/<code>(.+)<\/code>/)[1] + langDomainInput.val() + '/' + (subdirMatches !== null ? subdirMatches[1] : '')
+
+        if (usedUrls.indexOf(languageDomainURL) !== -1) {
+          jQuery('.spinner.spinner-' + lang).empty()
+          formErrors = true
+          duplicateDomain = langDomainInput.val()
+          return
+        }
+
+        usedUrls.push(languageDomainURL)
+        langDomainInput.css('color', '#000')
+        domainsToValidate.push({ lang: lang, url: languageDomainURL })
+      })
+
+      domainsToValidateCount = domainsToValidate.length
+
+      if (formErrors) {
+        // Two languages point at the same domain; saving that would break the site.
+        refuseLanguageDomainsSave(icl_ajx_domains_duplicate.replace('%s', duplicateDomain))
+        return false
+      }
+
+      if (domainsToValidateCount === 0) {
+        saveLanguageForm()
+      } else {
+        validateLanguageDomainsInSequence(domainsToValidate, 0, 0)
       }
     }
 
     return false
+  }
+
+  /**
+   * Validates one language domain per request, in order, updating each domain's
+   * own row as soon as its result arrives. Saves the form once every queued
+   * domain has reported back, and only if all of them were valid.
+   *
+   * These requests must NOT run in parallel (wpmldev-4442). Each one makes the
+   * server issue a blocking loopback request back to this same site, so it holds
+   * two PHP workers for its duration: one for the admin-ajax call and one for the
+   * loopback it waits on. Firing every domain at once therefore needed one worker
+   * per domain plus a spare; on a site whose worker pool was no larger than the
+   * number of domains, nothing was left to answer the loopbacks and every domain
+   * failed on the server's 15s timeout — while validating the same domains one at
+   * a time succeeded. Going in sequence needs two workers no matter how many
+   * domains there are.
+   *
+   * @param queue      Array of {lang, url} to validate, in order.
+   * @param index      Position in the queue to validate now.
+   * @param validCount How many entries before this one came back valid.
+   */
+  function validateLanguageDomainsInSequence(queue, index, validCount) {
+    if (index >= queue.length) {
+      if (validCount === queue.length) {
+        saveLanguageForm()
+      } else {
+        refuseLanguageDomainsSave(icl_ajx_domains_not_validated.replace('%s', domainsThatFailed(queue)))
+      }
+      return
+    }
+
+    const lang = queue[index].lang
+    const spinner = jQuery('.spinner.spinner-' + lang)
+    const placeholder = jQuery('#ajx_ld_' + lang)
+
+    spinner.addClass('is-active')
+    placeholder.html('').removeClass('icl_error_text').removeClass('icl_valid_text')
+
+    // Keep going after a failure rather than stopping at the first bad domain, so
+    // one save reports a verdict for every row instead of surfacing the problems
+    // one reload at a time.
+    const next = function (wasValid) {
+      spinner.removeClass('is-active')
+      validateLanguageDomainsInSequence(queue, index + 1, validCount + (wasValid ? 1 : 0))
+    }
+
+    jQuery.ajax({
+      method: 'POST',
+      url: ajaxurl,
+      data: {
+        url: queue[index].url,
+        action: 'validate_language_domain',
+        nonce: jQuery('#validate_language_domain_nonce').val()
+      },
+      success: function (resp) {
+        placeholder.html(resp.data)
+        placeholder.addClass(resp.success ? 'icl_valid_text' : 'icl_error_text')
+        next(resp.success)
+      },
+      error: function (jqXHR, textStatus) {
+        placeholder.html('')
+        if (jqXHR === '0') {
+          fadeInAjxResp('#' + textStatus, icl_ajx_error, true)
+        }
+        next(false)
+      }
+    })
+  }
+
+  /**
+   * The rows of the queue that did not come back valid, as "language: domain"
+   * for the refusal notice. A row that failed carries icl_error_text ("Not
+   * valid"); a row whose request died carries nothing at all — either way it
+   * is not icl_valid_text, and either way the form was not saved because of it.
+   */
+  function domainsThatFailed(queue) {
+    const failed = []
+    queue.forEach(function (entry) {
+      if (jQuery('#ajx_ld_' + entry.lang).hasClass('icl_valid_text')) {
+        return
+      }
+      const name = jQuery('label[for="language_domain_' + entry.lang + '"]').text().trim() || entry.lang
+      failed.push(name + ': ' + jQuery('#language_domain_' + entry.lang).val())
+    })
+    return failed.join(', ')
+  }
+
+  /**
+   * Refuses the save out loud (wpmldev-8550). Until now a refused save ended
+   * with a bare return: the loader vanished, nothing said the form was not
+   * saved, and the only trace was a "Not valid" chip beside a row that could
+   * be off-screen. Nothing reaches the server on this path — the settings are
+   * untouched — so the notice has to come from here: the loader becomes the
+   * error banner, the form's error box carries the reason, and the first
+   * failed row (or the box itself) is scrolled into view.
+   *
+   * @param message Already localized, already carrying the domains.
+   */
+  function refuseLanguageDomainsSave(message) {
+    const form = jQuery('#icl_save_language_negotiation_type')
+    const errorBox = form.find('.wpml-form-errors')
+    errorBox.text(message)
+    errorBox.show()
+    fadeInAjxResp('#' + form.find('.icl_ajx_response').attr('id'), icl_ajx_error, true)
+    const target = form.find('.icl_error_text').filter(':visible').first()
+    const scrollTo = target.length ? target[0] : errorBox[0]
+    if (scrollTo && scrollTo.scrollIntoView) {
+      scrollTo.scrollIntoView({ block: 'center' })
+    }
   }
 
   function saveLanguageForm() {
@@ -406,8 +478,6 @@
     const form = jQuery('#icl_save_language_negotiation_type')
     const formName = jQuery(form).attr('name')
     const ajxResponse = jQuery(form).find('.icl_ajx_response').attr('id')
-    const sso_enabled = jQuery('#sso_enabled').is(':checked')
-    const sso_notice = jQuery('#sso_enabled_notice')
 
     if (form.find('input[name=use_directory]').is(':checked')) {
       useDirectory = 1
@@ -433,8 +503,7 @@
       show_on_root: form.find('input[name=show_on_root]:checked').val(),
       root_html_file_path: form.find('input[name=root_html_file_path]').val(),
       hide_language_switchers: hideSwitcher,
-      xdomain: xdomain,
-      sso_enabled: sso_enabled
+      xdomain: xdomain
     }
 
     jQuery.ajax({
@@ -446,10 +515,11 @@
         let formErrors, rootHtmlFile, rootPage, spl
         if (response.success) {
           fadeInAjxResp('#' + ajxResponse, icl_ajx_saved)
-          if (sso_enabled) {
-            sso_notice.addClass('updated').fadeIn()
-          } else {
-            sso_notice.removeClass('updated').fadeOut()
+
+          // LANG-17d: a save that turned the directory off or chose a root target left
+          // the forgotten state, so the Save gate asks for a root choice again.
+          if (useDirectory !== 1 || data.show_on_root) {
+            form.find('[name=use_directory]').data('root-forgotten', 0)
           }
 
           if (response.data) {
@@ -459,17 +529,19 @@
             formMessage.fadeIn()
           }
 
-          if (jQuery('input[name=show_on_root]').length) {
+          if (jQuery('input[name=use_directory]').is(':checked') && jQuery('input[name=show_on_root]').length) {
             rootHtmlFile = jQuery('#wpml_show_on_root_html_file')
             rootPage = jQuery('#wpml_show_on_root_page')
             if (rootHtmlFile.prop('checked')) {
               rootHtmlFile.addClass('active')
               rootPage.removeClass('active')
             }
+
             if (rootPage.prop('checked')) {
               rootPage.addClass('active')
               rootHtmlFile.removeClass('active')
             }
+
           }
         } else {
           formErrors = jQuery('form[name="' + formName + '"] .icl_form_errors')
@@ -496,28 +568,32 @@
     })
   }
 
-  function iclEnableContentTranslation() {
-    const val = jQuery(':radio[name=icl_translation_option]:checked').val()
-    /* jshint validthis:true */
-    jQuery(this).prop('disabled', true)
-    jQuery.ajax({
-      type: 'POST',
-      url: icl_ajx_url,
-      data: 'icl_ajx_action=toggle_content_translation&wizard=1&new_val=' + val,
-      success: function (msg) {
-        const spl = msg.split('|')
-        if (spl[1]) {
-          location.href = WPML_core.sanitize(spl[1])
-        } else {
-          location.href = WPML_core.sanitize(location.href).replace(/#[\w\W]*/, '')
-        }
-      }
-    })
-    return false
-  }
-
   function update_seo_head_langs_priority(event) {
     const element = jQuery(this)
     jQuery('#wpml-seo-head-langs-priority').prop('disabled', !element.prop('checked'))
   }
+
+  function checkLanguageDirectorySettings() {
+    let isShowOnRootChecked
+    let useDirectories
+
+    const form       = jQuery('#icl_save_language_negotiation_type')
+    let submitButton = form.find('input[name=save]')
+
+    useDirectories      = form.find('[name=use_directory]').is(':checked')
+    isShowOnRootChecked = form.find('[name=show_on_root]').is(':checked')
+    // LANG-17d: the stored root page was deleted permanently and forgotten, so the
+    // section saves without a root choice. The server accepts it only in that state.
+    const rootForgotten = String(form.find('[name=use_directory]').data('root-forgotten')) === '1'
+
+    if (useDirectories && !isShowOnRootChecked && !rootForgotten) {
+      submitButton.prop('disabled', true)
+      submitButton.addClass('js-wpml-url-format-submit-button-tooltip-open')
+    } else {
+      form.find('input[name=save]').prop('disabled', false)
+      submitButton.removeClass('js-wpml-url-format-submit-button-tooltip-open')
+      jQuery('.js-wpml-url-format-submit-button-tooltip').remove()
+    }
+  }
+
 }())

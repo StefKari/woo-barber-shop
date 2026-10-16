@@ -4,9 +4,46 @@
  * Display wpwBot Icon ball
  */
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
-add_action('wp_footer', 'wp_chatbot_load_footer_html');
-add_action( 'admin_footer', 'qc_style_for_hide_iframe');
-function qc_style_for_hide_iframe(){
+
+
+function qcld_custom_search_form( $form ) {
+      // Add a hidden input to limit search to 'product' post type
+    if (get_option('wp_chatbot_agent_image') == "custom-agent.png") {
+        $wp_chatbot_custom_agent_path = get_option('wp_chatbot_custom_agent_path');
+    } else if (get_option('wp_chatbot_agent_image') != "custom-agent.png") {
+        $wp_chatbot_custom_agent_path = QCLD_wpCHATBOT_IMG_URL . get_option('wp_chatbot_agent_image');
+    } else {
+        $wp_chatbot_custom_agent_path = QCLD_wpCHATBOT_IMG_URL . 'custom-agent.png';
+    }
+    $hidden_field = '<a class="wp-chatbot qc_wpbot_chat_link" id="wp-chatbot-search-btn" data-search-type="product" data-search-term="" style="max-height: 50px; margin-left: 10px;padding: 0 !important;position: absolute;top: -9px;right: -60px;"><img src="'. esc_url($wp_chatbot_custom_agent_path) .'" alt=""></a>';
+    $block_content = str_replace( '</form>', $hidden_field . '</form>', $form );
+    return $block_content;
+}
+if(get_option('wpbot_enable_on_search') == 1 && (get_option('disable_floating_button') != '1') && get_option('disable_wp_chatbot') != 1 ){
+   add_filter( 'get_search_form', 'qcld_custom_search_form' );
+   add_filter( 'render_block_core/search', 'qcld_modify_gutenberg_search_block', 10, 2 );
+}
+
+
+function qcld_modify_gutenberg_search_block( $block_content, $block ) {
+    // Add a hidden input to limit search to 'product' post type
+    if (get_option('wp_chatbot_agent_image') == "custom-agent.png") {
+        $wp_chatbot_custom_agent_path = get_option('wp_chatbot_custom_agent_path');
+    } else if (get_option('wp_chatbot_agent_image') != "custom-agent.png") {
+        $wp_chatbot_custom_agent_path = QCLD_wpCHATBOT_IMG_URL . get_option('wp_chatbot_agent_image');
+    } else {
+        $wp_chatbot_custom_agent_path = QCLD_wpCHATBOT_IMG_URL . 'custom-agent.png';
+    }
+    $hidden_field = '<button type="button" class="wp-chatbot qc_wpbot_chat_link" id="wp-chatbot-search-btn" data-search-type="product" data-search-term="" style="max-height: 50px; margin-left: 10px;padding: 0 !important"><img src="'. esc_url($wp_chatbot_custom_agent_path) .'" alt=""></button>';
+    // Inject the hidden field before the closing </form> tag
+    $block_content = str_replace( '</div></form>', $hidden_field . '</div></form>', $block_content );
+    return $block_content;
+}
+if(get_option('disable_floating_button') != '1'){
+    add_action('wp_footer', 'wp_chatbot_load_footer_html');
+}
+add_action( 'admin_footer', 'qcld_style_for_hide_iframe');
+function qcld_style_for_hide_iframe(){
 ?>
     <script>
         jQuery( document ).ready(function() {
@@ -22,15 +59,68 @@ function qc_style_for_hide_iframe(){
     </script>
 <?php 
 }
+/**
+ * Extract a YouTube video ID from common URL formats.
+ *
+ * @param string $url YouTube watch, embed, short, or youtu.be URL.
+ * @return string Video ID or empty string.
+ */
+if ( ! function_exists( 'qcld_wpbot_extract_youtube_id' ) ) {
+	function qcld_wpbot_extract_youtube_id( $url ) {
+		$url = trim( (string) $url );
+		if ( $url === '' ) {
+			return '';
+		}
+
+		if ( preg_match( '/(?:youtube\.com\/(?:embed\/|shorts\/|live\/|watch\?(?:.*&)?v=)|youtu\.be\/)([A-Za-z0-9_-]{11})/', $url, $matches ) ) {
+			return $matches[1];
+		}
+
+		$path = (string) wp_parse_url( $url, PHP_URL_PATH );
+		$base = basename( $path );
+		if ( preg_match( '/^[A-Za-z0-9_-]{11}$/', $base ) ) {
+			return $base;
+		}
+
+		return '';
+	}
+}
+if ( ! function_exists( 'qcld_wpbot_youtube_icon_embed_src' ) ) {
+	function qcld_wpbot_youtube_icon_embed_src( $url ) {
+		$video_id = qcld_wpbot_extract_youtube_id( $url );
+		if ( $video_id === '' ) {
+			return '';
+		}
+
+		return add_query_arg(
+			array(
+				'autoplay'        => '1',
+				'mute'            => '1',
+				'loop'            => '1',
+				'playlist'        => $video_id,
+				'controls'        => '0',
+				'showinfo'        => '0',
+				'rel'             => '0',
+				'fs'              => '0',
+				'iv_load_policy'  => '3',
+				'cc_load_policy'  => '0',
+				'disablekb'       => '1',
+				'playsinline'     => '1',
+				'modestbranding'  => '1',
+				'color'           => 'white',
+			),
+			'https://www.youtube.com/embed/' . rawurlencode( $video_id )
+		);
+	}
+}
 function wp_chatbot_load_footer_html(){
     if ( get_option('disable_wp_chatbot') != 1 && wp_chatbot_load_controlling() === true) {
 		
         ?>
         <style>
             <?php if(get_option('wp_chatbot_custom_css')!="") {
-                //Sanitization to be checked
-                // phpcs:ignore
-                echo sanitize_text_field(get_option('wp_chatbot_custom_css'));
+     
+                echo wp_strip_all_tags( get_option('wp_chatbot_custom_css') );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             }
             ?>
         </style>
@@ -44,7 +134,24 @@ function wp_chatbot_load_footer_html(){
             ?>
             <style>
                 .wp-chatbot-container {
+                    background-color: #eceef3 !important;
                     background-image: url(<?php echo esc_url($qcld_wb_chatbot_board_bg_path); ?>) !important;
+                    background-size: cover !important;
+                    background-position: center !important;
+                    background-repeat: no-repeat !important;
+                }
+                .wp-chatbot-template-01 #wp-chatbot-board-container,
+                .wp-chatbot-template-01 .wp-chatbot-board-container {
+                    background-color: #eceef3 !important;
+                    background-image: none !important;
+                }
+                .wp-chatbot-template-01 #wp-chatbot-board-container::before,
+                .wp-chatbot-template-01 .wp-chatbot-board-container::before {
+                    background-color: #eceef3 !important;
+                    background-image: url(<?php echo esc_url($qcld_wb_chatbot_board_bg_path); ?>) !important;
+                    background-size: cover !important;
+                    background-position: center !important;
+                    background-repeat: no-repeat !important;
                 }
             </style>
         <?php }
@@ -57,31 +164,31 @@ function wp_chatbot_load_footer_html(){
             $wp_chatbot_enable_mobile_screen .= "wp-chatbot-mobile-full-screen";
        // }
         ?>
-        <div id="wp-chatbot-chat-container" class="<?php echo esc_attr($wp_chatbot_enable_rtl .' '.$wp_chatbot_enable_mobile_screen); ?>">
+        <div id="wp-chatbot-chat-container" class="<?php echo esc_attr($wp_chatbot_enable_rtl .' '.$wp_chatbot_enable_mobile_screen); ?>" style="<?php if(get_option('disable_floating_button') == '1'){ echo 'display:none';} ?>">
             <div id="wp-chatbot-integration-container">
                 <div class="wp-chatbot-integration-button-container">
                     <?php if (get_option('enable_wp_chatbot_skype_floating_icon') == 1) { ?>
                         <a href="skype:<?php echo esc_attr(get_option('enable_wp_chatbot_skype_id')); ?>?chat"><span
-                                    class="inetegration-skype-btn" title="<?php esc_attr_e('Skype', 'wpchatbot'); ?>"> </span></a>
+                                    class="inetegration-skype-btn" title="<?php esc_attr_e('Skype', 'chatbot'); ?>"> </span></a>
                     <?php } ?>
                     <?php if (get_option('enable_wp_chatbot_floating_whats') == 1) { ?>
                         <a href="<?php echo esc_url('https://api.whatsapp.com/send?phone=' . get_option('qlcd_wp_chatbot_whats_num')); ?>"
                            target="_blank"><span class="intergration-whats"
-                                                 title="<?php esc_html_e('WhatsApp', 'wpchatbot'); ?>"></span></a>
+                                                 title="<?php esc_html_e('WhatsApp', 'chatbot'); ?>"></span></a>
                     <?php } ?>
                     <?php if (get_option('enable_wp_chatbot_floating_viber') == 1) { ?>
                         <a href="<?php echo esc_url('https://live.viber.com/#/' . get_option('qlcd_wp_chatbot_viber_acc')); ?>"
                            target="_blank"><span class="intergration-viber"
-                                                 title="<?php esc_html_e('Viber', 'wpchatbot'); ?>"></span></a>
+                                                 title="<?php esc_html_e('Viber', 'chatbot'); ?>"></span></a>
                     <?php } ?>
                     <?php if (get_option('enable_wp_chatbot_floating_phone') == 1 && get_option('qlcd_wp_chatbot_phone') != "") { ?>
                         <a href="tel:<?php echo esc_attr(get_option('qlcd_wp_chatbot_phone')); ?>"><span
                                     class="intergration-phone"
-                                    title="<?php esc_html_e('Phone', 'wpchatbot'); ?>"> </span></a>
+                                    title="<?php esc_html_e('Phone', 'chatbot'); ?>"> </span></a>
                     <?php } ?>
                     <?php if (get_option('enable_wp_chatbot_floating_link') == 1 && get_option('qlcd_wp_chatbot_weblink') != "") { ?>
                         <a href="<?php echo esc_url(get_option('qlcd_wp_chatbot_weblink')); ?>" target="_blank"><span
-                                    class="intergration-weblink" title="<?php esc_html_e('Web Link', 'wpchatbot'); ?>"></span></a>
+                                    class="intergration-weblink" title="<?php esc_html_e('Web Link', 'chatbot'); ?>"></span></a>
                     <?php } ?>
                 </div>
             </div>
@@ -96,7 +203,7 @@ function wp_chatbot_load_footer_html(){
             if (file_exists(QCLD_wpCHATBOT_PLUGIN_DIR_PATH . '/templates/' . $qcld_wb_chatbot_theme . '/template.php')) {
                 require_once(QCLD_wpCHATBOT_PLUGIN_DIR_PATH . '/templates/' . $qcld_wb_chatbot_theme . '/template.php');
             } else {
-                echo "<h2>" . esc_html__('No wpWBot Theme Found!', 'wpchatbot') . "</h2>";
+                echo "<h2>" . esc_html__('No wpWBot Theme Found!', 'chatbot') . "</h2>";
             }
             ?>
             <?php
@@ -105,7 +212,7 @@ function wp_chatbot_load_footer_html(){
                 <div id="wp-chatbot-notification-container" class="wp-chatbot-notification-container">
                     <div class="wp-chatbot-notification-controller"> 
                         <span class="wp-chatbot-notification-close">
-                            <?php esc_html_e('X', 'wpchatbot'); ?>
+                            <?php esc_html_e('X', 'chatbot'); ?>
                         </span>
                     </div>
                     <?php
@@ -120,7 +227,7 @@ function wp_chatbot_load_footer_html(){
                     ?>
                     <div class="wp-chatbot-notification-agent-profile">
                         <div class="wp-chatbot-notification-widget-avatar" ><img
-                                    src="<?php echo esc_attr($wp_chatbot_custom_agent_path); ?>" alt=""></div>
+                                    src="<?php echo esc_url($wp_chatbot_custom_agent_path); ?>" alt=""></div>
                         <div class="wp-chatbot-notification-welcome"><?php echo wp_kses_post(wpb_randmom_message_handle(maybe_unserialize(get_option('qlcd_wp_chatbot_welcome')))) . ' <strong>' . esc_html(get_option('qlcd_wp_chatbot_host')) . '</strong>'; ?></div>
                     </div>
                     <?php 
@@ -145,12 +252,70 @@ function wp_chatbot_load_footer_html(){
                     } else {
                         $wp_chatbot_custom_icon_path = QCLD_wpCHATBOT_IMG_URL . 'custom.png';
                     }
+                    $_wpbot_icon_video = get_option('wp_chatbot_icon_video', '');
+                    $_wpbot_video_is_youtube = ( strpos( $_wpbot_icon_video, 'youtube.com' ) !== false || strpos( $_wpbot_icon_video, 'youtu.be' ) !== false );
+					$_wpbot_youtube_embed_src = $_wpbot_video_is_youtube ? qcld_wpbot_youtube_icon_embed_src( $_wpbot_icon_video ) : '';
+					$_wpbot_video_delay_ms = absint( get_option( 'wp_chatbot_icon_video_delay', 0 ) ) * 1000;
+
+                    $wp_chatbot_ball_is_youtube = ($_wpbot_icon_video !== '' && (strpos($_wpbot_icon_video, 'youtube.com') !== false || strpos($_wpbot_icon_video, 'youtu.be') !== false));
+                    $wp_chatbot_ball_is_video   = ($_wpbot_icon_video !== '' && !$wp_chatbot_ball_is_youtube);
+                    $wp_chatbot_ball_has_video  = ($wp_chatbot_ball_is_youtube || $wp_chatbot_ball_is_video);
                     ?>
                     <img src="<?php echo esc_url($wp_chatbot_custom_icon_path); ?>"
-                         alt="wpChatIcon" qcld_agent="<?php echo esc_url($wp_chatbot_custom_icon_path); ?>" >
-                    
+                         alt="wpChatIcon" qcld_agent="<?php echo esc_url($wp_chatbot_custom_icon_path); ?>"
+                         id="wp-chatbot-ball-icon-img"
+                         <?php if ($wp_chatbot_ball_has_video) { echo 'style="display:none;"'; } ?> >
+                    <?php if ( $_wpbot_icon_video !== '' ) : ?>
+							<?php if ( $_wpbot_video_is_youtube && $_wpbot_youtube_embed_src !== '' ) : ?>
+								<iframe class="wpbot-icon-video" src="<?php echo $_wpbot_video_delay_ms > 0 ? 'about:blank' : esc_url( $_wpbot_youtube_embed_src ); ?>" data-wpbot-yt-src="<?php echo esc_url( $_wpbot_youtube_embed_src ); ?>" frameborder="0" allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
+							<?php elseif ( ! $_wpbot_video_is_youtube ) : ?>
+								<video class="wpbot-icon-video" src="<?php echo esc_url( $_wpbot_icon_video ); ?>" autoplay muted loop playsinline preload="auto"></video>
+							<?php endif; ?>
+						<?php endif; ?>
                 </div>
+
             </div>
+            <?php 
+            if ( $_wpbot_icon_video !== '' ) :
+                ?>
+			<script>
+			(function(){
+				var wpbotDelay = <?php echo (int) $_wpbot_video_delay_ms; ?>;
+				function wpbotForcePlay(){
+					var v = document.querySelector('#wp-chatbot-ball video.wpbot-icon-video');
+					if( v ){
+						v.muted   = true;
+						v.volume  = 0;
+						v.loop    = true;
+						var tries = 0, maxTries = 30;
+						var timer = setInterval(function(){
+							tries++;
+							v.play().then(function(){ clearInterval(timer); }).catch(function(){});
+							if( tries >= maxTries ) clearInterval(timer);
+						}, 300);
+					}
+					var yt = document.querySelector('#wp-chatbot-ball iframe.wpbot-icon-video');
+					if( yt ){
+						var ytSrc = yt.getAttribute('data-wpbot-yt-src');
+						if( ytSrc && ( !yt.getAttribute('src') || yt.getAttribute('src') === 'about:blank' || yt.getAttribute('src').indexOf('autoplay=1') === -1 ) ){
+							yt.setAttribute('src', ytSrc);
+						}
+					}
+				}
+				function wpbotDelayedPlay(){
+					setTimeout(wpbotForcePlay, wpbotDelay);
+				}
+				if( document.readyState === 'loading' ){
+					document.addEventListener('DOMContentLoaded', wpbotDelayedPlay);
+				} else {
+					wpbotDelayedPlay();
+				}
+				window.addEventListener('load', function(){
+					setTimeout(wpbotForcePlay, wpbotDelay);
+				});
+			})();
+			</script>
+			<?php endif; ?>
             <?php
             $fb_app_id = get_option('qlcd_wp_chatbot_fb_app_id');
             $fb_page_id = get_option('qlcd_wp_chatbot_fb_page_id');
@@ -195,9 +360,9 @@ function wp_chatbot_load_footer_html(){
         
         <?php
 
-        if ( get_transient( 'bot_clear_cache' ) ) {
+        if ( get_transient( 'qcld_bot_clear_cache' ) ) {
             echo  '<script type="text/javascript">var wpbot_clear_cache = 1 </script>';
-            delete_transient( 'bot_clear_cache' );
+            delete_transient( 'qcld_bot_clear_cache' );
         }
 
     }else{
@@ -269,7 +434,7 @@ function wp_chatbot_load_controlling(){
 }
 //checking Devices
 function wp_chatbot_is_mobile(){
-    $useragent = $_SERVER['HTTP_USER_AGENT'];
+    $useragent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
     if (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i', $useragent) || preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i', substr($useragent, 0, 4))) {
         return true;
     } else {
@@ -278,8 +443,8 @@ function wp_chatbot_is_mobile(){
 }
 //Checking wpwbot opening hour
 function wp_chatbot_check_opening_hours(){
-    $curent_day=strtolower(date('l',strtotime(current_time( 'mysql' ))));
-    $current_time=date('H:i',strtotime(current_time( 'mysql')));
+    $curent_day=strtolower(gmdate('l',strtotime(current_time( 'mysql' ))));
+    $current_time=gmdate('H:i',strtotime(current_time( 'mysql')));
     $is_wpwbot_open =false;
     if(get_option('wpwbot_hours')) {
         $wpwbot_times = wp_kses_post(unserialize(get_option('wpwbot_hours')));
@@ -303,7 +468,14 @@ function wp_chatbot_check_opening_hours(){
 add_action('wp_ajax_qcld_wb_chatbot_keyword', 'qcld_wb_chatbot_keyword');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_keyword', 'qcld_wb_chatbot_keyword');
 function qcld_wb_chatbot_keyword(){
-    $keyword = sanitize_text_field($_POST['keyword']);
+    // Verify nonce for security
+    $nonce = isset($_POST['security']) ? sanitize_text_field(wp_unslash($_POST['security'])) : (isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '');
+    if ( ! wp_verify_nonce( $nonce, 'wp_chatbot' ) && ! wp_verify_nonce( $nonce, 'qcsecretbotnonceval123qc' ) ) {
+        wp_send_json_error( array( 'status' => 'fail', 'message' => 'Security check failed.' ) );
+        wp_die();
+    }
+
+    $keyword = sanitize_text_field(wp_unslash($_POST['keyword']));
     $product_per_page = get_option('qlcd_wp_chatbot_ppp') != '' ? get_option('qlcd_wp_chatbot_ppp') : 10;
     if (get_option('qlcd_wp_chatbot_search_option') == 'standard') {
         $product_orderby = sanitize_text_field(get_option('qlcd_wp_chatbot_product_orderby') != '' ? get_option('qlcd_wp_chatbot_product_orderby') : 'title');
@@ -351,7 +523,7 @@ function qcld_wb_chatbot_keyword(){
             wp_reset_postdata();
             $html .= '</ul>';
             if ($total_product_num > $product_per_page && $product_per_page > 0 ) {
-                $html .= '<p style="text-align: center"><button type="button" id="wp-chatbot-loadmore" data-offset="' . $product_per_page . '" data-search-type="product" data-search-term="' . $keyword . '" >' . wp_kses_post(wpb_randmom_message_handle(unserialize(get_option('qlcd_wp_chatbot_load_more')))) . ' <span id="wp-chatbot-loadmore-loader"></span></button> </p>';
+                $html .= '<p style="text-align: center"><button type="button" id="wp-chatbot-loadmore" data-offset="' . $product_per_page . '" data-search-type="product" data-search-term="' . esc_attr($keyword) . '" >' . wp_kses_post(wpb_randmom_message_handle(unserialize(get_option('qlcd_wp_chatbot_load_more')))) . ' <span id="wp-chatbot-loadmore-loader"></span></button> </p>';
             }
         }
         $html .= '</div>';
@@ -381,7 +553,7 @@ function qcld_wb_chatbot_keyword(){
             }
             $html .= '</ul>';
             if ($total_product_num > $product_per_page && $product_per_page > 0) {
-                $html .= '<p style="text-align: center"><button type="button" id="wp-chatbot-loadmore" data-offset="' . $product_per_page . '" data-search-type="product" data-search-term="' . $more_product_ids . '" >' . wp_kses_post(wpb_randmom_message_handle(unserialize(get_option('qlcd_wp_chatbot_load_more')))) . ' <span id="wp-chatbot-loadmore-loader"></span></button> </p>';
+                $html .= '<p style="text-align: center"><button type="button" id="wp-chatbot-loadmore" data-offset="' . $product_per_page . '" data-search-type="product" data-search-term="' . esc_attr($more_product_ids) . '" >' . wp_kses_post(wpb_randmom_message_handle(unserialize(get_option('qlcd_wp_chatbot_load_more')))) . ' <span id="wp-chatbot-loadmore-loader"></span></button> </p>';
             }
         }
         $html .= '</div>';
@@ -398,14 +570,13 @@ add_action('wp_ajax_nopriv_qcld_wb_chatbot_category', 'qcld_wb_chatbot_category'
 function qcld_wb_chatbot_category(){
     $category_type="common";
     if (get_option('wp_chatbot_show_parent_category') != "") {
-        $terms = get_terms('product_cat', array('parent' => 0, 'hide_empty' => true, 'fields' => 'all'));
-
+        $terms = get_terms( array( 'taxonomy' => 'product_cat', 'parent' => 0, 'hide_empty' => true, 'fields' => 'all' ) );
     } else {
-        $terms = get_terms('product_cat', array('hide_empty' => true, 'fields' => 'all'));
+        $terms = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => true, 'fields' => 'all' ) );
     }
     $html = "";
     foreach ($terms as $term) {
-        $child_terms=get_terms('product_cat', array('parent' => $term->term_id, 'hide_empty' => true, 'fields' => 'all'));
+        $child_terms=get_terms( array( 'taxonomy' => 'product_cat', 'parent' => $term->term_id, 'hide_empty' => true, 'fields' => 'all' ) );
         if(get_option('wp_chatbot_show_sub_category')==1 && count($child_terms) >0){
             $category_type="hasChilds";
         }
@@ -420,8 +591,8 @@ function qcld_wb_chatbot_category(){
 add_action('wp_ajax_qcld_wb_chatbot_sub_category', 'qcld_wb_chatbot_sub_category');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_sub_category', 'qcld_wb_chatbot_sub_category');
 function qcld_wb_chatbot_sub_category(){
-    $parent_id = stripslashes($_POST['parent_id']);
-    $terms = get_terms('product_cat', array('parent' => $parent_id, 'hide_empty' => true, 'fields' => 'all'));
+    $parent_id = intval( wp_unslash( $_POST['parent_id'] ) );
+    $terms = get_terms( array( 'taxonomy' => 'product_cat', 'parent' => $parent_id, 'hide_empty' => true, 'fields' => 'all' ) );
     $html = "";
     foreach ($terms as $term) {
         $html .= '<span class="qcld-chatbot-product-category" data-category-type="common"  data-category-slug="' . $term->slug . '" data-category-id="' . $term->term_id . '">' . $term->name . '</span>';
@@ -435,7 +606,7 @@ function qcld_wb_chatbot_sub_category(){
 add_action('wp_ajax_qcld_wb_chatbot_category_products', 'qcld_wb_chatbot_category_products');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_category_products', 'qcld_wb_chatbot_category_products');
 function qcld_wb_chatbot_category_products(){
-    $category_id = stripslashes($_POST['category']);
+    $category_id = intval( wp_unslash( $_POST['category'] ) );
     $product_per_page = sanitize_text_field(get_option('qlcd_wp_chatbot_ppp') != '' ? get_option('qlcd_wp_chatbot_ppp') : 10);
     $product_orderby = sanitize_text_field(get_option('qlcd_wp_chatbot_product_orderby') != '' ? get_option('qlcd_wp_chatbot_product_orderby') : 'title');
     $product_order = sanitize_text_field(get_option('qlcd_wp_chatbot_product_order') != '' ? get_option('qlcd_wp_chatbot_product_order') : 'ASC');
@@ -674,9 +845,9 @@ function qcld_wb_chatbot_sale_products(){
 add_action('wp_ajax_qcld_wb_chatbot_load_more', 'qcld_wb_chatbot_load_more');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_load_more', 'qcld_wb_chatbot_load_more');
 function qcld_wb_chatbot_load_more(){
-    $offset = stripslashes($_POST['offset']);
-    $search_type = stripslashes($_POST['search_type']);
-    $search_term = stripslashes($_POST['search_term']);
+    $offset = intval( wp_unslash( $_POST['offset'] ) );
+    $search_type = sanitize_text_field( wp_unslash( $_POST['search_type'] ) );
+    $search_term = sanitize_text_field( wp_unslash( $_POST['search_term'] ) );
     $product_per_page = sanitize_text_field(get_option('qlcd_wp_chatbot_ppp') != '' ? get_option('qlcd_wp_chatbot_ppp') : 10);
     $product_orderby = sanitize_text_field(get_option('qlcd_wp_chatbot_product_orderby') != '' ? get_option('qlcd_wp_chatbot_product_orderby') : 'title');
     $product_order = sanitize_text_field(get_option('qlcd_wp_chatbot_product_order') != '' ? get_option('qlcd_wp_chatbot_product_order') : 'ASC');
@@ -809,7 +980,7 @@ function qcld_wb_chatbot_load_more(){
 add_action('wp_ajax_qcld_wb_chatbot_product_details', 'qcld_wb_chatbot_product_details');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_product_details', 'qcld_wb_chatbot_product_details');
 function qcld_wb_chatbot_product_details(){
-    $product_id = stripslashes($_POST['wp_chatbot_pid']);
+    $product_id = intval( wp_unslash( $_POST['wp_chatbot_pid'] ) );
     //Tracking product view from chat board
     wp_chatbot_view_track_product_by_id($product_id);
     //wpcommerce product factory
@@ -839,7 +1010,7 @@ function qcld_wb_chatbot_product_details(){
     }
     $product_image .= '</ul></div>';
     $product_price = '<p class="wp-chatbot-product-price" id="wp-chatbot-product-price">' . $product->get_price_html() . '</p>';
-    $product_sku = '<p class="wp-chatbot-product-sku"> ' . __('SKU', 'wpchatbot') . ' : ' . $product->get_sku() . '</p>';
+    $product_sku = '<p class="wp-chatbot-product-sku"> ' . __('SKU', 'chatbot') . ' : ' . $product->get_sku() . '</p>';
     //if ( $product->is_in_stock() || $product->is_purchasable() )
     //Handle variable product start
     $variations = "";
@@ -884,8 +1055,9 @@ function qcld_wb_chatbot_product_details(){
                     $variations .= '<select id="' . esc_attr(sanitize_title($name)) . '" name="attribute_' . sanitize_title($name) . '" data-attribute_name="attribute_' . sanitize_title($name) . '" class="each_attribute">';
                     $variations .= '<option value="">' . wp_kses_post(wpb_randmom_message_handle(unserialize(get_option('qlcd_wp_chatbot_choose_option')))) . '</option>';
                     foreach ($values as $value) {
-                        if (isset($_REQUEST['attribute_' . sanitize_title($name)])) {
-                            $selected_value = $_REQUEST['attribute_' . sanitize_title($name)];
+                        $attr_key = 'attribute_' . sanitize_title( $name );
+                        if ( isset( $_REQUEST[ $attr_key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+                            $selected_value = sanitize_text_field( wp_unslash( $_REQUEST[ $attr_key ] ) );
                         } else {
                             $selected_value = '';
                         }
@@ -908,13 +1080,13 @@ function qcld_wb_chatbot_product_details(){
     wp_send_json($response);
 }
 //Add to cart for variable product.
-add_action('wp_ajax_variable_add_to_cart', 'qcld_wb_chatbot_variable_add_to_cart');
-add_action('wp_ajax_nopriv_variable_add_to_cart', 'qcld_wb_chatbot_variable_add_to_cart');
-function qcld_wb_chatbot_variable_add_to_cart(){
-    $product_id = stripslashes($_POST['p_id']);
-    $quantity = stripslashes($_POST['quantity']);
-    $variations_id = stripslashes($_POST['variations_id']);
-    $attrs = stripslashes($_POST['attributes']);
+add_action('wp_ajax_qcld_variable_add_to_cart', 'qcld_variable_add_to_cart');
+add_action('wp_ajax_nopriv_qcld_variable_add_to_cart', 'qcld_variable_add_to_cart');
+function qcld_variable_add_to_cart(){
+    $product_id = intval( wp_unslash( $_POST['p_id'] ) );
+    $quantity = intval( wp_unslash( $_POST['quantity'] ) );
+    $variations_id = intval( wp_unslash( $_POST['variations_id'] ) );
+    $attrs = isset( $_POST['attributes'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_POST['attributes'] ) ) : array();
     //echo wp_send_json(array('p_id'=>$product_id,'qnty'=>$quantity,'id'=>$variations_id,'att'=>$attrs));
     $attributes = array();
     foreach ($attrs as $attr) {
@@ -936,8 +1108,8 @@ function qcld_wb_chatbot_variable_add_to_cart(){
 add_action('wp_ajax_qcld_wb_chatbot_add_to_cart', 'qcld_wb_chatbot_add_to_cart');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_add_to_cart', 'qcld_wb_chatbot_add_to_cart');
 function qcld_wb_chatbot_add_to_cart(){
-    $product_id = stripslashes($_POST['product_id']);
-    $product_quantity = stripslashes($_POST['quantity']);
+    $product_id = intval( wp_unslash( $_POST['product_id'] ) );
+    $product_quantity = intval( wp_unslash( $_POST['quantity'] ) );
     global $wpcommerce;
     $result = $wpcommerce->cart->add_to_cart($product_id, $product_quantity);
     if ($result != false) {
@@ -950,13 +1122,17 @@ function qcld_wb_chatbot_add_to_cart(){
 add_action('wp_ajax_qcld_wb_chatbot_support_email', 'qcld_wb_chatbot_support_email');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_support_email', 'qcld_wb_chatbot_support_email');
 function qcld_wb_chatbot_support_email(){
-    $name = trim(sanitize_text_field($_POST['name']));
-    $email = sanitize_email($_POST['email']);
-    $message = sanitize_text_field($_POST['message']);
+    $nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+    if ( ! wp_verify_nonce( $nonce, 'qcsecretbotnonceval123qc' ) ) {
+        wp_send_json_error( array( 'error' => esc_html__( 'Error: Invalid nonce verification.', 'chatbot' ) ) );
+    }   
+    $name = trim(sanitize_text_field(wp_unslash($_POST['name'])));
+    $email = sanitize_email(wp_unslash($_POST['email']));
+    $message = sanitize_text_field(wp_unslash($_POST['message']));
     $subject = sanitize_text_field(get_option('qlcd_wp_chatbot_email_sub') != '' ? get_option('qlcd_wp_chatbot_email_sub') : 'Support Email from wpWBot by Client');
     //Extract Domain
     $url = get_site_url();
-    $url = parse_url($url);
+    $url = wp_parse_url($url);
     $domain = $url['host'];
     //$admin_email = "admin@" . $domain;
     $admin_email = sanitize_email(get_option('admin_email'));
@@ -968,7 +1144,6 @@ function qcld_wb_chatbot_support_email(){
     }else{
 		$fromEmail = "wordpress@" . $domain;
 	}
-	
     //Starting messaging and status.
     $response['status'] = 'fail';
     $response['message'] = str_replace('\\', '',wp_kses_post(get_option('qlcd_wp_chatbot_email_fail')));
@@ -978,12 +1153,12 @@ function qcld_wb_chatbot_support_email(){
     } else {
         //build email body
         $bodyContent = "";
-        $bodyContent .= '<p><strong>' . __('Support Request Details', 'wpchatbot') . ':</strong></p><hr>';
-        $bodyContent .= '<p>' . __('Name', 'wpchatbot') . ' : ' . $name . '</p>';
-        $bodyContent .= '<p>' . __('Email', 'wpchatbot') . ' : ' . $email . '</p>';
-        $bodyContent .= '<p>' . __('Subject', 'wpchatbot') . ' : ' . $subject . '</p>';
-        $bodyContent .= '<p>' . __('Message', 'wpchatbot') . ' : ' . $message . '</p>';
-        $bodyContent .= '<p>' . __('Mail Generated on', 'wpchatbot') . ': ' . current_time('F j, Y, g:i a') . '</p>';
+        $bodyContent .= '<p><strong>' . __('Support Request Details', 'chatbot') . ':</strong></p><hr>';
+        $bodyContent .= '<p>' . __('Name', 'chatbot') . ' : ' . $name . '</p>';
+        $bodyContent .= '<p>' . __('Email', 'chatbot') . ' : ' . $email . '</p>';
+        $bodyContent .= '<p>' . __('Subject', 'chatbot') . ' : ' . $subject . '</p>';
+        $bodyContent .= '<p>' . __('Message', 'chatbot') . ' : ' . $message . '</p>';
+        $bodyContent .= '<p>' . __('Mail Generated on', 'chatbot') . ': ' . current_time('F j, Y, g:i a') . '</p>';
         $to = $toEmail;
         $body = $bodyContent;
         $headers = array();
@@ -997,19 +1172,20 @@ function qcld_wb_chatbot_support_email(){
         }
 		
     }
-    echo json_encode($response);
+    echo wp_json_encode($response);
     die();
 }
 //Support Phone
 add_action('wp_ajax_qcld_wb_chatbot_support_phone', 'qcld_wb_chatbot_support_phone');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_support_phone', 'qcld_wb_chatbot_support_phone');
 function qcld_wb_chatbot_support_phone(){
-    $name = trim(sanitize_text_field($_POST['name']));
-    $phone =sanitize_text_field($_POST['phone']);
+    check_ajax_referer('qcsecretbotnonceval123qc', 'nonce');
+    $name = trim(sanitize_text_field(wp_unslash($_POST['name'])));
+    $phone =sanitize_text_field(wp_unslash($_POST['phone']));
     $subject = 'WPBot Support Mail Request for Call Back';
     //Extract Domain
     $url = get_site_url();
-    $url = parse_url($url);
+    $url = wp_parse_url($url);
     $domain = $url['host'];
     //$admin_email = "admin@" . $domain;
     $admin_email = get_option('admin_email');
@@ -1026,12 +1202,12 @@ function qcld_wb_chatbot_support_phone(){
     $response['message'] = str_replace('\\', '',wp_kses_post(get_option('qlcd_wp_chatbot_phone_fail')));
         //build email body
         $bodyContent = "";
-        $bodyContent .= '<p><strong>' . __('Support Request Details', 'wpchatbot') . ':</strong></p><hr>';
-        $bodyContent .= '<p>' . __('Name', 'wpchatbot') . ' : ' . $name . '</p>';
-        $bodyContent .= '<p>' . __('Phone', 'wpchatbot') . ' : ' . $phone . '</p>';
-        $bodyContent .= '<p>' . __('Subject', 'wpchatbot') . ' : ' . $subject . '</p>';
-        $bodyContent .= '<p>' . __('Message', 'wpchatbot') . ' : ' . __(' Call me at ', 'wpchatbot'). $phone . '</p>';
-        $bodyContent .= '<p>' . __('Mail Generated on', 'wpchatbot') . ': ' . current_time('F j, Y, g:i a') . '</p>';
+        $bodyContent .= '<p><strong>' . __('Support Request Details', 'chatbot') . ':</strong></p><hr>';
+        $bodyContent .= '<p>' . __('Name', 'chatbot') . ' : ' . $name . '</p>';
+        $bodyContent .= '<p>' . __('Phone', 'chatbot') . ' : ' . $phone . '</p>';
+        $bodyContent .= '<p>' . __('Subject', 'chatbot') . ' : ' . $subject . '</p>';
+        $bodyContent .= '<p>' . __('Message', 'chatbot') . ' : ' . __(' Call me at ', 'chatbot'). $phone . '</p>';
+        $bodyContent .= '<p>' . __('Mail Generated on', 'chatbot') . ': ' . current_time('F j, Y, g:i a') . '</p>';
         $to = $toEmail;
         $body = $bodyContent;
         $headers = array();
@@ -1043,13 +1219,13 @@ function qcld_wb_chatbot_support_phone(){
             $response['status'] = 'success';
             $response['message'] = str_replace('\\', '',wp_kses_post(get_option('qlcd_wp_chatbot_phone_sent')));
         }
-    echo json_encode($response);
+    echo wp_json_encode($response);
     die();
 }
 // Order Status part. removed
 
 function wpb_randmom_message_handle($items){
-    return $items[rand(0, count($items) - 1)];
+    return $items[wp_rand(0, count($items) - 1)];
 }
 function qcld_wb_chatbot_func_str_replace($messages = array()){
     $refined_mesgses = array();
@@ -1066,8 +1242,8 @@ function qcld_wb_chatbot_login_user(){
     check_ajax_referer('wpwbot-order-nonce', 'security');
     // Nonce is checked, get the POST data and sign user on
     $info = array();
-    $info['user_login'] = trim(sanitize_text_field($_POST['user_name']));
-    $info['user_password'] = trim(sanitize_text_field($_POST['user_pass']));
+    $info['user_login'] = trim(sanitize_text_field(wp_unslash($_POST['user_name'])));
+    $info['user_password'] = trim(sanitize_text_field(wp_unslash($_POST['user_pass'])));
     $info['remember'] = true;
     $user_signon = wp_signon($info, false);
     $response = array();
@@ -1109,10 +1285,10 @@ function get_order_by_username($user_name){
         $response['message'] .= wp_kses_post(wpb_randmom_message_handle(unserialize(get_option('qlcd_wp_chatbot_order_found'))));
         $order_html .= '<div class="wp-chatbot-orders-container">
             <div class="wp-chatbot-orders-header">
-                <div class="order-id">' . __('ID', 'wpchatbot') . '</div> 
-                <div class="order-date">' . __('Date', 'wpchatbot') . ' </div>
-                <div class="order-items">' . __('Items', 'wpchatbot') . '</div>
-                <div class="order-status">' . __('Status', 'wpchatbot') . '</div>
+                <div class="order-id">' . __('ID', 'chatbot') . '</div> 
+                <div class="order-date">' . __('Date', 'chatbot') . ' </div>
+                <div class="order-items">' . __('Items', 'chatbot') . '</div>
+                <div class="order-status">' . __('Status', 'chatbot') . '</div>
             </div>';
         foreach ($customer_orders as $order) {
             //Formatting order summery
@@ -1125,7 +1301,7 @@ function get_order_by_username($user_name){
             }
             $order_html .= '<div class="wp-chatbot-orders-single">
                 <div class="order-id"> ' . $order_url . '</div>
-                <div class="order-date"> <p>' . date("m/d/Y", strtotime($order->post_date)) . '</p> </div>
+                <div class="order-date"> <p>' . gmdate("m/d/Y", strtotime($order->post_date)) . '</p> </div>
                 <div class="order-items">';
             $singleOrder = new WC_Order($order->ID);
             $items = $singleOrder->get_items();
@@ -1227,7 +1403,7 @@ function qcld_wb_chatbot_recently_viewed_products(){
        <div class="wp-chatbot-product-summary">
        <div class="wp-chatbot-product-table">
        <div class="wp-chatbot-product-table-cell">
-       <h3 class="wp-chatbot-product-title">' . $product->post->post_title . '</h3>
+       <h3 class="wp-chatbot-product-title">' . esc_html($product->post->post_title) . '</h3>
        <div class="price">' . $product->get_price_html() . '</div>';
             $html .= ' </div>
        </div>
@@ -1298,7 +1474,7 @@ function qcld_wb_chatbot_recently_viewed_shortcode(){
        <div class="wp-chatbot-product-summary">
        <div class="wp-chatbot-product-table">
        <div class="wp-chatbot-product-table-cell">
-       <h3 class="wp-chatbot-product-title">' . $product->post->post_title . '</h3>
+       <h3 class="wp-chatbot-product-title">' . esc_html($product->post->post_title) . '</h3>
        <div class="price">' . $product->get_price_html() . '</div>';
             $html .= ' </div>
        </div>
@@ -1310,7 +1486,7 @@ function qcld_wb_chatbot_recently_viewed_shortcode(){
         $html .= '</ul></div>';
     } else {
         $html .= '<div class="wp-chatbot-products-area">';
-        $html .= '<p style="text-align: center">' . __('You have no products', 'wpchatbot') . ' !';
+        $html .= '<p style="text-align: center">' . __('You have no products', 'chatbot') . ' !';
         $html .= '</div>';
     }
     return $html;
@@ -1474,9 +1650,10 @@ function qcld_wb_chatbot_cart_shortcode(){
 add_action('wp_ajax_qcld_wb_chatbot_update_cart_item_number', 'qcld_wb_chatbot_update_cart_item_number');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_update_cart_item_number', 'qcld_wb_chatbot_update_cart_item_number');
 function qcld_wb_chatbot_update_cart_item_number(){
+    check_ajax_referer( 'wp_chatbot', 'nonce' );
     //getting cart items n
-    $cart_item_key = sanitize_text_field($_POST['cart_item_key']);
-    $qnty = sanitize_text_field($_POST['qnty']);
+    $cart_item_key = sanitize_text_field(wp_unslash($_POST['cart_item_key']));
+    $qnty = sanitize_text_field(wp_unslash($_POST['qnty']));
     global $wpcommerce;
     $result = $wpcommerce->cart->set_quantity($cart_item_key, $qnty);
     wp_send_json($result);
@@ -1485,8 +1662,9 @@ function qcld_wb_chatbot_update_cart_item_number(){
 add_action('wp_ajax_qcld_wb_chatbot_cart_item_remove', 'qcld_wb_chatbot_cart_item_remove');
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_cart_item_remove', 'qcld_wb_chatbot_cart_item_remove');
 function qcld_wb_chatbot_cart_item_remove(){
+    check_ajax_referer( 'wp_chatbot', 'nonce' );
     //getting cart items n
-    $cart_item_key = sanitize_text_field($_POST['cart_item']);
+    $cart_item_key = sanitize_text_field(wp_unslash($_POST['cart_item']));
     global $wpcommerce;
     $result = $wpcommerce->cart->remove_cart_item($cart_item_key);
     wp_send_json($result);
@@ -1525,7 +1703,7 @@ function qcld_wb_chatbot_checkout_page(){
     wp_send_json($response);
 }
 //_dynamic_intent
-function qc_dynamic_intent(){
+function qcld_dynamic_intent(){
     global $wpdb;
     $intents = array();
  
@@ -1544,7 +1722,7 @@ function qc_dynamic_intent(){
     if(class_exists('Qcformbuilder_Forms_Admin')){
         
 
-        $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM ". $wpdb->prefix."wfb_forms WHERE type= %s",'primary')); //DB Call OK, No Caching OK
+        $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM ". $wpdb->prefix."wfb_forms WHERE type= %s",'primary')); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
         if(!empty($results)){
 
@@ -1571,8 +1749,8 @@ function qc_dynamic_intent(){
 //     // Nonce is checked, get the POST data and sign user on
 //     $info = array();
 //     //$info['nonce'] = $_POST['nonce_val'];
-//     $info['user_login'] = trim(sanitize_text_field($_POST['user_name']));
-//     $info['user_password'] = trim(sanitize_text_field($_POST['user_pass']));
+//     $info['user_login'] = trim(sanitize_text_field(wp_unslash($_POST['user_name'])));
+//     $info['user_password'] = trim(sanitize_text_field(wp_unslash($_POST['user_pass'])));
 //     $info['remember'] = true;
 //     $user_signon = wp_signon($info, false);
 //     // $response=$info;
@@ -1615,13 +1793,14 @@ add_action('init', 'wp_chatbot_create_app_checkout_thankyou_page');
 function wp_chatbot_create_app_checkout_thankyou_page(){
     if (get_option('wp_chatbot_app_pages') == 1) {
         //Mobile App page create
-        if (get_page_by_title('wpwBot Mobile App') == NULL) {
+        $existing_app = new WP_Query( array( 'post_type' => 'page', 'name' => 'wpwbot-mobile-app', 'post_status' => 'publish', 'posts_per_page' => 1 ) );
+        if ( ! $existing_app->have_posts() ) {
             //post status and options
             $app_page = array(
                 'comment_status' => 'closed',
                 'ping_status' => 'closed',
                 'post_author' => get_current_user_id(),
-                'post_date' => date('Y-m-d H:i:s'),
+                'post_date' => gmdate('Y-m-d H:i:s'),
                 'post_status' => 'publish',
                 'post_title' => 'wpwBot Mobile App',
                 'post_name' => 'wpwbot-mobile-app',
@@ -1633,13 +1812,14 @@ function wp_chatbot_create_app_checkout_thankyou_page(){
             update_option('wp_chatbot_app_checkout', $wpwbot_app);
         }
         //App checkout page create
-        if (get_page_by_title('wpwBot App Checkout') == NULL) {
+        $existing_checkout = new WP_Query( array( 'post_type' => 'page', 'name' => 'wpwbot-app-checkout', 'post_status' => 'publish', 'posts_per_page' => 1 ) );
+        if ( ! $existing_checkout->have_posts() ) {
             //post status and options
             $checkout_page = array(
                 'comment_status' => 'closed',
                 'ping_status' => 'closed',
                 'post_author' => get_current_user_id(),
-                'post_date' => date('Y-m-d H:i:s'),
+                'post_date' => gmdate('Y-m-d H:i:s'),
                 'post_status' => 'publish',
                 'post_title' => 'wpwBot App Checkout',
                 'post_name' => 'wpwbot-app-checkout',
@@ -1651,13 +1831,14 @@ function wp_chatbot_create_app_checkout_thankyou_page(){
             update_option('wp_chatbot_app_checkout', $app_checkout);
         }
         //App Order thank you page create
-        if (get_page_by_title('wpwBot App Order Thank You') == NULL) {
+        $existing_thankyou = new WP_Query( array( 'post_type' => 'page', 'name' => 'wpwbot-app-order-thankyou', 'post_status' => 'publish', 'posts_per_page' => 1 ) );
+        if ( ! $existing_thankyou->have_posts() ) {
             //post status and options
             $thankyou_page = array(
                 'comment_status' => 'closed',
                 'ping_status' => 'closed',
                 'post_author' => get_current_user_id(),
-                'post_date' => date('Y-m-d H:i:s'),
+                'post_date' => gmdate('Y-m-d H:i:s'),
                 'post_status' => 'publish',
                 'post_title' => 'wpwBot App Order Thank You',
                 'post_name' => 'wpwbot-app-order-thankyou',
@@ -1670,7 +1851,7 @@ function wp_chatbot_create_app_checkout_thankyou_page(){
         }
     }
     //Keep tracking from App by cookies
-    if (isset($_GET['from']) && $_GET['from'] == 'app') {
+    if ( isset( $_GET['from'] ) && sanitize_text_field( wp_unslash( $_GET['from'] ) ) === 'app' ) { // phpcs:ignore WordPress.Security.NonceVerification
         if (!isset($_COOKIE['from_app'])) {
             setcookie('from_app', 'yes', (time() + 3600), '/');
         }
@@ -1686,7 +1867,7 @@ function qcld_wb_chatbot__redirect_after_purchase($order_get_id){
         if (is_checkout() && !empty($wp->query_vars['order-received'])) {
             $thanks_page_id = get_option('wp_chatbot_app_order_thankyou');
             $thanks_parmanlink = esc_url(get_permalink($thanks_page_id));
-            wp_redirect($thanks_parmanlink . '?order_id=' . $order_get_id);
+            wp_safe_redirect($thanks_parmanlink . '?order_id=' . $order_get_id);
             exit;
         }
     } else {
@@ -1696,7 +1877,10 @@ function qcld_wb_chatbot__redirect_after_purchase($order_get_id){
 }
 
 function qcld_choose_random($array){
-    return $array[array_rand($array)];
+    if (is_array($array) && !empty($array)) {
+        return $array[array_rand($array)];
+    }
+    return $array;
 }
 
 //User session count
@@ -1704,26 +1888,27 @@ add_action('wp_ajax_qcld_wb_chatbot_session_count', 'qcld_wb_chatbot_session_cou
 add_action('wp_ajax_nopriv_qcld_wb_chatbot_session_count', 'qcld_wb_chatbot_session_count');
 function qcld_wb_chatbot_session_count(){
     // Nonce is checked, get the POST data and sign user on
+    check_ajax_referer( 'wp_chatbot', 'nonce' );
     global $wpdb;
     $wpdb->show_errors = true;
     $tableuser    = $wpdb->prefix.'wpbot_sessions';
     $response = array();
     
 
-    $session_exists = $wpdb->get_row($wpdb->prepare("select * from $tableuser where 1 and id = %d",1)); //DB Call OK, No Caching OK
+    $session_exists = $wpdb->get_row($wpdb->prepare("select * from {$tableuser} where 1 and id = %d",1)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
 		if(empty($session_exists)){
-			$wpdb->insert(
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$tableuser,
 				array(
 					'session'   => 1,
 				)
-			); //DB Call OK, No Caching OK
+			);
 		}else{
 
 			$session_id = $session_exists->id;
 
-			$wpdb->update(
+			$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$tableuser,
 				array(
 					'session'=>($session_exists->session+1),
@@ -1733,7 +1918,7 @@ function qcld_wb_chatbot_session_count(){
 					'%d',
 				),
 				array('%d')
-			); //DB Call OK, No Caching OK
+			);
 
 		}
 	
@@ -1743,7 +1928,7 @@ function qcld_wb_chatbot_session_count(){
 /* WPBot Chat History Addon check */
 function qcld_wpbot_is_active_chat_history(){
 
-    if(function_exists('qcwp_chat_session_menu_fnc')  || function_exists( 'qcpdcs_chat_session_menu_fnc' ) ){
+    if(function_exists('qcwp_chat_session_menu_fnc') || function_exists('qcwp_chat_session_menu_fnc_free')  || function_exists( 'qcpdcs_chat_session_menu_fnc' ) ){
         return 1;
     }else{
         return 0;
@@ -1751,16 +1936,71 @@ function qcld_wpbot_is_active_chat_history(){
 
 }
 
-function qc_wpbot_input_validation( $data ) {
-	$data = html_entity_decode($data);
-	$data = trim($data);
-	$data = stripslashes($data);
-	$data = htmlspecialchars($data);
+/**
+ * Safely sanitize chatbot conversation input.
+ *
+ * SECURITY FIX (CVE WPBot Stored XSS ≤ 8.6.9):
+ * The previous order was: wp_kses() → html_entity_decode() → htmlspecialchars().
+ * An attacker could submit entity-encoded payloads (&lt;img onerror=...&gt;) that
+ * bypassed wp_kses (which saw inert text), were then decoded back into live markup
+ * by html_entity_decode(), and survived into storage and the admin UI.
+ *
+ * Correct order: html_entity_decode() FIRST → wp_kses() → htmlspecialchars().
+ * wp_kses() now sees the real decoded markup and strips forbidden tags/attributes.
+ *
+ * @param  string $data Raw conversation string (already wp_unslash'd by caller).
+ * @return string Sanitized, entity-encoded string safe for DB storage.
+ */
+function qcld_wpbot_input_validation( $data ) {
+	// 1. Decode any entity-encoded HTML so wp_kses sees the real markup.
+	$data = html_entity_decode( $data, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+	$data = trim( $data );
+	$data = stripslashes( $data );
+	// 2. Sanitize with a strict allowlist — NOW operating on decoded markup.
+	$data = wp_kses( $data, wpbot_get_safe_conversation_tags() );
+	// 3. Re-encode for safe DB storage; admin.js decodes for rendering.
+	$data = htmlspecialchars( $data, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	return $data;
 }
-add_action('wp_ajax_small_talk_import', 'small_talk_import');
-function small_talk_import(){
 
+/**
+ * Returns the strict HTML allowlist for chatbot conversation content.
+ *
+ * Critically: no event-handler attributes (onerror, onclick, onload, etc.) are
+ * allowed — wp_kses strips any attribute not explicitly listed here.
+ * 'img' is intentionally omitted; bot responses that include images should use
+ * safe URLs only and can be re-added with only 'src', 'alt', 'class' if needed.
+ *
+ * @return array<string, array<string, bool>>
+ */
+function wpbot_get_safe_conversation_tags() {
+	return array(
+		'ul'     => array( 'class' => true ),
+		'ol'     => array( 'class' => true ),
+		'li'     => array( 'class' => true, 'id' => true ),
+		'div'    => array( 'class' => true, 'id' => true ),
+		'span'   => array( 'class' => true, 'id' => true ),
+		'p'      => array( 'class' => true ),
+		'br'     => array(),
+		'strong' => array(),
+		'em'     => array(),
+		'b'      => array(),
+		'i'      => array(),
+		'a'      => array(
+			'href'   => true,
+			'target' => true,
+			'rel'    => true,
+			'class'  => true,
+		),
+		// 'img' intentionally excluded — prevents onerror/onload injection.
+		// Add back with only 'src','alt','class' if bot image responses are needed.
+	);
+}
+add_action('wp_ajax_qcld_small_talk_import', 'qcld_small_talk_import');
+function qcld_small_talk_import(){
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die();
+    }
     global $wpdb;
 
     $table = $wpdb->prefix.'wpbot_response';
@@ -1769,21 +2009,23 @@ function small_talk_import(){
 
     foreach ($csvFile as $line) {
         $line = str_getcsv($line, ',', '"');
-        $wpdb->insert($table, array(
+        $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $table, array(
             'query' => $line[0],
             'keyword' => $line[1],
             'response' => $line[2],
             'category'=> $line[3],
             'intent'=> '',
             //'lang'=> 'en_US',
-        )); //DB Call OK, No Caching OK
+        ));
     }
 
     $table2 = $wpdb->prefix.'wpbot_response_category';
 
-    $wpdb->insert($table2, array(
+    $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+        $table2, array(
         'name' => 'smalltalk',
-    )); //DB Call OK, No Caching OK
+    ));
 
    update_option( 'qcld_small_talk_imported', 'yes' );
     
@@ -1805,3 +2047,34 @@ function qcld_wpbot_meta_tags() {
     echo '<!-- "This site uses ChatBot for WordPress - WPBot from https://www.wpbot.pro/" -->';
 }
 add_action('wp_footer', 'qcld_wpbot_meta_tags', 100);
+
+if ( ! function_exists( 'qcld_change_language_from_center' ) ) {
+	add_action( 'wp_ajax_qcld_change_language_from_center', 'qcld_change_language_from_center' );
+	add_action( 'wp_ajax_nopriv_qcld_change_language_from_center', 'qcld_change_language_from_center' );
+	function qcld_change_language_from_center() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => 'Unauthorized.' ) );
+		}
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+		if ( ! wp_verify_nonce( $nonce, 'wp_chatbot' ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid nonce.' ) );
+		}
+		$plugin_path = plugin_dir_path( __FILE__ );
+		include $plugin_path . 'includes/admin/settings-fields.php';
+		$json_file_path = $plugin_path . 'includes/language-center.json';
+		
+   		$json_string = file_get_contents( $json_file_path );
+		   if ( isset( $_POST['language'] ) ) {
+			    $language = sanitize_text_field( wp_unslash( $_POST['language'] ) );
+			    $language_array= json_decode($json_string)->$language;
+                update_option( 'wp_chatbot_language_center_language', $language );
+			    wp_send_json_success( array( 'message' => true, 'data' => $language_array, 'language' => $language ) );
+		    } else {
+			    wp_send_json_error( array( 'message' => 'Language not specified.' ) );
+
+		    }
+	}
+}
+
+// AI Actions Chat Preview
+

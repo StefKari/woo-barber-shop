@@ -1,0 +1,42 @@
+#adminmenu #toplevel_page_woo-product-feed .wp-menu-image img {
+  opacity: 1;
+}
+
+/* Upgrade to Elite Menu - Start */
+#adminmenu #toplevel_page_woo-product-feed .pfp-upgrade-to-elite-menu {
+  background: linear-gradient(to left, #e63e77 50%, #d32f5e 50%);
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: background-position 0.5s ease;
+}
+
+#adminmenu #toplevel_page_woo-product-feed .pfp-upgrade-to-elite-menu:hover {
+  background-position: left bottom;
+}
+
+#adminmenu #toplevel_page_woo-product-feed .wp-submenu .pfp-upgrade-to-elite-menu a {
+  color: #fff;
+  font-weight: 700;
+}
+
+#adminmenu #toplevel_page_woo-product-feed .pfp-upgrade-to-elite-menu a:hover,
+#adminmenu #toplevel_page_woo-product-feed .pfp-upgrade-to-elite-menu a:focus {
+  color: #fff;
+  border-color: #fff;
+}
+/* Upgrade to Elite Menu - End */
+
+/* "NEW" tag next to a submenu item (e.g. AI Discovery) */
+#adminmenu #toplevel_page_woo-product-feed .adt-menu-new-tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 6px;
+  border-radius: 9px;
+  background: #e63e77;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  vertical-align: text-bottom;
+}

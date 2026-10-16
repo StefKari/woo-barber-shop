@@ -32,10 +32,6 @@ class RWMB_Media_Field extends RWMB_File_Field {
 		] );
 	}
 
-	public static function add_actions() {
-		add_action( 'print_media_templates', [ get_called_class(), 'print_templates' ] );
-	}
-
 	/**
 	 * Get meta value.
 	 *
@@ -58,7 +54,7 @@ class RWMB_Media_Field extends RWMB_File_Field {
 			foreach ( $ids as &$value ) {
 				$value = (array) $value;
 			}
-			$ids = call_user_func_array( 'array_merge', $ids );
+			$ids = array_merge( ...$ids );
 		}
 		update_meta_cache( 'post', $ids );
 
@@ -136,7 +132,16 @@ class RWMB_Media_Field extends RWMB_File_Field {
 		$attributes['class'] .= ' rwmb-media';
 
 		// Add attachment details.
-		$attachments                    = array_values( array_filter( array_map( 'wp_prepare_attachment_for_js', $value ) ) );
+		$attachments = [];
+		foreach ( $value as $attachment_id ) {
+			$attachment = wp_prepare_attachment_for_js( $attachment_id );
+			if ( empty( $attachment ) ) {
+				continue;
+			}
+			// Do not load compat media HTML markup, which can cause invalid JSON
+			unset( $attachment['compat'] );
+			$attachments[] = $attachment;
+		}
 		$attributes['data-attachments'] = wp_json_encode( $attachments );
 
 		if ( empty( $attachments ) ) {
@@ -146,7 +151,7 @@ class RWMB_Media_Field extends RWMB_File_Field {
 		return $attributes;
 	}
 
-	protected static function get_mime_extensions() : array {
+	protected static function get_mime_extensions(): array {
 		$mime_types = wp_get_mime_types();
 		$extensions = [];
 		foreach ( $mime_types as $ext => $mime ) {
@@ -205,12 +210,5 @@ class RWMB_Media_Field extends RWMB_File_Field {
 		$storage = $field['storage'];
 		$storage->delete( $post_id, $field['id'] );
 		parent::save( $new, [], $post_id, $field );
-	}
-
-	/**
-	 * Template for media item.
-	 */
-	public static function print_templates() {
-		require RWMB_INC_DIR . 'templates/media.php';
 	}
 }

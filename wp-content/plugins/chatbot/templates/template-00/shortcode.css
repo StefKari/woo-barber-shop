@@ -111,15 +111,6 @@
 }
 
 
-
-.wp-chatbot-content {
-
-    /*background: url("../../images/message-bg.png") no-repeat top center;*/
-
-}
-
-
-
 ul.wp-chatbot-messages-container li {
 
     font-size: 14px;
@@ -231,8 +222,6 @@ ul.wp-chatbot-messages-container > li.wp-chatbot-msg .wp-chatbot-paragraph, .wp-
 ul.wp-chatbot-messages-container li:first-child.wp-chatbot-msg .wp-chatbot-paragraph {
 
     background-color: transparent;
-
-    color: #494949;
 
 }
 

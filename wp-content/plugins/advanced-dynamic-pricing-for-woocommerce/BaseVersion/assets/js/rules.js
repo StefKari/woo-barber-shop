@@ -9,12 +9,24 @@ jQuery(document).ready(function ($) {
         var init_events = function ($container, $rule, blocks) {
             $rule.find('.wdp_bulk_adjustment_remove').click(function () {
                 destroy($container, $rule, blocks);
+              if($rule.find('.wdp-role-discounts').css('display') === 'none' &&
+                 $rule.find('.wdp-product-adjustments').css('display') === 'none') {
+                $rule.find('.replace-adjustments').hide();
+                $rule.find('.replace-adjustments').find('input[type="checkbox"]').prop('checked', false);
+                $rule.find('.replace-adjustments').find('input[type="text"]').val('');
+              }
             });
             $container.find('.bulk-adjustment-type').on('change', function () {
                 update_selectors($container, $rule);
             });
+            $container.find('.bulk-discount-type').on('change', function () {
+                update_selectors_discount_type($container);
+            });
             $container.find('.bulk-qty_based-type').on('change', function () {
-                update_selectors($container, $rule);
+              update_selectors($container, $rule);
+            });
+            $container.find('.bulk-measurement-type').on('change', function () {
+              update_selectors($container, $rule);
             });
             make_select2_products($container.find('[data-field="autocomplete"]'));
         };
@@ -41,6 +53,7 @@ jQuery(document).ready(function ($) {
             var $adj_type = $container.find('.bulk-adjustment-type').val();
             var $qty_based = $container.find('.bulk-qty_based-type').val();
             var $discount_type = $container.find('.bulk-discount-type').val();
+            var $measurement_type = $container.find('.bulk-measurement-type').val();
 
             var $available_qty_based;
             if ( persistence ) {
@@ -54,21 +67,35 @@ jQuery(document).ready(function ($) {
                 $qty_based = Object.keys(get_available_qty_based_types($adj_type))[0];
               }
             }
+
+            $container.find('.wdp-help-tip').hide();
+            $container.find(`.wdp-help-tip[data-qty-based="${$qty_based}"]`).show();
             $container.find('.bulk-qty_based-type').html("");
             $.each($available_qty_based, function ($key, $item) {
                 $container.find('.bulk-qty_based-type').append(make_option($key, $item.label))
             });
 
             var $available_discount_types
+            var $available_measurement_types
             if ( persistence ) {
-              var $available_discount_types = get_available_discount_persistence_types($adj_type, $qty_based);
+              $available_discount_types = get_available_discount_persistence_types($adj_type, $qty_based);
               if (!check_discount_type_persistence_availability($adj_type, $qty_based, $discount_type)) {
-                $discount_type = Object.keys(get_available_discount_persistence_types($adj_type, $qty_based))[0];
+                $discount_type = Object.keys($available_discount_types)[0];
+              }
+
+              $available_measurement_types = get_available_measurement_persistence_types($adj_type, $qty_based);
+              if (!check_measurement_type_persistence_availability($adj_type, $qty_based, $measurement_type)) {
+                $measurement_type = Object.keys(get_available_measurement_persistence_types($adj_type, $qty_based))[0];
               }
             } else {
-              var $available_discount_types = get_available_discount_types($adj_type, $qty_based);
+              $available_discount_types = get_available_discount_types($adj_type, $qty_based);
               if (!check_discount_type_availability($adj_type, $qty_based, $discount_type)) {
-                $discount_type = Object.keys(get_available_discount_types($adj_type, $qty_based))[0];
+                $discount_type = Object.keys($available_discount_types)[0];
+              }
+
+              $available_measurement_types = get_available_measurement_types($adj_type, $qty_based);
+              if (!check_measurement_type_availability($adj_type, $qty_based, $measurement_type)) {
+                $measurement_type = Object.keys($available_measurement_types)[0];
               }
             }
             $container.find('.bulk-discount-type').html("");
@@ -76,8 +103,14 @@ jQuery(document).ready(function ($) {
                 $container.find('.bulk-discount-type').append(make_option($key, $label))
             });
 
+            $container.find('.bulk-measurement-type').html("");
+            $.each($available_measurement_types, function ($key, $label) {
+              $container.find('.bulk-measurement-type').append(make_option($key, $label))
+            });
+
             $container.find('.bulk-qty_based-type').val($qty_based);
             $container.find('.bulk-discount-type').val($discount_type);
+            $container.find('.bulk-measurement-type').val($measurement_type);
 
             if ($qty_based === 'product_selected_categories') {
                 $container.find('.bulk-selected_categories-type').show();
@@ -90,6 +123,10 @@ jQuery(document).ready(function ($) {
             } else {
                 $container.find('.bulk-selected_products-type').hide();
             }
+
+            updateBulkAdjustmentInputPlaceholders($container);
+
+            $container.find('.wdp-product-adjustments-type-value-note').toggle($adj_type === 'tier');
         };
 
         var make_option = function ($value, $label, $classes) {
@@ -120,8 +157,16 @@ jQuery(document).ready(function ($) {
             return $available_types[$adj_type][$qty_based].items;
         };
 
+        var get_available_measurement_types = function ($adj_type, $qty_based) {
+          return $available_types[$adj_type][$qty_based].measurement;
+        };
+
         var check_discount_type_availability = function ($adj_type, $qty_based, $discount_type) {
             return typeof $available_types[$adj_type][$qty_based].items[$discount_type] !== 'undefined';
+        };
+
+        var check_measurement_type_availability = function ($adj_type, $qty_based, $measurement) {
+          return typeof $available_types[$adj_type][$qty_based].measurement[$measurement] !== 'undefined';
         };
 
       var get_available_qty_based_persistence_types = function ($adj_type) {
@@ -136,8 +181,16 @@ jQuery(document).ready(function ($) {
         return $persistence_available_types[$adj_type][$qty_based].items;
       };
 
+      var get_available_measurement_persistence_types = function ($adj_type, $qty_based) {
+        return $persistence_available_types[$adj_type][$qty_based].measurement;
+      };
+
       var check_discount_type_persistence_availability = function ($adj_type, $qty_based, $discount_type) {
         return typeof $persistence_available_types[$adj_type][$qty_based].items[$discount_type] !== 'undefined';
+      };
+
+      var check_measurement_type_persistence_availability = function ($adj_type, $qty_based, $measurement) {
+        return typeof $persistence_available_types[$adj_type][$qty_based].measurement[$measurement] !== 'undefined';
       };
 
         return {
@@ -162,6 +215,7 @@ jQuery(document).ready(function ($) {
                 $rule.find('.bulk-adjustment-type').find('option:first-child').prop("selected", "selected");
                 $rule.find('.bulk-qty_based-type').find('option:first-child').prop("selected", "selected");
                 $rule.find('.bulk-discount-type').find('option:first-child').prop("selected", "selected");
+                $rule.find('.bulk-measurement-type').find('option:first-child').prop("selected", "selected");
 
                 init_events($container, $rule, blocks);
 
@@ -172,6 +226,10 @@ jQuery(document).ready(function ($) {
 
                     if ($data.discount_type) {
                         $container.find('.bulk-discount-type').val($data.discount_type);
+                    }
+
+                    if ($data.measurement) {
+                        $container.find('.bulk-measurement-type').val($data.measurement);
                     }
 
                     if ($data.qty_based) {
@@ -215,7 +273,25 @@ jQuery(document).ready(function ($) {
 
     });
 
+    function update_selectors_discount_type ($container) {
+      var $select = $container.find('.bulk-discount-type');
+      var selectedValue = $select.val();
+      var $rangeInputs = $container.find('.wdp-adjustment-ranges input.adjustment-value');
 
+      if(selectedValue === "discount__expression_price") {
+        $rangeInputs.each(function () {
+          if ($(this).attr('type') === 'number') {
+            $(this).attr('type', 'text');
+          }
+        });
+      } else {
+        $rangeInputs.each(function () {
+          if ($(this).attr('type') === 'text') {
+            $(this).attr('type', 'number');
+          }
+        });
+      }
+    };
 
     // make rule blocks collapsable and sortable
     wpc_postboxes.add_postbox_toggles( $('#rules-container') );
@@ -275,17 +351,71 @@ jQuery(document).ready(function ($) {
           add_product_filter(new_rule.find('.wdp-filter-block'));
         }
 
-        new_rule.removeClass('not-initialized')
+        new_rule.removeClass('not-initialized');
     }
 
 	wpc_postboxes._on_expand = function (new_rule, data) {
 		new_rule.find('.rule-trigger-coupon-code input').prop('readonly', false);
+		new_rule.find('.rule-date-from-to input[name="rule[additional][date_from]"]').datepicker( "option", "disabled", false ).css("background-color", "white");
+		new_rule.find('.rule-date-from-to input[name="rule[additional][date_to]"]').datepicker( "option", "disabled", false ).css("background-color", "white");
 		finishLoadRule(new_rule, data);
+		new_rule.find('.wdp-title').focus();
 	};
 
 	wpc_postboxes._on_close = function (new_rule, data) {
 		new_rule.find('.rule-trigger-coupon-code input').prop('readonly', true);
+    new_rule.find('.rule-date-from-to input[name="rule[additional][date_from]"]').datepicker( "option", "disabled", true ).css("background-color", "#f0f0f1");
+    new_rule.find('.rule-date-from-to input[name="rule[additional][date_to]"]').datepicker( "option", "disabled", true ).css("background-color", "#f0f0f1");
 	};
+
+  function initWdpTooltips() {
+    $('.wdp-help-tip').off('hover');
+
+    $('.wdp-help-tip').hover(
+      function() {
+        var tipText = $(this).data('tip');
+        if (!tipText) return;
+
+        var $tooltip = $('<div class="wdp-tooltip-box"></div>').text(tipText).appendTo('body');
+
+        var offset = $(this).offset();
+        var tooltipWidth = $tooltip.outerWidth();
+        var tooltipHeight = $tooltip.outerHeight();
+        var windowWidth = $(window).width();
+
+        var left = offset.left + $(this).outerWidth() / 2 - tooltipWidth / 2;
+        if (left < 5) left = 5;
+        if (left + tooltipWidth > windowWidth - 5) left = windowWidth - tooltipWidth - 5;
+
+        $tooltip.css({
+          top: offset.top - tooltipHeight - 12,
+          left: left,
+          display: 'none'
+        }).fadeIn(200);
+      },
+      function() {
+        $('.wdp-tooltip-box').remove();
+      }
+    );
+  }
+
+  // create new rule when click 'Add rule' button
+	$('.add-rule').click(function (e) {
+		e.preventDefault();
+		// $('.wdp-count-all-rules').text(Number($('.wdp-count-all-rules').text()) + 1);
+		// $('.wdp-count-active-rules').text(Number($('.wdp-count-active-rules').text()) + 1);
+		var new_rule = add_rule();
+		new_rule.find('.rule-trigger-coupon-code input').prop('readonly', false);
+		new_rule.find('.rule-date-from-to input[name="rule[additional][date_from]"]').datepicker( "option", "disabled", false ).css("background-color", "white");
+		new_rule.find('.rule-date-from-to input[name="rule[additional][date_to]"]').datepicker( "option", "disabled", false ).css("background-color", "white");
+		finishLoadRule(new_rule);
+		if(new_rule.find('.wdp-discount-type').length) {
+			new_rule.find('.wdp-discount-type').show();
+			new_rule.find('.inside > .wdp-add-condition, .replace-adjustments').hide();
+		}
+		new_rule.find('.wdp-title').focus();
+		$("html, body").animate({ scrollTop: $(document).height() }, "slow"); //scroll to bottom
+	});
 
     // load saved rules
     if (wdp_data.rules) {
@@ -293,6 +423,7 @@ jQuery(document).ready(function ($) {
 	    wdp_data.rules.forEach( function ( data ) {
 		    promises.push( add_rule( data ) );
 	    } );
+      initWdpTooltips();
 	    Promise.all( promises ).then( function ( responses ) {
 		    $( "#rules-container" ).removeClass( "loading" );
 		    $( '#no-rules' ).removeClass( "loading" );
@@ -324,21 +455,10 @@ jQuery(document).ready(function ($) {
                 add_product_filter(new_rule.find('.wdp-filter-block'), filter_data);
             }
 
-        }
+        } else if(!wdp_data.rules.length) {
+			$('.add-rule').first().click();
+		}
     }
-
-    // create new rule when click 'Add rule' button
-    $('.add-rule').click(function (e) {
-        e.preventDefault();
-        // $('.wdp-count-all-rules').text(Number($('.wdp-count-all-rules').text()) + 1);
-        // $('.wdp-count-active-rules').text(Number($('.wdp-count-active-rules').text()) + 1);
-        var new_rule = add_rule();
-        new_rule.find('.rule-trigger-coupon-code input').prop('readonly', false);
-        finishLoadRule(new_rule);
-        new_rule.find('.wdp-discount-type-selector').show();
-        new_rule.find('.wdp-title').focus();
-      $("html, body").animate({ scrollTop: $(document).height() }, "slow"); //scroll to bottom
-    });
 
     /* Template functions */
 
@@ -365,8 +485,8 @@ jQuery(document).ready(function ($) {
         // prepare template
         var rule_template = get_template(template_options.rule_type + '_rule', template_options);
         if (rule_template === '') {
-	    rule_template = get_template('rule', template_options);
-	}
+	        rule_template = get_template('rule', template_options);
+	      }
 
         var new_rule = $(rule_template);
         if (data && data.rule_type === 'persistent') {
@@ -384,7 +504,11 @@ jQuery(document).ready(function ($) {
           new_rule.closest('.postbox').find('.rule-type select').val('common');
         }
         set_type_label_color(new_rule);
+        initWdpTooltips();
 
+        if (!wdp_data.options.support_persistence_rules && wdp_data.options.is_free_version) {
+          new_rule.closest('.postbox').find(".rule-type").hide();
+        }
         return new_rule;
     }
 
@@ -408,64 +532,77 @@ jQuery(document).ready(function ($) {
         $cartConditions.each(function () {
           let $condition_block = $( this ).find('.wdp-condition');
           if ( $condition_block.length ) {
-            let $searchField = $condition_block.find( '.select2-search__field' );
-            if ( ! $searchField.attr('disabled') ) {
-              let $selectionRender = $condition_block.find( '.select2-selection__rendered' );
-              let $inputFields = $condition_block.find( 'input' );
-              let $textAreas = $condition_block.find( 'textarea' );
-              let $qtyInputs = $condition_block.find( '.wdp-condition-field-qty' );
-              let elements = [];
-              let diff = [];
-              for (let idx = 0; idx < $qtyInputs.length; idx++) {
-                if (idx % 2 === 0) {
-                  diff.push($qtyInputs[idx]);
-                }
-              }
-              let attachErrorTo = [];
-              if ($selectionRender.length) {
-                $selectionRender.each(function() {
-                  elements.push($(this));
-                });
-              }
-              if ($inputFields.length) {
-                $inputFields.each(function () {
-                  let $parent = $(this).parent();
-                  let parentClasses = $parent.attr('class');
-                  if ($(this).attr('type') !== 'checkbox'
-                    && ! parentClasses.includes('select2')
-                    && ! parentClasses.includes('qty')
-                  ) {
-                    elements.push($(this));
+            let attachErrorTo = [];
+            $condition_block.each(function () {
+              let $searchField = $( this ).find( '.select2-search__field' );
+              if ( ! $searchField.attr('disabled') ) {
+                let $selectionRender = $( this ).find( '.select2-selection__rendered' );
+                let $inputFields = $( this ).find( 'input' );
+                let $textAreas = $( this ).find( 'textarea' );
+                let $qtyInputs = $( this ).find( '.wdp-condition-field-qty' );
+                let elements = [];
+                let diff = [];
+                for (let idx = 0; idx < $qtyInputs.length; idx++) {
+                  if (idx % 2 === 0) {
+                    diff.push($qtyInputs[idx]);
                   }
-                });
-              }
-              if ($textAreas.length) {
-                elements = elements.concat($textAreas);
-              }
-              elements.filter(x => diff.includes(x));
-              elements.forEach(function (el) {
-                if (el[0].localName !== 'input' && el[0].localName !== 'textarea') {
-                  if (! el[0].textContent.length || el[0].textContent === 'Select value') {
+                }
+
+                if ($selectionRender.length) {
+                  $selectionRender.each(function() {
+                    elements.push($(this));
+                  });
+                }
+                if ($inputFields.length) {
+                  $inputFields.each(function () {
+                    let $parent = $(this).parent();
+                    let parentClasses = $parent.attr('class');
+                    if ($(this).attr('type') !== 'checkbox'
+                      && ! parentClasses.includes('select2')
+                      && ! parentClasses.includes('qty')
+                    ) {
+                      elements.push($(this));
+                    }
+                  });
+                }
+                if ($textAreas.length) {
+                  elements = elements.concat($textAreas);
+                }
+                elements.filter(x => diff.includes(x));
+                elements = elements.filter(el => el.is(':visible'));
+                elements.forEach(function (el) {
+                  if (el[0].localName !== 'input' && el[0].localName !== 'textarea') {
+                    if (! el[0].textContent.length || el[0].textContent === 'Select value') {
+                      beforeSendValidation = false;
+                      attachErrorTo.push(el);
+                    }
+                  } else if (! el.val().length && !el.hasClass('not-required')) {
                     beforeSendValidation = false;
                     attachErrorTo.push(el);
+                  } else if(el.hasClass('hasDatepicker') && !el.val().match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)) {
+                    beforeSendValidation = false;
+                    el.data('customError', 'Incorrect date format');
+                    attachErrorTo.push(el);
+                  } else if(el.hasClass('datetimepicker') && !el.val().match(/^(\d{4})\/(\d{1,2})\/(\d{1,2}) (\d{1,2}):(\d{1,2})$/)) {
+                    beforeSendValidation = false;
+                    el.data('customError', 'Incorrect date format');
+                    attachErrorTo.push(el);
                   }
-                } else if (! el.val().length) {
-                  beforeSendValidation = false;
-                  attachErrorTo.push(el);
-                }
-              });
-              attachErrorTo.forEach(function (val) {
-                if (!beforeSendValidation && !val.next('.cart-conditions__error-wrapper').length) {
-                  let $elEmptyValue = $("<div class=\"cart-conditions__error-wrapper\"><span class=\"cart-conditions__onempty-error\"></span></div>");
-                  val.after($elEmptyValue);
-                  $('.cart-conditions__onempty-error').text('You must provide at least one value');
+                });
+              }
+            });
 
-                  setTimeout(function () {
-                    $form.find('.inside .cart-conditions__error-wrapper').remove();
-                  }, 5000);
-                }
-              });
-            }
+            attachErrorTo.forEach(function (val) {
+              if (!beforeSendValidation && !val.next('.cart-conditions__error-wrapper').length) {
+                let $elEmptyValue = $("<div class=\"cart-conditions__error-wrapper\"><span class=\"cart-conditions__onempty-error\"></span></div>");
+                val.after($elEmptyValue);
+                $elEmptyValue.find('.cart-conditions__onempty-error').text(val.data('customError') || 'You must provide at least one value');
+                val.removeData("customError");
+                setTimeout(function () {
+                  $form.find('.inside .cart-conditions__error-wrapper').remove();
+                }, 5000);
+              }
+            });
           }
         });
       }
@@ -483,7 +620,7 @@ jQuery(document).ready(function ($) {
           }
         });
         for (let i = adjustments.length - 1; i >= 0; i--) {
-          let rowValid = isNaN(adjustments[i].to) ? !isNaN(adjustments[i].from) : adjustments[i].from <= adjustments[i].to;
+          let rowValid = isNaN(adjustments[i].to) ? (!isNaN(adjustments[i].from) && adjustments[i].from > 0)  : (adjustments[i].from <= adjustments[i].to && adjustments[i].from > 0);
           let less = false;
           let include = false;
           if (i - 1 >= 0) {
@@ -589,6 +726,11 @@ jQuery(document).ready(function ($) {
             innerErrorContainerClass  = "products-filter__emptiness-error"
           }
 
+          if(rangeStartValue < 1) {
+            currentRangeError    = "The quantity must be greater than 0";
+            innerErrorContainerClass  = "products-filter__input-error"
+          }
+
           if ( currentRangeError !== "" ) {
             beforeSendValidation = false;
             if ( ! $( this ).find( '.two-on-two-column.left-column' ).children('.products-filter__error-wrapper').length ) {
@@ -620,6 +762,26 @@ jQuery(document).ready(function ($) {
         });
       }
 
+      let roleRows = $form.find('.wdp-role-discounts .wdp-role-discount');
+      if ( roleRows.length ) {
+        roleRows.each(function (index) {
+          //Check if values in filters are present
+          let roleSelects = $(this).find('.wdp-column.wdp-condition-field-value');
+          if (roleSelects.length) {
+            let $selectedOptions = roleSelects.find('.select2-selection__choice');
+            if (!$selectedOptions.length && !roleSelects.find(".select2-hidden-accessible").prop('disabled')) {
+              beforeSendValidation = false;
+              let $attachErrorTo = $(this).find('.select2.select2-container').first();
+              if (!$attachErrorTo.next('.products-filter__error-wrapper').length) {
+                let $elEmptyValue = $("<div class=\"products-filter__error-wrapper\"><span class=\"products-filter__onempty-error\"></span></div>");
+                $attachErrorTo.after($elEmptyValue);
+                $('.products-filter__onempty-error').text('You must select at least one value');
+              }
+            }
+          }
+        });
+      }
+
       setTimeout( function() {
         //remove errors
         var $all_filters = $('.wdp-product-filter-container .wdp-row.wdp-filter-item');
@@ -636,6 +798,13 @@ jQuery(document).ready(function ($) {
           let searchIn = $( value ).find( '.two-on-two-column.left-column' );
           remove_user_input_errors( searchIn, '.products-filter__error-wrapper' );
         } );
+
+        $('.wdp-role-discounts .wdp-role-discount').each(function (key, value) {
+          let $selectValuesField = $(value).find('.wdp-column.wdp-condition-field-value');
+          remove_user_input_errors($selectValuesField, '.products-filter__error-wrapper');
+          let searchIn = $(value).find('.two-on-two-column.left-column');
+          remove_user_input_errors(searchIn, '.products-filter__error-wrapper');
+        } );
       }, 5000 );
       if ( beforeSendValidation ) {
         let new_params = $form.serialize();
@@ -651,7 +820,7 @@ jQuery(document).ready(function ($) {
             $form.find('.rule-id').val(id);
 
             $form.removeClass('dirty');
-            $form.find( '.wdp-discount-type-selector').hide();
+            // $form.find( '.wdp-discount-type-selector').hide();
             $form.removeClass('disabled-by-plugin');
             $form.find('.wdp-disabled-automatically-prefix').hide();
           },
@@ -704,6 +873,17 @@ jQuery(document).ready(function ($) {
             }
             $postbox.find('[data-wdp-title]').text(value);
         });
+
+
+      new_rule.closest('.postbox').on('keydown', function(event) {
+        // Check if the pressed key is Enter (key code 13)
+        if (event.keyCode === 13) {
+          // Prevent the default action of the Enter key (e.g., form submission)
+          event.preventDefault();
+          // Optionally, you can also stop the event from propagating further
+          event.stopPropagation();
+        }
+      });
 
         // listeners for buttons
         new_rule.find('.wdp_remove_rule').on('click', function () {
@@ -831,8 +1011,16 @@ jQuery(document).ready(function ($) {
             } );
         });
 
-		new_rule.find('.rule-trigger-coupon-code input').change(function () {
+		new_rule.find('.rule-trigger-coupon-code input').change(function (evt) {
 			new_rule.addClass('dirty');
+
+            let val = $(evt.target).val();
+
+            if ( val ) {
+                $(evt.target).closest(".rule-trigger-coupon-code").find("button").show();
+            } else {
+                $(evt.target).closest(".rule-trigger-coupon-code").find("button").hide();
+            }
 		});
 
         new_rule.find('.wdp-field-enabled').click(function (event) {
@@ -845,7 +1033,32 @@ jQuery(document).ready(function ($) {
             update_rule_title(new_rule);
         });
         update_rule_title(new_rule);
-    }
+
+
+      let jqDateFrom = new_rule.find('.rule-date-from-to input[name="rule[additional][date_from]"]');
+      let jqDateTo = new_rule.find('.rule-date-from-to input[name="rule[additional][date_to]"]');
+
+      jqDateFrom.removeClass('hasDatepicker').datepicker({
+        dateFormat: "yy-mm-dd",
+        beforeShow: function () {
+          let maxDate = new Date(jqDateTo.val());
+
+          jqDateFrom.datepicker("option", "maxDate", maxDate);
+        },
+        disabled: true,
+      }).css("background-color", "#f0f0f1");
+
+      jqDateTo.removeClass('hasDatepicker').datepicker({
+        dateFormat: "yy-mm-dd",
+        beforeShow: function () {
+          let minDate = new Date(jqDateFrom.val());
+          minDate.setDate(minDate.getDate());
+
+          jqDateTo.datepicker("option", "minDate", minDate);
+        },
+        disabled: true,
+      }).css("background-color", "#f0f0f1");
+      }
 
     function set_type_label_color($rule) {
       let $select = $rule.find('.rule-type select');
@@ -862,6 +1075,7 @@ jQuery(document).ready(function ($) {
       $rule.find('.wdp-filter-item').remove();
       blocks.setProductFiltersOpen(false)
       $(rule).find('.wdp-btn-add-product-filter').show();
+      $(rule).find('.wdp-btn-add-product-set').show();
 
       //remove product discount
       $rule.find('.wdp-btn-add-product-adjustment').show();
@@ -963,6 +1177,153 @@ jQuery(document).ready(function ($) {
       add_role_discount(new_rule.find('.wdp-btn-add-role-discount'));
     }
 
+    function show_pro_threebytwo_discount_type(rule_type_selector, new_rule){
+      let linkOnExample = $(rule_type_selector).parent().find('a');
+      linkOnExample.attr('href', 'https://docs.algolplus.com/algol_pricing/cart-discount-help/').show();
+
+      if(!wdp_data.options.filter_priority) {
+        let params = {
+          action: 'wdp_ajax',
+          method: 'check_filter_priority',
+        };
+        params[wdp_data.security_query_arg] = wdp_data.security;
+        $.post(
+          ajaxurl,
+          params,
+          function (response) {
+            if (!response.success) {
+              console.error(response.data);
+              return;
+            } else {
+              new_rule.find('.wdp-select-filter-priority-temp')
+                .removeClass('wdp-select-filter-priority-temp')
+                .addClass('wdp-select-filter-priority')
+                .show();
+            }
+          },
+          'json'
+        );
+      }
+
+      var filter_data_1 = {
+        qty: 2,
+        type: "products",
+        limitation: "none",
+        select_priority: "expensive",
+      };
+
+      var filter_data_2 = {
+        qty: 1,
+        type: "products",
+        limitation: "none",
+        select_priority: "cheap",
+      };
+
+      var adjustment_data = {
+        type: 'split',
+        split: [
+          {
+            type: 'discount__amount',
+          },
+          {
+            type: 'discount__percentage',
+            value: 100
+          }
+        ]
+      };
+
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_1, null, {isSet: true});
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_2, null, {isSet: true});
+
+      add_product_adjustment(new_rule.find('.wdp-product-adjustments'), adjustment_data);
+    }
+
+    function show_buy_three_for_x(rule_type_selector, new_rule) {
+      let linkOnExample = $(rule_type_selector).parent().find('a');
+      linkOnExample.attr('href', 'https://docs.algolplus.com/algol_pricing/cart-discount-help/').show();
+
+      var filter_data = {
+        qty: 3,
+        type: "any",
+        limitation: "product"
+      };
+
+      var adjustment_data = {
+        type: 'total',
+        total: {
+          type: 'price__fixed',
+        }
+      };
+
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data);
+      add_product_adjustment(new_rule.find('.wdp-product-adjustments'), adjustment_data);
+    }
+
+    function show_disc_cheapest_fifty_perc(rule_type_selector, new_rule){
+      let linkOnExample = $(rule_type_selector).parent().find('a');
+      linkOnExample.attr('href', 'https://docs.algolplus.com/algol_pricing/cart-discount-help/').show();
+
+      if(!wdp_data.options.filter_priority) {
+        let params = {
+          action: 'wdp_ajax',
+          method: 'check_filter_priority',
+        };
+        params[wdp_data.security_query_arg] = wdp_data.security;
+        $.post(
+          ajaxurl,
+          params,
+          function (response) {
+            if (!response.success) {
+              console.error(response.data);
+              return;
+            } else {
+              new_rule.find('.wdp-select-filter-priority-temp')
+                .removeClass('wdp-select-filter-priority-temp')
+                .addClass('wdp-select-filter-priority')
+                .show();
+            }
+          },
+          'json'
+        );
+      }
+
+      var filter_data_1 = {
+        qty: 1,
+        type: "products",
+        limitation: "product",
+        select_priority: "expensive",
+      };
+
+      var filter_data_2 = {
+        qty: 1,
+        type: "products",
+        limitation: "product",
+        select_priority: "cheap",
+      };
+
+      var adjustment_data = {
+        type: 'split',
+        total: {
+          type: 'discount__percentage',
+          value: 50
+        },
+        split: [
+          {
+            type: 'discount__amount',
+          },
+          {
+            type: 'discount__percentage',
+            value: 50
+          }
+        ]
+      };
+
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_1, null, {isSet: true});
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_2, null, {isSet: true});
+
+      add_product_adjustment(new_rule.find('.wdp-product-adjustments'), adjustment_data);
+    }
+
     function show_cart_discount_type(rule_type_selector, new_rule){
       let linkOnExample = $(rule_type_selector).parent().find('a');
       linkOnExample.attr('href', 'https://docs.algolplus.com/algol_pricing/cart-discount-help/').show();
@@ -978,43 +1339,101 @@ jQuery(document).ready(function ($) {
             add_condition($(this));
         });
 
-        new_rule.find('select[name="discount-type"]').change(function(){
-          resetAll(new_rule);
-          switch($(this).val()){
-            case '0':
-              (new RuleBlocks(new_rule)).updateView();
-              $(this).parent().find('a').hide(0);
-              break;
-            case 'product_discount':
-              show_product_discount_type(this, new_rule);
-              break;
-            case 'gifts_discount':
-              show_gifts_discount_type(this, new_rule);
-              break;
-            case 'pro_bogo_discount':
-              show_pro_bogo_discount_type(this, new_rule);
-              break;
-            case 'bogo_discount':
-              show_bogo_discount_type(this, new_rule);
-              break;
-            case 'bulk_discount':
-              show_bulk_discount_type(this, new_rule);
-              break;
-            case 'role_bulk_discount':
-              show_role_bulk_discount_type(this, new_rule);
-              break;
-            case 'role_discount':
-              show_role_discount_type(this, new_rule);
-              break;
-            case 'cart_discount':
-              show_cart_discount_type(this, new_rule);
-              break;
-          }
+        new_rule.find('.wdp-add-popular-condition').click(function () {
+            var data = {
+                type: $(this).data('condition-type'),
+                options: {
+                    comparison_value: $(this).data('condition-value'),
+                },
+                data_list: {},
+            };
+
+            var rule = $(this).closest('.postbox');
+            var rule_id = rule.find('.rule-id').val();
+
+            if(rule_id == '') {
+                var $condition_type_selector = rule.find('.wdp-condition-field-type select').first();
+                $condition_type_selector.val(data.type);
+                update_condition_fields($condition_type_selector, data);
+            } else {
+                add_condition($(this), data);
+            }
         });
+
+		new_rule.find('[data-discount-type]').click(function (e) {
+			e.preventDefault();
+			new_rule.find('.wdp-discount-type').hide();
+			resetAll(new_rule);
+			switch($(this).data('discount-type')){
+			  case '0':
+				(new RuleBlocks(new_rule)).updateView();
+				$(this).parent().find('a').hide(0);
+				break;
+			  case 'product_discount':
+				show_product_discount_type(this, new_rule);
+				break;
+			  case 'gifts_discount':
+				show_gifts_discount_type(this, new_rule);
+				break;
+			  case 'pro_bogo_discount':
+				show_pro_bogo_discount_type(this, new_rule);
+				break;
+        case 'pro_threebytwo_discount':
+          show_pro_threebytwo_discount_type(this, new_rule);
+        break;
+			  case 'bogo_discount':
+				show_bogo_discount_type(this, new_rule);
+				break;
+			  case 'bulk_discount':
+				show_bulk_discount_type(this, new_rule);
+				break;
+			  case 'role_bulk_discount':
+				show_role_bulk_discount_type(this, new_rule);
+				break;
+			  case 'role_discount':
+				show_role_discount_type(this, new_rule);
+				break;
+			  case 'cart_discount':
+				show_cart_discount_type(this, new_rule);
+        break;
+        case 'buy_three_for_x':
+        show_buy_three_for_x(this, new_rule);
+				break;
+        case 'disc_cheapest_fifty_perc':
+          show_disc_cheapest_fifty_perc(this, new_rule);
+        break;
+
+			  case '':
+				var skip = new_rule.find('[name="discount_type_skip"]:checked').val();
+				if(skip) {
+					$('.wdp-discount-type').remove();
+					let params = {
+						action: 'wdp_ajax',
+						method: 'skip_discount_type',
+					};
+					params[wdp_data.security_query_arg] = wdp_data.security;
+					$.post(
+						ajaxurl,
+						params,
+						function (response) {
+
+						},
+						'json'
+					);
+				}
+				break;
+			}
+      new_rule.find('.wdp-title').focus();
+			new_rule.find('.inside > .wdp-add-condition').show();
+		});
 
         // Add discount message
         new_rule.find('.wdp-btn-add-discount-message').click(function () {
           add_advertising(new_rule.find('.wdp-discount-messages'));
+        });
+
+        new_rule.find('.wdp-btn-add-condition-message').click(function () {
+          add_condition_message(new_rule.find('.wdp-condition-message'));
         });
 
         // Add limit
@@ -1025,11 +1444,39 @@ jQuery(document).ready(function ($) {
         // Add range (bulk)
         new_rule.find('.add-range').click(function () {
             add_range($(this));
+            updateBulkAdjustmentInputPlaceholders(new_rule);
         });
 
         // Add product filter
-        new_rule.find('.add-product-filter, .wdp-btn-add-product-filter').click(function () {
-            add_product_filter(new_rule.find('.wdp-filter-block'));
+        new_rule.find('.wdp-btn-add-product-filter').click(function () {
+            add_product_filter(new_rule.find('.wdp-filter-block'), null, null, {isSet: false});
+        });
+
+        new_rule.find('.wdp-btn-popup-autoadd').click(function () {
+          $( this ).WCBackboneModal( {
+            template: 'autoadd_modal'
+          } );
+        });
+
+        new_rule.find('.wdp-btn-popup-discount-message').click(function () {
+          $( this ).WCBackboneModal( {
+            template: 'discount-message_modal'
+          } );
+        });
+
+        // Add product filter
+        new_rule.find('.add-product-filter, .wdp-btn-add-product-set').click(function () {
+          if(new_rule.find('.wdp-filter-block').find('.wdp-exlcude-filter-item').length == 0) {
+            add_product_filter(new_rule.find('.wdp-filter-block'), null, null, {isSet: true});
+          }
+          add_product_filter(new_rule.find('.wdp-filter-block'), null, null, {isSet: true});
+        });
+
+        new_rule.click(function(e) {
+          if(e.target.closest('.add-exclude-filter')) {
+            add_exclude_filter($(e.target).closest('.wdp-product-exclude').find('.wdp-exlclude-filters'));
+            e.preventDefault();
+          }
         });
 
         // Add product filter for 'Add product adjustment' block
@@ -1087,6 +1534,7 @@ jQuery(document).ready(function ($) {
 			    }
                 new_rule.find(".sortable-apply-mode-block").show();
 		    }
+        new_rule.find('.replace-adjustments').show();
 	    });
 
       // Add product filter for 'Get products' block
@@ -1169,7 +1617,18 @@ jQuery(document).ready(function ($) {
           }
 			if (data.additional.trigger_coupon_code) {
 				new_rule.find('.rule-trigger-coupon-code input').val(data.additional.trigger_coupon_code);
-			}
+			} else {
+                new_rule.find('.rule-trigger-coupon-code button').hide()
+            }
+
+          if (data.additional.date_from) {
+            new_rule.find('input[name="rule[additional][date_from]"]').val(data.additional.date_from);
+          }
+
+          if (data.additional.date_to) {
+            new_rule.find('input[name="rule[additional][date_to]"]').val(data.additional.date_to);
+          }
+
             if(data.id) {
                 new_rule.find('.rule-id').val(data.id);
             }
@@ -1197,6 +1656,7 @@ jQuery(document).ready(function ($) {
             //   inactiveRules.text(Number(inactiveRules.text()) + 1);
             // }
         } else {
+            new_rule.find('.rule-trigger-coupon-code button').hide()
             new_rule.find('.wdp-disabled-automatically-prefix').hide();
             new_rule.removeClass('closed');
             new_rule.addClass('dirty');
@@ -1240,15 +1700,23 @@ jQuery(document).ready(function ($) {
     }
 
     if (data.additional.auto_add_products_replace_name) {
-      new_rule.find('.replace-auto-add-products input:text').val(data.additional.auto_add_products_replace_name)
+      new_rule.find('.replace-auto-add input:text').val(data.additional.auto_add_products_replace_name)
     }
 
     if (data.additional.auto_add_cant_be_removed_from_cart) {
       new_rule.find('.auto-add-remove-disable input:checkbox').prop('checked', true)
     }
 
+    if (data.additional.auto_add_show_as_recommended_product) {
+      new_rule.find('.auto-add-recommended-product input:checkbox').prop('checked', true)
+    }
+
     if (data.get_products.max_amount_for_gifts) {
       new_rule.find('input.max-amount-for-gifts').val(data.get_products.max_amount_for_gifts)
+    }
+
+    if (data.get_products.is_gifts_below_cheapest) {
+      new_rule.find('input.is_gifts_below_cheapest:checkbox').prop('checked', true)
     }
 
     let blocks = new RuleBlocks(new_rule)
@@ -1260,8 +1728,10 @@ jQuery(document).ready(function ($) {
 
     if (blocks.isProductFiltersOpen()) {
       var $wdp_product_filter = new_rule.find('.wdp-filter-block')
+
+      let isSet = data.filters.length > 1;
       $.each(data.filters, function (i, filter) {
-        add_product_filter($wdp_product_filter, filter, blocks)
+        add_product_filter($wdp_product_filter, filter, blocks, {isSet})
       })
     }
 
@@ -1359,6 +1829,18 @@ jQuery(document).ready(function ($) {
     if (blocks.isAdvertisingOpen()) {
       add_advertising(new_rule.find('.wdp-discount-messages'), data.advertising, blocks)
     }
+
+    if (blocks.isConditionMessageOpen()) {
+      add_condition_message(new_rule.find('.wdp-condition-message'), data.condition_message, blocks)
+    }
+
+    if(new_rule.find('.wdp-role-discounts').css('display') === 'none' &&
+      new_rule.find('.wdp-bulk-adjustments').css('display') === 'none' &&
+      new_rule.find('.wdp-product-adjustments').css('display') === 'none') {
+      new_rule.find('.replace-adjustments').hide();
+      new_rule.find('.replace-adjustments').find('input[type="checkbox"]').prop('checked', false);
+      new_rule.find('.replace-adjustments').find('input[type="text"]').val('');
+    }
   }
 
     function fill_options($container, data) {
@@ -1372,7 +1854,7 @@ jQuery(document).ready(function ($) {
         }
     }
 
-    function add_product_filter($container, data, blocks) {
+    function add_product_filter($container, data, blocks, options={}) {
         if ( ! blocks ) {
           blocks = new RuleBlocks($container.closest('.postbox'))
           blocks.setProductFiltersOpen(true)
@@ -1382,8 +1864,14 @@ jQuery(document).ready(function ($) {
 
         if ( blocks.isProductFiltersOpen() ) {
           $container.closest('.postbox').find('.wdp-btn-add-product-filter').hide();
+          $container.closest('.postbox').find('.wdp-btn-add-product-set').hide();
         } else {
           $container.closest('.postbox').find('.wdp-btn-add-product-filter').show();
+          $container.closest('.postbox').find('.wdp-btn-add-product-set').show();
+        }
+
+        if(options && options.isSet) {
+          $container.addClass('wdp-set-block');
         }
 
         var product_filter_index = get_new_product_filter_index($container);
@@ -1412,13 +1900,17 @@ jQuery(document).ready(function ($) {
 			var $product_filter_container = $(this).closest('.wdp-filter-block');
 			var filters_count = $product_filter_container.find('.wdp-filter-item').length;
 			if( $(this).val() == 1 && filters_count === 1 ) {
-                $product_filter_container.find('.wdp-limitation').hide();
                 $product_filter_container.find('.wdp-select-filter-priority').hide();
 			}
 			else {
-                $product_filter_container.find('.wdp-limitation').show();
                 $product_filter_container.find('.wdp-select-filter-priority').show();
 			}
+
+      if ($(this).val() == 1) {
+        $product_filter.find('.wdp-limitation').hide();
+      } else {
+        $product_filter.find('.wdp-limitation').show();
+      }
 		});
 
 		var filters_count = $container.find('.wdp-filter-item').length;
@@ -1438,25 +1930,31 @@ jQuery(document).ready(function ($) {
             var qty = data.qty ? data.qty : false;
             var qty_end = data.qty_end ? data.qty_end : data.qty;
 
-			if (qty) {
-				$product_filter.find('.wdp-condition-field-qty input').val(qty);
-				if(qty == 1 && filters_count === 1) {
-					$container.find('.wdp-limitation').hide();
-                }
-                if(qty > 1 && filters_count === 1) {
-                    $('.wdp-select-filter-priority').show()
-                }
-			}
+          if (qty) {
+            $product_filter.find('.wdp-condition-field-qty input').val(qty);
+
+            if (qty == 1) {
+              $product_filter.find('.wdp-limitation').hide();
+            }
+
+            if (qty > 1 && filters_count === 1) {
+              $('.wdp-select-filter-priority').show()
+            }
+          }
 	        if (qty_end) $product_filter.find('.wdp-condition-field-qty-end input').val(qty_end);
 		}
 
       if( $product_filter.find('.wdp-condition-field-qty input').val() == 1 && filters_count === 1 ) {
-        $container.find('.wdp-limitation').hide();
         $container.find('.wdp-select-filter-priority').hide();
       }
       else {
-        $container.find('.wdp-limitation').show();
         $container.find('.wdp-select-filter-priority').show();
+      }
+
+      if ($product_filter.find('.wdp-condition-field-qty input').val() == 1) {
+        $product_filter.find('.wdp-limitation').hide();
+      } else {
+        $product_filter.find('.wdp-limitation').show();
       }
 
         // hook for remove filter
@@ -1470,17 +1968,24 @@ jQuery(document).ready(function ($) {
                 blocks.setProductFiltersOpen(false)
                 blocks.updateView()
                 $container.closest('.postbox').find('.wdp-btn-add-product-filter').show();
+                $container.closest('.postbox').find('.wdp-btn-add-product-set').show();
                 $container.trigger('change');
+                $container.removeClass('wdp-set-block');
 			}
 
           if(filters_count > 1) {
             $container.closest('.postbox').find('.adjustment-mode-split').attr('disabled', false);
+            $container.closest('.postbox').find('.condition-message-mode-split').attr('disabled', false);
             $container.closest('.postbox').find('.wdp-filter-warning').show();
           } else {
             $container.closest('.postbox').find('.wdp-filter-warning').hide();
             $container.closest('.postbox').find('.adjustment-mode-split').prop('checked', false);
             $container.closest('.postbox').find('.adjustment-mode-total').prop('checked', true);
             $container.closest('.postbox').find('.adjustment-mode-split').attr('disabled', 'disabled');
+
+            $container.closest('.postbox').find('.condition-message-mode-split').prop('checked', false);
+            $container.closest('.postbox').find('.condition-message-mode-total').prop('checked', true);
+            $container.closest('.postbox').find('.condition-message-mode-split').attr('disabled', 'disabled');
           }
 			if (filters_count === 1) {
                 $product_filter_container.find('.wdp-condition-field-qty input').trigger('change');
@@ -1491,19 +1996,13 @@ jQuery(document).ready(function ($) {
             }
 
             $container.find(".wdp-matched-previous-filters-container").first().hide();
+			      $container.find('.wdp-filter-type option[value="same_previous_filter"]').first().remove();
         });
 
-        if (!wdp_data.options.enable_product_exclude) {
-            $container.find(".wdp-product-exclude").hide();
-            $container.find(".wdp-exclude-title").hide();
-            $container.find(".wdp-exclude-on-wc-sale-container").hide();
-            $container.find(".wdp-exclude-already-affected-container").hide();
-            $container.find(".wdp-exclude-backorder-container").hide();
-            $container.find(".wdp-matched-previous-filters-container").hide();
-        }
 
         if ( product_filter_index === 0 ) {
           $container.find(".wdp-matched-previous-filters-container").hide();
+		      $container.find('.wdp-filter-type option[value="same_previous_filter"]').remove();
         }
 
         // render controls for selected filter type
@@ -1514,10 +2013,15 @@ jQuery(document).ready(function ($) {
 
         if(filters_count > 1) {
             $container.closest('.postbox').find('.adjustment-mode-split').attr('disabled', false);
+            $container.closest('.postbox').find('.condition-message-mode-split').attr('disabled', false);
         } else {
           $container.closest('.postbox').find('.adjustment-mode-split').prop('checked', false);
           $container.closest('.postbox').find('.adjustment-mode-total').prop('checked', true);
             $container.closest('.postbox').find('.adjustment-mode-split').attr('disabled', 'disabled');
+
+          $container.closest('.postbox').find('.condition-message-mode-split').prop('checked', false);
+          $container.closest('.postbox').find('.condition-message-mode-total').prop('checked', true);
+          $container.closest('.postbox').find('.condition-message-mode-split').attr('disabled', 'disabled');
         }
 
         let type = 'total';
@@ -1528,6 +2032,14 @@ jQuery(document).ready(function ($) {
         add_product_adjustment_split($container.closest('.wdp-filter-block'), product_filter_index);
         updateElementsVisibilityDiscountSplit($container.closest('.postbox').find('.wdp-product-adjustments'), $container.closest('.postbox'));
         updateElementsVisisibilyInRowForElementValue(type, $container.closest('.postbox').find('.wdp-product-adjustments'))
+
+        type = 'total';
+        if ( $container.closest('.postbox').find('.condition-message-mode-split').prop('checked')) {
+          type = 'split'
+        }
+
+        add_condition_message_split($container.closest('.wdp-filter-block'), product_filter_index)
+        updateElementsVisisibilyInRowForElementValue(type, $container.closest('.postbox').find('.wdp-condition-message'))
     }
 
     function remove_user_input_errors( searchIn, errorEl ) {
@@ -1573,7 +2085,8 @@ jQuery(document).ready(function ($) {
 				var html = '';
 				$.each(data.value, function (i, id) {
 					var title = wdp_data.titles[type] && wdp_data.titles[type][id] ? wdp_data.titles[type][id] : id;
-					html += '<option selected value="' + id + '">' + title + '</option>';
+					var link = wdp_data.links && wdp_data.links[type] && wdp_data.links[type][id] ? wdp_data.links[type][id] : '';
+					html += '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
 				});
 				container.find('.wdp-condition-field-value select').append(html);
 			}
@@ -1601,11 +2114,14 @@ jQuery(document).ready(function ($) {
         container.find('.wdp-filter-field-method select').val(data.method);
       }
 
+
       if (data.value) {
         var html = '';
         $.each(data.value, function (i, id) {
+          pr_excl_type = data.type.replace('_all', '');
+          link = wdp_data.links && wdp_data.links[pr_excl_type] && wdp_data.links[pr_excl_type][id] ? wdp_data.links[pr_excl_type][id] : '';
           var title = wdp_data.titles[type] && wdp_data.titles[type][id] ? wdp_data.titles[type][id] : id;
-          html += '<option selected value="' + id + '">' + title + '</option>';
+          html += '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
         });
         container.find('.wdp-condition-field-value select').append(html);
       }
@@ -1619,6 +2135,8 @@ jQuery(document).ready(function ($) {
         var $container = $el.closest('.wdp-filter-item');
         var type = $el.val();
 
+		    $container.toggleClass('wdp-filter-item_same_previous_filter', type == 'same_previous_filter');
+
         // prepare template for filter type
         var template = get_template('filter_' + type, {
             r: get_current_rule_index($el),
@@ -1627,9 +2145,9 @@ jQuery(document).ready(function ($) {
         });
 
         $container.find('.wdp-condition-field-sub').html(template);
-      if ( $container.closest('.postbox').find(".rule-type select").val() === "persistent" ) {
-        $container.find('.wdp-condition-field-sub .wdp-filter-field-method select').remove();
-      }
+        if ( $container.closest('.postbox').find(".rule-type select").val() === "persistent" ) {
+          $container.find('.wdp-condition-field-sub .wdp-filter-field-method select').remove();
+        }
 
         // load data for existing filter
         if (data) {
@@ -1640,23 +2158,15 @@ jQuery(document).ready(function ($) {
             if (data.value) {
                 var html = '';
                 $.each(data.value, function (i, id) {
-                    var title = wdp_data.titles[data.type] && wdp_data.titles[data.type][id] ? wdp_data.titles[data.type][id] : id;
-                    html += '<option selected value="' + id + '">' + title + '</option>';
+                  id = id.replace(/"/g, '&quot;');
+                  var title = wdp_data.titles[data.type] && wdp_data.titles[data.type][id] ? wdp_data.titles[data.type][id] : id;
+					        var link = wdp_data.links && wdp_data.links[data.type] && wdp_data.links[data.type][id] ? wdp_data.links[data.type][id] : '';
+                    html += '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
                 });
                 $container.find('.wdp-condition-field-value select').append(html);
             }
 
             if ( data.product_exclude ) {
-                if ( data.product_exclude.values ) {
-                    var product_exclude_html = '';
-                    var pr_excl_type = 'products';
-                    $.each(data.product_exclude.values, function (i, id) {
-                        var title = wdp_data.titles[pr_excl_type] && wdp_data.titles[pr_excl_type][id] ? wdp_data.titles[pr_excl_type][id] : id;
-                        product_exclude_html += '<option selected value="' + id + '">' + title + '</option>';
-                    });
-                    $container.find('.wdp-product-exclude select').append(product_exclude_html);
-                }
-
                 if (data.product_exclude.on_wc_sale) {
                     $container.find('.wdp-exclude-on-wc-sale-container input').prop('checked', true);
                 }
@@ -1665,13 +2175,14 @@ jQuery(document).ready(function ($) {
                     $container.find('.wdp-exclude-already-affected-container input').prop('checked', true);
                 }
 
-				if (data.product_exclude.backorder) {
-					$container.find('.wdp-exclude-backorder-container input').prop('checked', true);
-				}
+				        if (data.product_exclude.backorder) {
+					        $container.find('.wdp-exclude-backorder-container input').prop('checked', true);
+				        }
 
-              if (data.product_exclude.matched_previous_filters) {
-                $container.find('.wdp-matched-previous-filters-container input').prop('checked', true);
-              }
+                if (data.product_exclude.matched_previous_filters) {
+                  $container.find('.wdp-matched-previous-filters-container input').prop('checked', true);
+                }
+                $container.find('.wdp-product-exclude details').prop('open', true);
             }
 
             if (data.limitation) {
@@ -1680,12 +2191,123 @@ jQuery(document).ready(function ($) {
 
             /** pro version functionality */
             if ( data.select_priority ) {
+                $container.find('.wdp-select-filter-priority-temp select').val(data.select_priority);
                 $container.find('.wdp-select-filter-priority select').val(data.select_priority);
             }
         }
 
         make_select2_products($container.find('[data-field="autocomplete"]'));
 	    make_select2_product_taxonomies($container.find('[data-field="autocomplete"][data-list="product_taxonomies"]'));
+
+      let $exFilters = $container.find('.wdp-exlclude-filters');
+      if(data && data.excludes) {
+        for (const [id, filter] of Object.entries(data.excludes)) {
+          add_exclude_filter($exFilters, filter);
+        }
+      } else {
+        if($exFilters.children().length) {
+          let filters = $exFilters.serializeArray();
+            $exFilters.children().each(function( index ) {
+              filters.push({
+                type: $(this).find('.wdp-filter-exclude-type select').val(),
+                value: $(this).find('.wdp-filter-exlclude-value select').val()
+              });
+            });
+
+            $exFilters.html('');
+            filters.forEach(filter => {
+              add_exclude_filter($exFilters, filter);
+            });
+        }
+      }
+      if(!$exFilters.children().length) {
+        add_exclude_filter($exFilters);
+      }
+    }
+
+    function add_exclude_filter($items, filter={}) {
+      let filterType = $items.closest('.wdp-filter-item').find('.wdp-filter-field-type select').val();
+      let type = filter.type || 'products';
+      let value = filter.value || [];
+      let options = value.map((id) => {
+          let title = wdp_data.titles[type] && wdp_data.titles[type][id] ? wdp_data.titles[type][id] : id;
+          let link = wdp_data.links && wdp_data.links[type] && wdp_data.links[type][id] ? wdp_data.links[type][id] : '';
+          return '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
+      }).join('');
+
+      let excludeId = 0;
+      $items.children().each(function (i, el) {
+        let index = ~~$(el).data('index');
+        excludeId = index + 1;
+      });
+
+      let variables = {
+        filterId: get_current_product_filter_index($items),
+        excludeId: excludeId,
+        type,
+        options
+      };
+
+      let html = get_template(`exclude_filter_${filterType}`, variables);
+      if(!html) {
+        html = get_template(`exclude_filter`, variables);
+      }
+
+      $items.append(html);
+      let $item = $items.find(`[data-index=${excludeId}]`);
+      let $type = $item.find('.wdp-filter-exclude-type select');
+      $type.val(type);
+
+      if($type.val() !== type) {
+        $item.remove();
+        return;
+      };
+
+      addExcludeAutocomplete($item, type, value, excludeId);
+
+      $type.on('change', () => {
+        addExcludeAutocomplete($item, $type.val(), [], excludeId, true);
+      });
+
+      $item.find('.wdp-filter-exlclude-remove').on('click', (e) => {
+        $item.remove();
+      });
+    }
+
+    var EXCLUDE_FILTER_BUILTIN_TYPES = [
+      'products', 'product_sku', 'product_categories', 'product_category_slug',
+      'product_attributes', 'product_custom_attributes', 'product_tags',
+      'product_custom_fields', 'product_sellers', 'product_collections',
+      'any', 'same_previous_filter'
+    ];
+
+    function addExcludeAutocomplete($item, type, value, excludeId) {
+      let $value = $item.find('.wdp-filter-exlclude-value');
+
+      $value.html('');
+
+      let options = value.map((id) => {
+          let title = wdp_data.titles[type] && wdp_data.titles[type][id] ? wdp_data.titles[type][id] : id;
+          let link = wdp_data.links && wdp_data.links[type] && wdp_data.links[type][id] ? wdp_data.links[type][id] : '';
+          return '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
+      }).join('');
+
+      // custom product taxonomies (e.g. brands) don't have a dedicated ajax_<type> handler,
+      // they must go through the generic product_taxonomies autocomplete instead
+      let isTaxonomy = EXCLUDE_FILTER_BUILTIN_TYPES.indexOf(type) === -1;
+
+      let html = get_template('product_exclude_filter', {
+        filterId: get_current_product_filter_index($item),
+        excludeId: excludeId,
+        list: isTaxonomy ? 'product_taxonomies' : type,
+        taxonomy: isTaxonomy ? type : '',
+        options
+      });
+
+      $value.html(html);
+
+      make_select2_products($item.find('[data-field="autocomplete"]'));
+      make_select2_product_taxonomies($item.find('[data-field="autocomplete"][data-list="product_taxonomies"]'));
     }
 
     function add_condition($el, data, blocks) {
@@ -1786,6 +2408,17 @@ jQuery(document).ready(function ($) {
         var $container = $el.closest('.wdp-condition');
         var type = $el.val();
 
+        if(type == 'date' && data?.options?.comparison_datetime) {
+          var m = data.options.comparison_datetime.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2}) (\d{1,2}):(\d{1,2})$/);
+          if(m) {
+            data.options.comparison_datetime = $.datepicker.formatDate("yy-mm-dd", new Date(m[1], m[2] - 1, m[3]));
+          }
+          // When change type from Time to Date
+          if(!data.options.comparison_datetime.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)) {
+            data.options.comparison_datetime = '';
+          }
+        }
+
         var template = get_template(type, {
             r: get_current_rule_index($el),
             c: $container.data('index')
@@ -1857,7 +2490,9 @@ jQuery(document).ready(function ($) {
 
                     $.each(data.options[key], function (i, val) {
                       // value_field.find('[value="' + val + '"]').prop('selected', 'selected');
-                      value_field.append('<option selected value="' + val + '">' + get_title(val) + '</option>');
+                      pr_excl_type = data.type.replace('_all', '');
+                      link = wdp_data.links && wdp_data.links[pr_excl_type] && wdp_data.links[pr_excl_type][val] ? wdp_data.links[pr_excl_type][val] : '';
+                      value_field.append('<option selected data-link="' + link + '" value="' + val + '" >' + get_title(val) + '</option>');
                     });
                     return;
                   }
@@ -1893,6 +2528,7 @@ jQuery(document).ready(function ($) {
 
         $container.find('[data-field="date"]').removeClass('hasDatepicker').datepicker({dateFormat:"yy-mm-dd"});
         $container.find('[class="datetimepicker"]').datetimepicker();
+        $container.find('[class="datetimepicker"]').datetimepicker('validate');
         make_select2_tags($container.find('[data-field="tags"]'));
 
         make_select2_products($container.find('[data-field="autocomplete"]'));
@@ -1902,23 +2538,22 @@ jQuery(document).ready(function ($) {
         $container.find('.wdp-condition-field-method-coupon select').change( function() {
             var disabled = [ 'at_least_one_any', 'none_at_all' ].indexOf( $( this ).val() ) >= 0;
             $container.find('.wdp-condition-field-value-coupon select').prop('disabled', disabled);
-            if ( disabled ) {
-                $container.find('.wdp-condition-field-value-coupon select').val([]).trigger('change');
-            }
         } );
 
         $container.find('.wdp-condition-field-method-coupon select').each( function() {
             var disabled = [ 'at_least_one_any', 'none_at_all' ].indexOf( $( this ).val() ) >= 0;
             $container.find('.wdp-condition-field-value-coupon select').prop('disabled', disabled);
-            if ( disabled ) {
-                $container.find('.wdp-condition-field-value-coupon select').val([]).trigger('change');
-            }
         } );
 
 	    $container.find( '.wdp-condition-field-method select' ).change( function () {
 		    var enable_last = 'in_range' === $( this ).val();
 		    $container.find( '.wdp-condition-field-value-last' ).toggle( enable_last );
+
+        $container.find('.wdp-condition-promotion-message').toggle(['>', '>='].includes($( this ).val()));
 	    } );
+      $container.find('.wdp-condition-promotion-message')
+        .toggle(['>', '>=']
+          .includes($container.find( '.wdp-condition-field-method select' ).val()));
 
 	    $container.find( '.wdp-condition-field-method select' ).each( function () {
 		    var enable_last = 'in_range' === $( this ).val();
@@ -1967,6 +2602,14 @@ jQuery(document).ready(function ($) {
       });
 
       if (data) {
+        if ( data.enabled_timer ) {
+            $container.find('[name="rule[advertising][enabled_timer]"]').prop('checked', true);
+        }
+
+        if ( data.timer_message ) {
+            $container.find('[name="rule[advertising][timer_message]"]').val(data.timer_message);
+        }
+
         if ( data.discount_message ) {
             $container.find('[name="rule[advertising][discount_message]"]').val(data.discount_message);
         }
@@ -1982,7 +2625,72 @@ jQuery(document).ready(function ($) {
         if ( data.sale_badge ) {
           $container.find('[name="rule[advertising][sale_badge]"]').val(data.sale_badge);
         }
+
+        if ( data.message_notice_discount ) {
+          $container.find('[name="rule[advertising][message_notice_discount]"]').val(data.message_notice_discount);
+        }
       }
+    }
+
+    function add_condition_message($container, data, blocks) {
+      if ( ! blocks ) {
+        blocks = new RuleBlocks($container.closest('.postbox'))
+        blocks.setConditionMessageOpen(true)
+      }
+
+      blocks.updateView()
+
+      var $rule = $container.closest('.postbox');
+
+      if ( blocks.isConditionMessageOpen() ) {
+        $rule.find('.wdp-btn-add-condition-message').hide();
+      } else {
+        $rule.find('.wdp-btn-add-condition-message').show();
+      }
+
+      $container.find('.wdp-btn-remove').click(function () {
+        $rule.find('.wdp-btn-add-condition-message').show();
+        blocks.setConditionMessageOpen(false)
+        blocks.updateView()
+        flushInputs($container);
+      });
+
+      var type;
+      if (data) {
+            type = data.type;
+            $container.find('.condition-message-mode-' + type).attr('checked', 'checked').prop('checked', true);
+
+            if (data.total) {
+                $container.find('.condition-message-total-message').val(data.total.message);
+            }
+
+            $container.find('.condition-message-split').each(function(index) {
+                if (data.split && data.split[index]) {
+                    fill_condition_message_split($(this), data.split[index]);
+                }
+                else {
+                    fill_condition_message_split($(this));
+                }
+            });
+            if (data['beginning_message']) {
+                $container.find('.condition-message-beginning-message').val(data['beginning_message']);
+            }
+            if (data['end_message']) {
+                $container.find('.condition-message-end-message').val(data['end_message']);
+            }
+        } else {
+            type = 'total';
+            $container.find('.condition-message-mode-total').attr('checked', 'checked').prop('checked', true);
+
+            $container.find('.condition-message-split').each(function() {
+                fill_condition_message_split($(this));
+            });
+        }
+
+        $container.find('.condition-message-mode').change(function () {
+            updateElementsVisisibilyInRowForElementValue($(this).val(), $(this).closest('.wdp-condition-message'));
+        });
+        updateElementsVisisibilyInRowForElementValue(type, $container);
     }
 
     function add_limit($el, data, blocks) {
@@ -2076,7 +2784,8 @@ jQuery(document).ready(function ($) {
             $range.find('.adjustment-to').focus();
         } else {
             $range.find('.adjustment-from').focus();
-		}
+        }
+        update_selectors_discount_type($postbox);
 
         if (data) {
             $range.find('.adjustment-from').val(data.from);
@@ -2093,6 +2802,7 @@ jQuery(document).ready(function ($) {
                 $postbox.find('.wdp-ranges-empty').show();
             }
         });
+
     }
 
     function fill_get_products_options($container, data) {
@@ -2103,6 +2813,14 @@ jQuery(document).ready(function ($) {
 
             if (data.repeat_subtotal) {
                 $container.find('.wdp-get-products-repeat .repeat-subtotal-value').val(data.repeat_subtotal);
+            }
+
+            if (data.total && data.total.type) {
+                $container.find('.gifts-total-type').val(data.total.type);
+            }
+
+            if (data.total && data.total.value !== undefined) {
+                $container.find('.gifts-total-value').val(data.total.value);
             }
         }
 
@@ -2159,7 +2877,7 @@ jQuery(document).ready(function ($) {
         var prev_field_values = {};
 
         let giftTypeSelectorOnChange = function(value, addProductData) {
-			if ( value === "use_product_from_filter" ) {
+			if ( value === "use_product_from_filter" || value === "use_only_first_product_from_filter" ) {
 				addProductData = {
 					'value': {},
 				}
@@ -2173,7 +2891,7 @@ jQuery(document).ready(function ($) {
 				);
 
 				$product_filter.find('.wdp-condition-field-sub select').prop("disabled", true);
-			} else if ( value === "allow_to_choose" || value === "giftable_products" || value === "require_to_choose" || value === "giftable_products_in_rotation" ) {
+			} else if ( value === "allow_to_choose" || value === "giftable_products" || value === "require_to_choose" || value === "giftable_products_in_rotation" || value === "giftable_products_in_random" ) {
         if (addProductData && addProductData.data_list && addProductData.data_list !== "giftable_products") {
           addProductData = {};
         }
@@ -2334,6 +3052,12 @@ jQuery(document).ready(function ($) {
 
         $rule.find('.wdp_product_adjustment_remove').click(function () {
             $rule.find('.wdp-btn-add-product-adjustment').show();
+            if($rule.find('.wdp-role-discounts').css('display') === 'none' &&
+              $rule.find('.wdp-bulk-adjustments').css('display') === 'none') {
+              $rule.find('.replace-adjustments').hide();
+              $rule.find('.replace-adjustments').find('input[type="checkbox"]').prop('checked', false);
+              $rule.find('.replace-adjustments').find('input[type="text"]').val('');
+            }
             blocks.setProductDiscountsOpen(false)
             blocks.updateView()
             flushInputs($container);
@@ -2346,6 +3070,9 @@ jQuery(document).ready(function ($) {
 
             if (data.total) {
                 $container.find('.adjustment-total-type').val(data.total.type);
+                if(data.total.type === 'discount__expression_price') {
+                  $container.find('.adjustment-total-value').attr('type', 'text');
+                }
                 $container.find('.adjustment-total-value').val(data.total.value);
             }
 
@@ -2383,6 +3110,23 @@ jQuery(document).ready(function ($) {
         updateElementsVisibilityDiscountSplit($(this).find('.wdp-product-adjustments'), $(this));
       })
       updateElementsVisibilityDiscountSplit($container, $rule);
+      $rule.find('.replace-adjustments').show();
+
+      $container.find('.adjustment-total-type').on('change', function () {
+        update_selector_discount_type_product_adj($container);
+      });
+    }
+
+    function update_selector_discount_type_product_adj($container) {
+      var select = $container.find('.adjustment-total-type');
+      var input = $container.find('.adjustment-total-value');
+
+      if (select.val() === "discount__expression_price") {
+        input.attr('type', 'text').attr('placeholder', '0.00');
+        input.val('{price}');
+      } else {
+        input.attr('type', 'number').attr('placeholder', '0.00');
+      }
     }
 
     function add_product_adjustment_split($container, adj_index, data) {
@@ -2408,8 +3152,29 @@ jQuery(document).ready(function ($) {
         }
     }
 
+    function add_condition_message_split($container, adj_index, data) {
+        var template = get_template('condition_message_split_row', {
+            adj: adj_index
+        });
+
+        var $split_adjustment = $(template);
+
+        $container.closest('.postbox')
+            .find('.wdp-condition-message-split-container').append($split_adjustment);
+
+        fill_condition_message_split($split_adjustment, data);
+    }
+
+    function fill_condition_message_split($split_adjustment, data) {
+        if (data) {
+            $split_adjustment.find('.condition-message-split-message').val(data.message);
+        }
+    }
+
     function add_bulk_adjustment($container, data, blocks) {
         bulk_adjustment().add($container, data, blocks);
+        var $rule = $container.closest('.postbox');
+        $rule.find('.replace-adjustments').show();
     }
 
     function add_cart_adjustment($el, data, blocks) {
@@ -2525,6 +3290,7 @@ jQuery(document).ready(function ($) {
 		$el.closest( '.postbox' ).find( '.wdp-role-discounts-container' ).append( $role_discount );
 
 		if ( data ) {
+      $checkExpres = false;
 			$role_discount.find( 'input.wdp-role-discount-value, select.wdp-role-discount-value' ).each(
 				function ( index, el ) {
 					var field_name = $( el ).data( 'field-name' );
@@ -2537,6 +3303,8 @@ jQuery(document).ready(function ($) {
 							} );
 							$( this ).append( html );
 						} else {
+              if(field_value !== 'discount__expression_price' && $checkExpres) $( this ).attr('type', 'text');
+              if(field_value === 'discount__expression_price') $checkExpres = true;
 							$( this ).val( field_value );
 						}
 					}
@@ -2549,6 +3317,13 @@ jQuery(document).ready(function ($) {
 			var $rule = $( this ).closest( '.postbox' );
 			$( this ).closest( '.wdp-role-discount' ).remove();
 
+      if($rule.find('.wdp-product-adjustments').css('display') === 'none' &&
+         $rule.find('.wdp-bulk-adjustments').css('display') === 'none') {
+        $rule.find('.replace-adjustments').hide();
+        $rule.find('.replace-adjustments').find('input[type="checkbox"]').prop('checked', false);
+        $rule.find('.replace-adjustments').find('input[type="text"]').val('');
+      }
+
 			var role_discounts_count = $rule.find( '.wdp-role-discounts .wdp-role-discount' ).length;
 			if ( role_discounts_count === 0 ) {
         blocks.setRoleDiscountsOpen(false)
@@ -2556,12 +3331,27 @@ jQuery(document).ready(function ($) {
 				$el.closest( '.postbox' ).find( '.wdp-btn-add-role-discount' ).show();
 
 				// Unconditionally hide all sortable handlers
-                $rule.find(".wdp-drag-handle").hide();
-                $rule.find(".sortable-apply-mode-block").hide();
-            }
-        } );
+        $rule.find(".wdp-drag-handle").hide();
+        $rule.find(".sortable-apply-mode-block").hide();
+      }
+    });
 
+    $role_discount.find('.role-discount-type').on('change', function () {
+      update_selector_discount_type_role_discount($role_discount);
+    });
 	}
+
+  function update_selector_discount_type_role_discount($role_discount) {
+    var select = $role_discount.find('.role-discount-type');
+    var input = $role_discount.find('.role-discount-value');
+
+    if (select.val() === "discount__expression_price") {
+      input.attr('type', 'text').attr('placeholder', '0.00');
+      input.val('{price}');
+    } else {
+      input.attr('type', 'number').attr('placeholder', '0.00');
+    }
+  }
 
     function update_cart_adjustment_fields($el, data) {
         var $container = $el.closest('.wdp-cart-adjustment');
@@ -2681,7 +3471,9 @@ jQuery(document).ready(function ($) {
         var $type_val = $rule.find('.wdp-get-products-repeat select').val();
 
         if ( $type_val === 'based_on_subtotal' || $type_val === 'based_on_subtotal_after_discount'
-          || $type_val === 'based_on_subtotal_inc' || $type_val === 'based_on_subtotal_after_discount_inc' ) {
+          || $type_val === 'based_on_subtotal_inc' || $type_val === 'based_on_subtotal_after_discount_inc'
+          || $type_val === 'based_on_subtotal_with_coupons_after_discount'
+          || $type_val === 'based_on_subtotal_with_coupons_after_discount_inc') {
             $rule.find('.wdp-get-products-repeat .repeat-subtotal').show();
         } else {
             $rule.find('.wdp-get-products-repeat .repeat-subtotal').hide();
@@ -2715,7 +3507,9 @@ jQuery(document).ready(function ($) {
     /* Utils */
     // find template by id, replace variables by values and return string
         function get_template(name, variables) {
+
         var template = $('#' + name + '_template').html() || '';
+
         for (var v in variables) {
             template = template.replace(new RegExp('{' + v + '}', 'g'), variables[v]);
         }
@@ -2900,7 +3694,38 @@ jQuery(document).ready(function ($) {
                     processResults: function (response) {
                         return { results: response.data || [] };
                     }
-                }
+                },
+                templateResult: function (data) {
+                  var html = '<span class="wdp-select2-option">';
+                  if(data.img) {
+                    html += `<img class="wdp-select2-img" src="${data.img}"/>`;
+                  }
+                  var title = [data.text, data.price].filter(Boolean).join(' | ');
+                  html += `<span>${title}</span>`;
+
+                  html += '</span>';
+                  return $(html);
+                },
+				templateSelection: function (data) {
+					if (!data.id) {
+					  return data.text;
+					}
+					var link = data.link || $(data.element).data('link');
+
+					if(!link) {
+						return data.text;
+					}
+
+					var $option = $("<span></span>");
+					var $preview = $('<a target="_blank" href="' + link + '">' + data.text + '</a>');
+
+					$preview.on('mouseup', function (e) {
+						e.stopPropagation();
+					});
+
+					$option.append($preview);
+					return $option;
+				  }
             });
 
             $el.on('select2:select', function (e) {
@@ -3176,7 +4001,7 @@ jQuery(document).ready(function ($) {
 		remove_get_parameter('disable_all_rules_coupon_applied');
 		remove_get_parameter('paged');
 
-		window.location.href += '&disable_all_rules_coupon_applied=' + result;
+    window.location.href += `&disable_all_rules_coupon_applied=${result}&${wdp_data.security_query_arg}=${wdp_data.security}`;
 	});
 
     function remove_get_parameter(parameterName) {
@@ -3263,10 +4088,26 @@ jQuery(document).ready(function ($) {
     }
 
     function updateElementsVisibilityDiscountSplit($container, $rule) {
+      let totalTypeValue = $container.find('.adjustment-total-type').val()
+      let perItemDiscountSelected = totalTypeValue === 'discount__amount_per_item' || totalTypeValue === 'price__fixed_per_item'
+
       if ( isPackageRule($rule) ) {
-        $container.find(".split-discount-controls").show();
+        $container.find('.adjustment-total-type option[value="discount__amount_per_item"]').show();
+        $container.find('.adjustment-total-type option[value="price__fixed_per_item"]').show();
+
+        if ( perItemDiscountSelected ) {
+          $container.find(".split-discount-controls").hide();
+        } else {
+          $container.find(".split-discount-controls").show();
+        }
       } else{
         $container.find(".split-discount-controls").hide();
+
+        if ( perItemDiscountSelected ) {
+          $rule.find('.adjustment-total-type').find('option:first-child').prop("selected", "selected");
+        }
+        $container.find('.adjustment-total-type option[value="discount__amount_per_item"]').hide();
+        $container.find('.adjustment-total-type option[value="price__fixed_per_item"]').hide();
       }
     }
 
@@ -3277,8 +4118,9 @@ jQuery(document).ready(function ($) {
     if (filters.length === 1) {
       let filter = filters.first()
       let qty = filter.find('.wdp-condition-field-qty input').val();
+      let qtyEnd = filter.find('.wdp-condition-field-qty-end input').val();
 
-      return parseInt(qty) > 1;
+      return parseInt(qty) > 1 || (qtyEnd !== undefined && parseInt(qtyEnd) > 1);
     } else if (filters.length > 1) {
       return true
     }
@@ -3378,78 +4220,6 @@ jQuery(document).ready(function ($) {
 
   });
 
-  $('.wdp-rebuild-run').click(function () {
-    progressParentBlock.start();
-    progress.start();
-
-    $("#progress_div").show();
-    disableControls();
-    $("#rules-action-controls button").attr("disabled", "disabled");
-
-    let props = {
-      action: 'wdp_ajax',
-      method: 'start_partial_' + $('select[name=recalculace_selector]').val(),
-    };
-    props[wdp_data.security_query_arg] = wdp_data.security;
-
-    let requestPromise = $.post({
-      url: ajaxurl,
-      data: props,
-      dataType: 'json'
-    });
-
-    async function runPartial(data, textStatus, jqXHR) {
-      let totalCount = typeof data.data !== 'undefined' && typeof data.data.count !== 'undefined' ? data.data.count : null;
-
-      if (!totalCount) {
-        progress.setProgress(100);
-        $("#progress_div").hide();
-        enableControls();
-        return;
-      }
-
-      const PAGE_SIZE = 100;
-
-      for (let i = 0; i < totalCount; i += PAGE_SIZE) {
-        let props = {
-          action: 'wdp_ajax',
-          method: 'partial_' + $('select[name=recalculace_selector]').val(),
-          from: i,
-          count: PAGE_SIZE
-        };
-        props[wdp_data.security_query_arg] = wdp_data.security;
-
-        let responseData = await $.post({
-          url: ajaxurl,
-          data: props,
-          dataType: 'json',
-        });
-
-        if ( typeof responseData.success === 'undefined' || !responseData.success) {
-          let msg = "The operation is failed";
-          if ( typeof responseData.data !== 'undefined' && responseData.data ) {
-            msg += ' : ' + responseData.data;
-          }
-          progressParentBlock.setNotification(msg, true, 3.5);
-
-          $("#progress_div").hide();
-          enableControls();
-          return;
-        }
-
-        let percent = ((i + PAGE_SIZE) < totalCount) ? ((i + PAGE_SIZE) / totalCount) * 100 : 100;
-        percent = Math.round(percent);
-        progress.setProgress(percent);
-      }
-      progressParentBlock.setNotification('The operation is completed', false, 2.5);
-
-      $("#progress_div").hide();
-      enableControls();
-    }
-
-    requestPromise.then(runPartial);
-  });
-
   $('#bulk-action').submit(function (e) {
     let form = $(this)
     $('.bulk-action-mark').each(function () {
@@ -3472,133 +4242,62 @@ jQuery(document).ready(function ($) {
     });
   })
 
-  let ProgressBar = (function () {
-    function ProgressBar(element) {
-      this.el = element;
-      this.subscribers = [];
-      this.init();
-    }
-
-    ProgressBar.prototype.init = function () {
-      this.el.css("width", "100%")
-        .css("background", "#292929")
-        .css("border", "1px solid #111")
-        .css("border-radius", "5px")
-        .css("overflow", "hidden")
-        .css("box-shadow", "0 0 5px #333")
-        .css("float", "right");
-
-      let subElement = $("<div></div>");
-      subElement.css("height", "100%")
-        .css("color", "#fff")
-        .css("text-align", "right")
-        .css("font-size", "12px")
-        .css("line-height", "22px")
-        .css("text-align", "right")
-        .css("background-color", "#1a82f7")
-        .css("background", "-webkit-gradient(linear, 0% 0%, 0% 100%, from(#0099FF), to(#1a82f7))")
-        .css("background", "-webkit-linear-gradient(top, #0099FF, #1a82f7)")
-        .css("background", "-moz-linear-gradient(top, #0099FF, #1a82f7)")
-        .css("background", "-ms-linear-gradient(top, #0099FF, #1a82f7)")
-        .css("background", "-o-linear-gradient(top, #0099FF, #1a82f7)");
-
-      this.el.append(subElement);
-      this.setProgress(0);
-    }
-
-    ProgressBar.prototype.start = function () {
-      this.setProgress(0);
-    }
-
-    ProgressBar.prototype.finish = function () {
-      this.setProgress(100);
-    }
-
-    ProgressBar.prototype.setProgress = function (percent) {
-      if (percent === 0) {
-        this.el.find('div').html(percent + "%&nbsp;").animate({width: 0}, 0);
-      } else {
-        var progressBarWidth = percent * this.el.width() / 100;
-        this.el.find('div').html(percent + "%&nbsp;").animate({width: progressBarWidth}, 200);
-      }
-
-      this.__notify(percent);
-    }
-
-    ProgressBar.prototype.addSubscriber = function (sub) {
-      this.subscribers.push(sub);
-    }
-
-    ProgressBar.prototype.__notify = function (percent) {
-      for (let i in this.subscribers) {
-        let subscriber = this.subscribers[i];
-        subscriber.react(percent);
-      }
-    }
-
-    return ProgressBar;
-  })();
-
-  let ProgressBarBlock = (function () {
-    function ProgressBarBlock(element) {
-      this.el = element;
-      this.el.hide();
-      this.hideTimer = null;
-    }
-
-    ProgressBarBlock.prototype.react = function (percent) {
-      if (this.hideTimer) {
-        clearTimeout(this.hideTimer);
-        this.hideTimer = null;
-      }
-
-      if (percent === 100) {
-        let that = this;
-        this.hideTimer = setTimeout(function () {
-          that.el.hide();
-        }, 2000);
-      }
-    }
-
-    ProgressBarBlock.prototype.start = function () {
-      this.el.show();
-    }
-
-    ProgressBarBlock.prototype.setError = function (msg) {
-      let errorEl = $(`<div id="progress-error-msg" style="color: red;">${msg}</div>`);
-      this.el.append(errorEl);
-
-      let that = this;
-      setTimeout(function () {
-        that.el.hide();
-        errorEl.remove();
-      }, 2000);
-    }
-
-    ProgressBarBlock.prototype.setNotification = function (msg, isErr, durationSec) {
-      let notificationEl = $(`<div id="progress-notification-msg" style="color: ${isErr ? 'red' : 'green'};">${msg}</div>`);
-      this.el.append(notificationEl);
-
-      let that = this;
-      setTimeout(function () {
-        that.el.hide();
-        notificationEl.remove();
-      }, durationSec * 1000);
-    }
-
-    return ProgressBarBlock;
-  })();
-
-  let progress = new ProgressBar($("#progressBar"));
-  let progressParentBlock = new ProgressBarBlock($("#progressBarBlock"));
-  progress.addSubscriber(progressParentBlock);
-
   $('#bulk-action').submit(function (e) {
     if ($('#bulk-action-selector').val() === 'delete') {
       return confirm(wdp_data.labels.are_you_sure_to_delete_selected_rules)
     }
   })
+
+  $(document).on('click', '.wdp-description-cut',function() {
+      $(this).closest('.wdp-description').toggleClass('wdp-description_visible');
+  });
+
+  function updateBulkAdjustmentInputPlaceholders(rule) {
+    var $measurement_type = rule.find('.bulk-measurement-type').val();
+    if ( $measurement_type === 'qty' ) {
+      rule.find('.adjustment-from').attr('placeholder', wdp_data.labels.qty_from);
+      rule.find('.adjustment-to').attr('placeholder', wdp_data.labels.qty_to);
+    } else if ( $measurement_type === 'sum' ) {
+      rule.find('.adjustment-from').attr('placeholder', wdp_data.labels.sum_from);
+      rule.find('.adjustment-to').attr('placeholder', wdp_data.labels.sum_to);
+    } else if ( $measurement_type === 'weight' ) {
+      rule.find('.adjustment-from').attr('placeholder', wdp_data.labels.weight_from);
+      rule.find('.adjustment-to').attr('placeholder', wdp_data.labels.weight_to);
+    }
+  }
 });
+
+jQuery( function ( $ ) {
+    $(document.body)
+        .on('click', '.copy-to-clipboard-button', function (evt) {
+            let code = $(evt.target).closest(".rule-trigger-coupon-code").find("input").val()
+
+            if ( ! code ) {
+                return;
+            }
+
+            if ( ! wdp_data.activation_link_pattern ) {
+                return;
+            }
+
+            wcClearClipboard();
+            wcSetClipboard(wdp_data.activation_link_pattern + "=" + code, $(this));
+            evt.preventDefault();
+        })
+        .on('aftercopy', '.copy-to-clipboard-button', function (evt) {
+            $(evt.target).tipTip({
+                'attribute': 'data-tip',
+                'activation': 'focus',
+                'fadeIn': 50,
+                'fadeOut': 50,
+                'delay': 0,
+            }).trigger('focus')
+        })
+        .on('aftercopyfailure', '.copy-to-clipboard-button', function (evt) {
+            console.error("Copy to clipboard failed")
+            console.log(evt.target)
+        })
+})
 
 let RuleBlocks = (function () {
   function RuleBlocks (element) {
@@ -3609,6 +4308,7 @@ let RuleBlocks = (function () {
     this.FREE_PRODUCTS = 'freeProducts'
     this.AUTO_ADD_TO_CART = 'autoAddToCart'
     this.ADVERTISING = 'advertising'
+    this.CONDITION_MESSAGE = 'conditionMessage'
     this.CART_ADJUSTMENTS = 'cartAdjustments'
     this.CONDITIONS = 'conditions'
     this.LIMITS = 'limits'
@@ -3701,6 +4401,15 @@ let RuleBlocks = (function () {
       let isNotEmpty = Array.isArray(data.limits) && data.limits.length
       this.setLimitsOpen(isNotEmpty)
     }
+
+    if (data.additional.blocks && data.additional.blocks.conditionMessage) {
+      this.setConditionMessageOpen(data.additional.blocks.conditionMessage.isOpen === '1')
+    } else {
+      let conditionMessageTypeIsNotEmpty = data.condition_message && data.condition_message.type
+      let totalConditionMessageIsNotEmpty = conditionMessageTypeIsNotEmpty && 'total' === data.condition_message.type && data.condition_message['total']['message']
+      let splitConditionMessageIsNotEmpty = conditionMessageTypeIsNotEmpty && 'split' === data.condition_message.type && typeof data.condition_message['split'][0] !== 'undefined' && data.condition_message['split'][0]['message']
+      this.setConditionMessageOpen(totalConditionMessageIsNotEmpty || splitConditionMessageIsNotEmpty)
+    }
   }
 
   RuleBlocks.prototype.updateView = function () {
@@ -3750,6 +4459,12 @@ let RuleBlocks = (function () {
       this.__el.find('.wdp-discount-messages').show()
     } else {
       this.__el.find('.wdp-discount-messages').hide()
+    }
+
+    if (this.isOpen(this.CONDITION_MESSAGE)) {
+      this.__el.find('.wdp-condition-message').show()
+    } else {
+      this.__el.find('.wdp-condition-message').hide()
     }
 
     if (this.isOpen(this.CONDITIONS)) {
@@ -3827,6 +4542,14 @@ let RuleBlocks = (function () {
 
   RuleBlocks.prototype.isAdvertisingOpen = function () {
     return this.isOpen(this.ADVERTISING)
+  }
+
+  RuleBlocks.prototype.setConditionMessageOpen = function (value) {
+    this.setOpen(this.CONDITION_MESSAGE, value)
+  }
+
+  RuleBlocks.prototype.isConditionMessageOpen = function () {
+    return this.isOpen(this.CONDITION_MESSAGE)
   }
 
   RuleBlocks.prototype.setCartAdjustmentsOpen = function (value) {

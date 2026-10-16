@@ -19,22 +19,23 @@ class OrderAppliedDiscountRules
 
     public static function init()
     {
-        global $post;
+        global $post, $theorder;
 
-        if ( ! $post ) {
+        if (!$post && !$theorder) {
             return;
         }
 
         $orderRepository = new OrderRepository();
-        self::$rules = $orderRepository->getAppliedRulesForOrder($post->ID);
+        self::$rules = $orderRepository->getAppliedRulesForOrder($post->ID ?? $theorder->get_id());
 
         if ( ! empty(self::$rules)) {
             add_meta_box(
                 'wdp-order-applied-rules',
                 __('Applied discounts', 'advanced-dynamic-pricing-for-woocommerce'),
                 array(__CLASS__, 'output'),
-                'shop_order',
-                'side'
+                adp_context()->isHPOSEnabled() ? wc_get_page_screen_id('shop-order') : 'shop_order',
+                'side',
+                'core'
             );
         }
     }
@@ -67,10 +68,12 @@ class OrderAppliedDiscountRules
                 <tr>
                     <td>
                         <?php
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         echo $rule ? sprintf('<a href="%s">%s</a>', self::ruleUrl($rule), $rule->title) : "";
                         ?>
                     </td>
                     <td><?php
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         echo empty($amount) ? '-' : wc_price($amount);
                         ?>
                     </td>

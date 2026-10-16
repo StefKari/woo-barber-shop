@@ -3,6 +3,7 @@
 namespace Elementor\Modules\AtomicWidgets\PropTypes;
 
 use Elementor\Modules\AtomicWidgets\PropTypes\Base\Object_Prop_Type;
+use Elementor\Modules\AtomicWidgets\Styles\Size_Constants;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -10,15 +11,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Border_Width_Prop_Type extends Object_Prop_Type {
 	public static function get_key(): string {
-		return 'border-width';
+		return 'border-width-v2';
 	}
 
 	protected function define_shape(): array {
+		$units = Size_Constants::border();
+
 		return [
-			'top' => Size_Prop_Type::make(),
-			'right' => Size_Prop_Type::make(),
-			'bottom' => Size_Prop_Type::make(),
-			'left' => Size_Prop_Type::make(),
+			'block-start' => Size_Prop_Type::make()->units( $units ),
+			'block-end' => Size_Prop_Type::make()->units( $units ),
+			'inline-start' => Size_Prop_Type::make()->units( $units ),
+			'inline-end' => Size_Prop_Type::make()->units( $units ),
 		];
 	}
 }

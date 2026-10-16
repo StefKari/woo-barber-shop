@@ -4,12 +4,12 @@ defined('ABSPATH') or exit;
 ?>
 
 <tr valign="top">
-    <th scope="row" class="titledesc"><?php _e('Disable shipping calculation',
+    <th scope="row" class="titledesc"><?php esc_html_e('Disable shipping calculation',
             'advanced-dynamic-pricing-for-woocommerce') ?></th>
     <td class="forminp forminp-checkbox">
         <fieldset>
             <legend class="screen-reader-text">
-                <span><?php _e('Disable shipping calculation',
+                <span><?php esc_html_e('Disable shipping calculation',
                         'advanced-dynamic-pricing-for-woocommerce') ?></span></legend>
             <label for="disable_shipping_calc_during_process">
                 <input <?php checked($options['disable_shipping_calc_during_process']) ?>

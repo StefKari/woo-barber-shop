@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
+ * @see     https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
  * @version 3.3.0
  */
@@ -29,5 +29,5 @@ if ( ! $short_description ) {
 
 ?>
 <div class="woocommerce-product-details__short-description">
-	<?php echo $short_description; // WPCS: XSS ok. ?>
+	<?php echo $short_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Short descriptions intentionally contain filtered post and extension HTML. ?>
 </div>

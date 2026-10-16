@@ -56,7 +56,7 @@ if ( ! class_exists( 'Redux_Repeater' ) ) {
 		 * @return      void
 		 */
 		public function render() {
-			$unallowed = array( 'tabbed', 'social_profiles', 'color_scheme', 'repeater' );
+			$unallowed = array( 'tabbed', 'social_profiles', 'color_scheme', 'repeater', 'icon_select' );
 
 			if ( isset( $this->field['group_values'] ) && $this->field['group_values'] ) {
 				$this->repeater_values = '[' . $this->field['id'] . ']';
@@ -119,7 +119,7 @@ if ( ! class_exists( 'Redux_Repeater' ) ) {
 												$field['args'][ $key ] = array();
 											}
 
-											$field['options'][ $key ] = $this->parent->get_wordpress_data( $data, $field['args'][ $key ] );
+											$field['options'][ $key ] = $this->parent->wordpress_data->get( $data, $field['args'][ $key ], $this->parent->args['opt_name'] );
 										}
 									}
 								}
@@ -322,7 +322,7 @@ if ( ! class_exists( 'Redux_Repeater' ) ) {
 						if ( ! isset( $field['args'][ $key ] ) ) {
 							$field['args'][ $key ] = array();
 						}
-						$field['options'][ $key ] = $this->parent->get_wordpress_data( $data, $field['args'][ $key ] );
+						$field['options'][ $key ] = $this->parent->wordpress_data->get( $data, $field['args'][ $key ], $this->parent->args['opt_name'] );
 					}
 				}
 			}

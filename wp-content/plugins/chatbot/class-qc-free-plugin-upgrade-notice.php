@@ -1,5 +1,5 @@
 <?php
-
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
 /*******************************************
  * QuantumCloud Plugin Upgrade Link for Free Plugins
  * Last Updated On: 05-24-2017
@@ -11,8 +11,8 @@ if( !class_exists('QcchatbotPluginUpgradeToProNotice') )
 		
 		//Public variables, these can be overrides using instance callback
 
-		public $upgrade_link = "https://www.quantumcloud.com";
-		public $link_color = "#0000ff";
+		public $upgrade_link = "https://www.quantumcloud.net";
+		public $link_color = "#FCB214";
 		public $link_text = "Upgrade to Pro";
 		public $link_class = "";
 		public $link_target = "_blank";
@@ -31,10 +31,10 @@ if( !class_exists('QcchatbotPluginUpgradeToProNotice') )
 		//Contructor - Set defaults 
 		function __construct()
 		{
-			add_action('admin_head', array(&$this, 'qc_upgrade_to_pro_heading_part') );
+			add_action('admin_head', array(&$this, 'qcld_upgrade_to_pro_heading_part') );
 		}
 
-		function qc_upgrade_to_pro_heading_part()
+		function qcld_upgrade_to_pro_heading_part()
 		{
 			if( is_admin() ){
 			?>
@@ -97,16 +97,16 @@ if( !class_exists('QcchatbotPluginUpgradeToProNotice') )
 		function func_show_upgrade_link_with_action_links( $links )
 		{
 			$links = array_merge( $links, array(
-				'<a  href="' . esc_url( admin_url('admin.php?page=wpbot') ) . '" target="">' . __( 'Settings', 'quantumcloud' ) . '</a>'
+				'<a  href="' . esc_url( admin_url('admin.php?page=wpbot') ) . '" target="">' . __( 'Settings', 'chatbot' ) . '</a>'
 			) );
 			$links = array_merge( $links, array(
-				'<a  href="' . esc_url( admin_url('admin.php?page=wpbot_help_page') ) . '" target="">' . __( 'Help', 'quantumcloud' ) . '</a>'
+				'<a  href="' . esc_url( admin_url('admin.php?page=wpbot_help_page') ) . '" target="">' . __( 'Help', 'chatbot' ) . '</a>'
 			) );
 			$links = array_merge( $links, array(
-				'<a  href="' . esc_url('https://www.wpbot.pro/free-support/' ) . '" target="">' . __( 'Support', 'quantumcloud' ) . '</a>'
+				'<a  href="' . esc_url('https://www.wpbot.pro/free-support/' ) . '" target="">' . __( 'Get Support', 'chatbot' ) . '</a>'
 			) );
 			$links = array_merge( $links, array(
-				'<a style="font-weight: bold; background: '.$this->link_color.';color: #fff; padding:5px" href="' . esc_url( $this->upgrade_link ) . '" target="'.$this->link_target.'">' . __( $this->link_text, 'quantumcloud' ) . '</a>'
+				'<a style="font-weight: bold; background: '.$this->link_color.';color: #fff;border-radius: 4px; padding:5px" href="' . esc_url( $this->upgrade_link ) . '" target="'.$this->link_target.'">' . $this->link_text . '</a>'
 			) );
 			
 			return $links;
@@ -143,7 +143,7 @@ if( !class_exists('QcchatbotPluginUpgradeToProNotice') )
 			if ( strpos( $file, "$this->plugin_main_file" ) !== false ) {
 			
 				$new_links = array(
-					'<a class="'.$this->link_class.'" style="font-weight: bold; color: #fff; padding: 5px; background: '.$this->link_color.';" href="' . esc_url( $this->upgrade_link ) . '" title="'.$this->link_text.'" target="'.$this->link_target.'">' . __( $this->link_text, 'quantumcloud' ) . '</a>'
+					'<a class="'.$this->link_class.'" style="font-weight: bold; color: #fff; padding: 5px;border-radius: 4px; background: '.$this->link_color.';" href="' . esc_url( $this->upgrade_link ) . '" title="'.$this->link_text.'" target="'.$this->link_target.'">' . $this->link_text . '</a>'
 				);
 				
 				$links = array_merge( $links, $new_links );
@@ -180,8 +180,9 @@ if( !class_exists('QcchatbotPluginUpgradeToProNotice') )
 		     return;
 		    }
 		   
-		    $link_text = '<span class="qc-up-pro-link-chatbot"  style="font-weight: bold; padding: 5px; background: #FCB214; border-radius: 4px; color: '.esc_attr($this->link_color).'">'.$this->link_text.'</span>';
-			if($current_user->roles[0]!='subscriber')
+		    $link_text = '<span class="qc-up-pro-link-chatbot"  style="font-weight: bold; padding: 5px; background: '.esc_attr($this->link_color).'; border-radius: 4px; color: #fff">'.$this->link_text.'</span>';
+
+			if( ( $current_user->roles[0] ?? '' ) != 'subscriber' )
 				$submenu["$this->plugin_menu_slug"][300] = array( $link_text, 'activate_plugins' , $this->upgrade_link );
 			
 			return $submenu;
@@ -229,4 +230,3 @@ if( is_admin() )
 	$instance_bot2->hook_with_plugin_submenu();
 
 }
-

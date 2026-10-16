@@ -29,8 +29,7 @@ class AdministratorRoleManager {
 		if (
 			! $user ||
 			( ! $user->has_cap( User::CAP_ADMINISTRATOR ) && ! $skipRoleCheck ) ||
-			User::getMetaSingle( $user->ID, self::USER_METAKEY_INITIALIZED) ||
-			$user->has_cap( User::CAP_TRANSLATE )
+			User::getMetaSingle( $user->ID, self::USER_METAKEY_INITIALIZED )
 		) {
 			return false;
 		}

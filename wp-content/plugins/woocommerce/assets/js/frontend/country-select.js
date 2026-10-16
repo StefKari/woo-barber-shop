@@ -55,14 +55,18 @@ jQuery( function( $ ) {
 
 		var wc_country_select_select2 = function() {
 			$( 'select.country_select:visible, select.state_select:visible' ).each( function() {
+				var $this = $( this );
+
 				var select2_args = $.extend({
-					placeholder: $( this ).attr( 'data-placeholder' ) || $( this ).attr( 'placeholder' ) || '',
+					placeholder: $this.attr( 'data-placeholder' ) || $this.attr( 'placeholder' ) || '',
+					label: $this.attr( 'data-label' ) || null,
+					required: $this.attr( 'aria-required' ) === 'true' || null,
 					width: '100%'
 				}, getEnhancedSelectFormatString() );
 
 				$( this )
 					.on( 'select2:select', function() {
-						$( this ).focus(); // Maintain focus after select https://github.com/select2/select2/issues/4384
+						$( this ).trigger( 'focus' ); // Maintain focus after select https://github.com/select2/select2/issues/4384
 					} )
 					.selectWoo( select2_args );
 			});
@@ -101,12 +105,15 @@ jQuery( function( $ ) {
 			placeholder   = $statebox.attr( 'placeholder' ) || $statebox.attr( 'data-placeholder' ) || '',
 			$newstate;
 
+		if ( placeholder === wc_country_select_params.i18n_select_state_text ) {
+			placeholder = '';
+		}
+
 		if ( states[ country ] ) {
 			if ( $.isEmptyObject( states[ country ] ) ) {
 				$newstate = $( '<input type="hidden" />' )
 					.prop( 'id', input_id )
 					.prop( 'name', input_name )
-					.prop( 'placeholder', placeholder )
 					.attr( 'data-input-classes', input_classes )
 					.addClass( 'hidden ' + input_classes );
 				$parent.hide().find( '.select2-container' ).remove();
@@ -151,8 +158,8 @@ jQuery( function( $ ) {
 				$newstate = $( '<input type="text" />' )
 					.prop( 'id', input_id )
 					.prop( 'name', input_name )
-					.prop('placeholder', placeholder)
-					.attr('data-input-classes', input_classes )
+					.prop( 'placeholder', placeholder )
+					.attr( 'data-input-classes', input_classes )
 					.addClass( 'input-text  ' + input_classes );
 				$parent.show().find( '.select2-container' ).remove();
 				$statebox.replaceWith( $newstate );

@@ -15,6 +15,7 @@ add_filter( 'update_post_term_count_statuses', 'wpcode_taxonomies_count_drafts',
 add_action( 'wpcode_before_snippet_save', 'wpcode_maybe_remove_core_content_filters' );
 add_action( 'wpcode_snippet_after_update', 'wpcode_restore_core_content_filters' );
 add_filter( 'wp_import_post_data_raw', 'wpcode_prevent_wp_importer_import' );
+add_filter( 'wp_insert_post_empty_content', 'wpcode_block_unauthorized_snippet_writes', 10, 2 );
 
 /**
  * Register the post type for snippets.
@@ -25,11 +26,51 @@ function wpcode_register_post_type() {
 	register_post_type(
 		'wpcode',
 		array(
-			'public'     => false,
-			'show_ui'    => false,
-			'can_export' => false,
+			'public'          => false,
+			'show_ui'         => false,
+			'can_export'      => false,
+			'capability_type' => array( 'wpcode_snippet', 'wpcode_snippets' ),
+			'map_meta_cap'    => true,
+			'capabilities'    => array(
+				'edit_posts'             => 'wpcode_edit_snippets',
+				'edit_others_posts'      => 'wpcode_edit_snippets',
+				'delete_posts'           => 'wpcode_edit_snippets',
+				'publish_posts'          => 'wpcode_activate_snippets',
+				'read_private_posts'     => 'wpcode_edit_snippets',
+				'read'                   => 'read',
+				'create_posts'           => 'wpcode_edit_snippets',
+				'delete_private_posts'   => 'wpcode_edit_snippets',
+				'delete_published_posts' => 'wpcode_edit_snippets',
+				'delete_others_posts'    => 'wpcode_edit_snippets',
+				'edit_private_posts'     => 'wpcode_edit_snippets',
+				'edit_published_posts'   => 'wpcode_edit_snippets',
+			),
 		)
 	);
+}
+
+/**
+ * Block wp_insert_post writes to the wpcode post type from unauthorized users and XML-RPC.
+ *
+ * @param bool  $maybe_empty Whether to treat the post as empty (abort save).
+ * @param array $postarr     The post data being inserted.
+ *
+ * @return bool
+ */
+function wpcode_block_unauthorized_snippet_writes( $maybe_empty, $postarr ) {
+	if ( empty( $postarr['post_type'] ) || 'wpcode' !== $postarr['post_type'] ) {
+		return $maybe_empty;
+	}
+
+	if ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {
+		return true;
+	}
+
+	if ( ! current_user_can( 'wpcode_edit_snippets' ) ) {
+		return true;
+	}
+
+	return $maybe_empty;
 }
 
 /**

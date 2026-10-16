@@ -2,6 +2,8 @@
 /**
  * Admin View: Edit Webhooks
  *
+ * @var WC_Webhook $webhook Webhook object.
+ *
  * @package WooCommerce\Admin\Webhooks\Views
  */
 
@@ -22,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php esc_html_e( 'Name', 'woocommerce' ); ?>
 						<?php
 						/* translators: %s: date */
-						echo wc_help_tip( sprintf( __( 'Friendly name for identifying this webhook, defaults to Webhook created on %s.', 'woocommerce' ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Webhook created on date parsed by strftime', 'woocommerce' ) ) ) ); // @codingStandardsIgnoreLine
+						echo wc_help_tip( sprintf( __( 'Friendly name for identifying this webhook, defaults to Webhook created on %s.', 'woocommerce' ), (new DateTime('now'))->format( _x( 'M d, Y @ h:i A', 'Webhook created on date parsed by DateTime::format', 'woocommerce' ) ) ) ); // @codingStandardsIgnoreLine
 						?>
 					</label>
 				</th>
@@ -63,24 +65,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$topic_data = WC_Admin_Webhooks::get_topic_data( $webhook );
 
 							$topics = apply_filters(
-								'woocommerce_webhook_topics', array(
-									''                 => __( 'Select an option&hellip;', 'woocommerce' ),
-									'coupon.created'   => __( 'Coupon created', 'woocommerce' ),
-									'coupon.updated'   => __( 'Coupon updated', 'woocommerce' ),
-									'coupon.deleted'   => __( 'Coupon deleted', 'woocommerce' ),
-									'coupon.restored'  => __( 'Coupon restored', 'woocommerce' ),
-									'customer.created' => __( 'Customer created', 'woocommerce' ),
-									'customer.updated' => __( 'Customer updated', 'woocommerce' ),
-									'customer.deleted' => __( 'Customer deleted', 'woocommerce' ),
-									'order.created'    => __( 'Order created', 'woocommerce' ),
-									'order.updated'    => __( 'Order updated', 'woocommerce' ),
-									'order.deleted'    => __( 'Order deleted', 'woocommerce' ),
-									'order.restored'   => __( 'Order restored', 'woocommerce' ),
-									'product.created'  => __( 'Product created', 'woocommerce' ),
-									'product.updated'  => __( 'Product updated', 'woocommerce' ),
-									'product.deleted'  => __( 'Product deleted', 'woocommerce' ),
-									'product.restored' => __( 'Product restored', 'woocommerce' ),
-									'action'           => __( 'Action', 'woocommerce' ),
+								'woocommerce_webhook_topics',
+								array(
+									''                  => __( 'Select an option&hellip;', 'woocommerce' ),
+									'coupon.created'    => __( 'Coupon created', 'woocommerce' ),
+									'coupon.updated'    => __( 'Coupon updated', 'woocommerce' ),
+									'coupon.deleted'    => __( 'Coupon deleted', 'woocommerce' ),
+									'coupon.restored'   => __( 'Coupon restored', 'woocommerce' ),
+									'customer.created'  => __( 'Customer created', 'woocommerce' ),
+									'customer.updated'  => __( 'Customer updated', 'woocommerce' ),
+									'customer.deleted'  => __( 'Customer deleted', 'woocommerce' ),
+									'order.created'     => __( 'Order created', 'woocommerce' ),
+									'order.updated'     => __( 'Order updated', 'woocommerce' ),
+									'order.deleted'     => __( 'Order deleted', 'woocommerce' ),
+									'order.restored'    => __( 'Order restored', 'woocommerce' ),
+									'product.created'   => __( 'Product created', 'woocommerce' ),
+									'product.updated'   => __( 'Product updated', 'woocommerce' ),
+									'product.deleted'   => __( 'Product deleted', 'woocommerce' ),
+									'product.restored'  => __( 'Product restored', 'woocommerce' ),
+									'product.published' => __( 'Product published', 'woocommerce' ),
+									'action'            => __( 'Action', 'woocommerce' ),
 								)
 							);
 
@@ -144,14 +148,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 								?>
 							</option>
 						<?php endforeach; ?>
-						<option value="legacy_v3" <?php selected( 'legacy_v3', $webhook->get_api_version(), true ); ?>><?php esc_html_e( 'Legacy API v3 (deprecated)', 'woocommerce' ); ?></option>
+						<?php if ( WC()->legacy_rest_api_is_available() ) : ?>
+							<option value="legacy_v3" <?php selected( 'legacy_v3', $webhook->get_api_version(), true ); ?>>
+								<?php esc_html_e( 'Legacy API v3 (deprecated)', 'woocommerce' ); ?>
+							</option>
+						<?php elseif ( ! in_array( $webhook->get_api_version(), wc_get_webhook_rest_api_versions(), true ) ) : ?>
+							<option value="<?php echo esc_attr( $webhook->get_api_version() ); ?>" selected="selected">
+								<?php
+									/* translators: %s: unsupported api version identifier e.g. legacy_v3 */
+									echo esc_html( sprintf( __( '%s (unsupported)', 'woocommerce' ), $webhook->get_api_version() ) );
+								?>
+							</option>
+						<?php endif; ?>
 					</select>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 
-	<?php do_action( 'woocommerce_webhook_options' ); ?>
+	<?php
+	/**
+	 * Fires within the webhook editor, after the Webhook Data fields have rendered.
+	 *
+	 * @param WC_Webhook $webhook
+	 */
+	do_action( 'woocommerce_webhook_options', $webhook );
+	?>
 </div>
 
 <div id="webhook-actions" class="settings-panel">
@@ -197,11 +219,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 								add_query_arg(
 									array(
 										'delete' => $webhook->get_id(),
-									), admin_url( 'admin.php?page=wc-settings&tab=advanced&section=webhooks' )
-								), 'delete-webhook'
+									),
+									admin_url( 'admin.php?page=wc-settings&tab=advanced&section=webhooks' )
+								),
+								'delete-webhook'
 							);
 							?>
-							<a style="color: #a00; text-decoration: none; margin-left: 10px;" href="<?php echo esc_url( $delete_url ); ?>"><?php esc_html_e( 'Delete permanently', 'woocommerce' ); ?></a>
+							<a style="color: var(--wc-destructive, #cc1818); text-decoration: none; margin-left: 10px;" href="<?php echo esc_url( $delete_url ); ?>"><?php esc_html_e( 'Delete permanently', 'woocommerce' ); ?></a>
 						<?php endif; ?>
 					</p>
 				</td>
@@ -221,6 +245,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( 'action' === current ) {
 				action_event_field.show();
 			}
-		}).change();
+		}).trigger( 'change' );
 	});
 </script>

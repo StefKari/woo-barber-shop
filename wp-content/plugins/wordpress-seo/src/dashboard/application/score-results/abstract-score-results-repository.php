@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong
 // phpcs:disable Yoast.NamingConventions.NamespaceName.MaxExceeded
 namespace Yoast\WP\SEO\Dashboard\Application\Score_Results;
@@ -45,9 +46,7 @@ abstract class Abstract_Score_Results_Repository {
 	 *
 	 * @return void
 	 */
-	public function set_repositories(
-		Current_Scores_Repository $current_scores_repository
-	) {
+	public function set_repositories( Current_Scores_Repository $current_scores_repository ) {
 		$this->current_scores_repository = $current_scores_repository;
 	}
 

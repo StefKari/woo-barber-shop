@@ -644,7 +644,7 @@ class Plugin_Admin_Settings {
      * @param string $slug    Slug.
      * @return bool
      */
-	public static function save_fields( $options, $data = null, $slug ) {
+	public static function save_fields( $options, $data, $slug ) {
 		if ( is_null( $data ) ) {
 			$data = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}

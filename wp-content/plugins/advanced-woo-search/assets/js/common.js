@@ -14,6 +14,7 @@ AwsHooks.filters = AwsHooks.filters || {};
         showmore  : aws_vars.showmore,
         noresults : aws_vars.noresults
     };
+    var awsData = new Array();
 
     AwsHooks.add_filter = function( tag, callback, priority ) {
 
@@ -73,10 +74,24 @@ AwsHooks.filters = AwsHooks.filters || {};
                 searchFor = $searchField.val();
                 searchFor = searchFor.trim();
                 searchFor = searchFor.replace( /<>\{\}\[\]\\\/]/gi, '' );
-                searchFor = searchFor.replace( /\s\s+/g, ' ' );
+                searchFor = searchFor.replace( /<[^>]*>/g, ' ' );
 
+                // Bail when the value hasn't actually changed - a trailing
+                // keyup that produces the same searchFor must not reset the
+                // debounce or abort the request scheduled by the preceding
+                // input event.
+                if ( searchFor === lastSearchFor ) {
+                    return;
+                }
+                lastSearchFor = searchFor;
+
+                // Skip XHRs whose response has already started arriving - a
+                // late-firing keyup must not kill a request that is about to
+                // deliver results. Stale responses are filtered in success().
                 for ( var i = 0; i < requests.length; i++ ) {
-                    requests[i].abort();
+                    if ( requests[i].readyState < 2 ) {
+                        requests[i].abort();
+                    }
                 }
 
                 methods.searchRequest();
@@ -125,9 +140,11 @@ AwsHooks.filters = AwsHooks.filters || {};
 
             ajaxRequest: function() {
 
+                var requestKeyword = searchFor;
+
                 var data = {
                     action: 'aws_action',
-                    keyword : searchFor,
+                    keyword : requestKeyword,
                     aws_page: d.pageId,
                     aws_tax: d.tax,
                     lang: d.lang,
@@ -136,6 +153,9 @@ AwsHooks.filters = AwsHooks.filters || {};
                 };
 
                 data = AwsHooks.apply_filters( 'aws_ajax_request_params', data, { instance: instance, form: self, data: d } );
+
+                // @since 3.38
+                ajaxUrl = AwsHooks.apply_filters( 'aws_ajax_request_url', ajaxUrl, { instance: instance, form: self, data: d, ajaxData: data } );
 
                 requests.push(
 
@@ -146,9 +166,12 @@ AwsHooks.filters = AwsHooks.filters || {};
                         dataType: 'json',
                         success: function( response ) {
 
-                            methods.analytics( searchFor, false );
+                            cachedResponse[requestKeyword] = response;
 
-                            cachedResponse[searchFor] = response;
+                            // Drop stale responses - the user has typed more since this request was sent.
+                            if ( requestKeyword !== searchFor ) {
+                                return;
+                            }
 
                             methods.showResults( response );
 
@@ -156,6 +179,9 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
+                            if ( textStatus === 'abort' ) {
+                                return;
+                            }
                             console.log( "Request failed: " + textStatus );
                             methods.hideLoader();
                         }
@@ -170,7 +196,10 @@ AwsHooks.filters = AwsHooks.filters || {};
                 var resultNum = 0;
                 var taxName = '';
 
-                var html = '<ul>';
+                var html = '<div class="aws_result_scroll">';
+
+                html += '<div class="aws_result_inner">';
+                html += '<div class="aws_results style-inline">';
 
                 if ( typeof response.data !== 'undefined' ) {
 
@@ -196,19 +225,22 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                                     var linkData = ( typeof topResult.link_data !== 'undefined' ) ? topResult.link_data : '';
 
-                                    html += '<li class="aws_result_item aws_result_top_custom_item aws_result_top_custom_item_' + topResultsName + '" style="position:relative;">';
-                                        html += '<div class="aws_result_link">';
-                                            html += '<a class="aws_result_link_top" ' + linkData + ' href="' + topResult.link + '">' + topResult.name + '</a>';
-                                            html += '<span class="aws_result_content">';
-                                                html += '<span class="aws_result_title">';
+                                    html += '<div class="aws_result_item aws_result_top_custom_item aws_result_top_custom_item_' + topResultsName + '" style="position:relative;">';
+                                        html += '<a class="aws_result_link_top" ' + linkData + ' href="' + topResult.link + '">' + topResult.name + '</a>';
+                                        html += '<span class="aws_result_content">';
+                                            html += '<span class="aws_result_head">';
+                                                html += '<span class="aws_result_top_custom_item_title">';
+                                                    if ( ( typeof topResult.heading !== 'undefined' ) && topResult.heading ) {
+                                                        html += '<span class="aws_result_heading">' + topResult.heading + '</span>';
+                                                    }
                                                     html += topResult.name;
                                                 html += '</span>';
-                                                if ( ( typeof topResult.content !== 'undefined' ) && topResult.content ) {
-                                                    html += '<span class="aws_result_excerpt">' + topResult.content + '</span>';
-                                                }
                                             html += '</span>';
-                                        html += '</div>';
-                                    html += '</li>';
+                                            if ( ( typeof topResult.content !== 'undefined' ) && topResult.content ) {
+                                                html += '<span class="aws_result_excerpt">' + topResult.content + '</span>';
+                                            }
+                                        html += '</span>';
+                                    html += '</div>';
 
                                 });
 
@@ -231,22 +263,28 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                                 resultNum++;
 
-                                html += '<li class="aws_result_item aws_result_tag aws_result_tax_' + taxName + '" style="position:relative;">';
-                                    html += '<div class="aws_result_link">';
-                                        html += '<a class="aws_result_link_top" href="' + taxitem.link + '">' + taxitem.name + '</a>';
-                                        html += '<span class="aws_result_content">';
-                                            html += '<span class="aws_result_title">';
+                                html += '<div class="aws_result_item aws_result_tag aws_result_tax_' + taxName + '" style="position:relative;">';
+                                    html += '<a class="aws_result_link_top" href="' + taxitem.link + '">' + taxitem.name + '</a>';
+                                    html += '<span class="aws_result_content">';
+                                        html += '<span class="aws_result_head">';
+                                            html += '<span class="aws_result_tax_title">';
+                                                if ( ( typeof taxitem.heading !== 'undefined' ) && taxitem.heading ) {
+                                                    html += '<span class="aws_result_heading">' + taxitem.heading + '</span>';
+                                                }
                                                 html += taxitem.name;
                                                 if ( taxitem.count ) {
                                                     html += '<span class="aws_result_count">&nbsp;(' + taxitem.count + ')</span>';
                                                 }
+                                                if ( ( typeof taxitem.hierarchy !== 'undefined' ) && taxitem.hierarchy ) {
+                                                    html += '<span class="aws_result_hierarchy">' + taxitem.hierarchy + '</span>';
+                                                }
                                             html += '</span>';
-                                            if ( ( typeof taxitem.excerpt !== 'undefined' ) && taxitem.excerpt ) {
-                                                html += '<span class="aws_result_excerpt">' + taxitem.excerpt + '</span>';
-                                            }
                                         html += '</span>';
-                                    html += '</div>';
-                                html += '</li>';
+                                        if ( ( typeof taxitem.excerpt !== 'undefined' ) && taxitem.excerpt ) {
+                                            html += '<span class="aws_result_excerpt">' + taxitem.excerpt + '</span>';
+                                        }
+                                    html += '</span>';
+                                html += '</div>';
 
                             });
                         }
@@ -261,72 +299,82 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                         resultNum++;
 
-                        html += '<li class="aws_result_item" style="position:relative;">';
-                        html += '<div class="aws_result_link">';
+                        var isOnSale = result.on_sale ? ' on-sale' : '';
 
-                        html += '<a class="aws_result_link_top" href="' + result.link + '">' + result.title.replace(/(<[\s\S]*>)/gm, '') + '</a>';
+                        html += '<div class="aws_result_item' + isOnSale + '">';
 
-                        if ( result.image ) {
-                            html += '<span class="aws_result_image">';
-                            html += '<img src="' + result.image + '">';
-                            html += '</span>';
-                        }
+                            html += '<a class="aws_result_link_top" href="' + result.link + '">' + result.title.replace(/<[^>]*>/g, '') + '</a>';
 
-                        html += '<span class="aws_result_content">';
-
-                        html += '<span class="aws_result_title">';
-                            html += result.title;
-                            if ( result.featured ) {
-                                html += '<span class="aws_result_featured" title="Featured"><svg version="1.1" viewBox="0 0 20 21" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill-rule="evenodd" stroke="none" stroke-width="1"><g transform="translate(-296.000000, -422.000000)"><g transform="translate(296.000000, 422.500000)"><path d="M10,15.273 L16.18,19 L14.545,11.971 L20,7.244 L12.809,6.627 L10,0 L7.191,6.627 L0,7.244 L5.455,11.971 L3.82,19 L10,15.273 Z"/></g></g></g></svg></span>';
+                            if ( result.image ) {
+                                html += '<span class="aws_result_image">';
+                                    html += '<img src="' + result.image + '">';
+                                html += '</span>';
                             }
-                        html += '</span>';
 
-                        if ( result.stock_status ) {
-                            var statusClass = result.stock_status.status ? 'in' : 'out';
-                            html += '<span class="aws_result_stock ' + statusClass + '">';
-                                html += result.stock_status.text;
+                            html += '<span class="aws_result_content">';
+
+                                html += '<span class="aws_result_head">';
+
+                                    html += '<span class="aws_result_title">';
+                                    html += result.title;
+                                    if ( result.featured ) {
+                                        html += '<span class="aws_result_featured" title="Featured"><svg version="1.1" viewBox="0 0 20 21" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill-rule="evenodd" stroke="none" stroke-width="1"><g transform="translate(-296.000000, -422.000000)"><g transform="translate(296.000000, 422.500000)"><path d="M10,15.273 L16.18,19 L14.545,11.971 L20,7.244 L12.809,6.627 L10,0 L7.191,6.627 L0,7.244 L5.455,11.971 L3.82,19 L10,15.273 Z"/></g></g></g></svg></span>';
+                                    }
+                                    html += '</span>';
+
+                                    if ( result.price ) {
+                                        html += '<span class="aws_result_price">' + result.price + '</span>';
+                                    }
+
+                                html += '</span>';
+
+                                if ( result.stock_status ) {
+                                    var statusClass = result.stock_status.status ? 'in' : 'out';
+                                    html += '<span class="aws_result_stock ' + statusClass + '">';
+                                        html += result.stock_status.text;
+                                    html += '</span>';
+                                }
+
+                                if ( result.sku ) {
+                                    html += '<span class="aws_result_sku">' + translate.sku +  result.sku + '</span>';
+                                }
+
+                                if ( result.excerpt ) {
+                                    html += '<span class="aws_result_excerpt">' + result.excerpt + '</span>';
+                                }
+
+                                if ( typeof result.categories !== 'undefined' && result.categories ) {
+                                    html += '<span class="aws_result_term">' + result.categories + '</span>';
+                                }
+
                             html += '</span>';
-                        }
 
-                        if ( result.sku ) {
-                            html += '<span class="aws_result_sku">' + translate.sku +  result.sku + '</span>';
-                        }
-
-                        if ( result.excerpt ) {
-                            html += '<span class="aws_result_excerpt">' + result.excerpt + '</span>';
-                        }
-
-                        if ( result.price ) {
-                            html += '<span class="aws_result_price">' + result.price + '</span>';
-                        }
-
-                        html += '</span>';
-
-                        if ( result.on_sale ) {
-                            html += '<span class="aws_result_sale">';
-                            html += '<span class="aws_onsale">' + translate.sale + '</span>';
-                            html += '</span>';
-                        }
+                            if ( result.on_sale ) {
+                                html += '<span class="aws_result_sale">';
+                                    html += '<span class="aws_onsale">' + translate.sale + '</span>';
+                                html += '</span>';
+                            }
 
                         html += '</div>';
-                        html += '</li>';
 
                     });
 
                     if ( d.showMore && d.showPage ) {
-                        html += '<li class="aws_result_item aws_search_more"><a href="#">' + translate.showmore + '</a></li>';
+                        html += '<a class="aws_result_item aws_search_more" href="#">' + translate.showmore + '</a>';
                     }
-
-                    //html += '<li class="aws_result_item"><a href="#">Next Page</a></li>';
 
                 }
 
                 if ( ! resultNum ) {
-                    html += '<li class="aws_result_item aws_no_result">' + translate.noresults + '</li>';
+
+                    /* from 3.32 */
+                    methods.createAndDispatchEvent( document, 'awsNoResults', { term: searchFor, instance: instance, form: self, data: d } );
+
+                    html += '<span class="aws_result_item aws_no_result">' + translate.noresults + '</span>';
+
                 }
 
-
-                html += '</ul>';
+                html += '</div></div></div>';
 
                 // @since 2.05
                 html = AwsHooks.apply_filters( 'aws_results_html', html, { response: response, data: d, translate: translate } );
@@ -340,6 +388,11 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                 if ( eShowResults ) {
                     self[0].dispatchEvent( eShowResults );
+                }
+
+                // send analytics event
+                if ( ! cachedResponse.hasOwnProperty( searchFor ) ) {
+                    methods.analytics( searchFor, false, resultNum !== 0 );
                 }
 
             },
@@ -365,6 +418,7 @@ AwsHooks.filters = AwsHooks.filters || {};
             resultsHide: function() {
                 $(d.resultBlock).hide();
                 $searchForm.removeClass('aws-form-active');
+                methods.createAndDispatchEvent( document, 'awsResultsHidden', { instance: instance, form: self, data: d } );
             },
 
             onFocus: function( event ) {
@@ -417,6 +471,12 @@ AwsHooks.filters = AwsHooks.filters || {};
                         top : 0,
                         left: 0
                     };
+
+                    if ( styles.width <= 500 ) {
+                        $resultsBlock.addClass('less500');
+                    } else {
+                        $resultsBlock.removeClass('less500');
+                    }
 
                     if ( bodyPosition === 'relative' || bodyPosition === 'absolute' || bodyPosition === 'fixed' ) {
                         styles.top = offset.top + $(self).innerHeight() - bodyOffset.top;
@@ -508,13 +568,18 @@ AwsHooks.filters = AwsHooks.filters || {};
                 return isFixed;
             },
 
-            analytics: function( label, submit ) {
+            getUrlParam: function( name ) {
+                const url = new URL (window.location.href );
+                return url.searchParams.get( name );
+            },
+
+            analytics: function( label, submit, hasResults ) {
 
                 /* from 2.95 */
                 methods.createAndDispatchEvent( document, 'awsAnalytics', { term: label, instance: instance, form: self, data: d } );
 
                 if ( d.useAnalytics ) {
-
+                    
                     try {
                         var sPage = submit ? '' : '/?s=' + encodeURIComponent( 'ajax-search:' + label );
 
@@ -534,8 +599,16 @@ AwsHooks.filters = AwsHooks.filters || {};
                             });
 
                             tagF('event', 'aws_search', {
-                                'aws_search_term': label
+                                'aws_search_term': label,
+                                'aws_has_results': hasResults
                             });
+
+                            if ( hasResults === false ) {
+                                tagF('event', 'aws_search_no_results', {
+                                    'aws_search_term': label,
+                                    'event_label': label
+                                });
+                            }
 
                             if ( sPage ) {
                                 tagF('event', 'page_view', {
@@ -548,6 +621,9 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                         if ( typeof ga !== 'undefined' && ga !== null ) {
                             ga('send', 'event', 'AWS search', 'AWS Search Term', label);
+                            if ( hasResults === false ) {
+                                ga('send', 'event', 'AWS search no results', 'AWS Search Term', label);
+                            }
                             if ( sPage ) {
                                 ga( 'send', 'pageview', sPage );
                             }
@@ -557,10 +633,16 @@ AwsHooks.filters = AwsHooks.filters || {};
                             if ( sPage ) {
                                 pageTracker._trackPageview( sPage );
                             }
-                            pageTracker._trackEvent( 'AWS search', 'AWS search', 'AWS Search Term', label )
+                            pageTracker._trackEvent( 'AWS search', 'AWS search', 'AWS Search Term', label );
+                            if ( hasResults === false ) {
+                                pageTracker._trackEvent( 'AWS search no results', 'AWS search no results', 'AWS Search Term', label );
+                            }
                         }
                         if ( typeof _gaq !== 'undefined' && _gaq !== null ) {
                             _gaq.push(['_trackEvent', 'AWS search', 'AWS Search Term', label ]);
+                            if ( hasResults === false ) {
+                                _gaq.push(['_trackEvent', 'AWS search no results', 'AWS Search Term', label ]);
+                            }
                             if ( sPage ) {
                                 _gaq.push(['_trackPageview', sPage]);
                             }
@@ -570,6 +652,9 @@ AwsHooks.filters = AwsHooks.filters || {};
                             __gaTracker( 'send', 'event', 'AWS search', 'AWS Search Term', label );
                             if ( sPage ) {
                                 __gaTracker( 'send', 'pageview', sPage );
+                            }
+                            if ( hasResults === false ) {
+                                __gaTracker( 'send', 'event', 'AWS search no results', 'AWS Search Term', label );
                             }
                         }
                     }
@@ -629,6 +714,7 @@ AwsHooks.filters = AwsHooks.filters || {};
             eShowResults    = false,
             requests        = Array(),
             searchFor       = '',
+            lastSearchFor   = null,
             keyupTimeout,
             cachedResponse = new Array();
 
@@ -722,11 +808,13 @@ AwsHooks.filters = AwsHooks.filters || {};
         });
 
 
-        $searchForm.on( 'submit', function(e) {
+        var pageSearchQuery = window.location.search;
+        if ( pageSearchQuery.indexOf('type_aws=true') !== -1 && typeof awsData['pageEvent'] == 'undefined' ) {
             if ( ! d.ajaxSearch ) {
-                methods.analytics( $searchField.val(), true );
+                awsData['pageEvent'] = true;
+                methods.analytics( $searchField.val(), true, ! $('body').hasClass('aws-no-results') );
             }
-        });
+        }
 
 
         $(document).on( 'click', function (e) {
@@ -797,7 +885,7 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                     var $item = $( d.resultBlock ).find('.aws_result_item');
                     var $hoveredItem = $( d.resultBlock ).find('.aws_result_item.hovered');
-                    var $itemsList = $( d.resultBlock ).find('ul');
+                    var $itemsList = $( d.resultBlock ).find('.aws_result_scroll');
 
                     if ( e.keyCode == 40 ) {
 
@@ -838,11 +926,51 @@ AwsHooks.filters = AwsHooks.filters || {};
 
 
     // Call plugin method
-    $(document).ready( function() {
+
+    var awsInit = false;
+    var awsInitAttempts = 0
+
+    setTimeout(function () {
+
+        if ( ! awsInit ) {
+            // if document.ready is not fired - call aws manually
+            awsInitWhenReady();
+        }
+
+    }, 2000);
+
+    // try to init plugin
+    function awsInitWhenReady() {
+
+        awsInitAttempts++;
+
+        if ( awsInit || awsInitAttempts > 10 ) {
+            return;
+        }
+
+        if ( typeof $.fn.aws_search === 'undefined' ) {
+            setTimeout( awsInitWhenReady, 1000 );
+            return;
+        }
+
+        awsInitForAll();
+
+    }
+
+    // init plugin for all search forms on the page
+    function awsInitForAll() {
 
         $(selector).each( function() {
             $(this).aws_search();
         });
+
+        awsInit = true;
+
+    }
+
+    $(document).ready( function() {
+
+        awsInitForAll();
 
         // Enfold header
         $('[data-avia-search-tooltip]').on( 'click', function() {
@@ -871,7 +999,7 @@ AwsHooks.filters = AwsHooks.filters || {};
         }
 
         // Buttons to force certain terms search
-        $('[data-aws-term-submit]').on( 'click', function(e) {
+        $(document).on( 'click', '[data-aws-term-submit]', function(e) {
             e.preventDefault();
 
             var $btn = $(this);
