@@ -27,6 +27,11 @@ class WpCron implements LoadStrategy
 
     public function start()
     {
+        if (!apply_filters("adp_wp_cron_strategy_load", true)) {
+            return false;
+        }
+
+
         /**
          * Do not call @see wc_get_chosen_shipping_method_ids() in CRON.
          *
@@ -41,6 +46,11 @@ class WpCron implements LoadStrategy
          */
         add_filter('woocommerce_apply_base_tax_for_local_pickup', "__return_false");
 
+        if ( ! did_action('woocommerce_load_cart_from_session') && function_exists('wc_load_cart')) {
+            include_once WC_ABSPATH . 'includes/wc-cart-functions.php';
+            include_once WC_ABSPATH . 'includes/wc-notice-functions.php';
+            wc_load_cart();
+        }
         /**
          * @var Engine $engine
          */

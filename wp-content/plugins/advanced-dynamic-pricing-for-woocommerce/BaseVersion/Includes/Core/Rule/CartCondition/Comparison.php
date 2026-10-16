@@ -91,7 +91,11 @@ trait Comparison
             $result = $value === $comparisonValue;
         } elseif (ComparisonMethods::NEQ === $comparisonMethod) {
             $result = $value !== $comparisonValue;
-        }
+        } elseif (ComparisonMethods::CONTAINS === $comparisonMethod) {
+            $result = stripos($value, $comparisonValue) !== false;
+        } elseif (ComparisonMethods::NOT_CONTAINS === $comparisonMethod) {
+            $result = stripos($value, $comparisonValue) === false;
+        } 
 
         return $result;
     }

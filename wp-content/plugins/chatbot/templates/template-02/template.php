@@ -21,9 +21,12 @@
             <!--            wp-chatbot-product-details-->
         </div>
         <!--        wp-chatbot-product-container-->
-        <div id="wp-chatbot-board-container" class="wp-chatbot-board-container">
+        <?php $avatar_loc = get_option('qcld_chatbot_avatar_location', 'inside'); ?>
+        <div id="wp-chatbot-board-container" class="wp-chatbot-board-container wp-chatbot-avatar-<?php echo esc_attr($avatar_loc); ?>">
             <div class="wp-chatbot-header">
-                <h3> <?php if (get_option('qlcd_wp_chatbot_host') != '') {
+                <h3> <?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
+if (get_option('qlcd_wp_chatbot_host') != '') {
                         $welcomes=unserialize(get_option('qlcd_wp_chatbot_welcome'));
                         echo esc_html($welcomes[0].' '.get_option('qlcd_wp_chatbot_host'));
                     } ?></h3>
@@ -46,18 +49,19 @@
             </div>
             <div class="wp-chatbot-footer">
                 <div id="wp-chatbot-editor-container" class="wp-chatbot-editor-container">
+                    
                     <input id="wp-chatbot-editor" class="wp-chatbot-editor" required placeholder="<?php echo esc_attr(wpb_randmom_message_handle(unserialize(get_option('qlcd_wp_chatbot_send_a_msg')))); ?>"
                            >
-                    <button type="button" id="wp-chatbot-send-message" class="wp-chatbot-button"><?php esc_html_e('send', 'wpchatbot'); ?></button>
+                    <button type="button" id="wp-chatbot-send-message" class="wp-chatbot-button"><?php esc_html_e('send', 'chatbot'); ?></button>
                 </div>
                 <!--wp-chatbot-editor-container-->
                 <div class="wp-chatbot-tab-nav">
                  
 					<ul>
-                        <li><a class="wp-chatbot-operation-option" data-option="help" href="" title="<?php echo esc_html__('Help', 'wpchatbot'); ?>"></a></li>
+                        <li><a class="wp-chatbot-operation-option" data-option="help" href="" title="<?php echo esc_html__('Help', 'chatbot'); ?>"></a></li>
                         
-                        <li class="wp-chatbot-operation-active"><a class="wp-chatbot-operation-option" data-option="chat" href="" title="<?php echo esc_html__('Chat', 'wpchatbot'); ?>"></a></li>
-                        <li><a class="wp-chatbot-operation-option" data-option="support"  href="" title="<?php echo esc_html__('Support', 'wpchatbot'); ?>"></a></li>
+                        <li class="wp-chatbot-operation-active"><a class="wp-chatbot-operation-option" data-option="chat" href="" title="<?php echo esc_html__('Chat', 'chatbot'); ?>"></a></li>
+                        <li><a class="wp-chatbot-operation-option" data-option="support"  href="" title="<?php echo esc_html__('Support', 'chatbot'); ?>"></a></li>
                     </ul>
                 </div>
                 <!--wp-chatbot-tab-nav-->

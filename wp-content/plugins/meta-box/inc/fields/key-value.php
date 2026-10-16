@@ -34,11 +34,11 @@ class RWMB_Key_Value_Field extends RWMB_Input_Field {
 		return $html;
 	}
 
-	protected static function begin_html( array $field ) : string {
+	protected static function begin_html( array $field ): string {
 		return parent::begin_html( $field ) . parent::input_description( $field );
 	}
 
-	protected static function input_description( array $field ) : string {
+	protected static function input_description( array $field ): string {
 		return '';
 	}
 
@@ -93,6 +93,6 @@ class RWMB_Key_Value_Field extends RWMB_Input_Field {
 	 * @return string
 	 */
 	public static function format_clone_value( $field, $value, $args, $post_id ) {
-		return sprintf( '<label>%s:</label> %s', $value[0], $value[1] );
+		return sprintf( '<label>%s:</label> %s', esc_html( $value[0] ), esc_html( $value[1] ) );
 	}
 }

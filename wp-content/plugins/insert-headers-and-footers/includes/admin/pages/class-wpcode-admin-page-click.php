@@ -284,6 +284,11 @@ class WPCode_Admin_Page_Click extends WPCode_Admin_Page {
 			return;
 		}
 
+		// Drop cloud_id so we don't write My Library meta for a public-library install.
+		if ( isset( $snippet_data['data'] ) && is_array( $snippet_data['data'] ) ) {
+			unset( $snippet_data['data']['cloud_id'] );
+		}
+
 		// Let's create a new snippet.
 		$snippet = new WPCode_Snippet( $snippet_data['data'] );
 		// Let's save the snippet.

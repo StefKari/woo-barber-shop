@@ -98,12 +98,12 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 	/**
 	 * The status name => count combinations for this table's items. Used to display status filters.
 	 *
-	 * @var array
+	 * @var array<string,int>
 	 */
 	protected $status_counts = array();
 
 	/**
-	 * Notices to display when loading the table. Array of arrays of form array( 'class' => {updated|error}, 'message' => 'This is the notice text display.' ).
+	 * Notices to display when loading the table. Array of arrays of form array( 'type' => {updated|error}, 'message' => 'This is the notice text display.' ).
 	 *
 	 * @var array
 	 */
@@ -455,7 +455,7 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 	/**
 	 * Prepares the data to feed WP_Table_List.
 	 *
-	 * This has the core for selecting, sorting and filting data. To keep the code simple
+	 * This has the core for selecting, sorting and filtering data. To keep the code simple
 	 * its logic is split among many methods (get_items_query_*).
 	 *
 	 * Beside populating the items this function will also count all the records that matches
@@ -544,7 +544,7 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 
 	/**
 	 * Set the data for displaying. It will attempt to unserialize (There is a chance that some columns
-	 * are serialized). This can be override in child classes for futher data transformation.
+	 * are serialized). This can be override in child classes for further data transformation.
 	 *
 	 * @param array $items Items array.
 	 */
@@ -645,7 +645,7 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 	}
 
 	/**
-	 * Default column formatting, it will escape everythig for security.
+	 * Default column formatting, it will escape everything for security.
 	 *
 	 * @param array  $item The item array.
 	 * @param string $column_name Column name to display.
@@ -675,9 +675,15 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 	 */
 	protected function display_admin_notices() {
 		foreach ( $this->admin_notices as $notice ) {
-			echo '<div id="message" class="' . esc_attr( $notice['class'] ) . '">';
-			echo '	<p>' . wp_kses_post( $notice['message'] ) . '</p>';
-			echo '</div>';
+			wp_admin_notice(
+				$notice['message'],
+				array(
+					'id'                 => 'message',
+					'type'               => 'updated' === $notice['type'] ? '' : $notice['type'],
+					'paragraph_wrap'     => true,
+					'additional_classes' => 'updated' === $notice['type'] ? 'updated' : '',
+				)
+			);
 		}
 	}
 
@@ -710,15 +716,15 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 			}
 
 			if ( $status_slug === $request_status || ( empty( $request_status ) && 'all' === $status_slug ) ) {
-				$status_list_item = '<li class="%1$s"><a href="%2$s" class="current">%3$s</a> (%4$d)</li>';
+				$status_list_item = '<li class="%1$s"><a href="%2$s" class="current">%3$s</a> (%4$s)</li>';
 			} else {
-				$status_list_item = '<li class="%1$s"><a href="%2$s">%3$s</a> (%4$d)</li>';
+				$status_list_item = '<li class="%1$s"><a href="%2$s">%3$s</a> (%4$s)</li>';
 			}
 
 			$status_name         = isset( $status_labels[ $status_slug ] ) ? $status_labels[ $status_slug ] : ucfirst( $status_slug );
 			$status_filter_url   = ( 'all' === $status_slug ) ? remove_query_arg( 'status' ) : add_query_arg( 'status', $status_slug );
 			$status_filter_url   = remove_query_arg( array( 'paged', 's' ), $status_filter_url );
-			$status_list_items[] = sprintf( $status_list_item, esc_attr( $status_slug ), esc_url( $status_filter_url ), esc_html( $status_name ), absint( $count ) );
+			$status_list_items[] = sprintf( $status_list_item, esc_attr( $status_slug ), esc_url( $status_filter_url ), esc_html( $status_name ), number_format_i18n( absint( $count ) ) );
 		}
 
 		if ( $status_list_items ) {

@@ -3,6 +3,7 @@
 namespace ADP\BaseVersion\Includes\Core\Rule\CartCondition\Impl;
 
 use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Interfaces\ProductAll;
+use ADP\BaseVersion\Includes\Core\Rule\Internationalization\IObjectInternationalization;
 
 defined('ABSPATH') or exit;
 
@@ -26,7 +27,7 @@ trait ProductAllCheck {
         return $this->subCondition->check($cart);
     }
 
-    public function translate($languageCode) {
+    public function translate(IObjectInternationalization $languageCode) {
         $this->subCondition->translate($languageCode);
     }
 

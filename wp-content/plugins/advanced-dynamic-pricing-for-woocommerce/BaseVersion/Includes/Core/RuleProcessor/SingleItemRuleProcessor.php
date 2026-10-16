@@ -5,19 +5,21 @@ namespace ADP\BaseVersion\Includes\Core\RuleProcessor;
 use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
-use ADP\BaseVersion\Includes\Core\Cart\CartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\CartItemAttributeEnum;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\ICartItem;
+use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Filter;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\RangeDiscount;
+use ADP\BaseVersion\Includes\Core\RuleProcessor\BulkDiscount\SingleItemRuleBulkDiscountProcessor;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Exceptions\RuleExecutionTimeout;
-use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\ProductStock\ProductStockController;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\ProductStock\ProductStockItem;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartItemsCollection;
-use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
 use ADP\Factory;
 use Exception;
 use WC_Product;
+use ADP\BaseVersion\Includes\Core\Cart\DisableWcCouponsCart;
 
 defined('ABSPATH') or exit;
 
@@ -32,6 +34,8 @@ class SingleItemRuleProcessor implements RuleProcessor
     const STATUS_CONDITIONS_NOT_PASSED = 4;
     const STATUS_FILTERS_NOT_PASSED = 5;
     const STATUS_DISABLED_BY_COUPON_CODE_TRIGGER = 6;
+    const STATUS_DISABLED_BY_DATE = 7;
+    const STATUS_SUCCESSFULLY_COMPLETED = 8;
 
     protected $status;
     protected $lastUnexpectedErrorMessage;
@@ -197,6 +201,16 @@ class SingleItemRuleProcessor implements RuleProcessor
             return;
         }
 
+        if ( ! $this->activationTriggerStrategy->canBeAppliedByDate($cart)) {
+            $this->status = self::STATUS_DISABLED_BY_DATE;
+
+            return;
+        }
+
+        if ($this->rule->getActivationCouponCode() && ! $this->isRuleMatchedCart($cart)) {
+            $cart->addCouponsAdjustments(new DisableWcCouponsCart($this->rule->getActivationCouponCode(), $this->rule->getId()));
+        }
+
         if ( ! $this->activationTriggerStrategy->canBeAppliedUsingCouponCode($cart)) {
             $this->status = self::STATUS_DISABLED_BY_COUPON_CODE_TRIGGER;
 
@@ -241,7 +255,16 @@ class SingleItemRuleProcessor implements RuleProcessor
 
         $this->applyCartAdjustments($cart, $collection);
 
+        $collection = apply_filters(
+            "adp_collection_before_apply_changes_of_single_item_rule",
+            $collection,
+            $cart,
+            $this
+        );
+
         $this->applyChangesToCart($cart, $collection);
+
+        $this->status = self::STATUS_SUCCESSFULLY_COMPLETED;
     }
 
     /**
@@ -258,6 +281,16 @@ class SingleItemRuleProcessor implements RuleProcessor
         }
 
         if ( ! $this->checkConditions($cart)) {
+            $this->status = $this::STATUS_CONDITIONS_NOT_PASSED;
+
+            return false;
+        }
+
+        if(
+            $this->rule->getRoleDiscounts()
+            && !$this->roleDiscountStrategy->findMatchedRoleDiscounts($cart->getContext()->getCustomer())
+            && !$this->rule->getProductRangeAdjustmentHandler()
+        ) {
             $this->status = $this::STATUS_CONDITIONS_NOT_PASSED;
 
             return false;
@@ -311,8 +344,9 @@ class SingleItemRuleProcessor implements RuleProcessor
      * @return CartItemsCollection
      * @throws Exception
      */
-    protected function getItemsToDiscount($cart)
+    public function getItemsToDiscount($cart)
     {
+        $context = adp_context();
         $collection = new CartItemsCollection($this->rule->getId());
 
         if ( ! $cartMutableItems = $cart->getMutableItems()) {
@@ -321,8 +355,8 @@ class SingleItemRuleProcessor implements RuleProcessor
 
         $productStockController = new ProductStockController();
         foreach ($cart->getItems() as $item) {
-            /** @var CartItem $item */
-            if ($item->hasAttr($item::ATTR_IMMUTABLE)) {
+            /** @var ICartItem $item */
+            if ($item->hasAttr(CartItemAttributeEnum::IMMUTABLE())) {
                 $wcCartItemFacade = $item->getWcItem();
                 $product          = $wcCartItemFacade->getProduct();
 
@@ -346,15 +380,11 @@ class SingleItemRuleProcessor implements RuleProcessor
         $filters = $this->rule->getFilters();
         /** @var $productFiltering ProductFiltering */
         $productFiltering = Factory::get("Core_RuleProcessor_ProductFiltering", $this->context);
-        /** @var $productExcluding ProductFiltering */
-        $productExcluding = Factory::get("Core_RuleProcessor_ProductFiltering", $this->context);
-
-        $productExcludingEnabled = $cart->getContext()->getOption('allow_to_exclude_products');
 
         $totalQtyLeft = $this->rule->getItemsCountLimit() !== -1 ? floatval($this->rule->getItemsCountLimit()) : INF;
 
         foreach ($cartMutableItems as $index => $mutableItem) {
-            /** @var $mutableItem CartItem */
+            /** @var $mutableItem ICartItem */
 
             if ($totalQtyLeft <= floatval(0)) {
                 $cart->addToCart($mutableItem);
@@ -364,7 +394,7 @@ class SingleItemRuleProcessor implements RuleProcessor
             $wcCartItemFacade = $mutableItem->getWcItem();
             $product          = $wcCartItemFacade->getProduct();
 
-            /** @var CartItem[] $filterAffectedItems */
+            /** @var ICartItem[] $filterAffectedItems */
             $filterAffectedItems = array();
 
             /**
@@ -374,54 +404,80 @@ class SingleItemRuleProcessor implements RuleProcessor
             foreach ($filters as $filter) {
                 $filterMutableItem = $mutableItem;
 
-                $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
+                if ($filter->isExcludeWcOnSale() && $product->is_on_sale('')) {
+                    $match = false;
+                    break;
+                }
 
-                if ($productExcludingEnabled) {
-                    $productExcluding->prepare($filter::TYPE_PRODUCT, $filter->getExcludeProductIds(),
-                        $filter::METHOD_IN_LIST);
+                if ($filter->isExcludeAlreadyAffected() && $filterMutableItem->areRuleApplied()) {
+                    $match = false;
+                    break;
+                }
 
-                    if ($productExcluding->checkProductSuitability($product, $wcCartItemFacade->getData())) {
+                if ($filter->isExcludeBackorder()) {
+                    if ('onbackorder' === $product->get_stock_status('edit')) {
                         $match = false;
                         break;
-                    }
+                    } elseif ($product->managing_stock() && $product->backorders_allowed()) {
+                        $qtyInCart = $productStockController->get($product->get_id(), $product->get_parent_id(),
+                            $wcCartItemFacade->getVariation(), array());
 
-                    if ($filter->isExcludeWcOnSale() && $product->is_on_sale('')) {
-                        $match = false;
-                        break;
-                    }
+                        $availableQty = $product->get_stock_quantity('edit') - $qtyInCart;
 
-                    if ($filter->isExcludeAlreadyAffected() && $filterMutableItem->areRuleApplied()) {
-                        $match = false;
-                        break;
-                    }
-
-                    if ($filter->isExcludeBackorder()) {
-                        if ('onbackorder' === $product->get_stock_status('edit')) {
+                        if ($availableQty <= 0) {
                             $match = false;
                             break;
-                        } elseif ($product->managing_stock() && $product->backorders_allowed()) {
-                            $qtyInCart = $productStockController->get($product->get_id(), $product->get_parent_id(),
-                                $wcCartItemFacade->getVariation(), array());
+                        }
 
-                            $availableQty = $product->get_stock_quantity('edit') - $qtyInCart;
-
-                            if ($availableQty <= 0) {
-                                $match = false;
-                                break;
-                            }
-
-                            if ($filterMutableItem->getQty() > $availableQty) {
-                                $tmpCartItem = clone $filterMutableItem;
-                                $tmpCartItem->setQty($availableQty);
-                                $filterMutableItem = $tmpCartItem;
-                            }
+                        if ($filterMutableItem->getQty() > $availableQty) {
+                            $tmpCartItem = clone $filterMutableItem;
+                            $tmpCartItem->setQty($availableQty);
+                            $filterMutableItem = $tmpCartItem;
                         }
                     }
                 }
 
+                foreach ($filter->getExcludeFilters() as $excludeFilter) {
+                    $productFiltering->prepare($excludeFilter->getType(), $excludeFilter->getValue(), $excludeFilter->getMethod());
+                    if ($productFiltering->checkProductSuitability($product, $wcCartItemFacade->getData())) {
+                        $match = false;
+                        break 2;
+                    }
+                }
+
+                if (
+                    $context->getOption('allow_customers_choose_between_discounts')
+                    && $this->rule->isExclusive()
+                ) {
+
+                    $excludeIds = $this->getExcludeProductIds($this->rule->getId());
+
+                    if (!empty($excludeIds)) {
+
+                        $productFiltering->prepare(
+                            $filter::TYPE_PRODUCT,
+                            $excludeIds,
+                            $filter::METHOD_IN_LIST
+                        );
+
+                        if ($productFiltering->checkProductSuitability(
+                            $product,
+                            $wcCartItemFacade->getData()
+                        )) {
+                            $match = false;
+                            break;
+                        }
+                    }
+                }
+
+                $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
                 if ( ! $productFiltering->checkProductSuitability($product, $wcCartItemFacade->getData())) {
                     $match = false;
                     break;
+                }
+
+                if ($match && !$filterMutableItem->hasAttr(CartItemAttributeEnum::TEMPORARY())) {
+                    $filter->setCollectedQtyInCart($filter->getCollectedQtyInCart() + $filterMutableItem->getQty());
                 }
 
                 $filterAffectedItems[] = $filterMutableItem;
@@ -474,9 +530,28 @@ class SingleItemRuleProcessor implements RuleProcessor
         return $collection;
     }
 
+    public function getExcludeProductIds($ruleId = null)
+    {
+        $excludeProduct = array();
+        if ($ruleId != null) {
+            $session_key    = WC()->session ? WC()->session->get_customer_id() : session_id();
+            $transient_key  = 'adp_selected_rules_' . $session_key;
+            $selectedRules  = get_transient($transient_key) ?: [];
+
+            foreach ($selectedRules as $productId => $tmpRuleId) {
+                if ($ruleId != $tmpRuleId) {
+                    $excludeProduct[] = (string)$productId;
+                }
+            }
+        }
+
+        return $excludeProduct;
+    }
+
+
     /**
-     * @param CartItem $item1
-     * @param CartItem $item2
+     * @param ICartItem $item1
+     * @param ICartItem $item2
      *
      * @return float|int
      */
@@ -623,245 +698,11 @@ class SingleItemRuleProcessor implements RuleProcessor
         }
 
         if ($handler::TYPE_BULK === $handler->getType()) {
-            $groupedItems = array();
-            if ($handler::GROUP_BY_DEFAULT === $handler->getGroupBy()) {
-                $groupedItems[] = $collection->get_items();
-            } elseif ($handler::GROUP_BY_PRODUCT === $handler->getGroupBy()) {
-                foreach ($collection->get_items() as $item) {
-                    /**
-                     * @var CartItem $item
-                     */
-                    $facade = $item->getWcItem();
-
-                    if ( ! isset($groupedItems[$facade->getProductId()])) {
-                        $groupedItems[$facade->getProductId()] = array();
-                    }
-
-                    $groupedItems[$facade->getProductId()][] = $item;
-                }
-            } elseif ($handler::GROUP_BY_VARIATION === $handler->getGroupBy()) {
-                foreach ($collection->get_items() as $item) {
-                    /**
-                     * @var CartItem $item
-                     */
-                    $facade = $item->getWcItem();
-
-                    if ( ! isset($groupedItems[$facade->getVariationId()])) {
-                        $groupedItems[$facade->getVariationId()] = array();
-                    }
-
-                    $groupedItems[$facade->getVariationId()][] = $item;
-                }
-            } elseif ($handler::GROUP_BY_CART_POSITIONS === $handler->getGroupBy()) {
-                foreach ($collection->get_items() as $item) {
-                    /**
-                     * @var CartItem $item
-                     */
-                    $facade = $item->getWcItem();
-
-                    if ( ! isset($groupedItems[$facade->getKey()])) {
-                        $groupedItems[$facade->getKey()] = array();
-                    }
-
-                    $groupedItems[$facade->getKey()][] = $item;
-                }
-            } elseif ($handler::GROUP_BY_ALL_ITEMS_IN_CART === $handler->getGroupBy()) {
-                $totalQty = array_sum(array_map(function ($item) {
-                    $facade = $item->getWcItem();
-
-                    return $facade->isVisible() ? $item->getQty() : floatval(0);
-                }, array_merge($collection->get_items(), $cart->getItems())));
-
-                foreach ($ranges as $range) {
-                    if ($range->isIn($totalQty)) {
-                        /** @var PriceCalculator $priceCalculator */
-                        $priceCalculator = Factory::get("Core_RuleProcessor_PriceCalculator", $this->rule, $range->getData());
-                        foreach ($collection->get_items() as $item) {
-                            $priceCalculator->applyItemDiscount($item, $cart, $handler);
-                        }
-                        break;
-                    }
-                }
-            } elseif ($handler::GROUP_BY_PRODUCT_CATEGORIES === $handler->getGroupBy()) {
-                $usedCategoryIds = array();
-                foreach ($collection->get_items() as $item) {
-                    $product = $item->getWcItem()->getProduct();
-
-                    if ($product->is_type('variation') && $product->get_parent_id()) {
-                        $product         = CacheHelper::getWcProduct($product->get_parent_id());
-                        $usedCategoryIds += $product->get_category_ids();
-                    } else {
-                        $usedCategoryIds += $product->get_category_ids();
-                    }
-                }
-                $usedCategoryIds = array_unique($usedCategoryIds);
-
-                $product_filtering = Factory::get("Core_RuleProcessor_ProductFiltering", $this->context);
-                /** @var ProductFiltering $product_filtering */
-                $product_filtering->prepare(Filter::TYPE_CATEGORY, $usedCategoryIds, 'in_list');
-
-                // count items with same categories in WC cart
-                $totalQty = floatval(0);
-                if ($usedCategoryIds) {
-                    foreach (array_merge($collection->get_items(), $cart->getItems()) as $cartItem) {
-                        /** @var CartItem $cartItem */
-                        $facade = $cartItem->getWcItem();
-
-                        if ( ! $facade->isVisible()) {
-                            continue;
-                        }
-
-                        if ($product_filtering->checkProductSuitability($facade->getProduct())) {
-                            $totalQty += $facade->getQty();
-                        }
-                    }
-                }
-
-                foreach ($ranges as $range) {
-                    if ($range->isIn($totalQty)) {
-                        /** @var PriceCalculator $priceCalculator */
-                        $priceCalculator = Factory::get("Core_RuleProcessor_PriceCalculator", $this->rule, $range->getData());
-                        foreach ($collection->get_items() as $item) {
-                            $priceCalculator->applyItemDiscount($item, $cart, $handler);
-                        }
-                        break;
-                    }
-                }
-            } elseif ($handler::GROUP_BY_PRODUCT_SELECTED_PRODUCTS === $handler->getGroupBy()) {
-                $selectedProductIds = $handler->getSelectedProductIds();
-
-                $totalQty = floatval(0);
-                if ($selectedProductIds) {
-                    foreach (array_merge($collection->get_items(), $cart->getItems()) as $cartItem) {
-                        /** @var CartItem $cartItem */
-                        $facade = $cartItem->getWcItem();
-
-                        if ( ! $facade->isVisible()) {
-                            continue;
-                        }
-
-                        if (in_array($facade->getProduct()->get_id(), $selectedProductIds)) {
-                            $totalQty += $facade->getQty();
-                        }
-                    }
-                }
-
-                foreach ($ranges as $range) {
-                    if ($range->isIn($totalQty)) {
-                        /** @var PriceCalculator $priceCalculator */
-                        $priceCalculator = Factory::get("Core_RuleProcessor_PriceCalculator", $this->rule, $range->getData());
-                        foreach ($collection->get_items() as $item) {
-                            $priceCalculator->applyItemDiscount($item, $cart, $handler);
-                        }
-                        break;
-                    }
-                }
-            } elseif ($handler::GROUP_BY_PRODUCT_SELECTED_CATEGORIES === $handler->getGroupBy()) {
-                $selectedCategoryIds = $handler->getSelectedCategoryIds();
-
-                $product_filtering = Factory::get("Core_RuleProcessor_ProductFiltering", $this->context);
-                /** @var ProductFiltering $product_filtering */
-                $product_filtering->prepare(Filter::TYPE_CATEGORY, $selectedCategoryIds, 'in_list');
-
-                $totalQty = floatval(0);
-                if ($selectedCategoryIds) {
-                    foreach (array_merge($collection->get_items(), $cart->getItems()) as $cartItem) {
-                        /** @var CartItem $cartItem */
-                        $facade = $cartItem->getWcItem();
-
-                        if ( ! $facade->isVisible()) {
-                            continue;
-                        }
-
-                        if ($product_filtering->checkProductSuitability($facade->getProduct())) {
-                            $totalQty += $facade->getQty();
-                        }
-                    }
-                }
-
-                foreach ($ranges as $range) {
-                    if ($range->isIn($totalQty)) {
-                        /** @var PriceCalculator $priceCalculator */
-                        $priceCalculator = Factory::get("Core_RuleProcessor_PriceCalculator", $this->rule, $range->getData());
-                        foreach ($collection->get_items() as $item) {
-                            $priceCalculator->applyItemDiscount($item, $cart, $handler);
-                        }
-                        break;
-                    }
-                }
-            } elseif ($handler::GROUP_BY_META_DATA === $handler->getGroupBy()) {
-                foreach ($collection->get_items() as $item) {
-                    /**
-                     * @var CartItem $item
-                     */
-                    $facade = $item->getWcItem();
-
-                    $meta = $facade->getProduct()->get_meta_data();
-
-                    usort($meta, function ($a, $b) {
-                        return strcmp($a->__get('key'), $b->__get('key'));
-                    });
-
-                    $meta[] = $facade->getProductId();
-                    $meta[] = $facade->getVariationId();
-
-                    $key = md5(json_encode($meta));
-
-                    if ( ! isset($groupedItems[$key])) {
-                        $groupedItems[$key] = array();
-                    }
-
-                    $groupedItems[$key][] = $item;
-                }
-            }
-
-            foreach ($groupedItems as $items) {
-                $totalQty = array_sum(array_map(function ($item) {
-                    /**
-                     * @var CartItem $item
-                     */
-                    return $item->getQty();
-                }, $items));
-
-                foreach ($ranges as $range) {
-                    /** @var PriceCalculator $priceCalculator */
-                    $priceCalcMinDiscountRange = Factory::get(
-                        "Core_RuleProcessor_PriceCalculator",
-                        $this->rule,
-                        $range->getData()
-                    );
-                    foreach ($items as $item) {
-                        $price = $priceCalcMinDiscountRange->calculatePrice($item, $cart);
-
-                        if ($price === null) {
-                            continue;
-                        }
-
-                        $minPrice = $item->getMinDiscountRangePrice();
-
-                        if ($minPrice !== null) {
-                            if ($price < $minPrice) {
-                                $item->setMinDiscountRangePrice($price);
-                            }
-                        } else {
-                            $item->setMinDiscountRangePrice($price);
-                        }
-                    }
-                }
-
-                foreach ($ranges as $range) {
-                    if ($range->isIn($totalQty)) {
-                        /** @var PriceCalculator $priceCalculator */
-                        $priceCalculator = Factory::get(
-                            "Core_RuleProcessor_PriceCalculator",
-                            $this->rule,
-                            $range->getData()
-                        );
-                        foreach ($items as $item) {
-                            $priceCalculator->applyItemDiscount($item, $cart, $handler);
-                        }
-                    }
-                }
+            $bulkProcessor = new SingleItemRuleBulkDiscountProcessor();
+            $groupedItems = $bulkProcessor->calculateItems($this->rule, $collection);
+            foreach ( $groupedItems as $items ) {
+                $value = $bulkProcessor->calculateMeasurementValue($this->rule, $cart, $collection, $items);
+                $bulkProcessor->discountItems($this->rule, $cart, $value, $items);
             }
         } elseif ($handler::TYPE_TIER === $handler->getType()) {
             if ($handler::GROUP_BY_DEFAULT === $handler->getGroupBy()) {
@@ -922,7 +763,7 @@ class SingleItemRuleProcessor implements RuleProcessor
                 $totalQty = floatval(0);
                 if ($selectedProductIds) {
                     foreach (array_merge($collection->get_items(), $cart->getItems()) as $cartItem) {
-                        /** @var CartItem $cartItem */
+                        /** @var ICartItem $cartItem */
                         $facade = $cartItem->getWcItem();
 
                         if ( ! $facade->isVisible()) {
@@ -952,7 +793,7 @@ class SingleItemRuleProcessor implements RuleProcessor
                 $totalQty = floatval(0);
                 if ($selectedCategoryIds) {
                     foreach (array_merge($collection->get_items(), $cart->getItems()) as $cartItem) {
-                        /** @var CartItem $cartItem */
+                        /** @var ICartItem $cartItem */
                         $facade = $cartItem->getWcItem();
 
                         if ( ! $facade->isVisible()) {
@@ -977,7 +818,7 @@ class SingleItemRuleProcessor implements RuleProcessor
 
                 foreach ($collection->get_items() as $item) {
                     /**
-                     * @var CartItem $item
+                     * @var ICartItem $item
                      */
                     $facade = $item->getWcItem();
 
@@ -1099,6 +940,10 @@ class SingleItemRuleProcessor implements RuleProcessor
             return false;
         }
 
+        if ( ! $this->activationTriggerStrategy->canBeAppliedByDate($cart)) {
+            return false;
+        }
+
         if ( ! $this->checkLimits($cart)) {
             return false;
         }
@@ -1107,36 +952,37 @@ class SingleItemRuleProcessor implements RuleProcessor
             return false;
         }
 
+        if($checkConditions &&
+            $this->rule->getRoleDiscounts()
+            && !$this->roleDiscountStrategy->findMatchedRoleDiscounts($cart->getContext()->getCustomer())
+            && !$this->rule->getProductRangeAdjustmentHandler()
+        ) {
+            return false;
+        }
+
         $filters = $this->rule->getFilters();
         /** @var $productFiltering ProductFiltering */
         $productFiltering = Factory::get("Core_RuleProcessor_ProductFiltering", $this->context);
-        /** @var $productExcluding ProductFiltering */
-        $productExcluding = Factory::get("Core_RuleProcessor_ProductFiltering", $this->context);
-
-        $productExcludingEnabled = $cart->getContext()->getOption('allow_to_exclude_products');
 
         /**
          * Item must match all filters
          */
         $match = true;
         foreach ($filters as $filter) {
-            $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
+            if ($filter->isExcludeWcOnSale() && $product->is_on_sale('')) {
+                $match = false;
+                break;
+            }
 
-            if ($productExcludingEnabled) {
-                $productExcluding->prepare($filter::TYPE_PRODUCT, $filter->getExcludeProductIds(),
-                    $filter::METHOD_IN_LIST);
-
-                if ($productExcluding->checkProductSuitability($product, array())) {
+            foreach ($filter->getExcludeFilters() as $excludeFilter) {
+                $productFiltering->prepare($excludeFilter->getType(), $excludeFilter->getValue(), $excludeFilter->getMethod());
+                if ($productFiltering->checkProductSuitability($product, array())) {
                     $match = false;
-                    break;
-                }
-
-                if ($filter->isExcludeWcOnSale() && $product->is_on_sale('')) {
-                    $match = false;
-                    break;
+                    break 2;
                 }
             }
 
+            $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
             if ( ! $productFiltering->checkProductSuitability($product, array())) {
                 $match = false;
                 break;
@@ -1161,6 +1007,10 @@ class SingleItemRuleProcessor implements RuleProcessor
 
         $termId = intval($termId);
 
+        if ( ! $this->activationTriggerStrategy->canBeAppliedByDate($cart)) {
+            return false;
+        }
+
         if ( ! $this->checkLimits($cart)) {
             return false;
         }
@@ -1183,4 +1033,11 @@ class SingleItemRuleProcessor implements RuleProcessor
         return $match;
     }
 
+    /**
+     * @return SingleItemRule
+     */
+    public function getProcessorRule()
+    {
+        return $this->rule;
+    }
 }

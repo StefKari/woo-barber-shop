@@ -1,7 +1,7 @@
 <?php
 /**
  * Parameter-based Order querying
- * Args and usage: https://github.com/woocommerce/woocommerce/wiki/wc_get_orders-and-WC_Order_Query
+ * Args and usage: https://developer.woocommerce.com/docs/extensions/core-concepts/wc-get-orders/
  *
  * @package WooCommerce\Classes
  * @version 3.1.0
@@ -63,13 +63,13 @@ class WC_Order_Query extends WC_Object_Query {
 				'shipping_state'       => '',
 				'shipping_postcode'    => '',
 				'shipping_country'     => '',
+				'shipping_phone'       => '',
 				'payment_method'       => '',
 				'payment_method_title' => '',
 				'transaction_id'       => '',
 				'customer_ip_address'  => '',
 				'customer_user_agent'  => '',
 				'created_via'          => '',
-				'customer_note'        => '',
 			)
 		);
 	}

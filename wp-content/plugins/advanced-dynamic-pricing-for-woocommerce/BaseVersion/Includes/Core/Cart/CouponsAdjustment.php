@@ -1,7 +1,6 @@
 <?php
 
 namespace ADP\BaseVersion\Includes\Core\Cart;
-
 interface CouponsAdjustment
 {
     /**

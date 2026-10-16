@@ -1,14 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\Translation\Domain\TranslationMethod;
-
-use WPML\Core\SharedKernel\Component\Translation\Domain\TranslationMethod\TargetLanguageMethodType;
-
-interface TranslationMethodInterface {
-
-
-  /** @return TargetLanguageMethodType::* */
-  public function get();
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/Translation/Domain/TranslationMethod/TranslationMethodInterface.php';

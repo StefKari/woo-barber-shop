@@ -1,7 +1,12 @@
 <?php
-if (!defined('ABSPATH')) die('-1');
 
-if (!class_exists("WD_ASL_Plugin_SearchExclude_Filter")) {
+use WPDRMS\ASL\Search\SearchQueryArgs;
+
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
+
+if ( !class_exists('WD_ASL_Plugin_SearchExclude_Filter') ) {
 	/**
 	 * Class WD_ASL_Plugin_SearchExclude_Filter
 	 *
@@ -16,8 +21,8 @@ if (!class_exists("WD_ASL_Plugin_SearchExclude_Filter")) {
 	 */
 	class WD_ASL_Plugin_SearchExclude_Filter extends WD_ASL_Filter_Abstract {
 
-		public function handle( array $args = array() ) {
-			if ( class_exists("QuadLayers\QLSE\Models\Settings") ) {
+		public function handle( ?SearchQueryArgs $args = null ) {
+			if ( class_exists('QuadLayers\QLSE\Models\Settings') ) {
 				$excluded = QuadLayers\QLSE\Models\Settings::instance()->get();
 				if ( ! isset( $excluded ) ) {
 					return $args;
@@ -33,8 +38,7 @@ if (!class_exists("WD_ASL_Plugin_SearchExclude_Filter")) {
 					}
 					$args['post_not_in'] = is_array($args['post_not_in']) ? $args['post_not_in'] : array();
 					$args['post_not_in'] = array_unique( array_merge( $args['post_not_in'], $post__not_in ) );
-				}
-
+				}           
 			}
 			return $args;
 		}
@@ -50,7 +54,7 @@ if (!class_exists("WD_ASL_Plugin_SearchExclude_Filter")) {
 		}
 
 		// ------------------------------------------------------------
-		//   ---------------- SINGLETON SPECIFIC --------------------
+		// ---------------- SINGLETON SPECIFIC --------------------
 		// ------------------------------------------------------------
 		/**
 		 * Static instance storage

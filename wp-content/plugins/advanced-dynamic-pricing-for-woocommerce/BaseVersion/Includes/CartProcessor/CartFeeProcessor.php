@@ -2,6 +2,7 @@
 
 namespace ADP\BaseVersion\Includes\CartProcessor;
 
+use ADP\BaseVersion\Includes\Compatibility\Addons\ThemehighExtraOptionsProCmp;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
 use ADP\BaseVersion\Includes\Core\Cart\CartContext;
 use ADP\BaseVersion\Includes\Core\Cart\Fee;
@@ -48,6 +49,17 @@ class CartFeeProcessor
      */
     public function calculateFees($wcCart)
     {
+        $themeHighCmp = new ThemehighExtraOptionsProCmp();
+        if ($themeHighCmp->isActive()) {
+            $feesthc = $themeHighCmp->checkFeesFromCart($wcCart->cart_contents);
+
+            if (!empty($feesthc)) {
+                foreach ($feesthc as $fee) {
+                    $wcCart->add_fee($fee['name'], $fee['amount']);
+                }
+            }
+        }
+
         if (empty($this->fees) || empty($this->cartContext)) {
             return;
         }
@@ -75,7 +87,13 @@ class CartFeeProcessor
             $fee->setAmount($amount);
 
             if ($context->isCombineMultipleFees()) {
-                $fee->setName($context->getOption('default_fee_name'));
+                $fee->setName(
+                    //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                    _x( $context->getOption('default_fee_name'),
+                        "Default fee name",
+                        "advanced-dynamic-pricing-for-woocommerce"
+                    )
+                );
             }
 
             $exists = false;
@@ -110,7 +128,7 @@ class CartFeeProcessor
 
     public function setFilterToCalculateFees()
     {
-        add_filter('woocommerce_cart_calculate_fees', array($this, 'calculateFees'), 10, 3);
+        add_filter('woocommerce_cart_calculate_fees', array($this, 'calculateFees'), 10);
     }
 
     public function unsetFilterToCalculateFees()

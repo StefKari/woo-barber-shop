@@ -1,20 +1,2 @@
 <?php
-
-namespace WPML\PHP;
-
-/**
- * @template ReturnTypeFromArray
- */
-interface ConstructableFromArrayInterface {
-
-
-  /**
-    * @phpstan-ignore-next-line Mixed array as input.
-    *
-    * @param array $array
-    * @return ReturnTypeFromArray
-    */
-  public static function fromArray( $array );
-
-
-}
+require_once __DIR__ . '/../../../../../wpml/lib/Php/ConstructableFromArrayInterface.php';

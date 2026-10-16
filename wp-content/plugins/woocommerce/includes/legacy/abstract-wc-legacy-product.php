@@ -1,4 +1,7 @@
 <?php
+
+use Automattic\WooCommerce\Enums\ProductType;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -39,7 +42,7 @@ abstract class WC_Abstract_Legacy_Product extends WC_Data {
 			'crosssell_ids',
 			'parent',
 		);
-		if ( $this->is_type( 'variation' ) ) {
+		if ( $this->is_type( ProductType::VARIATION ) ) {
 			$valid = array_merge( $valid, array(
 				'variation_id',
 				'variation_data',
@@ -73,7 +76,7 @@ abstract class WC_Abstract_Legacy_Product extends WC_Data {
 
 		switch ( $key ) {
 			case 'id' :
-				$value = $this->is_type( 'variation' ) ? $this->get_parent_id() : $this->get_id();
+				$value = $this->is_type( ProductType::VARIATION ) ? $this->get_parent_id() : $this->get_id();
 				break;
 			case 'product_type' :
 				$value = $this->get_type();
@@ -123,16 +126,16 @@ abstract class WC_Abstract_Legacy_Product extends WC_Data {
 				$value = wc_get_product( $this->get_parent_id() );
 				break;
 			case 'variation_id' :
-				$value = $this->is_type( 'variation' ) ? $this->get_id() : '';
+				$value = $this->is_type( ProductType::VARIATION ) ? $this->get_id() : '';
 				break;
 			case 'variation_data' :
-				$value = $this->is_type( 'variation' ) ? wc_get_product_variation_attributes( $this->get_id() ) : '';
+				$value = $this->is_type( ProductType::VARIATION ) ? wc_get_product_variation_attributes( $this->get_id() ) : '';
 				break;
 			case 'variation_has_stock' :
-				$value = $this->is_type( 'variation' ) ? $this->managing_stock() : '';
+				$value = $this->is_type( ProductType::VARIATION ) ? $this->managing_stock() : '';
 				break;
 			case 'variation_shipping_class_id' :
-				$value = $this->is_type( 'variation' ) ? $this->get_shipping_class_id() : '';
+				$value = $this->is_type( ProductType::VARIATION ) ? $this->get_shipping_class_id() : '';
 				break;
 			case 'variation_has_sku' :
 			case 'variation_has_length' :
@@ -367,7 +370,11 @@ abstract class WC_Abstract_Legacy_Product extends WC_Data {
 	 * @param string $sep (default: ', ').
 	 * @param string $before (default: '').
 	 * @param string $after (default: '').
-	 * @return string
+	 * @return string|false|WP_Error Category list HTML on success. False when the product has no
+	 *                               categories, and also when an ordering mode is selected and a
+	 *                               `term_links-product_cat` callback returns a non-array; the default
+	 *                               path passes that value to implode() the way core does. WP_Error if
+	 *                               the terms or a term link cannot be resolved.
 	 */
 	public function get_categories( $sep = ', ', $before = '', $after = '' ) {
 		wc_deprecated_function( 'WC_Product::get_categories', '3.0', 'wc_get_product_category_list' );
@@ -398,7 +405,7 @@ abstract class WC_Abstract_Legacy_Product extends WC_Data {
 		wc_deprecated_function( 'WC_Product::get_post_data', '3.0', 'get_post' );
 
 		// In order to keep backwards compatibility it's required to use the parent data for variations.
-		if ( $this->is_type( 'variation' ) ) {
+		if ( $this->is_type( ProductType::VARIATION ) ) {
 			$post_data = get_post( $this->get_parent_id() );
 		} else {
 			$post_data = get_post( $this->get_id() );
@@ -585,6 +592,7 @@ abstract class WC_Abstract_Legacy_Product extends WC_Data {
 				$children = $product->get_children( 'edit' );
 			}
 
+			/** @var int[] $children */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			foreach ( $children as $child_id ) {
 				$all_meta = get_post_meta( $child_id );
 

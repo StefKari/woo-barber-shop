@@ -1643,7 +1643,7 @@ if( !class_exists('Urus_Pluggable_WooCommerce')){
             $args['meta_query'] = $meta_query;
             $args['tax_query']  = $tax_query;
 
-            $urus_products = new WP_Query( apply_filters( 'woocommerce_shortcode_products_query', $args, $atts ) );
+            $urus_products = new WP_Query( apply_filters( 'woocommerce_shortcode_products_query', $args, $atts, $target ) );
             wp_reset_postdata();
             return $urus_products;
         }

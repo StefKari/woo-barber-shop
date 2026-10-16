@@ -1106,11 +1106,51 @@
 			}, 500 ) );
 
 			$('#add-custom-links input[type="text"]').on( 'keypress', function(e){
-				$('#customlinkdiv').removeClass('form-invalid');
+				$( '#customlinkdiv' ).removeClass( 'form-invalid' );
+				$( '#custom-menu-item-url' ).removeAttr( 'aria-invalid' ).removeAttr( 'aria-describedby' );
+				$( '#custom-url-error' ).hide();
 
 				if ( e.keyCode === 13 ) {
 					e.preventDefault();
 					$( '#submit-customlinkdiv' ).trigger( 'click' );
+				}
+			});
+
+			$( '#submit-customlinkdiv' ).on( 'click', function (e) {
+				var urlInput = $( '#custom-menu-item-url' ),
+					url = urlInput.val().trim(),
+					errorMessage = $( '#custom-url-error' ),
+					urlWrap = $( '#menu-item-url-wrap' ),
+					urlRegex;
+
+				// Hide the error message initially
+				errorMessage.hide();
+				urlWrap.removeClass( 'has-error' );
+
+				/*
+				 * Allow URLs including:
+				 * - http://example.com/
+				 * - //example.com
+				 * - /directory/
+				 * - ?query-param
+				 * - #target
+				 * - mailto:foo@example.com
+				 *
+				 * Any further validation will be handled on the server when the setting is attempted to be saved,
+				 * so this pattern does not need to be complete.
+				 */
+				urlRegex = /^((\w+:)?\/\/\w.*|\w+:(?!\/\/$)|\/|\?|#)/;
+				if ( ! urlRegex.test( url ) ) {
+					e.preventDefault();
+					urlInput.addClass( 'form-invalid' )
+						.attr( 'aria-invalid', 'true' )
+						.attr( 'aria-describedby', 'custom-url-error' );
+
+					errorMessage.show();
+					var errorText = errorMessage.text();
+					urlWrap.addClass( 'has-error' );
+					// Announce error message via screen reader
+					wp.a11y.speak( errorText, 'assertive' );
 				}
 			});
 		},
@@ -1366,14 +1406,25 @@
 
 		updateQuickSearchResults : function(input) {
 			var panel, params,
-				minSearchLength = 2,
-				q = input.val();
+				minSearchLength = 1,
+				q = input.val(),
+				pageSearchChecklist = $( '#page-search-checklist' );
 
 			/*
-			 * Minimum characters for a search. Also avoid a new Ajax search when
-			 * the pressed key (e.g. arrows) doesn't change the searched term.
+			 * Avoid a new Ajax search when the pressed key (e.g. arrows)
+			 * doesn't change the searched term.
 			 */
-			if ( q.length < minSearchLength || api.lastSearch == q ) {
+			if ( api.lastSearch == q ) {
+				return;
+			}
+
+			/*
+			 * Reset results when search is less than or equal to 
+			 * minimum characters for searched term.
+			 */
+			if ( q.length <= minSearchLength ) {
+				pageSearchChecklist.empty();
+				wp.a11y.speak( wp.i18n.__( 'Search results cleared' ) );
 				return;
 			}
 
@@ -1398,7 +1449,8 @@
 
 		addCustomLink : function( processMethod ) {
 			var url = $('#custom-menu-item-url').val().toString(),
-				label = $('#custom-menu-item-name').val();
+				label = $('#custom-menu-item-name').val(),
+				urlRegex;
 
 			if ( '' !== url ) {
 				url = url.trim();
@@ -1406,7 +1458,20 @@
 
 			processMethod = processMethod || api.addMenuItemToBottom;
 
-			if ( '' === url || 'https://' == url || 'http://' == url ) {
+			/*
+			 * Allow URLs including:
+			 * - http://example.com/
+			 * - //example.com
+			 * - /directory/
+			 * - ?query-param
+			 * - #target
+			 * - mailto:foo@example.com
+			 *
+			 * Any further validation will be handled on the server when the setting is attempted to be saved,
+			 * so this pattern does not need to be complete.
+			 */
+			urlRegex = /^((\w+:)?\/\/\w.*|\w+:(?!\/\/$)|\/|\?|#)/;
+			if ( ! urlRegex.test( url ) ) {
 				$('#customlinkdiv').addClass('form-invalid');
 				return false;
 			}
@@ -1716,12 +1781,14 @@
 			$item;
 
 			if( ! $items.length ) {
+				let noResults = wp.i18n.__( 'No results found.' );
 				const li = $( '<li>' );
-				const p = $( '<p>', { text: wp.i18n.__( 'No results found.' ) } );
+				const p = $( '<p>', { text: noResults } );
 				li.append( p );
 				$('.categorychecklist', panel).empty().append( li );
 				$( '.spinner', panel ).removeClass( 'is-active' );
 				wrapper.addClass( 'has-no-menu-item' );
+				wp.a11y.speak( noResults, 'assertive' );
 				return;
 			}
 
@@ -1748,6 +1815,7 @@
 			});
 
 			$('.categorychecklist', panel).html( $items );
+			wp.a11y.speak( wp.i18n.sprintf( wp.i18n.__( '%d Search Results Found' ), $items.length ), 'assertive' );
 			$( '.spinner', panel ).removeClass( 'is-active' );
 			wrapper.removeClass( 'has-no-menu-item' );
 

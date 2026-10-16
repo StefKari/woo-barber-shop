@@ -5,10 +5,8 @@ namespace WPML\ST;
 use WPML\FP\Fns;
 
 class StringsRepository {
-	/** @var \SitePress $sitepress */
 	private $sitepress;
 
-	/** @var \wpdb */
 	private $wpdb;
 
 	public function __construct( \SitePress $sitepress, \wpdb $wpdb ) {
@@ -16,151 +14,190 @@ class StringsRepository {
 		$this->wpdb      = $wpdb;
 	}
 
-	/**
-	 * @param string[] $langs
-	 *
-	 * @return string
-	 */
-	private function getLanguagesSql( $langs = [] ) {
-		return ' AND language IN (' . wpml_prepare_in( $langs, '%s' ) . ')';
-	}
-
-	/**
-	 * @param string[] $notPriorities
-	 *
-	 * @return string
-	 */
-	private function getNotPrioritiesSql( $notPriorities = [] ) {
-		return ' AND translation_priority NOT IN (' . wpml_prepare_in( $notPriorities, '%s' ) . ')';
-	}
-
-	/**
-	 * @param string[] $domains
-	 * @param string   $extraSql
-	 *
-	 * @return int
-	 */
-	private function execGetCountInDomains( $domains = [], $extraSql = '' ) {
+	private function execGetCountInDomains( $domains = [], $langs = [], $notPriorities = [] ) {
 		if ( ! $domains ) {
 			return 0;
 		}
+		$wpdb = $this->wpdb;
 
-		return (int) $this->wpdb->get_var(
-			$this->wpdb->prepare(
-				"SELECT count(id) FROM {$this->wpdb->prefix}icl_strings WHERE 1=%d AND context IN ("
-				. wpml_prepare_in( $domains, '%s' ) . ')'
-				. $extraSql,
-				1
+		if ( $langs ) {
+			return (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT count(id) FROM {$wpdb->prefix}icl_strings WHERE context IN ("
+					. implode( ', ', array_fill( 0, count( $domains ), '%s' ) )
+					. ') AND language IN (' . implode( ', ', array_fill( 0, count( $langs ), '%s' ) ) . ')',
+					...array_merge( array_values( $domains ), array_values( $langs ) )
+				)
+			);
+		}
+
+		if ( $notPriorities ) {
+			return (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT count(id) FROM {$wpdb->prefix}icl_strings WHERE context IN ("
+					. implode( ', ', array_fill( 0, count( $domains ), '%s' ) )
+					. ') AND translation_priority NOT IN ('
+					. implode( ', ', array_fill( 0, count( $notPriorities ), '%s' ) ) . ')',
+					...array_merge( array_values( $domains ), array_values( $notPriorities ) )
+				)
+			);
+		}
+
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT count(id) FROM {$wpdb->prefix}icl_strings WHERE context IN ("
+				. implode( ', ', array_fill( 0, count( $domains ), '%s' ) ) . ')',
+				...array_values( $domains )
 			)
 		);
 	}
 
-	/**
-	 * @param string[] $domains
-	 *
-	 * @return int
-	 */
 	public function getCountInDomains( $domains = [] ) {
 		return $this->execGetCountInDomains( $domains );
 	}
 
-	/**
-	 * @param string[] $domains
-	 * @param string[] $langs
-	 *
-	 * @return int
-	 */
 	public function getCountInDomainsByLangs( $domains = [], $langs = [] ) {
-		return $this->execGetCountInDomains( $domains, $this->getLanguagesSql( $langs ) );
+		if ( ! $langs ) {
+			return 0;
+		}
+
+		return $this->execGetCountInDomains( $domains, $langs );
 	}
 
-	/**
-	 * @param string[] $domains
-	 * @param string[] $notPriorities
-	 *
-	 * @return int
-	 */
 	public function getCountInDomainsByNotPriorities( $domains = [], $notPriorities = [] ) {
-		return $this->execGetCountInDomains( $domains, $this->getNotPrioritiesSql( $notPriorities ) );
+		return $this->execGetCountInDomains( $domains, [], $notPriorities );
 	}
 
-	/**
-	 * @param string[] $domains
-	 * @param int      $limit
-	 * @param string   $extraSql
-	 *
-	 * @return array
-	 */
-	private function execGetFromDomains( $domains = [], $limit = 20, $extraSql = '' ) {
+	private function execGetFromDomains( $domains = [], $limit = 20, $langs = [], $notPriorities = [] ) {
 		if ( ! $domains ) {
 			return [];
 		}
+		$wpdb = $this->wpdb;
 
-		return $this->wpdb->get_col(
-			$this->wpdb->prepare(
-				"SELECT id FROM {$this->wpdb->prefix}icl_strings WHERE context IN ("
-				. wpml_prepare_in( $domains, '%s' ) . ')' . $extraSql . ' LIMIT 0, %d',
-				$limit
+		if ( $langs ) {
+			return $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT id FROM {$wpdb->prefix}icl_strings WHERE context IN ("
+					. implode( ', ', array_fill( 0, count( $domains ), '%s' ) )
+					. ') AND language IN (' . implode( ', ', array_fill( 0, count( $langs ), '%s' ) )
+					. ') LIMIT 0, %d',
+					...array_merge( array_values( $domains ), array_values( $langs ), [ $limit ] )
+				)
+			);
+		}
+
+		if ( $notPriorities ) {
+			return $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT id FROM {$wpdb->prefix}icl_strings WHERE context IN ("
+					. implode( ', ', array_fill( 0, count( $domains ), '%s' ) )
+					. ') AND translation_priority NOT IN ('
+					. implode( ', ', array_fill( 0, count( $notPriorities ), '%s' ) )
+					. ') LIMIT 0, %d',
+					...array_merge( array_values( $domains ), array_values( $notPriorities ), [ $limit ] )
+				)
+			);
+		}
+
+		return $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT id FROM {$wpdb->prefix}icl_strings WHERE context IN ("
+				. implode( ', ', array_fill( 0, count( $domains ), '%s' ) ) . ') LIMIT 0, %d',
+				...array_merge( array_values( $domains ), [ $limit ] )
 			)
 		);
 	}
 
-	/**
-	 * @param string[] $domains
-	 * @param int      $limit
-	 *
-	 * @return array
-	 */
+	public function countExistingIds( array $ids ) {
+		return $this->countIds( $ids, '', null );
+	}
+
+	public function countIdsNotInLanguage( array $ids, $language ) {
+		return $this->countIds( $ids, 'language', $language );
+	}
+
+	public function countIdsWithoutPriority( array $ids, $priority ) {
+		return $this->countIds( $ids, 'priority', $priority );
+	}
+
+	private function countIds( array $ids, $differentFrom, $value ) {
+		if ( ! $ids ) {
+			return 0;
+		}
+		$wpdb = $this->wpdb;
+		$ids  = array_map( 'intval', array_values( $ids ) );
+
+		if ( 'language' === $differentFrom ) {
+			return (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(id) FROM {$wpdb->prefix}icl_strings WHERE id IN ("
+					. implode( ', ', array_fill( 0, count( $ids ), '%d' ) ) . ') AND language <> %s',
+					...array_merge( $ids, [ (string) $value ] )
+				)
+			);
+		}
+
+		if ( 'priority' === $differentFrom ) {
+			return (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(id) FROM {$wpdb->prefix}icl_strings WHERE id IN ("
+					. implode( ', ', array_fill( 0, count( $ids ), '%d' ) ) . ') AND translation_priority <> %s',
+					...array_merge( $ids, [ (string) $value ] )
+				)
+			);
+		}
+
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(id) FROM {$wpdb->prefix}icl_strings WHERE id IN ("
+				. implode( ', ', array_fill( 0, count( $ids ), '%d' ) ) . ')',
+				...$ids
+			)
+		);
+	}
+
 	public function getFromDomains( $domains = [], $limit = 20 ) {
 		return $this->execGetFromDomains( $domains, $limit );
 	}
 
-	/**
-	 * @param string[] $domains
-	 * @param string[] $langs
-	 * @param int      $limit
-	 *
-	 * @return array
-	 */
 	public function getStringIdFromDomainsByLangs( $domains = [], $langs = [], $limit = 20 ) {
-		return $this->execGetFromDomains( $domains, $limit, $this->getLanguagesSql( $langs ) );
+		if ( ! $langs ) {
+			return [];
+		}
+
+		return $this->execGetFromDomains( $domains, $limit, $langs );
 	}
 
-	/**
-	 * @param string[] $domains
-	 * @param string[] $notPriorities
-	 * @param int      $limit
-	 *
-	 * @return array
-	 */
 	public function getStringIdsFromDomainsWithExcludedPriorities( $domains = [], $notPriorities = [], $limit = 20 ) {
-		return $this->execGetFromDomains( $domains, $limit, $this->getNotPrioritiesSql( $notPriorities ) );
+		return $this->execGetFromDomains( $domains, $limit, [], $notPriorities );
 	}
 
-	/**
-	 * @param string[] $domains
-	 * @param string[] $ignoreLangs
-	 *
-	 * @return array
-	 */
 	public function getLanguagesUsedInDomains( $domains = [], $ignoreLangs = [] ) {
+		$wpdb = $this->wpdb;
+
 		if ( ! $domains ) {
 			return [];
 		}
 
 		$allLanguages = array_keys( $this->sitepress->get_languages( $this->sitepress->get_admin_language() ) );
-		$allLanguages = Fns::filter(
-			function( $language ) use ( $ignoreLangs ) {
-				return ! in_array( $language, $ignoreLangs );
-			},
-			$allLanguages
+		$allLanguages = array_values(
+			Fns::filter(
+				function( $language ) use ( $ignoreLangs ) {
+					return ! in_array( $language, $ignoreLangs );
+				},
+				$allLanguages
+			)
 		);
+		if ( ! $allLanguages ) {
+			return [];
+		}
 
-		$results = $this->wpdb->get_results(
-			$this->wpdb->prepare(
-				"SELECT DISTINCT(language) FROM {$this->wpdb->prefix}icl_strings s"
-				. " WHERE 1=%d AND context IN (" . wpml_prepare_in( $domains ) . ") AND language IN (" . wpml_prepare_in( $allLanguages ) . ')',
-				1
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT DISTINCT(language) FROM {$wpdb->prefix}icl_strings s WHERE context IN ("
+				. implode( ', ', array_fill( 0, count( $domains ), '%s' ) )
+				. ') AND language IN (' . implode( ', ', array_fill( 0, count( $allLanguages ), '%s' ) ) . ')',
+				...array_merge( array_values( $domains ), $allLanguages )
 			),
 			ARRAY_A
 		);

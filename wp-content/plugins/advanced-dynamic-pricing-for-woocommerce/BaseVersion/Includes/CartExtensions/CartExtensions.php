@@ -6,6 +6,8 @@ namespace ADP\BaseVersion\Includes\CartExtensions;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepositoryInterface;
+use ADP\BaseVersion\Includes\WC\WcAdpMergedCouponHelper;
+use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 use WC_Coupon;
 
 defined('ABSPATH') or exit;
@@ -59,18 +61,26 @@ class CartExtensions
 
     /**
      * @param string $html
-     * @param WC_Coupon $coupon
+     * @param WC_Coupon $wcCoupon
      *
      * @return string
      */
-    public function hookWoocommerceCartTotalsCouponLabel($html, $coupon)
+    public function hookWoocommerceCartTotalsCouponLabel($html, $wcCoupon)
     {
-        if ($coupon->get_virtual() && ($adpMeta = $coupon->get_meta('adp', true))) {
-            if ( ! empty($adpMeta['parts']) && count($adpMeta['parts']) < 2) {
-                $adp_coupon = array_pop($adpMeta['parts']);
-                $html       = $adp_coupon->getLabel();
-            } else {
-                $html = $coupon->get_code();
+        if ($this->context->isUseMergedCoupons()) {
+            $mergedCoupon = WcAdpMergedCouponHelper::loadOfCoupon($wcCoupon);
+
+            if ($mergedCoupon->hasAdpPart()) {
+                $html = $mergedCoupon->getCode();
+            }
+        } else {
+            if ($wcCoupon->get_virtual() && ($adpMeta = $wcCoupon->get_meta('adp', true))) {
+                if (!empty($adpMeta['parts']) && count($adpMeta['parts']) < 2) {
+                    $adp_coupon = array_pop($adpMeta['parts']);
+                    $html = $adp_coupon->getLabel();
+                } else {
+                    $html = $wcCoupon->get_code();
+                }
             }
         }
 
@@ -84,18 +94,24 @@ class CartExtensions
 
     /**
      * @param string $couponHtml
-     * @param WC_Coupon $coupon
+     * @param WC_Coupon $wcCoupon
      * @param string $discountAmountHtml
      *
      * @return string
      */
-    public function hookWoocommerceCartTotalsCouponHtml($couponHtml, $coupon, $discountAmountHtml)
+    public function hookWoocommerceCartTotalsCouponHtml($couponHtml, $wcCoupon, $discountAmountHtml)
     {
-        /**
-         * @var WC_Coupon $coupon
-         */
-        if ($coupon->get_virtual() && $coupon->get_meta('adp', true)) {
-            $couponHtml = preg_replace('#<a(.*?)class="woocommerce-remove-coupon"(.*?)</a>#', '', $couponHtml);
+        /** @var WC_Coupon $wcCoupon */
+        if ($this->context->isUseMergedCoupons()) {
+            $mergedCoupon = WcAdpMergedCouponHelper::loadOfCoupon($wcCoupon);
+
+            if ($mergedCoupon->hasAdpPart() && !$mergedCoupon->hasRuleTriggerPart()) {
+                $couponHtml = preg_replace('#<a(.*?)class="woocommerce-remove-coupon"(.*?)</a>#', '', $couponHtml);
+            }
+        } else {
+            if ($wcCoupon->get_virtual() && $wcCoupon->get_meta('adp', true)) {
+                $couponHtml = preg_replace('#<a(.*?)class="woocommerce-remove-coupon"(.*?)</a>#', '', $couponHtml);
+            }
         }
 
         return $couponHtml;
@@ -179,13 +195,36 @@ class CartExtensions
     {
         $baseVersionUrl = WC_ADP_PLUGIN_URL . "/BaseVersion/";
 
-        if ($this->ruleRepository->isConditionTypeActive(array('customer_shipping_method'))) {
+        if(!$this->context->is($this->context::WC_CHECKOUT_PAGE) && !$this->context->is($this->context::WC_CART_PAGE)) {
+            return;
+        }
+
+        if ($this->ruleRepository->hasActiveRulesDependOnShipping()) {
             wp_enqueue_script(
                 'wdp_update_cart',
                 $baseVersionUrl . 'assets/js/update-cart.js',
                 array('wc-cart'),
-                WC_ADP_VERSION
+                WC_ADP_VERSION, true
             );
+        }
+    }
+
+    public function readOnlyPriceForFreeProducts()
+    {
+        if ($this->context->getOption('readonly_price_for_free_products')) {
+            add_filter('woocommerce_cart_item_quantity', function ($productQuantity, $cartItemKey, $cartItem) {
+                $wcCartItem = new WcCartItemFacade($this->context, $cartItem, $cartItemKey);
+
+                if ($wcCartItem->isFreeItem()) {
+                    $productQuantity = sprintf(
+                        '%1$s <input type="hidden" name="cart[%2$s][qty]" value="%1$s" />',
+                        $cartItem['quantity'],
+                        $cartItemKey
+                    );
+                }
+
+                return $productQuantity;
+            }, 10, 3);
         }
     }
 }

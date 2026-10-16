@@ -6,12 +6,12 @@ use WPML\FP\Obj;
 use WPML\FP\Str;
 use WPML\FP\Relation;
 use WPML\FP\Fns;
+use WPML\TM\Editor\RichText;
 use function WPML\FP\pipe;
 
 class ExtraFieldDataInEditor implements \IWPML_Backend_Action {
 	const MAX_ALLOWED_SINGLE_LINE_LENGTH = 50;
 
-	/** @var \WPML_Custom_Field_Editor_Settings */
 	private $customFieldEditorSettings;
 
 	public function __construct( \WPML_Custom_Field_Editor_Settings $customFieldEditorSettings ) {
@@ -24,13 +24,6 @@ class ExtraFieldDataInEditor implements \IWPML_Backend_Action {
 		add_filter( 'wpml_tm_adjust_translation_fields', [ $this, 'maybeApplyTitleFallback' ], PHP_INT_MAX );
 	}
 
-	/**
-	 * @param array                             $fields
-	 * @param \stdClass                         $job
-	 * @param \WP_Post|\WPML_Package|null|mixed $originalEntity
-	 *
-	 * @return array|callable|\Closure|mixed|object
-	 */
 	public function appendTitleAndStyle( array $fields, $job, $originalEntity ) {
 		$appendTitleAndStyleStrategy = $this->isExternalElement( $job ) ?
 			$this->appendToExternalField( $job, $originalEntity ) :
@@ -39,11 +32,6 @@ class ExtraFieldDataInEditor implements \IWPML_Backend_Action {
 		return Fns::map( pipe( $appendTitleAndStyleStrategy, $this->adjustFieldStyleForUnsafeContent() ), $fields );
 	}
 
-	/**
-	 * @param array $fields
-	 *
-	 * @return array
-	 */
 	public function maybeApplyTitleFallback( array $fields ) {
 		foreach ( $fields as &$field ) {
 			if ( isset( $field['title_fallback'], $field['title'] ) ) {
@@ -75,12 +63,6 @@ class ExtraFieldDataInEditor implements \IWPML_Backend_Action {
 		return isset( $job->element_type_prefix ) && wpml_load_core_tm()->is_external_type( $job->element_type_prefix );
 	}
 
-	/**
-	 * @param \stdClass                         $job
-	 * @param \WP_Post|\WPML_Package|null|mixed $originalEntity
-	 *
-	 * @return \Closure(array):array
-	 */
 	private function appendToExternalField( $job, $originalEntity ) {
 		$hasIncomingOriginalEntity = true;
 
@@ -130,9 +112,12 @@ class ExtraFieldDataInEditor implements \IWPML_Backend_Action {
 	private function appendToRegularField( $field ) {
 		$field['title'] = \wpml_collect(
 			[
-				'title'   => __( 'Title', 'wpml-translation-management' ),
-				'body'    => __( 'Body', 'wpml-translation-management' ),
-				'excerpt' => __( 'Excerpt', 'wpml-translation-management' ),
+				/* translators: Column heading in the table of translation jobs, and the label of the title field in the translation editor: the title of the piece of content. */
+				'title'   => __( 'Title', 'sitepress' ),
+				/* translators: Label of the field holding the main text of a post, in the translation editor. */
+				'body'    => __( 'Body', 'sitepress' ),
+				/* translators: Label of the field holding the short summary of a post, in the translation editor. */
+				'excerpt' => __( 'Excerpt', 'sitepress' ),
 			]
 		)->get( $field['field_type'], $field['field_type'] );
 
@@ -146,10 +131,6 @@ class ExtraFieldDataInEditor implements \IWPML_Backend_Action {
 	private function getCustomFieldTitle( $field ) {
 		$unfiltered_type    = \WPML_TM_Field_Type_Sanitizer::sanitize( $field['field_type'] );
 		$element_field_type = $unfiltered_type;
-		/**
-		 * @deprecated Use `wpml_editor_custom_field_name` filter instead
-		 * @since      3.2
-		 */
 		$element_field_type = apply_filters( 'icl_editor_cf_name', $element_field_type );
 		$element_field_type = apply_filters( 'wpml_editor_custom_field_name', $element_field_type );
 
@@ -161,10 +142,6 @@ class ExtraFieldDataInEditor implements \IWPML_Backend_Action {
 
 		$style = Str::includes( "\n", $field['field_data'] ) ? 1 : 0;
 
-		/**
-		 * @deprecated Use `wpml_editor_custom_field_style` filter instead
-		 * @since      3.2
-		 */
 		$style = apply_filters( 'icl_editor_cf_style', $style, $type );
 		$style = apply_filters( 'wpml_editor_custom_field_style', $style, $type );
 
@@ -172,17 +149,6 @@ class ExtraFieldDataInEditor implements \IWPML_Backend_Action {
 	}
 
 	private function getAdjustedFieldStyle( array $field, $style ) {
-		/**
-		 * wpml_tm_editor_max_allowed_single_line_length filter
-		 *
-		 * Filters the value of `\WPML_Translation_Editor_UI::MAX_ALLOWED_SINGLE_LINE_LENGTH`
-		 *
-		 * @param  int    $max_allowed_single_line_length MAX_ALLOWED_SINGLE_LINE_LENGTH The length of the string, after which it must use a multiline input
-		 * @param  array  $field  The generic field data
-		 * @param  array  $custom_field_data  The custom field specific data
-		 *
-		 * @since 2.3.1
-		 */
 		$maxAllowedLength = (int) apply_filters(
 			'wpml_tm_editor_max_allowed_single_line_length',
 			self::MAX_ALLOWED_SINGLE_LINE_LENGTH,
@@ -196,10 +162,10 @@ class ExtraFieldDataInEditor implements \IWPML_Backend_Action {
 	private function adjustFieldStyleForUnsafeContent() {
 		return function ( array $field ) {
 			if ( Relation::propEq( 'field_style', '2', $field ) ) {
-				$black_list         = [ 'script', 'style', 'iframe' ];
-				$black_list_pattern = '#</?(' . implode( '|', $black_list ) . ')[^>]*>#i';
+				$fieldData = Obj::propOr( '', 'field_data', $field );
+				$translation = Obj::propOr( '', 'field_data_translated', $field );
 
-				if ( preg_replace( $black_list_pattern, '', $field['field_data'] ) !== $field['field_data'] ) {
+				if ( ! RichText::isRenderable( $fieldData ) || ! RichText::isRenderable( $translation ) ) {
 					$field['field_style'] = '1';
 				}
 			}

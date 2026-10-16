@@ -26,6 +26,11 @@ class CompareStrategy
         $this->context = $context;
     }
 
+    public function formatFloat($f)
+    {
+        return number_format(floatval($f), $this->context->getPriceDecimals(),".","");
+    }
+
     /**
      * You can't just compare floating point numbers!
      * Only with a certain accuracy.
@@ -37,10 +42,7 @@ class CompareStrategy
      */
     public function floatsAreEqual($a, $b)
     {
-        $a = number_format(floatval($a), $this->context->getPriceDecimals());
-        $b = number_format(floatval($b), $this->context->getPriceDecimals());
-
-        return $a === $b;
+        return $this->formatFloat($a) === $this->formatFloat($b);
     }
 
     /**
@@ -54,10 +56,21 @@ class CompareStrategy
      */
     public function floatLessAndEqual($a, $b)
     {
-        $a = number_format(floatval($a), $this->context->getPriceDecimals());
-        $b = number_format(floatval($b), $this->context->getPriceDecimals());
+        return $this->formatFloat($a) <= $this->formatFloat($b);
+    }
 
-        return $a <= $b;
+    /**
+     * You can't just compare floating point numbers!
+     * Only with a certain accuracy.
+     *
+     * @param string|int|float $a
+     * @param string|int|float $b
+     *
+     * @return bool
+     */
+    public function floatLess($a, $b)
+    {
+        return $this->formatFloat($a) < $this->formatFloat($b);
     }
 
     /**

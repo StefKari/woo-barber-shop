@@ -16,23 +16,23 @@ defined('ABSPATH') or exit;
 
 
 <div id="wdp_reporter_tab_rules_products_table_template">
-    <div class="rule-table-title"><?php echo __('Applied to visible products',
+    <div class="rule-table-title"><?php echo esc_html__('Applied to visible products',
             'advanced-dynamic-pricing-for-woocommerce'); ?></div>
     <div class="rule-row rule-header">
-        <div class="rule-cell index"><?php echo __('#', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
-        <div class="rule-cell large"><?php echo __('Title', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
-        <div class="rule-cell "><?php echo __('Timing', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
+        <div class="rule-cell index"><?php echo esc_html__('#', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
+        <div class="rule-cell large"><?php echo esc_html__('Title', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
+        <div class="rule-cell "><?php echo esc_html__('Timing', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
     </div>
 
     {rule_rows}
 </div>
 
 <div id="wdp_reporter_tab_rules_cart_table_template">
-    <div class="rule-table-title"><?php echo __('Applied to cart items',
+    <div class="rule-table-title"><?php echo esc_html__('Applied to cart items',
             'advanced-dynamic-pricing-for-woocommerce'); ?></div>
     <div class="rule-row rule-header">
-        <div class="rule-cell index"><?php echo __('#', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
-        <div class="rule-cell large"><?php echo __('Title', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
+        <div class="rule-cell index"><?php echo esc_html__('#', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
+        <div class="rule-cell large"><?php echo esc_html__('Title', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
     </div>
 
     {rule_rows}

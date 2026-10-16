@@ -41,17 +41,21 @@ var WPML_TM = WPML_TM || {};
       var $textAreas = jQuery('#icl_tm_editor textarea[name^="fields[package-string-"][name$="[data]"]')
       $textAreas.each( function () {
         var $textArea = jQuery( this )
-        var originalText = $textArea.val() || ''
-        var updatedText = originalText.replace(/(<([a-zA-Z0-9]+)[^>]*>[\s\S]*?<\/\2>)|(\r?\n)/g,
+        var originalFieldValue = $textArea.closest('.wpml-form-row').find('textarea.js-original-value').val();
+        var translationText = $textArea.val() || ''
+        var updatedText = translationText.replace(/(<([a-zA-Z0-9]+)[^>]*>[\s\S]*?<\/\2>)|(\r?\n)/g,
           function (match, entireTagBlock) {
             if (entireTagBlock) {
               return entireTagBlock
             }
+            if (undefined !== originalFieldValue && self.containsOnlyTextsAndLF(originalFieldValue)) {
+              return '\n'
+            }
             return '<br>'
           }
         );
-        if ( originalText !== updatedText ) {
-          updatedValues.push( { element: $textArea, original: originalText } )
+        if ( translationText !== updatedText ) {
+          updatedValues.push( { element: $textArea, original: translationText } )
           $textArea.val( updatedText )
         }
       } )
@@ -187,5 +191,10 @@ var WPML_TM = WPML_TM || {};
       var toggle = this.$el.find( '.js-toggle-translated' )
       this.mainView.hideTranslated( toggle.is( ':checked' ) )
     },
+    containsOnlyTextsAndLF: function(value) {
+      // It does not contain \r\n (CRLF)
+      var hasCRLF = /\r\n/.test(value);
+      return !hasCRLF;
+    }
   } )
 }() )

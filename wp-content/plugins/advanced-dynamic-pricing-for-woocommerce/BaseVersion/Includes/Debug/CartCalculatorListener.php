@@ -2,37 +2,31 @@
 
 namespace ADP\BaseVersion\Includes\Debug;
 
-use ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\CartCoupon;
+use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\CartItemCoupon;
+use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\ExternalWcCoupon;
+use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\InternalWcCoupon;
+use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\IMergeAdpCoupon;
+use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\IMergeCoupon;
+use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\RuleTriggerCoupon;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
-use ADP\BaseVersion\Includes\Core\Cart\Coupon;
-use ADP\BaseVersion\Includes\Core\Cart\CouponCart;
-use ADP\BaseVersion\Includes\Core\Cart\CouponInterface;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCart;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponInterface;
 use ADP\BaseVersion\Includes\Core\Cart\Fee;
-use ADP\BaseVersion\Includes\Core\RuleProcessor\Listener;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\RuleProcessor;
+use ADP\BaseVersion\Includes\WC\WcAdpMergedCouponHelper;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 use ADP\BaseVersion\Includes\WC\WcCustomerSessionFacade;
 use ADP\BaseVersion\Includes\WC\WcShippingRateFacade;
-use ADP\BaseVersion\Includes\WC\WcTotalsFacade;
 use WC_Cart;
 use WC_Product;
-use WC_Session;
 use WC_Session_Handler;
 
 defined('ABSPATH') or exit;
 
-class CartCalculatorListener implements Listener
+class CartCalculatorListener extends Listener
 {
-    /**
-     * @var Context
-     */
-    protected $context;
-
-    /**
-     * @var array
-     */
-    protected $totals;
-
     /**
      * @var array
      */
@@ -43,14 +37,8 @@ class CartCalculatorListener implements Listener
      */
     public function __construct($deprecated = null)
     {
-        $this->context       = adp_context();
-        $this->totals        = array();
+        parent::__construct($deprecated);
         $this->currentTotals = array();
-    }
-
-    public function withContext(Context $context)
-    {
-        $this->context = $context;
     }
 
     /**
@@ -74,11 +62,6 @@ class CartCalculatorListener implements Listener
      * @param Cart $cart
      */
     public function cartCompleted($cart)
-    {
-
-    }
-
-    public function calcProcessStarted()
     {
 
     }
@@ -141,7 +124,7 @@ class CartCalculatorListener implements Listener
         $replacedFreeItemRuleId   = array();
         $feeReplacedItemRuleId    = array();
         foreach ($wcSessionFacade->getSingleCoupons() as $coupon) {
-            if ($coupon instanceof Coupon) {
+            if ($coupon instanceof CouponCartItem) {
                 if ($coupon->isType($coupon::TYPE_ITEM_DISCOUNT)) {
                     $couponReplacedItemRuleId[$coupon->getRuleId()] = $coupon;
                 }
@@ -154,7 +137,7 @@ class CartCalculatorListener implements Listener
 
         foreach ($wcSessionFacade->getGroupedCoupons() as $code => $coupons) {
             foreach ($coupons as $coupon) {
-                if ($coupon instanceof Coupon) {
+                if ($coupon instanceof CouponCartItem) {
                     if ($coupon->isType($coupon::TYPE_ITEM_DISCOUNT)) {
                         $couponReplacedItemRuleId[$coupon->getRuleId()] = $coupon;
                     }
@@ -243,49 +226,14 @@ class CartCalculatorListener implements Listener
             );
         }
 
-        $groupedCoupons = array();
-        foreach ($wcSessionFacade->getGroupedCoupons() as $code => $coupons) {
-            $groupedCoupons[$code] = array();
-
-            foreach ($coupons as $coupon) {
-                $data = array();
-
-                if ($coupon instanceof CouponCart) {
-                    $data = array(
-                        'code'   => $coupon->getCode(),
-                        'type'   => $coupon->getType(),
-                        'value'  => $coupon->getValue(),
-                        'amount' => $wcCart->get_coupon_discount_amount(
-                            $coupon->getCode(), $wcCart->display_cart_ex_tax
-                        ),
-                        'ruleId' => $coupon->getRuleId(),
-                    );
-                } elseif ($coupon instanceof Coupon) {
-                    $data = array(
-                        'code'         => $coupon->getCode(),
-                        'type'         => $coupon->getType(),
-                        'value'        => $coupon->getValue(),
-                        'amount'       => $wcCart->get_coupon_discount_amount(
-                            $coupon->getCode(), $wcCart->display_cart_ex_tax
-                        ),
-                        'ruleId'       => $coupon->getRuleId(),
-                        'affectedItem' => $coupon->getAffectedCartItemKey(),
-                        'affectedQty'  => $coupon->getAffectedCartItemQty(),
-                    );
-                }
-
-                if ($data) {
-                    $groupedCoupons[$code][] = $data;
-                }
-            }
-        }
-
         $shippingRates = array();
 
         if ($this->context->getOption("disable_shipping_calc_during_process", false)) {
             $reflection = new \ReflectionClass($wcCart);
             $property   = $reflection->getProperty('shipping_methods');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             if ( ! ($shippingRates = $property->getValue($wcCart))) {
                 $shippingRates = array();
             }
@@ -317,43 +265,10 @@ class CartCalculatorListener implements Listener
 
         return array(
             'items'    => $cartContentsData,
-            'coupons'  => array(
-                'applied' => $wcCart->get_applied_coupons(),
-                'adp'     => array(
-                    'single'  => array_filter(
-                        array_map(
-                            function ($coupon) use ($wcCart) {
-                                /** @var CouponInterface $coupon */
-
-                                if ($coupon instanceof CouponCart) {
-                                    return array(
-                                        'code'   => $coupon->getCode(),
-                                        'type'   => $coupon->getType(),
-                                        'value'  => $coupon->getValue(),
-                                        'amount' => $wcCart->get_coupon_discount_amount(
-                                            $coupon->getCode(), $wcCart->display_cart_ex_tax
-                                        ),
-                                        'ruleId' => $coupon->getRuleId(),
-                                    );
-                                } elseif ($coupon instanceof Coupon) {
-                                    return array(
-                                        'code'         => $coupon->getCode(),
-                                        'type'         => $coupon->getType(),
-                                        'value'        => $coupon->getValue(),
-                                        'amount'       => $wcCart->get_coupon_discount_amount(
-                                            $coupon->getCode(), $wcCart->display_cart_ex_tax
-                                        ),
-                                        'ruleId'       => $coupon->getRuleId(),
-                                        'affectedItem' => $coupon->getAffectedCartItemKey(),
-                                        'affectedQty'  => $coupon->getAffectedCartItemQty(),
-                                    );
-                                }
-
-                                return null;
-                            }, $wcSessionFacade->getSingleCoupons())),
-                    'grouped' => $groupedCoupons,
-                ),
-            ),
+            'removedRecommendedPromotions'     => $wcSessionFacade->getRemovedRecommendedPromotions(),
+            'addedRecommendedPromotions'       => $wcSessionFacade->getAddedRecommendedAutoAddItemsList(),
+            'removedAutoAddedItems'            => $wcSessionFacade->getRemovedAutoAddItemsList(),
+            'coupons'  => $this->calculateCoupons($wcCart, $wcSessionFacade),
             'fees'     => array(
                 'applied' => json_decode(json_encode($wcCart->get_fees())),
                 'adp'     => array_map(function ($fee) {
@@ -418,6 +333,180 @@ class CartCalculatorListener implements Listener
     }
 
     /**
+     * @param WC_Cart $wcCart
+     * @param WcCustomerSessionFacade $wcSessionFacade
+     * @return array
+     */
+    protected function calculateCoupons($wcCart, $wcSessionFacade)
+    {
+        $groupedCoupons = array();
+        foreach ($wcSessionFacade->getGroupedCoupons() as $code => $coupons) {
+            $groupedCoupons[$code] = array();
+
+            foreach ($coupons as $coupon) {
+                $data = array();
+
+                if ($coupon instanceof CouponCart) {
+                    $data = array(
+                        'code' => $coupon->getCode(),
+                        'type' => $coupon->getType(),
+                        'value' => $coupon->getValue(),
+                        'amount' => $wcCart->get_coupon_discount_amount(
+                            $coupon->getCode(), $wcCart->display_cart_ex_tax
+                        ),
+                        'ruleId' => $coupon->getRuleId(),
+                    );
+                } elseif ($coupon instanceof CouponCartItem) {
+                    $data = array(
+                        'code' => $coupon->getCode(),
+                        'type' => $coupon->getType(),
+                        'value' => $coupon->getValue(),
+                        'amount' => $wcCart->get_coupon_discount_amount(
+                            $coupon->getCode(), $wcCart->display_cart_ex_tax
+                        ),
+                        'ruleId' => $coupon->getRuleId(),
+                        'affectedItem' => $coupon->getAffectedCartItemKey(),
+                        'affectedQty' => $coupon->getAffectedCartItemQty(),
+                    );
+                }
+
+                if ($data) {
+                    $groupedCoupons[$code][] = $data;
+                }
+            }
+        }
+
+        return array(
+            'applied' => $wcCart->get_applied_coupons(),
+            'adp' => array(
+                'single' => array_filter(
+                    array_map(
+                        function ($coupon) use ($wcCart) {
+                            /** @var CouponInterface $coupon */
+
+                            if ($coupon instanceof CouponCart) {
+                                return array(
+                                    'code' => $coupon->getCode(),
+                                    'type' => $coupon->getType(),
+                                    'value' => $coupon->getValue(),
+                                    'amount' => $wcCart->get_coupon_discount_amount(
+                                        $coupon->getCode(), $wcCart->display_cart_ex_tax
+                                    ),
+                                    'ruleId' => $coupon->getRuleId(),
+                                );
+                            } elseif ($coupon instanceof CouponCartItem) {
+                                return array(
+                                    'code' => $coupon->getCode(),
+                                    'type' => $coupon->getType(),
+                                    'value' => $coupon->getValue(),
+                                    'amount' => $wcCart->get_coupon_discount_amount(
+                                        $coupon->getCode(), $wcCart->display_cart_ex_tax
+                                    ),
+                                    'ruleId' => $coupon->getRuleId(),
+                                    'affectedItem' => $coupon->getAffectedCartItemKey(),
+                                    'affectedQty' => $coupon->getAffectedCartItemQty(),
+                                );
+                            }
+
+                            return null;
+                        }, $wcSessionFacade->getSingleCoupons())),
+                'grouped' => $groupedCoupons,
+            ),
+            'adp_merged_coupons' => $this->calculateAdpMergedCoupons(),
+            'use_merged' => $this->context->isUseMergedCoupons(),
+        );
+    }
+
+    protected function calculateAdpMergedCoupons()
+    {
+        $result = [];
+
+        foreach (WC()->cart->applied_coupons as $couponCode) {
+            $mergedCoupon = WcAdpMergedCouponHelper::loadOfCouponCode($couponCode);
+
+            if ($mergedCoupon !== null) {
+                $resultItem = [];
+
+                $resultItem['code'] = $mergedCoupon->getCode();
+
+                foreach ($mergedCoupon->getParts() as $internalCoupon) {
+                    $resultItemParts = [];
+
+                    if ($internalCoupon instanceof CartItemCoupon) {
+                        $type = "[ADP] Item coupon";
+                    } elseif ($internalCoupon instanceof CartCoupon) {
+                        $type = "[ADP] Coupon adjustment";
+                    } elseif ($internalCoupon instanceof InternalWcCoupon) {
+                        $type = "[ADP] WC coupon from rule";
+                    } elseif ($internalCoupon instanceof ExternalWcCoupon) {
+                        $discountType = $internalCoupon->wcCoupon()->get_discount_type("edit");
+                        $discountTypeLabel = wc_get_coupon_types()[$discountType] ?: $discountType;
+                        $type = "WC coupon ( " . $discountTypeLabel . " )";
+
+                        if ( $internalCoupon->wcCoupon()->get_free_shipping("edit") === true ) {
+                            $type .= " ( Free shipping )";
+                        }
+                    } elseif ($internalCoupon instanceof RuleTriggerCoupon) {
+                        $type = "[ADP] Rule trigger";
+                    } else {
+                        $type = "unknown";
+                    }
+
+                    $resultItemParts['type_title'] = $type;
+                    $resultItemParts['rule_id'] = $internalCoupon instanceof IMergeAdpCoupon ? $internalCoupon->ruleId() : 0;
+
+                    $resultItemPartsDistribution = [];
+                    if ($internalCoupon instanceof IMergeCoupon) {
+                        $facades = [];
+                        foreach (WC()->cart->cart_contents as $cartItemKey => $cartItem) {
+                            $facades[$cartItemKey] = new WcCartItemFacade($cartItem, $cartItemKey);
+                        }
+
+                        foreach ($internalCoupon->totalsPerItem() as $cartItemKey => $amount) {
+                            $facade = $facades[$cartItemKey] ?? null;
+
+                            if ($facade === null) {
+                                continue;
+                            }
+
+                            $amount = wc_remove_number_precision_deep($amount);
+
+                            $resultItemPartsDistribution[] = [
+                                'cart_item_key' => $facade->getKey(),
+                                'name' => $facade->getProduct()->get_name("edit"),
+                                'qty' => $facade->getQty(),
+                                'amount_value' => $amount,
+                                'amount' => wc_price($amount),
+                            ];
+                        }
+                    }
+
+                    $resultItemParts['dist'] = $resultItemPartsDistribution;
+                    $resultItem['parts'][] = $resultItemParts;
+                    $resultItem['amount_value_excl_tax'] = WC()->cart->get_coupon_discount_amount(
+                        $mergedCoupon->getCode(),
+                        true
+                    );
+                    $resultItem['amount_value_incl_tax'] = WC()->cart->get_coupon_discount_amount(
+                        $mergedCoupon->getCode(),
+                        false
+                    );
+                    $resultItem['amount_for_display'] = wc_price(
+                        WC()->cart->get_coupon_discount_amount(
+                            $mergedCoupon->getCode(),
+                            true
+                        )
+                    );
+                }
+
+                $result[] = $resultItem;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @param Cart $cart
      *
      * @return array
@@ -427,11 +516,4 @@ class CartCalculatorListener implements Listener
         return array();
     }
 
-    /**
-     * @return array
-     */
-    public function getTotals()
-    {
-        return $this->totals;
-    }
 }

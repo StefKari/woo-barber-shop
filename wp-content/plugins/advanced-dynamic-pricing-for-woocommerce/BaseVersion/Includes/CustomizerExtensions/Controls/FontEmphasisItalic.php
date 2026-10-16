@@ -21,7 +21,7 @@ class FontEmphasisItalic extends WP_Customize_Control
 
         ?>
         <label class="wdp-control-icon font-style-button <?php if ($value) : echo 'active'; endif; ?>"
-               data-tip="<?php echo $this->label; ?>">
+               data-tip="<?php echo esc_attr($this->label); ?>">
             <input type="checkbox" class="font-style-italic" style="display: none;" <?php $this->link(); ?>
                    value="<?php echo esc_attr($value); ?>" <?php checked($value); ?> />
             <span class="dashicons dashicons-editor-italic"></span>

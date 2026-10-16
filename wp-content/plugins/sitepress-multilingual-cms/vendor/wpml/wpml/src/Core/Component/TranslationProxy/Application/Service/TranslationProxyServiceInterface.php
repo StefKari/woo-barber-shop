@@ -1,18 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\TranslationProxy\Application\Service;
-
-interface TranslationProxyServiceInterface {
-
-
-  /**
-   * @return int|bool
-   * @throws SendTranslationProxyCommitRequestException
-   */
-  public function sendCommitRequest();
-
-
-  public function getTPUrl(): string;
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/TranslationProxy/Application/Service/TranslationProxyServiceInterface.php';

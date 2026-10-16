@@ -1,9 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\ATE\Application\Query;
-
-use WPML\PHP\Exception\Exception;
-
-class GlossaryException extends Exception {
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/ATE/Application/Query/GlossaryException.php';

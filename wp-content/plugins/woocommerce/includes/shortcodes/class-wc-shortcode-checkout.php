@@ -10,6 +10,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
+use Automattic\WooCommerce\Enums\OrderStatus;
+use Automattic\WooCommerce\Internal\Utilities\Users;
+
 /**
  * Shortcode checkout class.
  */
@@ -39,17 +42,17 @@ class WC_Shortcode_Checkout {
 		}
 
 		// Backwards compatibility with old pay and thanks link arguments.
-		if ( isset( $_GET['order'] ) && isset( $_GET['key'] ) ) { // WPCS: input var ok, CSRF ok.
+		if ( isset( $_GET['order'] ) && isset( $_GET['key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flow selectors are cleaned; order access verifies key/ownership.
 			wc_deprecated_argument( __CLASS__ . '->' . __FUNCTION__, '2.1', '"order" is no longer used to pass an order ID. Use the order-pay or order-received endpoint instead.' );
 
 			// Get the order to work out what we are showing.
-			$order_id = absint( $_GET['order'] ); // WPCS: input var ok.
+			$order_id = absint( $_GET['order'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flow selectors are cleaned; order access verifies key/ownership.
 			$order    = wc_get_order( $order_id );
 
-			if ( $order && $order->has_status( 'pending' ) ) {
-				$wp->query_vars['order-pay'] = absint( $_GET['order'] ); // WPCS: input var ok.
+			if ( $order && $order->has_status( OrderStatus::PENDING ) ) {
+				$wp->query_vars['order-pay'] = absint( $_GET['order'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flow selectors are cleaned; order access verifies key/ownership.
 			} else {
-				$wp->query_vars['order-received'] = absint( $_GET['order'] ); // WPCS: input var ok.
+				$wp->query_vars['order-received'] = absint( $_GET['order'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flow selectors are cleaned; order access verifies key/ownership.
 			}
 		}
 
@@ -82,9 +85,9 @@ class WC_Shortcode_Checkout {
 		$order_id = absint( $order_id );
 
 		// Pay for existing order.
-		if ( isset( $_GET['pay_for_order'], $_GET['key'] ) && $order_id ) { // WPCS: input var ok, CSRF ok.
+		if ( isset( $_GET['pay_for_order'], $_GET['key'] ) && $order_id ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flow selectors are cleaned; order access verifies key/ownership.
 			try {
-				$order_key = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : ''; // WPCS: input var ok, CSRF ok.
+				$order_key = isset( $_GET['key'] ) && is_string( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flow selectors are cleaned; order access verifies key/ownership.
 				$order     = wc_get_order( $order_id );
 
 				// Order or payment link is invalid.
@@ -94,7 +97,7 @@ class WC_Shortcode_Checkout {
 
 				// Logged out customer does not have permission to pay for this order.
 				if ( ! current_user_can( 'pay_for_order', $order_id ) && ! is_user_logged_in() ) {
-					echo '<div class="woocommerce-info">' . esc_html__( 'Please log in to your account below to continue to the payment form.', 'woocommerce' ) . '</div>';
+					wc_print_notice( esc_html__( 'Please log in to your account below to continue to the payment form.', 'woocommerce' ), 'notice' );
 					woocommerce_login_form(
 						array(
 							'redirect' => $order->get_checkout_payment_url(),
@@ -138,34 +141,49 @@ class WC_Shortcode_Checkout {
 						}
 					}
 
-					foreach ( $order->get_items() as $item_key => $item ) {
-						if ( $item && is_callable( array( $item, 'get_product' ) ) ) {
-							$product = $item->get_product();
+					// Stock levels may already have been adjusted for this order (in which case we don't need to worry about checking for low stock).
+					if ( ! $order->get_data_store()->get_stock_reduced( $order->get_id() ) ) {
+						foreach ( $order->get_items() as $item_key => $item ) {
+							if ( $item && is_callable( array( $item, 'get_product' ) ) ) {
+								$product = $item->get_product();
 
-							if ( ! $product ) {
-								continue;
-							}
+								if ( ! $product ) {
+									continue;
+								}
 
-							if ( ! apply_filters( 'woocommerce_pay_order_product_in_stock', $product->is_in_stock(), $product, $order ) ) {
-								/* translators: %s: product name */
-								throw new Exception( sprintf( __( 'Sorry, "%s" is no longer in stock so this order cannot be paid for. We apologize for any inconvenience caused.', 'woocommerce' ), $product->get_name() ) );
-							}
+								if ( ! apply_filters( 'woocommerce_pay_order_product_in_stock', $product->is_in_stock(), $product, $order ) ) {
+									/* translators: %s: product name */
+									throw new Exception( sprintf( __( 'Sorry, "%s" is no longer in stock so this order cannot be paid for. We apologize for any inconvenience caused.', 'woocommerce' ), $product->get_name() ) );
+								}
 
-							// We only need to check products managing stock, with a limited stock qty.
-							if ( ! $product->managing_stock() || $product->backorders_allowed() ) {
-								continue;
-							}
+								// We only need to check products managing stock, with a limited stock qty.
+								if ( ! $product->managing_stock() || $product->backorders_allowed() ) {
+									continue;
+								}
 
-							// Check stock based on all items in the cart and consider any held stock within pending orders.
-							$held_stock     = wc_get_held_stock_quantity( $product, $order->get_id() );
-							$required_stock = $quantities[ $product->get_stock_managed_by_id() ];
+								// Check stock based on all items in the cart and consider any held stock within pending orders.
+								$held_stock     = wc_get_held_stock_quantity( $product, $order->get_id() );
+								$required_stock = $quantities[ $product->get_stock_managed_by_id() ];
 
-							if ( ! apply_filters( 'woocommerce_pay_order_product_has_enough_stock', ( $product->get_stock_quantity() >= ( $held_stock + $required_stock ) ), $product, $order ) ) {
-								/* translators: 1: product name 2: quantity in stock */
-								throw new Exception( sprintf( __( 'Sorry, we do not have enough "%1$s" in stock to fulfill your order (%2$s available). We apologize for any inconvenience caused.', 'woocommerce' ), $product->get_name(), wc_format_stock_quantity_for_display( $product->get_stock_quantity() - $held_stock, $product ) ) );
+								if ( ! apply_filters( 'woocommerce_pay_order_product_has_enough_stock', ( $product->get_stock_quantity() >= ( $held_stock + $required_stock ) ), $product, $order ) ) {
+									/* translators: 1: product name 2: quantity in stock */
+									throw new Exception( sprintf( __( 'Sorry, we do not have enough "%1$s" in stock to fulfill your order (%2$s available). We apologize for any inconvenience caused.', 'woocommerce' ), $product->get_name(), wc_format_stock_quantity_for_display( $product->get_stock_quantity() - $held_stock, $product ) ) );
+								}
 							}
 						}
 					}
+				}
+
+				// If we cannot match the order with the current user, ask that they verify their email address.
+				if ( self::guest_should_verify_email( $order, 'order-pay' ) ) {
+					wc_get_template(
+						'checkout/form-verify-email.php',
+						array(
+							'failed_submission' => ! empty( $_POST['email'] ), // phpcs:ignore WordPress.Security.NonceVerification.Missing
+							'verify_url'        => $order->get_checkout_payment_url(),
+						)
+					);
+					return;
 				}
 
 				WC()->customer->set_props(
@@ -177,18 +195,35 @@ class WC_Shortcode_Checkout {
 				);
 				WC()->customer->save();
 
-				$available_gateways = WC()->payment_gateways->get_available_payment_gateways();
+				$available_gateways = WC()->payment_gateways()->get_available_payment_gateways();
+				WC()->payment_gateways()->set_current_gateway( $available_gateways );
 
-				if ( count( $available_gateways ) ) {
-					current( $available_gateways )->set_current();
-				}
+				/**
+				 * Allows the text of the submit button on the Pay for Order page to be changed.
+				 *
+				 * @param string $text The text of the button.
+				 *
+				 * @since 3.0.2
+				 */
+				$order_button_text = apply_filters( 'woocommerce_pay_order_button_text', __( 'Pay for order', 'woocommerce' ) );
+
+				/**
+				 * Triggered right before the Pay for Order form, after validation of the order and customer.
+				 *
+				 * @param WC_Order $order              The order that is being paid for.
+				 * @param string   $order_button_text  The text for the submit button.
+				 * @param array    $available_gateways All available gateways.
+				 *
+				 * @since 6.6
+				 */
+				do_action( 'before_woocommerce_pay_form', $order, $order_button_text, $available_gateways );
 
 				wc_get_template(
 					'checkout/form-pay.php',
 					array(
 						'order'              => $order,
 						'available_gateways' => $available_gateways,
-						'order_button_text'  => apply_filters( 'woocommerce_pay_order_button_text', __( 'Pay for order', 'woocommerce' ) ),
+						'order_button_text'  => $order_button_text,
 					)
 				);
 
@@ -198,7 +233,7 @@ class WC_Shortcode_Checkout {
 		} elseif ( $order_id ) {
 
 			// Pay for order after checkout step.
-			$order_key = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : ''; // WPCS: input var ok, CSRF ok.
+			$order_key = isset( $_GET['key'] ) && is_string( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flow selectors are cleaned; order access verifies key/ownership.
 			$order     = wc_get_order( $order_id );
 
 			if ( $order && $order->get_id() === $order_id && hash_equals( $order->get_order_key(), $order_key ) ) {
@@ -230,12 +265,25 @@ class WC_Shortcode_Checkout {
 		$order = false;
 
 		// Get the order.
-		$order_id  = apply_filters( 'woocommerce_thankyou_order_id', absint( $order_id ) );
-		$order_key = apply_filters( 'woocommerce_thankyou_order_key', empty( $_GET['key'] ) ? '' : wc_clean( wp_unslash( $_GET['key'] ) ) ); // WPCS: input var ok, CSRF ok.
+		/**
+		 * Filters the ID of the order shown on the thanks page.
+		 *
+		 * @since 2.0.0
+		 * @param int $order_id The order ID resolved from the request.
+		 */
+		$order_id = apply_filters( 'woocommerce_thankyou_order_id', absint( $order_id ) );
+		/**
+		 * Filters the order key used to validate the order shown on the thanks page.
+		 *
+		 * @since 2.0.0
+		 * @param string $order_key The order key read from the request, or an empty string.
+		 */
+		$order_key = apply_filters( 'woocommerce_thankyou_order_key', ( empty( $_GET['key'] ) || ! is_string( $_GET['key'] ) ) ? '' : sanitize_text_field( wp_unslash( $_GET['key'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Bearer-style order-key lookup; the value is compared with hash_equals() below and a nonce cannot apply to links emailed to the customer.
 
 		if ( $order_id > 0 ) {
 			$order = wc_get_order( $order_id );
-			if ( ! $order || ! hash_equals( $order->get_order_key(), $order_key ) ) {
+
+			if ( ( ! $order instanceof WC_Order ) || ! hash_equals( $order->get_order_key(), $order_key ) ) {
 				$order = false;
 			}
 		}
@@ -253,6 +301,47 @@ class WC_Shortcode_Checkout {
 		// Empty current cart.
 		wc_empty_cart();
 
+		// If the specified order ID was invalid, we still render the default order received page (which will simply
+		// state that the order was received, but will not output any other details: this makes it harder to probe for
+		// valid order IDs than if we state that the order ID was not recognized).
+		if ( ! $order ) {
+			wc_get_template( 'checkout/thankyou.php', array( 'order' => false ) );
+			return;
+		}
+
+		/**
+		 * Indicates if known (non-guest) shoppers need to be logged in before we let
+		 * them access the order received page.
+		 *
+		 * @param bool $verify_known_shoppers If verification is required.
+		 *
+		 * @since 8.4.0
+		 */
+		$verify_known_shoppers = apply_filters( 'woocommerce_order_received_verify_known_shoppers', true );
+		$order_customer_id     = $order->get_customer_id();
+
+		// For non-guest orders, require the user to be logged in before showing this page.
+		if ( $verify_known_shoppers && $order_customer_id && get_current_user_id() !== $order_customer_id ) {
+			wc_get_template( 'checkout/order-received.php', array( 'order' => false ) );
+			wc_print_notice( esc_html__( 'Please log in to your account to view this order.', 'woocommerce' ), 'notice' );
+			woocommerce_login_form( array( 'redirect' => $order->get_checkout_order_received_url() ) );
+			return;
+		}
+
+		// For guest orders, request they verify their email address (unless we can identify them via the active user session).
+		if ( self::guest_should_verify_email( $order, 'order-received' ) ) {
+			wc_get_template( 'checkout/order-received.php', array( 'order' => false ) );
+			wc_get_template(
+				'checkout/form-verify-email.php',
+				array(
+					'failed_submission' => ! empty( $_POST['email'] ), // phpcs:ignore WordPress.Security.NonceVerification.Missing
+					'verify_url'        => $order->get_checkout_order_received_url(),
+				)
+			);
+			return;
+		}
+
+		// Otherwise, display the thank you (order received) page.
 		wc_get_template( 'checkout/thankyou.php', array( 'order' => $order ) );
 	}
 
@@ -277,14 +366,14 @@ class WC_Shortcode_Checkout {
 		// Get checkout object.
 		$checkout = WC()->checkout();
 
-		if ( empty( $_POST ) && wc_notice_count( 'error' ) > 0 ) { // WPCS: input var ok, CSRF ok.
+		if ( empty( $_POST ) && wc_notice_count( 'error' ) > 0 ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only flow selectors are cleaned; order access verifies key/ownership.
 
 			wc_get_template( 'checkout/cart-errors.php', array( 'checkout' => $checkout ) );
 			wc_clear_notices();
 
 		} else {
 
-			$non_js_checkout = ! empty( $_POST['woocommerce_checkout_update_totals'] ); // WPCS: input var ok, CSRF ok.
+			$non_js_checkout = ! empty( $_POST['woocommerce_checkout_update_totals'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only flow selectors are cleaned; order access verifies key/ownership.
 
 			if ( wc_notice_count( 'error' ) === 0 && $non_js_checkout ) {
 				wc_add_notice( __( 'The order totals have been updated. Please confirm your order by pressing the "Place order" button at the bottom of the page.', 'woocommerce' ) );
@@ -293,5 +382,27 @@ class WC_Shortcode_Checkout {
 			wc_get_template( 'checkout/form-checkout.php', array( 'checkout' => $checkout ) );
 
 		}
+	}
+
+	/**
+	 * Tries to determine if the user's email address should be verified before rendering either the 'order received' or
+	 * 'order pay' pages. This should only be applied to guest orders.
+	 *
+	 * @param WC_Order $order   The order for which a need for email verification is being determined.
+	 * @param string   $context The context in which email verification is being tested.
+	 *
+	 * @return bool
+	 */
+	private static function guest_should_verify_email( WC_Order $order, string $context ): bool {
+		// If we cannot match the order with the current user, ask that they verify their email address.
+		$nonce_is_valid = wp_verify_nonce( filter_input( INPUT_POST, 'check_submission' ), 'wc_verify_email' );
+		$supplied_email = null;
+		$order_id       = $order->get_id();
+
+		if ( $nonce_is_valid ) {
+			$supplied_email = sanitize_email( wp_unslash( filter_input( INPUT_POST, 'email' ) ) );
+		}
+
+		return Users::should_user_verify_order_email( $order_id, $supplied_email, $context );
 	}
 }

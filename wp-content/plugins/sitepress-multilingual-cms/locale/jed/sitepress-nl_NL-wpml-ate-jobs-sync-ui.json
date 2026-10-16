@@ -3,37 +3,34 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "nl_NL"
          },
          "Sending for translation": [
             "Verzenden voor vertaling"
          ],
+         "The translation could not be started because the server did not answer.": [
+            "De vertaling kon niet worden gestart omdat de server niet antwoordde."
+         ],
+         "This translation cannot be opened right now.": [
+            "Deze vertaling kan momenteel niet worden geopend."
+         ],
+         "Refresh this page": [
+            "Vernieuw deze pagina"
+         ],
          "This content is being automatically translated. If you want to do something different with it cancel translation jobs first.": [
             "Deze inhoud wordt automatisch vertaald. Als u iets anders wilt doen, annuleer dan eerst de vertaalopdrachten."
          ],
-         "Connecting to WPML’s Advanced Translation Editor": [
-            "Verbinden met WPML's Geavanceerde Vertaaleditor"
-         ],
-         "Try again": [
-            "Opnieuw proberen"
-         ],
          "You don't have the rights to review this language": [
-            "U heeft geen rechten om deze taal te beoordelen"
+            "U heeft niet de rechten om deze taal te beoordelen"
          ],
-         "translations": [
-            "vertalingen"
+         "Translating your content": [
+            "Uw inhoud vertalen"
          ],
-         "left in the queue": [
-            "resterend in de wachtrij"
-         ],
-         "Translation on hold": [
-            "Vertaling in de wacht"
-         ],
-         "No translations in the queue": [
-            "Geen vertalingen in de wachtrij"
-         ],
-         "%d translations left": [
-            "%d vertalingen resterend"
+         "%d translation notice": [
+            "%d vertaalmelding",
+            "%d vertaalmeldingen"
          ],
          "%d min remaining": [
             "%d min resterend"
@@ -41,128 +38,126 @@
          "less than 1 min remaining": [
             "minder dan 1 min resterend"
          ],
-         "Automatic translation status": [
-            "Status automatische vertaling"
-         ],
-         "Translate Everything Automatically": [
-            "Vertaal Alles Automatisch"
-         ],
-         "Translate Everything Automatically is active": [
-            "Vertaal Alles Automatisch is actief"
-         ],
-         "Translate Everything Automatically is paused": [
-            "Vertaal Alles Automatisch is gepauzeerd"
-         ],
-         "Translate Everything Automatically is stopped": [
-            "Alles Automatisch Vertalen is gestopt"
-         ],
-         "Out of Credits for Automatic Translation": [
-            "Geen Krediet meer voor Automatische Vertaling"
-         ],
-         "You have <b>1</b> prepaid translation credit in your wpml.org account. Assign these credits to your site to start using automatic translation": [
-            "U heeft <b>1</b> vooruitbetaald vertaalkrediet in uw wpml.org account. Wijs deze kredieten toe aan uw site om automatische vertaling te beginnen gebruiken",
-            "U heeft <b>%s</b> vooruitbetaalde vertaalkredieten in uw wpml.org account. Wijs deze kredieten toe aan uw site om automatische vertaling te beginnen gebruiken"
-         ],
          "Preparing content for translation": [
             "Inhoud voorbereiden voor vertaling"
          ],
          "Preparing more content for translation": [
             "Meer inhoud voorbereiden voor vertaling"
          ],
-         "An error occured, fix it to continue.": [
-            "Er is een fout opgetreden, los het op om door te gaan."
-         ],
-         "There is an issue with automatic translation that needs your attention. Fix it to continue.": [
-            "Er is een probleem met de automatische vertaling dat uw aandacht vereist. Los het op om door te gaan."
-         ],
          "Your default language, %s, must be mapped to a supported language in order to use automatic translation.": [
-            "Uw standaardtaal, %s, moet worden gekoppeld aan een ondersteunde taal om automatische vertaling te kunnen gebruiken."
+            "Uw standaardtaal, %s, moet worden gekoppeld aan een ondersteunde taal om automatisch vertalen te kunnen gebruiken."
          ],
          "Your language, %s, must be mapped to a supported language in order to use automatic translation.": [
-            "Je taal, %s, moet worden gekoppeld aan een ondersteunde taal om automatische vertaling te kunnen gebruiken.",
-            "De volgende talen op je site moeten worden gekoppeld aan een ondersteunde taal om automatische vertaling te kunnen gebruiken: %s"
+            "Uw taal, %s, moet worden gekoppeld aan een ondersteunde taal om automatisch vertalen te kunnen gebruiken.",
+            "De volgende talen op uw site moeten worden gekoppeld aan een ondersteunde taal om automatisch vertalen te kunnen gebruiken: %s"
          ],
          "Content in those languages: %s, cannot be automatically translated unless you map them to a language that's different from the default.": [
-            "Inhoud in deze talen: %s, kan niet automatisch worden vertaald tenzij u ze koppelt aan een taal die verschilt van de standaardtaal."
+            "Inhoud in deze talen: %s, kan niet automatisch worden vertaald, tenzij u ze koppelt aan een taal die verschilt van de standaardtaal."
          ],
          "%d translation waiting for review": [
             "%d vertaling wacht op beoordeling",
             "%d vertalingen wachten op beoordeling"
          ],
-         "Account credits used": [
-            "Gebruikte accounttegoeden"
+         "<b>Translate Everything Automatically</b> has unresolved jobs": [
+            "<b>Alles automatisch vertalen</b> heeft onopgeloste opdrachten"
          ],
-         "Once you’ve used all your prepaid credits, we’ll invoice you for any additional credits you use after the end of the month": [
-            "Zodra u al uw vooruitbetaalde tegoeden heeft gebruikt, zullen we u factureren voor eventuele extra tegoeden die u gebruikt na het einde van de maand"
+         "Automatic translation has unresolved jobs": [
+            "Automatisch vertalen heeft onopgeloste opdrachten"
          ],
-         "Payment limit:": [
-            "Betalingslimiet:"
+         "%d job couldn't be completed. Go to <b>Translation Dashboard</b> to review and resolve.": [
+            "%d opdracht kon niet worden voltooid. Ga naar het <b>Vertaaldashboard</b> om dit te bekijken en op te lossen.",
+            "%d opdrachten konden niet worden voltooid. Ga naar het <b>Vertaaldashboard</b> om dit te bekijken en op te lossen."
          ],
-         "%s credits": [
-            "%s tegoeden"
+         "Automatic translation status": [
+            "Status van automatisch vertalen"
          ],
-         "Credits used:": [
-            "Gebruikte tegoeden:"
+         "No translations in the queue": [
+            "Geen vertalingen in de wachtrij"
          ],
-         "Credits left:": [
-            "Resterende tegoeden:"
+         "Translate Everything Automatically": [
+            "Alles automatisch vertalen"
          ],
-         "The number of credit you will receive an invoice for at the end of the month. View your pay-as-you-go details in your site’s automatic translation settings.": [
-            "Het aantal tegoeden waarvoor u aan het einde van de maand een factuur ontvangt. Bekijk uw pay-as-you-go details in de automatische vertaalinstellingen van uw site."
+         "<b>Translate Everything Automatically</b> is active": [
+            "<b>Alles automatisch vertalen</b> is actief"
          ],
-         "Calculating": [
-            "Berekenen"
+         "<b>Translate Everything Automatically</b> is paused — payment required": [
+            "<b>Alles automatisch vertalen</b> is gepauzeerd — betaling vereist"
          ],
-         "Remaining prepaid credits that are assigned to this site on WPML.org.": [
-            "Resterende vooruitbetaalde tegoeden die aan deze site zijn toegewezen op WPML.org."
+         "Automatic translation is paused — payment required": [
+            "Automatisch vertalen is gepauzeerd — betaling vereist"
          ],
-         "Prepaid credits left": [
-            "Resterende vooruitbetaalde tegoeden"
+         "We couldn’t process your payment. Click “Pay now” to complete the transaction and resume automatic translation.": [
+            "We konden uw betaling niet verwerken. Klik op “Nu betalen” om de transactie te voltooien en automatisch vertalen te hervatten."
          ],
-         "Pay-as-you-go credits used": [
-            "Gebruikte pay-as-you-go tegoeden"
+         "<b>Translate Everything</b> automatically is paused - not enough words": [
+            "<b>Alles automatisch vertalen</b> is gepauzeerd - onvoldoende woorden"
+         ],
+         "Automatic translation is paused — not enough words": [
+            "Automatisch vertalen is gepauzeerd — onvoldoende woorden"
+         ],
+         "Translation will resume automatically once you assign more words.": [
+            "Het vertalen wordt automatisch hervat zodra u meer woorden toewijst."
+         ],
+         "You have %s prepaid translation words in your WPML account. Assign these words to this site to resume automatic translation": [
+            "U heeft %s prepaid-woorden voor vertaling in uw WPML-account. Wijs deze woorden toe aan deze site om automatisch vertalen te hervatten",
+            "U heeft %s prepaid-woorden voor vertaling in uw WPML-account. Wijs deze woorden toe aan deze site om automatisch vertalen te hervatten"
+         ],
+         "<b>Translate Everything Automatically</b> is temporarily paused": [
+            "<b>Alles automatisch vertalen</b> is tijdelijk gepauzeerd"
+         ],
+         "Automatic translation is temporarily paused": [
+            "Automatisch vertalen is tijdelijk gepauzeerd"
+         ],
+         "We noticed something unexpected in your recent translation activity and paused automatic translation on your account. Contact support and we’ll review it with you.": [
+            "We hebben iets onverwachts opgemerkt in uw recente vertaalactiviteit en hebben automatisch vertalen voor uw account gepauzeerd. Neem contact op met de ondersteuning, dan zullen we dit met u doornemen."
+         ],
+         "<b>Translate Everything Automatically</b> is paused: monthly spending cap reached": [
+            "<b>Alles automatisch vertalen</b> is gepauzeerd: maandelijks bestedingslimiet bereikt"
+         ],
+         "Automatic translation is paused: monthly spending cap reached": [
+            "Automatisch vertalen is gepauzeerd: maandelijks bestedingslimiet bereikt"
+         ],
+         "This website reached the monthly spending cap set for it. Translation continues when the cap is raised, or when the cap resets. Only the account owner can do this.": [
+            "Deze website heeft de ingestelde maandelijkse bestedingslimiet bereikt. Het vertalen gaat verder wanneer de limiet wordt verhoogd of wanneer de limiet wordt gereset. Alleen de accounteigenaar kan dit doen."
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "Uw site voldoet niet aan de minimale vereisten van WPML"
+         ],
+         "Fix it": [
+            "Los het op"
          ],
          "Stop": [
             "Stoppen"
          ],
-         "Fix it": [
-            "Oplossen"
+         "Pay now": [
+            "Nu betalen"
          ],
-         "Assign credits now": [
-            "Wijs nu kredieten toe"
+         "Get more words": [
+            "Meer woorden verkrijgen"
+         ],
+         "Assign words": [
+            "Woorden toewijzen"
+         ],
+         "Go to Translation Jobs": [
+            "Ga naar vertaalopdrachten"
+         ],
+         "Raise the cap": [
+            "Verhoog de limiet"
+         ],
+         "Contact support": [
+            "Contact opnemen met ondersteuning"
          ],
          "Resume": [
             "Hervatten"
          ],
+         "This translation couldn't be completed due to an unexpected error. Please try resending it.": [
+            "Deze vertaling kon niet worden voltooid vanwege een onverwachte fout. Probeer deze opnieuw te verzenden."
+         ],
          "Refreshing translation status": [
-            "Vertalingsstatus vernieuwen"
+            "Vertaalstatus vernieuwen"
          ],
-         "Read more about how to translate your content in the <a>Getting Started Guide</a>": [
-            "Lees meer over hoe u uw inhoud kunt vertalen in de <a>Aan de slag gids</a>"
-         ],
-         "Let's Start Translating!": [
-            "Laten we beginnen met vertalen!"
-         ],
-         "Choose your content from the Translation Dashboard below and create your first translation job!": [
-            "Kies uw inhoud uit het Vertaaldashboard hieronder en maak uw eerste vertaalopdracht!"
-         ],
-         "Change your <a>automatic translation settings</a> (in-progress translation jobs will be completed with the current settings).": [
-            "Wijzig uw <a>automatische vertaalinstellingen</a> (lopende vertaalopdrachten worden voltooid met de huidige instellingen)."
-         ],
-         "Read more about translating your site automatically.": [
-            "Lees meer over het automatisch vertalen van uw site."
-         ],
-         "Your site is being automatically translated!": [
-            "Uw site wordt automatisch vertaald!"
-         ],
-         "Calculating...": [
-            "Berekenen..."
-         ],
-         "Do not close WP admin!": [
-            "Sluit WP-beheer niet af!"
-         ],
-         "The number of translations": [
-            "Het aantal vertalingen"
+         "WPML's automatic translation service did not accept this request (it answered %d). Wait a minute and try again, and contact WPML support if it keeps happening.": [
+            "De automatische vertaalservice van WPML heeft dit verzoek niet geaccepteerd (het antwoord was %d). Wacht een minuut en probeer het opnieuw. Neem contact op met de WPML-support als dit blijft gebeuren."
          ]
       }
    }

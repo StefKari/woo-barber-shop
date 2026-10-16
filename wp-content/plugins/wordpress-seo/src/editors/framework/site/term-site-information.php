@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong
 namespace Yoast\WP\SEO\Editors\Framework\Site;
 
@@ -39,7 +40,7 @@ class Term_Site_Information extends Base_Site_Information {
 	/**
 	 * Returns term specific site information together with the generic site information.
 	 *
-	 * @return array<string|string,string[]>
+	 * @return array<string, string|string[]>
 	 */
 	public function get_site_information(): array {
 		$data = [
@@ -54,7 +55,7 @@ class Term_Site_Information extends Base_Site_Information {
 	/**
 	 * Returns term specific site information together with the generic site information.
 	 *
-	 * @return array<string|string,string[]>
+	 * @return array<string, array<string, string>>
 	 */
 	public function get_legacy_site_information(): array {
 		$data = [

@@ -22,6 +22,13 @@ class WPML_TM_Ajax_Factory extends WPML_Ajax_Factory {
 		);
 	}
 
+	public function get_policy( $class_name ) {
+		return \WPML\Request\Policy\Policy::capability(
+			array( 'wpml_manage_support', 'manage_translations' ),
+			\WPML\Request\Policy\Authenticity::actionNonce( 'WPML_Ajax_Update_Link_Targets', 'nonce' )
+		);
+	}
+
 	public function create( $class_name ) {
 		global $ICL_Pro_Translation;
 

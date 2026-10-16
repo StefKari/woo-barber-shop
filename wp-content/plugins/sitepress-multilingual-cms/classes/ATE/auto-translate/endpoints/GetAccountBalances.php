@@ -9,6 +9,6 @@ use WPML\TM\API\ATE\Account;
 class GetAccountBalances implements IHandler {
 
 	public function run( Collection $data ) {
-		return Account::getAccountBalances();
+		return Account::getAccountBalances( (bool) $data->get( 'allowCached', false ) );
 	}
 }

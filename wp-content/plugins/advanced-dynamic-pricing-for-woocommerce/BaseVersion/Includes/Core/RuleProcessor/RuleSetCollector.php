@@ -3,13 +3,16 @@
 namespace ADP\BaseVersion\Includes\Core\RuleProcessor;
 
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
-use ADP\BaseVersion\Includes\Core\Cart\CartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\CartItemAttributeEnum;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\ICartItem;
 use ADP\BaseVersion\Includes\Core\Rule\PackageRule;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\PackageItem;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\PackageItemFilter;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Range;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartItemsCollection;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartSet;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartSetCollection;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Basic\BasicCartItem;
 use ADP\Factory;
 use Exception;
 
@@ -30,6 +33,11 @@ class RuleSetCollector
     protected $checkExecutionTimeCallback;
 
     protected $packages;
+
+    /**
+     * @var PackageItemFilter|null
+     */
+    protected $previousFilter;
 
     /**
      * @param PackageRule $rule
@@ -62,7 +70,7 @@ class RuleSetCollector
     }
 
     /**
-     * @param array<int, CartItem> $mutableItems
+     * @param array<int, BasicCartItem> $mutableItems
      */
     public function addItems($mutableItems)
     {
@@ -83,6 +91,7 @@ class RuleSetCollector
         // hashes with highest priority
         $typeProductsHashes = array();
 
+        $this->previousFilter = null;
         foreach ($this->rule->getPackages() as $package) {
             $packages[] = $this->preparePackage($cart, $package, $typeProductsHashes);
         }
@@ -123,16 +132,11 @@ class RuleSetCollector
     protected function preparePackage($cart, $package, &$typeProductsHashes)
     {
         $filters = $package->getFilters();
-//		$excludes = $package->getExcludes();
 
         /**
          * @var $productFiltering ProductFiltering
-         * @var $productExcluding ProductFiltering
          */
         $productFiltering = Factory::get("Core_RuleProcessor_ProductFiltering", $cart->getContext()->getGlobalContext());
-        $productExcluding = Factory::get("Core_RuleProcessor_ProductFiltering", $cart->getContext()->getGlobalContext());
-
-        $productExcludingEnabled = $cart->getContext()->getOption('allow_to_exclude_products');
         $limitation              = $package->getLimitation();
 
 
@@ -140,58 +144,36 @@ class RuleSetCollector
 
         foreach ($this->mutableItemsCollection->get_items() as $cartItem) {
             /**
-             * @var $cartItem CartItem
+             * @var $cartItem BasicCartItem
              */
             $wcCartItemFacade = $cartItem->getWcItem();
             $product          = $wcCartItemFacade->getProduct();
 
-//				if ( $productExcludingEnabled ) {
-//					$isExclude = false;
-//
-//					foreach ( $excludes as $exclude ) {
-//						$productExcluding->prepare( $exclude->getType(), $exclude->getValue(), $exclude->getMethod() );
-//
-//						if ( $productExcluding->check_product_suitability( $product, $wcCartItemFacade->getData() ) ) {
-//							$isExclude = true;
-//							break;
-//						}
-//					}
-//
-//					if ( $isExclude ) {
-//						continue;
-//					}
-//				}
 
             /**
              * Item must match all filters
              */
             $match = true;
             foreach ($filters as $filter) {
-                $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
+                if ($filter->isExcludeWcOnSale() && $product->is_on_sale('')) {
+                    $match = false;
+                    break;
+                }
 
-                if ($productExcludingEnabled) {
-                    $productExcluding->prepare(
-                        $filter::TYPE_PRODUCT,
-                        $filter->getExcludeProductIds(),
-                        $filter::METHOD_IN_LIST
-                    );
+                if ($filter->isExcludeAlreadyAffected() && $cartItem->areRuleApplied()) {
+                    $match = false;
+                    break;
+                }
 
-                    if ($productExcluding->checkProductSuitability($product, $wcCartItemFacade->getData())) {
+                foreach ($filter->getExcludeFilters() as $excludeFilter) {
+                    $productFiltering->prepare($excludeFilter->getType(), $excludeFilter->getValue(), $excludeFilter->getMethod());
+                    if ($productFiltering->checkProductSuitability($product, $wcCartItemFacade->getData())) {
                         $match = false;
-                        break;
-                    }
-
-                    if ($filter->isExcludeWcOnSale() && $product->is_on_sale('')) {
-                        $match = false;
-                        break;
-                    }
-
-                    if ($filter->isExcludeAlreadyAffected() && $cartItem->areRuleApplied()) {
-                        $match = false;
-                        break;
+                        break 2;
                     }
                 }
 
+                $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
                 if ( ! $productFiltering->checkProductSuitability($product, $wcCartItemFacade->getData())) {
                     $match = false;
                     break;
@@ -239,10 +221,12 @@ class RuleSetCollector
      *
      * @return array|null
      */
-    private function handleUniqueLimitations($limitation, $validHashes, $range)
+    private function handleUniqueLimitations($limitation, $validHashes, $range, &$collectedQtyInCart = 0)
     {
         $packageSetItems   = array();
-        $validItemsGrouped = array();
+
+        /** @var ICartItem[] $validItemsGrouped */
+        $validItemsGrouped = [];
 
         foreach ($validHashes as $index => $validCartItemHash) {
             $cartItem = $this->mutableItemsCollection->getNotEmptyItemWithReferenceByHash($validCartItemHash);
@@ -266,6 +250,15 @@ class RuleSetCollector
                 $validItemsGrouped[] = $cartItem;
             }
         }
+
+        $collectedQtyInCart = count(
+            array_filter(
+                $validItemsGrouped,
+                function ($v) {
+                    return !$v->hasAttr(CartItemAttributeEnum::TEMPORARY());
+                }
+            )
+        );
 
         if ($range->isLess(count($validItemsGrouped))) {
             return null;
@@ -293,7 +286,7 @@ class RuleSetCollector
     /**
      * @param Cart $cart
      *
-     * @return CartSetCollection|false
+     * @return CartSetCollection
      * @throws Exception
      */
     public function collectSetsLegacy(&$cart)
@@ -308,20 +301,27 @@ class RuleSetCollector
                 $validHashes = ! empty($filter['valid_hashes']) ? $filter['valid_hashes'] : array();
                 $limitation  = ! empty($filter['limitation']) ? $filter['limitation'] : PackageItem::LIMITATION_NONE;
                 $isExcludeMatchedPreviousFilters = !empty($filter['excludeMatchedPreviousFilters']);
+                $isSamePreviousFilters = !empty($filter['isSamePreviousFilters']);
                 $package     = $filter['package'];
                 /** @var $package PackageItem */
                 $range = new Range($package->getQty(), $package->getQtyEnd(), $validHashes);
+
+                $collectedQtyInCart = 0;
 
                 if (in_array($limitation, array(
                     PackageItem::LIMITATION_UNIQUE_PRODUCT,
                     PackageItem::LIMITATION_UNIQUE_VARIATION,
                     PackageItem::LIMITATION_UNIQUE_HASH,
                 ))) {
-                    if ($packageSetItems = $this->handleUniqueLimitations($limitation, $validHashes, $range)) {
+                    if ($packageSetItems = $this->handleUniqueLimitations($limitation, $validHashes, $range, $collectedQtyInCart)) {
                         $applied    = $applied && count($packageSetItems);
                         $setItems[] = $packageSetItems;
                     } else {
                         $applied = false;
+                    }
+
+                    foreach($package->getFilters() as $packageFilter) {
+                        $packageFilter->setCollectedQtyInCart($collectedQtyInCart);
                     }
 
                     continue;
@@ -387,7 +387,9 @@ class RuleSetCollector
                             foreach ($setItems as $tmpFilterSetItems) {
                                 foreach ($tmpFilterSetItems as $setItem) {
                                     if (
-                                        $setItem->getWcItem()->getVariationId() == $cartItem->getWcItem()->getVariationId()
+                                        ( apply_filters('adp_only_variation_parent', false) 
+                                            || $setItem->getWcItem()->getVariationId() == $cartItem->getWcItem()->getVariationId()
+                                        )
                                         && $setItem->getWcItem()->getProductId() == $cartItem->getWcItem()->getProductId()
                                     ) {
                                         $atLeastOneInTheSet = true;
@@ -399,14 +401,49 @@ class RuleSetCollector
                             }
                         }
 
+                        if ($isSamePreviousFilters) {
+                            $tmpFilterSetItems = end($setItems);
+                            if ($tmpFilterSetItems) {
+                                /** @var CartItem[] $tmpFilterSetItems */
+                                $prevHashes = [];
+                                foreach ($tmpFilterSetItems as $setItem) {
+                                    $prevHashes[] = $setItem->getWcItem()->getKey();
+                                }
+
+                                if (!in_array($cartItem->getWcItem()->getKey(), $prevHashes, true)) {
+
+                                    /**
+                                     * A workaround to enable the `same as previous` filter.
+                                     *
+                                     * Return all collected set items into cart and pretend that filter has been applied.
+                                     * In other words, we intentionally restart the `while` loop ignoring the fact that
+                                     * previous run was unsuccessful.
+                                     */
+
+                                    $this->returnSetItemsToCart($setItems, $cart);
+                                    $setItems = [];
+
+                                    $filterApplied = true;
+                                    break;
+                                }
+                            }
+                        }
+
                         $collectedQty = 0;
+                        $collectedQtyInCart = 0;
                         foreach ($filterSetItems as $filterSetItem) {
                             /**
-                             * @var $filterSetItem CartItem
+                             * @var $filterSetItem BasicCartItem
                              */
+                            if (!$filterSetItem->hasAttr(CartItemAttributeEnum::TEMPORARY())) {
+                                $collectedQtyInCart += $filterSetItem->getQty();
+                            }
                             $collectedQty += $filterSetItem->getQty();
                         }
 
+                        if (!$cartItem->hasAttr(CartItemAttributeEnum::TEMPORARY())) {
+                            $collectedQtyInCart += $cartItem->getQty();
+                        }
                         $collectedQty += $cartItem->getQty();
 
                         if ( ! $range->isValid()) {
@@ -453,11 +490,13 @@ class RuleSetCollector
                              * If range 'to' equals infinity or 'to' not equal 'from'
                              */
                             if ($range->getQty() === false || $range->getQty()) {
+                                $collectedQtyInCart = 0;
                                 $collectedQty = 0;
                                 foreach ($filterSetItems as $filterSetItem) {
                                     /**
-                                     * @var $filterSetItem CartItem
+                                     * @var $filterSetItem BasicCartItem
                                      */
+                                    $collectedQtyInCart += $filterSetItem->getQty();
                                     $collectedQty += $filterSetItem->getQty();
                                 }
 
@@ -470,7 +509,7 @@ class RuleSetCollector
 
                             foreach ($filterSetItems as $item) {
                                 /**
-                                 * @var $item CartItem
+                                 * @var $item BasicCartItem
                                  */
                                 $this->mutableItemsCollection->add($item);
                             }
@@ -482,6 +521,10 @@ class RuleSetCollector
                     if ($filterApplied) {
                         break;
                     }
+                }
+
+                foreach($package->getFilters() as $packageFilter) {
+                    $packageFilter->setCollectedQtyInCart($collectedQtyInCart);
                 }
 
                 $applied = $applied && $filterApplied;
@@ -496,11 +539,7 @@ class RuleSetCollector
         }
 
         if ( ! empty($setItems)) {
-            foreach ($setItems as $tmpFilterSetItems) {
-                foreach ($tmpFilterSetItems as $item) {
-                    $cart->addToCart($item);
-                }
-            }
+            $this->returnSetItemsToCart($setItems, $cart);
         }
 
         if ( ! empty($filterSetItems)) {
@@ -511,12 +550,26 @@ class RuleSetCollector
 
         foreach ($this->mutableItemsCollection->get_items() as $item) {
             /**
-             * @var $item CartItem
+             * @var $item ICartItem
              */
             $cart->addToCart($item);
         }
 
         return $collection;
+    }
+
+    /**
+     * @param array<int,array<int,CartItem>> $setItems
+     * @param Cart $cart
+     * @return void
+     */
+    private function returnSetItemsToCart($setItems, $cart)
+    {
+        foreach ($setItems as $tmpFilterSetItems) {
+            foreach ($tmpFilterSetItems as $item) {
+                $cart->addToCart($item);
+            }
+        }
     }
 
 }

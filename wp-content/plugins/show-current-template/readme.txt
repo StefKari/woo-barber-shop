@@ -3,11 +3,12 @@ Contributors: tai
 Donate link: https://wp.tekapo.com/is-my-plugin-useful/
 Tags: template, toolbar
 Requires at least: 5.9
-Tested up to: 6.3
-Stable tag: 0.5.2
+Tested up to: 6.9
+Stable tag: 0.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+A WordPress plugin which shows the current template file name, the current theme name and included template files' name in the tool bar. 
 
 == Description ==
 A WordPress plugin which shows the current template file name, the current theme name and included template files' name in the tool bar. If you like this plugin, <a href="https://wp.tekapo.com/is-my-plugin-useful/">you can buy me a coffee! ;-)</a>
@@ -43,7 +44,7 @@ You can find your profile page is in your WordPress admin -> Users -> Profile.
 = I don't see the current template file name in the toolbar. =
 Do you logged in as "Administrator"? Other role users like "Editor" can't see the file name. If your WordPress is multisite, only super admin can see the file name.
 
-= I'dont think this plugin is working properly.
+= I don't think this plugin is working properly.
 
 Please try below:
 
@@ -64,6 +65,12 @@ Now the plugin work properly? Then it means there may be a compatibility issue b
 None so far.
 
 == Changelog ==
+
+= 0.5.4 =
+* Fix: Fix PHP Warning. Special thanks to @dieppon for reporting the issue!
+
+= 0.5.3 =
+* Fix: Addressed PHP 8.x deprecation warning for passing null to parameter #3 ($subject) of str_replace(). Special thanks to @rembem for reporting the issue!
 
 = 0.5.2 =
 * Update required WordPress version to 5.9. Special thanks to @dmchale for reporting the issue!

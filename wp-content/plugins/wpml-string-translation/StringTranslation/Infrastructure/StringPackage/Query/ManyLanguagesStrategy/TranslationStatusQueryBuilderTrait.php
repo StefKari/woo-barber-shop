@@ -7,13 +7,11 @@ use WPML\StringTranslation\Application\StringPackage\Query\Criteria\StringPackag
 use WPML\Core\SharedKernel\Component\Translation\Domain\TranslationStatus;
 
 trait TranslationStatusQueryBuilderTrait {
-	/**
-	 * @param StringPackageCriteria|SearchPopulatedKindsCriteria $criteria
-	 * @param array<string>                                      $targetLanguageCodes
-	 *
-	 * @return string
-	 */
 	protected function buildTranslationStatusCondition( $criteria, array $targetLanguageCodes ): string {
+		if ( empty( $targetLanguageCodes ) ) {
+			return '1';
+		}
+
 		$gluedLanguageCodes = wpml_prepare_in( $targetLanguageCodes, '%s' );
 
 		$isNotTranslated = in_array( TranslationStatus::NOT_TRANSLATED, $criteria->getTranslationStatuses() );
@@ -37,7 +35,6 @@ trait TranslationStatusQueryBuilderTrait {
 				'%d'
 			);
 
-			// Skip the string packages with status 0 (canceled jobs) but already translated.
 			$appendConditions[] = "
 						        (
 						          SELECT COUNT(DISTINCT t.language_code)
@@ -55,14 +52,12 @@ trait TranslationStatusQueryBuilderTrait {
 			$appendConditions[] = 'target_ts.needs_update = 1';
 		}
 		if ( $complete ) {
-			// We want to display string packages with canceled jobs (status 0) but already translated.
 			$appendConditions[] = '(target_t.element_id IS NULL AND ((target_ts.status = 10) OR (target_ts.status = 0 OR target_ts.status IS NULL)))';
 		}
 
 		if ( ! empty( $statuses ) ) {
 			$appendConditions[] = sprintf(
 				'target_ts.status IN %s' .
-				// Make sure "needs_update" is 0 for filter "Translation complete".
 				( $complete ? ' AND target_ts.needs_update = 0' : '' ),
 				'(' . implode( ', ', $statuses ) . ')'
 			);
@@ -75,11 +70,6 @@ trait TranslationStatusQueryBuilderTrait {
 		return '1';
 	}
 
-	/**
-	 * @param StringPackageCriteria|SearchPopulatedKindsCriteria $criteria
-	 *
-	 * @return array<string>
-	 */
 	private function getStatusesToQuery( $criteria ) {
 		$statuses = [];
 		foreach ( $criteria->getTranslationStatuses() as $status ) {

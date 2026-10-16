@@ -118,6 +118,13 @@ interface Rule
      */
     public function getHash();
 
+    public function setEnabledTimer($enabled);
+
+    /**
+     * @param string $message
+     */
+    public function setTimerMessage($message);
+
     /**
      * @param string $message
      */
@@ -127,6 +134,16 @@ interface Rule
      * @param string $message
      */
     public function setDiscountMessageCartItem($message);
+
+    /**
+     * @return bool
+     */
+    public function getEnabledTimer();
+
+    /**
+     * @return string
+     */
+    public function getTimerMessage();
 
     /**
      * @return string
@@ -152,4 +169,38 @@ interface Rule
      * @return string
      */
     public function getSaleBadge();
+
+    /**
+     * @param string $message
+     */
+    public function setMessageNoticeDiscount($message);
+
+    /**
+     * @return string
+     */
+    public function getMessageNoticeDiscount();
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDateFrom();
+
+    /**
+     * @param \DateTime|null $dateFrom
+     */
+    public function setDateFrom(\DateTime $dateFrom);
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDateTo();
+
+    /**
+     * @param \DateTime|null $dateTo
+     */
+    public function setDateTo(\DateTime $dateTo);
+
+    public function setBlocks($blocks);
+
+    public function getBlocks();
 }

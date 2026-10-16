@@ -1,10 +1,11 @@
 <?php
 
 namespace ADP\BaseVersion\Includes\Core\Cart;
+use ADP\BaseVersion\Includes\Helpers\Serializable;
 
 defined('ABSPATH') or exit;
 
-class DisableAllWcCouponsCart implements CouponsAdjustment
+class DisableAllWcCouponsCart extends Serializable implements CouponsAdjustment
 {
     /**
      * @var integer

@@ -19,6 +19,7 @@ class PhoneOrdersCmp
     const CART_ITEM_COST_KEY = 'wpo_item_cost';
     const CART_ITEM_ID_KEY = 'wpo_key';
     const CART_ITEM_COST_UPDATED_MANUALLY_KEY = 'cost_updated_manually';
+    const CART_ITEM_ALLOW_PO_DISCOUNT_KEY = 'allow_po_discount';
     const CART_ITEM_SKIP_KEY = 'wpo_skip_item';
 
     /**
@@ -56,11 +57,12 @@ class PhoneOrdersCmp
             $needToUpdate = isset(
                 $trdPartyData[self::CART_ITEM_ID_KEY],
                 $trdPartyData[self::CART_ITEM_COST_KEY],
-                $trdPartyData[self::CART_ITEM_COST_UPDATED_MANUALLY_KEY]
+                $trdPartyData[self::CART_ITEM_COST_UPDATED_MANUALLY_KEY],
+                $trdPartyData[self::CART_ITEM_ALLOW_PO_DISCOUNT_KEY]
             );
         }
 
-        if ( ! $needToUpdate) {
+        if ( !$needToUpdate/* || $this->context->priceSettings->isIncludeTax()*/) {
             return;
         }
 
@@ -72,10 +74,15 @@ class PhoneOrdersCmp
             if ( ! $this->isCartItemCostUpdateManually($facade)) {
                 $facade->deleteThirdPartyData(self::CART_ITEM_COST_KEY);
                 $facade->deleteThirdPartyData(self::CART_ITEM_COST_UPDATED_MANUALLY_KEY);
+                $facade->deleteThirdPartyData(self::CART_ITEM_ALLOW_PO_DISCOUNT_KEY);
             }
 
-            $newCartKey = $facade::generateCartId($facade->getProductId(), $facade->getVariationId(),
-                $facade->getVariation(), $facade->getCartItemData());
+            $newCartKey = $facade::generateCartId(
+                $facade->getProductId(),
+                $facade->getVariationId(),
+                $facade->getVariation(),
+                $facade->getThirdPartyData()
+            );
 
             if (isset($newCartContents[$newCartKey])) {
                 $existingFacade = new WcCartItemFacade($this->context, $newCartContents[$newCartKey], $newCartKey);
@@ -124,5 +131,21 @@ class PhoneOrdersCmp
         $trdPartyData = $facade->getThirdPartyData();
 
         return isset($trdPartyData[self::CART_ITEM_COST_KEY]) ? $trdPartyData[self::CART_ITEM_COST_KEY] : null;
+    }
+
+    public function woocsModifyContext()
+    {
+        $woocsCmp = new WoocsCmp();
+        if ($woocsCmp->isActive()) {
+            $woocsCmp->modifyContext($this->context);
+        }
+    }
+
+    public function allowCartItemWithPriceUpdatedManuallyToParticipateInCalculation()
+    {
+        return apply_filters(
+            "adp_po_allow_cart_item_with_price_updated_manually_to_participate_in_calculations",
+            false
+        );
     }
 }

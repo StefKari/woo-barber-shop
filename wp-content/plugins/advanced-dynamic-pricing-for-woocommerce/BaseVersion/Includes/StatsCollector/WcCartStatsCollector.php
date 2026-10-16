@@ -2,6 +2,7 @@
 
 namespace ADP\BaseVersion\Includes\StatsCollector;
 
+use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\IMergeAdpCoupon;
 use ADP\BaseVersion\Includes\Core\Cart\ShippingAdjustment;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Database\Models\Order;
@@ -10,6 +11,7 @@ use ADP\BaseVersion\Includes\Database\Repository\OrderItemRepository;
 use ADP\BaseVersion\Includes\Database\Repository\OrderItemRepositoryInterface;
 use ADP\BaseVersion\Includes\Database\Repository\OrderRepository;
 use ADP\BaseVersion\Includes\Database\Repository\OrderRepositoryInterface;
+use ADP\BaseVersion\Includes\WC\WcAdpMergedCouponHelper;
 use ADP\BaseVersion\Includes\WC\WcCustomerSessionFacade;
 use \ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 use WC_Cart;
@@ -66,7 +68,7 @@ class WcCartStatsCollector
     public function setActionCheckoutOrderProcessed()
     {
         add_action('woocommerce_checkout_order_processed', array($this, 'checkoutOrderProcessed'), 10, 3);
-        add_action(
+        add_filter(
             'woocommerce_checkout_create_order_line_item_object',
             array($this, 'saveInitialPriceToOrderItem'),
             10,
@@ -85,7 +87,7 @@ class WcCartStatsCollector
     public function unsetActionCheckoutOrderProcessed()
     {
         remove_action('woocommerce_checkout_order_processed', array($this, 'checkoutOrderProcessed'), 10);
-        remove_action(
+        remove_filter(
             'woocommerce_checkout_create_order_line_item_object',
             array($this, 'saveInitialPriceToOrderItem'),
             10
@@ -117,7 +119,12 @@ class WcCartStatsCollector
 
         $orderId = $order->get_id();
 
-        list($orderStats, $productStats) = $this->collectWcCartStats(WC());
+        $order_item_ids = [];
+        foreach($order->get_items() as $order_item_id => $item) {
+            $order_item_ids[$item->get_meta( '_wdp_cart_item_key' )] = $order_item_id;
+        }
+
+        list($orderStats, $productStats) = $this->collectWcCartStats(WC(), $order_item_ids);
 
         $orderDate = current_time('mysql');
 
@@ -161,7 +168,12 @@ class WcCartStatsCollector
             return;
         }
 
-        list($orderStats, $productStats) = $this->collectWcCartStats(WC());
+        $order_item_ids = [];
+        foreach($order->get_items() as $order_item_id => $item) {
+            $order_item_ids[$item->get_meta( '_wdp_cart_item_key' )] = $order_item_id;
+        }
+
+        list($orderStats, $productStats) = $this->collectWcCartStats(WC(), $order_item_ids);
 
         $orderDate = current_time('mysql');
 
@@ -204,7 +216,7 @@ class WcCartStatsCollector
      *
      * @return array
      */
-    private function collectWcCartStats(WooCommerce $wc)
+    private function collectWcCartStats(WooCommerce $wc, $order_item_ids = [])
     {
         $orderStats   = array();
         $productStats = array();
@@ -220,6 +232,7 @@ class WcCartStatsCollector
                 continue;
             }
 
+            $order_item_id = $order_item_ids[$cartKey] ?? 0;
             $productId = $itemFacade->getProductId();
             foreach ($rules as $ruleId => $amounts) {
                 $amount = is_array($amounts) ? array_sum($amounts) : $amounts;
@@ -240,7 +253,8 @@ class WcCartStatsCollector
                         'amount'        => 0,
                         'qty'           => 0,
                         'gifted_qty'    => 0,
-                        'gifted_amount' => 0
+                        'gifted_amount' => 0,
+                        'order_item_id' => $order_item_id,
                     );
                 }
 
@@ -258,11 +272,44 @@ class WcCartStatsCollector
             }
         }
 
-        $this->injectWcCartCouponStats($wc, $orderStats);
+        if ( $this->context->isUseMergedCoupons() ) {
+            $this->injectWcCartMergedCouponStats($wc, $orderStats);
+        } else {
+            $this->injectWcCartCouponStats($wc, $orderStats);
+        }
+
         $this->injectWcCartFeeStats($wc, $orderStats);
         $this->injectWcCartShippingStats($wc, $orderStats);
 
         return array($orderStats, $productStats);
+    }
+
+    /**
+     * @param WooCommerce $wc
+     * @param array $orderStats
+     */
+    private function injectWcCartMergedCouponStats($wc, array &$orderStats)
+    {
+        foreach ($wc->cart->applied_coupons as $couponCode) {
+            $mergedCoupon = WcAdpMergedCouponHelper::loadOfCouponCode($couponCode);
+
+            foreach ($mergedCoupon->getParts() as $internalCoupon) {
+                if ($internalCoupon instanceof IMergeAdpCoupon) {
+                    $ruleId = $internalCoupon->ruleId();
+                    $value = wc_remove_number_precision_deep(array_sum($internalCoupon->totalsPerItem()));
+
+                    if (!isset($orderStats[$ruleId])) {
+                        $orderStats[$ruleId] = array();
+                    }
+
+                    if (!isset($orderStats[$ruleId]['extra'])) {
+                        $orderStats[$ruleId]['extra'] = 0.0;
+                    }
+
+                    $orderStats[$ruleId]['extra'] += $value;
+                }
+            }
+        }
     }
 
     /**
@@ -403,6 +450,8 @@ class WcCartStatsCollector
         if ( ! empty($values['wdp_rules'])) {
             $item->add_meta_data('_wdp_rules', $values['wdp_rules']);
         }
+
+        $item->add_meta_data( '_wdp_cart_item_key', $cartItemKey );
 
         return $item;
     }

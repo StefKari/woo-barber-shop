@@ -13,24 +13,14 @@ use WPML\StringTranslation\Application\Setting\Repository\SettingsRepositoryInte
 
 class FindBySearchCriteriaQuery implements FindBySearchCriteriaQueryInterface {
 
-	/** @var FindBySearchCriteriaQueryBuilder */
 	private $queryBuilder;
 
-	/** @var TranslationStatusesParser */
 	private $translationStatusesParser;
 
-	/** @var FindTranslationDetailsQueryInterface */
 	private $findTranslationDetailsQuery;
 
-	/** @var SettingsRepositoryInterface */
 	private $settingsRepository;
 
-	/**
-	 * @param FindBySearchCriteriaQueryBuilder $queryBuilder
-	 * @param TranslationStatusesParser $translationStatusesParser
-	 * @param FindTranslationDetailsQueryInterface $findTranslationDetailsQuery
-	 * @param SettingsRepositoryInterface $settingsRepository
-	 */
 	public function __construct(
 		FindBySearchCriteriaQueryBuilder     $queryBuilder,
 		TranslationStatusesParser            $translationStatusesParser,
@@ -43,9 +33,6 @@ class FindBySearchCriteriaQuery implements FindBySearchCriteriaQueryInterface {
 		$this->settingsRepository          = $settingsRepository;
 	}
 
-	/**
-	 * @param SearchCriteria $criteria
-	 */
 	public function execute( SearchCriteria $criteria ) {
 		global $wpdb;
 
@@ -94,7 +81,7 @@ class FindBySearchCriteriaQuery implements FindBySearchCriteriaQueryInterface {
 			$stringTranslation['string_id'] = (int)$stringTranslation['string_id'];
 			$stringTranslation['status']    = (int)$stringTranslation['status'];
 		}
-		unset( $stringTranslation ); // Clear the reference.
+		unset( $stringTranslation );
 		usort($stringsTranslations, function( $a, $b ) {
 			return $a['language'] <=> $b['language'];
 		});
@@ -175,7 +162,6 @@ class FindBySearchCriteriaQuery implements FindBySearchCriteriaQueryInterface {
 
 		$details     = [];
 		$indexedJobs = [];
-		/** @var TranslationDetailsDto $translationDetails */
 		foreach ( $string['translationDetails'] as $translationDetails ) {
 			$key          = $translationDetails->getStringId() . $translationDetails->getLanguageCode();
 			$code         = $translationDetails->getLanguageCode();
@@ -199,15 +185,18 @@ class FindBySearchCriteriaQuery implements FindBySearchCriteriaQueryInterface {
 				$translation = $translationsByStringId[ $key ];
 			}
 
-			$indexedJobs[ $translationDetails->getRid() ] = [
-				'job_id' => $translationDetails->getJobId(),
-				'automatic' => $translationDetails->getAutomatic(),
-				'translation_service' => $translationDetails->getTranslationService(),
-				'editor' => $translationDetails->getEditor(),
-				'review_status' => $translationDetails->getReviewStatus(),
-				'translated' => is_array( $translation ) ? $translation['value'] : '',
-				'translator_id' => $translationDetails->getTranslatorId(),
-			];
+			if ( is_int( $rid ) && $rid > 0 ) {
+				$indexedJobs[ $rid ] = [
+					'job_id'              => $translationDetails->getJobId(),
+					'automatic'           => $translationDetails->getAutomatic(),
+					'translation_service' => $translationDetails->getTranslationService(),
+					'editor'              => $translationDetails->getEditor(),
+					'review_status'       => $translationDetails->getReviewStatus(),
+					'translated'          => is_array( $translation ) ? $translation['value'] : '',
+					'translator_id'       => $translationDetails->getTranslatorId(),
+					'editor_job_id'       => $translationDetails->getEditorJobId(),
+				];
+			}
 		}
 
 		foreach ( $string['translations'] as $translation ) {

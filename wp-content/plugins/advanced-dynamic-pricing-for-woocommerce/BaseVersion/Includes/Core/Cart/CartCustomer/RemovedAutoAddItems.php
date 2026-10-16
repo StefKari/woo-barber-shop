@@ -97,4 +97,12 @@ class RemovedAutoAddItems
     {
         $this->removed = array();
     }
+
+    public function toArray() 
+    {
+        return [
+            'associatedGiftHash' => $this->associatedAutoAddHash,
+            'removed' => array_filter($this->removed),
+        ];
+    }
 }

@@ -25,4 +25,5 @@ interface KeyKeeperDB
     const FREE_PRODUCTS = 'get_products';
     const AUTO_ADD_PRODUCTS = 'auto_add_products';
     const ADVERTISING = 'advertising';
+    const CONDITION_MESSAGE = 'condition_message';
 }

@@ -29,7 +29,7 @@ class WPSEO_Metabox_Link_Suggestions implements WPSEO_WordPress_Integration {
 		 * Since the link suggestions are already added in the Yoast sidebar.
 		 * Do not add them to the metabox when in the block editor.
 		 */
-		if ( WP_Screen::get()->is_block_editor() ) {
+		if ( YoastSEO()->helpers->current_page->is_block_editor() ) {
 			return;
 		}
 
@@ -101,7 +101,7 @@ class WPSEO_Metabox_Link_Suggestions implements WPSEO_WordPress_Integration {
 			sprintf(
 				/* translators: %s expands to Yoast  */
 				__( '%s internal linking', 'wordpress-seo-premium' ),
-				'Yoast'
+				'Yoast',
 			),
 			[ $this, 'render_metabox_content' ],
 			$post_type,
@@ -109,7 +109,7 @@ class WPSEO_Metabox_Link_Suggestions implements WPSEO_WordPress_Integration {
 			'low',
 			[
 				'__block_editor_compatible_meta_box' => true,
-			]
+			],
 		);
 	}
 }

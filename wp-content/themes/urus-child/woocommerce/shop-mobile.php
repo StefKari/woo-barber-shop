@@ -12,6 +12,7 @@
         <h1 class="page-title"><?php woocommerce_page_title(); ?></h1>
         <?php do_action('urus_shop_control_top'); ?>
     </div>
+    <?php do_action( 'barbers_shop_mobile_before_toolbar' ); ?>
     <div class="container">
         <div class="toolbar-products-mobile">
             <div class="mobile_sort_by">

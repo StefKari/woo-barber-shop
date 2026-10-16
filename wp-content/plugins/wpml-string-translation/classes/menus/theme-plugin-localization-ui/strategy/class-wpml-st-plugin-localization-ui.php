@@ -4,22 +4,12 @@ use WPML\FP\Str;
 
 class WPML_ST_Plugin_Localization_UI implements IWPML_Theme_Plugin_Localization_UI_Strategy {
 
-	/** @var WPML_ST_Plugin_Localization_Utils */
 	private $utils;
 
-	/** @var WPML_Localization */
 	private $localization;
 
-	/** @var \WPML\ST\TranslationFile\FilesToScanRepository */
 	private $filesToScanRepository;
 
-	/**
-	 * WPML_ST_Plugin_Localization_UI constructor.
-	 *
-	 * @param WPML_Localization                              $localization
-	 * @param WPML_ST_Plugin_Localization_Utils              $utils
-	 * @param \WPML\ST\TranslationFile\FilesToScanRepository $filesToScanRepository
-	 */
 	public function __construct(
 		WPML_Localization $localization,
 		WPML_ST_Plugin_Localization_Utils $utils,
@@ -30,9 +20,6 @@ class WPML_ST_Plugin_Localization_UI implements IWPML_Theme_Plugin_Localization_
 		$this->filesToScanRepository = $filesToScanRepository;
 	}
 
-	/**
-	 * @return array
-	 */
 	public function get_model() {
 
 		$model = array(
@@ -40,14 +27,21 @@ class WPML_ST_Plugin_Localization_UI implements IWPML_Theme_Plugin_Localization_
 			'scan_button_label'  => __( 'Scan selected plugins for strings', 'wpml-string-translation' ),
 			'completed_title'    => __( 'Completely translated strings', 'wpml-string-translation' ),
 			'needs_update_title' => __( 'Strings in need of translation', 'wpml-string-translation' ),
+			/* translators: Name of the group on the Theme and plugins localization page that holds the plugins. Noun, plural. */
 			'component'          => __( 'Plugins', 'wpml-string-translation' ),
+			/* translators: Column heading on the Theme and plugins localization page: the text domain, the short name a theme or plugin uses for its texts. */
 			'domain'             => __( 'Textdomain', 'wpml-string-translation' ),
+			/* translators: Option in the filter on the Theme and plugins localization page: show every theme or plugin. */
 			'all_text'           => __( 'All', 'wpml-string-translation' ),
+			/* translators: Option in the filter on the Theme and plugins localization page: show only themes or plugins that are switched on. On the Packages page it is also the state of a package that is in use. Adjective. */
 			'active_text'        => __( 'Active', 'wpml-string-translation' ),
+			/* translators: Option in the filter on the Theme and plugins localization page: show only themes or plugins that are switched off. Adjective. */
 			'inactive_text'      => __( 'Inactive', 'wpml-string-translation' ),
+			/* translators: Link on the Theme and plugins localization page that shows the text domain of each theme or plugin. Verb, imperative, lower case in the source. */
 			'show_textdomains'   => __( 'show textdomains', 'wpml-string-translation' ),
+			/* translators: Link on the Theme and plugins localization page that hides the text domain of each theme or plugin. Verb, imperative, lower case in the source. */
 			'hide_textdomains'   => __( 'hide textdomains', 'wpml-string-translation' ),
-			'download_po'        => __( 'Download .po file', 'wpml_string_translation' ),
+			'download_po'        => __( 'Download .po file', 'wpml-string-translation' ),
 			'type'               => 'plugin',
 			'components'         => $this->get_components( $this->utils->get_plugins(), $this->localization->get_localization_stats( 'plugin' ) ),
 			'stats_id'           => 'wpml_plugin_scan_stats',
@@ -64,12 +58,6 @@ class WPML_ST_Plugin_Localization_UI implements IWPML_Theme_Plugin_Localization_
 		return $model;
 	}
 
-	/**
-	 * @param array $plugins
-	 * @param array $plugin_stats
-	 *
-	 * @return array
-	 */
 	private function get_components( $plugins, $plugin_stats ) {
 		$components         = [];
 		$pluginFilesInStats = array_keys( $plugin_stats );
@@ -95,6 +83,7 @@ class WPML_ST_Plugin_Localization_UI implements IWPML_Theme_Plugin_Localization_
 
 			if ( in_array( $plugin_file, $pluginFilesInStats ) ) {
 				$components[ $plugin_file ]['completed']       = true;
+				/* translators: Tooltip on the icon next to a theme or plugin on the Theme and plugins localization page: its texts have already been scanned. Past participle used as a state. */
 				$components[ $plugin_file ]['statusIconTitle'] = __( 'Scanned', 'wpml-string-translation' );
 			}
 
@@ -108,7 +97,6 @@ class WPML_ST_Plugin_Localization_UI implements IWPML_Theme_Plugin_Localization_
 		return $components;
 	}
 
-	/** @return string */
 	public function get_template() {
 		return 'theme-plugin-localization-ui.twig';
 	}

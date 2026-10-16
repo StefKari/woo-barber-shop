@@ -4,33 +4,14 @@ use WPML\FP\Fns;
 
 class WPML_Term_Translation_Utils extends WPML_SP_User {
 
-	/**
-	 * Duplicates all terms, that exist in the given target language,
-	 * from the original post to the translation in that language.
-	 *
-	 * @param int    $original_post_id
-	 * @param string $lang
-	 */
 	function sync_terms( $original_post_id, $lang ) {
 		$this->synchronize_terms( $original_post_id, $lang, false );
 	}
 
-	/**
-	 * Duplicates all terms on the original post to its translation in the given target language.
-	 * Missing terms are created with the same name as their originals.
-	 *
-	 * @param int    $original_post_id
-	 * @param string $lang
-	 */
 	function duplicate_terms( $original_post_id, $lang ) {
 		$this->synchronize_terms( $original_post_id, $lang, true );
 	}
 
-	/**
-	 * @param int    $original_post_id
-	 * @param string $lang
-	 * @param bool   $duplicate sets whether missing terms should be created by duplicating the original term
-	 */
 	private function synchronize_terms( $original_post_id, $lang, $duplicate ) {
 		global $wpml_post_translations;
 
@@ -43,6 +24,7 @@ class WPML_Term_Translation_Utils extends WPML_SP_User {
 			$taxonomies = get_post_taxonomies( $original_post_id );
 
 			foreach ( $taxonomies as $tax ) {
+				$tax               = (string) $tax;
 				$terms_on_original = wp_get_object_terms( $original_post_id, $tax );
 				if ( is_wp_error ( $terms_on_original ) ) {
 					continue;
@@ -50,7 +32,6 @@ class WPML_Term_Translation_Utils extends WPML_SP_User {
 
 				if ( ! $this->sitepress->is_translated_taxonomy( $tax ) ) {
 					if ( $this->sitepress->get_setting( 'sync_post_taxonomies' ) ) {
-						// Taxonomy is not translated so we can just copy from the original
 						foreach ( $terms_on_original as $key => $term ) {
 							$terms_on_original[ $key ] = $term->term_id;
 						}
@@ -58,7 +39,6 @@ class WPML_Term_Translation_Utils extends WPML_SP_User {
 					}
 				} else {
 
-					/** @var int[] $translated_terms translated term_ids */
 					$translated_terms = $this->get_translated_term_ids( $terms_on_original, $lang, $tax, $duplicate );
 					wp_set_object_terms( $translated_post_id, $translated_terms, $tax );
 				}
@@ -70,16 +50,7 @@ class WPML_Term_Translation_Utils extends WPML_SP_User {
 		$post_type && clean_object_term_cache( $original_post_id, $post_type );
 	}
 
-	/**
-	 * @param object[] $terms
-	 * @param string   $lang
-	 * @param string   $taxonomy
-	 * @param bool     $duplicate sets whether missing terms should be created by duplicating the original term
-	 *
-	 * @return array
-	 */
 	private function get_translated_term_ids( $terms, $lang, $taxonomy, $duplicate ) {
-		/** @var WPML_Term_Translation $wpml_term_translations */
 		global $wpml_term_translations;
 
 		$term_utils = new WPML_Terms_Translations();

@@ -7,7 +7,6 @@ use WPML\StringTranslation\Infrastructure\Factory;
 
 class SavePendingStringsCommand implements SavePendingStringsCommandInterface {
 
-	/** @var Factory */
 	private $factory;
 
 	public function __construct(
@@ -16,7 +15,7 @@ class SavePendingStringsCommand implements SavePendingStringsCommandInterface {
 		$this->factory = $factory;
 	}
 
-	public function run( string $domain, array $strings ) {
-		$this->factory->getSavePendingStringsCommand()->run( $domain, $strings );
+	public function run( string $domain, array $strings ) : bool {
+		return $this->factory->getSavePendingStringsCommand()->run( $domain, $strings );
 	}
 }

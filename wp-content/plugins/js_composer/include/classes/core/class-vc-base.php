@@ -671,7 +671,8 @@ class Vc_Base {
 			return $content;
 		}
 
-		return null;
+		// Return the (empty) input instead of null so later 'the_content' filters always receive a string.
+		return is_string( $content ) ? $content : '';
 	}
 
 	/**

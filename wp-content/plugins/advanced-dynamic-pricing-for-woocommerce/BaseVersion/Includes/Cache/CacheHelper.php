@@ -14,7 +14,6 @@ use ADP\BaseVersion\Includes\Database\RuleStorage;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedProductSimple;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedVariableProduct;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
-use ADP\BaseVersion\Includes\WP\WpObjectCache;
 use ADP\BaseVersion\Includes\Enums\RuleTypeEnum;
 use ADP\Factory;
 use WC_Product;
@@ -30,37 +29,67 @@ class CacheHelper
     const GROUP_PROCESSED_PRODUCTS_TO_DISPLAY = 'adp_processed_products_to_display';
     const GROUP_WC_PRODUCT = 'adp_wc_product';
 
-    public static $objCache;
+    const GROUP_COLLECTIONS = 'adp_collections';
 
     /**
      * @return true
      */
     public static function flush()
     {
-        if ( ! isset(self::$objCache)) {
-            self::$objCache = new WpObjectCache();
-        }
+        return wp_cache_flush();
+    }
 
-        return self::$objCache->flush();
+    public static function applyLanguageCurrency($key) {
+        if( function_exists('get_locale'))
+            $key .= "|".get_locale();
+        if( function_exists('get_woocommerce_currency'))
+            $key .= "|".get_woocommerce_currency();
+        return $key;
     }
 
     public static function cacheGet($key, $group = '', $force = false, &$found = null)
     {
-        if ( ! isset(self::$objCache)) {
-            self::$objCache = new WpObjectCache();
-        }
-
-        return self::$objCache->get($key, $group, $force, $found);
+        return wp_cache_get(self::applyLanguageCurrency($key), $group, $force, $found);
     }
 
     public static function cacheSet($key, $data, $group = '', $expire = 0)
     {
-        if ( ! isset(self::$objCache)) {
-            self::$objCache = new WpObjectCache();
-        }
-
-        return self::$objCache->set($key, $data, $group, (int)$expire);
+        if( apply_filters("adp_cache_enabled",true) )
+            return wp_cache_set( self::applyLanguageCurrency($key), $data, $group, (int)$expire);
+        else
+            return false;
     }
+
+    public static function cacheDelete($key, $group = '')
+    {
+        return wp_cache_delete( self::applyLanguageCurrency($key), $group );
+    }
+
+    public static function cacheFlushGroup($group)
+    {
+        if ( wp_cache_supports( 'flush_group' ) ) {
+            wp_cache_flush_group( $group );
+        } else {
+            wp_cache_flush();
+        }
+    }
+
+    public static function flushRulesCache()
+    {
+        self::cacheDelete(self::KEY_ACTIVE_RULES_COLLECTION);
+        self::cacheFlushGroup(self::GROUP_RULES_CACHE);
+        self::cacheFlushGroup(self::GROUP_PROCESSED_PRODUCTS_TO_DISPLAY);
+
+        Factory::callStaticMethod('Shortcodes_OnSaleProducts', 'clearCache');
+        Factory::callStaticMethod('Shortcodes_BogoProducts', 'clearCache');
+    }
+
+    public static function flushCollectionsCache()
+    {
+        self::cacheFlushGroup(self::GROUP_COLLECTIONS);
+        self::flushRulesCache();
+    }
+
 
     /**
      * @param null $deprecated
@@ -69,14 +98,16 @@ class CacheHelper
      */
     public static function loadActiveRules($deprecated = null): RulesCollection
     {
+        /** @var RuleStorage $storage */
+        // must load this class before reading rules from cache, to avoid __PHP_Incomplete_Class for custom conditions
+        $storage         = Factory::get("Database_RuleStorage");
+
         $rulesCollection = self::cacheGet(self::KEY_ACTIVE_RULES_COLLECTION);
 
         if ($rulesCollection instanceof RulesCollection) {
             return $rulesCollection;
         }
 
-        /** @var RuleStorage $storage */
-        $storage         = Factory::get("Database_RuleStorage");
         $ruleRepository = new RuleRepository();
         $rows            = $ruleRepository->getRules(array('active_only' => true, 'rule_types' => array(RuleTypeEnum::COMMON()->getValue(), RuleTypeEnum::EXCLUSIVE()->getValue())));
         $rulesCollection = $storage->buildRules($rows);
@@ -93,8 +124,12 @@ class CacheHelper
      *
      * @return array<int, Rule>
      */
-    public static function loadRules($ruleIds, Context $context = null)
+    public static function loadRules($ruleIds, ?Context $context = null)
     {
+        /** @var RuleStorage $storage */
+        // must load this class before reading rules from cache, to avoid __PHP_Incomplete_Class for custom conditions
+        $storage         = Factory::get("Database_RuleStorage");
+
         $ruleIds = (array)$ruleIds;
         $ruleIds = array_map('intval', $ruleIds);
 
@@ -123,12 +158,60 @@ class CacheHelper
             $context = new Context();
         }
 
-        /** @var RuleStorage $storage */
-        $storage         = Factory::get("Database_RuleStorage");
         $storage->withContext($context);
         $ruleRepository = new RuleRepository();
         $rows            = $ruleRepository->getRules(array('id' => $notCachedRuleIds));
         $rulesCollection = $storage->buildRules($rows);
+        $rules           = $rulesCollection->getRules();
+        self::addRulesToCache($rules);
+
+        return $rules;
+    }
+
+    /**
+     * @param array<int, int> $ruleIds
+     * @param Context $context
+     *
+     * @return array<int, Rule>
+     */
+    public static function loadProductOnlyRules($ruleIds, ?Context $context = null)
+    {
+        /** @var RuleStorage $storage */
+        // must load this class before reading rules from cache, to avoid __PHP_Incomplete_Class for custom conditions
+        $storage         = Factory::get("Database_RuleStorage");
+
+        $ruleIds = (array)$ruleIds;
+        $ruleIds = array_map('intval', $ruleIds);
+
+        if (count($ruleIds) === 0) {
+            return array();
+        }
+
+        $rules            = array();
+        $notCachedRuleIds = array();
+
+        foreach ($ruleIds as $ruleId) {
+            $rule = self::cacheGet($ruleId, self::GROUP_RULES_CACHE);
+
+            if ($rule instanceof Rule) {
+                $rules[$rule->getId()] = $rule;
+            } else {
+                $notCachedRuleIds[] = $ruleId;
+            }
+        }
+
+        if (count($notCachedRuleIds) === 0) {
+            return $rules;
+        }
+
+        if (is_null($context)) {
+            $context = new Context();
+        }
+
+        $storage->withContext($context);
+        $ruleRepository = new RuleRepository();
+        $rows            = $ruleRepository->getRules(array('id' => $notCachedRuleIds));
+        $rulesCollection = $storage->buildPersistentRules($rows);
         $rules           = $rulesCollection->getRules();
         self::addRulesToCache($rules);
 
@@ -180,18 +263,11 @@ class CacheHelper
         $productMeta = self::cacheGet($productId, self::GROUP_VARIATION_PROD_DATA_CACHE);
 
         if (false === $productMeta) {
-            $productMeta = get_post_meta($productId);
-            array_walk($productMeta, function (&$item) {
-                if (is_array($item)) {
-                    $item = reset($item);
-                }
+            $productMeta = Database::getOnlyRequiredProductPostMetaData((int)$productId);
 
-                $item = maybe_unserialize($item);
-
-                return $item;
-            });
-
-            self::cacheSet($productId, $productMeta, self::GROUP_VARIATION_PROD_DATA_CACHE);
+            if ( $productMeta ) {
+                self::cacheSet($productId, $productMeta, self::GROUP_VARIATION_PROD_DATA_CACHE);
+            }
         }
 
         return $productMeta;
@@ -207,22 +283,6 @@ class CacheHelper
         $product_data = self::getVariationProductData($productId);
 
         return $product_data ? $product_data->meta : array();
-    }
-
-    public static function flushRulesCache()
-    {
-        global $wp_object_cache;
-
-        if ($wp_object_cache instanceof WpObjectCache) {
-            // I have no idea how to delete cache group another way
-            $cache = $wp_object_cache->cache;
-            unset($cache[self::GROUP_RULES_CACHE]);
-            $wp_object_cache->cache = $cache;
-
-            $wp_object_cache->delete(self::KEY_ACTIVE_RULES_COLLECTION);
-        } else {
-            $wp_object_cache->flush();
-        }
     }
 
     /**
@@ -252,24 +312,25 @@ class CacheHelper
 
     /**
      * @param WcCartItemFacade $cartItem
+     * @param float $qty
      * @param ProcessedProductSimple|null $processed
      * @param Cart $cart
      * @param ICartCalculator $calc
      */
     public static function addProcessedProductToDisplay(
         WcCartItemFacade $cartItem,
+        float $qty,
         ProcessedProductSimple $processed,
         Cart $cart,
         ICartCalculator $calc
     ) {
         $productId           = $cartItem->getVariationId() ? $cartItem->getVariationId() : $cartItem->getProductId();
-        $qty                 = $cartItem->getQty();
         $cartItemData        = $cartItem->getThirdPartyData();
         $product             = $cartItem->getProduct();
         $variationAttributes = $product instanceof \WC_Product_Variation ? $product->get_variation_attributes() : array();
         $hash                = self::calcHashProcessedProduct($productId, $variationAttributes, $qty, $cartItemData,
             $cart, $calc);
-        self::cacheSet($hash, $processed, self::GROUP_PROCESSED_PRODUCTS_TO_DISPLAY);
+        self::cacheSet($hash, $processed, self::GROUP_PROCESSED_PRODUCTS_TO_DISPLAY, 60 * 10 );
     }
 
     /**
@@ -282,14 +343,24 @@ class CacheHelper
      *
      * @return string
      */
-    protected static function calcHashProcessedProduct(
-        $productId,
+    public static function calcHashProcessedProduct(
+        $theProduct,
         $variationAttributes,
         $qty,
         $cartItemData,
         $cart,
         $calc
     ) {
+        if ($theProduct instanceof WC_Product) {
+            $productId = $theProduct->get_id();
+        } elseif (is_numeric($theProduct)) {
+            $productId = $theProduct;
+        } elseif ($theProduct instanceof \WP_Post) {
+            $productId = $theProduct->ID;
+        } else {
+            $productId = $theProduct;
+        }
+
         $parts = array($productId, $qty);
 
         foreach ($variationAttributes as $key => $value) {
@@ -313,10 +384,17 @@ class CacheHelper
         }
 
         foreach ($calc->getRulesCollection()->getRules() as $rule) {
-            $parts[] = $rule->getId();
+            $parts[] = $rule->getHash();
         }
 
-        return md5(implode('_', $parts));
+        $parts[]= md5( json_encode( $cart->getContext()->getCustomer()->getJson() ) );
+        $parts[] = 'v2';
+        $parts = apply_filters("adp_calculate_processed_product_hash", $parts,
+                    $theProduct, $variationAttributes, $qty, $cartItemData, $cart, $calc);
+
+        $hash = md5(implode('_', $parts));
+
+        return $hash;
     }
 
     /**
@@ -326,13 +404,17 @@ class CacheHelper
      */
     public static function getWcProduct($theProduct)
     {
+        $clone_products = apply_filters("adp_cache_clone_products",true);
+
         if ($theProduct instanceof WC_Product) {
-            $product = clone $theProduct;
+            $product = $clone_products ? clone $theProduct : $theProduct;
 
             try {
                 $reflection = new \ReflectionClass($product);
                 $property   = $reflection->getProperty('changes');
-                $property->setAccessible(true);
+                if (\PHP_VERSION_ID < 80100) {
+                    $property->setAccessible(true);
+                }
                 $property->setValue($product, array());
             } catch (\ReflectionException $exception) {
                 return false;
@@ -346,7 +428,7 @@ class CacheHelper
             $product = self::cacheGet($productId, self::GROUP_WC_PRODUCT);
 
             if ($product === false && ! empty($productById = wc_get_product($productId))) {
-                $product = clone $productById;
+                $product = $clone_products ? clone $productById : $productById;
                 self::cacheSet($productId, $product, self::GROUP_WC_PRODUCT);
             }
 
@@ -357,7 +439,7 @@ class CacheHelper
             $product = self::cacheGet($productId, self::GROUP_WC_PRODUCT);
 
             if ($product === false && ! empty($productById = wc_get_product($productId))) {
-                $product = clone $productById;
+                $product = $clone_products ? clone $productById : $productById;
                 self::cacheSet($productId, $product, self::GROUP_WC_PRODUCT);
             }
         } else {
@@ -405,6 +487,50 @@ class CacheHelper
             $parts[] = $cartItemDataKey;
         }
 
+        $parts = apply_filters("adp_calculate_persistent_rule_product_hash", $parts);
+
         return md5(implode('_', $parts));
+    }
+
+
+    public static function getCollectionsById($collectionIds)
+    {
+        $collectionIds = (array)$collectionIds;
+        $collectionIds = array_map('intval', $collectionIds);
+
+        if (count($collectionIds) === 0) {
+            return [];
+        }
+
+        $collections = [];
+        $notCachedCollectionsIds = [];
+
+        foreach ($collectionIds as $collectionId) {
+            $collection = self::cacheGet($collectionId, self::GROUP_COLLECTIONS);
+
+            if ($collection === false) {
+                $notCachedCollectionsIds[] = $collectionId;
+            } else {
+                $collections[$collection->id] = $collection;
+            }
+        }
+
+        if (count($notCachedCollectionsIds) === 0) {
+            return $collections;
+        }
+
+        if (!class_exists("\ADP\ProVersion\Includes\Database\Repository\CollectionRepository")) {
+            return $collections;
+        }
+
+        $newCollections = \ADP\ProVersion\Includes\Database\Repository\CollectionRepository::getProductCollectionsByIds(
+            $notCachedCollectionsIds
+        );
+
+        foreach ($newCollections as $collection) {
+            self::cacheSet($collection->id, $collection, self::GROUP_COLLECTIONS);
+        }
+
+        return array_merge($collections, $newCollections);
     }
 }

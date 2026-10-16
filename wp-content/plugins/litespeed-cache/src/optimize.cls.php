@@ -20,7 +20,7 @@ class Optimize extends Base {
 
 	const ITEM_TIMESTAMP_PURGE_CSS = 'timestamp_purge_css';
 
-	const DUMMY_CSS_REGEX = "#<link rel=['\"]stylesheet['\"] id=['\"]litespeed-cache-dummy-css['\"] href=['\"].+assets/css/litespeed-dummy\.css[?\w.=-]*['\"][ \w='\"/]*>#isU";
+	const DUMMY_CSS_REGEX = "#<link [ \w='\"/-]*id=['\"]litespeed-cache-dummy-css['\"][ \w='\"/-]*href=['\"].+assets/css/litespeed-dummy\.css[?\w.=-]*['\"][ \w='\"/-]*>#isU";
 
 	private $content;
 	private $content_ori;
@@ -225,7 +225,7 @@ class Optimize extends Base {
 	public function finalize( $content ) {
 		$content = $this->_finalize($content);
 		// Fallback to replace dummy css placeholder
-		if (false !== preg_match(self::DUMMY_CSS_REGEX, $content)) {
+		if (1 === preg_match(self::DUMMY_CSS_REGEX, $content)) {
 			self::debug('Fallback to drop dummy CSS');
 			$content = preg_replace( self::DUMMY_CSS_REGEX, '', $content );
 		}
@@ -251,7 +251,7 @@ class Optimize extends Base {
 			// Check if hit URI excludes
 			add_filter('litespeed_optm_uri_exc', array( $this->cls('Data'), 'load_optm_uri_exc' ));
 			$excludes = apply_filters('litespeed_optm_uri_exc', $this->conf(self::O_OPTM_EXC));
-			$result   = Utility::str_hit_array($_SERVER['REQUEST_URI'], $excludes);
+			$result   = REST::str_hit_uri($_SERVER['REQUEST_URI'], $excludes);
 			if ($result) {
 				self::debug('bypass: hit URI Excludes setting: ' . $result);
 				return $content;
@@ -273,12 +273,7 @@ class Optimize extends Base {
 	 * @access private
 	 */
 	private function _optimize() {
-		global $wp;
-		$this->_request_url = get_permalink();
-		// Backup, in case get_permalink() fails.
-		if (!$this->_request_url) {
-			$this->_request_url = home_url($wp->request);
-		}
+		$this->_request_url = Utility::request_url();
 
 		$this->cfg_css_min            = defined('LITESPEED_GUEST_OPTM') || $this->conf(self::O_OPTM_CSS_MIN);
 		$this->cfg_css_comb           = defined('LITESPEED_GUEST_OPTM') || $this->conf(self::O_OPTM_CSS_COMB);
@@ -496,7 +491,7 @@ class Optimize extends Base {
 				$this->content = str_replace('</head>', $this->html_head . '</head>', $this->content);
 			} else {
 				// Put header content to dummy css position
-				if (false !== preg_match(self::DUMMY_CSS_REGEX, $this->content)) {
+				if (1 === preg_match(self::DUMMY_CSS_REGEX, $this->content)) {
 					self::debug('Put optm data to dummy css location');
 					$this->content = preg_replace( self::DUMMY_CSS_REGEX, $this->html_head, $this->content );
 				}
@@ -521,6 +516,9 @@ class Optimize extends Base {
 		if ($this->conf(self::O_OPTM_NOSCRIPT_RM)) {
 			// $this->content = preg_replace( '#<noscript>.*</noscript>#isU', '', $this->content );
 		}
+
+		// Inline font-face optimize
+		$this->content = $this->__optimizer->optm_font_face( $this->content );
 
 		// HTML minify
 		if (defined('LITESPEED_GUEST_OPTM') || $this->conf(self::O_OPTM_HTML_MIN)) {
@@ -602,7 +600,7 @@ class Optimize extends Base {
 		 *      -> family: PT Sans:400,700|PT Sans Narrow:400|Montserrat:600
 		 *  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,300italic,400italic,600,700,900&#038;subset=latin%2Clatin-ext' />
 		 */
-		$script = 'WebFontConfig={google:{families:[';
+		$script = 'WebFontConfig={google:{families:';
 
 		$families = array();
 		foreach ($this->_ggfonts_urls as $v) {
@@ -623,9 +621,12 @@ class Optimize extends Base {
 			}
 		}
 
-		$script .= '"' . implode('","', $families) . ($this->_conf_css_font_display ? '&display=swap' : '') . '"';
+		if ($families && $this->_conf_css_font_display) {
+			$families[count($families) - 1] .= '&display=swap';
+		}
 
-		$script .= ']}};';
+		$script .= wp_json_encode($families, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+		$script .= '}};';
 
 		// if webfontloader lib was loaded before WebFontConfig variable, call WebFont.load
 		$script .= 'if ( typeof WebFont === "object" && typeof WebFont.load === "function" ) { WebFont.load( WebFontConfig ); }';
@@ -994,9 +995,7 @@ class Optimize extends Base {
 
 		if ($this->cfg_js_defer === 2) {
 			// Drop type attribute from $attrs
-			if (strpos($attrs, ' type=') !== false) {
-				$attrs = preg_replace('# type=([\'"])([^\1]+)\1#isU', '', $attrs);
-			}
+			$attrs = Utility::remove_attr( $attrs, 'type' );
 			// Replace DOMContentLoaded
 			$con = str_replace('DOMContentLoaded', 'DOMContentLiteSpeedLoaded', $con);
 			return '<script' . $attrs . ' type="litespeed/javascript">' . $con . '</script>';
@@ -1231,9 +1230,7 @@ class Optimize extends Base {
 	 * @since  3.5
 	 */
 	private function _js_defer( $ori, $src ) {
-		if (strpos($ori, ' async') !== false) {
-			$ori = preg_replace('# async(?:=([\'"])(?:[^\1]*?)\1)?#is', '', $ori);
-		}
+		$ori = Utility::remove_attr( $ori, 'async' );
 
 		if (strpos($ori, 'defer') !== false) {
 			return false;
@@ -1258,9 +1255,7 @@ class Optimize extends Base {
 		}
 
 		if ($this->cfg_js_defer === 2 || Utility::str_hit_array($src, $this->cfg_js_delay_inc)) {
-			if (strpos($ori, ' type=') !== false) {
-				$ori = preg_replace('# type=([\'"])([^\1]+)\1#isU', '', $ori);
-			}
+			$ori = Utility::remove_attr( $ori, 'type' );
 			return str_replace(' src=', ' type="litespeed/javascript" data-src=', $ori);
 		}
 
@@ -1273,9 +1268,7 @@ class Optimize extends Base {
 	 * @since 5.6
 	 */
 	private function _js_delay( $ori, $src ) {
-		if (strpos($ori, ' async') !== false) {
-			$ori = str_replace(' async', '', $ori);
-		}
+		$ori = Utility::remove_attr( $ori, 'async' );
 
 		if (strpos($ori, 'defer') !== false) {
 			return false;
@@ -1293,9 +1286,7 @@ class Optimize extends Base {
 			return;
 		}
 
-		if (strpos($ori, ' type=') !== false) {
-			$ori = preg_replace('# type=([\'"])([^\1]+)\1#isU', '', $ori);
-		}
+		$ori = Utility::remove_attr( $ori, 'type' );
 		return str_replace(' src=', ' type="litespeed/javascript" data-src=', $ori);
 	}
 }

@@ -26,6 +26,8 @@ class NoItemRuleProcessor implements RuleProcessor
     const STATUS_CONDITIONS_NOT_PASSED = 4;
     const STATUS_FILTERS_NOT_PASSED = 5;
     const STATUS_DISABLED_BY_COUPON_CODE_TRIGGER = 6;
+    const STATUS_DISABLED_BY_DATE = 7;
+    const STATUS_SUCCESSFULLY_COMPLETED = 8;
 
     protected $status;
     protected $lastUnexpectedErrorMessage;
@@ -184,6 +186,12 @@ class NoItemRuleProcessor implements RuleProcessor
             return;
         }
 
+        if ( ! $this->activationTriggerStrategy->canBeAppliedByDate($cart)) {
+            $this->status = self::STATUS_DISABLED_BY_DATE;
+
+            return;
+        }
+
         if ( ! $this->activationTriggerStrategy->canBeAppliedUsingCouponCode($cart)) {
             $this->status = self::STATUS_DISABLED_BY_COUPON_CODE_TRIGGER;
 
@@ -202,6 +210,8 @@ class NoItemRuleProcessor implements RuleProcessor
         $this->ruleTimer->checkExecutionTime();
 
         $this->applyCartAdjustments($cart);
+
+        $this->status = self::STATUS_SUCCESSFULLY_COMPLETED;
     }
 
     /**

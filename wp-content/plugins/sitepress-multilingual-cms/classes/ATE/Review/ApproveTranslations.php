@@ -16,15 +16,18 @@ class ApproveTranslations implements IHandler {
 	public function run( Collection $data ) {
 		$jobIds           = $data->get( 'jobsIds' );
 		$TranslatedPostId = function ( $arg ) {
-			// we need to check if it's package type, otherwise this will return a misleading ID.
-			if ( PackageJob::isPackageJob( $arg ) ) {
+			if ( PackageJob::isPackageJob( $arg ) || TermJob::isTermJob( $arg ) ) {
 				return null;
 			}
 			return Jobs::getTranslatedPostId()( $arg );
 		};
 
+		$getJob = function ( $jobId ) {
+			return Jobs::get( $jobId ) ?: TermJob::get( (int) $jobId );
+		};
+
 		return wpml_collect( $jobIds )
-			->map( Jobs::get() )
+			->map( $getJob )
 			->filter( ReviewStatus::doesJobNeedReview() )
 			->map( Obj::addProp( 'translated_id', $TranslatedPostId ) )
 			->map( Obj::props( [ 'job_id', 'translated_id', 'element_type_prefix' ] ) )

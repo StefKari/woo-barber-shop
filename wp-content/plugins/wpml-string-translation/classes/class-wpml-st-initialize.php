@@ -2,7 +2,6 @@
 
 class WPML_ST_Initialize {
 
-	/** @var array */
 	private $config;
 
 	public function __construct( array $config = [] ) {
@@ -16,11 +15,12 @@ class WPML_ST_Initialize {
 	public function run() {
 		$this->includeAutoloader();
 		$this->configureDIC();
-		$this->loadEarlyHooks();
 
-		$app = new \WPML\StringTranslation\Application( $this->config );
-		$app->run();
-
+		if ( has_action( 'wpml_before_init', 'load_wpml_st_basics' ) !== false ) {
+			$this->loadEarlyHooks();
+			$app = new \WPML\StringTranslation\Application( $this->config );
+			$app->run();
+		}
 	}
 
 	private function includeAutoloader() {
@@ -34,7 +34,6 @@ class WPML_ST_Initialize {
 	}
 
 	private function loadEarlyHooks() {
-		/** @var \WPML\ST\TranslationFile\Hooks $hooks */
 		$hooks = \WPML\Container\make( \WPML\ST\TranslationFile\Hooks::class );
 		$hooks->install();
 	}

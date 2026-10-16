@@ -64,7 +64,7 @@ class Yoast_Input_Validation {
 				/* translators: %1$s: amount of errors, %2$s: the admin page title */
 				_n( 'The form contains %1$s error. %2$s', 'The form contains %1$s errors. %2$s', $error_count, 'wordpress-seo' ),
 				number_format_i18n( $error_count ),
-				$admin_title
+				$admin_title,
 			);
 		}
 
@@ -90,38 +90,6 @@ class Yoast_Input_Validation {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Sets the error descriptions.
-	 *
-	 * @since 12.1
-	 *
-	 * @param array<string, string> $descriptions An associative array of error descriptions.
-	 *                            For each entry, the key must be the setting variable.
-	 *
-	 * @return void
-	 *
-	 * @deprecated 23.3
-	 * @codeCoverageIgnore
-	 */
-	public static function set_error_descriptions( $descriptions = [] ) { // @phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable, Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Needed for BC.
-		_deprecated_function( __METHOD__, 'Yoast SEO 23.3' );
-	}
-
-	/**
-	 * Gets all the error descriptions.
-	 *
-	 * @since 12.1
-	 *
-	 * @deprecated 23.3
-	 * @codeCoverageIgnore
-	 *
-	 * @return array<string, string> An associative array of error descriptions.
-	 */
-	public static function get_error_descriptions() {
-		_deprecated_function( __METHOD__, 'Yoast SEO 23.3' );
-		return [];
 	}
 
 	/**
@@ -217,40 +185,5 @@ class Yoast_Input_Validation {
 				$wp_settings_errors[ $index ]['yoast_dirty_value'] = $dirty_value;
 			}
 		}
-	}
-
-	/**
-	 * Gets an invalid submitted value.
-	 *
-	 * @since 12.1
-	 *
-	 * @param string $error_code Code of the error set via `add_settings_error()`, normally the variable name.
-	 *
-	 * @return string The submitted invalid input field value.
-	 *
-	 * @deprecated 23.3
-	 * @codeCoverageIgnore
-	 */
-	public static function get_dirty_value( $error_code ) {  // @phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable, Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Needed for BC.
-		_deprecated_function( __METHOD__, 'Yoast SEO 23.3' );
-		return '';
-	}
-
-	/**
-	 * Gets a specific invalid value message.
-	 *
-	 * @since 12.1
-	 *
-	 * @param string $error_code Code of the error set via `add_settings_error()`, normally the variable name.
-	 *
-	 * @return string The error invalid value message or empty string.
-	 *
-	 * @deprecated 23.3
-	 * @codeCoverageIgnore
-	 */
-	public static function get_dirty_value_message( $error_code ) { // @phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable, Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Needed for BC.
-		_deprecated_function( __METHOD__, 'Yoast SEO 23.3' );
-
-		return '';
 	}
 }

@@ -27,17 +27,23 @@ if ( empty( $product ) || ! $product->is_visible() ) {
     return;
 }
 $product_item_class = array('product-item');
-$woo_lg_items = Urus_Helper::get_option_c('woo_lg_items',3);
-$woo_md_items = Urus_Helper::get_option('woo_md_items',3);
-$woo_sm_items = Urus_Helper::get_option('woo_sm_items',4);
-$woo_xs_items = Urus_Helper::get_option('woo_xs_items',6);
-$woo_ts_items = Urus_Helper::get_option('woo_ts_items',6);
-$woo_shop_list_style = Urus_Helper::get_option('woo_shop_list_style','grid');
-$woo_product_item_layout= Urus_Helper::get_option('woo_product_item_layout','classic');
-$woo_shop_layout= Urus_Helper::get_option('woo_shop_layout','left');
 
-$mobile_product_item_style = Urus_Helper::get_option('mobile_product_item_style', 'default');
-$mobile_enable = Urus_Helper::is_mobile_template();
+static $woo_lg_items, $woo_md_items, $woo_sm_items, $woo_xs_items, $woo_ts_items,
+$woo_shop_list_style, $woo_product_item_layout, $woo_shop_layout,
+$mobile_product_item_style, $mobile_enable;
+
+if ( $woo_lg_items === null ) {
+    $woo_lg_items              = Urus_Helper::get_option_c( 'woo_lg_items', 3 );
+    $woo_md_items              = Urus_Helper::get_option( 'woo_md_items', 3 );
+    $woo_sm_items              = Urus_Helper::get_option( 'woo_sm_items', 4 );
+    $woo_xs_items              = Urus_Helper::get_option( 'woo_xs_items', 6 );
+    $woo_ts_items              = Urus_Helper::get_option( 'woo_ts_items', 6 );
+    $woo_shop_list_style       = Urus_Helper::get_option( 'woo_shop_list_style', 'grid' );
+    $woo_product_item_layout   = Urus_Helper::get_option( 'woo_product_item_layout', 'classic' );
+    $woo_shop_layout           = Urus_Helper::get_option( 'woo_shop_layout', 'left' );
+    $mobile_product_item_style = Urus_Helper::get_option( 'mobile_product_item_style', 'default' );
+    $mobile_enable             = Urus_Helper::is_mobile_template();
+}
 if ($mobile_enable) {
     $woo_shop_list_style = 'grid';
 }
@@ -78,9 +84,9 @@ $product_item_class = apply_filters('urus_product_item_class',$product_item_clas
     <?php if( $woo_shop_list_style == "grid" || $woo_shop_list_style == "masonry"):?>
         <?php if ($mobile_enable) {
             if ($mobile_product_item_style != 'default') {
-                wc_get_template_part('product-styles/content-product-mobile', $mobile_product_item_style );    
+                wc_get_template_part('product-styles/content-product-mobile', $mobile_product_item_style );
             }else{
-                wc_get_template_part('product-styles/content-product', $woo_product_item_layout );    
+                wc_get_template_part('product-styles/content-product', $woo_product_item_layout );
             }
         }else{
             wc_get_template_part('product-styles/content-product', $woo_product_item_layout );

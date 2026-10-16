@@ -3,6 +3,7 @@
 namespace ADP\BaseVersion\Includes\Core\Rule\CartCondition;
 
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
+use ADP\BaseVersion\Includes\Core\Rule\Internationalization\IObjectInternationalization;
 
 defined('ABSPATH') or exit;
 
@@ -44,11 +45,7 @@ interface RuleCondition
      */
     public function multiplyAmounts($rate);
 
-    /**
-     * @param string $languageCode
-     *
-     */
-    public function translate($languageCode);
+    public function translate(IObjectInternationalization $oi);
 
     /**
      * @return string
@@ -69,6 +66,11 @@ interface RuleCondition
      * @return string
      */
     public static function getGroup();
+
+    /**
+     * @return int
+     */
+    public static function getIndex();
 
     /**
      * @return bool

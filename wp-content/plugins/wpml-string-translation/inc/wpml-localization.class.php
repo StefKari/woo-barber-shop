@@ -1,16 +1,8 @@
 <?php
 
 class WPML_Localization {
-	/**
-	 * @var \wpdb
-	 */
 	private $wpdb;
 
-	/**
-	 * WPML_Localization constructor.
-	 *
-	 * @param wpdb $wpdb
-	 */
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb        = $wpdb;
 	}
@@ -23,6 +15,7 @@ class WPML_Localization {
 	}
 
 	public function get_domain_stats( $localization_domains, $default, $no_wordpress = false, $count_in_progress_as_completed = false ) {
+		$wpdb    = $this->wpdb;
 		$results = array();
 		if ( $localization_domains ) {
 			$domains = array();
@@ -31,14 +24,17 @@ class WPML_Localization {
 				if ( ! ( $no_wordpress && 'WordPress' === $domain ) ) {
 					$domains[] = $domain ? $domain : $default;
 				}
-			}
-			if ( ! empty( $domains ) ) {
-				$sql     = "SELECT context, status, COUNT(id) AS c 
-						FROM {$this->wpdb->prefix}icl_strings 
-						WHERE context IN (" . wpml_prepare_in( $domains ) . ")
-						GROUP BY context, status";
-
-				$results = $this->wpdb->get_results( $sql );
+				}
+				if ( ! empty( $domains ) ) {
+					$results = $wpdb->get_results(
+						$wpdb->prepare(
+							"SELECT context, status, COUNT(id) AS c
+							FROM {$wpdb->prefix}icl_strings
+							WHERE context IN (" . implode( ', ', array_fill( 0, count( $domains ), '%s' ) ) . ')
+							GROUP BY context, status',
+							$domains
+						)
+					);
 			}
 		}
 
@@ -87,10 +83,12 @@ class WPML_Localization {
 	}
 
 	public function get_wrong_plugin_localization_stats() {
+		$wpdb = $this->wpdb;
+
 		$results = $this->wpdb->get_results(
 			"
 	        SELECT context, status, COUNT(id) AS c
-	        FROM {$this->wpdb->prefix}icl_strings
+	        FROM {$wpdb->prefix}icl_strings
 	        WHERE context LIKE ('plugin %')
 	        GROUP BY context, status
 	    "
@@ -100,10 +98,12 @@ class WPML_Localization {
 	}
 
 	public function get_wrong_theme_localization_stats() {
+		$wpdb = $this->wpdb;
+
 		$results = $this->wpdb->get_results(
 			"
 	        SELECT context, status, COUNT(id) AS c
-	        FROM {$this->wpdb->prefix}icl_strings
+	        FROM {$wpdb->prefix}icl_strings
 	        WHERE context LIKE ('theme %')
 	        GROUP BY context, status
 	    "
@@ -121,19 +121,20 @@ class WPML_Localization {
 	}
 
 	public function does_theme_require_rescan() {
+		$wpdb = $this->wpdb;
 
 		$theme_path        = TEMPLATEPATH;
 		$old_theme_context = 'theme ' . basename( $theme_path );
 
-		/** @var string $sql */
-		$sql = $this->wpdb->prepare(
-			"
-	        SELECT COUNT(id) AS c
-	        FROM {$this->wpdb->prefix}icl_strings
-	        WHERE context = %s",
-			$old_theme_context
+		$result = $wpdb->get_var(
+			$wpdb->prepare(
+				"
+		        SELECT COUNT(id) AS c
+		        FROM {$wpdb->prefix}icl_strings
+		        WHERE context = %s",
+				$old_theme_context
+			)
 		);
-		$result = $this->wpdb->get_var( $sql );
 
 		return $result ? true : false;
 	}
@@ -179,20 +180,10 @@ class WPML_Localization {
 		return $stats;
 	}
 
-	/**
-	 * @return string
-	 */
 	private function getBaseStUrl() {
-		return admin_url( 'admin.php?page=' . WPML_ST_FOLDER . '/menu/string-translation.php' );
+		return admin_url( 'admin.php?page=tm/menu/main.php&tab=strings' );
 	}
 
-	/**
-	 * @param array  $localization_stats
-	 * @param string $localization_file
-	 * @param array  $localization_data
-	 *
-	 * @return array
-	 */
 	public function getDomainsFromLocalizationStats( $localization_stats, $localization_file, $localization_data ) {
 		$domains = array_key_exists( $localization_file, $localization_stats ) ? $localization_stats[ $localization_file ] : false;
 
@@ -202,17 +193,12 @@ class WPML_Localization {
 			} )->toArray();
 		}
 
+		/* translators: Shown on the Theme and plugins localization page in place of a text domain when the theme or plugin declares none. */
 		$textDomain = \WPML\FP\Obj::propOr( __( 'No TextDomain', 'wpml-string-translation' ), 'TextDomain', $localization_data );
 
 		return [ $textDomain => $this->get_component( $textDomain, [ 'complete' => 0, 'incomplete' => 0 ] ) ];
 	}
 
-	/**
-	 * @param string $domain
-	 * @param array  $stats
-	 *
-	 * @return array
-	 */
 	private function get_component( $domain, array $stats ) {
 		return array(
 			'translated'              => $stats['complete'],
@@ -232,7 +218,9 @@ class WPML_Localization {
 				$this->getBaseStUrl()
 			),
 			'domain_link'             => add_query_arg( array( 'context' => $domain ), $this->getBaseStUrl() ),
+			/* translators: Tooltip on the link in the row of a theme or plugin on the Theme and plugins localization page. %s: the name of the text domain. */
 			'title_needs_translation' => sprintf( __( 'Translate strings in %s', 'wpml-string-translation' ), $domain ),
+			/* translators: Tooltip on the link in the row of a theme or plugin on the Theme and plugins localization page. %s: the name of the text domain. */
 			'title_all_strings'       => sprintf( __( 'All strings in %s', 'wpml-string-translation' ), $domain ),
 		);
 	}

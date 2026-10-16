@@ -1,0 +1,1272 @@
+# Translation of Plugins - Meta Box &#8211; A Framework for Dynamic Websites - Stable (latest release) in Serbian
+# This file is distributed under the same license as the Plugins - Meta Box &#8211; A Framework for Dynamic Websites - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-10-08 09:49:04+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: sr_RS\n"
+"Project-Id-Version: Plugins - Meta Box &#8211; A Framework for Dynamic Websites - Stable (latest release)\n"
+
+#: src/Integrations/BlockBindings/Source.php:216
+msgid "Published Date"
+msgstr "Датум објављивања"
+
+#: src/Integrations/BlockBindings/Source.php:215
+msgid "Content"
+msgstr "Садржај"
+
+#: src/Integrations/BlockBindings/Source.php:217
+msgid "Modified Date"
+msgstr "Датум измене"
+
+#: src/Integrations/BlockBindings/Source.php:218
+msgid "Author"
+msgstr "Аутор"
+
+#: src/Integrations/BlockBindings/Source.php:220
+msgid "Display Name"
+msgstr "Име за приказ"
+
+#: src/Integrations/BlockBindings/Source.php:212
+msgid "Target"
+msgstr "Одредиште"
+
+#: src/Integrations/BlockBindings/Source.php:214
+msgid "Excerpt"
+msgstr "Одломак"
+
+#: src/Integrations/BlockBindings/Source.php:211
+msgid "Image"
+msgstr "Слика"
+
+#: src/Integrations/BlockBindings/Source.php:210
+msgid "Longitude"
+msgstr "Географска дужина"
+
+#: src/Integrations/BlockBindings/Source.php:208
+msgid "Source URL"
+msgstr "Изворни URL"
+
+#: src/Integrations/BlockBindings/Source.php:209
+msgid "Latitude"
+msgstr "Географска ширина"
+
+#: src/Integrations/BlockBindings/Source.php:206
+msgid "Description"
+msgstr "Опис"
+
+#: src/Integrations/BlockBindings/Source.php:207
+msgid "Name"
+msgstr "Име"
+
+#: src/Integrations/BlockBindings/Source.php:203
+msgid "Alt Text"
+msgstr "Резервни текст"
+
+#: src/Integrations/BlockBindings/Source.php:204
+#: src/Integrations/BlockBindings/Source.php:213
+msgid "Title"
+msgstr "Наслов"
+
+#: src/Integrations/BlockBindings/Source.php:205
+msgid "Caption"
+msgstr "Натпис"
+
+#: src/Integrations/BlockBindings/Source.php:202
+#: src/Integrations/BlockBindings/Source.php:221
+msgid "URL"
+msgstr "URL"
+
+#. translators: 1: field name, 2: value property (URL, Caption, …).
+#: src/Integrations/BlockBindings/Source.php:188
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+#: src/Integrations/BlockBindings/Post.php:15
+msgid "Meta Box Post Field"
+msgstr "Meta Box поље чланка"
+
+#: src/Integrations/BlockBindings/Source.php:219
+msgid "Slug"
+msgstr "Slug"
+
+#: inc/fields/file.php:47
+msgid "Error: You are not allowed to delete this file"
+msgstr "Грешка: није вам дозвољено да избришете ову датотеку"
+
+#: src/Abilities.php:717
+msgid "String (HTML)"
+msgstr "Ниска (HTML)"
+
+#: src/Abilities.php:707
+msgid "Integer (user ID)"
+msgstr "Цео број (ИБ корисника)"
+
+#: src/Abilities.php:697
+msgid "String (time format) or integer (Unix timestamp when timestamp=true)"
+msgstr "Ниска (облик времена) или цео број (Unix временска ознака када је timestamp=true)"
+
+#: src/Abilities.php:692
+msgid "String (multi-line)"
+msgstr "Ниска (више редова)"
+
+#: src/Abilities.php:684
+msgid "Associative array of field values"
+msgstr "Асоцијативни низ вредности поља"
+
+#: src/Abilities.php:674
+msgid "Comma-separated string of term IDs"
+msgstr "Ниска ИБ-ова појмова раздвојених зарезима"
+
+#: src/Abilities.php:669
+msgid "Integer (term ID)"
+msgstr "Цео број (ИБ појма)"
+
+#: src/Abilities.php:654
+msgid "Integer (attachment ID)"
+msgstr "Цео број (ИБ прилога)"
+
+#: src/Abilities.php:649
+msgid "String (sidebar ID)"
+msgstr "Ниска (ИБ бочне траке)"
+
+#: src/Abilities.php:629 src/Abilities.php:659
+msgid "Integer"
+msgstr "Цео број"
+
+#: src/Abilities.php:619
+msgid "Integer (post ID)"
+msgstr "Цео број (ИБ чланка)"
+
+#: src/Abilities.php:609 src/Abilities.php:702
+msgid "String (URL)"
+msgstr "Ниска (URL)"
+
+#: src/Abilities.php:604
+msgid "Integer or float"
+msgstr "Цео или децимални број"
+
+#: src/Abilities.php:594
+msgid "String \"latitude,longitude\" or \"latitude,longitude,zoom\""
+msgstr "Ниска \"latitude,longitude\" или \"latitude,longitude,zoom\""
+
+#: src/Abilities.php:585
+msgid "Array with url, title, target keys"
+msgstr "Низ са кључевима url, title, target"
+
+#: src/Abilities.php:571
+msgid "Array of {key, value} objects"
+msgstr "Низ објеката {key, value}"
+
+#: src/Abilities.php:566
+msgid "Array of strings"
+msgstr "Низ ниски"
+
+#: src/Abilities.php:541
+msgid "String (icon class)"
+msgstr "Ниска (класа иконице)"
+
+#: src/Abilities.php:533
+msgid "Associative array of sub-field values"
+msgstr "Асоцијативни низ вредности подпоља"
+
+#: src/Abilities.php:523
+msgid "String (file URL)"
+msgstr "Ниска (URL датотеке)"
+
+#: src/Abilities.php:518 src/Abilities.php:528 src/Abilities.php:546
+#: src/Abilities.php:551 src/Abilities.php:561 src/Abilities.php:599
+#: src/Abilities.php:712
+msgid "Array of attachment IDs"
+msgstr "Низ ИБ-ова прилога"
+
+#: src/Abilities.php:505
+msgid "String (email)"
+msgstr "Ниска (е-адреса)"
+
+#: src/Abilities.php:510
+msgid "Array with sub-field keys"
+msgstr "Низ са кључевима подпоља"
+
+#: src/Abilities.php:500
+msgid "String (datetime format) or integer (Unix timestamp when timestamp=true)"
+msgstr "Ниска (облик датума и времена) или цео број (Unix временска ознака када је timestamp=true)"
+
+#: src/Abilities.php:490
+msgid "String (hex color)"
+msgstr "Ниска (хексадецимална боја)"
+
+#: src/Abilities.php:495
+msgid "String (date format) or integer (Unix timestamp when timestamp=true)"
+msgstr "Ниска (облик датума) или цео број (Unix временска ознака када је timestamp=true)"
+
+#: src/Abilities.php:485 src/Abilities.php:644
+msgid "Array of strings (selected option values)"
+msgstr "Низ ниски (вредности изабраних ставки)"
+
+#: src/Abilities.php:475 src/Abilities.php:556 src/Abilities.php:624
+#: src/Abilities.php:634 src/Abilities.php:639
+msgid "String (selected option value)"
+msgstr "Ниска (вредност изабране ставке)"
+
+#: src/Abilities.php:480 src/Abilities.php:664
+msgid "String \"1\" or \"0\""
+msgstr "Ниска \"1\" или \"0\""
+
+#: src/Abilities.php:464
+msgid "Array with color, image, repeat, position, size keys"
+msgstr "Низ са кључевима color, image, repeat, position, size"
+
+#: src/Abilities.php:459
+msgid "String (term slug or ID)"
+msgstr "Ниска (кратко име или ИБ појма)"
+
+#: src/Abilities.php:379 src/Abilities.php:403
+msgid "Unknown field type."
+msgstr "Непозната врста поља."
+
+#: src/Abilities.php:361
+msgid "Field not found."
+msgstr "Поље није пронађено."
+
+#: src/Abilities.php:245
+msgid "The value to store. Required for update; ignored for get and delete. Use meta-box/get-field-value-format ability to get expected format for a specific field type."
+msgstr "Вредност за чување. Обавезна за ажурирање; занемарује се за дохватање и брисање. Користите способност meta-box/get-field-value-format да бисте добили очекивани облик за одређену врсту поља."
+
+#: src/Abilities.php:242
+msgid "The object type the field belongs to."
+msgstr "Врста објекта којој поље припада."
+
+#: src/Abilities.php:236
+msgid "The object ID (post, term, user ID, or settings page slug)."
+msgstr "ИБ објекта (ИБ чланка, појма, корисника или кратко име странице подешавања)."
+
+#: src/Abilities.php:199
+msgid "Whether the value was deleted."
+msgstr "Да ли је вредност избрисана."
+
+#: src/Abilities.php:232
+msgid "The custom field meta key."
+msgstr "Мета кључ произвољног поља."
+
+#: src/Abilities.php:191
+msgid "Delete a custom field value"
+msgstr "Избриши вредност произвољног поља"
+
+#: src/Abilities.php:192
+msgid "Remove the stored value of a Meta Box custom field for a given object."
+msgstr "Уклоните сачувану вредност произвољног поља Meta Box за дати објекат."
+
+#: src/Abilities.php:166
+msgid "Whether the value was saved."
+msgstr "Да ли је вредност сачувана."
+
+#: src/Abilities.php:159
+msgid "Set the value of a Meta Box custom field. Creates the field value if it does not exist yet."
+msgstr "Поставите вредност произвољног поља Meta Box. Прави вредност поља ако још не постоји."
+
+#: src/Abilities.php:158
+msgid "Update (or create) a custom field value"
+msgstr "Ажурирај (или направи) вредност произвољног поља"
+
+#: src/Abilities.php:134
+msgid "The stored field value."
+msgstr "Сачувана вредност поља."
+
+#: src/Abilities.php:128
+msgid "Retrieve the stored value of a Meta Box custom field for a given object."
+msgstr "Дохватите сачувану вредност произвољног поља Meta Box за дати објекат."
+
+#: src/Abilities.php:87
+msgid "Whether field has clone=true (stores array of values)."
+msgstr "Да ли поље има clone=true (чува низ вредности)."
+
+#: src/Abilities.php:92
+msgid "Overall value shape. scalar = single value; array = array of values (multiple or clone); array_of_arrays = nested array (multiple + clone)."
+msgstr "Укупан облик вредности. scalar = једна вредност; array = низ вредности (multiple или clone); array_of_arrays = угњеждени низ (multiple + clone)."
+
+#: src/Abilities.php:127
+msgid "Get a custom field value"
+msgstr "Дохвати вредност произвољног поља"
+
+#: src/Abilities.php:79
+msgid "Whether value is an array."
+msgstr "Да ли је вредност низ."
+
+#: src/Abilities.php:83
+msgid "Whether field has multiple=true (allows selecting multiple values)."
+msgstr "Да ли поље има multiple=true (омогућава избор више вредности)."
+
+#: src/Abilities.php:75
+msgid "Example of a valid value."
+msgstr "Пример исправне вредности."
+
+#: src/Abilities.php:68
+msgid "The field type."
+msgstr "Врста поља."
+
+#: src/Abilities.php:72
+msgid "Human-readable description of expected value format."
+msgstr "Човеку читљив опис очекиваног облика вредности."
+
+#: src/Abilities.php:58
+msgid "Object type. Used with field_id."
+msgstr "Врста објекта. Користи се са field_id."
+
+#: src/Abilities.php:52
+msgid "Object ID (post, term, user ID, or option name). Required when field_id is given."
+msgstr "ИБ објекта (ИБ чланка, појма, корисника или назив могућности). Обавезно када је задат field_id."
+
+#: src/Abilities.php:48
+msgid "Field meta key. When given, resolves field settings (multiple/clone) for precise format."
+msgstr "Мета кључ поља. Када је задат, одређује подешавања поља (multiple/clone) за прецизан облик."
+
+#: src/Abilities.php:44
+msgid "Meta Box field type slug. Alternative to field_id."
+msgstr "Кратко име врсте поља Meta Box. Алтернатива за field_id."
+
+#: src/Abilities.php:37
+msgid "Get expected value format for a field"
+msgstr "Дохвати очекивани облик вредности за поље"
+
+#: src/Abilities.php:38
+msgid "Return expected value format and example for a Meta Box field. Provide field_type for type-level info, or field_id + object_id for field-level info that accounts for multiple/clone settings."
+msgstr "Враћа очекивани облик вредности и пример за поље Meta Box. Наведите field_type за податке на нивоу врсте или field_id + object_id за податке на нивоу поља који узимају у обзир подешавања multiple/clone."
+
+#: src/Abilities.php:28
+msgid "Abilities for Meta Box data (post types, taxonomies, fields, etc.)."
+msgstr "Способности за Meta Box податке (врсте чланака, таксономије, поља итд.)."
+
+#: src/Abilities.php:614 src/Abilities.php:679
+msgid "String"
+msgstr "Стринг"
+
+#: inc/fields/link.php:16 inc/fields/link.php:57
+msgid "Add link"
+msgstr "Додај везу"
+
+#: inc/fields/link.php:15 inc/fields/link.php:49
+msgid "(new tab)"
+msgstr "(нови језичак)"
+
+#: inc/fields/link.php:13 inc/fields/link.php:52
+msgid "Edit"
+msgstr "Уреди"
+
+#: inc/fields/file.php:67
+msgid "Error: The file is outside the allowed upload directory"
+msgstr "Грешка: датотека је ван дозвољене фасцикле за отпремање"
+
+#. Translators: %2$s - URL to the pricing page.
+#: src/Updater/Notification.php:67
+msgid "Your Meta Box license has been <b>refunded</b>. To continue using Meta Box premium features and receive updates, please <a href=\"%2$s\" target=\"_blank\">purchase a new license</a>. Otherwise, premium features will be disabled."
+msgstr "Ваша Meta Box лиценца је <b>рефундирана</b>. Да бисте наставили да користите премијум могућности Meta Box-а и добијате ажурирања, <a href=\"%2$s\" target=\"_blank\">купите нову лиценцу</a>. У супротном, премијум могућности ће бити искључене."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:59
+msgid "You have not entered a Meta Box license key. Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">purchase a license</a> to enable premium features."
+msgstr "Нисте унели кључ лиценце за Meta Box. <a href=\"%1$s\">Унесите кључ лиценце</a> или <a href=\"%2$s\" target=\"_blank\">купите лиценцу</a> да бисте укључили премијум могућности."
+
+#: src/Updater/Settings.php:80
+msgid "Your license has been <b style=\"color: #d63638\">refunded</b>."
+msgstr "Ваша лиценца је <b style=\"color: #d63638\">рефундирана</b>."
+
+#. Translators: %2$s - URL to the pricing page.
+#: src/Updater/Notification.php:99
+msgid "Your license has been <b>refunded</b>. Please <a href=\"%2$s\" target=\"_blank\">purchase a new license</a> to enable premium features."
+msgstr "Ваша лиценца је <b>рефундирана</b>. <a href=\"%2$s\" target=\"_blank\">Купите нову лиценцу</a> да бисте укључили премијум могућности."
+
+#: src/Dashboard/content.php:590
+msgid "on annual plans"
+msgstr "на годишњим пакетима"
+
+#: src/Dashboard/content.php:588
+msgid "Get 25% OFF now"
+msgstr "Остварите 25% попуста сада"
+
+#: src/Dashboard/content.php:586
+msgid "Get 40% OFF now"
+msgstr "Остварите 40% попуста сада"
+
+#: src/Dashboard/content.php:583
+msgid "Upgrade your package and optimize the workflow at the best price!"
+msgstr "Надоградите пакет и оптимизујте ток рада по најбољој цени!"
+
+#: src/Dashboard/content.php:580
+msgid "Hot"
+msgstr "Популарно"
+
+#: inc/core.php:19 src/Dashboard/content.php:579
+msgid "Black Friday Sale"
+msgstr "Распродаја за Црни петак"
+
+#: src/Dashboard/Dashboard.php:264
+msgid "Error installing plugin. Please try again."
+msgstr "Грешка при постављању додатка. Покушајте поново."
+
+#: src/Dashboard/Dashboard.php:185
+msgid "Activating..."
+msgstr "Укључивање у току..."
+
+#: src/Dashboard/Dashboard.php:184
+msgid "Activate"
+msgstr "Укључи"
+
+#: src/Dashboard/Dashboard.php:177 src/Dashboard/Dashboard.php:186
+#: src/Dashboard/Dashboard.php:192
+msgid "Active"
+msgstr "Активно"
+
+#: src/Dashboard/Dashboard.php:176
+msgid "Installing..."
+msgstr "Постављање..."
+
+#: src/Dashboard/Dashboard.php:175
+msgid "Install"
+msgstr "Постави"
+
+#: src/Dashboard/content.php:739
+msgid "Getting news..."
+msgstr "Добављање вести..."
+
+#: src/Dashboard/content.php:738 src/Dashboard/Dashboard.php:291
+msgid "No items available"
+msgstr "Нема доступних ставки"
+
+#: src/Dashboard/content.php:727
+msgid "Submit a review"
+msgstr "Пошаљи рецензију"
+
+#: src/Dashboard/content.php:725
+msgid "Are you are enjoying Meta Box? We would love to hear your feedback."
+msgstr "Да ли уживате у Meta Box-у? Волели бисмо да чујемо ваше мишљење."
+
+#: src/Dashboard/content.php:723
+msgid "Leave us a review"
+msgstr "Оставите нам рецензију"
+
+#: src/Dashboard/content.php:716
+msgid "Join our Facebook Group"
+msgstr "Придружите се нашој Фејсбук групи"
+
+#: src/Dashboard/content.php:714
+msgid "Share opinions, ask questions and help each other on our Meta Box community!"
+msgstr "Делите мишљења, постављајте питања и помажите једни другима у нашој Meta Box заједници!"
+
+#: src/Dashboard/content.php:712
+msgid "Join the community"
+msgstr "Придружите се заједници"
+
+#: src/Dashboard/content.php:689
+msgid "WordPress Optimizations & Tweaks"
+msgstr "Оптимизације и дотеривања Вордпреса"
+
+#: src/Dashboard/content.php:683
+msgid "Fast & Automated WordPress SEO Plugin"
+msgstr "Брз и аутоматизован SEO додатак за Вордпрес"
+
+#: src/Dashboard/content.php:675
+msgid "Recommended plugins"
+msgstr "Препоручени додаци"
+
+#: src/Dashboard/content.php:665
+msgid "If you have any questions, need a hand with a technical issue, or just want to say hi, we've got you covered. Get in touch with us and we'll be happy to assist you!"
+msgstr "Ако имате питања, потребна вам је помоћ око техничког проблема или само желите да се јавите, ту смо за вас. Ступите у контакт са нама и радо ћемо вам помоћи!"
+
+#: src/Dashboard/content.php:657
+msgid "Upgrade Now"
+msgstr "Надогради сада"
+
+#: src/Dashboard/content.php:654
+msgid "Priority support"
+msgstr "Приоритетна подршка"
+
+#: src/Dashboard/content.php:653
+msgid "Submit & manage posts on the frontend"
+msgstr "Шаљите и управљајте чланцима на јавном делу"
+
+#: src/Dashboard/content.php:652
+msgid "Create login, register & edit profile pages"
+msgstr "Направите странице за пријаву, регистрацију и уређивање профила"
+
+#: src/Dashboard/content.php:651
+msgid "Create custom blocks with low code"
+msgstr "Направите произвољне блокове уз мало кода"
+
+#: src/Dashboard/content.php:650
+msgid "Custom tables to boost performance"
+msgstr "Произвољне табеле за бољи учинак"
+
+#: src/Dashboard/content.php:649
+msgid "More location rules & conditional logic"
+msgstr "Више правила локације и условна логика"
+
+#: src/Dashboard/content.php:648
+msgid "Organize fields into groups (repeater)"
+msgstr "Организујте поља у групе (понављач)"
+
+#: src/Dashboard/content.php:560
+msgid "Get access to the all-in-one version of Meta Box with full of top-notch features for building robust and dynamic websites."
+msgstr "Добијте приступ свеобухватном издању Meta Box-а са мноштвом врхунских могућности за изградњу снажних и динамичних веб сајтова."
+
+#: src/Dashboard/content.php:645
+msgid "Wanna advanced features?"
+msgstr "Желите напредне могућности?"
+
+#. Translators: %s - Meta Box AIO.
+#: src/Dashboard/content.php:557
+msgid "Do more with %s"
+msgstr "Урадите више уз %s"
+
+#: src/Dashboard/content.php:529
+msgid "Licensing management system, including sub-licensing"
+msgstr "Систем за управљање лиценцама, укључујући подлиценце"
+
+#: src/Dashboard/content.php:519
+msgid "UI features: columns, tooltips, tabs"
+msgstr "Могућности сучеља: колоне, описи алата, језичци"
+
+#: src/Dashboard/content.php:514
+msgid "Display fields in admin columns"
+msgstr "Прикажите поља у колонама администрације"
+
+#: src/Dashboard/content.php:504
+msgid "Save post/term meta to custom tables"
+msgstr "Чувајте мета податке чланака/појмова у произвољним табелама"
+
+#: src/Dashboard/content.php:509
+msgid "Create custom Gutenberg blocks"
+msgstr "Направите произвољне Гутенберг блокове"
+
+#: src/Dashboard/content.php:499
+msgid "Create templates and displaying fields with views"
+msgstr "Направите шаблоне и прикажите поља помоћу приказа"
+
+#: src/Dashboard/content.php:494
+msgid "Frontend submission forms and dashboard"
+msgstr "Обрасци за слање са јавног дела и контролна табла"
+
+#: src/Dashboard/content.php:489
+msgid "Toggle fields or field groups with conditional logic"
+msgstr "Укључујте/искључујте поља или групе поља условном логиком"
+
+#: src/Dashboard/content.php:474
+msgid "Create custom content models and save their data to custom tables"
+msgstr "Направите произвољне моделе садржаја и чувајте њихове податке у произвољним табелама"
+
+#: src/Dashboard/content.php:484
+msgid "Advanced location rules for field groups"
+msgstr "Напредна правила локације за групе поља"
+
+#: src/Dashboard/content.php:464
+msgid "Create Customizer sections & panels"
+msgstr "Направите одељке и панеле прилагођавача"
+
+#: src/Dashboard/content.php:469
+msgid "Create user profile"
+msgstr "Направите кориснички профил"
+
+#: src/Dashboard/content.php:454
+msgid "Create custom fields for users"
+msgstr "Направите произвољна поља за кориснике"
+
+#: src/Dashboard/content.php:449
+msgid "Create custom fields for taxonomies"
+msgstr "Направите произвољна поља за таксономије"
+
+#: src/Dashboard/content.php:434
+msgid "Limit text length"
+msgstr "Ограничите дужину текста"
+
+#: src/Dashboard/content.php:439
+msgid "Add custom fields to comments in WordPress"
+msgstr "Додајте произвољна поља коментарима у Вордпресу"
+
+#: src/Dashboard/content.php:429
+msgid "Get/set meta values with REST API"
+msgstr "Дохватајте/постављајте мета вредности помоћу REST API-ја"
+
+#: src/Dashboard/content.php:444
+msgid "Auto update"
+msgstr "Аутоматско ажурирање"
+
+#: src/Dashboard/content.php:424
+msgid "Relationships"
+msgstr "Односи"
+
+#: src/Dashboard/content.php:419
+msgid "Integrations with Elementor, Divi, FacetWP, Yoast SEO,..."
+msgstr "Уклапање са Elementor, Divi, FacetWP, Yoast SEO,..."
+
+#: src/Dashboard/content.php:404
+msgid "Create custom post types & taxonomies"
+msgstr "Правите произвољне врсте чланака и таксономије"
+
+#: src/Dashboard/content.php:409
+msgid "Create custom fields with UI"
+msgstr "Правите произвољна поља помоћу сучеља"
+
+#: src/Dashboard/content.php:399
+msgid "The Meta Box framework"
+msgstr "Meta Box оквир"
+
+#: src/Dashboard/content.php:414
+msgid "Migration from ACF, Pods, Toolset"
+msgstr "Миграција са ACF, Pods, Toolset"
+
+#: src/Dashboard/content.php:396
+msgid "Paid"
+msgstr "Плаћено"
+
+#: src/Dashboard/content.php:395
+msgid "Free"
+msgstr "Бесплатно"
+
+#: src/Dashboard/content.php:387
+msgid "Feature"
+msgstr "Могућност"
+
+#: src/Dashboard/content.php:381 src/Dashboard/content.php:562
+msgid "Upgrade now"
+msgstr "Надогради сада"
+
+#: src/Dashboard/content.php:378
+msgid "An all-in-one plugin that provides all free & pro Meta Box extensions for building powerful and dynamic WordPress websites!"
+msgstr "Свеобухватни додатак који пружа сва бесплатна и Pro проширења Meta Box-а за изградњу моћних и динамичних Вордпрес веб сајтова!"
+
+#. Translators: %s - Meta Box AIO.
+#: src/Dashboard/content.php:375
+msgid "Get access to %s"
+msgstr "Добијте приступ за %s"
+
+#: src/Dashboard/content.php:363
+msgid "View all tutorials"
+msgstr "Погледај сва упутства"
+
+#: src/Dashboard/content.php:356
+msgid "How to create listings and use Elementor to show and filter them."
+msgstr "Како направити огласе и користити Elementor за њихов приказ и филтрирање."
+
+#: src/Dashboard/content.php:351 src/Dashboard/content.php:354
+msgid "Creating a listing site with Meta Box and Elementor"
+msgstr "Прављење сајта са огласима помоћу Meta Box-а и Elementor-а"
+
+#: src/Dashboard/content.php:334
+msgid "How to export custom fields settings and data and import them into another site."
+msgstr "Како извести подешавања и податке произвољних поља и увести их на други сајт."
+
+#: src/Dashboard/content.php:312
+msgid "How to create a post type with custom fields and show them with Bricks."
+msgstr "Како направити врсту чланка са произвољним пољима и приказати их помоћу Bricks-а."
+
+#: src/Dashboard/content.php:329 src/Dashboard/content.php:332
+msgid "Export and import custom fields"
+msgstr "Извоз и увоз произвољних поља"
+
+#: src/Dashboard/content.php:307 src/Dashboard/content.php:310
+msgid "Creating a recipe with Meta Box and Bricks"
+msgstr "Прављење рецепта помоћу Meta Box-а и Bricks-а"
+
+#: src/Dashboard/content.php:285 src/Dashboard/content.php:288
+msgid "Filtering posts by custom fields and taxonomies"
+msgstr "Филтрирање чланака по произвољним пољима и таксономијама"
+
+#: src/Dashboard/content.php:290
+msgid "How to query, filter and show posts by taxonomies and by custom fields."
+msgstr "Како упитати, филтрирати и приказати чланке по таксономијама и произвољним пољима."
+
+#: src/Dashboard/content.php:268
+msgid "How to create featured images for categories and show them on the frontend."
+msgstr "Како направити истакнуте слике за категорије и приказати их на јавном делу."
+
+#: src/Dashboard/content.php:263 src/Dashboard/content.php:266
+msgid "Creating category thumbnails"
+msgstr "Прављење сличица категорија"
+
+#: src/Dashboard/content.php:246
+msgid "Understanding custom fields and how to create them with Meta Box."
+msgstr "Разумевање произвољних поља и како их направити помоћу Meta Box-а."
+
+#: src/Dashboard/content.php:241 src/Dashboard/content.php:244
+msgid "Creating and configure custom fields"
+msgstr "Прављење и подешавање произвољних поља"
+
+#: src/Dashboard/content.php:224
+msgid "If you want to change a field ID after entering data, here is the guide."
+msgstr "Ако желите да промените ИБ поља након уноса података, ево упутства."
+
+#: src/Dashboard/content.php:219 src/Dashboard/content.php:222
+msgid "Changing the ID of a field"
+msgstr "Промена ИБ-а поља"
+
+#: src/Dashboard/content.php:202
+msgid "Step-by-step guide to create custom post types and custom taxonomies."
+msgstr "Корак по корак упутство за прављење произвољних врста чланака и произвољних таксономија."
+
+#: src/Dashboard/content.php:197 src/Dashboard/content.php:200
+msgid "Creating post types and taxonomies"
+msgstr "Прављење врста чланака и таксономија"
+
+#: src/Dashboard/content.php:194 src/Dashboard/content.php:216
+#: src/Dashboard/content.php:238 src/Dashboard/content.php:260
+#: src/Dashboard/content.php:282 src/Dashboard/content.php:304
+#: src/Dashboard/content.php:326 src/Dashboard/content.php:348
+msgid "Click to view the video version"
+msgstr "Притисните да бисте погледали видео издање"
+
+#: src/Dashboard/content.php:179
+msgid "Cool"
+msgstr "Одлично"
+
+#: src/Dashboard/content.php:162
+msgid "For global settings of your website"
+msgstr "За општа подешавања вашег веб сајта"
+
+#: src/Dashboard/content.php:178 src/Dashboard/Dashboard.php:55
+msgid "Upgrade"
+msgstr "Надогради"
+
+#: src/Dashboard/content.php:151
+msgid "To output fields on the frontend"
+msgstr "За приказ поља на јавном делу"
+
+#: src/Dashboard/content.php:161
+msgid "Create a settings page"
+msgstr "Направи страницу подешавања"
+
+#: src/Dashboard/content.php:150
+msgid "Create a view"
+msgstr "Направи приказ"
+
+#: src/Dashboard/content.php:130
+msgid "To add custom fields to your posts"
+msgstr "За додавање произвољних поља вашим чланцима"
+
+#: src/Dashboard/content.php:129
+msgid "Create a field group"
+msgstr "Направи групу поља"
+
+#: src/Dashboard/content.php:138
+msgid "Create a relationship"
+msgstr "Направи однос"
+
+#: src/Dashboard/content.php:139
+msgid "To establish connections between posts"
+msgstr "За успостављање веза између чланака"
+
+#: src/Dashboard/content.php:120
+msgid "To group or categorize your posts"
+msgstr "За груписање или разврставање ваших чланака"
+
+#: src/Dashboard/content.php:119
+msgid "Create a taxonomy"
+msgstr "Направи таксономију"
+
+#: src/Dashboard/content.php:111
+msgid "For a new type of content on your website"
+msgstr "За нову врсту садржаја на вашем веб сајту"
+
+#: src/Dashboard/content.php:92
+msgid "Get started"
+msgstr "Започни"
+
+#: src/Dashboard/content.php:110
+msgid "Create a post type"
+msgstr "Направи врсту чланка"
+
+#. Translators: %s - Meta Box (plugin name).
+#: src/Dashboard/content.php:86
+msgid "%s is a powerful, lightweight WordPress plugin for creating custom post types, fields, relationships, and more. With a user-friendly interface and flexible options, it simplifies dynamic content creation without complex coding. Free and reliable, it's perfect for beginners and experts alike."
+msgstr "%s је моћан, лаган Вордпрес додатак за прављење произвољних врста чланака, поља, односа и још много тога. Уз једноставно сучеље и прилагодљиве могућности, поједностављује прављење динамичног садржаја без сложеног кодирања. Бесплатан и поуздан, савршен је и за почетнике и за стручњаке."
+
+#. Translators: %s - current user display name.
+#: src/Dashboard/content.php:74
+msgid "Hello %s,"
+msgstr "Здраво, %s,"
+
+#: src/Dashboard/content.php:56 src/Dashboard/content.php:742
+msgid "What's new?"
+msgstr "Шта је ново?"
+
+#: src/Dashboard/content.php:18
+msgid "Searching..."
+msgstr "Претраживање..."
+
+#: src/Dashboard/content.php:14
+msgid "Need some help? Search here..."
+msgstr "Потребна вам је помоћ? Претражите овде..."
+
+#: src/Dashboard/content.php:19
+msgid "No results found."
+msgstr "Нема резултата."
+
+#: src/Dashboard/content.php:394
+msgid "Pricing"
+msgstr "Ценовник"
+
+#: inc/fields/icon.php:227
+msgid "Select an icon"
+msgstr "Изаберите иконицу"
+
+#: src/Dashboard/content.php:173
+msgid "Tutorials"
+msgstr "Упутства"
+
+#: inc/fields/user.php:215
+msgid "Add New User"
+msgstr "Додај новог корисника"
+
+#: src/Updater/Settings.php:79
+msgid "Your license key is <b style=\"color: #00a32a\">active</b>."
+msgstr "Ваш кључ лиценце је <b style=\"color: #00a32a\">активан</b>."
+
+#: src/Updater/Settings.php:78
+msgid "Your license key is <b style=\"color: #d63638\">expired</b>."
+msgstr "Ваш кључ лиценце је <b style=\"color: #d63638\">истекао</b>."
+
+#: src/Updater/Settings.php:76 src/Updater/Settings.php:77
+msgid "Your license key is <b style=\"color: #d63638\">invalid</b>."
+msgstr "Ваш кључ лиценце је <b style=\"color: #d63638\">неисправан</b>."
+
+#: inc/fields/post.php:175 inc/fields/taxonomy.php:134 inc/fields/user.php:156
+msgid "(No title)"
+msgstr "(Без наслова)"
+
+#: inc/meta-box.php:313
+msgid "Meta Box Title"
+msgstr "Наслов Meta Box-а"
+
+#: inc/fields/background.php:123
+msgid "-- Size --"
+msgstr "-- Величина --"
+
+#: inc/fields/background.php:109
+msgid "-- Attachment --"
+msgstr "-- Прилог --"
+
+#: inc/fields/background.php:89
+msgid "-- Position --"
+msgstr "-- Положај --"
+
+#: inc/fields/background.php:73
+msgid "-- Repeat --"
+msgstr "-- Понављање --"
+
+#: src/Dashboard/content.php:479
+msgid "Organize custom fields into repeatable groups"
+msgstr "Организујте произвољна поља у групе које се понављају"
+
+#: inc/core.php:13
+msgid "Docs"
+msgstr "Документација"
+
+#: src/Updater/Notification.php:115
+msgid "Update License"
+msgstr "Ажурирај лиценцу"
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:97
+msgid "Your license key is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a>."
+msgstr "Ваш кључ лиценце је <b>истекао</b>. <a href=\"%3$s\" target=\"_blank\">Обновите лиценцу</a>."
+
+#: src/Updater/Notification.php:115
+msgid "Activate License"
+msgstr "Укључи лиценцу"
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:91
+msgid "Please <a href=\"%1$s\">enter your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "<a href=\"%1$s\">Унесите кључ лиценце</a> или <a href=\"%2$s\" target=\"_blank\">набавите нови овде</a>."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:93 src/Updater/Notification.php:95
+msgid "Your license key is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one here</a>."
+msgstr "Ваш кључ лиценце је <b>неисправан</b>. <a href=\"%1$s\">Ажурирајте кључ лиценце</a> или <a href=\"%2$s\" target=\"_blank\">набавите нови овде</a>."
+
+#. Translators: %3$s - URL to the My Account page.
+#: src/Updater/Notification.php:65
+msgid "Your license key for Meta Box is <b>expired</b>. Please <a href=\"%3$s\" target=\"_blank\">renew your license</a> to get automatic updates and premium support."
+msgstr "Ваш кључ лиценце за Meta Box је <b>истекао</b>. <a href=\"%3$s\" target=\"_blank\">Обновите лиценцу</a> да бисте добијали аутоматска ажурирања и премијум подршку."
+
+#. Translators: %1$s - URL to the settings page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Notification.php:61 src/Updater/Notification.php:63
+msgid "Your license key for Meta Box is <b>invalid</b>. Please <a href=\"%1$s\">update your license key</a> or <a href=\"%2$s\" target=\"_blank\">get a new one</a> to enable automatic updates."
+msgstr "Ваш кључ лиценце за Meta Box је <b>неисправан</b>. <a href=\"%1$s\">Ажурирајте кључ лиценце</a> или <a href=\"%2$s\" target=\"_blank\">набавите нови</a> да бисте укључили аутоматска ажурирања."
+
+#: src/Updater/Checker.php:124
+msgid "UPDATE UNAVAILABLE! Please enter a valid license key to enable automatic updates."
+msgstr "АЖУРИРАЊЕ НИЈЕ ДОСТУПНО! Унесите исправан кључ лиценце да бисте укључили аутоматска ажурирања."
+
+#. Translators: %s - URL to the My Account page.
+#: src/Updater/Settings.php:129
+msgid "License expired. Please renew on the <a href=\"%s\" target=\"_blank\">My Account</a> page on metabox.io website."
+msgstr "Лиценца је истекла. Обновите је на страници <a href=\"%s\" target=\"_blank\">Мој налог</a> на сајту metabox.io."
+
+#: src/Updater/Settings.php:126
+msgid "Your license is activated."
+msgstr "Ваша лиценца је укључена."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:135
+msgid "Invalid license. Please <a href=\"%1$s\" target=\"_blank\">check again</a> or <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "Неисправна лиценца. <a href=\"%1$s\" target=\"_blank\">Проверите поново</a> или <a href=\"%2$s\" target=\"_blank\">набавите нову лиценцу овде</a>."
+
+#: src/Updater/Settings.php:124
+msgid "Something wrong with the connection to metabox.io. Please try again later."
+msgstr "Нешто није у реду са везом ка metabox.io. Покушајте поново касније."
+
+#. Translators: %1$s - URL to the My Account page, %2$s - URL to the pricing
+#. page.
+#: src/Updater/Settings.php:60
+msgid "To get the license key, visit the <a href=\"%1$s\" target=\"_blank\">My Account</a> page on metabox.io website. If you have not purchased any extension yet, please <a href=\"%2$s\" target=\"_blank\">get a new license here</a>."
+msgstr "Да бисте добили кључ лиценце, посетите страницу <a href=\"%1$s\" target=\"_blank\">Мој налог</a> на сајту metabox.io. Ако још нисте купили ниједно проширење, <a href=\"%2$s\" target=\"_blank\">набавите нову лиценцу овде</a>."
+
+#: src/Updater/Settings.php:93
+msgid "Save Changes"
+msgstr "Сачувај измене"
+
+#: src/Updater/Settings.php:55
+msgid "Please enter your license key to enable automatic updates for Meta Box extensions."
+msgstr "Унесите кључ лиценце да бисте укључили аутоматска ажурирања за Meta Box проширења."
+
+#: src/Updater/Settings.php:72
+msgid "License Key"
+msgstr "Кључ лиценце"
+
+#: src/Updater/Settings.php:39 src/Updater/Settings.php:54
+msgid "Meta Box License"
+msgstr "Meta Box лиценца"
+
+#: src/Updater/Settings.php:39
+msgid "License"
+msgstr "Лиценца"
+
+#: inc/fields/input-list.php:83
+msgid "Toggle All"
+msgstr "Укључи/искључи све"
+
+#: inc/fields/file.php:54
+msgid "Error: Invalid file"
+msgstr "Грешка: неисправна датотека"
+
+#: inc/fields/map.php:29 inc/fields/osm.php:16
+msgid "No results found"
+msgstr "Нема пронађених резултата"
+
+#: src/Dashboard/Dashboard.php:53 src/Dashboard/Dashboard.php:78
+#: src/Dashboard/Dashboard.php:79
+msgid "Dashboard"
+msgstr "Контролна табла"
+
+#. Translators: %s - Meta Box (plugin name).
+#: src/Dashboard/content.php:80
+msgid "Welcome to %s,"
+msgstr "Добро дошли у %s,"
+
+#: src/Dashboard/content.php:655
+msgid "And much more!"
+msgstr "И још много тога!"
+
+#: src/Dashboard/content.php:459
+msgid "Create custom settings pages"
+msgstr "Направите произвољне странице подешавања"
+
+#: src/Dashboard/content.php:667
+msgid "Go to the support forum"
+msgstr "Иди на форум подршке"
+
+#: src/Dashboard/content.php:524 src/Dashboard/content.php:663
+msgid "Premium support"
+msgstr "Премијум подршка"
+
+#: inc/fields/switch.php:87
+msgid "Off"
+msgstr "Искључено"
+
+#: inc/fields/switch.php:86
+msgid "On"
+msgstr "Укључено"
+
+#: inc/fields/background.php:127
+msgid "Contain"
+msgstr "Садржи"
+
+#: inc/fields/background.php:126
+msgid "Cover"
+msgstr "Прекриј"
+
+#: inc/fields/background.php:99
+msgid "Bottom Right"
+msgstr "Доле десно"
+
+#: inc/fields/background.php:111
+msgid "Fixed"
+msgstr "Фиксирано"
+
+#: inc/fields/background.php:98
+msgid "Bottom Center"
+msgstr "Средина доле"
+
+#: inc/fields/background.php:97
+msgid "Bottom Left"
+msgstr "Доле лево"
+
+#: inc/fields/background.php:96
+msgid "Center Right"
+msgstr "Средина десно"
+
+#: inc/fields/background.php:95
+msgid "Center Center"
+msgstr "Средина"
+
+#: inc/fields/background.php:93
+msgid "Top Right"
+msgstr "Горе десно"
+
+#: inc/fields/background.php:94
+msgid "Center Left"
+msgstr "Средина лево"
+
+#: inc/fields/background.php:92
+msgid "Top Center"
+msgstr "Средина горе"
+
+#: inc/fields/background.php:91
+msgid "Top Left"
+msgstr "Горе лево"
+
+#: inc/fields/background.php:79 inc/fields/background.php:113
+#: inc/fields/background.php:125
+msgid "Inherit"
+msgstr "Наследи"
+
+#: inc/fields/background.php:78
+msgid "Repeat Vertically"
+msgstr "Понављај усправно"
+
+#: inc/fields/background.php:77
+msgid "Repeat Horizontally"
+msgstr "Понављај водоравно"
+
+#: inc/fields/background.php:76
+msgid "Repeat All"
+msgstr "Понављај све"
+
+#: inc/fields/background.php:75
+msgid "No Repeat"
+msgstr "Без понављања"
+
+#: inc/fields/background.php:61
+msgid "Background Image"
+msgstr "Позадинска слика"
+
+#: inc/fields/background.php:112
+msgid "Scroll"
+msgstr "Скроловање"
+
+#: src/Dashboard/content.php:101
+msgid "Getting Started"
+msgstr "Како почети"
+
+#: src/Dashboard/content.php:536
+msgid "Learn more"
+msgstr "Сазнај више"
+
+#: inc/fields/sidebar.php:10
+msgid "Select a sidebar"
+msgstr "Изаберите бочну траку"
+
+#. Author of the plugin
+#: meta-box.php
+msgid "MetaBox.io"
+msgstr "MetaBox.io"
+
+#. Description of the plugin
+#: meta-box.php
+msgid "Create custom meta boxes and custom fields in WordPress."
+msgstr "Правите произвољне мета кутије и произвољна поља у Вордпресу."
+
+#: inc/fields/media.php:30
+msgctxt "media"
+msgid "or"
+msgstr "или"
+
+#: inc/fields/select-advanced.php:44
+msgid "Select an item"
+msgstr "Одаберите ставку"
+
+#: inc/fields/media.php:31
+msgctxt "media"
+msgid "Drop files here to upload"
+msgstr "Превуците датотеке овде ради отпремања"
+
+#: inc/fields/media.php:29
+msgctxt "media"
+msgid "Select Files"
+msgstr "Изабери датотеке"
+
+#: inc/fields/taxonomy.php:84
+msgid "Select a term"
+msgstr "Изаберите појам"
+
+#: inc/fields/media.php:26
+msgctxt "media"
+msgid "No Title"
+msgstr "Без наслова"
+
+#: inc/fields/media.php:22
+msgctxt "media"
+msgid " files"
+msgstr " датотека"
+
+#: inc/fields/media.php:25
+msgctxt "media"
+msgid "View"
+msgstr "Погледај"
+
+#: inc/fields/media.php:21
+msgctxt "media"
+msgid " file"
+msgstr " датотека"
+
+#: inc/fields/media.php:24
+msgctxt "media"
+msgid "Edit"
+msgstr "Уреди"
+
+#: inc/fields/media.php:23
+msgctxt "media"
+msgid "Remove"
+msgstr "Уклони"
+
+#: inc/fields/media.php:20
+msgctxt "media"
+msgid "+ Add Media"
+msgstr "+ Додај медиј"
+
+#: inc/field.php:310
+msgid "+ Add more"
+msgstr "+ Додај још"
+
+#: inc/fields/file-input.php:48 inc/fields/link.php:14 inc/fields/link.php:53
+msgid "Remove"
+msgstr "Уклони"
+
+#: inc/fields/checkbox.php:43
+msgid "Yes"
+msgstr "Да"
+
+#: inc/fields/select.php:80
+msgid "None"
+msgstr "Ниједан"
+
+#: inc/fields/checkbox.php:43
+msgid "No"
+msgstr "Не"
+
+#: inc/validation.php:68
+msgid "Please correct the errors highlighted below and try again."
+msgstr "Исправите доле истакнуте грешке и покушајте поново."
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: meta-box.php
+msgid "https://metabox.io"
+msgstr "https://metabox.io"
+
+#: inc/fields/user.php:84
+msgid "Select a user"
+msgstr "Одаберите корисника"
+
+#: inc/fields/select.php:80
+msgid "All"
+msgstr "Сви"
+
+#. Translators: %s is the post singular label.
+#. Translators: %s is the taxonomy singular label.
+#: inc/fields/post.php:85 inc/fields/taxonomy.php:88
+msgid "Select a %s"
+msgstr "Изаберите %s"
+
+#: inc/fields/post.php:79
+msgid "Select a post"
+msgstr "Изаберите чланак"
+
+#: inc/fields/oembed.php:18
+msgid "Embed HTML not available."
+msgstr "Уградни HTML није доступан."
+
+#: inc/fields/key-value.php:80
+msgid "Value"
+msgstr "Вредност"
+
+#: inc/fields/key-value.php:79
+msgid "Key"
+msgstr "Кључ"
+
+#: inc/fields/file.php:145
+msgctxt "file upload"
+msgid "+ Add new file"
+msgstr "+ Додај нову датотеку"
+
+#: inc/fields/file.php:76
+msgid "Error: Cannot delete file"
+msgstr "Грешка: није могуће избрисати датотеку"
+
+#. Translators: %d is the number of files in plural form.
+#: inc/fields/file.php:17
+msgid "You may only upload maximum %d files"
+msgstr "Можете да отпремите највише %d датотека"
+
+#. Translators: %d is the number of files in singular form.
+#: inc/fields/file.php:15
+msgid "You may only upload maximum %d file"
+msgstr "Можете да отпремите највише %d датотеку"
+
+#: inc/fields/file-input.php:46 inc/fields/select.php:80
+msgid "Select"
+msgstr "Изабери"
+
+#: inc/fields/file-input.php:17
+msgid "Select File"
+msgstr "Изаберите датотеку"
+
+#: inc/fields/file.php:226
+msgctxt "file upload"
+msgid "Edit"
+msgstr "Уреди"
+
+#: inc/fields/file.php:225
+msgctxt "file upload"
+msgid "Delete"
+msgstr "Избриши"
+
+#: inc/fields/button.php:28
+msgid "Click me"
+msgstr "Притисни ме"
+
+#: src/Dashboard/content.php:51
+msgid "Documentation"
+msgstr "Документација"
+
+#: inc/fields/autocomplete.php:14 inc/fields/autocomplete.php:80
+#: inc/fields/autocomplete.php:92
+msgid "Delete"
+msgstr "Избриши"
+
+#. Plugin Name of the plugin
+#: meta-box.php src/Abilities.php:27 src/Dashboard/Dashboard.php:65
+#: src/Dashboard/Dashboard.php:66 src/Integrations/Block.php:12
+#: src/Integrations/Bricks.php:10 src/Integrations/Elementor.php:13
+#: src/Integrations/Oxygen.php:14
+msgid "Meta Box"
+msgstr "Мета поље"

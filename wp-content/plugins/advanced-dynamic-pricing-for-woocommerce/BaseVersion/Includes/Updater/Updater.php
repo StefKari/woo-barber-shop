@@ -10,6 +10,8 @@ class Updater
 {
     const DB_VERSION_KEY = "wdp_db_version";
 
+    const DB_LEVEL_KEY = "wdp_db_level";
+
     private static $db_updates = array(
         '2.2.3' => array(
             'migrateTo_2_2_3',
@@ -46,14 +48,39 @@ class Updater
             'migrateSummaryTo_4_1_6',
             'migrateCompatibilityOptionsTo_4_1_6'
         ),
+        '4.4.3' => array(
+            'migratethemeOptionsTo_4_4_3',
+        ),
+        '4.5.3' => array(
+            'migratePostalCodesConditionsTo_4_5_3',
+            'migrateSpentConditionsTo_4_5_3'
+        ),
+        '4.10.4' => array(
+            'migrateSummaryTo_4_10_4',
+        ),
+        '4.12.0' => array(
+            'migrateSummaryTo_4_12_0',
+        ),
     );
 
     public static function update()
     {
+        self::updateLevel();
+        self::applyMigrations();
+    }
+
+    public static function cleanUp()
+    {
+        delete_option(self::DB_LEVEL_KEY);
+        delete_option(self::DB_VERSION_KEY);
+    }
+
+    public static function applyMigrations()
+    {
         $current_version = get_option(self::DB_VERSION_KEY, "");
 
         if (version_compare($current_version, WC_ADP_VERSION, '<')) {
-            Factory::get("PluginActions", WC_ADP_PLUGIN_PATH . WC_ADP_PLUGIN_FILE)->install();
+            Factory::get("PluginActions", WC_ADP_PLUGIN_PATH . WC_ADP_PLUGIN_FILE)->singleInstall();
 
             foreach (self::$db_updates as $version => $update_callbacks) {
                 if (version_compare($current_version, $version, '<')) {
@@ -61,9 +88,27 @@ class Updater
                         UpdateFunctions::call_update_function($update_callback);
                     }
                 }
+                update_option(self::DB_VERSION_KEY, $version, false);
             }
 
             update_option(self::DB_VERSION_KEY, WC_ADP_VERSION, false);
+        }
+    }
+
+    public static function updateLevel()
+    {
+        $currentDBLevel = get_option(self::DB_LEVEL_KEY, "");
+        $currentLevel = defined("WC_ADP_PRO_VERSION_PATH") ? "pro" : "base";
+
+        if ( $currentDBLevel !== $currentLevel ) {
+            if ($currentLevel === "base" ) {
+                \ADP\BaseVersion\Includes\Database\Database::createDatabase();
+            } else if ( $currentLevel === "pro" ) {
+                \ADP\BaseVersion\Includes\Database\Database::createDatabase();
+                \ADP\ProVersion\Includes\Database\Database::createDatabase();
+            }
+
+            update_option(self::DB_LEVEL_KEY, $currentLevel, false);
         }
     }
 }

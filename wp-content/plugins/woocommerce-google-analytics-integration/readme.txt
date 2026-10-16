@@ -1,9 +1,9 @@
-=== WooCommerce Google Analytics Integration ===
-Contributors: woocommerce, automattic, claudiosanches, bor0, royho, laurendavissmith001, c-shultz
+=== Google Analytics for WooCommerce ===
+Contributors: woocommerce, automattic, claudiosanches, bor0, royho, laurendavissmith001, cshultz88, mmjones, tomalec, neosinner
 Tags: woocommerce, google analytics
-Requires at least: 3.9
-Tested up to: 5.8
-Stable tag: 1.5.3
+Requires at least: 7.0
+Tested up to: 7.1
+Stable tag: 2.4.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -11,9 +11,9 @@ Provides integration between Google Analytics and WooCommerce.
 
 == Description ==
 
-This plugin provides the integration between Google Analytics and the WooCommerce plugin. You can link a referral to a purchase and add transaction information to your Google Analytics data. It also supports Global Site Tag, Universal Analytics, eCommerce, and enhanced eCommerce event tracking.
+This plugin provides the integration between Google Analytics and the WooCommerce plugin. You can link a referral to a purchase and add transaction information to your Google Analytics data. It supports Global Site Tag (GA4) and eCommerce event tracking.
 
-Starting from WooCommerce 2.1, this integration is no packaged with WooCommerce and is only available by using this plugin.
+Please visit the [documentation page for additional information](https://woocommerce.com/document/google-analytics-integration/).
 
 Contributions are welcome via the [GitHub repository](https://github.com/woocommerce/woocommerce-google-analytics-integration).
 
@@ -42,65 +42,26 @@ Also please make sure to enter your Google Analytics ID under WooCommerce → Se
 
 Duplicate Google Analytics code causes a conflict in tracking. Remove any other Google Analytics plugins or code from your site to avoid duplication and conflicts in tracking.
 
-= My settings are not saving! =
-
-Do you have SUHOSIN installed/active on your server? If so, the default index length is 64 and some settings on this plugin requires longer lengths. Try setting your SUHOSIN configuration's "max_array_index_length" to "100" and test again.
-
-= My national data privacy laws require that I offer an opt-out for users, how can I do this? =
-
-Include the following html code snippet within the page where you want to have the opt-out, e.g. the your Imprint our Data Privacy page:
-
-https://gist.github.com/claudiosanches/b12d15b245be21c92ebc
-
-Exact wording depends on the national data privacy laws and should be adjusted.
-
 == Screenshots ==
 
 1. Google Analytics Integration Settings.
 
 == Changelog ==
 
-= 1.5.3 - 2021-09-15 =
-* Tweak - Avoid unnecessary completed orders queries.
-* Tweak - WC 5.7 compatibility.
-* Tweak - WP 5.8 compatibility.
+= 2.4.3 - 2026-10-12 =
+* Fix - Report the catalog price of Composite Products instead of 0 in `view_item`, `view_item_list`, `select_content` and `add_to_cart` events.
+* Update - Bump the minimum required WooCommerce version to 11.1 and the compatibility version to 11.2.
 
-= 1.5.2 - 2021-07-30 =
-* Fix - Change utm_source and utm_medium in upsell notice link.
-* Fix - add product links to readme.
+= 2.4.2 - 2026-09-08 =
+* Declare compatibility with WooCommerce 11.1.0.
+* Dev - Pin GitHub Actions and their nested dependencies to immutable commit SHAs.
+* Fix - Strip the order key and other sensitive query parameters from the page URL and referrer sent to Google Analytics, and send an explicit denied consent state for undecided visitors on opt-in sites.
+* Update GitHub Action references.
 
-= 1.5.1 - 2021-02-03 =
-* Tweak - WC 5.0 compatibility.
+= 2.4.1 - 2026-08-25 =
+* Fix - Purchase event no longer reports a false item discount in stores that enter prices inclusive of tax, and no longer drops coupon discounts for quantities above one; item price and discount are now per unit and tax-exclusive.
+* Fix - Purchase event value now sums the item prices × quantity, excluding tax and shipping as GA4 expects, instead of the gross order total.
+* Tweak - WordPress 7.1 compatibility.
+* Update - Require WordPress 7.0+.
 
-= 1.5.0 - 2020-12-17 =
-* Add - Option to use Global Site Tag and the gtag.js library (for Universal Analytics or Google Analytics 4).
-* Add - Several new values added to the Tracker data.
-* Add - Developer ID for gtag.js and analytics.js.
-* Tweak - Bump minimum-supported WooCommerce version to 3.2.
-* Tweak - Remove deprecated jQuery .click().
-* Fix - Settings link in plugins table row points directly to plugin settings.
-* Fix - Issue with multiple consecutive "Remove from Cart" events sent from the mini cart.
-
-= 1.4.25 - 2020-11-25 =
-* Tweak - WC 4.7 compatibility.
-* Tweak - WordPress 5.6 compatibility.
-
-= 1.4.24 - 2020-10-12 =
-* Tweak - WC 4.5 compatibility.
-
-= 1.4.23 - 2020-08-19 =
-* Fix   - Prevent transaction from being tracked a second time when page is reloaded locally or from cache.
-* Tweak - WordPress 5.5 compatibility.
-
-= 1.4.22 - 2020-06-05 =
-* Tweak - WC 4.2 compatibility.
-
-= 1.4.21 - 2020-05-04 =
-* Tweak - WC 4.1 compatibility.
-
-= 1.4.20 - 2020-03-29 =
-* Fix - Change wc_goole_analytics_send_pageview fiter name to wc_google_analytics_send_pageview.
-
-== Upgrade Notice ==
-= 1.4.0 =
-Adds support for enhanced eCommerce (tracking full store process from view to order)
+[See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce-google-analytics-integration/trunk/changelog.txt).

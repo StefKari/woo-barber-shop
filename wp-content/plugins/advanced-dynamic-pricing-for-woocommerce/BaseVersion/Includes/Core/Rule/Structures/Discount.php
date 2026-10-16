@@ -12,12 +12,18 @@ class Discount
     const TYPE_FREE = 'free';
     const TYPE_PERCENTAGE = 'percentage';
     const TYPE_AMOUNT = 'fixed_amount';
+    const TYPE_AMOUNT_PER_ITEM = 'fixed_amount_per_item';
     const TYPE_FIXED_VALUE = 'fixed_value';
+    const TYPE_FIXED_VALUE_PER_ITEM = 'fixed_value_per_item';
+    const TYPE_EXPRESSION_PRICE = 'discount_expression';
 
     const AVAILABLE_TYPES = array(
         self::TYPE_PERCENTAGE,
         self::TYPE_AMOUNT,
+        self::TYPE_AMOUNT_PER_ITEM,
         self::TYPE_FIXED_VALUE,
+        self::TYPE_FIXED_VALUE_PER_ITEM,
+        self::TYPE_EXPRESSION_PRICE,
     );
 
     /**
@@ -26,7 +32,7 @@ class Discount
     protected $type;
 
     /**
-     * @var float
+     * @var float|string
      */
     protected $value;
 
@@ -49,7 +55,12 @@ class Discount
         }
 
         $this->type         = $type;
-        $this->value        = floatval($value);
+        if($type === self::TYPE_EXPRESSION_PRICE) {
+            $this->value = !empty($value) ? esc_attr(trim($value)) : floatval($value);
+        } else {
+            $this->value = floatval($value);
+        }
+
         $this->currencyCode = $context->getCurrencyCode();
     }
 
@@ -86,7 +97,7 @@ class Discount
     }
 
     /**
-     * @return float
+     * @return float|string
      */
     public function getValue()
     {

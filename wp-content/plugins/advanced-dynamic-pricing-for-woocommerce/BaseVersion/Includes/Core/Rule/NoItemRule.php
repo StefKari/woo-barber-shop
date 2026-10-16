@@ -25,4 +25,9 @@ class NoItemRule extends BaseRule implements Rule
     {
         return new NoItemRuleProcessor($context, $this);
     }
+
+    public function setAutoAdds($autoAdds)
+    {
+        // TODO: Implement setAutoAdds() method.
+    }
 }

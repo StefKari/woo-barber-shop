@@ -3,16 +3,21 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "sv_SE"
          },
-         "Edit": [
-            "Redigera"
+         "Edit %s": [
+            "Redigera %s"
          ],
          "Shift+Tab": [
-            "Skift+Tab"
+            "Skift+tab"
          ],
          "Tab": [
             "Tab"
+         ],
+         "Original:": [
+            "Original:"
          ],
          "Translation to:": [
             "Översättning till:"
@@ -21,19 +26,16 @@
             "Kopiera från original"
          ],
          "Use Shift+Enter to add a new line.": [
-            "Använd Skift+Retur för ny rad."
-         ],
-         "Original:": [
-            "Original:"
+            "Använd Skift+Enter för att lägga till en ny rad."
          ],
          "Add %s translation": [
-            "Lägg till %s-översättning"
+            "Lägg till översättning för %s"
          ],
          "Edit %s translation": [
-            "Redigera %s-översättning"
+            "Redigera översättning för %s"
          ],
          "Add %s translation (the string appears on the site and is not translated)": [
-            "Lägg till %s-översättning"
+            "Lägg till översättning för %s (strängen visas på webbplatsen och är inte översatt)"
          ],
          "Original language %s": [
             "Originalspråk %s"
@@ -44,14 +46,11 @@
          "Translation in progress to %s": [
             "Översättning pågår till %s"
          ],
-         "In basket for translation to %s": [
-            "I korg för översättning till %s"
-         ],
          "Translation saved.": [
-            "Översättning sparad."
+            "Översättningen har sparats."
          ],
          "Translation update failed.": [
-            "Uppdatering misslyckades."
+            "Det gick inte att uppdatera översättningen."
          ]
       }
    }

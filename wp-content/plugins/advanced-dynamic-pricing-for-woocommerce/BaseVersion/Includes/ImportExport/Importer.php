@@ -34,13 +34,13 @@ class Importer
             }
 
             if ( $rawRule[KeyKeeperDB::RULE_TYPE] === RuleTypeEnum::PERSISTENT()->getValue() ) {
-                $rulesCol    = $ruleStorage->buildPersistentRules(array(Rule::fromArray($rawRule)));
+                $rulesCol    = $ruleStorage->buildPersistentRules(array(Factory::callStaticMethod('Database_Models_Rule', 'fromArray', $rawRule)));
             } else {
-                $rulesCol    = $ruleStorage->buildRules(array(Rule::fromArray($rawRule)));
+                $rulesCol    = $ruleStorage->buildRules(array(Factory::callStaticMethod('Database_Models_Rule', 'fromArray', $rawRule)));
             }
 
             if ( $rulesCol->getRules() ) {
-                $ruleObjects[] = $rulesCol->getRules()[0];
+                $ruleObjects[] = $rulesCol->getFirst();
             }
         }
 
@@ -64,8 +64,15 @@ class Importer
                 foreach ($rule['filters'] as &$item) {
                     $item['value'] = isset($item['value']) ? $item['value'] : array();
                     $item['value'] = self::convertElementsFromNameToId($item['value'], $item['type']);
+
+                    foreach ($item['excludes'] as &$excludeItem) {
+                        $excludeItem['value'] = isset($excludeItem['value']) ? $excludeItem['value'] : array();
+                        $excludeItem['value'] = self::convertElementsFromNameToId($excludeItem['value'], $excludeItem['type']);
+                    }
                 }
+                
                 unset($item);
+                unset($excludeItem);
             }
 
             if ( ! empty($rule['get_products']['value'])) {
@@ -96,7 +103,7 @@ class Importer
                 unset($item);
             }
 
-            $ruleObj = Rule::fromArray($rule);
+            $ruleObj = Factory::callStaticMethod('Database_Models_Rule', 'fromArray', $rule);
 
             $id         = $ruleRepository->storeRule($ruleObj);
             $imported[] = $id;
@@ -121,13 +128,13 @@ class Importer
 
         foreach ( $items as $rawRule ) {
             if ( $rawRule[KeyKeeperDB::RULE_TYPE] === RuleTypeEnum::PERSISTENT()->getValue() ) {
-                $rulesCol    = $ruleStorage->buildPersistentRules(array(Rule::fromArray($rawRule)));
+                $rulesCol    = $ruleStorage->buildPersistentRules(array(Factory::callStaticMethod('Database_Models_Rule', 'fromArray', $rawRule)));
             } else {
-                $rulesCol    = $ruleStorage->buildRules(array(Rule::fromArray($rawRule)));
+                $rulesCol    = $ruleStorage->buildRules(array(Factory::callStaticMethod('Database_Models_Rule', 'fromArray', $rawRule)));
             }
 
             if ( $rulesCol->getRules() ) {
-                $ruleObjects[] = $rulesCol->getRules()[0];
+                $ruleObjects[] = $rulesCol->getFirst();
             }
         }
 
@@ -167,7 +174,7 @@ class Importer
 //                unset($item);
 //            }
 
-            $ruleObj    = Rule::fromArray($rule);
+            $ruleObj = Factory::callStaticMethod('Database_Models_Rule', 'fromArray', $rule);
             $id         = $ruleRepository->storeRule($ruleObj);
             $imported[] = $id;
 

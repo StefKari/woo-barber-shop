@@ -67,10 +67,6 @@ class WPSEO_Admin {
 		WPSEO_Sitemaps_Cache::register_clear_on_option_update( 'wpseo' );
 		WPSEO_Sitemaps_Cache::register_clear_on_option_update( 'home' );
 
-		if ( YoastSEO()->helpers->current_page->is_yoast_seo_page() ) {
-			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
-		}
-
 		$this->initialize_cornerstone_content();
 
 		if ( WPSEO_Utils::is_plugin_network_active() ) {
@@ -99,7 +95,7 @@ class WPSEO_Admin {
 		$integrations = array_merge(
 			$integrations,
 			$this->get_admin_features(),
-			$this->initialize_cornerstone_content()
+			$this->initialize_cornerstone_content(),
 		);
 
 		foreach ( $integrations as $integration ) {
@@ -132,20 +128,6 @@ class WPSEO_Admin {
 	 */
 	public function get_admin_features() {
 		return $this->admin_features;
-	}
-
-	/**
-	 * Register assets needed on admin pages.
-	 *
-	 * @return void
-	 */
-	public function enqueue_assets() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reason: We are not processing form data.
-		$page = isset( $_GET['page'] ) && is_string( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
-		if ( $page === 'wpseo_licenses' ) {
-			$asset_manager = new WPSEO_Admin_Asset_Manager();
-			$asset_manager->enqueue_style( 'extensions' );
-		}
 	}
 
 	/**
@@ -252,7 +234,7 @@ class WPSEO_Admin {
 			$no_deactivation_explanation = '<span style="color: #32373c">' . sprintf(
 				/* translators: %s expands to Yoast SEO Premium. */
 				__( 'Required by %s', 'wordpress-seo' ),
-				'Yoast SEO Premium'
+				'Yoast SEO Premium',
 			) . '</span>';
 
 			array_unshift( $links, $no_deactivation_explanation );
@@ -297,35 +279,6 @@ class WPSEO_Admin {
 	}
 
 	/**
-	 * Filter the $contactmethods array and add a set of social profiles.
-	 *
-	 * These are used with the Facebook author, rel="author" and Twitter cards implementation.
-	 *
-	 * @deprecated 22.6
-	 * @codeCoverageIgnore
-	 *
-	 * @param array<string, string> $contactmethods Currently set contactmethods.
-	 *
-	 * @return array<string, string> Contactmethods with added contactmethods.
-	 */
-	public function update_contactmethods( $contactmethods ) {
-		_deprecated_function( __METHOD__, 'Yoast SEO 22.6' );
-
-		$contactmethods['facebook']   = __( 'Facebook profile URL', 'wordpress-seo' );
-		$contactmethods['instagram']  = __( 'Instagram profile URL', 'wordpress-seo' );
-		$contactmethods['linkedin']   = __( 'LinkedIn profile URL', 'wordpress-seo' );
-		$contactmethods['myspace']    = __( 'MySpace profile URL', 'wordpress-seo' );
-		$contactmethods['pinterest']  = __( 'Pinterest profile URL', 'wordpress-seo' );
-		$contactmethods['soundcloud'] = __( 'SoundCloud profile URL', 'wordpress-seo' );
-		$contactmethods['tumblr']     = __( 'Tumblr profile URL', 'wordpress-seo' );
-		$contactmethods['twitter']    = __( 'X username (without @)', 'wordpress-seo' );
-		$contactmethods['youtube']    = __( 'YouTube profile URL', 'wordpress-seo' );
-		$contactmethods['wikipedia']  = __( 'Wikipedia page about you', 'wordpress-seo' ) . '<br/><small>' . __( '(if one exists)', 'wordpress-seo' ) . '</small>';
-
-		return $contactmethods;
-	}
-
-	/**
 	 * Log the updated timestamp for user profiles when theme is changed.
 	 *
 	 * @return void
@@ -354,14 +307,14 @@ class WPSEO_Admin {
 				/* translators: %1$s: '%%term_title%%' variable used in titles and meta's template that's not compatible with the given template, %2$s: expands to 'HelpScout beacon' */
 					__( 'Warning: the variable %1$s cannot be used in this template. See the %2$s for more info.', 'wordpress-seo' ),
 					'<code>%s</code>',
-					'HelpScout beacon'
+					'HelpScout beacon',
 				),
 				/* translators: %s: expends to Yoast SEO */
 				'help_video_iframe_title' => sprintf( __( '%s video tutorial', 'wordpress-seo' ), 'Yoast SEO' ),
 				'scrollable_table_hint'   => __( 'Scroll to see the table content.', 'wordpress-seo' ),
 				'wincher_is_logged_in'    => WPSEO_Options::get( 'wincher_integration_active', true ) ? YoastSEO()->helpers->wincher->login_status() : false,
 			],
-			YoastSEO()->helpers->wincher->get_admin_global_links()
+			YoastSEO()->helpers->wincher->get_admin_global_links(),
 		);
 	}
 

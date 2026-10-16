@@ -1,48 +1,27 @@
 <?php
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Automattic\WooCommerce\Admin\Features\OnboardingTasks\TaskLists;
+
 /**
- * Google Analytics Integration
+ * Google Analytics for WooCommerce
  *
  * Allows tracking code to be inserted into store pages.
  *
  * @class   WC_Google_Analytics
- * @extends WC_Integration
- *
- * @property $ga_id
- * @property $ga_set_domain_name
- * @property $ga_gtag_enabled
- * @property $ga_standard_tracking_enabled
- * @property $ga_support_display_advertising
- * @property $ga_support_enhanced_link_attribution
- * @property $ga_use_universal_analytics
- * @property $ga_anonymize_enabled
- * @property $ga_404_tracking_enabled
- * @property $ga_ecommerce_tracking_enabled
- * @property $ga_enhanced_ecommerce_tracking_enabled
- * @property $ga_enhanced_remove_from_cart_enabled
- * @property $ga_enhanced_product_impression_enabled
- * @property $ga_enhanced_product_click_enabled
- * @property $ga_enhanced_checkout_process_enabled
- * @property $ga_enhanced_product_detail_view_enabled
- * @property $ga_event_tracking_enabled
  */
 class WC_Google_Analytics extends WC_Integration {
 
 	/**
 	 * Returns the proper class based on Gtag settings.
 	 *
-	 * @param  array $options                  Options
 	 * @return WC_Abstract_Google_Analytics_JS
 	 */
-	protected function get_tracking_instance( $options = array() ) {
-		if ( 'yes' === $this->ga_gtag_enabled ) {
-			return WC_Google_Gtag_JS::get_instance( $options );
-		}
-
-		return WC_Google_Analytics_JS::get_instance( $options );
+	protected function get_tracking_instance() {
+		return WC_Google_Gtag_JS::get_instance( $this->settings );
 	}
 
 	/**
@@ -50,231 +29,181 @@ class WC_Google_Analytics extends WC_Integration {
 	 * Init and hook in the integration.
 	 */
 	public function __construct() {
-		$this->id                    = 'google_analytics';
-		$this->method_title          = __( 'Google Analytics', 'woocommerce-google-analytics-integration' );
-		$this->method_description    = __( 'Google Analytics is a free service offered by Google that generates detailed statistics about the visitors to a website.', 'woocommerce-google-analytics-integration' );
-		$this->dismissed_info_banner = get_option( 'woocommerce_dismissed_info_banner' );
+		$this->id                 = 'google_analytics';
+		$this->method_title       = __( 'Google Analytics', 'woocommerce-google-analytics-integration' );
+		$this->method_description = __( 'Google Analytics is a free service offered by Google that generates detailed statistics about the visitors to a website.', 'woocommerce-google-analytics-integration' );
 
 		// Load the settings
 		$this->init_form_fields();
 		$this->init_settings();
-		$constructor = $this->init_options();
 
-		// Contains snippets/JS tracking code
-		include_once( 'class-wc-abstract-google-analytics-js.php' );
-		include_once( 'class-wc-google-analytics-js.php' );
-		include_once( 'class-wc-google-gtag-js.php' );
-		$this->get_tracking_instance( $constructor );
-
-		// Display an info banner on how to configure WooCommerce
-		if ( is_admin() ) {
-			include_once( 'class-wc-google-analytics-info-banner.php' );
-			WC_Google_Analytics_Info_Banner::get_instance( $this->dismissed_info_banner, $this->ga_id );
+		// Backfill any settings keys not yet stored in the database.
+		// On a fresh activation, maybe_set_defaults() writes a partial settings array before
+		// init_settings() runs. WC_Integration::init_settings() only applies defaults when no
+		// settings exist at all, so keys missing from a partial array would be absent from
+		// $this->settings. We fill them in here using the same fallback logic as get_option().
+		foreach ( $this->get_form_fields() as $key => $field ) {
+			if ( ! array_key_exists( $key, $this->settings ) ) {
+				$this->settings[ $key ] = $this->get_field_default( $field );
+			}
 		}
 
+		add_action( 'admin_notices', array( $this, 'universal_analytics_upgrade_notice' ) );
+
+		include_once 'class-wc-abstract-google-analytics-js.php';
+		include_once 'class-wc-google-gtag-js.php';
+
+		if ( ! $this->disable_tracking( 'all' ) ) {
+			$this->get_tracking_instance();
+		}
+
+		// Display a task on  "Things to do next section"
+		add_action( 'init', array( $this, 'add_wc_setup_task' ), 20 );
 		// Admin Options
-		add_filter( 'woocommerce_tracker_data', array( $this, 'track_options' ) );
-		add_action( 'woocommerce_update_options_integration_google_analytics', array( $this, 'process_admin_options') );
-		add_action( 'woocommerce_update_options_integration_google_analytics', array( $this, 'show_options_info') );
-		add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_assets') );
-
-		// Tracking code
-		add_action( 'wp_head', array( $this, 'tracking_code_display' ), 999999 );
-
-		// Event tracking code
-		add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'add_to_cart' ) );
-		add_action( 'wp_footer', array( $this, 'loop_add_to_cart' ) );
-		add_action( 'woocommerce_after_cart', array( $this, 'remove_from_cart' ) );
-		add_action( 'woocommerce_after_mini_cart', array( $this, 'remove_from_cart' ) );
-		add_filter( 'woocommerce_cart_item_remove_link', array( $this, 'remove_from_cart_attributes' ), 10, 2 );
-		add_action( 'woocommerce_after_shop_loop_item', array( $this, 'listing_impression' ) );
-		add_action( 'woocommerce_after_shop_loop_item', array( $this, 'listing_click' ) );
-		add_action( 'woocommerce_after_single_product', array( $this, 'product_detail' ) );
-		add_action( 'woocommerce_after_checkout_form', array( $this, 'checkout_process' ) );
+		add_filter( 'woocommerce_tracker_data', array( $this, 'track_settings' ) );
+		add_action( 'woocommerce_update_options_integration_google_analytics', array( $this, 'process_admin_options' ) );
+		add_action( 'woocommerce_update_options_integration_google_analytics', array( $this, 'show_options_info' ) );
+		add_action( 'admin_init', array( $this, 'privacy_policy' ) );
 
 		// utm_nooverride parameter for Google AdWords
 		add_filter( 'woocommerce_get_return_url', array( $this, 'utm_nooverride' ) );
+
+		// Mark extension as compatible with WP Consent API
+		add_filter( 'wp_consent_api_registered_' . plugin_basename( __FILE__ ), '__return_true' );
+
+		// Dequeue the WooCommerce Blocks Google Analytics integration,
+		// not to let it register its `gtag` function so that we could provide a more detailed configuration.
+		add_action(
+			'wp_enqueue_scripts',
+			function () {
+				wp_dequeue_script( 'wc-blocks-google-analytics' );
+			}
+		);
 	}
 
 	/**
-	 * Loads all of our options for this plugin (stored as properties as well)
+	 * Conditionally display an error notice to the merchant if the stored property ID starts with "UA"
 	 *
-	 * @return array An array of options that can be passed to other classes
+	 * @return void
 	 */
-	public function init_options() {
-		$options = array(
-			'ga_id',
-			'ga_set_domain_name',
-			'ga_gtag_enabled',
-			'ga_standard_tracking_enabled',
-			'ga_support_display_advertising',
-			'ga_support_enhanced_link_attribution',
-			'ga_use_universal_analytics',
-			'ga_anonymize_enabled',
-			'ga_404_tracking_enabled',
-			'ga_ecommerce_tracking_enabled',
-			'ga_enhanced_ecommerce_tracking_enabled',
-			'ga_enhanced_remove_from_cart_enabled',
-			'ga_enhanced_product_impression_enabled',
-			'ga_enhanced_product_click_enabled',
-			'ga_enhanced_checkout_process_enabled',
-			'ga_enhanced_product_detail_view_enabled',
-			'ga_event_tracking_enabled',
-		);
-
-		$constructor = array();
-		foreach ( $options as $option ) {
-			$constructor[ $option ] = $this->$option = $this->get_option( $option );
+	public function universal_analytics_upgrade_notice() {
+		if ( 'ua' === substr( strtolower( $this->get_option( 'ga_id' ) ), 0, 2 ) ) {
+			printf(
+				'<div class="%1$s"><p>%2$s</p></div>',
+				'notice notice-error',
+				sprintf(
+					/* translators: 1) URL for Google documentation on upgrading from UA to GA4 2) URL to WooCommerce Google Analytics settings page */
+					esc_html__( 'Your website is configured to use Universal Analytics which Google retired in July of 2023. Update your account using the %1$ssetup assistant%2$s and then update your %3$sWooCommerce settings%4$s.', 'woocommerce-google-analytics-integration' ),
+					'<a href="https://support.google.com/analytics/answer/9744165" target="_blank">',
+					'</a>',
+					'<a href="/wp-admin/admin.php?page=wc-settings&tab=integration&section=google_analytics">',
+					'</a>'
+				)
+			);
 		}
-
-		return $constructor;
 	}
 
 	/**
 	 * Tells WooCommerce which settings to display under the "integration" tab
 	 */
 	public function init_form_fields() {
-
-		// backwards_compatibility
-		if ( get_option( 'woocommerce_ga_use_universal_analytics' ) ) {
-			 $ua_default_value = get_option( 'woocommerce_ga_use_universal_analytics' );
-		} else {
-			// don't enable for extension updates, only default to enabled on new installs
-			$ua_default_value = get_option( $this->get_option_key() ) ? 'no' : 'yes';
-		}
-
 		$this->form_fields = array(
-			'ga_id' => array(
+			'ga_product_identifier'                   => array(
+				'title'       => __( 'Product Identification', 'woocommerce-google-analytics-integration' ),
+				'description' => __( 'Specify how your products will be identified to Google Analytics. Changing this setting may cause issues with historical data if a product was previously identified using a different structure.', 'woocommerce-google-analytics-integration' ),
+				'type'        => 'select',
+				'options'     => array(
+					'product_id'  => __( 'Product ID', 'woocommerce-google-analytics-integration' ),
+					'product_sku' => __( 'Product SKU with prefixed (#) ID as fallback', 'woocommerce-google-analytics-integration' ),
+				),
+				// If the option is not set then the product SKU is used as default for existing installations
+				'default'     => 'product_sku',
+			),
+			'ga_id'                                   => array(
 				'title'       => __( 'Google Analytics Tracking ID', 'woocommerce-google-analytics-integration' ),
-				'description' => __( 'Log into your Google Analytics account to find your ID. e.g. <code>G-XXXXX</code> or <code>UA-XXXXX-X</code>', 'woocommerce-google-analytics-integration' ),
+				'description' => __( 'Log into your Google Analytics account to find your ID. e.g. <code>GT-XXXXX</code> or <code>G-XXXXX</code>', 'woocommerce-google-analytics-integration' ),
 				'type'        => 'text',
-				'placeholder' => 'UA-XXXXX-X',
-				'default'     => get_option( 'woocommerce_ga_id' ) // Backwards compat
+				'placeholder' => 'GT-XXXXX',
+				'default'     => get_option( 'woocommerce_ga_id' ), // Backwards compat
 			),
-			'ga_set_domain_name' => array(
-				'title' 			=> __( 'Set Domain Name', 'woocommerce-google-analytics-integration' ),
-				'description' 		=> sprintf( __( '(Optional) Sets the <code>_setDomainName</code> variable. <a href="%s" target="_blank">See here for more information</a>.', 'woocommerce-google-analytics-integration' ), 'https://developers.google.com/analytics/devguides/collection/gajs/gaTrackingSite#multipleDomains' ),
-				'type' 				=> 'text',
-				'default' 			=> '',
-				'class'             => 'legacy-setting',
-			),
-
-			'ga_gtag_enabled' => array(
-				'title'         => __( 'Tracking Options', 'woocommerce-google-analytics-integration' ),
-				'label'         => __( 'Use Global Site Tag', 'woocommerce-google-analytics-integration' ),
-				'description'   => sprintf( __( 'The Global Site Tag provides streamlined tagging across Google’s site measurement, conversion tracking, and remarketing products. This must be enabled to use a Google Analytics 4 Measurement ID (e.g., <code>G-XXXXX</code>). <a href="%s" target="_blank">See here for more information</a>.', 'woocommerce-google-analytics-integration' ), 'https://support.google.com/analytics/answer/7475631?hl=en' ),
-				'type'          => 'checkbox',
-				'checkboxgroup' => '',
-				'default'       => get_option( $this->get_option_key() ) ? 'no' : 'yes', // don't enable on updates, only default on new installs
-			),
-
-			'ga_use_universal_analytics' => array(
-				'label'         => __( 'Enable Universal Analytics', 'woocommerce-google-analytics-integration' ),
-				'description'   => sprintf( __( 'Uses Universal Analytics instead of Classic Google Analytics. If you have <strong>not</strong> previously used Google Analytics on this site, check this box. Otherwise, %sfollow step 1 of the Universal Analytics upgrade guide.%s Enabling this setting will take care of step 2. %sRead more about Universal Analytics%s. Universal Analytics or Global Site Tag must be enabled to enable enhanced eCommerce.', 'woocommerce-google-analytics-integration' ), '<a href="https://developers.google.com/analytics/devguides/collection/upgrade/guide" target="_blank">', '</a>', '<a href="https://support.google.com/analytics/answer/2790010?hl=en" target="_blank">', '</a>' ),
-				'type'          => 'checkbox',
-				'checkboxgroup' => '',
-				'default'       => $ua_default_value,
-				'class'         => 'legacy-setting',
-			),
-			'ga_standard_tracking_enabled' => array(
-				'label'         => __( 'Enable Standard Tracking', 'woocommerce-google-analytics-integration' ),
-				'description'   =>  __( 'This tracks session data such as demographics, system, etc. You don\'t need to enable this if you are using a 3rd party Google analytics plugin.', 'woocommerce-google-analytics-integration' ),
-				'type'          => 'checkbox',
-				'checkboxgroup' => 'start',
-				'default'       => get_option( 'woocommerce_ga_standard_tracking_enabled' ) ? get_option( 'woocommerce_ga_standard_tracking_enabled' ) : 'no'  // Backwards compat
-			),
-			'ga_support_display_advertising' => array(
+			'ga_support_display_advertising'          => array(
 				'label'         => __( '"Display Advertising" Support', 'woocommerce-google-analytics-integration' ),
-				'description'   => sprintf( __( 'Set the Google Analytics code to support Display Advertising. %sRead more about Display Advertising%s.', 'woocommerce-google-analytics-integration' ), '<a href="https://support.google.com/analytics/answer/2700409" target="_blank">', '</a>' ),
+				/* translators: Read more link */
+				'description'   => sprintf( __( 'Set the Google Analytics code to support Display Advertising. %1$sRead more about Display Advertising%2$s.', 'woocommerce-google-analytics-integration' ), '<a href="https://support.google.com/analytics/answer/2700409" target="_blank">', '</a>' ),
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
 				'default'       => get_option( 'woocommerce_ga_support_display_advertising' ) ? get_option( 'woocommerce_ga_support_display_advertising' ) : 'yes', // Backwards compat
 			),
-			'ga_support_enhanced_link_attribution' => array(
-				'label'         => __( 'Use Enhanced Link Attribution', 'woocommerce-google-analytics-integration' ),
-				'description'   => sprintf( __( 'Set the Google Analytics code to support Enhanced Link Attribution. %sRead more about Enhanced Link Attribution%s.', 'woocommerce-google-analytics-integration' ), '<a href="https://support.google.com/analytics/answer/7377126?hl=en" target="_blank">', '</a>' ),
-				'type'          => 'checkbox',
-				'checkboxgroup' => '',
-				'default'       => get_option( 'woocommerce_ga_support_enhanced_link_attribution' ) ? get_option( 'woocommerce_ga_support_enhanced_link_attribution' ) : 'no'  // Backwards compat
-			),
-			'ga_anonymize_enabled' => array(
-				'label'         => __( 'Anonymize IP addresses', 'woocommerce-google-analytics-integration' ),
-				'description'   => sprintf( __( 'Enabling this option is mandatory in certain countries due to national privacy laws. %sRead more about IP Anonymization%s.', 'woocommerce-google-analytics-integration' ), '<a href="https://support.google.com/analytics/answer/2763052" target="_blank">', '</a>' ),
-				'type'          => 'checkbox',
-				'checkboxgroup' => '',
-				'default'       => 'yes'
-			),
-			'ga_404_tracking_enabled' => array(
+			'ga_404_tracking_enabled'                 => array(
 				'label'         => __( 'Track 404 (Not found) Errors', 'woocommerce-google-analytics-integration' ),
-				'description'   => sprintf( __( 'Enable this to find broken or dead links. An "Event" with category "Error" and action "404 Not Found" will be created in Google Analytics for each incoming pageview to a non-existing page. By setting up a "Custom Goal" for these events within Google Analytics you can find out where broken links originated from (the referrer). %sRead how to set up a goal%s.', 'woocommerce-google-analytics-integration' ), '<a href="https://support.google.com/analytics/answer/1032415" target="_blank">', '</a>' ),
+				/* translators: Read more link */
+				'description'   => sprintf( __( 'Enable this to find broken or dead links. An "Event" with category "Error" and action "404 Not Found" will be created in Google Analytics for each incoming pageview to a non-existing page. By setting up a "Custom Goal" for these events within Google Analytics you can find out where broken links originated from (the referrer). %1$sRead how to set up a goal%2$s.', 'woocommerce-google-analytics-integration' ), '<a href="https://support.google.com/analytics/answer/1032415" target="_blank">', '</a>' ),
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
-				'default'       => 'yes'
+				'default'       => 'yes',
 			),
-			'ga_ecommerce_tracking_enabled' => array(
-				'label' 			=> __( 'Purchase Transactions', 'woocommerce-google-analytics-integration' ),
-				'description' 			=> __( 'This requires a payment gateway that redirects to the thank you/order received page after payment. Orders paid with gateways which do not do this will not be tracked.', 'woocommerce-google-analytics-integration' ),
-				'type' 				=> 'checkbox',
-				'checkboxgroup'		=> 'start',
-				'default' 			=> get_option( 'woocommerce_ga_ecommerce_tracking_enabled' ) ? get_option( 'woocommerce_ga_ecommerce_tracking_enabled' ) : 'yes',  // Backwards compat
-			),
-			'ga_event_tracking_enabled' => array(
-				'label' 			=> __( 'Add to Cart Events', 'woocommerce-google-analytics-integration' ),
-				'type' 				=> 'checkbox',
-				'checkboxgroup'		=> '',
-				'default' 			=> 'yes',
-			),
-
-			'ga_enhanced_ecommerce_tracking_enabled' => array(
-				'title'         => __( 'Enhanced eCommerce', 'woocommerce-google-analytics-integration' ),
-				'label'         => __( 'Enable Enhanced eCommerce ', 'woocommerce-google-analytics-integration' ),
-				'description'   => sprintf( __( 'Enhanced eCommerce allows you to measure more user interactions with your store, including: product impressions, product detail views, starting the checkout process, adding cart items, and removing cart items. Universal Analytics or Global Site Tag must be enabled for Enhanced eCommerce to work. If using Universal Analytics, turn on Enhanced eCommerce in your Google Analytics dashboard before enabling this setting. <a href="%s" target="_blank">See here for more information</a>.', 'woocommerce-google-analytics-integration' ), 'https://support.google.com/analytics/answer/6032539?hl=en' ),
+			'ga_linker_allow_incoming_enabled'        => array(
+				'label'         => __( 'Accept Incoming Linker Parameters', 'woocommerce-google-analytics-integration' ),
+				'description'   => __( 'Enabling this option will allow incoming linker parameters from other websites.', 'woocommerce-google-analytics-integration' ),
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
 				'default'       => 'no',
-				'class'         => 'legacy-setting'
+			),
+			'ga_ecommerce_tracking_enabled'           => array(
+				'title'         => __( 'Event Tracking', 'woocommerce-google-analytics-integration' ),
+				'label'         => __( 'Purchase Transactions', 'woocommerce-google-analytics-integration' ),
+				'description'   => __( 'This requires a payment gateway that redirects to the thank you/order received page after payment. Orders paid with gateways which do not do this will not be tracked.', 'woocommerce-google-analytics-integration' ),
+				'type'          => 'checkbox',
+				'checkboxgroup' => 'start',
+				'default'       => get_option( 'woocommerce_ga_ecommerce_tracking_enabled' ) ? get_option( 'woocommerce_ga_ecommerce_tracking_enabled' ) : 'yes',  // Backwards compat
+			),
+			'ga_event_tracking_enabled'               => array(
+				'label'         => __( 'Add to Cart Events', 'woocommerce-google-analytics-integration' ),
+				'type'          => 'checkbox',
+				'checkboxgroup' => '',
+				'default'       => 'yes',
+			),
+			'ga_enhanced_remove_from_cart_enabled'    => array(
+				'label'         => __( 'Remove from Cart Events', 'woocommerce-google-analytics-integration' ),
+				'type'          => 'checkbox',
+				'checkboxgroup' => '',
+				'default'       => 'yes',
 			),
 
-			// Enhanced eCommerce Sub-Settings
-
-			'ga_enhanced_remove_from_cart_enabled' => array(
-				'label' 			=> __( 'Remove from Cart Events', 'woocommerce-google-analytics-integration' ),
-				'type' 				=> 'checkbox',
-				'checkboxgroup'		=> '',
-				'default' 			=> 'yes',
-				'class'             => 'enhanced-setting'
+			'ga_enhanced_product_impression_enabled'  => array(
+				'label'         => __( 'Product Impressions from Listing Pages', 'woocommerce-google-analytics-integration' ),
+				'type'          => 'checkbox',
+				'checkboxgroup' => '',
+				'default'       => 'yes',
 			),
 
-			'ga_enhanced_product_impression_enabled' => array(
-				'label' 			=> __( 'Product Impressions from Listing Pages', 'woocommerce-google-analytics-integration' ),
-				'type' 				=> 'checkbox',
-				'checkboxgroup'		=> '',
-				'default' 			=> 'yes',
-				'class'             => 'enhanced-setting'
-			),
-
-			'ga_enhanced_product_click_enabled' => array(
-				'label' 			=> __( 'Product Clicks from Listing Pages', 'woocommerce-google-analytics-integration' ),
-				'type' 				=> 'checkbox',
-				'checkboxgroup'		=> '',
-				'default' 			=> 'yes',
-				'class'             => 'enhanced-setting'
+			'ga_enhanced_product_click_enabled'       => array(
+				'label'         => __( 'Product Clicks from Listing Pages', 'woocommerce-google-analytics-integration' ),
+				'type'          => 'checkbox',
+				'checkboxgroup' => '',
+				'default'       => 'yes',
 			),
 
 			'ga_enhanced_product_detail_view_enabled' => array(
-				'label' 			=> __( 'Product Detail Views', 'woocommerce-google-analytics-integration' ),
-				'type' 				=> 'checkbox',
-				'checkboxgroup'		=> '',
-				'default' 			=> 'yes',
-				'class'             => 'enhanced-setting'
+				'label'         => __( 'Product Detail Views', 'woocommerce-google-analytics-integration' ),
+				'type'          => 'checkbox',
+				'checkboxgroup' => '',
+				'default'       => 'yes',
 			),
 
-			'ga_enhanced_checkout_process_enabled' => array(
-				'label' 			=> __( 'Checkout Process Initiated', 'woocommerce-google-analytics-integration' ),
-				'type' 				=> 'checkbox',
-				'checkboxgroup'		=> '',
-				'default' 			=> 'yes',
-				'class'             => 'enhanced-setting'
+			'ga_enhanced_checkout_process_enabled'    => array(
+				'label'         => __( 'Checkout Process Initiated', 'woocommerce-google-analytics-integration' ),
+				'type'          => 'checkbox',
+				'checkboxgroup' => '',
+				'default'       => 'yes',
+			),
+			'ga_linker_cross_domains'                 => array(
+				'title'       => __( 'Cross Domain Tracking', 'woocommerce-google-analytics-integration' ),
+				/* translators: Read more link */
+				'description' => sprintf( __( 'Add a comma separated list of domains for automatic linking. %1$sRead more about Cross Domain Measurement%2$s', 'woocommerce-google-analytics-integration' ), '<a href="https://support.google.com/analytics/answer/7476333" target="_blank">', '</a>' ),
+				'type'        => 'text',
+				'placeholder' => 'example.com, example.net',
+				'default'     => '',
 			),
 		);
 	}
@@ -282,11 +211,14 @@ class WC_Google_Analytics extends WC_Integration {
 	/**
 	 * Shows some additional help text after saving the Google Analytics settings
 	 */
-	function show_options_info() {
-		$this->method_description .= "<div class='notice notice-info'><p>" . __( 'Please allow Google Analytics 24 hours to start displaying results.', 'woocommerce-google-analytics-integration' ) . "</p></div>";
+	public function show_options_info() {
+		$this->method_description .= "<div class='notice notice-info'><p>" . __( 'Please allow Google Analytics 24 hours to start displaying results.', 'woocommerce-google-analytics-integration' ) . '</p></div>';
 
+		// Nonce verification is handled by WC_Integration::process_admin_options().
+		// This callback runs on woocommerce_update_options_integration_google_analytics, which is already nonce-protected.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['woocommerce_google_analytics_ga_ecommerce_tracking_enabled'] ) && true === (bool) $_REQUEST['woocommerce_google_analytics_ga_ecommerce_tracking_enabled'] ) {
-			$this->method_description .= "<div class='notice notice-info'><p>" . __( 'Please note, for transaction tracking to work properly, you will need to use a payment gateway that redirects the customer back to a WooCommerce order received/thank you page.', 'woocommerce-google-analytics-integration' ) . "</div>";
+			$this->method_description .= "<div class='notice notice-info'><p>" . __( 'Please note, for transaction tracking to work properly, you will need to use a payment gateway that redirects the customer back to a WooCommerce order received/thank you page.', 'woocommerce-google-analytics-integration' ) . '</div>';
 		}
 	}
 
@@ -298,26 +230,22 @@ class WC_Google_Analytics extends WC_Integration {
 	 * @param  array $data Current WC tracker data.
 	 * @return array       Updated WC Tracker data.
 	 */
-	function track_options( $data ) {
+	public function track_settings( $data ) {
+		$settings                    = $this->settings;
 		$data['wc-google-analytics'] = array(
-			'standard_tracking_enabled'   		  => $this->ga_standard_tracking_enabled,
-			'support_display_advertising' 		  => $this->ga_support_display_advertising,
-			'support_enhanced_link_attribution'   => $this->ga_support_enhanced_link_attribution,
-			'use_universal_analytics'     		  => $this->ga_use_universal_analytics,
-			'anonymize_enabled'           		  => $this->ga_anonymize_enabled,
-			'ga_404_tracking_enabled'             => $this->ga_404_tracking_enabled,
-			'ecommerce_tracking_enabled'  		  => $this->ga_ecommerce_tracking_enabled,
-			'event_tracking_enabled'      		  => $this->ga_event_tracking_enabled,
-			'gtag_enabled'                        => $this->ga_gtag_enabled,
-			'set_domain_name'                     => empty( $this->ga_set_domain_name ) ? 'no' : 'yes',
-			'plugin_version'                      => WC_GOOGLE_ANALYTICS_INTEGRATION_VERSION,
-			'enhanced_ecommerce_tracking_enabled' => $this->ga_enhanced_ecommerce_tracking_enabled,
+			'support_display_advertising'   => $settings['ga_support_display_advertising'],
+			'ga_404_tracking_enabled'       => $settings['ga_404_tracking_enabled'],
+			'ecommerce_tracking_enabled'    => $settings['ga_ecommerce_tracking_enabled'],
+			'event_tracking_enabled'        => $settings['ga_event_tracking_enabled'],
+			'plugin_version'                => WC_GOOGLE_ANALYTICS_INTEGRATION_VERSION,
+			'linker_allow_incoming_enabled' => empty( $settings['ga_linker_allow_incoming_enabled'] ) ? 'no' : 'yes',
+			'linker_cross_domains'          => $settings['ga_linker_cross_domains'],
 		);
 
 		// ID prefix, blank, or X for unknown
-		$prefix = substr( strtoupper( $this->ga_id ), 0, 2 );
-		if ( 'UA' === $prefix || 'G-' === $prefix || empty( $prefix ) ) {
-			$data['wc-google-analytics']['ga_id'] = str_replace( '-', '', $prefix );
+		$prefix = strstr( strtoupper( $settings['ga_id'] ), '-', true );
+		if ( in_array( $prefix, array( 'UA', 'G', 'GT' ), true ) || empty( $prefix ) ) {
+			$data['wc-google-analytics']['ga_id'] = $prefix;
 		} else {
 			$data['wc-google-analytics']['ga_id'] = 'X';
 		}
@@ -326,94 +254,24 @@ class WC_Google_Analytics extends WC_Integration {
 	}
 
 	/**
-	 * Enqueue the admin JavaScript
-	 */
-	function load_admin_assets() {
-		$screen = get_current_screen();
-		if ( 'woocommerce_page_wc-settings' !== $screen->id ) {
-			return;
-		}
-
-		if ( empty( $_GET['tab'] ) ) {
-			return;
-		}
-
-		if ( 'integration' !== $_GET['tab'] ) {
-			return;
-		}
-
-		wp_enqueue_script( 'wc-google-analytics-admin-enhanced-settings', plugins_url( '/assets/js/admin-ga-settings.js', dirname( __FILE__ ) ), array(), WC_GOOGLE_ANALYTICS_INTEGRATION_VERSION, true );
-	}
-
-	/**
-	 * Display the tracking codes
-	 * Acts as a controller to figure out which code to display
-	 */
-	public function tracking_code_display() {
-		global $wp;
-		$display_ecommerce_tracking = false;
-
-		if ( $this->disable_tracking( 'all' ) ) {
-			return;
-		}
-
-		// Check if is order received page and stop when the products and not tracked
-		if ( is_order_received_page() && 'yes' === $this->ga_ecommerce_tracking_enabled ) {
-			$order_id = isset( $wp->query_vars['order-received'] ) ? $wp->query_vars['order-received'] : 0;
-			if ( 0 < $order_id && 1 != get_post_meta( $order_id, '_ga_tracked', true ) ) {
-				$display_ecommerce_tracking = true;
-				echo $this->get_ecommerce_tracking_code( $order_id );
-			}
-		}
-
-		if ( is_woocommerce() || is_cart() || ( is_checkout() && ! $display_ecommerce_tracking ) ) {
-			$display_ecommerce_tracking = true;
-			echo $this->get_standard_tracking_code();
-		}
-
-		if ( ! $display_ecommerce_tracking && 'yes' === $this->ga_standard_tracking_enabled ) {
-			echo $this->get_standard_tracking_code();
-		}
-	}
-
-	/**
-	 * Generate Standard Google Analytics tracking
-	 */
-	protected function get_standard_tracking_code() {
-		return "<!-- WooCommerce Google Analytics Integration -->
-		" . $this->get_tracking_instance()->header() .
-		$this->get_tracking_instance()->load_analytics() . "
-		<!-- /WooCommerce Google Analytics Integration -->";
-	}
-
-	/**
-	 * Generate eCommerce tracking code
+	 * Add suggested privacy policy content
 	 *
-	 * @param int $order_id
-	 * @return string
+	 * @return void
 	 */
-	protected function get_ecommerce_tracking_code( $order_id ) {
-		// Get the order and output tracking code.
-		$order = wc_get_order( $order_id );
+	public function privacy_policy() {
+		$policy_text = sprintf(
+			/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
+			esc_html__( 'By using this extension, you may be storing personal data or sharing data with an external service. %1$sLearn more about what data is collected by Google and what you may want to include in your privacy policy%2$s.', 'woocommerce-google-analytics-integration' ),
+			'<a href="https://support.google.com/analytics/answer/7318509" target="_blank">',
+			'</a>'
+		);
 
-		// Make sure we have a valid order object.
-		if ( ! $order ) {
-			return '';
-		}
+		// As the extension doesn't offer suggested privacy policy text, the button to copy it is hidden.
+		$content = '
+			<p class="privacy-policy-tutorial">' . $policy_text . '</p>
+			<style>#privacy-settings-accordion-block-woocommerce-google-analytics-integration .privacy-settings-accordion-actions { display: none }</style>';
 
-		$load = $this->get_tracking_instance()->load_analytics( $order );
-		$code = $this->get_tracking_instance()->add_transaction( $order );
-
-		// Mark the order as tracked.
-		update_post_meta( $order_id, '_ga_tracked', 1 );
-
-		return "
-		<!-- WooCommerce Google Analytics Integration -->
-		" . $this->get_tracking_instance()->header() . "
-		" . $load . "
-		<script type='text/javascript'>$code</script>
-		<!-- /WooCommerce Google Analytics Integration -->
-		";
+		wp_add_privacy_policy_content( 'Google Analytics for WooCommerce', wpautop( $content, false ) );
 	}
 
 	/**
@@ -423,193 +281,7 @@ class WC_Google_Analytics extends WC_Integration {
 	 * @return bool         True if tracking for a certain setting is disabled
 	 */
 	private function disable_tracking( $type ) {
-		return is_admin() || current_user_can( 'manage_options' ) || ( ! $this->ga_id ) || 'no' === $type || apply_filters( 'woocommerce_ga_disable_tracking', false, $type );
-	}
-
-	/**
-	 * Google Analytics event tracking for single product add to cart
-	 */
-	public function add_to_cart() {
-		if ( $this->disable_tracking( $this->ga_event_tracking_enabled ) ) {
-			return;
-		}
-		if ( ! is_single() ) {
-			return;
-		}
-
-		global $product;
-
-		// Add single quotes to allow jQuery to be substituted into _trackEvent parameters
-		$parameters = array();
-		$parameters['category'] = "'" . __( 'Products', 'woocommerce-google-analytics-integration' ) . "'";
-		$parameters['action']   = "'" . __( 'Add to Cart', 'woocommerce-google-analytics-integration' ) . "'";
-		$parameters['label']    = "'" . esc_js( $product->get_sku() ? __( 'ID:', 'woocommerce-google-analytics-integration' ) . ' ' . $product->get_sku() : "#" . $product->get_id() ) . "'";
-
-		if ( ! $this->disable_tracking( $this->ga_enhanced_ecommerce_tracking_enabled ) ) {
-			$item = "{";
-			$item .= "'id': '" . esc_js( $product->get_sku() ? $product->get_sku() : ( '#' . $product->get_id() ) ) . "',";
-			$item .= "'name': '" . esc_js( $product->get_title() ) . "',";
-			$item .= "'quantity': $( 'input.qty' ).val() ? $( 'input.qty' ).val() : '1'";
-			$item .= "}";
-			$parameters['item'] = $item;
-
-			$code = "" . $this->get_tracking_instance()->tracker_var() . "( 'ec:addProduct', " . $item . " );";
-			$parameters['enhanced'] = $code;
-		}
-
-		$this->get_tracking_instance()->event_tracking_code( $parameters, '.single_add_to_cart_button' );
-	}
-
-	/**
-	 * Enhanced Analytics event tracking for removing a product from the cart
-	 */
-	public function remove_from_cart() {
-
-		if ( ! $this->enhanced_ecommerce_enabled( $this->ga_enhanced_remove_from_cart_enabled ) ) {
-			return;
-		}
-
-		$this->get_tracking_instance()->remove_from_cart();
-	}
-
-	/**
-	 * Adds the product ID and SKU to the remove product link if not present
-	 *
-	 * @param  string $url
-	 * @param  string $key
-	 * @return string
-	 */
-	public function remove_from_cart_attributes( $url, $key ) {
-		if ( strpos( $url,'data-product_id' ) !== false ) {
-			return $url;
-		}
-
-		if ( ! is_object( WC()->cart ) ) {
-			return $url;
-		}
-
-		$item = WC()->cart->get_cart_item( $key );
-		$product = $item['data'];
-
-		if ( ! is_object( $product ) ) {
-			return $url;
-		}
-
-		$url = str_replace( 'href=', 'data-product_id="' . esc_attr( $product->get_id() ) . '" data-product_sku="' . esc_attr( $product->get_sku() )  . '" href=', $url );
-		return $url;
-	}
-
-	/**
-	 * Google Analytics event tracking for loop add to cart
-	 */
-	public function loop_add_to_cart() {
-		if ( $this->disable_tracking( $this->ga_event_tracking_enabled ) ) {
-			return;
-		}
-
-		// Add single quotes to allow jQuery to be substituted into _trackEvent parameters
-		$parameters = array();
-		$parameters['category'] = "'" . __( 'Products', 'woocommerce-google-analytics-integration' ) . "'";
-		$parameters['action']   = "'" . __( 'Add to Cart', 'woocommerce-google-analytics-integration' ) . "'";
-		$parameters['label']    = "($(this).data('product_sku')) ? ($(this).data('product_sku')) : ('#' + $(this).data('product_id'))"; // Product SKU or ID
-
-		if ( ! $this->disable_tracking( $this->ga_enhanced_ecommerce_tracking_enabled ) ) {
-			$item = "{";
-			$item .= "'id': ($(this).data('product_sku')) ? ($(this).data('product_sku')) : ('#' + $(this).data('product_id')),";
-			$item .= "'quantity': $(this).data('quantity')";
-			$item .= "}";
-			$parameters['item'] = $item;
-
-			$code = "" . $this->get_tracking_instance()->tracker_var() . "( 'ec:addProduct', " . $item ." );";
-			$parameters['enhanced'] = $code;
-		}
-
-		$this->get_tracking_instance()->event_tracking_code( $parameters, '.add_to_cart_button:not(.product_type_variable, .product_type_grouped)' );
-	}
-
-	/**
-	 * Determine if the conditions are met for enhanced ecommerce interactions to be displayed.
-	 * Currently checks if Global Tags OR Universal Analytics are enabled, plus Enhanced eCommerce.
-	 *
-	 * @param  array $extra_checks Any extra option values that should be 'yes' to proceed
-	 * @return bool                Whether enhanced ecommerce transactions can be displayed.
-	 */
-	protected function enhanced_ecommerce_enabled( $extra_checks = [] ) {
-		if ( !is_array( $extra_checks ) ) {
-			$extra_checks = [ $extra_checks ];
-		}
-
-		// False if gtag and UA are disabled.
-		if ( $this->disable_tracking( $this->ga_use_universal_analytics ) && $this->disable_tracking( $this->ga_gtag_enabled ) ) {
-			return false;
-		}
-
-		// False if gtag or UA is enabled, but enhanced ecommerce is disabled.
-		if ( $this->disable_tracking( $this->ga_enhanced_ecommerce_tracking_enabled ) ) {
-			return false;
-		}
-
-		// False if any specified interaction-level checks are disabled.
-		foreach ( $extra_checks as $option_value ) {
-			if ( $this->disable_tracking( $option_value ) ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * Measures a listing impression (from search results)
-	 */
-	public function listing_impression() {
-
-		if ( ! $this->enhanced_ecommerce_enabled( $this->ga_enhanced_product_impression_enabled ) ) {
-			return;
-		}
-
-		global $product, $woocommerce_loop;
-		$this->get_tracking_instance()->listing_impression( $product, $woocommerce_loop['loop'] );
-	}
-
-	/**
-	 * Measure a product click from a listing page
-	 */
-	public function listing_click() {
-
-		if ( ! $this->enhanced_ecommerce_enabled( $this->ga_enhanced_product_click_enabled ) ) {
-			return;
-		}
-
-		global $product, $woocommerce_loop;
-		$this->get_tracking_instance()->listing_click( $product, $woocommerce_loop['loop'] );
-	}
-
-	/**
-	 * Measure a product detail view
-	 */
-	public function product_detail() {
-
-		if ( ! $this->enhanced_ecommerce_enabled( $this->ga_enhanced_product_detail_view_enabled ) ) {
-			return;
-		}
-
-		global $product;
-		$this->get_tracking_instance()->product_detail( $product );
-	}
-
-	/**
-	 * Tracks when the checkout form is loaded
-	 *
-	 * @param mixed $checkout (unused)
-	 */
-	public function checkout_process( $checkout ) {
-
-		if ( ! $this->enhanced_ecommerce_enabled( $this->ga_enhanced_checkout_process_enabled ) ) {
-			return;
-		}
-
-		$this->get_tracking_instance()->checkout_process( WC()->cart->get_cart() );
+		return is_admin() || current_user_can( 'manage_options' ) || empty( $this->settings['ga_id'] ) || 'no' === $type || apply_filters( 'woocommerce_ga_disable_tracking', false, $type );
 	}
 
 	/**
@@ -625,6 +297,34 @@ class WC_Google_Analytics extends WC_Integration {
 		// Now add the utm_nooverride query arg to the URL
 		$return_url = add_query_arg( 'utm_nooverride', '1', $return_url );
 
-		return $return_url;
+		return esc_url( $return_url, null, 'db' );
+	}
+
+	/**
+	 * Check if the Google Analytics Tracking ID has been set up.
+	 *
+	 * @since 1.5.17
+	 *
+	 * @return bool Whether the Google Analytics setup is completed.
+	 */
+	public function is_setup_complete() {
+		return (bool) $this->get_option( 'ga_id' );
+	}
+
+
+	/**
+	 * Adds the setup task to the Tasklists.
+	 *
+	 * @since 1.5.17
+	 */
+	public function add_wc_setup_task() {
+		require_once 'class-wc-google-analytics-task.php';
+
+		TaskLists::add_task(
+			'extended',
+			new WC_Google_Analytics_Task(
+				TaskLists::get_list( 'extended' )
+			)
+		);
 	}
 }

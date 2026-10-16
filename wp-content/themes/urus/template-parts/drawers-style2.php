@@ -145,6 +145,6 @@ $woocommerce_enable_myaccount_registration = get_option('woocommerce_enable_myac
 </div>
 <div id="Familab_CartDrawer" class="cart-drawer drawer style1">
     <div class="urus-mini-cart-content">
-        <div class="widget_shopping_cart_content"></div>
+        <div class="widget_shopping_cart_content"><?php /* Rendered server side: WooCommerce 7.8+ only refreshes it via cart fragments when the cart has items. */ if ( function_exists( 'woocommerce_mini_cart' ) ) { woocommerce_mini_cart(); } ?></div>
     </div>
 </div>

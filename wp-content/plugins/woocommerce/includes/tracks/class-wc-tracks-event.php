@@ -12,22 +12,23 @@ defined( 'ABSPATH' ) || exit;
 /**
  * WC_Tracks_Event class.
  */
+#[AllowDynamicProperties]
 class WC_Tracks_Event {
 
 	/**
 	 * Event name regex.
 	 */
-	const EVENT_NAME_REGEX = '/^(([a-z0-9]+)_){2}([a-z0-9_]+)$/';
+	public const EVENT_NAME_REGEX = '/^(([a-z0-9]+)_){1}([a-z0-9_]+)$/';
 
 	/**
 	 * Property name regex.
 	 */
-	const PROP_NAME_REGEX = '/^[a-z_][a-z0-9_]*$/';
+	public const PROP_NAME_REGEX = '/^[a-z_][a-z0-9_]*$/';
 
 	/**
 	 * Error message as WP_Error.
 	 *
-	 * @var WP_Error
+	 * @var WP_Error|null
 	 */
 	public $error;
 
@@ -54,7 +55,7 @@ class WC_Tracks_Event {
 	 * @return bool Always returns true.
 	 */
 	public function record() {
-		if ( wp_doing_ajax() || Constants::is_true( 'REST_REQUEST' ) ) {
+		if ( wp_doing_ajax() || Constants::is_true( 'REST_REQUEST' ) || Constants::is_true( 'WP_CLI' ) || wp_doing_cron() ) {
 			return WC_Tracks_Client::record_event( $this );
 		}
 
@@ -65,7 +66,7 @@ class WC_Tracks_Event {
 	 * Annotate the event with all relevant info.
 	 *
 	 * @param  array $event Event arguments.
-	 * @return bool|WP_Error True on success, WP_Error on failure.
+	 * @return object|WP_Error Event object on success, WP_Error on failure.
 	 */
 	public static function validate_and_sanitize( $event ) {
 		$event = (object) $event;
@@ -91,6 +92,19 @@ class WC_Tracks_Event {
 		if ( ! isset( $_event->_ts ) ) {
 			$_event->_ts = WC_Tracks_Client::build_timestamp();
 		}
+
+		if ( ! self::event_name_is_valid( $_event->_en ) ) {
+			return new WP_Error( 'invalid_event_name', __( 'A valid event name must be specified.', 'woocommerce' ) );
+		}
+
+		foreach ( array_keys( (array) $_event ) as $key ) {
+			if ( ! self::prop_name_is_valid( $key ) && '_en' !== $key ) {
+				return new WP_Error( 'invalid_prop_name', __( 'A valid prop name must be specified', 'woocommerce' ) );
+			}
+		}
+
+		// Sanitize array values to prevent bracket notation in serialization.
+		$_event = self::sanitize_property_values( $_event );
 
 		return $_event;
 	}
@@ -118,6 +132,54 @@ class WC_Tracks_Event {
 		}
 
 		return esc_url_raw( WC_Tracks_Client::PIXEL . '?' . http_build_query( $validated ) );
+	}
+
+	/**
+	 * Sanitize property values to ensure they can be safely serialized.
+	 *
+	 * Converts array values to appropriate formats to prevent http_build_query()
+	 * from creating bracket notation (e.g., prop[0], prop[1]) which violates
+	 * the property name regex.
+	 *
+	 * @param object|array $properties Event properties as object or array.
+	 * @return object|array Sanitized properties in the same type as input.
+	 */
+	private static function sanitize_property_values( $properties ) {
+		$is_object = is_object( $properties );
+		$props     = $is_object ? get_object_vars( $properties ) : $properties;
+
+		foreach ( $props as $key => $value ) {
+			if ( ! is_array( $value ) ) {
+				continue;
+			}
+
+			if ( ! $value ) {
+				// Empty array becomes empty string.
+				$props[ $key ] = '';
+				continue;
+			}
+
+			// Check if array is indexed (not associative) and contains only scalar values.
+			$is_indexed_array = array_keys( $value ) === range( 0, count( $value ) - 1 );
+			$has_scalar_only  = ! array_filter(
+				$value,
+				function ( $item ) {
+					return is_array( $item ) || is_object( $item );
+				}
+			);
+
+			if ( $is_indexed_array && $has_scalar_only ) {
+				// Indexed arrays with scalar values: join as comma string.
+				$props[ $key ] = implode( ',', array_map( 'strval', $value ) );
+				continue;
+			}
+
+			// Associative arrays or nested arrays become JSON strings.
+			$encoded       = wp_json_encode( $value, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES );
+			$props[ $key ] = ( false === $encoded ) ? '' : $encoded;
+		}
+
+		return $is_object ? (object) $props : $props;
 	}
 
 	/**

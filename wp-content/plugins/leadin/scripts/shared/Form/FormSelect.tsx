@@ -45,6 +45,7 @@ export default function FormSelect({
         handleChange({
           value: guid,
           label: name,
+          embedVersion: 'v4',
         });
       });
     } else {

@@ -1,9 +1,2 @@
 <?php
-
-namespace WPML\Core\SharedKernel\Component\TranslationProxy\Domain\Query;
-
-use WPML\PHP\Exception\Exception;
-
-class FetchRemoteTranslationServiceException extends Exception {
-
-}
+require_once __DIR__ . '/../../../../../../../../../../wpml/src/Core/SharedKernel/Component/TranslationProxy/Domain/Query/FetchRemoteTranslationServiceException.php';

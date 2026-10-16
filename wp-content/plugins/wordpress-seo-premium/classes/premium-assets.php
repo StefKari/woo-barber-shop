@@ -80,6 +80,7 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 					'lodash',
 					'react',
 					'react-dom',
+					'wp-api-fetch',
 					'wp-data',
 					'wp-dom-ready',
 					'wp-element',
@@ -157,7 +158,6 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 					'wp-i18n',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'analysis',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'admin-modules',
-					WPSEO_Admin_Asset_Manager::PREFIX . 'react-select',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'yoast-components',
 				],
 			],
@@ -266,6 +266,7 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 					'yoast-seo-premium-metabox',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'editor-modules',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'yoast-components',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ai-frontend-package',
 				],
 			],
 			[
@@ -307,61 +308,67 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 				'footer'       => true,
 			],
 			[
-				'name'         => 'wp-seo-premium-ai-generator',
-				'path'         => 'assets/js/dist/',
-				'filename'     => 'ai-generator-' . $version . WPSEO_CSSJS_SUFFIX . '.js',
-				'dependencies' => [
-					'lodash',
-					'regenerator-runtime',
-					'wp-api-fetch',
-					'wp-components',
-					'wp-data',
-					'wp-dom-ready',
-					'wp-element',
-					'wp-hooks',
-					'wp-i18n',
-					WPSEO_Admin_Asset_Manager::PREFIX . 'analysis',
-					WPSEO_Admin_Asset_Manager::PREFIX . 'editor-modules',
-					WPSEO_Admin_Asset_Manager::PREFIX . 'ui-library-package',
-					WPSEO_Admin_Asset_Manager::PREFIX . 'react-helmet-package',
-				],
-			],
-			[
-				'name'         => 'wp-seo-premium-ai-fix-assessments',
+				'name'         => 'wp-seo-premium-ai-optimize',
 				'path'         => 'assets/js/dist/',
 				'filename'     => 'ai-fix-assessments-' . $version . WPSEO_CSSJS_SUFFIX . '.js',
 				'dependencies' => [
 					'lodash',
+					'react',
 					'regenerator-runtime',
 					'wp-api-fetch',
+					'wp-blocks',
 					'wp-components',
 					'wp-data',
+					'wp-dom',
 					'wp-dom-ready',
 					'wp-element',
 					'wp-hooks',
+					'wp-html-entities',
 					'wp-i18n',
+					'wp-polyfill',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ai-frontend-package',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'analysis',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'editor-modules',
-					WPSEO_Admin_Asset_Manager::PREFIX . 'ui-library-package',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'prop-types-package',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'react-helmet-package',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'redux-js-toolkit-package',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ui-library-package',
 				],
 			],
 			[
-				'name'         => 'wp-seo-premium-manage-ai-consent-button',
+				'name'         => 'wp-seo-premium-ai-bulk-editor',
 				'path'         => 'assets/js/dist/',
-				'filename'     => 'manage-ai-consent-button-' . $version . WPSEO_CSSJS_SUFFIX . '.js',
+				'filename'     => 'ai-bulk-editor-' . $version . WPSEO_CSSJS_SUFFIX . '.js',
 				'dependencies' => [
 					'lodash',
-					'regenerator-runtime',
+					'react',
+					'react-jsx-runtime',
 					'wp-api-fetch',
 					'wp-components',
 					'wp-data',
 					'wp-dom-ready',
 					'wp-element',
-					'wp-hooks',
 					'wp-i18n',
-					WPSEO_Admin_Asset_Manager::PREFIX . 'ui-library-package',
+					'wp-plugins',
+					'wp-polyfill',
+					'wp-url',
+					// The Free bulk-editor script exposes the shared upsell modal Premium reuses on window.yoast.bulkEditor.
+					WPSEO_Admin_Asset_Manager::PREFIX . 'bulk-editor-page',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'prop-types-package',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'react-helmet-package',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'redux-js-toolkit-package',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ui-library-package',
+				],
+			],
+			[
+				'name'         => 'wp-seo-premium-bulk-editor-morphology',
+				'path'         => 'assets/js/dist/',
+				'filename'     => 'bulk-editor-morphology-' . $version . WPSEO_CSSJS_SUFFIX . '.js',
+				'dependencies' => [
+					'jquery',
+					'lodash',
+					'wp-hooks',
+					'wp-polyfill',
 				],
 			],
 			[
@@ -381,6 +388,50 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 					WPSEO_Admin_Asset_Manager::PREFIX . 'introductions',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'ui-library-package',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'react-helmet-package',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ai-frontend-package',
+				],
+			],
+			[
+				'name'         => 'wp-seo-premium-update-plugins',
+				'path'         => 'assets/js/dist/',
+				'filename'     => 'wp-seo-premium-update-plugins-' . $version . WPSEO_CSSJS_SUFFIX . '.js',
+				'dependencies' => [
+					'jquery',
+				],
+			],
+			[
+				'name'         => 'wp-seo-premium-admin-redirects',
+				'path'         => 'assets/js/dist/',
+				'filename'     => 'redirects-' . $version . WPSEO_CSSJS_SUFFIX . '.js',
+				'dependencies' => [
+					'wp-api',
+					'wp-api-fetch',
+					'wp-polyfill',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'editor-modules',
+				],
+			],
+			[
+				'name'         => 'wp-seo-premium-ai-blocks',
+				'path'         => 'assets/js/dist/',
+				'filename'     => 'ai-blocks-' . $version . WPSEO_CSSJS_SUFFIX . '.js',
+				'dependencies' => [
+					'lodash',
+					'react',
+					'react-jsx-runtime',
+					'wp-block-editor',
+					'wp-blocks',
+					'wp-components',
+					'wp-data',
+					'wp-dom-ready',
+					'wp-element',
+					'wp-i18n',
+					'wp-polyfill',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ai-frontend-package',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'analysis',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'editor-modules',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'prop-types-package',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'redux-js-toolkit-package',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ui-library-package',
 				],
 			],
 		];
@@ -429,11 +480,6 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 				'dependencies' => [],
 			],
 			[
-				'name'         => WPSEO_Admin_Asset_Manager::PREFIX . 'premium-settings',
-				'source'       => 'assets/css/dist/premium-settings-' . $version . '.css',
-				'dependencies' => [],
-			],
-			[
 				'name'         => WPSEO_Admin_Asset_Manager::PREFIX . 'premium-post-overview',
 				'source'       => 'assets/css/dist/premium-post-overview-' . $version . '.css',
 				'dependencies' => [],
@@ -448,17 +494,10 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 				'dependencies' => [],
 			],
 			[
-				'name'         => WPSEO_Admin_Asset_Manager::PREFIX . 'premium-ai-generator',
-				'source'       => 'assets/css/dist/premium-ai-generator-' . $version . $rtl_suffix . '.css',
-				'dependencies' => [
-					WPSEO_Admin_Asset_Manager::PREFIX . 'premium-tailwind',
-					WPSEO_Admin_Asset_Manager::PREFIX . 'monorepo',
-				],
-			],
-			[
 				'name'         => WPSEO_Admin_Asset_Manager::PREFIX . 'premium-ai-fix-assessments',
 				'source'       => 'assets/css/dist/premium-ai-fix-assessments-' . $version . $rtl_suffix . '.css',
 				'dependencies' => [
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ai-frontend',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'premium-tailwind',
 					WPSEO_Admin_Asset_Manager::PREFIX . 'monorepo',
 				],
@@ -466,7 +505,18 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 			[
 				'name'         => WPSEO_Admin_Asset_Manager::PREFIX . 'premium-block-editor',
 				'source'       => 'assets/css/dist/premium-block-editor-' . $version . $rtl_suffix . '.css',
-				'dependencies' => [],
+				'dependencies' => [
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ai-frontend',
+				],
+			],
+			[
+				'name'         => WPSEO_Admin_Asset_Manager::PREFIX . 'premium-ai-summarize',
+				'source'       => 'assets/css/dist/premium-ai-summarize-' . $version . $rtl_suffix . '.css',
+				'dependencies' => [
+					WPSEO_Admin_Asset_Manager::PREFIX . 'ai-frontend',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'premium-tailwind',
+					WPSEO_Admin_Asset_Manager::PREFIX . 'monorepo',
+				],
 			],
 		];
 	}
@@ -494,7 +544,7 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 			$url,
 			$script['dependencies'],
 			WPSEO_PREMIUM_VERSION,
-			$in_footer
+			$in_footer,
 		);
 	}
 
@@ -512,7 +562,7 @@ class WPSEO_Premium_Assets implements WPSEO_WordPress_Integration {
 			$style['name'],
 			plugin_dir_url( WPSEO_PREMIUM_FILE ) . $style['source'],
 			$style['dependencies'],
-			WPSEO_PREMIUM_VERSION
+			WPSEO_PREMIUM_VERSION,
 		);
 	}
 }

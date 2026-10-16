@@ -364,13 +364,22 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 			ob_start();
 
 			check_ajax_referer( 'search-products', 'security' );
-            // @codingStandardsIgnoreStart
 
-			$term       = isset( $_GET['term'] ) ? (string) wc_clean( stripslashes( $_GET['term'] ) ) : '';
+			$term       = isset( $_GET['term'] ) ? (string) wc_clean( stripslashes( $_GET['term'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput
 			$post_types = array( 'product', 'product_variation' );
 
-			$to_exclude = isset( $_GET['exclude'] ) ? explode( ',', wc_clean( stripslashes( $_GET['exclude'] ) ) ) : false;
-            // @codingStandardsIgnoreEnd
+			$to_exclude = false;
+
+			if ( isset( $_GET['exclude'] ) ) {
+				$exclude = wp_unslash( $_GET['exclude'] ); // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput
+
+				if ( is_array( $exclude ) ) {
+					$to_exclude = array_map( 'absint', $exclude );
+				} else {
+					$to_exclude = explode( ',', wc_clean( wp_unslash( $_GET['exclude'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput
+				}
+			}
+
 			if ( empty( $term ) ) {
 				die();
 			}
@@ -409,7 +418,7 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 					'post_type'      => $post_types,
 					'post_status'    => 'publish',
 					'posts_per_page' => -1,
-					'meta_query'     => array( //phpcs:ignore slow query ok.
+					'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery
 						array(
 							'key'     => '_sku',
 							'value'   => $term,
@@ -427,7 +436,7 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 					'post_type'      => $post_types,
 					'post_status'    => 'publish',
 					'posts_per_page' => -1,
-					'meta_query'     => array( //phpcs:ignore slow query ok.
+					'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery
 						array(
 							'key'     => '_sku',
 							'value'   => $term,

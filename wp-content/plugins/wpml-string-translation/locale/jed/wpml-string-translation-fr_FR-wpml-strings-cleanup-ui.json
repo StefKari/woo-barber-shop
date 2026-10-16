@@ -3,49 +3,51 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "fr_FR"
          },
-         "Clean up the String Translation table by removing untranslated strings by domain.": [
-            "Nettoyer la table de traduction des chaînes en supprimant les chaînes non traduites par domaine."
-         ],
-         "Translated with PTC": [
-            "Traduit par PTC"
+         "Clean up the <b>String Translation</b> table by removing <strong>untranslated</strong> strings by domain.": [
+            "Nettoyez la table de <b>Traduction de chaînes</b> en supprimant les chaînes <strong>non traduites</strong> par domaine."
          ],
          "Remove strings by domain": [
-            "Supprimer les chaînes de caractères par domaine"
+            "Supprimer les chaînes par domaine"
          ],
          "Remove strings": [
-            "Supprimer les chaînes de caractères"
+            "Supprimer les chaînes"
          ],
          "Cancel": [
             "Annuler"
          ],
          "Remove": [
-            "Enlever"
+            "Supprimer"
          ],
-         "The String Translation table currently contains strings from the domains listed below. If you do not plan to translate strings from a particular domain, select it below to remove its untranslated strings from the String Translation table. Any strings that already have translations will still be available.": [
-            "La table de traduction des chaînes contient actuellement des chaînes provenant des domaines énumérés ci-dessous. Si vous n'envisagez pas de traduire les chaînes d'un domaine particulier, sélectionnez-le ci-dessous pour supprimer les chaînes non traduites de la table de traduction des chaînes. Les chaînes déjà traduites resteront disponibles."
+         "The <b>String Translation</b> table currently contains strings from the domains listed below. If you do not plan to translate strings from a particular domain, select it below to remove its <strong>untranslated</strong> strings from the <b>String Translation</b> table. Any strings that already have translations will still be available.": [
+            "La table de <b>Traduction de chaînes</b> contient actuellement des chaînes provenant des domaines listés ci-dessous. Si vous ne prévoyez pas de traduire les chaînes d'un domaine particulier, sélectionnez-le ci-dessous pour supprimer ses chaînes <strong>non traduites</strong> de la table de <b>Traduction de chaînes</b>. Toutes les chaînes ayant déjà des traductions resteront disponibles."
          ],
          "Search": [
-            "Recherche"
+            "Rechercher"
          ],
-         "Removing strings from String Translation table": [
-            "Suppression des chaînes de caractères de la table de traduction des chaînes"
+         "Strings that are queued for translation, in progress, or waiting for a retry.": [
+            "Chaînes en attente de traduction, en cours ou en attente d'une nouvelle tentative."
          ],
-         "To add strings back to the String Translation table, you may need to rescan translation files or register strings as translatable.": [
-            "Pour ajouter à nouveau des chaînes à la table de traduction des chaînes, vous devrez peut-être analyser à nouveau les fichiers de traduction ou enregistrer les chaînes comme traduisibles."
+         "Also remove strings waiting for translation": [
+            "Supprimer également les chaînes en attente de traduction"
          ],
-         "Read more about ": [
-            "En savoir plus "
+         "Removing strings from <b>String Translation</b> table": [
+            "Suppression des chaînes de la table de <b>Traduction de chaînes</b>"
          ],
-         "scanning your site for strings and registering them as translatable.": [
-            "analyse votre site à la recherche de chaînes de caractères et les enregistre comme traduisibles."
+         "To add strings back to the <b>String Translation</b> table, you may need to rescan translation files or register strings as translatable.": [
+            "Pour rajouter des chaînes à la table de <b>Traduction de chaînes</b>, vous devrez peut-être analyser à nouveau les fichiers de traduction ou enregistrer les chaînes comme étant traduisibles."
+         ],
+         "Read more about <a>scanning your site for strings and registering them as translatable</a>.": [
+            "En savoir plus sur l'<a>analyse de votre site à la recherche de chaînes et leur enregistrement comme étant traduisibles</a>."
          ],
          "Successfully removed strings": [
-            "Suppression réussie des chaînes de caractères"
+            "Chaînes supprimées avec succès"
          ],
          "OK, Great": [
-            "OK, très bien"
+            "D'accord, super"
          ],
          "Domain": [
             "Domaine"
@@ -55,6 +57,9 @@
          ],
          "Translated strings": [
             "Chaînes traduites"
+         ],
+         "Removing strings stopped before it finished. The strings that were not removed are still in the table. Try again to remove them.": [
+            "La suppression des chaînes s'est arrêtée avant la fin. Les chaînes qui n'ont pas été supprimées sont toujours dans la table. Réessayez pour les supprimer."
          ]
       }
    }

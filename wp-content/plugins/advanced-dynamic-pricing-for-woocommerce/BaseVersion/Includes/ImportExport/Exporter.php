@@ -8,10 +8,13 @@ use ADP\BaseVersion\Includes\Core\Rule\NoItemRule;
 use ADP\BaseVersion\Includes\Core\Rule\PackageRule;
 use ADP\BaseVersion\Includes\Core\Rule\PackageRule\ProductsAdjustmentSplit;
 use ADP\BaseVersion\Includes\Core\Rule\PackageRule\ProductsAdjustmentTotal;
+use ADP\BaseVersion\Includes\Core\Rule\PackageRule\ConditionMessageSplit;
+use ADP\BaseVersion\Includes\Core\Rule\PackageRule\ConditionMessageTotal;
 use ADP\BaseVersion\Includes\Core\Rule\PersistentRule;
 use ADP\BaseVersion\Includes\Core\Rule\Rule;
 use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule;
 use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule\ProductsAdjustment;
+use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule\ConditionMessage;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAdd;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAddChoice;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
@@ -120,8 +123,13 @@ class Exporter
                         'on_wc_sale'       => $filter->isExcludeWcOnSale() ? "1" : "",
                         'already_affected' => $filter->isExcludeAlreadyAffected() ? "1" : "",
                         'backorder'        => $filter->isExcludeBackorder() ? "1" : "",
-                        'values'           => $filter->getExcludeProductIds() ? $filter->getExcludeProductIds() : array(),
                     ),
+                    'excludes' => array_map(function($excludeFilter) {
+                        return [
+                            'type'  => $excludeFilter->getType(),
+                            'value' => $excludeFilter->getValue(),
+                        ];
+                    }, $filter->getExcludeFilters()),
                 );
             }
             $rule[KeyKeeperDB::FILTERS] = $filters;
@@ -140,8 +148,13 @@ class Exporter
                         'on_wc_sale'       => $filter->isExcludeWcOnSale() ? "1" : "",
                         'already_affected' => $filter->isExcludeAlreadyAffected() ? "1" : "",
                         'backorder'        => $filter->isExcludeBackorder() ? "1" : "",
-                        'values'           => $filter->getExcludeProductIds() ? $filter->getExcludeProductIds() : array(),
                     ),
+                    'excludes' => array_map(function($excludeFilter) {
+                        return [
+                            'type'  => $excludeFilter->getType(),
+                            'value' => $excludeFilter->getValue(),
+                        ];
+                    }, $filter->getExcludeFilters()),
                 );
             }
             $rule[KeyKeeperDB::FILTERS] = $filters;
@@ -162,8 +175,13 @@ class Exporter
                             'on_wc_sale'       => $filter->isExcludeWcOnSale() ? "1" : "",
                             'already_affected' => $filter->isExcludeAlreadyAffected() ? "1" : "",
                             'backorder'        => $filter->isExcludeBackorder() ? "1" : "",
-                            'values'           => $filter->getExcludeProductIds() ? $filter->getExcludeProductIds() : array(),
                         ),
+                        'excludes' => array_map(function($excludeFilter) {
+                            return [
+                                'type'  => $excludeFilter->getType(),
+                                'value' => $excludeFilter->getValue(),
+                            ];
+                        }, $filter->getExcludeFilters()),
                     );
                 }
             }
@@ -187,6 +205,12 @@ class Exporter
 
         $additional                            = array();
         $additional['conditions_relationship'] = $ruleObject->getConditionsRelationship() ? $ruleObject->getConditionsRelationship() : "";
+
+        $additional['date_from'] = $ruleObject->getDateFrom() ? $ruleObject->getDateFrom()->format('Y-m-d') : '';
+        $additional['date_to'] = $ruleObject->getDateTo() ? $ruleObject->getDateTo()->format('Y-m-d') : '';
+        $additional['trigger_coupon_code'] = $ruleObject->getActivationCouponCode() ?? '';
+
+        $additional['blocks'] = $ruleObject->getBlocks();
         if ( ! ($ruleObject instanceof NoItemRule)) {
             if ($ruleObject->hasProductAdjustment()) {
                 $additional['is_replace']  = $ruleObject->getProductAdjustmentHandler()->isReplaceWithCartAdjustment() ? 'on' : '';
@@ -202,6 +226,9 @@ class Exporter
             $additional['is_replace_auto_add_products_with_discount'] = $ruleObject->isReplaceAutoAdds() ? 'on' : '';
             $additional['auto_add_products_replace_name']         = $ruleObject->getReplaceAutoAddsCode();
             $additional['sortable_apply_mode']                    = $ruleObject->getSortableApplyMode();
+
+            $additional['auto_add_cant_be_removed_from_cart'] = $ruleObject->getAutoAddRemoveDisable();
+            $additional['auto_add_show_as_recommended_product'] = $ruleObject->getAutoAddShowAsRecommended();
         } else {
             $additional['replace_name']               = "";
             $additional['free_products_replace_name'] = "";
@@ -273,6 +300,7 @@ class Exporter
             if ($adj_handler = $ruleObject->getProductRangeAdjustmentHandler()) {
                 $product_adj['type']          = $adj_handler->getType();
                 $product_adj['qty_based']     = $adj_handler->getGroupBy();
+                $product_adj['measurement']   = $adj_handler->getMeasurement()->getValue();
                 $ranges                       = $adj_handler->getRanges();
                 $product_adj['discount_type'] = $this->getDiscountType($ranges[0]->getData());
                 foreach ($ranges as $range) {
@@ -339,6 +367,35 @@ class Exporter
                 }
             }
             $rule[KeyKeeperDB::AUTO_ADD_PRODUCTS] = $autoAddProducts;
+
+            if ($ruleObject->hasConditionMessage()) {
+                $conditionMessage = array();
+                $handler = $ruleObject->getConditionMessageHandler();
+                if ($handler instanceof ConditionMessage or
+                    $handler instanceof ConditionMessageTotal) {
+                    $conditionMessage['type']  = "total";
+                    $conditionMessage['total'] = array(
+                        'message' => $handler->getMessage(),
+                    );
+                    $conditionMessage['beginning_message']  = $handler->getBeginningMessage();
+                    $conditionMessage['end_message']  = $handler->getEndMessage();
+
+                    $rule[KeyKeeperDB::CONDITION_MESSAGE] = $conditionMessage;
+                } elseif ($handler instanceof ConditionMessageSplit) {
+                    $conditionMessage['type'] = "split";
+                    foreach ($handler->getMessages() as $message) {
+                        $conditionMessage['split'][] = array(
+                            'message' => $message,
+                        );
+                    }
+
+                    $conditionMessage['beginning_message']  = $handler->getBeginningMessage();
+                    $conditionMessage['end_message']  = $handler->getEndMessage();
+
+                    $rule[KeyKeeperDB::CONDITION_MESSAGE] = $conditionMessage;
+                }
+            }
+
         }
 
         $options = array();
@@ -389,6 +446,14 @@ class Exporter
         }
 
         $free_products['max_amount_for_gifts'] = $ruleObject->getMaxAmountForGifts();
+
+        if (method_exists($ruleObject, 'getItemGiftsDiscount') && $ruleObject->getItemGiftsDiscount()) {
+            $giftsDiscount          = $ruleObject->getItemGiftsDiscount();
+            $free_products['total'] = array(
+                'type'  => $this->getDiscountType($giftsDiscount),
+                'value' => $giftsDiscount->getValue(),
+            );
+        }
 
         return $free_products;
     }

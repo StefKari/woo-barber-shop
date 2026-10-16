@@ -10,9 +10,9 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
+ * @see     https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 4.0.0
+ * @version 11.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -22,7 +22,7 @@ global $product, $post;
 do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
 <form class="cart grouped_form" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data'>
-	<table cellspacing="0" class="woocommerce-grouped-product-list group_table">
+	<table cellspacing="0" class="woocommerce-grouped-product-list group_table" role="presentation">
 		<tbody>
 			<?php
 			$quantites_required      = false;
@@ -63,7 +63,26 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 							if ( ! $grouped_product_child->is_purchasable() || $grouped_product_child->has_options() || ! $grouped_product_child->is_in_stock() ) {
 								woocommerce_template_loop_add_to_cart();
 							} elseif ( $grouped_product_child->is_sold_individually() ) {
-								echo '<input type="checkbox" name="' . esc_attr( 'quantity[' . $grouped_product_child->get_id() . ']' ) . '" value="1" class="wc-grouped-product-add-to-cart-checkbox" />';
+								echo '<input type="checkbox" name="' . esc_attr( 'quantity[' . $grouped_product_child->get_id() . ']' ) . '" value="1" class="wc-grouped-product-add-to-cart-checkbox" id="' . esc_attr( 'quantity-' . $grouped_product_child->get_id() ) . '" />';
+								echo '<label for="' . esc_attr( 'quantity-' . $grouped_product_child->get_id() ) . '" class="screen-reader-text">';
+								if ( $grouped_product_child->is_on_sale() ) {
+									printf(
+										/* translators: %1$s: Product name. %2$s: Sale price. %3$s: Regular price */
+										esc_html__( 'Buy one of %1$s on sale for %2$s, original price was %3$s', 'woocommerce' ),
+										esc_html( $grouped_product_child->get_name() ),
+										esc_html( wp_strip_all_tags( wc_price( $grouped_product_child->get_price() ) ) ),
+										esc_html( wp_strip_all_tags( wc_price( $grouped_product_child->get_regular_price() ) ) )
+									);
+								} else {
+									printf(
+										/* translators: %1$s: Product name. %2$s: Product price */
+										esc_html__( 'Buy one of %1$s for %2$s', 'woocommerce' ),
+										esc_html( $grouped_product_child->get_name() ),
+										esc_html( wp_strip_all_tags( wc_price( $grouped_product_child->get_price() ) ) )
+									);
+								}
+								echo '</label>';
+
 							} else {
 								do_action( 'woocommerce_before_add_to_cart_quantity' );
 
@@ -72,7 +91,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 										'input_name'  => 'quantity[' . $grouped_product_child->get_id() . ']',
 										'input_value' => isset( $_POST['quantity'][ $grouped_product_child->get_id() ] ) ? wc_stock_amount( wc_clean( wp_unslash( $_POST['quantity'][ $grouped_product_child->get_id() ] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Missing
 										'min_value'   => apply_filters( 'woocommerce_quantity_input_min', 0, $grouped_product_child ),
-										'max_value'   => apply_filters( 'woocommerce_quantity_input_max', $grouped_product_child->get_max_purchase_quantity(), $grouped_product_child ),
+										'max_value'   => $grouped_product_child->get_max_purchase_quantity(),
 										'placeholder' => '0',
 									)
 								);
@@ -116,7 +135,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
 		<?php do_action( 'woocommerce_before_add_to_cart_button' ); ?>
 
-		<button type="submit" class="single_add_to_cart_button button alt"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
+		<button type="submit" class="single_add_to_cart_button button alt<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
 
 		<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
 

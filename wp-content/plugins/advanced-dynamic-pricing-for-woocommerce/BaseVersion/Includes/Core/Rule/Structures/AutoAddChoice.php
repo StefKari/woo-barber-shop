@@ -111,15 +111,20 @@ class AutoAddChoice implements \Serializable
      */
     public function serialize()
     {
+        return serialize($this->__serialize());
+    }
+
+    public function __serialize(): array
+    {
         // due to random gifting we modify values on runtime, so need to sort before serialize
         $values = $this->values;
         sort($values);
 
-        return serialize(array(
-            'type'   => $this->type,
+        return [
+            'type' => $this->type,
             'method' => $this->method,
             'values' => $values,
-        ));
+        ];
     }
 
     /**
@@ -127,8 +132,13 @@ class AutoAddChoice implements \Serializable
      */
     public function unserialize($data)
     {
-        $data = unserialize($data);
+        $data = maybe_unserialize($data);
 
+        $this->__unserialize($data);
+    }
+
+    public function __unserialize($data)
+    {
         $this->type   = $data['type'];
         $this->method = $data['method'];
         $this->values = $data['values'];

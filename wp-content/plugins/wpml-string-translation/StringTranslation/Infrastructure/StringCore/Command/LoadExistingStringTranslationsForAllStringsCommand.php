@@ -2,6 +2,7 @@
 
 namespace WPML\StringTranslation\Infrastructure\StringCore\Command;
 
+use WPML\StringTranslation\Application\Setting\Repository\SettingsRepositoryInterface;
 use WPML\StringTranslation\Application\StringCore\Command\LoadExistingStringTranslationsCommandInterface;
 use WPML\StringTranslation\Application\StringCore\Command\LoadExistingStringTranslationsForAllStringsCommandInterface;
 use WPML\StringTranslation\Application\StringCore\Domain\StringItem;
@@ -14,23 +15,24 @@ class LoadExistingStringTranslationsForAllStringsCommand implements LoadExisting
 
 	const BATCH_SIZE = 1000;
 
-	/** @var LoadExistingStringTranslationsCommandInterface */
 	private $loadExistingStringTranslationsCommand;
 
-	/** @var FindAllStringsQueryInterface */
 	private $findAllStringsQuery;
 
-	/** @var FindAllStringsCountQueryInterface */
 	private $findAllStringsCountQuery;
+
+	private $settingsRepository;
 
 	public function __construct(
 		LoadExistingStringTranslationsCommandInterface $loadExistingStringTranslationsCommand,
 		FindAllStringsQueryInterface                   $findAllStringsQuery,
-		FindAllStringsCountQueryInterface              $findAllStringsCountQuery
+		FindAllStringsCountQueryInterface              $findAllStringsCountQuery,
+		SettingsRepositoryInterface                    $settingsRepository
 	) {
 		$this->loadExistingStringTranslationsCommand = $loadExistingStringTranslationsCommand;
 		$this->findAllStringsQuery                   = $findAllStringsQuery;
 		$this->findAllStringsCountQuery              = $findAllStringsCountQuery;
+		$this->settingsRepository                    = $settingsRepository;
 	}
 
 	public function run( array $criteria = [] ) {
@@ -53,7 +55,7 @@ class LoadExistingStringTranslationsForAllStringsCommand implements LoadExisting
 				$limit,
 				$offset
 			);
-			$selectCriteria = new SearchSelectCriteria(['id', 'gettext_context', 'context', 'value']);
+			$selectCriteria = new SearchSelectCriteria( [ 'id', 'gettext_context', 'context', 'value', 'status' ] );
 			$strings = $this->createStrings( $this->findAllStringsQuery->execute( $criteria, $selectCriteria ) );
 
 			$this->loadExistingStringTranslationsCommand->run( $strings );
@@ -62,17 +64,17 @@ class LoadExistingStringTranslationsForAllStringsCommand implements LoadExisting
 		}
 	}
 
-	/**
-	 * @param StringItem[] $strings
-	 */
 	private function createStrings( array $strings ) {
+		$english = $this->settingsRepository->getEnglishSourceLanguageCode();
+
 		return array_map(
-			function( $string ) {
+			function( $string ) use ( $english ) {
 				$item = new StringItem(
-					'en',
+					$english,
 					$string->getDomain(),
 					$string->getContext(),
-					$string->getValue()
+					$string->getValue(),
+					$string->getStatus()
 				);
 				$item->setId( $string->getId() );
 

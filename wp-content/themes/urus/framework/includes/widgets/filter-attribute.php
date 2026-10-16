@@ -103,8 +103,8 @@ if( !class_exists('Urus_Widgets_Filter_Attribute')){
             $taxonomy           = isset( $instance['attribute'] ) ? wc_attribute_taxonomy_name( $instance['attribute'] ) : $this->settings['attribute']['std'];
             $query_type         = isset( $instance['query_type'] ) ? $instance['query_type'] : $this->settings['query_type']['std'];
             $display_type       = isset( $instance['display_type'] ) ? $instance['display_type'] : $this->settings['display_type']['std'];
-            $display_column       = isset( $instance['display_column'] ) ? $instance['display_column'] : $this->settings['display_column']['std'];
-            $display_group       = isset( $instance['display_group'] ) ? $instance['display_group'] : $this->settings['display_group']['std'];
+            $display_column       = isset( $instance['display_column'] ) ? $instance['display_column'] : ( $this->settings['display_column']['std'] ?? null );
+            $display_group       = isset( $instance['display_group'] ) ? $instance['display_group'] : ( $this->settings['display_group']['std'] ?? null );
             
             
             if ( ! taxonomy_exists( $taxonomy ) ) {

@@ -22,7 +22,7 @@ class Vc_WXR_Parser_SimpleXML {
 
 		$dom = new DOMDocument();
 		$old_value = null;
-		if ( function_exists( 'libxml_disable_entity_loader' ) ) {
+		if ( PHP_VERSION_ID < 80000 && function_exists( 'libxml_disable_entity_loader' ) ) { // Deprecated since PHP 8.0, where entity loading is disabled by default.
 			$old_value = libxml_disable_entity_loader( true );
 		}
 		/** @var \WP_Filesystem_Direct $wp_filesystem */

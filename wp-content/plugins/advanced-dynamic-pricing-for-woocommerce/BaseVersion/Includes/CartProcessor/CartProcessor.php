@@ -2,36 +2,45 @@
 
 namespace ADP\BaseVersion\Includes\CartProcessor;
 
+use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\IMergeAdpCoupon;
 use ADP\BaseVersion\Includes\Compatibility\AvataxCmp;
 use ADP\BaseVersion\Includes\Compatibility\FacebookCommerceCmp;
 use ADP\BaseVersion\Includes\Compatibility\GiftCardsSomewhereWarmCmp;
 use ADP\BaseVersion\Includes\Compatibility\PDFProductVouchersCmp;
 use ADP\BaseVersion\Includes\Compatibility\PhoneOrdersCmp;
 use ADP\BaseVersion\Includes\Compatibility\ShoptimizerCmp;
-use ADP\BaseVersion\Includes\Compatibility\SomewhereWarmBundlesCmp;
-use ADP\BaseVersion\Includes\Compatibility\SomewhereWarmCompositesCmp;
-use ADP\BaseVersion\Includes\Compatibility\TmExtraOptionsCmp;
+use ADP\BaseVersion\Includes\Compatibility\Addons\TmExtraOptionsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcDepositsCmp;
+use ADP\BaseVersion\Includes\Compatibility\WcChainedProductsCmp;
+use ADP\BaseVersion\Includes\Compatibility\WcPaymentPlanSuiteCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcsAttCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcSubscriptionsCmp;
-use ADP\BaseVersion\Includes\Compatibility\WpcBundleCmp;
+use ADP\BaseVersion\Includes\Compatibility\YoastSEOCmp;
 use ADP\BaseVersion\Includes\Compatibility\YithGiftCardsCmp;
+use ADP\BaseVersion\Includes\Compatibility\WcFreeGiftCouponsCmp;
+use ADP\BaseVersion\Includes\Compatibility\RoleBasedPricingCmp;
 use ADP\BaseVersion\Includes\Context;
-use ADP\BaseVersion\Includes\Core\Cart\AutoAddCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
-use ADP\BaseVersion\Includes\Core\Cart\CartItem;
-use ADP\BaseVersion\Includes\Core\Cart\Coupon;
-use ADP\BaseVersion\Includes\Core\Cart\FreeCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\CartItemConverter;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\CartItemPriceAdjustment\CartItemPriceAdjustment;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\CartItemAttributeEnum;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Basic\BasicCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Free\FreeCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\ICartItem;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCart;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCartItem;
 use ADP\BaseVersion\Includes\Core\CartCalculator;
+use ADP\BaseVersion\Includes\Debug\Listener;
 use ADP\BaseVersion\Includes\Debug\CartCalculatorListener;
+use ADP\BaseVersion\Includes\Enums\ShippingMethodEnum;
 use ADP\BaseVersion\Includes\ProductExtensions\ProductExtension;
 use ADP\BaseVersion\Includes\SpecialStrategies\CompareStrategy;
-use ADP\BaseVersion\Includes\SpecialStrategies\OverrideCentsStrategy;
+use ADP\BaseVersion\Includes\WC\WcAdpMergedCouponHelper;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
-use ADP\BaseVersion\Includes\WC\WcCouponFacade;
+use ADP\BaseVersion\Includes\WC\WcCustomerSessionFacade;
 use ADP\BaseVersion\Includes\WC\WcNoFilterWorker;
 use ADP\Factory;
-use ADP\BaseVersion\Includes\Enums\ShippingMethodEnum;
 use ReflectionClass;
 use ReflectionException;
 use WC_Cart;
@@ -68,7 +77,7 @@ class CartProcessor
     protected $calc;
 
     /**
-     * @var CartCouponsProcessor
+     * @var ICartCouponsProcessor
      */
     protected $cartCouponsProcessor;
 
@@ -93,7 +102,7 @@ class CartProcessor
     protected $cartBuilder;
 
     /**
-     * @var CartCalculatorListener
+     * @var Listener
      */
     protected $listener;
 
@@ -101,11 +110,6 @@ class CartProcessor
      * @var PhoneOrdersCmp
      */
     protected $poCmp;
-
-    /**
-     * @var OverrideCentsStrategy
-     */
-    protected $overrideCentsStrategy;
 
     /**
      * @var CompareStrategy
@@ -128,19 +132,14 @@ class CartProcessor
     protected $vouchers;
 
     /**
-     * @var SomewhereWarmBundlesCmp
-     */
-    protected $bundlesCmp;
-
-    /**
-     * @var SomewhereWarmCompositesCmp
-     */
-    protected $compositesCmp;
-
-    /**
      * @var wcDepositsCmp
      */
     protected $wcDepositsCmp;
+
+    /**
+     * @var WcPaymentPlanSuiteCmp
+     */
+    protected $wcPaymentPlanSuiteCmp;
 
     /**
      * @var GiftCardsSomewhereWarmCmp
@@ -153,19 +152,44 @@ class CartProcessor
     protected $facebookCommerce;
 
     /**
-     * @var TmExtraOptionsCmp
-     */
-    protected $tmExtraOptCmp;
-
-    /**
      * @var AvataxCmp
      */
     protected $avataxCmp;
 
     /**
-     * @var WpcBundleCmp
+     * @var CartItemConverter
      */
-    protected $wpcBundleCmp;
+    protected $cartItemConverter;
+
+    /**
+     * @var YithGiftCardsCmp
+     */
+    protected $yithGiftCardsCmp;
+
+    /**
+     * @var ShoptimizerCmp
+     */
+    protected $shoptimizerCmp;
+
+    /**
+     * @var YoastSEOCmp
+     */
+    protected $yoastSEOCmp;
+
+    /**
+     * @var WcFreeGiftCouponsCmp
+     */
+    protected $wcFreeGiftCouponsCmp;
+
+    /**
+     * @var WcChainedProductsCmp
+     */
+    protected $wcchainprCmp;
+
+    /**
+     * @var RoleBasedPricingCmp
+     */
+    protected $roleBasedPricingCmp;
 
     /**
      * CartProcessor constructor.
@@ -180,7 +204,10 @@ class CartProcessor
         $this->wcCart           = $contextOrWcCart instanceof WC_Cart ? $contextOrWcCart : $wcCartOrCalc;
         $calc                   = $wcCartOrCalc instanceof CartCalculator ? $wcCartOrCalc : $deprecated;
         $this->wcNoFilterWorker = new WcNoFilterWorker();
-        $this->listener         = new CartCalculatorListener();
+        $this->listener         = new Listener();
+        if($this->context->isDebug()) {
+            $this->listener->subscribe(new CartCalculatorListener());
+        }
 
         if ($calc instanceof CartCalculator) {
             $this->calc = $calc;
@@ -193,27 +220,31 @@ class CartProcessor
             /** @see CartCalculator::make() */
         }
 
-        $this->cartCouponsProcessor  = Factory::get("CartProcessor_CartCouponsProcessor");
+        if ( $this->context->isUseMergedCoupons() ) {
+            $this->cartCouponsProcessor  = Factory::get("CartProcessor_CartCouponsProcessorMerge");
+        } else {
+            $this->cartCouponsProcessor  = Factory::get("CartProcessor_CartCouponsProcessor");
+        }
         $this->cartFeeProcessor      = new CartFeeProcessor();
         $this->shippingProcessor     = Factory::get("CartProcessor_CartShippingProcessor");
         $this->taxExemptProcessor    = new TaxExemptProcessor();
         $this->cartBuilder           = new CartBuilder();
         $this->poCmp                 = new PhoneOrdersCmp();
-        $this->overrideCentsStrategy = new OverrideCentsStrategy();
         $this->compareStrategy       = new CompareStrategy();
         $this->wcSubsCmp             = new WcSubscriptionsCmp();
         $this->wcsAttCmp             = new WcsAttCmp();
         $this->vouchers              = new PDFProductVouchersCmp();
-        $this->bundlesCmp            = new SomewhereWarmBundlesCmp();
-        $this->compositesCmp         = new SomewhereWarmCompositesCmp();
-        $this->tmExtraOptCmp         = new TmExtraOptionsCmp();
         $this->wcDepositsCmp         = new WcDepositsCmp();
+        $this->wcPaymentPlanSuiteCmp = new WcPaymentPlanSuiteCmp();
         $this->yithGiftCardsCmp      = new YithGiftCardsCmp();
         $this->giftCart              = new GiftCardsSomewhereWarmCmp();
+        $this->yoastSEOCmp              = new YoastSEOCmp();
         $this->facebookCommerce      = new FacebookCommerceCmp();
         $this->shoptimizerCmp        = new ShoptimizerCmp();
         $this->avataxCmp             = new AvataxCmp();
-        $this->wpcBundleCmp          = new WpcBundleCmp();
+        $this->wcFreeGiftCouponsCmp  = new WcFreeGiftCouponsCmp();
+        $this->wcchainprCmp          = new WcChainedProductsCmp();
+        $this->roleBasedPricingCmp   = new RoleBasedPricingCmp();
 
         if ($this->giftCart->isActive()) {
             $this->giftCart->applyCompatibility();
@@ -221,55 +252,68 @@ class CartProcessor
         if ($this->yithGiftCardsCmp->isActive()) {
             $this->yithGiftCardsCmp->applyCompatibility();
         }
-        if ($this->bundlesCmp->isActive()) {
-            $this->bundlesCmp->addFilters();
-        }
         if ($this->facebookCommerce->isActive()) {
             $this->facebookCommerce->applyCompatibility();
         }
         if ($this->shoptimizerCmp->isActive()) {
             $this->shoptimizerCmp->applyCompatibility();
         }
+        if ($this->wcPaymentPlanSuiteCmp->isActive()) {
+            $this->wcPaymentPlanSuiteCmp->applyCompatibility();
+        }
         if ($this->avataxCmp->isActive()) {
             $this->avataxCmp->applyCompatibility();
         }
-        if ($this->wpcBundleCmp->isActive()) {
-            $this->wpcBundleCmp->addFilters();
+        if($this->yoastSEOCmp->isActive()) {
+            $this->yoastSEOCmp->applyCompatibility();
         }
+        if($this->wcFreeGiftCouponsCmp->isActive()) {
+            $this->wcFreeGiftCouponsCmp->applyCompatibility();
+        }
+
+        if ($this->wcchainprCmp->isActive()) {
+            $this->wcchainprCmp->applyCompatibility();
+        }
+
+        if ($this->roleBasedPricingCmp->isActive()) {
+            $this->roleBasedPricingCmp->applyCompatibility();
+        }
+
+        $this->context->getContainerCompatibilityManager()->addFilters();
+
+        $this->cartItemConverter = new CartItemConverter();
+    }
+
+    public function withCart($wcCart)
+    {
+        $this->wcCart = $wcCart;
     }
 
     public function withContext(Context $context)
     {
         $this->context = $context;
+        $this->listener->withContext($context);
         $this->cartBuilder->withContext($context);
         $this->poCmp->withContext($context);
-        $this->overrideCentsStrategy->withContext($context);
         $this->compareStrategy->withContext($context);
         $this->wcSubsCmp->withContext($context);
         $this->wcsAttCmp->withContext($context);
         $this->vouchers->withContext($context);
-        $this->bundlesCmp->withContext($context);
-        $this->compositesCmp->withContext($context);
         $this->wcDepositsCmp->withContext($context);
+        $this->wcPaymentPlanSuiteCmp->withContext($context);
         $this->giftCart->withContext($context);
         $this->facebookCommerce->withContext($context);
+        $this->wcchainprCmp->withContext($context);
     }
 
-    public function installActionFirstProcess()
+    public function installActionFirstProcess($skip_cartCouponsProcessor=false)
     {
-        $this->cartCouponsProcessor->setFilterToInstallCouponsData();
-        $this->cartCouponsProcessor->setFiltersToSupportPercentLimitCoupon();
-        $this->cartCouponsProcessor->setFiltersToSupportExactItemApplicationOfReplacementCoupon();
-        $this->cartCouponsProcessor->setFilterToSuppressDisabledWcCoupons();
+        if($skip_cartCouponsProcessor)
+            $this->cartCouponsProcessor->installActions();
         $this->cartFeeProcessor->setFilterToCalculateFees();
         $this->shippingProcessor->setFilterToEditPackageRates();
         $this->shippingProcessor->setFilterToEditShippingMethodLabel();
         $this->shippingProcessor->setFilterForShippingChosenMethod();
-
-        $wpCleverBundleCmp = new WpcBundleCmp();
-        if ( $wpCleverBundleCmp->isActive() ) {
-            $wpCleverBundleCmp->callActionBeforeCalculateTotalsBeforeOurFirstRun();
-        }
 
         add_filter(
             'woocommerce_update_cart_validation',
@@ -277,6 +321,11 @@ class CartProcessor
             10,
             4
         );
+    }
+
+    public function installActionFirstProcess_Blocks()
+    {
+        $this->cartCouponsProcessor->installActions();
     }
 
     /**
@@ -289,6 +338,7 @@ class CartProcessor
      */
     public function process($first = false)
     {
+        static $doFirst = false;
         $wcCart           = $this->wcCart;
         $wcNoFilterWorker = $this->wcNoFilterWorker;
 
@@ -309,6 +359,46 @@ class CartProcessor
 
         if (count(array_filter($wcCart->get_cart_contents())) === 0) {
             $this->cartBuilder->addOriginCoupons($cart, $wcCart);
+
+            $this->modifySessionIfCartIsEmpty($cart, $wcCart);
+
+            return $cart;
+        }
+
+        if ($this->context->useCachedCart()) {
+            $cartHash = $this->getCartHash($wcCart, $cart);
+            $storedCartHash = WC()->session->get("adp_cart_hash");
+
+            if($cartHash === $storedCartHash) {
+                foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
+                    $facade  = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
+                    $product = $wcCartItem['data'];
+                    $product->set_price($facade->getNewPrice());
+                }
+
+                $data = WC()->session->get("adp_cached_cart");
+                $cart->fromArray($data);
+
+                $this->cartCouponsProcessor->prepareConfig();
+                $this->cartCouponsProcessor->applyCouponsToWcCart($cart, $wcCart);
+
+                $this->cartFeeProcessor->refreshFees($cart);
+                $this->shippingProcessor->refresh($cart);
+
+                $this->cartFeeProcessor->updateTotals($wcCart);
+                $this->shippingProcessor->updateTotals($wcCart);
+
+                $this->cartBuilder->populateCart($cart, $wcCart);
+
+                $this->processNotices($cart, $first);
+                return $cart;
+            }
+        }
+
+        $optionDontProcessCart = apply_filters('adp_dont_process_cart_on_page_load', $this->context->getOption("dont_recalculate_cart_on_page_load", true));
+        if( $first AND $optionDontProcessCart ) {
+            $doFirst = true;
+            $this->cartBuilder->populateCart($cart, $wcCart);
             return $cart;
         }
 
@@ -317,11 +407,13 @@ class CartProcessor
 
         if (is_array($chosenShippingMethods)) {
             foreach ($chosenShippingMethods as $index => $chosenShippingMethod) {
-                if (strpos($chosenShippingMethod, ShippingMethodEnum::TYPE_ADP_FREE_SHIPPING) !== false) {
+                if (is_string($chosenShippingMethod) && strpos($chosenShippingMethod, ShippingMethodEnum::TYPE_ADP_FREE_SHIPPING) !== false) {
                     $chosenOwnShippingMethods[$index] = $chosenShippingMethod;
                 }
             }
         }
+
+        $this->poCmp->woocsModifyContext();
 
         // add previously added free and auto add items to internal Cart and remove them from WC_Cart
         $this->processFreeItems($cart, $wcCart);
@@ -368,7 +460,9 @@ class CartProcessor
 
                 $productExt = new ProductExtension($this->context, $product);
 
-                if ($productExt->getCustomPrice() !== null ) {
+                if ( $facade->isContainerType() || $facade->isContaineredType() ) {
+                    continue;
+                } elseif ($productExt->getCustomPrice() !== null ) {
                     $product->set_price(
                         $currencySwitcher->getCurrentCurrencyProductPriceWithCustomPrice(
                             $product,
@@ -393,6 +487,7 @@ class CartProcessor
 
                 $facade->setCurrency($currencySwitcher->getCurrentCurrency());
                 $clonedWcCart->cart_contents[$cartKey] = $facade->getData();
+                $product->add_meta_data('adp_price_converted', true);
             }
         } else {
             foreach ($clonedWcCart->cart_contents as $cartKey => $wcCartItem) {
@@ -402,10 +497,26 @@ class CartProcessor
 
                 $productExt = new ProductExtension($this->context, $product);
 
-                if ($first) {
+                if ($first || $doFirst) {
+                    $doFirst = false;
                     $facade->setInitialCustomPrice(null);
 
-                    if ($productExt->getCustomPrice() !== null) {
+                    if ( $facade->isContainerType() ) {
+                        $containerCmp = $this->context
+                            ->getContainerCompatibilityManager()
+                            ->getCompatibilityFromContainerFacade($facade);
+
+                        if ( $containerCmp !== null ) {
+                            $containerItem = $containerCmp->adaptContainerCartItem($facade, [], -1);
+
+                            $product->set_price($containerItem->getBasePrice());
+                        }
+                    } elseif ($facade->isContaineredType()) {
+                        if ( $facade->isContaineredPricedIndividually() ) {
+                            self::setProductPriceDependsOnPriceMode($product);
+                        }
+                        continue;
+                    } elseif ($productExt->getCustomPrice() !== null) {
                         $facade->setInitialCustomPrice($productExt->getCustomPrice());
                         $product->set_price($productExt->getCustomPrice());
                     } elseif (
@@ -422,7 +533,20 @@ class CartProcessor
                         $facade->setInitialCustomPrice($product->get_price('edit'));
                     }
                 } else {
-                    if ($productExt->getCustomPrice() !== null) {
+                    if ( $facade->isContainerType() ) {
+                        $containerCmp = $this->context
+                            ->getContainerCompatibilityManager()
+                            ->getCompatibilityFromContainerFacade($facade);
+
+                        if ( $containerCmp !== null ) {
+                            $containerItem = $containerCmp->adaptContainerCartItem($facade, [], -1);
+                            $product->set_price($containerItem->getBasePrice());
+                        }
+                    } elseif ($facade->isContaineredType()) {
+                        if ( $facade->isContaineredPricedIndividually() ) {
+                            self::setProductPriceDependsOnPriceMode($product);
+                        }
+                    } elseif ($productExt->getCustomPrice() !== null) {
                         $facade->setInitialCustomPrice($productExt->getCustomPrice());
                         $product->set_price($productExt->getCustomPrice());
                     } elseif (
@@ -437,7 +561,11 @@ class CartProcessor
                     } elseif ($this->poCmp->isCartItemCostUpdateManually($facade)) {
                         $product->set_price($this->poCmp->getCartItemCustomPrice($facade));
                         $product->set_regular_price($this->poCmp->getCartItemCustomPrice($facade));
-                        $facade->addAttribute($facade::ATTRIBUTE_IMMUTABLE);
+                        if ($this->poCmp->allowCartItemWithPriceUpdatedManuallyToParticipateInCalculation()) {
+                            $facade->addAttribute($facade::ATTRIBUTE_READONLY_PRICE);
+                        } else {
+                            $facade->addAttribute($facade::ATTRIBUTE_IMMUTABLE);
+                        }
                     } elseif ($facade->getInitialCustomPrice() !== null) {
                         $product->set_price($facade->getInitialCustomPrice());
                     } /**
@@ -458,11 +586,10 @@ class CartProcessor
         }
 
         $flags = array();
-        if ($this->wcSubsCmp->isActive() && $this->wcsAttCmp->isActive()) {
-            $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
+        if (!apply_filters('adp_allow_cal_hooks_proc', false)) {
+            $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS;
         }
-
-        if ($this->bundlesCmp->isActive()) {
+        if ($this->wcSubsCmp->isActive() && $this->wcsAttCmp->isActive()) {
             $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
         }
 
@@ -476,59 +603,14 @@ class CartProcessor
         $this->listener->cartCompleted($cart);
         // fill internal Cart from cloned WC_Cart ended
 
-        // Delete all 'pricing' data from the cart
-        $this->sanitizeWcCart($wcCart);
-        $this->cartCouponsProcessor->sanitize($wcCart);
-        $this->cartFeeProcessor->sanitize($wcCart);
-        $this->shippingProcessor->sanitize($wcCart);
-
-        foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
-            $facade  = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
-            $product = $facade->getProduct();
-            $productExt = new ProductExtension($this->context, $product);
-            if ($productExt->getCustomPrice() !== null ) {
-                $product->set_price($productExt->getCustomPrice());
-            }
-
-            $wcCart->cart_contents[$cartKey] = $facade->getData();
-        }
-
-        /**
-         * Add flag 'FLAG_ALLOW_PRICE_HOOKS'
-         * because some plugins set price using 'get_price' hooks instead of modify WC_Product property.
-         */
-        $flags = array($wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS);
-        if ($this->context->getOption("disable_shipping_calc_during_process", false) && !did_action( "wpo_before_update_cart" )) {
-            $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
-        }
-        $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
-        // Delete all 'pricing' data from the cart ended
+        $this->deleteAllPricingDataFromCart($wcCart);
 
         $result = $this->calc->processCart($cart);
 
         if ($result) {
-            $context = $this->context;
+            $cart->setAnyRulesApplied(true);
 
-            // Replace notice in case of removing coupons later
-            // If coupons won't be removed, notice will be replaced back
-            if (
-                $context->getOption('external_product_coupons_behavior') === 'disable_if_any_rule_applied'
-                || $context->getOption('external_product_coupons_behavior') === 'disable_if_any_of_cart_items_updated'
-                || $context->getOption('external_cart_coupons_behavior') === 'disable_if_any_rule_applied'
-                || $context->getOption('external_cart_coupons_behavior') === 'disable_if_any_of_cart_items_updated'
-            ) {
-                $this->replaceWcNotice(
-                    array(
-                        'text' => __('Coupon code applied successfully.', 'woocommerce'),
-                        'type' => 'success',
-                    ),
-                    array(
-                        'text' => __('Sorry, coupons are disabled for these products.',
-                            'advanced-dynamic-pricing-for-woocommerce'),
-                        'type' => 'error',
-                    )
-                );
-            }
+            $this->cartCouponsProcessor->prepareConfig();
 
             do_action('wdp_before_apply_to_wc_cart', $this, $wcCart, $cart);
 
@@ -554,7 +636,7 @@ class CartProcessor
 
             $freeProductsMapping = $this->calculateFreeProductsMapping($cart, $clonedWcCart);
 
-            $flags = array($wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS);
+            $flags = array($wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS, $wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS);
             if ($this->context->getOption("disable_shipping_calc_during_process", false)) {
                 $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
             }
@@ -566,25 +648,32 @@ class CartProcessor
                 $wcNoFilterWorker->calculateTotals($clonedWcCart);
             } else {
                 $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
+                $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
                 $wcNoFilterWorker->calculateTotals($clonedWcCart, ...$flags);
             }
             $initialTotals = $clonedWcCart->get_totals();
+            $initialCoupons = $cart->getOriginCoupons();
 
             $this->addFreeItems($freeProductsMapping, $clonedWcCart, $cart, $wcCart, $flags);
 
-            $flags = array();
+            $flags = array($wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS);
             if ($this->context->getOption("disable_shipping_calc_during_process", false)) {
                 $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
             }
 
-            $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
+            if ( $this->context->getOption('external_cart_coupons_behavior') === "best_between_coupon_and_rule" ) {
+                $cart->setOriginCouponsCodes([]);
+            }
+
             // process free and auto added items ended
 
             $this->addCommonItems($cart, $wcCart);
 
-            // handle option 'external_coupons_behavior'
-            $this->maybeRemoveOriginCoupons($cart, $wcCart);
+            do_action('adp_after_add_common_items');
 
+            $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
+
+            $this->cartCouponsProcessor->applyCouponsToWcCart($cart, $wcCart);
             $this->applyTotals($cart, $wcCart);
 
             if (count($chosenOwnShippingMethods) > 0) {
@@ -609,22 +698,12 @@ class CartProcessor
                 $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
             }
 
-            if ($this->bundlesCmp->isActive()) {
-                $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
-            }
-
-            if ($this->compositesCmp->isActive()) {
-                $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
-            }
-
+            $flags = apply_filters( 'adp_flags_for_final_calculate_totals', $flags);
             $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
 
-            $this->taxExemptProcessor->updateTotals($cart);
-            $this->cartCouponsProcessor->updateTotals($wcCart);
-            $this->cartFeeProcessor->updateTotals($wcCart);
-            $this->shippingProcessor->updateTotals($wcCart);
-            $cart->getContext()->getSession()->insertInitialTotals($initialTotals);
-            $cart->getContext()->getSession()->push();
+            $this->normalizeCart($wcCart);
+
+            $this->modifySession($cart, $wcCart, $initialTotals);
             $wcCart->set_session(); // Push updated totals into the session. Should be after 'updateTotals'
 
             if ($this->context->getOption('show_message_after_add_free_product')) {
@@ -640,16 +719,120 @@ class CartProcessor
             }
 
             $this->postApplyProcess($first, $cart, $wcCart);
+            $this->processNotices($cart, $first || $doFirst);
 
             do_action('wdp_after_apply_to_wc_cart', $this, $cart, $wcCart);
             $this->poCmp->forceToSkipFreeCartItems($wcCart);
+
+            if ($this->context->getOption('external_cart_coupons_behavior') === "best_between_coupon_and_rule") {
+                $amountSavedByPricing = $this->getAmountSavedOnlyBePricing(
+                    $wcCart,
+                    WC()->session,
+                    'incl' === $this->context->getTaxDisplayCartMode()
+                );
+
+                if ( $this->cartCouponsProcessor->disableAllWcCoupons() ) {
+                    $this->replaceCouponSuccessNotices($initialCoupons);
+                } else {
+                    $initialDiscountTotal = $initialTotals['discount_total'] ?? 0.0;
+
+                    if ( $this->compareStrategy->floatLess(0.0, $initialDiscountTotal) ) {
+                        if ($this->compareStrategy->floatLess($amountSavedByPricing, $initialDiscountTotal)) {
+                            $wcCart->applied_coupons = $initialCoupons;
+                            $this->deleteAllPricingDataFromCart($wcCart);
+                            $cart->getContext()->getSession()->flush()->push();
+                            $wcCart->set_session();
+                        } else {
+                            $this->replaceCouponSuccessNotices($initialCoupons);
+                        }
+                    }
+                }
+            }
         } else {
+            $flags = array();
+            if ($this->wcSubsCmp->isActive() && $this->wcsAttCmp->isActive()) {
+                $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
+            }
+            // required to process bundles
+            $this->addCommonItems($cart, $wcCart);
+            do_action('adp_after_add_common_items');
+
+            $this->processNotices($cart, $first || $doFirst);
+            $this->cartCouponsProcessor->processCouponAdjustments($cart, $wcCart);
+            if($this->context->isWCStoreAPIRequest())
+            {
+                $this->cartCouponsProcessor->checkDisabledCoupons($cart, $wcCart);
+            }
+            $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
+
+            $this->normalizeCart($wcCart);
+
             $cart->getContext()->getSession()->flush()->push();
+            if ($this->context->refreshShippingProcessorWhenNoAppliedRules()) {
+                if ( ! $this->context->getOption("disable_shipping_calc_during_process", false)) {
+                    $this->shippingProcessor->purgeCalculatedPackagesInSession();
+                }
+                $this->shippingProcessor->refresh($cart);
+            }
+        }
+
+        if ($this->context->useCachedCart()) {
+            $cartHash = $this->getCartHash($wcCart, $cart);
+            WC()->session->set("adp_cart_hash", $cartHash);
+            WC()->session->set('adp_cached_cart', $cart->toArray());
         }
 
         $this->listener->processFinished($wcCart, WC()->session);
 
+        do_action('wdp_process_complete', $wcCart, $result, $cart, $this);
+
         return $cart;
+    }
+
+    protected function normalizeCart($wcCart) {
+        if( apply_filters('adp_force_integer_qty', true) ) {
+            foreach ($wcCart->cart_contents as $item_key => $item) {
+                if((float)$item['quantity'] == (int)$item['quantity']) {
+                    $item['quantity'] = (int)$item['quantity'];
+                }
+                $wcCart->cart_contents[$item_key] = $item;
+            }
+        }
+    }
+
+    protected function replaceCouponSuccessNotices($initialCoupons) {
+        $newNotices = [];
+        //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+        $appliedSuccessfullyText = __('Coupon code applied successfully.', 'woocommerce');
+        foreach (wc_get_notices() as $type => $notices) {
+            if ($type === "success") {
+                $notices = array_filter($notices, function ($notice) use ($appliedSuccessfullyText) {
+                    return !($notice['notice'] && $notice['notice'] === $appliedSuccessfullyText);
+                });
+            }
+
+            $newNotices[$type] = $notices;
+        }
+        wc_set_notices($newNotices);
+
+        $initialCoupons = array_filter(
+            $initialCoupons,
+            function ($code) {
+                return ! $this->isAdpCouponCode($code);
+            }
+        );
+
+        foreach ( $initialCoupons as $initialCoupon ) {
+            wc_add_notice(
+                sprintf(
+                    /* translators: invalid coupon message*/
+                    //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch, WordPress.WP.I18n.MissingTranslatorsComment
+                    __( 'Sorry, it seems the coupon "%s" is invalid - it has now been removed from your order.', 'woocommerce' ),
+                    esc_html( $initialCoupon )
+                ),
+                'error'
+            );
+        }
     }
 
     /**
@@ -660,13 +843,55 @@ class CartProcessor
      */
     protected function eliminateClones($wcCart)
     {
+        $context = $this->context;
+
+        foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
+            $wrapper = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
+
+            if ( $context->getContainerCompatibilityManager()->getCompatibilityFromContainerFacade($wrapper) ) {
+                $newChildrenHashes = [];
+                foreach ( $wrapper->getContainerChildrenHashes() as $childrenHash ) {
+                    if ( isset($wcCart->cart_contents[$childrenHash]) ) {
+                        $newChildrenHashes[] = $childrenHash;
+                    } else {
+                        $child = new WcCartItemFacade($wcCartItem, $cartKey);
+
+                        if ( $child->getOriginalKey() ) {
+                            $newChildrenHashes[] = $child->getOriginalKey();
+                        } else {
+                            $newChildrenHashes[] = $childrenHash;
+                        }
+                    }
+                }
+
+                $wrapper->setContainerChildrenHashes($newChildrenHashes);
+                $wrapper->setContainerType();
+                $wcCart->cart_contents[$wrapper->getKey()] = $wrapper->getData();
+            } elseif ( $context->getContainerCompatibilityManager()->getCompatibilityFromPartOfContainerFacade($wrapper) ) {
+                if ( isset($wcCart->cart_contents[$wrapper->getParentContainerCartItemHash()]) ) { //TODO: bug always null
+                    $parent = new WcCartItemFacade(
+                        $wcCart->cart_contents[$wrapper->getParentContainerCartItemHash()],
+                        $wrapper->getParentContainerCartItemHash()
+                    );
+
+                    if ($parent->getOriginalKey()) {
+                        $wrapper->setParentContainerCartItemHash($parent->getOriginalKey());
+                        $wrapper->setContaineredType();
+                        $wcCart->cart_contents[$wrapper->getKey()] = $wrapper->getData();
+                    }
+                }
+            }
+        }
+
         foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
             $wrapper = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
 
             if ($wrapper->getOriginalKey()) {
                 if (isset($wcCart->cart_contents[$wrapper->getOriginalKey()])) {
-                    $originalWrapper = new WcCartItemFacade($this->context,
-                        $wcCart->cart_contents[$wrapper->getOriginalKey()], $wrapper->getOriginalKey());
+                    $originalWrapper = new WcCartItemFacade(
+                        $wcCart->cart_contents[$wrapper->getOriginalKey()],
+                        $wrapper->getOriginalKey()
+                    );
                     $originalWrapper->setQty($originalWrapper->getQty() + $wrapper->getQty());
                     $wcCart->cart_contents[$originalWrapper->getKey()] = $originalWrapper->getData();
                 } else {
@@ -689,14 +914,14 @@ class CartProcessor
     protected function processFreeItems($cart, $wcCart)
     {
         $pos = 0;
+        $tmExtraOptCmp = new TmExtraOptionsCmp($this->context);
         foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
             $wrapper = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
             if ($wrapper->isFreeItem()) {
-                if ( $this->tmExtraOptCmp->isActive() ) {
-                    $this->tmExtraOptCmp->removeKeysFromFreeCartItem($wrapper);
+                if ( $tmExtraOptCmp->isActive() ) {
+                    $tmExtraOptCmp->removeKeysFromFreeCartItem($wrapper);
                 }
-                $item = $wrapper->createItem();
-                $item->setPos($pos);
+                $item = $this->cartItemConverter->fromFacadeToFreeCartItem($wrapper, $pos);
                 $cart->addToCart($item);
                 unset($wcCart->cart_contents[$cartKey]);
             }
@@ -715,8 +940,7 @@ class CartProcessor
         foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
             $wrapper = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
             if ($wrapper->isAutoAddItem()) {
-                $item = $wrapper->createItem();
-                $item->setPos($pos);
+                $item = $this->cartItemConverter->fromFacadeToAutoAddCartItem($wrapper, $pos);
                 $cart->addToCart($item);
                 unset($wcCart->cart_contents[$cartKey]);
             }
@@ -740,11 +964,124 @@ class CartProcessor
     /**
      * @param Cart $cart
      *
-     * @return array<int, CartItem>
+     * @return array<int, ICartItem>
      */
     protected function getCommonItemsFromCart($cart)
     {
-        return apply_filters('wdp_internal_cart_items_before_apply', $cart->getItems(), $this);
+        /** @var array<int, ICartItem> $items */
+        $items = apply_filters('wdp_internal_cart_items_before_apply', $cart->getItems(), $this);
+        $is_replaced_by_coupon = false;
+
+        foreach ($items as $item) {
+            foreach ($item->getPriceAdjustments() as $priceAdjustment) {
+                if ($priceAdjustment && $priceAdjustment->getType() && $priceAdjustment->getType()->getValue() === 'replaced_by_coupon') {
+                    $is_replaced_by_coupon = true;
+                    break 2;
+                }
+            }
+        }
+
+        if ($this->shouldMergeSameCostItems($is_replaced_by_coupon)) {
+            $mergedItemsNodes = [];
+            $mergedItemsHistory = [];
+
+            foreach ($items as $i => $item) {
+                $thirdPartyData = $item->getWcItem()->getThirdPartyData();
+                if (isset($thirdPartyData['woosb_ids'])) {
+                    continue;
+                }
+
+                if ( ! $item->isHistoryEqualsDiscounts()) {
+                    continue;
+                }
+
+                if (!isset($mergedItemsNodes[$item->getMergeHash()])) {
+                    $mergedItemsNodes[$item->getMergeHash()] = $item;
+                } else {
+                    unset($items[$i]);
+                }
+
+                if (!isset($mergedItemsHistory[$item->getMergeHash()])) {
+                    $mergedItemsHistory[$item->getMergeHash()] = [];
+                }
+
+                $mergedItemsHistory[$item->getMergeHash()][] = [
+                    'adjs' => $item->getPriceAdjustments(),
+                    'qty' => $item->getQty(),
+                    'minPrice' => $item->prices()->getMinDiscountRangePrice(),
+                    'maxPrice' => $item->prices()->getMaxDiscountRangePrice(),
+                ];
+            }
+
+            foreach ($items as &$item) {
+                if (!isset($mergedItemsHistory[$item->getMergeHash()])) {
+                    continue;
+                }
+
+                $mergedItemHistory = $mergedItemsHistory[$item->getMergeHash()];
+                $totalQty = array_sum(array_column($mergedItemHistory, 'qty'));
+
+                $newItem = clone $item;
+                $newItem->cleanAllAdjustments();
+                $newItem->setQty($totalQty);
+
+                $isImmutable = false;
+                if ( $newItem->hasAttr(CartItemAttributeEnum::IMMUTABLE()) ) {
+                    $isImmutable = true;
+                    $newItem->removeAttr(CartItemAttributeEnum::IMMUTABLE());
+                }
+
+                foreach ($mergedItemHistory as $priceAdjustmentAndQty) {
+                    /** @var array<int, CartItemPriceAdjustment> $priceAdjustments */
+                    $priceAdjustments = $priceAdjustmentAndQty['adjs'];
+                    $qty = $priceAdjustmentAndQty['qty'];
+
+                    foreach ($priceAdjustments as $priceAdjustment) {
+                        if ($priceAdjustment->getType()->getValue() === 'replaced_by_coupon') {
+                            $newAmount = $priceAdjustment->getAmount();
+                        } else {
+                            $newAmount = $priceAdjustment->getAmount() * $qty / $totalQty;
+                        }
+                        $newItem->applyPriceAdjustment(
+                            $priceAdjustment
+                                ->toBuilder()
+                                ->amount($newAmount)
+                                ->newPrice($priceAdjustment->getOriginalPrice() - $priceAdjustment->getAmount() * $qty / $item->getQty())
+                                ->build()
+                        );
+                    }
+
+                    if ($priceAdjustmentAndQty['minPrice'] !== null) {
+                        $newItem->prices()->setDiscountRangePrice($priceAdjustmentAndQty['minPrice']);
+                    }
+                    if ($priceAdjustmentAndQty['maxPrice'] !== null) {
+                        $newItem->prices()->setDiscountRangePrice($priceAdjustmentAndQty['maxPrice']);
+                    }
+                }
+
+                if ( $isImmutable ) {
+                    $newItem->addAttr(CartItemAttributeEnum::IMMUTABLE());
+                }
+
+                $item = $newItem;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * Whether cart rows for the same product that ended up at the same price should be
+     * collapsed into one row. Free always merges rows replaced by a coupon (their displayed
+     * price never differs); there is no "split_same_product_if_diff_costs" setting here.
+     *
+     * @param bool $is_replaced_by_coupon
+     *
+     * @return bool
+     */
+    protected function shouldMergeSameCostItems($is_replaced_by_coupon)
+    {
+        return $is_replaced_by_coupon;
     }
 
     /**
@@ -754,59 +1091,118 @@ class CartProcessor
      */
     protected function addCommonItems($cart, $wcCart)
     {
-        $cartContext = $cart->getContext();
-
         $items = $this->getCommonItemsFromCart($cart);
 
         $processedItemKeys = array();
 
         foreach ($items as $item) {
-            /** have to clone! because of split items are having the same WC_Product object */
-            $facade = clone $item->getWcItem();
+            if ($item instanceof ContainerCartItem) {
+                $parent = $this->cartItemConverter->fromContainerCartItemToFacade($item);
 
-            $productPrice = $item->getOriginalPrice();
-            foreach ($item->getDiscounts() as $ruleId => $amounts) {
-                $productPrice -= array_sum($amounts);
-            }
-            if ($cartContext->getOption('is_calculate_based_on_wc_precision')) {
-                $productPrice = round($productPrice, wc_get_price_decimals());
-            }
+                if (in_array($parent->getKey(), $processedItemKeys)) {
+                    $originalCartItemKey = $parent->getKey();
+                    $parent->setOriginalKey($originalCartItemKey);
 
-            $facade->setOriginalPrice($facade->getProduct()->get_price('edit'));
-            $productPrice = $this->overrideCentsStrategy->maybeOverrideCentsForItem($productPrice, $item);
+                    $cartItemKey = $wcCart->generate_cart_id(
+                        $parent->getProductId(),
+                        $parent->getVariationId(),
+                        $parent->getVariation(),
+                        $parent->getCartItemData()
+                    );
 
-            $facade->setNewPrice($productPrice);
-            $facade->setHistory($item->getHistory());
-            $facade->setDiscounts($item->getDiscounts());
+                    if (isset($wcCart->cart_contents[$cartItemKey])) {
+                        $alreadyProcessedItemFacade = new WcCartItemFacade(
+                            $this->context,
+                            $wcCart->cart_contents[$cartItemKey],
+                            $cartItemKey
+                        );
+                        $alreadyProcessedItemFacade->setQty($alreadyProcessedItemFacade->getQty() + $parent->getQty());
+                        $wcCart->cart_contents[$cartItemKey] = $alreadyProcessedItemFacade->getData();
+                        continue;
+                    }
 
-            $facade->setOriginalPriceWithoutTax($facade->getSubtotal() / $facade->getQty());
-            $facade->setOriginalPriceTax($facade->getExactSubtotalTax() / $facade->getQty());
-            $facade->setQty($item->getQty());
-
-            if (in_array($facade->getKey(), $processedItemKeys)) {
-                $originalCartItemKey = $facade->getKey();
-                $facade->setOriginalKey($originalCartItemKey);
-
-                $cartItemKey = $wcCart->generate_cart_id(
-                    $facade->getProductId(),
-                    $facade->getVariationId(),
-                    $facade->getVariation(),
-                    $facade->getCartItemData()
-                );
-
-                if (isset($wcCart->cart_contents[$cartItemKey])) {
-                    $alreadyProcessedItemFacade = new WcCartItemFacade($this->context,
-                        $wcCart->cart_contents[$cartItemKey], $cartItemKey);
-                    $alreadyProcessedItemFacade->setQty($alreadyProcessedItemFacade->getQty() + $facade->getQty());
-                    $wcCart->cart_contents[$cartItemKey] = $alreadyProcessedItemFacade->getData();
-                    continue;
+                    $parent->setKey($cartItemKey);
                 }
 
-                $facade->setKey($cartItemKey);
-            }
+                $processedItemKeys[] = $parent->getKey();
 
-            $wcCart->cart_contents[$facade->getKey()] = $facade->getData();
-            $processedItemKeys[]                      = $facade->getKey();
+                $children = $this->cartItemConverter->fromContainerCartItemToChildrenFacades($item);
+
+                foreach ($children as $child) {
+                    if (in_array($child->getKey(), $processedItemKeys)) {
+                        $originalCartItemKey = $child->getKey();
+                        $child->setOriginalKey($originalCartItemKey);
+
+                        $cartItemKey = $wcCart->generate_cart_id(
+                            $child->getProductId(),
+                            $child->getVariationId(),
+                            $child->getVariation(),
+                            $child->getCartItemData()
+                        );
+
+                        if (isset($wcCart->cart_contents[$cartItemKey])) {
+                            $alreadyProcessedItemFacade = new WcCartItemFacade(
+                                $this->context,
+                                $wcCart->cart_contents[$cartItemKey],
+                                $cartItemKey
+                            );
+                            $alreadyProcessedItemFacade->setQty($alreadyProcessedItemFacade->getQty() + $child->getQty());
+                            $wcCart->cart_contents[$cartItemKey] = $alreadyProcessedItemFacade->getData();
+                            continue;
+                        }
+
+                        $child->setKey($cartItemKey);
+
+                        $item->getCompatibility()->overrideContainerReferenceForPartOfContainerFacadeAfterPossibleDuplicates(
+                            $child,
+                            $parent
+                        );
+                    }
+
+                    $processedItemKeys[] = $child->getKey();
+                }
+
+                $parent->setContainerChildrenHashes(array_map(function ($child) use ($parent) {
+                    $child->setParentContainerCartItemHash($parent->getKey());
+                    return $child->getKey();
+                }, $children));
+
+                $wcCart->cart_contents[$parent->getKey()] = $parent->getData();
+
+                foreach ($children as $child) {
+                    $wcCart->cart_contents[$child->getKey()] = $child->getData();
+                }
+            } else if ( $item instanceof BasicCartItem) {
+                $facade = $this->cartItemConverter->fromBasicCartItemToFacade($item);
+
+                if (in_array($facade->getKey(), $processedItemKeys)) {
+                    $originalCartItemKey = $facade->getKey();
+                    $facade->setOriginalKey($originalCartItemKey);
+
+                    $cartItemKey = $wcCart->generate_cart_id(
+                        $facade->getProductId(),
+                        $facade->getVariationId(),
+                        $facade->getVariation(),
+                        $facade->getCartItemData()
+                    );
+
+                    if (isset($wcCart->cart_contents[$cartItemKey])) {
+                        $alreadyProcessedItemFacade = new WcCartItemFacade(
+                            $this->context,
+                            $wcCart->cart_contents[$cartItemKey],
+                            $cartItemKey
+                        );
+                        $alreadyProcessedItemFacade->setQty($alreadyProcessedItemFacade->getQty() + $facade->getQty());
+                        $wcCart->cart_contents[$cartItemKey] = $alreadyProcessedItemFacade->getData();
+                        continue;
+                    }
+
+                    $facade->setKey($cartItemKey);
+                }
+
+                $wcCart->cart_contents[$facade->getKey()] = $facade->getData();
+                $processedItemKeys[]                      = $facade->getKey();
+            }
         }
     }
 
@@ -816,181 +1212,12 @@ class CartProcessor
      */
     public function applyTotals($cart, $wcCart)
     {
-        $this->purgeAppliedCoupons($wcCart);
-        $this->addOriginCoupons($cart, $wcCart);
-        $this->addRuleTriggerCoupons($cart, $wcCart);
-
-        $this->cartCouponsProcessor->refreshCoupons($cart);
-        $this->cartCouponsProcessor->applyCoupons($wcCart);
-
         $this->cartFeeProcessor->refreshFees($cart);
 
         if ( ! $this->context->getOption("disable_shipping_calc_during_process", false)) {
             $this->shippingProcessor->purgeCalculatedPackagesInSession();
         }
         $this->shippingProcessor->refresh($cart);
-    }
-
-    /**
-     * @param WC_Cart $wcCart
-     */
-    protected function purgeAppliedCoupons($wcCart)
-    {
-        $wcCart->applied_coupons = array();
-    }
-
-    /**
-     * @param Cart $cart
-     * @param WC_Cart $wcCart
-     */
-    protected function addOriginCoupons(&$cart, &$wcCart)
-    {
-        $wcCart->applied_coupons = array_merge($wcCart->applied_coupons, $cart->getOriginCoupons());
-    }
-
-    /**
-     * @param Cart $cart
-     * @param WC_Cart $wcCart
-     */
-    protected function addRuleTriggerCoupons(&$cart, &$wcCart)
-    {
-        $wcCart->applied_coupons = array_merge($wcCart->applied_coupons, $cart->getRuleTriggerCoupons());
-    }
-
-    /**
-     * @param Cart $cart
-     * @param WC_Cart $wcCart
-     */
-    protected function maybeRemoveOriginCoupons($cart, $wcCart)
-    {
-        $externalProductCouponsBehavior = $this->context->getOption('external_product_coupons_behavior');
-        $externalCartCouponsBehavior = $this->context->getOption('external_cart_coupons_behavior');
-
-        $checkIfPriceChanged = function ($wcCart) {
-            $is_price_changed = false;
-
-            foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
-                $wrapper = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
-                foreach ($wrapper->getDiscounts() as $ruleId => $amounts) {
-                    if (array_sum($amounts) > 0) {
-                        $is_price_changed = true;
-                        break;
-                    }
-                }
-            }
-
-            $is_price_changed = (bool)apply_filters(
-                'wdp_is_disable_external_coupons_if_items_updated',
-                $is_price_changed,
-                $this,
-                $wcCart
-            );
-
-            return $is_price_changed;
-        };
-
-        $isPriceChanged = false;
-        $isPriceChangedCalculated = false;
-        $isCouponsRemoved = false;
-
-        if ($externalProductCouponsBehavior === 'disable_if_any_rule_applied') {
-            if ($cart->removeProductOriginCoupon()) {
-                $isCouponsRemoved = true;
-            }
-        } elseif ($externalProductCouponsBehavior === 'disable_if_any_of_cart_items_updated') {
-            $isPriceChanged = $checkIfPriceChanged($wcCart);
-            $isPriceChangedCalculated = true;
-
-            if ($isPriceChanged) {
-                if ($cart->removeProductOriginCoupon()) {
-                    $isCouponsRemoved = true;
-                }
-            }
-        }
-
-        if ($externalCartCouponsBehavior === 'disable_if_any_rule_applied') {
-            if ($cart->removeCartOriginCoupon()) {
-                $isCouponsRemoved = true;
-            }
-        } elseif ($externalCartCouponsBehavior === 'disable_if_any_of_cart_items_updated') {
-            if (!$isPriceChangedCalculated) {
-                $isPriceChanged = $checkIfPriceChanged($wcCart);
-            }
-
-            if ($isPriceChanged) {
-                if ($cart->removeCartOriginCoupon()) {
-                    $isCouponsRemoved = true;
-                }
-            }
-        }
-
-        if (!$isCouponsRemoved) {
-            $this->replaceWcNotice(
-                array(
-                    'text' => __('Sorry, coupons are disabled for these products.',
-                        'advanced-dynamic-pricing-for-woocommerce'),
-                    'type' => 'error',
-                ),
-                array(
-                    'text' => __('Coupon code applied successfully.', 'woocommerce'),
-                    'type' => 'success',
-                )
-            );
-        }
-    }
-
-    /**
-     * @param array $needleNotice
-     * @param array $newNotice
-     */
-    protected function replaceWcNotice($needleNotice, $newNotice)
-    {
-        if ( ! is_array($needleNotice) || ! is_array($newNotice)) {
-            return;
-        }
-
-        $needleNotice = array(
-            'type' => isset($needleNotice['type']) ? $needleNotice['type'] : null,
-            'text' => isset($needleNotice['text']) ? $needleNotice['text'] : "",
-        );
-
-        $newNotice = array(
-            'type' => isset($newNotice['type']) ? $newNotice['type'] : null,
-            'text' => isset($newNotice['text']) ? $newNotice['text'] : "",
-        );
-
-
-        $newNotices = array();
-        foreach (wc_get_notices() as $type => $notices) {
-            if ( ! isset($newNotices[$type])) {
-                $newNotices[$type] = array();
-            }
-
-            foreach ($notices as $loopNotice) {
-                if ( ! empty($loopNotice['notice'])
-                     && $needleNotice['text'] === $loopNotice['notice']
-                     && ( ! $needleNotice['type'] || $needleNotice['type'] === $type)
-                ) {
-                    if ($newNotice['type'] === null) {
-                        $newNotice['type'] = $type;
-                    }
-
-                    if ( ! isset($newNotices[$newNotice['type']])) {
-                        $newNotices[$newNotice['type']] = array();
-                    }
-
-                    $newNotices[$newNotice['type']][] = array(
-                        'notice' => $newNotice['text'],
-                        'data'   => array(),
-                    );
-
-                    continue;
-                } else {
-                    $newNotices[$type][] = $loopNotice;
-                }
-            }
-        }
-        wc_set_notices($newNotices);
     }
 
     /**
@@ -1012,7 +1239,12 @@ class CartProcessor
 
     protected function addNoticeAddedFreeProduct($product, $qty)
     {
-        $template  = $this->context->getOption('message_template_after_add_free_product');
+        $template = $this->context->getOption('message_template_after_add_free_product');
+        //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+        $template = _x( $template,
+            "Show message after adding gift|Output template",
+            "advanced-dynamic-pricing-for-woocommerce"
+        );
         $arguments = array(
             '{{qty}}'          => $qty,
             '{{product_name}}' => $product->get_name(),
@@ -1040,6 +1272,16 @@ class CartProcessor
 
     protected function addNoticeIfNotExists($message, $type = 'success', $data = array())
     {
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only check of which WooCommerce internal ajax action is running, no data is processed
+        if (
+            wp_doing_ajax()
+            && isset($_REQUEST['wc-ajax'])
+            && sanitize_text_field(wp_unslash($_REQUEST['wc-ajax'])) === 'update_order_review'
+        ) {
+            return;
+        }
+        // phpcs:enable
+
         $exists = false;
         $notices = wc_get_notices($type);
 
@@ -1059,7 +1301,7 @@ class CartProcessor
     }
 
     /**
-     * @return CartCalculatorListener
+     * @return Listener
      */
     public function getListener()
     {
@@ -1107,12 +1349,25 @@ class CartProcessor
      */
     protected function setProductPriceDependsOnPriceMode($product)
     {
-        $priceMode = $this->context->getOption('discount_for_onsale');
+        $product->set_price(self::getProductPriceDependsOnPriceMode($product));
+    }
+
+    /**
+     * @param WC_Product $product
+     */
+    public static function getProductPriceDependsOnPriceMode($product)
+    {
+        $priceMode = adp_context()->getOption('discount_for_onsale');
+        $changesToRestore = [];
 
         try {
             $reflection = new ReflectionClass($product);
-            $property   = $reflection->getProperty('changes');
-            $property->setAccessible(true);
+            $property = $reflection->getProperty('changes');
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+            $changesToRestore = $property->getValue($product);
+
             $changes = $property->getValue($product);
             unset($changes['price']);
             $property->setValue($product, $changes);
@@ -1122,15 +1377,17 @@ class CartProcessor
 
         if ($product->is_on_sale('edit')) {
             if ('sale_price' === $priceMode || 'discount_sale' === $priceMode) {
-                $price = $product->get_sale_price('edit');
+                $price = ($product instanceof \WC_Product_Variable) ? $product->get_variation_sale_price('min') : $product->get_sale_price('edit');
             } else {
-                $price = $product->get_regular_price('edit');
+                $price = ($product instanceof \WC_Product_Variable) ? $product->get_variation_regular_price('min') : $product->get_regular_price('edit');
             }
         } else {
-            $price = $product->get_price('edit');
+            $price = ($product instanceof \WC_Product_Variable) ? $product->get_variation_price('min') : $product->get_price('edit');
         }
 
-        $product->set_price($price);
+        $product->set_props($changesToRestore, 'edit');
+
+        return $price;
     }
 
     /**
@@ -1175,7 +1432,39 @@ class CartProcessor
      */
     protected function postApplyProcess($first, $cart, $wcCart)
     {
-        return;
+        //make split items be together
+        $cartContents = $wcCart->get_cart_contents();
+        $cartKeys = array_keys($cartContents);
+        $newOrderCartContents = array();
+        $cartItemsWithOriginalKeys = array();
+        $cartItemsWithContainerKeys = array();
+        $needNewOrder = false;
+        foreach ($cartContents as $cartItem) {
+            $facade = new WcCartItemFacade($this->context, $cartItem);
+            if ($facade->getOriginalKey()) {
+                $needNewOrder = true;
+                $cartItemsWithOriginalKeys[$facade->getKey()] = $facade->getOriginalKey();
+            }
+
+            if ( $facade->getParentContainerCartItemHash() ) {
+                $needNewOrder = true;
+                $cartItemsWithContainerKeys[$facade->getKey()] = $facade->getParentContainerCartItemHash();
+            }
+        }
+        if ($needNewOrder) {
+            foreach ($cartItemsWithOriginalKeys as $key => $originalKey) {
+                $movedKey = array_splice($cartKeys, array_search($key, $cartKeys), 1);
+                array_splice($cartKeys, array_search($originalKey, $cartKeys) + 1, 0, $movedKey);
+            }
+            foreach (array_reverse($cartItemsWithContainerKeys, true) as $key => $parentKey) {
+                $movedKey = array_splice($cartKeys, array_search($key, $cartKeys), 1);
+                array_splice($cartKeys, array_search($parentKey, $cartKeys) + 1, 0, $movedKey);
+            }
+            foreach ($cartKeys as $key) {
+                $newOrderCartContents[$key] = $cartContents[$key];
+            }
+            $wcCart->set_cart_contents($newOrderCartContents);
+        }
     }
 
     /**
@@ -1186,13 +1475,22 @@ class CartProcessor
     protected function insertRegularTotals($wcCart, $cart, $flags)
     {
         $clonedWcCartForRegular = clone $wcCart;
+
+        $tmpflags = array_merge(
+            $flags,
+            [
+                $this->wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS,
+                $this->wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION
+            ]
+        );
+
         foreach ($clonedWcCartForRegular->cart_contents as $cartItemKey => $wcCartItem) {
             $facade = new WcCartItemFacade($wcCartItem, $cartItemKey);
             $facade->getProduct()->set_price($facade->getProduct()->get_regular_price('edit'));
             $clonedWcCartForRegular->cart_contents[$cartItemKey] = $facade->getData();
         }
 
-        $this->wcNoFilterWorker->calculateTotals($clonedWcCartForRegular, ...$flags);
+        $this->wcNoFilterWorker->calculateTotals($clonedWcCartForRegular, ...$tmpflags);
 
         foreach ($clonedWcCartForRegular->cart_contents as $cartItemKey => $wcCartItem) {
             if ( ! isset($wcCart->cart_contents[$cartItemKey])) {
@@ -1202,8 +1500,9 @@ class CartProcessor
             $facade             = new WcCartItemFacade($wcCartItem, $cartItemKey);
             $globalWcCartFacade = new WcCartItemFacade($wcCart->cart_contents[$cartItemKey], $cartItemKey);
 
-            $globalWcCartFacade->setRegularPriceWithoutTax($facade->getSubtotal() / $facade->getQty());
-            $globalWcCartFacade->setRegularPriceTax($facade->getSubtotalTax() / $facade->getQty());
+            // gift has 0 qty when it's in process of adding to cart
+            $globalWcCartFacade->setRegularPriceWithoutTax($facade->getQty() > 0 ? $facade->getSubtotal() / $facade->getQty() : 0);
+            $globalWcCartFacade->setRegularPriceTax($facade->getQty() > 0 ? $facade->getSubtotalTax() / $facade->getQty() : 0);
 
             $wcCart->cart_contents[$cartItemKey] = $globalWcCartFacade->getData();
         }
@@ -1225,40 +1524,49 @@ class CartProcessor
         foreach ($freeProductsMapping as $loopCartItemKey => $freeItems) {
             foreach ($freeItems as $freeItem) {
                 /** @var FreeCartItem $freeItem */
+                $hostFacade = $this->cartItemConverter->fromFreeCartItemToFacade(
+                    new WcCartItemFacade(
+                        $this->context,
+                        $clonedWcCart->cart_contents[$loopCartItemKey],
+                        $loopCartItemKey
+                    ),
+                    $freeItem
+                );
 
-                $facade = new WcCartItemFacade($this->context, $clonedWcCart->cart_contents[$loopCartItemKey],
-                    $loopCartItemKey);
+                $cartItemKey = $wcNoFilterWorker->addToCart(
+                    $wcCart,
+                    $hostFacade->getProductId(),
+                    $hostFacade->getQty(),
+                    $hostFacade->getVariationId(),
+                    $hostFacade->getVariation(),
+                    $hostFacade->getCartItemData()
+                );
 
-                $rules = array($freeItem->getRuleId() => array($freeItem->getInitialPrice()));
+                $facade = new WcCartItemFacade(
+                    $this->context,
+                    $wcCart->cart_contents[$cartItemKey],
+                    $cartItemKey
+                );
+                $facade->setNewPrice($hostFacade->getProduct()->get_price('edit'));
 
-                $cartItemQty = $facade->getQty();
-                $facade->setQty($freeItem->getQty());
-
-                $facade->setOriginalPrice($facade->getProduct()->get_price('edit'));
-
-                $facade->addAttribute($facade::ATTRIBUTE_FREE);
-
-                /**
-                 * @var Coupon|null $coupon
-                 *
-                 * We must keep the reference, because the affected items are not yet known
-                 */
-                $coupon = null;
-
-                if ($freeItem->isReplaceWithCoupon()) {
-                    // no need to change the price, it is already full
-                    $facade->setDiscounts(array());
+                if ($facade->getReplaceWithCoupon() && $facade->getReplaceCouponCode()) {
 
                     if ($this->context->priceSettings->isIncludeTax()) {
-                        $couponAmount = $facade->getSubtotal() + $facade->getExactSubtotalTax();
+                        $couponAmount = $hostFacade->getOriginalPriceWithoutTax() + $facade->getOriginalPriceTax();
                     } else {
-                        $couponAmount = $facade->getSubtotal();
+                        $couponAmount = $hostFacade->getOriginalPriceWithoutTax();
                     }
-                    $couponAmount = ($couponAmount / $cartItemQty) * $freeItem->getQty();
 
-                    $coupon = new Coupon(
+
+                    if ($freeItem->getInitialPrice() > 0) {
+                        $couponAmount = $couponAmount * ($freeItem->getDiscountAmount() / $freeItem->getInitialPrice());
+                    }
+
+                    $couponAmount = $couponAmount * $freeItem->getQty();
+
+                    $coupon = new CouponCartItem(
                         $this->context,
-                        Coupon::TYPE_FREE_ITEM,
+                        CouponCartItem::TYPE_FREE_ITEM,
                         $freeItem->getReplaceCouponCode(),
                         $couponAmount / $freeItem->getQty(),
                         $freeItem->getRuleId(),
@@ -1266,35 +1574,10 @@ class CartProcessor
                     );
 
                     $cart->addCoupon($coupon);
-
-                    $facade->setReplaceWithCoupon(true);
-                    $facade->setReplaceCouponCode($freeItem->getReplaceCouponCode());
-                } else {
-                    $facade->setNewPrice(0);
-                    $facade->setDiscounts($rules);
+                    $coupon->setAffectedCartItem($facade);
                 }
 
-                $facade->setOriginalPriceWithoutTax($facade->getSubtotal() / $cartItemQty);
-                $facade->setOriginalPriceTax($facade->getExactSubtotalTax() / $cartItemQty);
-                $facade->setHistory($rules);
-                $facade->setAssociatedHash($freeItem->getAssociatedGiftHash());
-                $facade->setFreeCartItemHash($freeItem->hash());
-                $facade->setSelectedFreeCartItem($freeItem->isSelected());
-
-                $cartItemKey = $wcNoFilterWorker->addToCart($wcCart, $facade->getProductId(), $facade->getQty(),
-                    $facade->getVariationId(), $facade->getVariation(), $facade->getCartItemData());
-
-                $newFacade = new WcCartItemFacade(
-                    $this->context,
-                    $wcCart->cart_contents[$cartItemKey],
-                    $cartItemKey
-                );
-                $newFacade->setNewPrice($facade->getProduct()->get_price('edit'));
-                $wcCart->cart_contents[$cartItemKey] = $newFacade->getData();
-
-                if (isset($coupon)) {
-                    $coupon->setAffectedCartItem($newFacade);
-                }
+                $wcCart->cart_contents[$cartItemKey] = $facade->getData();
             }
         }
     }
@@ -1367,5 +1650,203 @@ class CartProcessor
         }
 
         return $freeProductsMapping;
+    }
+
+    protected function modifySession($cart, \WC_Cart $wcCart, $initialTotals)
+    {
+        /** @var Cart $cart */
+
+        $this->taxExemptProcessor->updateTotals($cart);
+        $this->cartCouponsProcessor->updateTotals($wcCart);
+        $this->cartFeeProcessor->updateTotals($wcCart);
+        $this->shippingProcessor->updateTotals($wcCart);
+
+        $sessionFacade = $cart->getContext()->getSession();
+
+        $sessionFacade->insertInitialTotals($initialTotals);
+        $sessionFacade->push();
+    }
+
+    protected function modifySessionIfCartIsEmpty($cart, \WC_Cart $wcCart)
+    {
+        /** @var Cart $cart */
+
+        $sessionFacade = $cart->getContext()->getSession();
+        $sessionFacade->setRemovedFreeItemsList([]);
+        $sessionFacade->push();
+    }
+
+    protected function getAmountSavedOnlyBePricing(\WC_Cart $wcCart, \WC_Session_Handler $wcSession, $includeTax): float
+    {
+        $cartItems = $wcCart->cart_contents;
+        $wcSessionFacade = new WcCustomerSessionFacade($wcSession);
+
+        $amountSaved = floatval(0);
+
+        foreach ($cartItems as $cartItemKey => $cartItem) {
+            $facade = new WcCartItemFacade($this->context, $cartItem, $cartItemKey);
+
+            if ($includeTax) {
+                $original = ($facade->getOriginalPriceWithoutTax() + $facade->getOriginalPriceTax()) * $facade->getQty();
+                $current = $facade->getSubtotal() + $facade->getExactSubtotalTax();
+            } else {
+                $original = $facade->getOriginalPriceWithoutTax() * $facade->getQty();
+                $current = $facade->getSubtotal();
+            }
+
+            $amountSaved += $original - $current;
+        }
+
+        foreach ($wcCart->get_coupons() as $wcCoupon) {
+            $code = $wcCoupon->get_code();
+
+            if ($this->context->isUseMergedCoupons()) {
+                $mergedCoupon = WcAdpMergedCouponHelper::loadOfCoupon($wcCoupon);
+
+                if ($mergedCoupon === null) {
+                    continue;
+                }
+
+                foreach ($mergedCoupon->getParts() as $internalCoupon) {
+                    if ( $internalCoupon instanceof IMergeAdpCoupon ) {
+                        foreach ($internalCoupon->totalsPerItem() as $cartItemKey => $amount) {
+                            $amountSaved += wc_remove_number_precision_deep($amount);
+                        }
+                    }
+                }
+            } else {
+                $adpData = $wcCoupon->get_meta('adp', true, 'edit');
+                $coupon = isset($adpData['parts']) ? reset($adpData['parts']) : null;
+
+                if ($coupon) {
+                    /** @var $coupon CouponCart */
+                    $amountSaved += $wcCart->get_coupon_discount_amount($code, !$includeTax);
+                }
+            }
+        }
+
+        foreach ($wcSessionFacade->getFees() as $fee) {
+            foreach ($wcCart->get_fees() as $cartFee) {
+                if ($fee->getName() === $cartFee->name) {
+                    if ($includeTax) {
+                        $amountSaved -= $cartFee->total + $cartFee->tax;
+                    } else {
+                        $amountSaved -= $cartFee->total;
+                    }
+                }
+            }
+        }
+
+        return floatval($amountSaved);
+    }
+
+    protected function isAdpCoupon(\WC_Coupon $wcCoupon): bool
+    {
+        if ($this->context->isUseMergedCoupons()) {
+            $mergedCoupon = WcAdpMergedCouponHelper::loadOfCoupon($wcCoupon);
+
+            return $mergedCoupon !== null && $mergedCoupon->hasAdpPart();
+        } else {
+            $adpData = $wcCoupon->get_meta('adp', true, 'edit');
+            $coupon = isset($adpData['parts']) ? reset($adpData['parts']) : null;
+
+            return !!$coupon;
+        }
+    }
+
+    protected function isAdpCouponCode(string $code): bool
+    {
+        $wcCoupon = new \WC_Coupon($code);
+
+        return $this->isAdpCoupon($wcCoupon);
+    }
+
+    protected function deleteAllPricingDataFromCart(WC_Cart $wcCart) {
+        $wcNoFilterWorker = $this->wcNoFilterWorker;
+
+        // Delete all 'pricing' data from the cart
+        $this->sanitizeWcCart($wcCart);
+        $this->cartCouponsProcessor->sanitize($wcCart);
+        $this->cartFeeProcessor->sanitize($wcCart);
+        $this->shippingProcessor->sanitize($wcCart);
+
+        foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
+            $facade  = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
+            $product = $facade->getProduct();
+            $productExt = new ProductExtension($this->context, $product);
+            if ($productExt->getCustomPrice() !== null ) {
+                $product->set_price($productExt->getCustomPrice());
+            }
+
+            $wcCart->cart_contents[$cartKey] = $facade->getData();
+        }
+
+        /**
+         * Add flag 'FLAG_ALLOW_PRICE_HOOKS'
+         * because some plugins set price using 'get_price' hooks instead of modify WC_Product property.
+         */
+        $flags = array($wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS, $wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS);
+        if ($this->context->getOption("disable_shipping_calc_during_process", false) && !did_action( "wpo_before_update_cart" )) {
+            //BUG: shipping cost ignored if rules are NOT applied to the cart
+            //$flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
+        }
+        $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
+        // Delete all 'pricing' data from the cart ended
+    }
+
+    protected function getCartHash($wcCart, $cart)
+    {
+        static $rulesHash = null;
+        if(is_null($rulesHash)) {
+            $rulesHash = $this->calc->getRulesCollection()->getHash();
+        }
+
+        $packages = array(
+            array(
+                'contents'        => $wcCart->get_cart(),
+                'contents_cost'   => array_sum( wp_list_pluck( $wcCart->get_cart(), 'line_total' ) ),
+                'applied_coupons' => $wcCart->get_applied_coupons(),
+                'user'            => array(
+                    'ID' => get_current_user_id(),
+                ),
+                'destination'     => array(
+                    'country'   => $wcCart->get_customer()->get_shipping_country(),
+                    'state'     => $wcCart->get_customer()->get_shipping_state(),
+                    'postcode'  => $wcCart->get_customer()->get_shipping_postcode(),
+                    'city'      => $wcCart->get_customer()->get_shipping_city(),
+                    'address'   => $wcCart->get_customer()->get_shipping_address(), // This is an alias of address_1, provided for backwards compatibility.
+                    'address_1' => $wcCart->get_customer()->get_shipping_address_1(),
+                    'address_2' => $wcCart->get_customer()->get_shipping_address_2(),
+                ),
+                'cart_subtotal'   => $wcCart->get_displayed_subtotal(),
+            ),
+        );
+
+        foreach ( $packages as $package_key => $package ) {
+			// Remove data objects so hashes are consistent.
+			foreach ( $packages[$package_key]['contents'] as $item_id => $item ) {
+				unset( $packages[$package_key]['contents'][ $item_id ]['data'] );
+
+                unset($packages[$package_key]['contents'][ $item_id ][PhoneOrdersCmp::CART_ITEM_SKIP_KEY] );
+			}
+		}
+
+        $wcCartHash = md5(json_encode($packages));
+        $customerHash = $cart->getContext()->getCustomer()->getHash();
+
+        $currencyData = $this->context->currencyController->getCurrentCurrency()->toArray();
+        $currencyHash = md5(json_encode($currencyData));
+
+        $language = $this->context->getLanguage()->getLocale() ?? '';
+
+        return md5($rulesHash . $wcCartHash . $customerHash . $currencyHash . $language);
+    }
+
+    /**
+     * @param Cart $cart
+     */
+    protected function processNotices($cart, $first)
+    {
+
     }
 }

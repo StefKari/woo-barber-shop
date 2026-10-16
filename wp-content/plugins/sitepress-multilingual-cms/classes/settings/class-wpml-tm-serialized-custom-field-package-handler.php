@@ -2,7 +2,6 @@
 
 class WPML_TM_Serialized_Custom_Field_Package_Handler {
 
-	/** @var WPML_Custom_Field_Setting_Factory $custom_field_setting_factory */
 	private $custom_field_setting_factory;
 
 	public function __construct( WPML_Custom_Field_Setting_Factory $custom_field_setting_factory ) {
@@ -29,12 +28,6 @@ class WPML_TM_Serialized_Custom_Field_Package_Handler {
 		);
 	}
 
-	/**
-	 * @param int    $translated
-	 * @param string $custom_field_job_type - e.g: field-my_custom_field-0-my_attribute.
-	 *
-	 * @return int
-	 */
 	public function translate_only_whitelisted_attributes( $translated, $custom_field_job_type ) {
 		if ( $translated ) {
 			list( $custom_field, $attributes ) = WPML_TM_Field_Type_Encoding::decode( $custom_field_job_type );
@@ -51,17 +44,6 @@ class WPML_TM_Serialized_Custom_Field_Package_Handler {
 		return $translated;
 	}
 
-	/**
-	 * Matches the attributes array to the whitelist array
-	 * The whitelist array has the attribute as the key to another array for sub keys
-	 * eg. array( 'attribute1' => array( 'subkey1' => '' ) )
-	 *
-	 * @param array $attributes - The attributes in the custom field.
-	 * @param array $whitelist - The whitelist attributes to match against.
-	 * @param int   $current_depth - The current depth in the attributes array.
-	 *
-	 * @return bool
-	 */
 	private function match_in_order( $attributes, $whitelist, $current_depth = 0 ) {
 		$current_attribute = $attributes[ $current_depth ];
 		$wildcard_match    = $this->match_with_wildcards( $current_attribute, array_keys( $whitelist ) );
@@ -76,11 +58,6 @@ class WPML_TM_Serialized_Custom_Field_Package_Handler {
 		return false;
 	}
 
-	/**
-	 * @param array[] $fields
-	 *
-	 * @return array[]
-	 */
 	public function set_title_for_whitelisted_attributes( $fields ) {
 		foreach ( $fields as $index => $field ) {
 			list( $custom_field, $attributes ) = WPML_TM_Field_Type_Encoding::decode( $field['field_type'] );
@@ -100,23 +77,14 @@ class WPML_TM_Serialized_Custom_Field_Package_Handler {
 		return $fields;
 	}
 
-	/**
-	 * Matches the attributes array to the whitelist array to find the label
-	 * The whitelist array has the attribute nested keys and the value is the label
-	 * eg. array( 'attribute1' => array( 'subkey1' => 'Label' ) )
-	 *
-	 * @param array $attributes    The attributes in the custom field.
-	 * @param array $whitelist     The whitelist attributes to match against.
-	 * @param int   $current_depth The current depth in the attributes array.
-	 *
-	 * @return string
-	 */
 	private function find_title_in_order( $attributes, $whitelist, $current_depth = 0 ) {
 		$current_attribute = $attributes[ $current_depth ];
 		$wildcard_match    = $this->match_with_wildcards( $current_attribute, array_keys( $whitelist ) );
 		if ( $wildcard_match ) {
 			if ( count( $attributes ) === $current_depth + 1 ) {
-				return $whitelist[ $current_attribute ] ?? '';
+				$title = $whitelist[ $wildcard_match ] ?? '';
+
+				return is_string( $title ) ? $title : '';
 			} else {
 				return $this->find_title_in_order( $attributes, $whitelist[ $wildcard_match ], $current_depth + 1 );
 			}
@@ -125,17 +93,6 @@ class WPML_TM_Serialized_Custom_Field_Package_Handler {
 		return '';
 	}
 
-	/**
-	 * Matches the attribute to the whitelist array using wildcards.
-	 * Wildcards can only be used at the end of the string.
-	 * eg. 'title-*', 'data*', '*'
-	 * A '*' matches everything.
-	 *
-	 * @param string $attribute - the current attributes.
-	 * @param array  $whitelist - the whitelist to match against.
-	 *
-	 * @return string - Returns the whitelist string match.
-	 */
 	private function match_with_wildcards( $attribute, $whitelist ) {
 		foreach ( $whitelist as $white_value ) {
 			$asterisk_pos = strpos( $white_value, '*' );

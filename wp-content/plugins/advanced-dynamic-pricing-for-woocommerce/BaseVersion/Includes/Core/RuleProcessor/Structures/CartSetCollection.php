@@ -112,6 +112,17 @@ class CartSetCollection
         return $count;
     }
 
+    public function getTotalSetsSum()
+    {
+        $sum = 0;
+
+        foreach ($this->sets as $set) {
+            $sum += $set->getTotalPrice();
+        }
+
+        return $sum;
+    }
+
     public function getSetByHash($hash)
     {
         foreach ($this->sets as $set) {

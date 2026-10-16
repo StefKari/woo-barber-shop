@@ -1,11 +1,9 @@
 <?php
 defined('ABSPATH') or exit;
-
 ?>
-
 <tr valign="top">
     <th scope="row" class="titledesc">
-        <?php _e('Apply pricing rules while doing API request', 'advanced-dynamic-pricing-for-woocommerce') ?>
+        <?php esc_html_e('Apply pricing rules while doing API request', 'advanced-dynamic-pricing-for-woocommerce') ?>
     </th>
     <td class="forminp forminp-checkbox">
         <fieldset>

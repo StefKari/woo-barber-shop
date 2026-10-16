@@ -1,15 +1,9 @@
 <?php
 
-use WPML\API\Sanitize;
-
-/**
- * @author OnTheGo Systems
- */
 class WPML_XML_Config_Log_Notice {
 	const NOTICE_ERROR_GROUP = 'wpml-config-update';
 	const NOTICE_ERROR_ID    = 'wpml-config-update-error';
 
-	/** @var WPML_Config_Update_Log */
 	private $log;
 
 	public function __construct( WPML_Log $log ) {
@@ -36,27 +30,18 @@ class WPML_XML_Config_Log_Notice {
 		$notice = $notices->create_notice( self::NOTICE_ERROR_ID, $text, self::NOTICE_ERROR_GROUP );
 		$notice->set_css_class_types( array( 'error' ) );
 
-		$log_url = add_query_arg( array( 'page' => WPML_Config_Update_Log::get_support_page_log_section() ), get_admin_url( null, 'admin.php#xml-config-log' ) );
+		$log_url = add_query_arg(
+			array(
+				'page' => WPML_Config_Update_Log::get_support_page_log_section(),
+				'tool' => WPML_Config_Update_Log::get_support_page_log_tool(),
+			),
+			get_admin_url( null, 'admin.php' )
+		);
 
 		$show_logs = $notices->get_new_notice_action( __( 'Detailed error log', 'sitepress' ), $log_url );
 
-		$return_url = null;
-		if ( $this->is_admin_user_action() ) {
-			$admin_uri  = preg_replace( '#^/wp-admin/#', '', $_SERVER['SCRIPT_NAME'] );
-			$return_url = get_admin_url( null, $admin_uri );
-
-			$return_url_qs = $_GET;
-			unset( $return_url_qs[ self::NOTICE_ERROR_GROUP . '-action' ], $return_url_qs[ self::NOTICE_ERROR_GROUP . '-nonce' ] );
-			$return_url = add_query_arg( $return_url_qs, $return_url );
-		}
-
-		$retry_url = add_query_arg(
-			array(
-				self::NOTICE_ERROR_GROUP . '-action' => 'wpml_xml_update_refresh',
-				self::NOTICE_ERROR_GROUP . '-nonce'  => wp_create_nonce( 'wpml_xml_update_refresh' ),
-			),
-			$return_url
-		);
+		$retry_url = get_admin_url( null, 'update-core.php#icl_theme_plugins_compatibility' );
+		/* translators: Button label in a notice: do the same thing once more. Verb, imperative. */
 		$retry     = $notices->get_new_notice_action( __( 'Retry', 'sitepress' ), $retry_url, false, false, true );
 
 		$notice->add_action( $show_logs );
@@ -74,14 +59,5 @@ class WPML_XML_Config_Log_Notice {
 		$notice->set_restrict_to_screen_ids( array( 'dashboard', 'plugins', 'themes' ) );
 		$notice->add_exclude_from_page( WPML_Config_Update_Log::get_support_page_log_section() );
 		$notices->add_notice( $notice );
-	}
-
-	/**
-	 * @return bool
-	 */
-	private function is_admin_user_action() {
-		return is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX )
-		       && ( 'heartbeat' !== Sanitize::stringProp( 'action', $_POST ) )
-		       && ( ! defined( 'DOING_CRON' ) || ! DOING_CRON );
 	}
 }

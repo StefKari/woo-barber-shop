@@ -125,7 +125,7 @@ class Menu_Extender {
      * @param  int    $current     Menu item current.
      * @return stdClass            Menu item object.
      */
-    private function create_menu_item( $title, $url, $order, $menu_parent = 0, $current ) {
+    private function create_menu_item( $title, $url, $order, $menu_parent, $current ) {
         $item = new stdClass();
 
         $item->ID               = 100000 + $order + $menu_parent;

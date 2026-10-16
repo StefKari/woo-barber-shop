@@ -3,10 +3,12 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "nl_NL"
          },
-         "Edit": [
-            "Bewerken"
+         "Edit %s": [
+            "%s bewerken"
          ],
          "Shift+Tab": [
             "Shift+tab"
@@ -14,44 +16,41 @@
          "Tab": [
             "Tab"
          ],
+         "Original:": [
+            "Origineel:"
+         ],
          "Translation to:": [
             "Vertaling naar:"
          ],
          "Copy from original": [
-            "Kopie van origineel"
+            "Kopiëren uit origineel"
          ],
          "Use Shift+Enter to add a new line.": [
             "Gebruik Shift+Enter om een nieuwe regel toe te voegen."
          ],
-         "Original:": [
-            "Origineel:"
-         ],
          "Add %s translation": [
-            "%s vertaling toevoegen"
+            "%s-vertaling toevoegen"
          ],
          "Edit %s translation": [
-            "Bewerk %s vertaling"
+            "%s-vertaling bewerken"
          ],
          "Add %s translation (the string appears on the site and is not translated)": [
-            "%s vertaling toevoegen (de string verschijnt op de site en wordt niet vertaald)"
+            "%s-vertaling toevoegen (de string verschijnt op de site en is niet vertaald)"
          ],
          "Original language %s": [
             "Originele taal %s"
          ],
          "Waiting for translator to %s": [
-            "Wachten op vertaler om %s"
+            "Wachten op vertaler naar %s"
          ],
          "Translation in progress to %s": [
-            "Vertaling in uitvoering naar %s"
-         ],
-         "In basket for translation to %s": [
-            "In mand voor vertaling naar %s"
+            "Vertaling naar %s in uitvoering"
          ],
          "Translation saved.": [
             "Vertaling opgeslagen."
          ],
          "Translation update failed.": [
-            "Vertaalupdate mislukt."
+            "Update van vertaling mislukt."
          ]
       }
    }

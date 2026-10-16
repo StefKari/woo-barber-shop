@@ -1,4 +1,4 @@
-/* globals ajaxurl, wpml_groups_to_scan, wpml_active_plugins_themes, wpml_mo_scan_ui_files */
+/* globals ajaxurl, wpml_active_plugins_themes, wpml_mo_scan_ui_files */
 
 var WPML_ST = WPML_ST || {};
 
@@ -148,8 +148,6 @@ jQuery(function($) {
 				'folderNonce': source.attr('data-scan_folder-nonce'),
 				'filesAction': source.attr('data-scan_files-action'),
 				'filesNonce': source.attr('data-scan_files-nonce'),
-				'updateHashAction': source.attr('data-update_hash-action'),
-				'updateHashNonce': source.attr('data-update_hash-nonce'),
 				'updateStatsEndpoint': source.attr('data-update_stats-endpoint'),
 				'updateStatsNonce': source.attr('data-update_stats-nonce'),
 			};
@@ -498,8 +496,14 @@ jQuery(function($) {
 				modal: true,
 				open: function() {
 					var dialog = $(self.scanningProgressDialog).closest('.ui-dialog');
+					$(window)
+						.off('resize.wpmlStringScanningDialog')
+						.on('resize.wpmlStringScanningDialog', function() {
+							self.recenterModalDialogInViewport();
+						});
 					dialog.find('.spinner').css('display', 'none');
 					dialog.addClass('wpml-st-string-scanning-modal-form');
+					self.anchorDialogToViewport(dialog);
 					dialog.find('.wpml-scanning-progress').removeClass('wpml-scanning-progress-show-results');
 					dialog.find(".ui-dialog-titlebar").css('display', 'none');
 					// We need to set title as block element to put inside block element with icon on new line, so should replace span with div.
@@ -524,8 +528,16 @@ jQuery(function($) {
 						}
 					};
 					fixDots();
+
+					// jQuery UI calculates the initial coordinates while the wrapper is
+					// absolutely positioned, before the open callback runs. Recalculate
+					// after anchoring it to the viewport so a scrolled page does not leave
+					// the loading dialog below the visible area.
+					self.recenterModalDialogInViewport();
 				},
 				close: function() {
+					$(window).off('resize.wpmlStringScanningDialog');
+					self.stopObservingDialogSize();
 					jQuery(self.statsMoSection).html('');
 					self.counter.reset();
 				},
@@ -618,9 +630,7 @@ jQuery(function($) {
 			ajaxFilesChunk.nonce = this.scanningSection.getNonces()['filesNonce'];
 			ajaxFilesChunk[sectionType] = elementValue;
 
-			while ( 0 < dirFiles.length ) {
-				filesChunks.push( dirFiles.splice(0, this.numberOfFilesPerChunk) );
-			}
+			filesChunks = this.buildFilesChunks(dirFiles);
 
 			this.counter.filesChunkToScanCount = this.counter.filesChunkToScanCount + filesChunks.length;
 			this.counter.scannedDirsCount++;
@@ -651,6 +661,39 @@ jQuery(function($) {
 			}, this);
 		},
 
+		buildFilesChunks: function(files) {
+			var filesChunks = [];
+			var chunk = [];
+			var jsFiles = [];
+			var nonJsFiles = [];
+
+			(files || []).forEach(function(file) {
+				if(/\.js$/i.test(file)) {
+					jsFiles.push(file);
+				} else {
+					nonJsFiles.push(file);
+				}
+			});
+
+			nonJsFiles.forEach(function(file) {
+				chunk.push(file);
+				if(chunk.length === this.numberOfFilesPerChunk) {
+					filesChunks.push(chunk);
+					chunk = [];
+				}
+			}, this);
+
+			if(chunk.length) {
+				filesChunks.push(chunk);
+			}
+
+			jsFiles.forEach(function(file) {
+				filesChunks.push([file]);
+			});
+
+			return filesChunks;
+		},
+
 		scanFilesAjax: function(ajax_files_chunk, files_chunks, index) {
 			var self = this;
 
@@ -667,6 +710,13 @@ jQuery(function($) {
 				context: this,
 				success: $.proxy(this.scanFilesSuccess, this),
 				error: function() {
+					var is_single_file_scan = 1 === files_chunks[index].length;
+
+					if(is_single_file_scan) {
+						self.skipErrorOnSingleFileScan(files_chunks, ajax_files_chunk, index);
+						return;
+					}
+
 					var origChunkFiles = files_chunks[index].slice();
 					var smallerFilesChunks = [];
 
@@ -679,6 +729,18 @@ jQuery(function($) {
 			}).done(function() {
 				this.scanFilesAjaxDone(files_chunks, ajax_files_chunk, index);
 			});
+		},
+
+		skipErrorOnSingleFileScan: function(files_chunks, ajax_files_chunk, index) {
+			this.counter.scannedFilesChunkCount++;
+
+			if(this.counter.scannedFilesChunkCount === this.counter.filesChunkToScanCount) {
+				this.scheduledFileChunks = [];
+				this.updateStatsAjax();
+				return;
+			}
+
+			this.scanFilesAjaxDone(files_chunks, ajax_files_chunk, index);
 		},
 
 		rescanFilesAjax: function(ajax_files_chunk, files_chunks, index, orig_files_chunks, orig_index) {
@@ -765,35 +827,7 @@ jQuery(function($) {
 					}),
 				},
 				success: function() {
-					var origScannedFiles = self.counter.scannedFiles.slice();
-					var scannedFilesChunks = [];
-
-					while ( 0 < origScannedFiles.length ) {
-						scannedFilesChunks.push( origScannedFiles.splice(0, 500) );
-					}
-
-					self.updateHashAjax(scannedFilesChunks, 0);
-				},
-			});
-		},
-
-		updateHashAjax: function(scannedFilesChunks, index) {
-			var self = this;
-			$.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				data: {
-					'action': this.scanningSection.getNonces()['updateHashAction'],
-					'nonce': this.scanningSection.getNonces()['updateHashNonce'],
-					'files': scannedFilesChunks[index],
-				},
-				success: function() {
-					if(index === scannedFilesChunks.length - 1) {
-						self.maybeRescanMo();
-						return;
-					}
-
-					self.updateHashAjax(scannedFilesChunks, index + 1);
+					self.maybeRescanMo();
 				},
 			});
 		},
@@ -944,12 +978,101 @@ jQuery(function($) {
 		},
 
 		recenterModalDialogInViewport: function() {
-			var bodyHeight = jQuery('#wpbody-content').outerHeight();
-			var dialogHeight = jQuery('.ui-dialog').outerHeight();
-			var windowHeight = jQuery(window).height();
-			var dialogScrollTopOffset = window.pageYOffset || document.documentElement.scrollTop;
-			var dialogViewportTopOffset = (windowHeight / 2) - (dialogHeight / 2);
-			jQuery('.ui-dialog').css('top', (dialogScrollTopOffset + dialogViewportTopOffset) + 'px');
+			if(!$(this.scanningProgressDialog).closest('.ui-dialog').length) {
+				return;
+			}
+
+			// The results replace a short loading state, so when this runs the
+			// dialog's box is still the loader's. Centring on that stale height
+			// leaves the grown dialog low enough for its bottom to sit on the
+			// viewport edge (wpmldev-8583), so position once the new content has
+			// been laid out and again whenever the box actually changes size.
+			this.scheduleDialogReposition();
+			this.observeDialogSize();
+		},
+
+		// THE DIALOG MUST NOT COUNT TOWARD THE DOCUMENT'S HEIGHT. .ui-dialog is
+		// positioned absolutely, so a dialog placed low extends the page; the scan
+		// leaves the Admin Texts screen scrolled to its maximum, the scroll then
+		// clamps to the taller document, and the element that ends the document
+		// necessarily sits on the viewport's bottom edge. Measured on lane 9:
+		// cssTop 1675 + height 536 = docH 2211, and scrollY 1443 = 2211 - 768, so
+		// rect.bottom lands on 768 whatever the placement asks for (wpmldev-8583).
+		// The wrapper carries an INLINE position that no stylesheet can beat, so
+		// the anchor is set here and re-asserted before every placement.
+		anchorDialogToViewport: function(dialog) {
+			var wrapper = dialog || $(this.scanningProgressDialog).closest('.ui-dialog');
+
+			if(wrapper && wrapper.length) {
+				wrapper.css('position', 'fixed');
+			}
+		},
+
+		scheduleDialogReposition: function() {
+			var progressDialog = $(this.scanningProgressDialog);
+			var self = this;
+			var reposition = function() {
+				var wrapper = progressDialog.closest('.ui-dialog');
+
+				if(!wrapper.length) {
+					return;
+				}
+
+				self.anchorDialogToViewport(wrapper);
+
+				progressDialog.dialog('option', 'position', {
+					my: 'center',
+					at: 'center',
+					of: window,
+					collision: 'fit',
+				});
+			};
+
+			// The frame after the one that lays out the new content measures the
+			// settled box. requestAnimationFrame does not run in a background tab,
+			// so a timer repeats the same idempotent placement for that case.
+			if(window.requestAnimationFrame) {
+				window.requestAnimationFrame(function() {
+					window.requestAnimationFrame(reposition);
+				});
+			}
+
+			window.setTimeout(reposition, 120);
+		},
+
+		observeDialogSize: function() {
+			var self = this;
+			var dialog = $(this.scanningProgressDialog).closest('.ui-dialog')[0];
+
+			if(!dialog || typeof window.ResizeObserver === 'undefined') {
+				return;
+			}
+
+			this.stopObservingDialogSize();
+
+			var lastHeight = dialog.getBoundingClientRect().height;
+
+			// Repositioning only writes 'top', so observing the box it moves
+			// cannot feed itself a new size.
+			this.dialogSizeObserver = new window.ResizeObserver(function(entries) {
+				var height = entries[0].contentRect.height;
+
+				if(Math.abs(height - lastHeight) < 1) {
+					return;
+				}
+
+				lastHeight = height;
+				self.scheduleDialogReposition();
+			});
+
+			this.dialogSizeObserver.observe(dialog);
+		},
+
+		stopObservingDialogSize: function() {
+			if(this.dialogSizeObserver) {
+				this.dialogSizeObserver.disconnect();
+				this.dialogSizeObserver = null;
+			}
 		},
 
 		allowClosingDialog: function() {
@@ -989,19 +1112,54 @@ jQuery(function($) {
             this.scanButton.click();
         },
 
+        // `action=scan_from_notice` was the URL of the retired "scan updated
+        // themes/plugins" notice. Its group list (wpml_groups_to_scan) has been an
+        // always-empty array since the notice and its writers were removed, so the
+        // loop below it already did nothing; the route goes with the leftover.
         shouldRunAutoScan: function () {
-            return '' !== this.groups[0] && (-1 !== location.href.search('action=scan_from_notice') || -1 !== location.href.search('action=scan_active_items'))
+            return '' !== this.groups[0] && -1 !== location.href.search('action=scan_active_items')
         }
     };
 
+	// THE ANCHORED SECTION OPENS ITSELF, WHEREVER IT IS HOSTED.
+	//
+	// The String Translation screen's recovery panel links to this section by id
+	// (`admin.php?page=wpml-admin-texts-translation#wpml-st-localization`,
+	// wpmldev-8513), and in the 5.0 IA the section is rendered by the Admin
+	// Texts screen. The handler that read the hash lived in ST's
+	// `res/js/scripts.js`, which is enqueued for the String Translation and
+	// Theme Localization screens only - so on the screen the link actually goes
+	// to, the section stayed collapsed and nothing took focus. This script is
+	// enqueued together with the section itself
+	// (WPML_ST_Theme_Plugin_Localization_Resources, every admin page), so the
+	// behaviour now travels with what it opens.
+	function openAnchoredDetails() {
+		var target;
+
+		if (!window.location.hash) {
+			return;
+		}
+
+		try {
+			// This script runs on every admin screen, so the hash is not
+			// necessarily a selector at all.
+			target = $(window.location.hash);
+		} catch (e) {
+			return;
+		}
+
+		if (target.is('details')) {
+			target.prop('open', true);
+			target.find('summary').first().trigger('focus');
+		}
+	}
+
     $(function () {
+		openAnchoredDetails();
+
     	var scanningSection = new WPML_ST.ScanningSection();
         var auto_scan_type = wpml_active_plugins_themes;
         var counter = new WPML_ST.ScanningCounter();
-
-        if (-1 !== location.href.search('action=scan_from_notice')) {
-            auto_scan_type = wpml_groups_to_scan;
-        }
 
 		var stringsScanning = new WPML_ST.StringsScanning(scanningSection, counter);
 		var themePluginFilter = new WPML_ST.ThemePluginFilter(scanningSection);

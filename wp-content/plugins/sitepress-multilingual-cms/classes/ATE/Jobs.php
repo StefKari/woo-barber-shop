@@ -13,22 +13,49 @@ use WPML\TM\ATE\Review\ReviewStatus;
 class Jobs {
 	const LONGSTANDING_AT_ATE_SYNC_COUNT = 100;
 
-	/**
-	 * Each string inside string batch is counted separately.
-	 * Therefore, if we have two string batches and the first one has 3 strings inside and another 2,
-	 * we will count it as 5=3+2 instead of 2.
-	 *
-	 * @param bool $includeLongstanding A long-standing job is an automatic ATE job which we already tried to sync LONGSTANDING_AT_ATE_SYNC_COUNT or more times.
-	 * @return int
-	 */
+	private function getLatestErrorJoinSQL() {
+		global $wpdb;
+
+		return "
+			LEFT JOIN {$wpdb->prefix}icl_translate_unsolvable_jobs latest_error 
+				ON latest_error.job_id = jobs.job_id
+		";
+	}
+
+	private function getLatestPendingJobJoinSQL( $statusCount = 2 ) {
+		global $wpdb;
+
+		$statusPlaceholders = implode( ', ', array_fill( 0, max( 1, (int) $statusCount ), '%d' ) );
+
+		return "
+			INNER JOIN (
+				SELECT pending_jobs.rid, MAX(pending_jobs.job_id) AS job_id
+				FROM {$wpdb->prefix}icl_translate_job pending_jobs
+				INNER JOIN {$wpdb->prefix}icl_translation_status pending_status
+					ON pending_status.rid = pending_jobs.rid
+				WHERE pending_status.status IN ( {$statusPlaceholders} )
+				GROUP BY pending_jobs.rid
+			) latest_job ON latest_job.job_id = jobs.job_id
+		";
+	}
+
+	private function getErrorExclusionWhereSQL() {
+		return "
+			AND (
+				latest_error.job_id IS NULL
+				OR (
+					latest_error.error_type NOT IN ('SyncError', 'DownloadError')
+				)
+				OR (
+					latest_error.error_type = 'DownloadError' AND latest_error.counter < 3
+				)
+			)
+		";
+	}
+
 	public function getCountOfAutomaticInProgress( $includeLongstanding = true ) {
 		global $wpdb;
 
-		/**
-		 * Notice that we have the LEFT JOIN on `icl_string_batches` table.
-		 * This is relevant only for string jobs. In case of the posts, it will do nothing.
-		 * We need that join to count individual strings inside a string batch.
-		 */
 		$sql = "
 				SELECT COUNT(jobs.job_id)
 				FROM {$wpdb->prefix}icl_translate_job jobs
@@ -44,29 +71,29 @@ class Jobs {
 					string_batches.batch_id = original_translations.element_id AND translations.element_type = 'st-batch_strings'
         ";
 		}
+
+		$sql .= $this->getLatestPendingJobJoinSQL( 1 );
+
+		$sql .= $this->getLatestErrorJoinSQL();
+
 		$sql .= "
-				WHERE jobs.job_id IN (
-					SELECT MAX(jobs.job_id) FROM {$wpdb->prefix}icl_translate_job jobs			
-					GROUP BY jobs.rid
-				) 
-				AND jobs.automatic = 1  
+				WHERE jobs.automatic = 1
 				AND jobs.editor = %s
-				AND translation_status.status = %d				
+				AND translation_status.status = %d
 				AND translations.source_language_code = %s
 		";
+
+		$sql .= $this->getErrorExclusionWhereSQL();
 
 		if ( ! $includeLongstanding ) {
 			$sql .= " AND jobs.ate_sync_count < %d";
 
-			return (int) $wpdb->get_var( $wpdb->prepare( $sql, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS, Languages::getDefaultCode(), self::LONGSTANDING_AT_ATE_SYNC_COUNT ) );
+			return (int) $wpdb->get_var( $wpdb->prepare( $sql, ICL_TM_IN_PROGRESS, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS, Languages::getDefaultCode(), self::LONGSTANDING_AT_ATE_SYNC_COUNT ) );
 		}
 
-		return (int) $wpdb->get_var( $wpdb->prepare( $sql, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS, Languages::getDefaultCode() ) );
+		return (int) $wpdb->get_var( $wpdb->prepare( $sql, ICL_TM_IN_PROGRESS, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS, Languages::getDefaultCode() ) );
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getCountOfInProgress() {
 		global $wpdb;
 
@@ -74,35 +101,45 @@ class Jobs {
 				SELECT COUNT(jobs.job_id)
 				FROM {$wpdb->prefix}icl_translate_job jobs
 				INNER JOIN {$wpdb->prefix}icl_translation_status translation_status ON translation_status.rid = jobs.rid
-				WHERE jobs.job_id IN (
-					SELECT MAX(jobs.job_id) FROM {$wpdb->prefix}icl_translate_job jobs			
-					GROUP BY jobs.rid
-				) 
-				AND jobs.editor = %s
-				AND translation_status.status = %d				
+				INNER JOIN {$wpdb->prefix}icl_translations translations ON translations.translation_id = translation_status.translation_id
 		";
 
-		return (int) $wpdb->get_var( $wpdb->prepare( $sql, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS ) );
+		$sql .= $this->getLatestPendingJobJoinSQL( 1 );
+
+		$sql .= $this->getLatestErrorJoinSQL();
+
+		$sql .= "
+				WHERE jobs.editor = %s
+				AND translation_status.status = %d
+		";
+
+		$sql .= $this->getErrorExclusionWhereSQL();
+
+		return (int) $wpdb->get_var( $wpdb->prepare( $sql, ICL_TM_IN_PROGRESS, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS ) );
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getCountOfNeedsReview() {
 		global $wpdb;
 
-		$sql = "
-			SELECT COUNT(translation_status.translation_id) 
-			FROM {$wpdb->prefix}icl_translation_status translation_status
-			INNER JOIN {$wpdb->prefix}icl_translations translations ON 
-			    translations.translation_id = translation_status.translation_id AND translations.element_id IS NOT NULL			
-			WHERE ( translation_status.review_status = %s AND translation_status.status = %d ) OR 
-			      ( translation_status.review_status = %s AND translation_status.status = %d )
-		";
-
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
-				$sql,
+				"SELECT COUNT(translation_status.translation_id)
+				FROM {$wpdb->prefix}icl_translation_status translation_status
+			INNER JOIN {$wpdb->prefix}icl_translations translations ON 
+			    translations.translation_id = translation_status.translation_id
+			INNER JOIN {$wpdb->prefix}icl_translations original_translations ON
+			    original_translations.trid = translations.trid
+			    AND original_translations.element_type = translations.element_type
+			    AND original_translations.source_language_code IS NULL
+			    AND original_translations.element_id IS NOT NULL
+				AND (
+					translations.element_id IS NOT NULL
+					OR translations.element_type LIKE %s
+				)
+				WHERE ( translation_status.review_status = %s AND translation_status.status = %d ) OR
+				      ( translation_status.review_status = %s AND translation_status.status = %d )
+				",
+				$wpdb->esc_like( 'package_' ) . '%',
 				ReviewStatus::NEEDS_REVIEW,
 				ICL_TM_COMPLETE,
 				ReviewStatus::EDITING,
@@ -112,25 +149,18 @@ class Jobs {
 	}
 
 
-	/**
-	 * It checks whether we have ANY jobs in the DB. It doesn't matter what kind of jobs they are. It can be a job from ATE, CTE or even the Translation Proxy.
-	 *
-	 * @return bool
-	 * @todo This method should not be here as the current class relates solely to ATE jobs, while this method asks for ANY jobs.
-	 */
 	public function hasAny() {
 		global $wpdb;
 
 		$noOfRowsToFetch = 1;
 
-		$sql = $wpdb->prepare( "SELECT EXISTS(SELECT %d FROM {$wpdb->prefix}icl_translate_job)", $noOfRowsToFetch );
-
-		return boolval( $wpdb->get_var( $sql ) );
+		return boolval(
+			$wpdb->get_var(
+				$wpdb->prepare( "SELECT EXISTS(SELECT %d FROM {$wpdb->prefix}icl_translate_job)", $noOfRowsToFetch )
+			)
+		);
 	}
 
-	/**
-	 * @return bool True if there is at least one job to sync.
-	 */
 	public function hasAnyToSync() {
 		global $wpdb;
 
@@ -138,45 +168,210 @@ class Jobs {
 				SELECT jobs.job_id
 				FROM {$wpdb->prefix}icl_translate_job jobs
 				INNER JOIN {$wpdb->prefix}icl_translation_status translation_status ON translation_status.rid = jobs.rid
-				WHERE jobs.job_id IN (
-					SELECT MAX(jobs.job_id) FROM {$wpdb->prefix}icl_translate_job jobs			
-					GROUP BY jobs.rid
-				) 
-				AND jobs.editor = %s
-				AND translation_status.status = %d
-				LIMIT 1
+				INNER JOIN {$wpdb->prefix}icl_translations translations ON translations.translation_id = translation_status.translation_id
 		";
 
-		return (bool) $wpdb->get_var( $wpdb->prepare( $sql, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS ) );
+		$sql .= $this->getLatestPendingJobJoinSQL( 1 );
+
+		$sql .= $this->getLatestErrorJoinSQL();
+
+		$sql .= "
+				WHERE jobs.editor = %s
+				AND translation_status.status = %d
+		";
+
+		$sql .= $this->getErrorExclusionWhereSQL();
+
+		$sql .= " LIMIT 1";
+
+		return (bool) $wpdb->get_var( $wpdb->prepare( $sql, ICL_TM_IN_PROGRESS, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS ) );
 	}
 
-	/**
-	 * This is optimized query for getting the ate job ids to sync.
-	 *
-	 * @param bool $includeManualAndLongstandingJobs
-	 * @return int[]
-	 */
 	public function getATEJobIdsToSync( $includeManualAndLongstandingJobs = true ) {
 		global $wpdb;
 
 		$sql = "
 				SELECT jobs.editor_job_id
 				FROM {$wpdb->prefix}icl_translate_job jobs
-			    INNER JOIN {$wpdb->prefix}icl_translation_status translation_status ON translation_status.rid = jobs.rid
-				WHERE jobs.job_id IN (
-	                SELECT MAX(jobs.job_id) FROM {$wpdb->prefix}icl_translate_job jobs			
-					GROUP BY jobs.rid
-				) 
-	            AND jobs.editor = %s
+			    INNER JOIN {$wpdb->prefix}icl_translation_status translation_status
+			        ON translation_status.rid = jobs.rid
+			    INNER JOIN {$wpdb->prefix}icl_translations translations
+			        ON translations.translation_id = translation_status.translation_id
+		";
+
+		$sql .= $this->getLatestPendingJobJoinSQL();
+
+		$sql .= $this->getLatestErrorJoinSQL();
+
+		$sql .= "
+				WHERE jobs.editor = %s
 				AND ( translation_status.status = %d OR translation_status.status = %d )
 		";
+
+		$sql .= $this->getErrorExclusionWhereSQL();
 
 		if ( ! $includeManualAndLongstandingJobs ) {
 			$sql .= " AND jobs.ate_sync_count < %d AND jobs.automatic = 1";
 
-			return $wpdb->get_col( $wpdb->prepare( $sql, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS, ICL_TM_WAITING_FOR_TRANSLATOR, self::LONGSTANDING_AT_ATE_SYNC_COUNT ) );
+			return $wpdb->get_col(
+				$wpdb->prepare(
+					$sql,
+					ICL_TM_IN_PROGRESS,
+					ICL_TM_WAITING_FOR_TRANSLATOR,
+					\WPML_TM_Editors::ATE,
+					ICL_TM_IN_PROGRESS,
+					ICL_TM_WAITING_FOR_TRANSLATOR,
+					self::LONGSTANDING_AT_ATE_SYNC_COUNT
+				)
+			);
 		}
 
-		return $wpdb->get_col( $wpdb->prepare( $sql, \WPML_TM_Editors::ATE, ICL_TM_IN_PROGRESS, ICL_TM_WAITING_FOR_TRANSLATOR ) );
+		return $wpdb->get_col(
+			$wpdb->prepare(
+				$sql,
+				ICL_TM_IN_PROGRESS,
+				ICL_TM_WAITING_FOR_TRANSLATOR,
+				\WPML_TM_Editors::ATE,
+				ICL_TM_IN_PROGRESS,
+				ICL_TM_WAITING_FOR_TRANSLATOR
+			)
+		);
+	}
+
+	public function getATEJobIdsToSyncWithElementIds( $includeManualAndLongstandingJobs = true ): array {
+		global $wpdb;
+
+		$sql = "
+				SELECT 
+					jobs.editor_job_id,
+					translations.element_type,
+					original_translations.element_id
+				FROM {$wpdb->prefix}icl_translate_job jobs
+			    INNER JOIN {$wpdb->prefix}icl_translation_status translation_status
+			        ON translation_status.rid = jobs.rid
+			    INNER JOIN {$wpdb->prefix}icl_translations translations
+			        ON translations.translation_id = translation_status.translation_id
+			    INNER JOIN {$wpdb->prefix}icl_translations original_translations
+			        ON original_translations.trid = translations.trid
+			        AND original_translations.source_language_code IS NULL
+		";
+
+		$sql .= $this->getLatestPendingJobJoinSQL();
+
+		$sql .= $this->getLatestErrorJoinSQL();
+
+		$sql .= "
+				WHERE jobs.editor = %s
+				AND ( translation_status.status = %d OR translation_status.status = %d )
+		";
+
+		$sql .= $this->getErrorExclusionWhereSQL();
+
+		$orderBySQL = ' ORDER BY jobs.ate_sync_count ASC, jobs.job_id ASC';
+
+		if ( ! $includeManualAndLongstandingJobs ) {
+			$sql    .= ' AND jobs.ate_sync_count < %d AND jobs.automatic = 1' . $orderBySQL;
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					$sql,
+					ICL_TM_IN_PROGRESS,
+					ICL_TM_WAITING_FOR_TRANSLATOR,
+					\WPML_TM_Editors::ATE,
+					ICL_TM_IN_PROGRESS,
+					ICL_TM_WAITING_FOR_TRANSLATOR,
+					self::LONGSTANDING_AT_ATE_SYNC_COUNT
+				)
+			);
+		} else {
+			$sql    .= $orderBySQL;
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					$sql,
+					ICL_TM_IN_PROGRESS,
+					ICL_TM_WAITING_FOR_TRANSLATOR,
+					\WPML_TM_Editors::ATE,
+					ICL_TM_IN_PROGRESS,
+					ICL_TM_WAITING_FOR_TRANSLATOR
+				)
+			);
+		}
+
+		return $this->groupJobsByElementType( $results ?: [] );
+	}
+
+	public function getAteJobIdsOfWpmlJobs( array $wpmlJobIds ): array {
+		global $wpdb;
+
+		$ids = self::positiveIds( $wpmlJobIds );
+		if ( ! $ids ) {
+			return [];
+		}
+
+		return self::uniqueInts(
+			$wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT editor_job_id FROM {$wpdb->prefix}icl_translate_job WHERE editor_job_id > 0 AND job_id IN ( " . implode( ', ', array_fill( 0, count( $ids ), '%d' ) ) . ' ) ORDER BY ate_sync_count ASC, job_id ASC',
+					$ids
+				)
+			)
+		);
+	}
+
+	public function orderAteJobIdsBySyncCount( array $ateJobIds ): array {
+		global $wpdb;
+
+		$ids = self::positiveIds( $ateJobIds );
+		if ( ! $ids ) {
+			return [];
+		}
+
+		return self::uniqueInts(
+			$wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT editor_job_id FROM {$wpdb->prefix}icl_translate_job WHERE editor_job_id IN ( " . implode( ', ', array_fill( 0, count( $ids ), '%d' ) ) . ' ) ORDER BY ate_sync_count ASC, job_id ASC',
+					$ids
+				)
+			)
+		);
+	}
+
+	private static function positiveIds( array $ids ): array {
+		return array_values( array_unique( array_filter( array_map( 'intval', $ids ) ) ) );
+	}
+
+	private static function uniqueInts( $values ): array {
+		return array_values( array_unique( array_map( 'intval', (array) $values ) ) );
+	}
+
+	private function groupJobsByElementType( array $results ): array {
+		$ateJobIds  = [];
+		$postIds    = [];
+		$stringIds  = [];
+		$packageIds = [];
+		$termIds    = [];
+
+		foreach ( $results as $row ) {
+			$ateJobIds[] = (int) $row->editor_job_id;
+			$elementId   = (int) $row->element_id;
+			$elementType = $row->element_type;
+
+			if ( strpos( $elementType, 'post_' ) === 0 ) {
+				$postIds[] = $elementId;
+			} elseif ( 'st-batch_strings' === $elementType ) {
+				$stringIds[] = $elementId;
+			} elseif ( strpos( $elementType, 'package_' ) === 0 ) {
+				$packageIds[] = $elementId;
+			} elseif ( strpos( $elementType, 'tax_' ) === 0 ) {
+				$termIds[] = $elementId;
+			}
+		}
+
+		return [
+			'ateJobIds'  => $ateJobIds,
+			'postIds'    => array_unique( $postIds ),
+			'stringIds'  => array_unique( $stringIds ),
+			'packageIds' => array_unique( $packageIds ),
+			'termIds'    => array_unique( $termIds ),
+		];
 	}
 }

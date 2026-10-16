@@ -57,7 +57,8 @@ class FreeCartItemChoicesSuitability
         $ruleUsedStock,
         $giftedCount,
         $cart,
-        &$maxAmountForGiftsLeft = null
+        &$maxAmountForGiftsLeft = null,
+        $maxAmountForGift = null
     ) {
         $result = array();
 
@@ -66,6 +67,12 @@ class FreeCartItemChoicesSuitability
             array_filter(
                 array_map(array("ADP\BaseVersion\Includes\Cache\CacheHelper", "getWcProduct"), $productIds)
             )
+        );
+
+        $products = array_values(
+            array_filter($products, function($product) {
+                return $product->is_purchasable();
+            })
         );
 
         if ( count($products) === 0 ) {
@@ -91,8 +98,17 @@ class FreeCartItemChoicesSuitability
             }
 
             $productBaseSubtotal = $this->getProductBaseSubtotal($cart, $currentProduct, $qtyToAdd);
+            $productBasePrice = $this->getProductBaseSubtotal($cart, $currentProduct, 1);
+
+            if ( $maxAmountForGift !== null && $productBasePrice > $maxAmountForGift) {
+
+                $result[md5($currentProduct->get_id())][3] = true;
+                unset($products[$currentIndex]);
+                continue;
+            }
 
             if ( $maxAmountForGiftsLeft !== null && $productBaseSubtotal > $maxAmountForGiftsLeft ) {
+
                 $result[md5($currentProduct->get_id())][3] = true;
                 unset($products[$currentIndex]);
                 continue;

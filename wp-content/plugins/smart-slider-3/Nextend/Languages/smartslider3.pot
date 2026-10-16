@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-09-24 16:20+0200\n"
+"POT-Creation-Date: 2026-03-03 08:54+0100\n"
 "PO-Revision-Date: 2020-03-10 19:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -23,6 +23,33 @@ msgid "CURL disabled in your php.ini configuration. Please enable it!"
 msgstr ""
 
 msgid "Unable to contact with the licensing server, please try again later!"
+msgstr ""
+
+msgid "The uploaded file exceeds the upload_max_filesize directive in php.ini."
+msgstr ""
+
+msgid "The uploaded file exceeds the MAX_FILE_SIZE directive specified in the HTML form."
+msgstr ""
+
+msgid "The uploaded file was only partially uploaded."
+msgstr ""
+
+msgid "No file was uploaded."
+msgstr ""
+
+msgid "The temporary folder is missing from the server."
+msgstr ""
+
+msgid "Failed to write file to disk."
+msgstr ""
+
+msgid "A PHP extension stopped the file uploading."
+msgstr ""
+
+msgid "Unknown error code: "
+msgstr ""
+
+msgid "File uploading was stopped by the server!"
 msgstr ""
 
 msgid "You are not allowed to upload!"
@@ -702,7 +729,7 @@ msgstr ""
 msgid "Content List - One Per Line"
 msgstr ""
 
-msgid "Choose images"
+msgid "Choose media"
 msgstr ""
 
 msgid "Titles - One Per Line"
@@ -1263,6 +1290,9 @@ msgid "Allow restart"
 msgstr ""
 
 msgid "Keeps the autoplay control visible after the autoplay has finished to allow starting it again."
+msgstr ""
+
+msgid "Reverse direction"
 msgstr ""
 
 msgid "Infinite loop"
@@ -2093,6 +2123,9 @@ msgstr ""
 msgid "Thumbnail alt"
 msgstr ""
 
+msgid "Thumbnail title"
+msgstr ""
+
 msgid "Custom lightbox image"
 msgstr ""
 
@@ -2566,13 +2599,16 @@ msgstr ""
 msgid "Preview in new window"
 msgstr ""
 
-msgid "Lightbox videos in new tab on Mobile"
+msgid "Lightbox videos in new tab on Mobile/Tablet"
 msgstr ""
 
-msgid "Opens the lightbox videos in the YouTube app to avoid the mobile disabling the video."
+msgid "Opens lightbox videos in their app to avoid the mobile or tablet disabling the video."
 msgstr ""
 
 msgid "YouTube and Vimeo privacy enhanced mode"
+msgstr ""
+
+msgid "Respect reduced motion"
 msgstr ""
 
 msgid "Smooth scroll speed"
@@ -3511,6 +3547,12 @@ msgid "Iframe title"
 msgstr ""
 
 msgid "Play button"
+msgstr ""
+
+msgid "Cover alt tag"
+msgstr ""
+
+msgid "Play alt tag"
 msgstr ""
 
 msgid "Play"
@@ -4621,9 +4663,6 @@ msgstr ""
 msgid "Load album images separately"
 msgstr ""
 
-msgid "Load Album images as record data"
-msgstr ""
-
 msgid "JSON from url"
 msgstr ""
 
@@ -4984,7 +5023,16 @@ msgstr ""
 msgid "Fallback language"
 msgstr ""
 
+msgid "Products without images"
+msgstr ""
+
 msgid "Show parent products only"
+msgstr ""
+
+msgid "Translate date"
+msgstr ""
+
+msgid "Special"
 msgstr ""
 
 #, php-format
@@ -5180,9 +5228,6 @@ msgid "Reveal"
 msgstr ""
 
 msgid "Bounce"
-msgstr ""
-
-msgid "Special"
 msgstr ""
 
 msgid "Left fade"
@@ -5822,6 +5867,9 @@ msgid "MP4 video"
 msgstr ""
 
 msgid "Preload"
+msgstr ""
+
+msgid "Poster alt tag"
 msgstr ""
 
 msgid "Joomla module"

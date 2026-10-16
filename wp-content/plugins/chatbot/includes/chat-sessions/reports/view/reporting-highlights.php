@@ -1,0 +1,373 @@
+<?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
+
+<main id="main" class="main clearfix wpbot-reports-dashboard">
+
+	<div class="pagetitle">
+		<h1><?php echo esc_html__( 'Bot - Reporting Dashboard', 'chatbot' ); ?></h1>
+	</div><!-- End Page Title -->
+
+	<section class="section dashboard">
+		<div class="row">
+
+		<!-- Left side columns -->
+		<div class="col-lg-12">
+			<div class="row">
+
+			<!-- Card 1 -->
+			<div class="col-xxl-4 col-md-6">
+				<div class="card info-card sales-card">
+
+				<div class="card-body">
+					<h5 class="card-title">Total Conversations</span></h5>
+
+					<div class="d-flex align-items-center">
+					<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+						<i class="bi bi-wechat"></i>
+					</div>
+					<div class="ps-3">
+						<h6>
+						<?php echo intval( botreports_get_total_conversation_count() ); ?>
+						</h6>
+						<span class="text-success small pt-1 fw-bold">
+						<?php echo intval( botreports_get_todays_conversation_count() ); ?>
+						</span> 
+						<span class="text-muted small pt-2 ps-1">Today</span>,
+						<span class="text-success small pt-1 fw-bold">
+						<?php echo intval( botreports_get_weeks_conversation_count() ); ?>
+						</span> 
+						<span class="text-muted small pt-2 ps-1">Last Week</span>
+
+					</div>
+					</div>
+				</div>
+
+				</div>
+			</div><!-- End Card 1 -->
+			<!-- Card 1 -->
+<div class="col-xxl-4 col-md-6">
+    <div class="card info-card sales-card feedback-card feedback-card--like" data-type="like" style="cursor:pointer;">
+        <div class="card-body">
+            <h5 class="card-title">Positive Feedback</h5>
+            <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-hand-thumbs-up"></i>
+                </div>
+                <div class="ps-3">
+                    <h6><?php echo intval( wpbot_get_report_stats_count()['likes'] ); ?></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-xxl-4 col-md-6">
+    <div class="card info-card sales-card feedback-card feedback-card--dislike" data-type="dislike" style="cursor:pointer;">
+        <div class="card-body">
+            <h5 class="card-title">Negative Feedback</h5>
+            <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-hand-thumbs-down"></i>
+                </div>
+                <div class="ps-3">
+                    <h6><?php echo intval( wpbot_get_report_stats_count()['dislikes'] ); ?></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="feedback-results" class="col-12" style="margin-top:8px;"></div>
+
+
+
+			<!-- Card 2 -->
+			<div class="col-xxl-4 col-md-6">
+				<div class="card info-card sales-card">
+
+				<div class="card-body">
+					<h5 class="card-title">Conversations in Last 30 Days</span></h5>
+
+					<div class="d-flex align-items-center">
+					<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+						<i class="bi bi-bar-chart-steps"></i>
+					</div>
+					<div class="ps-3">
+						<h6>
+						<?php echo intval( botreports_get_last30days_conversation_count() ); ?>
+						</h6>
+					</div>
+					</div>
+				</div>
+
+				</div>
+			</div><!-- End Card 2 -->
+
+			<!-- Card 3 -->
+			<div class="col-xxl-4 col-md-6">
+				<div class="card info-card sales-card">
+
+				<div class="card-body">
+					<h5 class="card-title">Average Daily Conversation</span></h5>
+
+					<div class="d-flex align-items-center">
+					<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+						<i class="bi bi-bar-chart"></i>
+					</div>
+					<div class="ps-3">
+						<h6><?php echo esc_html( botreports_get_last30days_conversation_average() ); ?></h6>
+						<span class="text-muted small">In</span>
+						<span class="text-success small pt-1 fw-bold">Last 30</span> 
+						<span class="text-muted small pt-2 ps-1">Days</span>
+					</div>
+					</div>
+				</div>
+
+				</div>
+			</div><!-- End Card 3 -->
+
+			<!-- Reports: Conversation Density Chart -->
+			<div class="col-lg-12">
+				<div class="card wpbot-report-panel" style="max-width: 100% !important;">
+					<div class="card-body">
+					<h5 class="card-title">Conversation Density Chart</h5>
+
+					<!-- Area Chart -->
+					<div id="areaChart" style="min-height: 365px;"></div>
+
+					<?php
+
+						$densityTable = botreports_get_last30days_conversation_density();
+
+						$dates                      = array();
+						$conversation_count_in_date = array();
+
+					foreach ( $densityTable as $data ) {
+						array_push( $dates, $data->CONVERSATION_DATE );
+						array_push( $conversation_count_in_date, $data->CONVERSATION_NUM );
+					}
+
+					?>
+
+					<script>
+						document.addEventListener("DOMContentLoaded", () => {
+						const series = {
+							"monthDataSeries1": {
+							"count": <?php echo wp_json_encode( $conversation_count_in_date ); ?>,
+							"dates": <?php echo wp_json_encode( $dates ); ?>,
+							},
+						}
+						new ApexCharts(document.querySelector("#areaChart"), {
+							series: [{
+								name: "Conversation Count",
+								data: series.monthDataSeries1.count
+							}],
+							chart: {
+								type: 'bar',
+								height: 350,
+								fontFamily: '"DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+								zoom: {
+									enabled: false
+								}
+							},
+							colors: ['#5B4E96'],
+							plotOptions: {
+								bar: {
+									horizontal: false,
+									borderRadius: 6,
+									columnWidth: '55%'
+								}
+							},
+							dataLabels: {
+								enabled: true,
+								style: { colors: ['#5B4E96'] }
+							},
+							labels: series.monthDataSeries1.dates,
+							xaxis: {
+								type: 'datetime',
+							},
+							yaxis: {
+								opposite: true
+							},
+							grid: {
+								borderColor: '#e4e0f2',
+								strokeDashArray: 4
+							},
+							legend: {
+								horizontalAlign: 'left'
+							}
+						}).render();
+						});
+					</script>
+					<!-- End Area Chart -->
+
+					</div>
+				</div>
+			</div><!-- End Reports: Conversation Density Chart -->
+
+			<!-- Recent Conversations -->
+			<div class="col-lg-12 clearfix">
+				<div class="card wpbot-report-panel" style="max-width: 100% !important;">
+
+				<div class="card-body">
+					<h5 class="card-title">Recent 5 Conversations</h5>
+
+					<?php
+
+						$results = botreports_get_last5_conversations();
+
+						$numberOfRecords = count( $results );
+
+					if ( $numberOfRecords > 0 ) :
+
+						?>
+
+					<table class="table table-hover wpbot-report-table">
+					<thead>
+						<tr class="first-row text-center">
+						<th scope="col">#</th>
+						<th scope="col">Date & Time</th>
+						<th scope="col">Session ID</th>
+						<th scope="col">Interaction Count</th>
+						<th scope="col">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<?php
+
+						$counter = count( $results ) === 5 ? 5 : count( $results );
+
+						foreach ( $results as $result ) {
+
+							?>
+
+						<tr class="text-center">
+							<th scope="row">
+							<a href="<?php echo esc_url( admin_url( "admin.php?page=wbcs-botsessions-page&userid={$result->user_id}" ) ); ?>">
+								<?php echo esc_html( $counter ); ?>
+							</a>
+							</th>
+							<td><?php echo esc_html( gmdate( 'd M, Y g:i A', strtotime( $result->date ) ) ); ?></td>
+							<td><?php echo esc_html( $result->session_id ); ?></td>
+							<td><?php echo intval( get_user_interaction_count( $result->conversation ) ); ?></td>
+							<td>
+								<a href="<?php echo esc_url( admin_url( "admin.php?page=wbcs-botsessions-page&userid={$result->user_id}" ) ); ?>" class="btn btn-primary">
+									<i class="bi bi-eyeglasses"></i> View Chat
+								</a>
+							</td>
+						</tr>
+
+							<?php
+
+							--$counter;
+
+						}
+
+						?>
+
+
+					</tbody>
+
+					</table>
+
+					<?php else : ?>
+
+					<div class="alert alert-info">No chat records were found in the database.</div>
+
+					<?php endif; ?>
+
+				</div>
+
+				</div>
+			</div><!-- End Recent Conversations -->
+			<!-- Reports Conversations -->
+			<div class="col-lg-12 clearfix">
+				<div class="card wpbot-report-panel" style="max-width: 100% !important;">
+
+				<div class="card-body">
+					<h5 class="card-title">Conversations Reports</h5>
+
+					<?php
+
+						$reports_count = wpbot_get_report_stats_count()['reports_only'];
+
+						
+
+					if ( $reports_count > 0 ) :
+
+						?>
+
+					<table class="table table-hover wpbot-report-table">
+					<thead>
+						<tr class="first-row text-center">
+						<th scope="col">#</th>
+						<th scope="col">Id</th>
+						<th scope="col">Email</th>
+						<th scope="col">Message</th>
+						<th scope="col">Report Text</th>
+						<th scope="col">Date</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<?php
+						$rests = wpbot_get_reports_list();
+						$counter = count( $rests ) === 5 ? 5 : count( $rests );
+						
+						foreach ( $rests as $report ) {
+						$meta = maybe_unserialize( $report['meta_info'] );
+						$email = isset($meta['email']) ? $meta['email'] : '';
+						$report_text = isset($meta['report_text']) ? $meta['report_text'] : '';
+							?>
+
+						<tr class="text-center">
+							<th scope="row">
+								<?php echo esc_html( $counter ); ?>
+							</th>
+							<td><?php echo esc_html( $report['id'] ); ?></td>
+							<td><?php echo esc_html( $email ); ?></td>
+							<td><?php echo esc_html( $report['message'] ); ?></td>
+							<td><?php echo esc_html( $report_text ); ?></td>
+							<td><?php echo esc_html( $report['created_at'] ); ?></td>
+						</tr>
+
+							<?php
+
+							--$counter;
+
+						}
+
+						?>
+
+
+					</tbody>
+
+					</table>
+
+					<?php else : ?>
+
+					<div class="alert alert-info">No chat records were found in the database.</div>
+
+					<?php endif; ?>
+
+				</div>
+
+				</div>
+			</div><!-- End Reports Conversations -->
+
+			</div>
+
+			<div class="wpbot-report-actions">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wbcs-botsessions-page' ) ); ?>" class="btn btn-primary">
+					<i class="bi bi-gear-wide-connected me-1"></i> Manage All Conversations
+				</a>
+
+				<button id="wpbot-clear-feedback" class="btn btn-danger"><i class="bi bi-trash me-1"></i>Clear All Feedback</button>
+				<div id="wpbot-clear-feedback-msg"></div>
+			</div>
+
+		</div><!-- End Left side columns -->
+
+		</div>
+	</section>
+
+	</main><!-- End #main -->

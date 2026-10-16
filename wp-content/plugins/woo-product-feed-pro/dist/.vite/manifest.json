@@ -1,0 +1,335 @@
+{
+  "__plugin-vue_export-helper-legacy.BVIICed7.js": {
+    "file": "common/_plugin-vue_export-helper-legacy.BVIICed7.js",
+    "name": "_plugin-vue_export-helper"
+  },
+  "__plugin-vue_export-helper.DlAUqK2U.js": {
+    "file": "common/_plugin-vue_export-helper.DlAUqK2U.js",
+    "name": "_plugin-vue_export-helper"
+  },
+  "_index-legacy.mMjW-6y_.js": {
+    "file": "common/index-legacy.mMjW-6y_.js",
+    "name": "index",
+    "imports": [
+      "_vue-select.es-legacy.33HjtT_H.js"
+    ]
+  },
+  "_index.CcsdqMSe.js": {
+    "file": "common/index.CcsdqMSe.js",
+    "name": "index",
+    "imports": [
+      "_vue-select.es.DZr3BXkQ.js"
+    ],
+    "css": [
+      "css/index.DA8hhM3z.css"
+    ]
+  },
+  "_index.DA8hhM3z.css": {
+    "file": "css/index.DA8hhM3z.css",
+    "src": "_index.DA8hhM3z.css"
+  },
+  "_vue-select.es-legacy.33HjtT_H.js": {
+    "file": "common/vue-select.es-legacy.33HjtT_H.js",
+    "name": "vue-select.es"
+  },
+  "_vue-select.es.DZr3BXkQ.js": {
+    "file": "common/vue-select.es.DZr3BXkQ.js",
+    "name": "vue-select.es"
+  },
+  "src/apps/field-mapping-builder/index-legacy.ts": {
+    "file": "apps/field-mapping-builder/index-legacy.CAKosPdQ.js",
+    "name": "apps/field-mapping-builder/index",
+    "src": "src/apps/field-mapping-builder/index-legacy.ts",
+    "isEntry": true,
+    "imports": [
+      "_vue-select.es-legacy.33HjtT_H.js",
+      "_index-legacy.mMjW-6y_.js"
+    ]
+  },
+  "src/apps/field-mapping-builder/index.ts": {
+    "file": "apps/field-mapping-builder/index.C6oH7vIc.js",
+    "name": "apps/field-mapping-builder/index",
+    "src": "src/apps/field-mapping-builder/index.ts",
+    "isEntry": true,
+    "imports": [
+      "_vue-select.es.DZr3BXkQ.js",
+      "_index.CcsdqMSe.js"
+    ],
+    "css": [
+      "css/index.Cpwj0O0S.css"
+    ]
+  },
+  "src/apps/filters-rules-builder/index-legacy.ts": {
+    "file": "apps/filters-rules-builder/index-legacy.BWYclVDF.js",
+    "name": "apps/filters-rules-builder/index",
+    "src": "src/apps/filters-rules-builder/index-legacy.ts",
+    "isEntry": true,
+    "imports": [
+      "_index-legacy.mMjW-6y_.js",
+      "_vue-select.es-legacy.33HjtT_H.js",
+      "__plugin-vue_export-helper-legacy.BVIICed7.js"
+    ]
+  },
+  "src/apps/filters-rules-builder/index.ts": {
+    "file": "apps/filters-rules-builder/index.DvLyimBe.js",
+    "name": "apps/filters-rules-builder/index",
+    "src": "src/apps/filters-rules-builder/index.ts",
+    "isEntry": true,
+    "imports": [
+      "_index.CcsdqMSe.js",
+      "_vue-select.es.DZr3BXkQ.js",
+      "__plugin-vue_export-helper.DlAUqK2U.js"
+    ],
+    "css": [
+      "css/index.DzGGr8Lh.css"
+    ]
+  },
+  "src/apps/ucp/index-legacy.ts": {
+    "file": "apps/ucp/index-legacy.jW93hPJ3.js",
+    "name": "apps/ucp/index",
+    "src": "src/apps/ucp/index-legacy.ts",
+    "isEntry": true,
+    "imports": [
+      "_vue-select.es-legacy.33HjtT_H.js",
+      "__plugin-vue_export-helper-legacy.BVIICed7.js"
+    ]
+  },
+  "src/apps/ucp/index.ts": {
+    "file": "apps/ucp/index.CdJ1rlTn.js",
+    "name": "apps/ucp/index",
+    "src": "src/apps/ucp/index.ts",
+    "isEntry": true,
+    "imports": [
+      "_vue-select.es.DZr3BXkQ.js",
+      "__plugin-vue_export-helper.DlAUqK2U.js"
+    ],
+    "css": [
+      "css/index.3uzq8rUA.css"
+    ]
+  },
+  "src/vanilla/edit-feed/index-legacy.ts": {
+    "file": "vanilla/edit-feed/index-legacy.BI1uLsl4.js",
+    "name": "vanilla/edit-feed/index",
+    "src": "src/vanilla/edit-feed/index-legacy.ts",
+    "isEntry": true,
+    "imports": [
+      "src/vanilla/edit-feed/style-legacy.scss"
+    ]
+  },
+  "src/vanilla/edit-feed/index.ts": {
+    "file": "vanilla/edit-feed/index.DdkjyG5H.js",
+    "name": "vanilla/edit-feed/index",
+    "src": "src/vanilla/edit-feed/index.ts",
+    "isEntry": true,
+    "css": [
+      "css/vanilla/edit-feed/style.D7iDJgY-.css"
+    ]
+  },
+  "src/vanilla/edit-feed/style-legacy.scss": {
+    "file": "vanilla/edit-feed/style.scss-legacy.CYJD_mAM.js",
+    "name": "vanilla/edit-feed/style.scss",
+    "src": "src/vanilla/edit-feed/style-legacy.scss",
+    "isEntry": true
+  },
+  "src/vanilla/edit-feed/style.scss": {
+    "file": "css/vanilla/edit-feed/style.D7iDJgY-.css",
+    "src": "src/vanilla/edit-feed/style.scss",
+    "isEntry": true
+  },
+  "src/vanilla/export-import-tools/index-legacy.ts": {
+    "file": "vanilla/export-import-tools/index-legacy.l-Kvb1PG.js",
+    "name": "vanilla/export-import-tools/index",
+    "src": "src/vanilla/export-import-tools/index-legacy.ts",
+    "isEntry": true,
+    "imports": [
+      "src/vanilla/export-import-tools/style-legacy.scss"
+    ]
+  },
+  "src/vanilla/export-import-tools/index.ts": {
+    "file": "vanilla/export-import-tools/index.dDIijf_L.js",
+    "name": "vanilla/export-import-tools/index",
+    "src": "src/vanilla/export-import-tools/index.ts",
+    "isEntry": true,
+    "css": [
+      "css/vanilla/export-import-tools/style.m4KFnMOM.css"
+    ]
+  },
+  "src/vanilla/export-import-tools/style-legacy.scss": {
+    "file": "vanilla/export-import-tools/style.scss-legacy.BWo5nvXv.js",
+    "name": "vanilla/export-import-tools/style.scss",
+    "src": "src/vanilla/export-import-tools/style-legacy.scss",
+    "isEntry": true
+  },
+  "src/vanilla/export-import-tools/style.scss": {
+    "file": "css/vanilla/export-import-tools/style.m4KFnMOM.css",
+    "src": "src/vanilla/export-import-tools/style.scss",
+    "isEntry": true
+  },
+  "src/vanilla/index-legacy.ts": {
+    "file": "vanilla/index-legacy.WVi_fnFa.js",
+    "name": "vanilla/index",
+    "src": "src/vanilla/index-legacy.ts",
+    "isEntry": true
+  },
+  "src/vanilla/index.ts": {
+    "file": "vanilla/index.3y8LKsMD.js",
+    "name": "vanilla/index",
+    "src": "src/vanilla/index.ts",
+    "isEntry": true,
+    "css": [
+      "css/index.BHi_zzBa.css"
+    ]
+  },
+  "src/vanilla/manage-feeds/index-legacy.ts": {
+    "file": "vanilla/manage-feeds/index-legacy.BcO8KvW7.js",
+    "name": "vanilla/manage-feeds/index",
+    "src": "src/vanilla/manage-feeds/index-legacy.ts",
+    "isEntry": true,
+    "imports": [
+      "src/vanilla/manage-feeds/style-legacy.scss"
+    ]
+  },
+  "src/vanilla/manage-feeds/index.ts": {
+    "file": "vanilla/manage-feeds/index.DhqAhXNk.js",
+    "name": "vanilla/manage-feeds/index",
+    "src": "src/vanilla/manage-feeds/index.ts",
+    "isEntry": true,
+    "css": [
+      "css/vanilla/manage-feeds/style.ro9YRqB9.css"
+    ]
+  },
+  "src/vanilla/manage-feeds/style-legacy.scss": {
+    "file": "vanilla/manage-feeds/style.scss-legacy.FEGptKsn.js",
+    "name": "vanilla/manage-feeds/style.scss",
+    "src": "src/vanilla/manage-feeds/style-legacy.scss",
+    "isEntry": true
+  },
+  "src/vanilla/manage-feeds/style.scss": {
+    "file": "css/vanilla/manage-feeds/style.ro9YRqB9.css",
+    "src": "src/vanilla/manage-feeds/style.scss",
+    "isEntry": true
+  },
+  "src/vanilla/notices/drawer-legacy.ts": {
+    "file": "vanilla/notices/drawer-legacy.emUWq9g1.js",
+    "name": "vanilla/notices/drawer",
+    "src": "src/vanilla/notices/drawer-legacy.ts",
+    "isEntry": true
+  },
+  "src/vanilla/notices/drawer.ts": {
+    "file": "vanilla/notices/drawer.BanUXkiu.js",
+    "name": "vanilla/notices/drawer",
+    "src": "src/vanilla/notices/drawer.ts",
+    "isEntry": true
+  },
+  "src/vanilla/notices/header-icon-legacy.ts": {
+    "file": "vanilla/notices/header-icon-legacy.C_1R8Qp-.js",
+    "name": "vanilla/notices/header-icon",
+    "src": "src/vanilla/notices/header-icon-legacy.ts",
+    "isEntry": true
+  },
+  "src/vanilla/notices/header-icon.ts": {
+    "file": "vanilla/notices/header-icon.Bj9Al0lH.js",
+    "name": "vanilla/notices/header-icon",
+    "src": "src/vanilla/notices/header-icon.ts",
+    "isEntry": true
+  },
+  "src/vanilla/notices/index-legacy.ts": {
+    "file": "vanilla/notices/index-legacy.CIutoPSR.js",
+    "name": "vanilla/notices/index",
+    "src": "src/vanilla/notices/index-legacy.ts",
+    "isEntry": true,
+    "imports": [
+      "src/vanilla/notices/style-legacy.scss",
+      "src/vanilla/notices/drawer-legacy.ts",
+      "src/vanilla/notices/header-icon-legacy.ts"
+    ]
+  },
+  "src/vanilla/notices/index.ts": {
+    "file": "vanilla/notices/index.Cy4xbBvE.js",
+    "name": "vanilla/notices/index",
+    "src": "src/vanilla/notices/index.ts",
+    "isEntry": true,
+    "imports": [
+      "src/vanilla/notices/drawer.ts",
+      "src/vanilla/notices/header-icon.ts"
+    ],
+    "css": [
+      "css/vanilla/notices/style.DW-XHh8a.css"
+    ]
+  },
+  "src/vanilla/notices/style-legacy.scss": {
+    "file": "vanilla/notices/style.scss-legacy.CuQ5LUVl.js",
+    "name": "vanilla/notices/style.scss",
+    "src": "src/vanilla/notices/style-legacy.scss",
+    "isEntry": true
+  },
+  "src/vanilla/notices/style.scss": {
+    "file": "css/vanilla/notices/style.DW-XHh8a.css",
+    "src": "src/vanilla/notices/style.scss",
+    "isEntry": true
+  },
+  "src/vanilla/setup-checklist/index-legacy.ts": {
+    "file": "vanilla/setup-checklist/index-legacy.DqX8nrmJ.js",
+    "name": "vanilla/setup-checklist/index",
+    "src": "src/vanilla/setup-checklist/index-legacy.ts",
+    "isEntry": true,
+    "imports": [
+      "src/vanilla/setup-checklist/style-legacy.scss"
+    ]
+  },
+  "src/vanilla/setup-checklist/index.ts": {
+    "file": "vanilla/setup-checklist/index.DtEsdU9z.js",
+    "name": "vanilla/setup-checklist/index",
+    "src": "src/vanilla/setup-checklist/index.ts",
+    "isEntry": true,
+    "css": [
+      "css/vanilla/setup-checklist/style.C7Nsme-l.css"
+    ]
+  },
+  "src/vanilla/setup-checklist/style-legacy.scss": {
+    "file": "vanilla/setup-checklist/style.scss-legacy.DH2KwIqX.js",
+    "name": "vanilla/setup-checklist/style.scss",
+    "src": "src/vanilla/setup-checklist/style-legacy.scss",
+    "isEntry": true
+  },
+  "src/vanilla/setup-checklist/style.scss": {
+    "file": "css/vanilla/setup-checklist/style.C7Nsme-l.css",
+    "src": "src/vanilla/setup-checklist/style.scss",
+    "isEntry": true
+  },
+  "src/vanilla/upsell/index-legacy.ts": {
+    "file": "vanilla/upsell/index-legacy.uubSjVto.js",
+    "name": "vanilla/upsell/index",
+    "src": "src/vanilla/upsell/index-legacy.ts",
+    "isEntry": true,
+    "imports": [
+      "src/vanilla/upsell/style-legacy.scss"
+    ]
+  },
+  "src/vanilla/upsell/index.ts": {
+    "file": "vanilla/upsell/index.N5ZBP55l.js",
+    "name": "vanilla/upsell/index",
+    "src": "src/vanilla/upsell/index.ts",
+    "isEntry": true,
+    "css": [
+      "css/vanilla/upsell/style.6peDWRDu.css"
+    ]
+  },
+  "src/vanilla/upsell/style-legacy.scss": {
+    "file": "vanilla/upsell/style.scss-legacy.DAXEeqxI.js",
+    "name": "vanilla/upsell/style.scss",
+    "src": "src/vanilla/upsell/style-legacy.scss",
+    "isEntry": true
+  },
+  "src/vanilla/upsell/style.scss": {
+    "file": "css/vanilla/upsell/style.6peDWRDu.css",
+    "src": "src/vanilla/upsell/style.scss",
+    "isEntry": true
+  },
+  "vite/legacy-polyfills-legacy": {
+    "file": "polyfills-legacy.DZXAVot1.js",
+    "name": "polyfills",
+    "src": "vite/legacy-polyfills-legacy",
+    "isEntry": true
+  }
+}

@@ -1,8 +1,8 @@
 *** Yoast SEO premium Changelog ***
 
 
-2025-04-01 - version 24.8
-* add -  Improves error messages related to AI features by updating the link directing to Yoast Support.
-* update -  Bumps the minimum required version of Yoast SEO to 24.8.
-* update -  Removes the beta label from the front-end SEO inspector.
+2026-10-13 - version 28.7
+* fix -  Fixes a bug where a PHP warning was emitted on the post edit screen when the global post could not be resolved at admin-enqueue time.
+* fix -  Fixes a bug where a user was able to add arbitrary internal redirects regardless of their role.
+* update -  Bumps the minimum required version of Yoast SEO to 28.7.
 

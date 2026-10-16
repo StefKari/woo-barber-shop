@@ -1,9 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\ATE\Application\Service;
-
-use WPML\PHP\Exception\Exception;
-
-class EngineServiceException extends Exception {
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/ATE/Application/Service/EngineServiceException.php';

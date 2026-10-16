@@ -8,8 +8,6 @@ interface ConcreteProductPriceHtml
 {
     /**
      * @param bool $striked
-     *
-     * @return self
      */
     public function withStriked($striked);
 

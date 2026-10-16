@@ -22,7 +22,7 @@ if($header_light == 1){
                 <div class="header-control left">
                     <!-- <?php //do_action('urus_header_left_control');?> -->
                     <i id="search-btn-custom" class="fa fa-search search-btn-custom"  onclick="toggleSearchButton()"></i>
-                    <i id="close-btn-custom" class="fas fa-times search-btn-custom hide"  onclick="toggleSearchButton()"></i>
+                    <i id="close-btn-custom" class="fa fa-times search-btn-custom hide"  onclick="toggleSearchButton()"></i>
                 </div>
                 <div class="header-control-center">
                     <div class="logo-in-menu">

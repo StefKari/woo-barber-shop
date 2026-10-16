@@ -41,6 +41,12 @@ class RWMB_File_Field extends RWMB_Field {
 		$attachment  = $request->post( 'attachment_id' );
 		$object_id   = $request->filter_post( 'object_id' );
 		$object_type = (string) $request->filter_post( 'object_type' );
+
+		// Authorization: caller must be able to edit the object and delete the attachment.
+		if ( ! self::can_delete_file( $object_id, $object_type, $attachment ) ) {
+			wp_send_json_error( __( 'Error: You are not allowed to delete this file', 'meta-box' ), 403 );
+		}
+
 		$field       = rwmb_get_field_settings( $field_id, [ 'object_type' => $object_type ], $object_id );
 		$field_value = self::raw_meta( $object_id, $field );
 
@@ -51,8 +57,17 @@ class RWMB_File_Field extends RWMB_Field {
 		if ( is_numeric( $attachment ) ) {
 			$result = wp_delete_attachment( $attachment );
 		} else {
-			$path   = str_replace( home_url( '/' ), trailingslashit( ABSPATH ), $attachment );
-			$result = unlink( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
+			$path = str_replace( home_url( '/' ), trailingslashit( ABSPATH ), $attachment );
+
+			// Security: validate resolved path is within $field['upload_dir'] directory.
+			$real_path    = realpath( $path );
+			$real_path    = wp_normalize_path( $real_path );
+			$allowed_base = ! empty( $field['upload_dir'] ) ? trailingslashit( wp_normalize_path( $field['upload_dir'] ) ) : '';
+			if ( ! $real_path || ! $allowed_base || ! str_starts_with( $real_path, $allowed_base ) ) {
+				wp_send_json_error( __( 'Error: The file is outside the allowed upload directory', 'meta-box' ) );
+			}
+
+			$result = unlink( $real_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
 		}
 
 		if ( $result ) {
@@ -62,10 +77,54 @@ class RWMB_File_Field extends RWMB_Field {
 	}
 
 	/**
+	 * Check whether the current user may delete a file for the given object.
+	 *
+	 * @param int|string $object_id   Object ID.
+	 * @param string     $object_type Object type (post, term, user, setting, comment).
+	 * @param mixed      $attachment  Attachment ID or custom upload path.
+	 */
+	protected static function can_delete_file( $object_id, string $object_type, $attachment ): bool {
+		if ( ! $object_id ) {
+			return false;
+		}
+
+		switch ( $object_type ) {
+			case 'term':
+				$edit_cap = 'edit_term';
+				break;
+			case 'user':
+				$edit_cap = 'edit_user';
+				break;
+			case 'setting':
+				$edit_cap = 'manage_options';
+				break;
+			case 'comment':
+				$edit_cap = 'moderate_comments';
+				break;
+			case 'post':
+			default:
+				$edit_cap = 'edit_post';
+				break;
+		}
+
+		if ( ! current_user_can( $edit_cap, $object_id ) ) {
+			return false;
+		}
+
+		// Media library attachments require delete permission on the attachment post.
+		if ( is_numeric( $attachment ) && ! current_user_can( 'delete_post', (int) $attachment ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Recursively search needle in haystack
 	 */
-	protected static function in_array_r( $needle, $haystack, $strict = false ) : bool {
+	protected static function in_array_r( $needle, $haystack, $strict = false ): bool {
 		foreach ( $haystack as $item ) {
+			// phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual
 			if ( ( $strict ? $item === $needle : $item == $needle ) || ( is_array( $item ) && self::in_array_r( $needle, $item, $strict ) ) ) {
 					return true;
 			}
@@ -213,7 +272,7 @@ class RWMB_File_Field extends RWMB_Field {
 		);
 	}
 
-	protected static function file_info_custom_dir( string $file, array $field ) : array {
+	protected static function file_info_custom_dir( string $file, array $field ): array {
 		$path     = wp_normalize_path( trailingslashit( $field['upload_dir'] ) . basename( $file ) );
 		$ext      = pathinfo( $path, PATHINFO_EXTENSION );
 		$icon_url = wp_mime_type_icon( wp_ext2type( $ext ) );
@@ -249,7 +308,7 @@ class RWMB_File_Field extends RWMB_Field {
 		$new = array_filter( (array) $new );
 
 		$count = self::transform( $input );
-		for ( $i = 0; $i < $count; $i ++ ) {
+		for ( $i = 0; $i < $count; $i++ ) {
 			$attachment = self::handle_upload( "{$input}_{$i}", $post_id, $field );
 			if ( $attachment && ! is_wp_error( $attachment ) ) {
 				$new[] = $attachment;
@@ -457,7 +516,7 @@ class RWMB_File_Field extends RWMB_Field {
 		// @codingStandardsIgnoreEnd
 
 		// Use a closure to filter upload directory. Requires PHP >= 5.3.0.
-		$filter_upload_dir = function( $uploads ) use ( $field ) {
+		$filter_upload_dir = function ( $uploads ) use ( $field ) {
 			$uploads['path']    = $field['upload_dir'];
 			$uploads['url']     = self::convert_path_to_url( $field['upload_dir'] );
 			$uploads['subdir']  = '';
@@ -485,7 +544,7 @@ class RWMB_File_Field extends RWMB_Field {
 		return empty( $file_info['url'] ) ? null : $file_info['url'];
 	}
 
-	public static function convert_path_to_url( string $path ) : string {
+	public static function convert_path_to_url( string $path ): string {
 		$path          = wp_normalize_path( untrailingslashit( $path ) );
 		$root          = wp_normalize_path( untrailingslashit( ABSPATH ) );
 		$relative_path = str_replace( $root, '', $path );

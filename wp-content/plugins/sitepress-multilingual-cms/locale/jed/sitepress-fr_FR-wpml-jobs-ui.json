@@ -3,10 +3,12 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "fr_FR"
          },
          "Start batch sync": [
-            "Commencer la synchronisation par lots"
+            "Démarrer la synchronisation par lot"
          ],
          "Cancel job": [
             "Annuler le travail"
@@ -15,13 +17,19 @@
             "Continuer la révision"
          ],
          "Start downloading XLIFF file": [
-            "Commencer le téléchargement du fichier XLIFF"
+            "Démarrer le téléchargement du fichier XLIFF"
          ],
          "Edit": [
             "Modifier"
          ],
          "Get translation": [
             "Obtenir la traduction"
+         ],
+         "Edit Translation": [
+            "Modifier la traduction"
+         ],
+         "Continue Translating": [
+            "Continuer la traduction"
          ],
          "Resign": [
             "Démissionner"
@@ -36,25 +44,25 @@
             "Prendre et traduire"
          ],
          "View": [
-            "Voir"
+            "Afficher"
+         ],
+         "Never mind. I want to review these translations.": [
+            "Peu importe. Je souhaite réviser ces traductions."
+         ],
+         "Cancel": [
+            "Annuler"
+         ],
+         "This will remove the selected jobs from the Translations Queue without publishing them. What would you like to do with the translations?": [
+            "Cette action supprimera les travaux sélectionnés de la file d'attente de traduction sans les publier. Que souhaitez-vous faire des traductions ?"
+         ],
+         "Cancel Translation Review": [
+            "Annuler la révision de la traduction"
          ],
          "Delete Translations": [
             "Supprimer les traductions"
          ],
          "Keep Translations as Draft": [
             "Conserver les traductions comme brouillon"
-         ],
-         "Never mind. I want to review these translations.": [
-            "Peu importe. Je veux réviser ces traductions."
-         ],
-         "Cancel": [
-            "Annuler"
-         ],
-         "This will remove the selected jobs from the Translations Queue without publishing them. What would you like to do with the translations?": [
-            "Cela supprimera les travaux sélectionnés de la File d'attente des traductions sans les publier. Que voulez-vous faire avec les traductions ?"
-         ],
-         "Cancel Translation Review": [
-            "Annuler la révision de traduction"
          ],
          "Bulk actions": [
             "Actions groupées"
@@ -69,10 +77,10 @@
             "Les actions appliquées à plusieurs travaux de traduction peuvent prendre quelques minutes. Veuillez ne pas quitter la page."
          ],
          "Select translator": [
-            "Sélectionner le traducteur"
+            "Sélectionner un traducteur"
          ],
          "Assign": [
-            "Assigner"
+            "Attribuer"
          ],
          "Cancelled": [
             "Annulé"
@@ -80,17 +88,20 @@
          "Needs translation": [
             "Nécessite une traduction"
          ],
-         "In progress": [
-            "En cours"
-         ],
          "Translation ready to download": [
-            "Traduction prête à télécharger"
+            "Traduction prête à être téléchargée"
          ],
          "Completed": [
             "Terminé"
          ],
+         "Failed - needs attention": [
+            "Échec - nécessite votre attention"
+         ],
+         "%s terms are published immediately because they don't support draft mode.": [
+            "%s termes sont publiés immédiatement car ils ne prennent pas en charge le mode brouillon."
+         ],
          "%s are immediately published because they don't support draft mode.": [
-            "Les %s sont publiés immédiatement car ils ne prennent pas en charge le mode brouillon."
+            "%s sont immédiatement publiés car ils ne prennent pas en charge le mode brouillon."
          ],
          "Published — Pending review": [
             "Publié — En attente de révision"
@@ -99,7 +110,7 @@
             "Brouillon — En attente de révision"
          ],
          "Review in progress": [
-            "Examen en cours"
+            "Révision en cours"
          ],
          "Published — Review in progress": [
             "Publié — Révision en cours"
@@ -110,11 +121,20 @@
          "Insufficient funds": [
             "Fonds insuffisants"
          ],
+         "Automatic translation was paused by a temporary error and retries automatically — no action needed. If the status has not changed in about 30 minutes, contact WPML support.": [
+            "La traduction automatique a été suspendue par une erreur temporaire et réessaie automatiquement — aucune action n'est requise. Si le statut n'a pas changé d'ici 30 minutes, contactez le support WPML."
+         ],
+         "In progress": [
+            "En cours"
+         ],
+         "Automatic translation failed repeatedly and WPML stopped retrying. Resend or discard the job from the Translation Dashboard, or cancel it here.": [
+            "La traduction automatique a échoué à plusieurs reprises et WPML a cessé de réessayer. Renvoyez ou ignorez le travail depuis le tableau de bord de traduction, ou annulez-le ici."
+         ],
          "Needs update": [
-            "Mise à jour nécessaire"
+            "Nécessite une mise à jour"
          ],
          "View original": [
-            "Voir l'original"
+            "Afficher l'original"
          ],
          "(no title)": [
             "(sans titre)"
@@ -123,7 +143,7 @@
             "Traduction automatique"
          ],
          "TP ID: %d": [
-            "TP ID : %d"
+            "ID TP : %d"
          ],
          "Reset": [
             "Réinitialiser"
@@ -131,8 +151,11 @@
          "Filter": [
             "Filtrer"
          ],
-         "ID (%s)": [
-            "ID (%s)"
+         "Reference ID (%s)": [
+            "ID de référence (%s)"
+         ],
+         "Job ID (%s)": [
+            "ID du travail (%s)"
          ],
          "Title (%s)": [
             "Titre (%s)"
@@ -156,25 +179,25 @@
             "Date d'envoi (%s)"
          ],
          "Deadline (%s)": [
-            "Date limite (%s)"
+            "Échéance (%s)"
          ],
          "Clear all filters": [
             "Effacer tous les filtres"
          ],
          "Any Translation Service": [
-            "N'importe quel service de traduction"
+            "Tout service de traduction"
          ],
          "Any WordPress Translator": [
-            "N'importe quel traducteur WordPress"
+            "Tout traducteur WordPress"
          ],
          "From": [
             "De"
          ],
          "To": [
-            "À"
+            "Vers"
          ],
          "Anyone": [
-            "N'importe qui"
+            "Tous"
          ],
          "Include jobs from translation services": [
             "Inclure les travaux des services de traduction"
@@ -185,17 +208,20 @@
          "Select visible columns": [
             "Sélectionner les colonnes visibles"
          ],
+         "No Data": [
+            "Aucune donnée"
+         ],
          "Sort descending": [
-            "Trier par ordre décroissant"
+            "Tri décroissant"
          ],
          "Sort ascending": [
-            "Trier par ordre croissant"
+            "Tri croissant"
          ],
          "Cancel sorting": [
             "Annuler le tri"
          ],
          "The bulk action is running...": [
-            "L'action groupée est en cours d'exécution..."
+            "L'action groupée est en cours..."
          ],
          "Export all jobs to XLIFF 1.0": [
             "Exporter tous les travaux vers XLIFF 1.0"
@@ -231,7 +257,7 @@
             "Importer"
          ],
          "Import / Export XLIFF": [
-            "Importer / Exporter XLIFF"
+            "Importer / exporter XLIFF"
          ],
          "Actions": [
             "Actions"
@@ -241,6 +267,12 @@
          ],
          "Filter by %s": [
             "Filtrer par %s"
+         ],
+         "WPML's id for this translation. It stays the same when the job is sent again.": [
+            "ID de référence de WPML pour cette traduction. Il reste le même lorsque le travail est renvoyé."
+         ],
+         "The number in exported XLIFF file names. It changes when the job is sent again.": [
+            "Le numéro dans les noms de fichiers XLIFF exportés. Il change lorsque le travail est renvoyé."
          ],
          "Title": [
             "Titre"
@@ -263,6 +295,21 @@
          "This action does not apply to any of the selected translation jobs": [
             "Cette action ne s'applique à aucun des travaux de traduction sélectionnés"
          ],
+         "%d translation is still in progress. You will not be charged for it.": [
+            "%d traduction est encore en cours. Elle ne vous sera pas facturée.",
+            "%d traductions sont encore en cours. Elles ne vous seront pas facturées."
+         ],
+         "usage ledger": [
+            "journal d'utilisation"
+         ],
+         "Cancelled. %1$d translation was in progress; its %2$s words are back on your account. Details:": [
+            "Annulé. %1$d traduction était en cours ; ses %2$s mots sont de retour sur votre compte. Détails :",
+            "Annulé. %1$d traductions étaient en cours ; leurs %2$s mots sont de retour sur votre compte. Détails :"
+         ],
+         "Cancelled. We asked to return the words for %d translation in progress; the usage ledger shows it once confirmed.": [
+            "Annulé. Nous avons demandé le retour des mots pour %d traduction en cours ; le journal d'utilisation les affichera une fois confirmés.",
+            "Annulé. Nous avons demandé le retour des mots pour %d traductions en cours ; le journal d'utilisation les affichera une fois confirmés."
+         ],
          "Translations have been downloaded": [
             "Les traductions ont été téléchargées"
          ],
@@ -275,23 +322,34 @@
          "Translation could not be downloaded": [
             "La traduction n'a pas pu être téléchargée"
          ],
+         "paused after repeated failures, will be retried automatically — %s": [
+            "suspendu après des échecs répétés, sera réessayé automatiquement — %s"
+         ],
+         "%d translation could not be downloaded": [
+            "%d traduction n'a pas pu être téléchargée",
+            "%d traductions n'ont pas pu être téléchargées"
+         ],
+         "%d translation has been downloaded": [
+            "%d traduction a été téléchargée",
+            "%d traductions ont été téléchargées"
+         ],
          "Approving translations reviews failed!": [
             "L'approbation des révisions de traductions a échoué!"
          ],
          "Failed approving translations for the following posts: ": [
-            "Échec de l'approbation des traductions pour les articles suivants : "
+            "Échec de l'approbation des traductions pour les publications suivantes : "
          ],
          "Translations reviews approved successfully!": [
-            "Les révisions de traductions ont été approuvées avec succès !"
+            "Révisions de traductions approuvées avec succès !"
          ],
          "No valid jobs selected to approve translations reviews!": [
             "Aucun travail valide sélectionné pour approuver les révisions de traductions !"
          ],
          "The translator has been assigned to the job": [
-            "Le traducteur a été assigné au travail"
+            "Le traducteur a été attribué au travail"
          ],
          "The translator could not be assigned to the job": [
-            "Le traducteur n'a pas pu être assigné au travail"
+            "Le traducteur n'a pas pu être attribué au travail"
          ],
          "The jobs have been cancelled": [
             "Les travaux ont été annulés"
@@ -317,11 +375,14 @@
          "Translation review could not be canceled": [
             "La révision de traduction n'a pas pu être annulée"
          ],
+         "Translated by": [
+            "Traduit par"
+         ],
          "Sent on": [
             "Envoyé le"
          ],
          "Deadline": [
-            "Date limite"
+            "Échéance"
          ],
          "Status": [
             "Statut"
@@ -329,17 +390,17 @@
          "Pending review": [
             "En attente de révision"
          ],
-         "ID": [
-            "ID"
+         "Reference ID": [
+            "ID de référence"
+         ],
+         "Job ID": [
+            "ID du travail"
          ],
          "Type": [
             "Type"
          ],
          "Languages": [
             "Langues"
-         ],
-         "Translated by": [
-            "Traduit par"
          ],
          "Download XLIFF file couldn't be finished": [
             "Le téléchargement du fichier XLIFF n'a pas pu être terminé"
@@ -351,10 +412,10 @@
             "L'exportation vers XLIFF a échoué"
          ],
          "Imported %d jobs": [
-            "Importé %d travaux"
+            "%d travaux importés"
          ],
          "Imported one job": [
-            "Importé un travail"
+            "Un travail importé"
          ],
          "Could not import any job": [
             "Impossible d'importer un travail"
@@ -363,7 +424,7 @@
             "L'importation a échoué!"
          ],
          "Loading translations queue": [
-            "Chargement de la file d'attente des traductions"
+            "Chargement de la file d'attente de traduction"
          ],
          "Loading translation jobs": [
             "Chargement des travaux de traduction"
@@ -371,11 +432,17 @@
          "Jobs could not be loaded": [
             "Les travaux n'ont pas pu être chargés"
          ],
+         "This translator cannot translate this language pair.": [
+            "Ce traducteur ne peut pas traduire cette paire de langues."
+         ],
+         "This translator is no longer available. Reload the page and choose a translator again.": [
+            "Ce traducteur n'est plus disponible. Rechargez la page et choisissez à nouveau un traducteur."
+         ],
          "Specify some jobs to resign": [
-            "Spécifiez des travaux à abandonner"
+            "Spécifiez des travaux pour lesquels démissionner"
          ],
          "We could not resign jobs: %s": [
-            "Nous n'avons pas pu abandonner les travaux : %s"
+            "Nous n'avons pas pu démissionner des travaux : %s"
          ],
          "Resigned from jobs": [
             "Démission des travaux effectuée"
@@ -387,20 +454,22 @@
             "Échec de la démission des travaux"
          ],
          "The Advanced Editor jobs synchronization has failed": [
-            "La synchronisation des travaux de l'Éditeur Avancé a échoué"
+            "La synchronisation des travaux de l'éditeur avancé a échoué"
          ],
          "Synchronization with the Professional Translation service has failed": [
-            "La synchronisation avec le service de Traduction Professionnelle a échoué"
+            "La synchronisation avec le service de traduction professionnelle a échoué"
          ],
-         "%d translation has been downloaded": [
-            "%d La traduction a été téléchargée",
-            "%d traductions téléchargées"
+         "%d batches are still being processed by the translation service. Check again in a few minutes.": [
+            "%d lots sont encore en cours de traitement par le service de traduction. Vérifiez à nouveau dans quelques minutes."
          ],
          "Batch sync finished successfully!": [
-            "La synchronisation par lots s'est terminée avec succès !"
+            "La synchronisation par lot s'est terminée avec succès !"
          ],
          "Batch sync couldn't be finished": [
-            "La synchronisation par lots n'a pas pu être terminée"
+            "La synchronisation par lot n'a pas pu être terminée"
+         ],
+         "WPML's automatic translation service did not accept this request (it answered %d). Wait a minute and try again, and contact WPML support if it keeps happening.": [
+            "Le service de traduction automatique de WPML n’a pas accepté cette requête (il a répondu %d). Attendez une minute et réessayez, puis contactez le support de WPML si cela continue de se produire."
          ]
       }
    }

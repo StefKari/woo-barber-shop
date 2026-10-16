@@ -19,6 +19,7 @@ class ConditionsLoader
     const LIST_LABEL_KEY = 'label';
     const LIST_TEMPLATE_PATH_KEY = 'path';
     const LIST_PARENT_CLASS_KEY = 'parent_class';
+    const LIST_INDEX_KEY = 'index';
 
     const GROUP_CART_ITEMS = 'cart_items';
     const GROUP_CART = 'cart';
@@ -57,7 +58,9 @@ class ConditionsLoader
                     $this->items[$className::getType() . '_' . $taxonomy->name] = $className;
                 }
             } else {
-                $this->items[$className::getType()] = $className;
+                if ( $className::isEnabled() ) {
+                    $this->items[$className::getType()] = $className;
+                }
             }
         }
 
@@ -171,6 +174,11 @@ class ConditionsLoader
             $condition->setInclTax($inclTax);
         }
 
+        if($condition instanceof Interfaces\PromotionMessageCondition) {
+            $condition->setSubtotalFrom($data['options'][$condition::SUBTOTAL_FROM_KEY] ?? null);
+            $condition->setPromotionMessage($data['options'][$condition::PROMOTION_MESSAGE_KEY] ?? null);
+        }
+
         if ($condition->isValid()) {
             return $condition;
         } else {
@@ -244,6 +252,7 @@ class ConditionsLoader
                     self::LIST_LABEL_KEY         => $taxonomyCondition->getTaxonomyLabel(),
                     self::LIST_TEMPLATE_PATH_KEY => $taxonomyCondition->getTemplatePath(),
                     self::LIST_PARENT_CLASS_KEY  => Factory::getShortClassName(get_parent_class($className)),
+                    self::LIST_INDEX_KEY         => $className::getIndex(),
                     'taxonomy'                   => $taxonomy,
                 );
             } else {
@@ -252,8 +261,23 @@ class ConditionsLoader
                     self::LIST_LABEL_KEY         => $className::getLabel(),
                     self::LIST_TEMPLATE_PATH_KEY => $className::getTemplatePath(),
                     self::LIST_PARENT_CLASS_KEY  => Factory::getShortClassName(get_parent_class($className)),
+                    self::LIST_INDEX_KEY         => $className::getIndex()
                 );
             }
+        }
+
+        foreach ($list as $group => $items) {
+            usort($items, function($a, $b) {
+                $aVal = $a[self::LIST_INDEX_KEY];
+                $bVal = $b[self::LIST_INDEX_KEY];
+
+                if ($aVal == $bVal) {
+                    return 0;
+                }
+
+                return ($aVal < $bVal) ? -1 : 1;
+            });
+            $list[$group] = $items;
         }
 
         return $list;

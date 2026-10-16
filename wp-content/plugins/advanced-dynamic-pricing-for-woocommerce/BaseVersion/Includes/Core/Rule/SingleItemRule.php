@@ -5,8 +5,10 @@ namespace ADP\BaseVersion\Includes\Core\Rule;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule\ProductsAdjustment;
 use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule\ProductsRangeAdjustments;
+use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule\ConditionMessage;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAdd;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAddsCollection;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Filter;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Gift;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\GiftsCollection;
@@ -89,6 +91,11 @@ class SingleItemRule extends BaseRule implements Rule
     protected $autoAddRemoveDisable = false;
 
     /**
+    * @var bool
+    */
+    protected $autoAddShowAsRecommended = false;
+
+    /**
      * @var string
      */
     protected $autoAddStrategy;
@@ -143,6 +150,21 @@ class SingleItemRule extends BaseRule implements Rule
      */
     protected $maxAmountForGifts;
 
+    /**
+     * @var Discount|null
+     */
+    protected $itemGiftsDiscount;
+
+    /**
+     * @var bool
+     */
+    protected $isGiftsBelowCheapestItem;
+
+    /**
+     * @var ConditionMessage
+     */
+    protected $conditionMessageHandler;
+
     const APPLY_FIRST_TO_EXPENSIVE = 'expensive';
     const APPLY_FIRST_TO_CHEAP = 'cheap';
     const APPLY_FIRST_AS_APPEAR = 'appeared';
@@ -172,6 +194,8 @@ class SingleItemRule extends BaseRule implements Rule
         $this->autoAddSubtotalDivider  = null;
         $this->roleDiscounts           = array();
         $this->maxAmountForGifts       = null;
+        $this->itemGiftsDiscount       = null;
+        $this->isGiftsBelowCheapestItem = false;
     }
 
     public function __clone()
@@ -184,6 +208,10 @@ class SingleItemRule extends BaseRule implements Rule
 
         $this->itemGiftsCollection = clone $this->itemGiftsCollection;
 
+        if ($this->itemGiftsDiscount) {
+            $this->itemGiftsDiscount = clone $this->itemGiftsDiscount;
+        }
+
         $this->roleDiscounts = array_map(function ($item) {
             return clone $item;
         }, $this->roleDiscounts);
@@ -194,6 +222,10 @@ class SingleItemRule extends BaseRule implements Rule
 
         if ($this->productRangeAdjustmentHandler) {
             $this->productRangeAdjustmentHandler = clone $this->productRangeAdjustmentHandler;
+        }
+
+        if ($this->conditionMessageHandler) {
+            $this->conditionMessageHandler = clone $this->conditionMessageHandler;
         }
     }
 
@@ -259,6 +291,16 @@ class SingleItemRule extends BaseRule implements Rule
     }
 
     /**
+     * @param ConditionMessage $handler
+     */
+    public function installConditionMessageHandler($handler)
+    {
+        if ($handler instanceof ConditionMessage) {
+            $this->conditionMessageHandler = $handler;
+        }
+    }
+
+    /**
      * @return ProductsAdjustment|null
      */
     public function getProductAdjustmentHandler()
@@ -275,6 +317,14 @@ class SingleItemRule extends BaseRule implements Rule
     }
 
     /**
+     * @return ConditionMessage|null
+     */
+    public function getConditionMessageHandler()
+    {
+        return $this->conditionMessageHandler;
+    }
+
+    /**
      * @return bool
      */
     public function hasProductAdjustment()
@@ -288,6 +338,14 @@ class SingleItemRule extends BaseRule implements Rule
     public function hasProductRangeAdjustment()
     {
         return isset($this->productRangeAdjustmentHandler) && $this->productRangeAdjustmentHandler->isValid();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasConditionMessage()
+    {
+        return isset($this->conditionMessageHandler) && $this->conditionMessageHandler->isValid();
     }
 
     /**
@@ -553,6 +611,22 @@ class SingleItemRule extends BaseRule implements Rule
     }
 
     /**
+    * @return bool
+    */
+    public function getAutoAddShowAsRecommended()
+    {
+        return $this->autoAddShowAsRecommended;
+    }
+
+    /**
+    * @param bool $autoAddShowAsRecommended
+    */
+    public function setAutoAddShowAsRecommended($autoAddShowAsRecommended)
+    {
+        $this->autoAddShowAsRecommended = boolval($autoAddShowAsRecommended);
+    }
+
+    /**
      * @return array<int,RoleDiscount>
      */
     public function getRoleDiscounts()
@@ -682,5 +756,76 @@ class SingleItemRule extends BaseRule implements Rule
     public function getMaxAmountForGifts()
     {
         return $this->maxAmountForGifts;
+    }
+
+    /**
+     * @param Discount|null $discount
+     */
+    public function setItemGiftsDiscount($discount)
+    {
+        $this->itemGiftsDiscount = $discount instanceof Discount ? $discount : null;
+    }
+
+    /**
+     * @return Discount|null
+     */
+    public function getItemGiftsDiscount()
+    {
+        return $this->itemGiftsDiscount;
+    }
+
+    /**
+     * @param bool $isGiftsBelowCheapestItem
+     */
+    public function setGiftsBelowCheapestItem($isGiftsBelowCheapestItem)
+    {
+        $this->isGiftsBelowCheapestItem = $isGiftsBelowCheapestItem;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGiftsBelowCheapestItem()
+    {
+        return $this->isGiftsBelowCheapestItem;
+    }
+
+    // check only Product Discount, Role and Bulk !!
+    public function findPossibleMaxDiscountsForProducts(&$maxRate,&$maxAmount)
+    {
+        $maxRate = $maxAmount = 0;
+
+        if( $this->productAdjustmentHandler ) {
+            $discount = $this->productAdjustmentHandler->getDiscount();
+            if( $discount->getType() == "percentage" )
+                $maxRate = $discount->getValue();
+            elseif($discount->getType() == "fixed_amount" )
+                $maxAmount= $discount->getValue();
+            //TODO fixed_value
+        }
+
+        if($this->roleDiscounts){
+            foreach($this->roleDiscounts as $roleDiscount ) {
+                $discount = $roleDiscount->getDiscount();
+                if( $discount->getType() == "percentage" )
+                    $maxRate = max($discount->getValue() , $maxRate);
+                elseif($discount->getType() == "fixed_amount" )
+                    $maxAmount= max($discount->getValue() ,$maxAmount);
+                //TODO fixed_value
+            }
+        }
+
+        if( $this->productRangeAdjustmentHandler) {
+            foreach($this->productRangeAdjustmentHandler->getRanges() as $range){
+                $discount = $range->getData();
+                if( $discount->getType() == "percentage" )
+                    $maxRate = $discount->getValue();
+                elseif($discount->getType() == "fixed_amount" )
+                    $maxAmount= $discount->getValue();
+                //TODO fixed_value
+            }
+        }
+
+        //Done, skip other sections of the rule
     }
 }

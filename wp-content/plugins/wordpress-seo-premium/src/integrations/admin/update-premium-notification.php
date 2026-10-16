@@ -107,6 +107,10 @@ class Update_Premium_Notification implements Integration_Interface {
 			return;
 		}
 
+		if ( $this->is_doing_plugin_upgrade() ) {
+			return;
+		}
+
 		// Check whether Free is set to a version later than the minimum required and a Premium update is a available.
 		if ( $this->version_helper->is_free_upgraded() && $this->version_helper->is_premium_update_available() ) {
 			$this->admin_asset_manager->enqueue_style( 'monorepo' );
@@ -117,7 +121,7 @@ class Update_Premium_Notification implements Integration_Interface {
 				\esc_html__( 'Please %2$supdate %1$s to the latest version%3$s to ensure you can fully use all Premium settings and features.', 'wordpress-seo-premium' ),
 				'Yoast SEO Premium',
 				( $is_plugins_page ) ? '' : '<a href="' . \esc_url( \self_admin_url( 'plugins.php' ) ) . '">',
-				( $is_plugins_page ) ? '' : '</a>'
+				( $is_plugins_page ) ? '' : '</a>',
 			);
 			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- Output of the title escaped in the Notice_Presenter.
 			echo new Notice_Presenter(
@@ -127,7 +131,7 @@ class Update_Premium_Notification implements Integration_Interface {
 				null,
 				null,
 				true,
-				'yoast-update-premium-notification'
+				'yoast-update-premium-notification',
 			);
 			// phpcs:enable
 
@@ -158,6 +162,16 @@ class Update_Premium_Notification implements Integration_Interface {
 	 */
 	public function dismiss_update_premium_notification() {
 		return $this->options_helper->set( 'dismiss_update_premium_notification', \WPSEO_PREMIUM_VERSION );
+	}
+
+	/**
+	 * Checks if we're on the page where a plugin is being upgraded.
+	 *
+	 * @return bool
+	 */
+	public function is_doing_plugin_upgrade() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reason: We are not processing form information.
+		return isset( $_GET['action'] ) && $_GET['action'] === 'do-plugin-upgrade';
 	}
 
 	/**

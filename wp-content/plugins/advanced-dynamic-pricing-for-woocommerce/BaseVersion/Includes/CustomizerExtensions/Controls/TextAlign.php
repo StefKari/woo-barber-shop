@@ -16,8 +16,11 @@ class TextAlign extends WP_Customize_Control
     public function __construct(WP_Customize_Manager $manager, $id, $args = array())
     {
         $this->choices = array(
+            //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch, WordPress.WP.I18n.MissingTranslatorsComment
             'left'   => __('Align left', 'woocommerce-pdf-product-vouchers'),
+            //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
             'center' => __('Align center', 'woocommerce-pdf-product-vouchers'),
+            //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
             'right'  => __('Align right', 'woocommerce-pdf-product-vouchers'),
         );
         parent::__construct($manager, $id, $args);

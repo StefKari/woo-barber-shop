@@ -24,7 +24,7 @@ WPML_String_Translation.ModalForm.prototype = {
 			modal: true,
 			buttons: [
 				{
-					class: 'wpml-st-cancel-button',
+					class: 'wpml-button base-btn wpml-button--outlined wpml-st-cancel-button',
 					text: that.dialog.attr('data-cancelButtonTitle'),
 					click: function() {
 						that.rmConfirmMsg.call(that);
@@ -33,7 +33,7 @@ WPML_String_Translation.ModalForm.prototype = {
 				},
 				{
 					text: that.dialog.attr('data-saveButtonTitle'),
-					class: 'button-primary js-wpml-st-apply-button',
+					class: 'wpml-button base-btn js-wpml-st-apply-button',
 					click: function() {
 						that.rmConfirmMsg.call(that);
 						that.settings.onSave();
@@ -113,8 +113,11 @@ WPML_String_Translation.ModalForm.prototype = {
 
     showSaveConfirmMsg: function() {
         var self = this;
-        var html = '<span class="icl_ajx_response" style="position: absolute; right: 100px; bottom: 22px; display: block">' + this.dialog.attr('data-saveConfirmMsg') + '</span>';
-        this.dialog.closest('.wpml-st-modal-form').find('.ui-dialog-buttonset').append(jQuery(html));
+        // The message is plain translated text: insert it as a text node so a
+        // translation containing markup can never become executable DOM.
+        var message = jQuery('<span class="icl_ajx_response" style="position: absolute; right: 100px; bottom: 22px; display: block"></span>');
+        message.text(this.dialog.attr('data-saveConfirmMsg'));
+        this.dialog.closest('.wpml-st-modal-form').find('.ui-dialog-buttonset').append(message);
 
         this.rmConfirmMsgTimeout = setTimeout(function() {
             self.rmConfirmMsg.call(self);

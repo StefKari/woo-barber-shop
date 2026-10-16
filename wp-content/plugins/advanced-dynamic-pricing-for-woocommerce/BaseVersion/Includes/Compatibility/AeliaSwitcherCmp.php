@@ -5,6 +5,7 @@ namespace ADP\BaseVersion\Includes\Compatibility;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Context\Currency;
 use ADP\BaseVersion\Includes\Context\CurrencyController;
+use ADP\HighLander\HighLanderShortcuts;
 use Aelia\WC\CurrencySwitcher\Definitions;
 use Aelia\WC\CurrencySwitcher\WC_Aelia_CurrencySwitcher;
 
@@ -37,8 +38,9 @@ class AeliaSwitcherCmp
     public function loadRequirements()
     {
         if ( ! did_action('plugins_loaded')) {
-            _doing_it_wrong(__FUNCTION__, sprintf(__('%1$s should not be called earlier the %2$s action.',
-                'advanced-dynamic-pricing-for-woocommerce'), 'load_requirements', 'plugins_loaded'), WC_ADP_VERSION);
+            /* translators: Message about the load order*/
+            _doing_it_wrong(__FUNCTION__, sprintf(esc_html__('%1$s should not be called earlier the %2$s action.',
+                'advanced-dynamic-pricing-for-woocommerce'), 'load_requirements', 'plugins_loaded'), esc_html(WC_ADP_VERSION));
         }
         $this->aeliaCurrencySwitcher = (class_exists("WC_Aelia_CurrencySwitcher") && isset($GLOBALS[WC_Aelia_CurrencySwitcher::$plugin_slug])) ? $GLOBALS[WC_Aelia_CurrencySwitcher::$plugin_slug] : null; //settings_controller
     }
@@ -46,6 +48,21 @@ class AeliaSwitcherCmp
     public function isActive()
     {
         return ! is_null($this->aeliaCurrencySwitcher);
+    }
+
+    public function prepareHooks()
+    {
+        if ($this->isActive()) {
+            remove_filter(
+                "woocommerce_package_rates",
+                [
+                    \Aelia\WC\CurrencySwitcher\WC27\WC_Aelia_CurrencyPrices_Manager::Instance(),
+                    "woocommerce_package_rates"
+                ],
+                10
+            );
+
+        }
     }
 
     /**
@@ -114,10 +131,10 @@ class AeliaSwitcherCmp
             $this,
             'customProductRegularPriceCallback'
         ));
-        $this->context->currencyController->setCustomProductSalePriceCallback(array(
+        /*$this->context->currencyController->setCustomProductSalePriceCallback(array(
             $this,
             'customProductSalePriceCallback'
-        ));
+        ));*/
     }
 
     /**

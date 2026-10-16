@@ -1,15 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\ATE\Application\Query;
-
-interface GlossaryInterface {
-
-
-  /**
-   * @return int
-   * @throws GlossaryException
-   */
-  public function getGlossaryCount(): int;
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/ATE/Application/Query/GlossaryInterface.php';

@@ -6,6 +6,7 @@ use ADP\BaseVersion\Includes\AdminExtensions\AdminPage;
 use ADP\BaseVersion\Includes\AdminExtensions\MetaBoxes;
 use ADP\BaseVersion\Includes\AdminExtensions\WcOrderPreviewExtensions;
 use ADP\BaseVersion\Includes\AdminExtensions\WcProductPageExtensions;
+use ADP\BaseVersion\Includes\Compatibility\WooVariationSwatchesCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Database\Repository\OrderRepository;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
@@ -61,5 +62,7 @@ class AdminCommon implements LoadStrategy
 
         /** @see Functions::install() */
         Factory::callStaticMethod("Functions", 'install');
+
+        (new WooVariationSwatchesCmp())->applyCompatibility();
     }
 }

@@ -34,7 +34,7 @@ if ( ! class_exists( 'Redux_Tabbed', false ) ) {
 		 * @since ReduxFramework 0.0.4
 		 */
 		public function render() {
-			$unallowed = array( 'tabbed', 'social_profiles', 'color_schemes', 'repeater' );
+			$unallowed = array( 'tabbed', 'social_profiles', 'color_schemes', 'repeater', 'icon_select' );
 
 			echo '<div id="' . esc_attr( $this->field['id'] ) . '-tabbed" class="redux-tabbed" rel="' . esc_attr( $this->field['id'] ) . '">';
 			echo '<div class="redux-tabbed-nav" data-id="' . esc_attr( $this->field['id'] ) . '">';
@@ -117,7 +117,8 @@ if ( ! class_exists( 'Redux_Tabbed', false ) ) {
 						if ( ! isset( $field['args'][ $key ] ) ) {
 							$field['args'][ $key ] = array();
 						}
-						$field['options'][ $key ] = $this->parent->get_wordpress_data( $data, $field['args'][ $key ] );
+
+						$field['options'][ $key ] = $this->parent->wordpress_data->get( $data, $field['args'][ $key ], $this->parent->args['opt_name'] );
 					}
 				}
 			}

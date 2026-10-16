@@ -54,9 +54,17 @@ class ShoptimizerCmp
 
         if ( $product->is_on_sale() && ! $product->is_type( 'grouped' ) && ! $product->is_type( 'bundle' ) ) {
 
-            if ( $product->is_type( 'variable' ) ) {
+            if ( $product instanceof \WC_Product_Variable ) {
                 $percentages = array();
-                foreach ( $product->get_children() as $child ) {
+
+                $children = [];
+                if ($product instanceof \WC_Product_Variable) {
+                    $children = $product->get_visible_children();
+                } else {
+                    $children = $product->get_children();
+                }
+
+                foreach ( $children as $child ) {
                     $childProduct = wc_get_product($child);
                     if ($childProduct->get_sale_price()) {
                         $percentages[] = round(100 - ($childProduct->get_sale_price() / $childProduct->get_regular_price() * 100));
@@ -76,8 +84,12 @@ class ShoptimizerCmp
 
             if( isset( $percentage ) && $percentage > 0 ) {
                 if ( 'bubble' === $shoptimizer_layout_woocommerce_display_badge_type ) {
+                    /* translators: Percentage optimization of sales*/
+                    //phpcs:ignore WordPress.WP.I18n
                     $shoptimizer_sale_badge .= sprintf( __( '<span class="sale-item product-label type-bubble">-%s</span>', 'shoptimizer' ), $percentage );
                 } else {
+                    /* translators: Percentage optimization of sales*/
+                    //phpcs:ignore WordPress.WP.I18n
                     $shoptimizer_sale_badge .= sprintf( __( '<span class="sale-item product-label type-circle">-%s</span>', 'shoptimizer' ), $percentage );
                 }
             }
@@ -85,6 +97,7 @@ class ShoptimizerCmp
         }
 
         if ( true === $shoptimizer_layout_woocommerce_display_badge ) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo shoptimizer_safe_html( $shoptimizer_sale_badge );
         }
 

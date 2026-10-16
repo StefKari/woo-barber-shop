@@ -3,55 +3,54 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
          },
-         "Edit": [
-            "Επεξεργασία"
+         "Edit %s": [
+            "Επεξεργασία %s"
          ],
          "Shift+Tab": [
-            "Shift+Tab"
+            "Shift+tab"
          ],
          "Tab": [
             "Tab"
          ],
-         "Translation to:": [
-            "Μετάφραση προς:"
-         ],
-         "Copy from original": [
-            "Αντιγραφή πρωτοτύπου"
-         ],
-         "Use Shift+Enter to add a new line.": [
-            "Shift+Enter: νέα γραμμή."
-         ],
          "Original:": [
             "Πρωτότυπο:"
          ],
+         "Translation to:": [
+            "Μετάφραση σε:"
+         ],
+         "Copy from original": [
+            "Αντιγραφή από το πρωτότυπο"
+         ],
+         "Use Shift+Enter to add a new line.": [
+            "Χρησιμοποιήστε το Shift+Enter για να προσθέσετε μια νέα γραμμή."
+         ],
          "Add %s translation": [
-            "Προσθήκη %s"
+            "Προσθήκη μετάφρασης στα %s"
          ],
          "Edit %s translation": [
-            "Επεξεργασία %s"
+            "Επεξεργασία μετάφρασης στα %s"
          ],
          "Add %s translation (the string appears on the site and is not translated)": [
-            "Προσθήκη %s (αμετάφραστο)"
+            "Προσθήκη μετάφρασης στα %s (η συμβολοσειρά εμφανίζεται στον ιστότοπο και δεν είναι μεταφρασμένη)"
          ],
          "Original language %s": [
-            "Γλώσσα πηγής %s"
+            "Πρωτότυπη γλώσσα %s"
          ],
          "Waiting for translator to %s": [
-            "Αναμονή μεταφραστή %s"
+            "Αναμονή για μεταφραστή στα %s"
          ],
          "Translation in progress to %s": [
-            "Μετάφραση σε εξέλιξη %s"
-         ],
-         "In basket for translation to %s": [
-            "Σε αναμονή %s"
+            "Μετάφραση σε εξέλιξη στα %s"
          ],
          "Translation saved.": [
-            "Αποθήκευση επιτυχής."
+            "Η μετάφραση αποθηκεύτηκε."
          ],
          "Translation update failed.": [
-            "Αποτυχία ενημέρωσης."
+            "Η ενημέρωση της μετάφρασης απέτυχε."
          ]
       }
    }

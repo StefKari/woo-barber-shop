@@ -54,9 +54,7 @@ class Save_Action {
 	 *                                                               prominent words from.
 	 * @param Indexable_Repository       $indexable_repository       The repository to read, update and delete
 	 *                                                               indexables from.
-	 *
 	 * @param Indexable_Helper           $indexable_helper           The indexable helper.
-	 *
 	 * @param Prominent_Words_Helper     $prominent_words_helper     The prominent words helper.
 	 */
 	public function __construct(
@@ -210,7 +208,7 @@ class Save_Action {
 					'indexable_id' => $indexable_id,
 					'stem'         => $stem,
 					'weight'       => $weight,
-				]
+				],
 			);
 			$new_models[] = $new_model;
 		}

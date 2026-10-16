@@ -32,6 +32,11 @@ class ProductTagsAll extends AbstractCondition implements ProductAll
         return ConditionsLoader::GROUP_CART_ITEMS;
     }
 
+    public static function getIndex()
+    {
+        return 35;
+    }
+
     public function isValid()
     {
         return true;

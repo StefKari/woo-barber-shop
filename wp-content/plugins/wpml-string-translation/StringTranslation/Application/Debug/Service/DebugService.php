@@ -8,10 +8,8 @@ use WPML\StringTranslation\Application\Debug\Repository\ComponentDebugRepository
 
 class DebugService {
 
-	/** @var QueueRepositoryInterface */
 	private $queueRepository;
 
-	/** @var ComponentRepositoryInterface */
 	private $componentRepository;
 
 	private static $checkpoints = [];
@@ -36,7 +34,10 @@ class DebugService {
 	}
 
 	public function displayPerformanceInfo() { return;
-		if ( ( strpos( $_SERVER['REQUEST_URI'], '/wp-json/' ) !== false ) || wpml_is_ajax() ) {
+		$restPrefix = trim( function_exists( 'rest_get_url_prefix' ) ? (string) rest_get_url_prefix() : '', '/' );
+		$restPrefix = '' === $restPrefix ? 'wp-json' : $restPrefix;
+
+		if ( ( strpos( $_SERVER['REQUEST_URI'], '/' . $restPrefix . '/' ) !== false ) || wpml_is_ajax() ) {
 			return;
 		}
 
@@ -105,7 +106,7 @@ class DebugService {
 		if ($minutes > 0) {
 			$formattedTime .= "{$minutes}m ";
 		}
-		if ($seconds > 0 || $minutes > 0) { // Including minutes check to handle cases like "1m 0s"
+		if ($seconds > 0 || $minutes > 0) {
 			$formattedTime .= "{$seconds}s ";
 		}
 		$formattedTime .= "{$milliseconds}ms";

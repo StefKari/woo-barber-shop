@@ -19,7 +19,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
         /**
          * @var AWS_Table Data
          */
-        private $data;
+        private $data = array();
 
         /**
          * Constructor
@@ -460,7 +460,14 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 				              VALUES $values
                     ";
 
-                $wpdb->query( $query );
+                $max_retries = 3;
+                for ( $i = 0; $i < $max_retries; $i++ ) {
+                    $wpdb->query( $query );
+                    if ( ! $wpdb->last_error || strpos( $wpdb->last_error, 'Deadlock' ) === false ) {
+                        break;
+                    }
+                    usleep( rand( 100000, 300000 ) );
+                }
 
             }
 
@@ -649,6 +656,11 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 return;
             }
 
+            // Forced re-index must always run, even if product was already indexed during current request
+            if ( ! $force && isset( $this->data['product_to_index'] ) && array_search( $product_id, $this->data['product_to_index'] ) !== false ) {
+                return;
+            }
+
             $wpdb->delete( $this->table_name, array( 'id' => $product_id ) );
 
             $posts = get_posts( array(
@@ -667,6 +679,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             }
 
             do_action('aws_cache_clear');
+
+            $this->data['product_to_index'][] = $product_id;
 
         }
 

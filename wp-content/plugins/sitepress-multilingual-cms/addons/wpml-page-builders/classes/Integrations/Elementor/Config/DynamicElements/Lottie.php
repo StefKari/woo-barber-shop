@@ -3,15 +3,12 @@
 namespace WPML\PB\Elementor\Config\DynamicElements;
 
 use WPML\FP\Obj;
-use WPML\FP\Relation;
+use WPML\PB\Elementor\Helper\Path;
 
 class Lottie {
 
-	/**
-	 * @return array
-	 */
 	public static function get() {
-		$isLottie        = Relation::propEq( 'widgetType', 'lottie' );
+		$isLottie        = Path::propEq( 'widgetType', 'lottie' );
 		$lottieLinksLens = Obj::lensPath( [ 'settings', '__dynamic__', 'custom_link' ] );
 
 		return [ $isLottie, $lottieLinksLens, 'popup', 'popup' ];

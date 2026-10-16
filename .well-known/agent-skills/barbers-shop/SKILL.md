@@ -1,0 +1,47 @@
+---
+name: barbers-shop
+description: Pretraga proizvoda, cene, dostava i poručivanje u online prodavnici Barbers (kozmetika za bradu, kosu i brijanje, Srbija).
+---
+
+# Barber Shop – vodič za AI agente
+
+Barbers je online prodavnica kozmetike i opreme za negu brade, brkova i kose i za brijanje. Cene su u dinarima (RSD), isporuka je na teritoriji Srbije.
+
+## Pretraga i pregled proizvoda
+
+Koristi javni WooCommerce Store API (samo čitanje, bez autentifikacije):
+
+- Pretraga: `GET https://www.barbers.rs/wp-json/wc/store/v1/products?search=ulje%20za%20bradu&per_page=20`
+- Proizvod po ID-u: `GET https://www.barbers.rs/wp-json/wc/store/v1/products/{id}`
+- Kategorije: `GET https://www.barbers.rs/wp-json/wc/store/v1/products/categories`
+- Proizvodi iz kategorije: `GET https://www.barbers.rs/wp-json/wc/store/v1/products?category={slug}`
+
+Cene u odgovoru su u najmanjoj jedinici valute (`prices.currency_minor_unit`). Polje `permalink` vodi na stranicu proizvoda.
+
+## Glavne kategorije
+
+- [Aksesoari](https://www.barbers.rs/kategorija/aksesoari/)
+- [Brijanje](https://www.barbers.rs/kategorija/brijanje/)
+- [Kozmetika za bradu](https://www.barbers.rs/kategorija/kozmetika-za-bradu/)
+- [Kozmetika za kosu](https://www.barbers.rs/kategorija/kozmetika-za-kosu/)
+- [Telo](https://www.barbers.rs/kategorija/telo/)
+
+## Poručivanje
+
+1. Otvori stranicu proizvoda (iz [prodavnice](https://www.barbers.rs/shop/) ili iz pretrage) i dodaj ga u korpu.
+2. Pregledaj [korpu](https://www.barbers.rs/cart/).
+3. Završi porudžbinu na [stranici za plaćanje](https://www.barbers.rs/checkout/) – kupac unosi podatke za dostavu. Porudžbinu uvek potvrđuje kupac.
+
+## Dostava i plaćanje
+
+- Dostava na teritoriji Srbije: od 450 do 550 RSD, u zavisnosti od lokacije.
+- Za porudžbine iznad 5.000 RSD dostava je besplatna.
+- Plaćanje: pouzećem (gotovinom prilikom preuzimanja).
+
+## Kontakt
+
+- [Kontakt stranica](https://www.barbers.rs/kontakt/)
+
+## Dodatno
+
+- [llms.txt](https://www.barbers.rs/llms.txt) – pregled sadržaja sajta za jezičke modele.

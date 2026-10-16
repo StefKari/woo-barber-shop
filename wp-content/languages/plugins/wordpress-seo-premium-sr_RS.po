@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Yoast - Yoast SEO Premium (for WordPress) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-12 22:46:28+0000\n"
+"PO-Revision-Date: 2026-10-15 22:17:07+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,6 +10,142 @@ msgstr ""
 "X-Generator: GlotPress/4.0.0-rc.1\n"
 "Language: sr_RS\n"
 "Project-Id-Version: Yoast - Yoast SEO Premium (for WordPress)\n"
+
+#: src/abilities/user-interface/organization-fields-integration.php:258
+msgid "tax ID"
+msgstr "пиб ID"
+
+#: src/abilities/user-interface/organization-fields-integration.php:256
+msgid "VAT ID"
+msgstr "ПДВ ИД"
+
+#: src/abilities/user-interface/organization-fields-integration.php:254
+msgid "phone number"
+msgstr "број телефона"
+
+#: src/abilities/user-interface/organization-fields-integration.php:252
+msgid "email address"
+msgstr "адреса е-поште"
+
+#. translators: 1: Yoast Local SEO, 2: the kind of value, like "email address".
+#: src/abilities/user-interface/organization-fields-integration.php:236
+msgid "%1$s is active on this site and provides the %2$s of the organization."
+msgstr "%1$s је укључен на овом веб месту и обезбеђује %2$s организације."
+
+#. translators: %s expands to the name of a setting.
+#: src/abilities/user-interface/organization-fields-integration.php:215
+msgid "The %s setting was not changed, because the lower bound of the range is above its upper bound."
+msgstr "Подешавање %s није промењено јер је доња граница опсега већа од горње границе."
+
+#. translators: %s expands to the name of a setting.
+#: src/abilities/user-interface/organization-fields-integration.php:193
+msgid "The %s setting was not changed, because it is not an existing date."
+msgstr "Подешавање %s није промењено јер наведени датум не постоји."
+
+#. translators: %s expands to the name of a setting.
+#: src/abilities/user-interface/organization-fields-integration.php:164
+msgid "The %s setting was not changed, because it is not a valid email address."
+msgstr "Подешавање %s није промењено јер адреса е-поште није важећа."
+
+#. translators: 1: the name of a setting, 2: Yoast Local SEO, 3: the kind of
+#. value, like "email address".
+#: src/abilities/user-interface/organization-fields-integration.php:143
+msgid "The %1$s setting was not changed, because %2$s is active and provides the %3$s of the organization."
+msgstr "Подешавање %1$s није промењено јер је %2$s активан и обезбеђује %3$s организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:118
+msgid "The URL of the Mastodon profile of the organization. Only used when company_or_person is \"company\". For a person, the Mastodon URL from the user's profile is used instead."
+msgstr "URL адреса Mastodon профила организације. Користи се само када је company_or_person подешено на „company“. За физичко лице користи се Mastodon URL адреса из корисничког профила."
+
+#: src/abilities/user-interface/organization-fields-integration.php:113
+msgid "The NAICS code of the organization."
+msgstr "NAICS код организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:109
+msgid "The LEI code of the organization."
+msgstr "LEI код организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:105
+msgid "The DUNS number of the organization."
+msgstr "DUNS број организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:101
+msgid "The ISO 6523 code of the organization."
+msgstr "ISO 6523 код организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:94
+msgid "The tax ID of the organization."
+msgstr "Порески идентификациони број организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:86
+msgid "The VAT ID of the organization."
+msgstr "ПДВ ID организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:80
+msgid "The number of employees of the organization, either as a number, like \"25\", or as a range, like \"11-50\"."
+msgstr "Број запослених у организацији, наведен као број, нпр. „25“, или као опсег, нпр. „11–50“."
+
+#: src/abilities/user-interface/organization-fields-integration.php:74
+msgid "The date the organization was founded, in the YYYY-MM-DD format."
+msgstr "Датум оснивања организације у формату YYYY-MM-DD."
+
+#: src/abilities/user-interface/organization-fields-integration.php:69
+msgid "The registered legal name of the organization."
+msgstr "Регистровани правни назив организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:62
+msgid "The phone number of the organization."
+msgstr "Број телефона организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:54
+msgid "The email address of the organization."
+msgstr "Адреса е-поште организације."
+
+#: src/abilities/user-interface/organization-fields-integration.php:49
+msgid "A description of the organization, of at most 2000 characters."
+msgstr "Опис организације, дужине до 2000 знакова."
+
+#: assets/js/src/components/RedirectNotification.js:153
+#: assets/js/src/elementor/components/RedirectNotification.js:125
+#: classes/watcher.php:241
+msgid "Got it"
+msgstr "Разумем"
+
+#: assets/js/src/components/RedirectNotification.js:145
+#: assets/js/src/elementor/components/RedirectNotification.js:113
+#: classes/watcher.php:248
+msgid "Manage redirects"
+msgstr "Управљајте преусмеравањима"
+
+#. translators: %s expands to Yoast SEO Premium
+#. translators: %s expands to Yoast SEO Premium.
+#: assets/js/src/components/RedirectNotification.js:83
+#: assets/js/src/elementor/components/RedirectNotification.js:57
+#: classes/post-watcher.php:481 classes/term-watcher.php:296
+msgid "A redirect from the old URL to the new URL was just created. You can manage this redirect in %s."
+msgstr "Управо је направљено преусмеравање са старе URL адресе на нову. Овим преусмеравањем можете управљати у одељку %s."
+
+#: src/task-list/application/tasks/child-tasks/set-social-sharing-images-child.php:104
+msgid "(no title)"
+msgstr "(без наслова)"
+
+#: classes/redirect/validation/redirect-control-chars-validation.php:37
+msgid "The redirect URLs may not contain line breaks or control characters."
+msgstr "URL адресе за преусмеравање не смеју да садрже преломе редова нити контролне знакове."
+
+#. translators: %s expands to a truncated form of the redirect origin.
+#: classes/redirect/redirect.php:129
+msgid "A redirect was skipped because it contained line breaks or control characters: %s"
+msgstr "Преусмеравање је прескочено јер је садржало преломе редова или контролне знакове: %s"
+
+#. translators: 1: number of removed redirect entries. 2: link opening tag to
+#. the .htaccess file editor. 3: link closing tag.
+#: classes/redirect/redirect-upgrade.php:157
+msgid "Yoast SEO Premium removed %1$d malformed redirect entry during a security update. Please %2$sinspect your .htaccess%3$s for leftover directives."
+msgid_plural "Yoast SEO Premium removed %1$d malformed redirect entries during a security update. Please %2$sinspect your .htaccess%3$s for leftover directives."
+msgstr[0] "Yoast SEO Premium је уклонио %1$d неисправан унос за преусмеравање током безбедносног ажурирања. Проверите %2$sсвој .htaccess%3$s да бисте утврдили да ли су остале неке директиве."
+msgstr[1] "Yoast SEO Premium је уклонио %1$d неисправна уноса за преусмеравање током безбедносног ажурирања. Проверите %2$sсвој .htaccess%3$s да бисте утврдили да ли су остале неке директиве."
+msgstr[2] "Yoast SEO Premium је уклонио %1$d неисправних уноса за преусмеравање током безбедносног ажурирања. Проверите %2$sсвој .htaccess%3$s да бисте утврдили да ли су остале неке директиве."
 
 #. translators: %1$s and %3$s expands to an opening p tag, %2$s and %4$s expand
 #. to a closing p tag
@@ -173,7 +309,7 @@ msgid "Paragraph break"
 msgstr "Нови пасус"
 
 #. translators: %1$s: Yoast SEO
-#: src/addon-installer.php:144
+#: src/addon-installer.php:185
 msgid "Install latest %1$s"
 msgstr "Постави најновији %1$s"
 
@@ -306,9 +442,11 @@ msgctxt "block title"
 msgid "Yoast Siblings"
 msgstr "Yoast странице истог нивоа"
 
-#: src/deprecated/integrations/admin/ai-consent-integration.php:137
-msgid "AI features"
-msgstr "AI функционалности"
+#. translators: Hidden accessibility text.
+#: assets/js/src/shared-admin/components/outbound-link.js:17
+#: classes/watcher.php:249
+msgid "(Opens in a new browser tab)"
+msgstr "(Отвара се на новој картици прегледача)"
 
 #. translators: 1: Yoast SEO Premium
 #: src/integrations/admin/update-premium-notification.php:129
@@ -533,11 +671,11 @@ msgstr "Почасни префикс"
 msgid "Basic information"
 msgstr "Основне информације"
 
-#: premium.php:318
+#: premium.php:338
 msgid "Custom fields to include in page analysis"
 msgstr "Прилагођена поља која треба укључити у анализу странице"
 
-#: premium.php:311
+#: premium.php:331
 msgid "Learn more about including custom fields in the page analysis"
 msgstr "Сазнајте више о укључивању прилагођених поља у анализу странице"
 
@@ -546,38 +684,38 @@ msgid "Job title"
 msgstr "Звање"
 
 #. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
-#: src/addon-installer.php:202
+#: src/addon-installer.php:243
 msgid "%2$sActivate %1$s now%3$s"
 msgstr "%2$sУкључите %1$s сада%3$s"
 
 #. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
-#: src/addon-installer.php:209
+#: src/addon-installer.php:250
 msgid "%2$sUpgrade %1$s now%3$s"
 msgstr "%2$sНадоградите %1$s сада%3$s"
 
 #. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
-#: src/addon-installer.php:214
+#: src/addon-installer.php:255
 msgid "%2$sInstall %1$s now%3$s"
 msgstr "%2$sПоставите %1$s сада%3$s"
 
 #. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required,
 #. %3$s: Yoast SEO Premium.
-#: src/addon-installer.php:152
+#: src/addon-installer.php:193
 msgid "%1$s %2$s must be installed and activated in order to use %3$s."
 msgstr "%1$s %2$s мора бити постављен и укључен да бисте користили %3$s."
 
 #. translators: %1$s: Yoast SEO, %2$s: Link start tag, %3$s: Link end tag.
-#: src/addon-installer.php:197
+#: src/addon-installer.php:238
 msgid "%2$sNetwork Activate %1$s now%3$s"
 msgstr "%2$sУкључите %1$s за мрежу сада%3$s"
 
 #. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required.
-#: src/addon-installer.php:227
+#: src/addon-installer.php:268
 msgid "Please contact a network administrator to install %1$s %2$s."
 msgstr "Обратите се мрежном администратору како бисте поставили %1$s %2$s."
 
 #. translators: %1$s: Yoast SEO, %2$s: The minimum Yoast SEO version required.
-#: src/addon-installer.php:231
+#: src/addon-installer.php:272
 msgid "Please contact an administrator to install %1$s %2$s."
 msgstr "Обратите се администратору како бисте поставили %1$s %2$s."
 
@@ -603,8 +741,6 @@ msgstr "Филтер"
 msgid "Edit"
 msgstr "Уреди"
 
-#: assets/js/src/components/RedirectNotification.js:128
-#: assets/js/src/elementor/components/RedirectNotification.js:101
 #: assets/js/src/frontend-inspector/components/frontend-inspector.js:87
 #: classes/premium-javascript-strings.php:55
 msgid "OK"
@@ -618,13 +754,13 @@ msgstr "Naslov"
 msgid "meta description"
 msgstr "meta opis"
 
-#: premium.php:276
+#: premium.php:281
 msgid "Create Redirect"
 msgstr "Napravite redirekciju"
 
 #: assets/js/src/new-redirects/components/menu.js:52
-#: assets/js/src/new-redirects/routes/redirects.js:72
-#: classes/redirect/redirect-formats.php:23 premium.php:337
+#: assets/js/src/new-redirects/routes/redirects.js:77
+#: classes/redirect/redirect-formats.php:23 premium.php:357
 msgid "Redirects"
 msgstr "Redirects"
 
@@ -816,6 +952,7 @@ msgstr "Preusmeravanje izbrisano."
 msgid "The redirect was deleted successfully."
 msgstr "Preusmeravanje je uspešno izbrisano."
 
+#: assets/js/src/ai/ai-bulk-editor/components/ai-pending-changes-modal.js:53
 #: assets/js/src/new-redirects/components/delete-modal.js:50
 #: assets/js/src/new-redirects/components/edit-redirect-row.js:104
 #: assets/js/src/new-redirects/components/redirect-warning-modal.js:42
@@ -934,7 +1071,7 @@ msgstr "%1$s је открио да сте преместили чланак (%5
 
 #. translators: %1$s: Yoast SEO Premium, %2$s: List with actions, %3$s: <a
 #. href='{post_with_explaination.}'>, %4$s: </a>, %5%s: The removed url.
-#: classes/post-watcher.php:493
+#: classes/post-watcher.php:494
 msgid "%1$s detected that you deleted a post (%5$s). You can either: %2$s Don't know what to do? %3$sRead this post %4$s."
 msgstr "%1$s је открио да сте избрисали чланак (%5$s). Можете да: %2$s Не знате шта да радите? %3$sПрочитајте овај чланак %4$s."
 
@@ -949,11 +1086,11 @@ msgstr "410 преусмеравање је направљено од %1$s!"
 msgid "%1$s detected that you deleted a term (%5$s). You can either: %2$s Don't know what to do? %3$sRead this post %4$s."
 msgstr "%1$s је открио да сте избрисали члан (%5$s). Можете да: %2$s Не знате шта да радите? %3$sПрочитајте овај чланак %4$s."
 
-#: classes/watcher.php:267
+#: classes/watcher.php:274
 msgid "Redirect it to another URL"
 msgstr "Preusmeri na drugi URL"
 
-#: classes/watcher.php:268
+#: classes/watcher.php:275
 msgid "Make it serve a 410 Content Deleted header"
 msgstr "Нека служи заглавље 410 Content Deleted"
 
@@ -994,7 +1131,7 @@ msgstr "Тип преусмеравања је HTTP код одговора ко
 msgid "Regular Expression (regex) Redirects are extremely powerful redirects. You should only use them if you know what you are doing. %1$sRead more about regex redirects on our help center%2$s."
 msgstr "Преусмеравања путем регуларног израза (regex) су изузетно моћна преусмеравања. Требали бисте их користити само ако знате шта радите. %1$sПрочитајте више о регуларним изразима за преусмеравања на нашој бази знања%2$s."
 
-#: assets/js/src/new-redirects/components/apache-settings.js:41 premium.php:373
+#: assets/js/src/new-redirects/components/apache-settings.js:41 premium.php:393
 msgid "Enabled"
 msgstr "Укључено"
 
@@ -1043,11 +1180,11 @@ msgstr "Uvezi iz drugih dodataka za preusmeravanje"
 msgid "Import from:"
 msgstr "Uvezi iz:"
 
-#: classes/watcher.php:238
+#: classes/watcher.php:236
 msgid "New URL:"
 msgstr "Novi URL:"
 
-#: classes/watcher.php:236
+#: classes/watcher.php:234
 msgid "Old URL:"
 msgstr "Stari URL"
 
@@ -1186,7 +1323,7 @@ msgstr "Први ред у овој датотеци је ред заглављ�
 msgid "Exporting data can take a long time when there are many posts, pages, public custom post types or terms."
 msgstr "Izvoz podataka može potrajati kad postoji mnogo postova, stranica, javnih prilagođenih tipova postova ili uslova"
 
-#: assets/js/src/new-redirects/routes/redirects.js:83
+#: assets/js/src/new-redirects/routes/redirects.js:88
 #: classes/redirect/views/redirects-tab-plain.php:25
 msgid "Plain redirects"
 msgstr "Obična preusmeravanja"
@@ -1299,9 +1436,9 @@ msgstr "Odaberite CSV sa svog kompjutera:"
 
 #: node_modules/@yoast/ai-frontend/dist/build.js:26
 #: assets/js/src/ai/ai-fix-assessments/components/fix-assessments-notification.js:351
-#: assets/js/src/components/RedirectNotification.js:138
-#: assets/js/src/elementor/components/RedirectNotification.js:107
-#: classes/watcher.php:249
+#: assets/js/src/components/RedirectNotification.js:135
+#: assets/js/src/elementor/components/RedirectNotification.js:106
+#: classes/watcher.php:256
 msgid "Undo"
 msgstr "Vrati korak nazad"
 
@@ -1319,22 +1456,6 @@ msgstr "Nešto je pošlo naopako pri brisanju redirekcije."
 #: classes/redirect/validation/redirect-relative-origin-validation.php:27
 msgid "The old URL for your redirect is not relative. Only the new URL is allowed to be absolute. Make sure to provide a relative old URL."
 msgstr "Стари URL за ваше преусмеравање није релативан. Само нова URL адреса може бити апсолутна. Проследите стари URL који је релативан."
-
-#. translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the
-#. admin page.
-#: classes/post-watcher.php:480
-msgid "%1$s created a %2$sredirect%3$s from the old post URL to the new post URL."
-msgstr "%1$s је креирао %2$sпреусмеравање%3$s са старог на нови URL чланка."
-
-#. translators: %1$s: Yoast SEO Premium, %2$s and %3$s expand to a link to the
-#. admin page.
-#: classes/term-watcher.php:296
-msgid "%1$s created a %2$sredirect%3$s from the old term URL to the new term URL."
-msgstr "%1$s је креирао %2$sпреусмеравање%3$s са старог на нови URL члана."
-
-#: classes/watcher.php:243
-msgid "Ok"
-msgstr "Ok"
 
 #: assets/js/src/blocks/table-of-contents-block.js:322
 #: assets/js/src/blocks/table-of-contents-block.js:407

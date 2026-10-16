@@ -25,7 +25,52 @@ if( !class_exists('Urus_Pluggable_Search_Module')){
             add_action('save_post_product',array(__CLASS__,'_save_post'),PHP_INT_MAX,3);
             add_action( 'wp_ajax_rebuild_search_index', array(__CLASS__,'ajax_rebuild_search_index') );
             add_action( 'wp_ajax_rebuild_search_sku_index', array(__CLASS__,'ajax_rebuild_search_sku_index') );
+            // Any change of the index invalidates the static JSON file served to the live search.
+            add_action( 'add_option_' . self::$live_search_key, array( __CLASS__, 'invalidate_live_search_file' ) );
+            add_action( 'update_option_' . self::$live_search_key, array( __CLASS__, 'invalidate_live_search_file' ) );
+            add_action( 'delete_option_' . self::$live_search_key, array( __CLASS__, 'invalidate_live_search_file' ) );
             self::$initialized = true;
+        }
+
+        public static function invalidate_live_search_file() {
+            delete_option( '_urus_live_search_file' );
+        }
+
+        /**
+         * Returns the URL of a static JSON copy of the live search index.
+         *
+         * The index used to be printed inline on every page (~350 KB); the front-end
+         * now fetches this file only when a visitor starts searching.
+         *
+         * @return string Empty string when the file cannot be written.
+         */
+        public static function live_search_file_url() {
+            $uploads = wp_upload_dir( null, false );
+            $dir     = trailingslashit( $uploads['basedir'] ) . 'urus-live-search';
+            $file    = get_option( '_urus_live_search_file' );
+
+            if ( ! $file || ! file_exists( $dir . '/' . $file ) ) {
+                $products = get_option( self::$live_search_key, array() );
+                $json     = wp_json_encode( $products ? $products : new stdClass() );
+                if ( false === $json || ! wp_mkdir_p( $dir ) ) {
+                    return '';
+                }
+                $file = 'products-' . substr( md5( $json ), 0, 12 ) . '.json';
+                if ( false === file_put_contents( $dir . '/' . $file, $json ) ) {
+                    return '';
+                }
+                // Remove stale copies of the index.
+                foreach ( (array) glob( $dir . '/products-*.json' ) as $old ) {
+                    if ( basename( $old ) !== $file ) {
+                        @unlink( $old );
+                    }
+                }
+                update_option( '_urus_live_search_file', $file, false );
+                // The index is only needed when the file is (re)built, so keep it out of the autoloaded options.
+                wp_set_option_autoload( self::$live_search_key, false );
+            }
+
+            return set_url_scheme( trailingslashit( $uploads['baseurl'] ) . 'urus-live-search/' . $file );
         }
 
         public static function _save_post($post_id, $post, $update ){

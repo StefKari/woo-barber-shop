@@ -3,12 +3,12 @@
 namespace ADP\BaseVersion\Includes\WC;
 
 use ADP\BaseVersion\Includes\Context;
-use ADP\BaseVersion\Includes\Core\Cart\Coupon;
-use ADP\BaseVersion\Includes\Core\Cart\CouponCart;
-use ADP\BaseVersion\Includes\Core\Cart\CouponInterface;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCart;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponInterface;
+use ADP\BaseVersion\Includes\Core\Cart\Coupon\WcCouponCart;
 use ADP\BaseVersion\Includes\Core\Cart\Fee;
 use ADP\BaseVersion\Includes\Core\Cart\ShippingAdjustment;
-use ADP\BaseVersion\Includes\Core\Cart\WcCouponCart;
 use WC_Cart;
 
 defined('ABSPATH') or exit;
@@ -178,7 +178,7 @@ class WcTotalsFacade
                 'value'  => $coupon->getValue(),
                 'ruleId' => $coupon->getRuleId(),
             );
-        } elseif ($coupon instanceof Coupon) {
+        } elseif ($coupon instanceof CouponCartItem) {
             return array(
                 'type'             => $coupon->getType(),
                 'code'             => $coupon->getCode(),
@@ -221,7 +221,7 @@ class WcTotalsFacade
                 $affectedCartItem = null;
             }
 
-            $coupon = new Coupon(
+            $coupon = new CouponCartItem(
                 $this->context,
                 $type,
                 $data['code'],

@@ -4,10 +4,11 @@ namespace ADP\BaseVersion\Includes\Core\Cart;
 
 use ADP\BaseVersion\Includes\Context;
 use Exception;
+use ADP\BaseVersion\Includes\Helpers\Serializable;
 
 defined('ABSPATH') or exit;
 
-class ShippingAdjustment
+class ShippingAdjustment extends Serializable
 {
     const DEFAULT_SHIPPING_METHOD = 'all';
 

@@ -10,6 +10,10 @@ use ADP\BaseVersion\Includes\Database\Models\Rule;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
 use ADP\BaseVersion\Includes\Enums\RuleTypeEnum;
 use ADP\Factory;
+use ADP\BaseVersion\Includes\Database\Repository\ThemeModificationsRepository;
+use ADP\BaseVersion\Includes\CustomizerExtensions\AdvertisingThemeProperties;
+use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Interfaces\ValueComparisonCondition;
+use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Interfaces\ListComparisonCondition;
 
 defined('ABSPATH') or exit;
 
@@ -28,6 +32,7 @@ class UpdateFunctions
 
         $table = $wpdb->prefix . Rule::TABLE_NAME;
         $sql   = "SELECT id, conditions FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows  = $wpdb->get_results($sql);
 
         $rows = array_map(function ($item) {
@@ -49,6 +54,7 @@ class UpdateFunctions
             }
             if ($prev_row != $row) {
                 $row['conditions'] = serialize($row['conditions']);
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $result            = $wpdb->update($table, array('conditions' => $row['conditions']),
                     array('id' => $row['id']));
             }
@@ -61,6 +67,7 @@ class UpdateFunctions
 
         $table = $wpdb->prefix . Rule::TABLE_NAME;
         $sql   = "SELECT id, conditions, limits, cart_adjustments FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows  = $wpdb->get_results($sql);
 
         $rows = array_map(function ($item) {
@@ -89,6 +96,7 @@ class UpdateFunctions
                 $row['conditions']       = serialize($row['conditions']);
                 $row['cart_adjustments'] = serialize($row['cart_adjustments']);
                 $row['limits']           = serialize($row['limits']);
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $result                  = $wpdb->update($table, array(
                     'conditions'       => $row['conditions'],
                     'cart_adjustments' => $row['cart_adjustments'],
@@ -126,6 +134,7 @@ class UpdateFunctions
 
         $table = $wpdb->prefix . Rule::TABLE_NAME;
         $sql   = "SELECT id, get_products FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows  = $wpdb->get_results($sql);
 
         $rows = array_filter(array_map(function ($item) {
@@ -154,7 +163,7 @@ class UpdateFunctions
                 unset($value['use_product_from_filter']);
             }
             $row['get_products']['value'] = $values;
-
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $result = $wpdb->update($table, array('get_products' => serialize($row['get_products'])),
                 array('id' => $row['id']));
         }
@@ -208,6 +217,7 @@ class UpdateFunctions
 
         $table = $wpdb->prefix . Rule::TABLE_NAME;
         $sql   = "SELECT id, get_products FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows  = $wpdb->get_results($sql);
 
         $rows = array_filter(array_map(function ($item) {
@@ -234,7 +244,7 @@ class UpdateFunctions
                 $value['gift_mode'] = $giftMode;
             }
             $row['get_products']['value'] = $values;
-
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $result = $wpdb->update($table, array('get_products' => serialize($row['get_products'])),
                 array('id' => $row['id']));
         }
@@ -245,6 +255,7 @@ class UpdateFunctions
 
         $table = $wpdb->prefix . Rule::TABLE_NAME;
         $sql   = "SELECT id, conditions FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows  = $wpdb->get_results($sql);
 
         $rows = array_filter(array_map(function ($item) {
@@ -271,6 +282,7 @@ class UpdateFunctions
             }
             if ($prev_row != $row) {
                 $row['conditions']       = serialize($row['conditions']);
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($table, array(
                     'conditions'       => $row['conditions'],
                 ), array('id' => $row['id']));
@@ -283,10 +295,12 @@ class UpdateFunctions
 
         $table = $wpdb->prefix . Rule::TABLE_NAME;
         $sql   = "SELECT id, exclusive FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows  = $wpdb->get_results($sql, ARRAY_A);
 
         foreach ($rows as $row) {
             $rule_type = $row['exclusive'] ? RuleTypeEnum::EXCLUSIVE()->getValue() : RuleTypeEnum::COMMON()->getValue();
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($table, array(
                 'rule_type'       => $rule_type,
             ), array('id' => $row['id']));
@@ -322,6 +336,7 @@ class UpdateFunctions
 
         $table = $wpdb->prefix . Rule::TABLE_NAME;
         $sql = "SELECT id, product_adjustments, bulk_adjustments FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows = $wpdb->get_results($sql);
 
         $rows = array_filter(array_map(function ($item) {
@@ -376,6 +391,7 @@ class UpdateFunctions
             }
 
             if (!empty($changes)) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($table, $changes, array('id' => $row['id']));
             }
         }
@@ -395,6 +411,7 @@ class UpdateFunctions
 
         $table = $wpdb->prefix . Rule::TABLE_NAME;
         $sql   = "SELECT id, conditions FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows  = $wpdb->get_results($sql);
 
         $rows = array_filter(array_map(function ($item) {
@@ -447,6 +464,7 @@ class UpdateFunctions
             }
             if ($prev_row != $row) {
                 $row['conditions']       = serialize($row['conditions']);
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($table, array(
                     'conditions'       => $row['conditions'],
                 ), array('id' => $row['id']));
@@ -460,6 +478,7 @@ class UpdateFunctions
 
         $table = $wpdb->prefix . Rule::TABLE_NAME;
         $sql = "SELECT id, advertising FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows = $wpdb->get_results($sql);
 
         $rows = array_map(function ($item) {
@@ -473,6 +492,7 @@ class UpdateFunctions
 
         foreach ($rows as &$row) {
             $row['advertising']['discount_message_cart_item'] = $row['advertising']['discount_message'] ?? "";
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $result = $wpdb->update(
                 $table,
                 array( 'advertising' => serialize($row['advertising'])),
@@ -490,6 +510,266 @@ class UpdateFunctions
         $cnxt->getCompatibilitySettings()->set("dont_apply_discount_to_addons", $cnxt->getOption("dont_apply_discount_to_addons"));
         $cnxt->getCompatibilitySettings()->set("enable_wc_product_bundles_cmp", $cnxt->getOption("enable_wc_product_bundles_cmp"));
         $cnxt->getCompatibilitySettings()->save();
+    }
+
+    public static function migratethemeOptionsTo_4_4_3()
+    {
+        $themeModificationsRepository = new ThemeModificationsRepository();
+        $attrOptions = $themeModificationsRepository->getModifications();
+        $options = $attrOptions[AdvertisingThemeProperties::KEY] ?? [];
+
+        $context  = new Context();
+        $settings = $context->getSettings();
+
+        $keys = [
+            'is_enable_cart_amount_saved'          => AdvertisingThemeProperties\CartMenu::KEY,
+            'is_enable_minicart_amount_saved'      => AdvertisingThemeProperties\MiniCartMenu::KEY,
+            'is_enable_checkout_amount_saved'      => AdvertisingThemeProperties\CheckoutMenu::KEY,
+            'is_enable_backend_order_amount_saved' => "wdp_discount_message-edit-order",
+        ];
+
+        if( class_exists('\ADP\ProVersion\Includes\CustomizerExtensions\AdvertisingThemeProperties\EmailOrderMenu')
+         && class_exists('\ADP\ProVersion\Includes\CustomizerExtensions\AdvertisingThemeProperties\OrderPageMenu') ) {
+
+            $keys = array_merge($keys, [
+            'is_enable_order_amount_saved'
+                => \ADP\ProVersion\Includes\CustomizerExtensions\AdvertisingThemeProperties\OrderPageMenu::KEY,
+            'is_enable_email_order_amount_saved'
+                => \ADP\ProVersion\Includes\CustomizerExtensions\AdvertisingThemeProperties\EmailOrderMenu::KEY,
+            ]);
+        }
+
+        foreach($keys as $newOptionName => $key) {
+            $enable = $options[$key]['enable'] ?? false;
+            $settings->set($newOptionName, $enable);
+        }
+        $settings->save();
+    }
+
+    public static function migratePostalCodesConditionsTo_4_5_3()
+    {
+        global $wpdb;
+
+        $table = $wpdb->prefix . Rule::TABLE_NAME;
+        $sql   = "SELECT id, conditions FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        $rows  = $wpdb->get_results($sql);
+
+        $rows = array_filter(array_map(function ($item) {
+            $result = array(
+                'id'           => $item->id,
+                'conditions' => unserialize($item->conditions),
+            );
+
+            if (empty($result['conditions'])) {
+                return false;
+            }
+
+            return $result;
+        }, $rows));
+
+
+        foreach ($rows as &$row) {
+            $hasTypeCustomerPostcode = false;
+            foreach ($row['conditions'] as &$data) {
+                if('customer_postcode' !== $data['type']) {
+                    continue;
+                }
+                $hasTypeCustomerPostcode = true;
+                $data['options'][ValueComparisonCondition::COMPARISON_VALUE_METHOD_KEY] = $data['options'][ListComparisonCondition::COMPARISON_LIST_METHOD_KEY];
+                $data['options'][ValueComparisonCondition::COMPARISON_VALUE_KEY]        = $data['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
+                unset($data['options'][ListComparisonCondition::COMPARISON_LIST_METHOD_KEY]);
+                unset($data['options'][ListComparisonCondition::COMPARISON_LIST_KEY]);
+            }
+            if($hasTypeCustomerPostcode) {
+                $row['conditions']       = serialize($row['conditions']);
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $wpdb->update($table, array(
+                    'conditions'       => $row['conditions'],
+                ), array('id' => $row['id']));
+            }
+        }
+    }
+
+    public static function migrateSpentConditionsTo_4_5_3()
+    {
+        global $wpdb;
+
+        $table = $wpdb->prefix . Rule::TABLE_NAME;
+        $sql   = "SELECT id, conditions FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        $rows  = $wpdb->get_results($sql);
+
+        $rows = array_filter(array_map(function ($item) {
+            $result = array(
+                'id'           => $item->id,
+                'conditions' => unserialize($item->conditions),
+            );
+
+            if (empty($result['conditions'])) {
+                return false;
+            }
+
+            $hasSpentConditions = false;
+            foreach($result['conditions'] as $data) {
+                if(in_array($data['type'], ['customer_spent_and_subtotal', 'customer_spent_and_subtotal_inc_vat'])) {
+                    $hasSpentConditions = true;
+                }
+            }
+            if(!$hasSpentConditions) {
+                return false;
+            }
+
+            return $result;
+        }, $rows));
+
+        foreach ($rows as &$row) {
+            foreach ($row['conditions'] as &$data) {
+                if(!in_array($data['type'], ['customer_spent_and_subtotal', 'customer_spent_and_subtotal_inc_vat'])) {
+                    continue;
+                }
+                $data['options']['time_range'] = 'all_time';
+            }
+
+            $row['conditions'] = serialize($row['conditions']);
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->update($table, array(
+                'conditions'       => $row['conditions'],
+            ), array('id' => $row['id']));
+        }
+    }
+
+    public static function migrateSummaryTo_4_10_4()
+    {
+        global $wpdb;
+
+        if(!class_exists('\ADP\ProVersion\Includes\Database\Models\Collection')) {
+            return;
+        }
+
+        $table = $wpdb->prefix . \ADP\ProVersion\Includes\Database\Models\Collection::TABLE_NAME;
+
+        //phpcs:disable WordPress.DB.DirectDatabaseQuery
+        $column_exists = $wpdb->get_results(
+            //phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $wpdb->prepare("SHOW COLUMNS FROM {$table} LIKE %s", 'conditions_relationship')
+        );
+
+        if (empty($column_exists)) {
+            //phpcs:disable WordPress.DB.PreparedSQL, WordPress.DB.DirectDatabaseQuery
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN conditions_relationship BOOLEAN DEFAULT TRUE");
+            //phpcs:disable WordPress.DB.PreparedSQL, WordPress.DB.DirectDatabaseQuery
+            $wpdb->query("UPDATE {$table} SET conditions_relationship = TRUE");
+        }
+
+        //phpcs:disable WordPress.DB.DirectDatabaseQuery
+        $column_exists = $wpdb->get_results(
+            //phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $wpdb->prepare("SHOW COLUMNS FROM {$table} LIKE %s", 'summary')
+        );
+
+        if (empty($column_exists)) {
+            //phpcs:disable WordPress.DB.PreparedSQL, WordPress.DB.DirectDatabaseQuery
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN summary TEXT DEFAULT NULL");
+        }
+
+        if (!class_exists("\ADP\ProVersion\Includes\Database\Repository\CollectionRepository")) {
+            return;
+        }
+
+        $productCollections = \ADP\ProVersion\Includes\Database\Repository\CollectionRepository::getProductCollections();
+
+        foreach ($productCollections as $collection) {
+            \ADP\ProVersion\Includes\Database\Repository\CollectionRepository::storeProductCollection($collection);
+        }
+    }
+
+    public static function migrateSummaryTo_4_12_0()
+    {
+        global $wpdb;
+
+        $table = $wpdb->prefix . Rule::TABLE_NAME;
+        $sql   = "SELECT id, filters FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        $rows  = $wpdb->get_results($sql);
+
+        foreach ($rows as $item) {
+            $id = $item->id;
+            $filters = unserialize($item->filters);
+
+            if(empty($filters)) {
+                continue;
+            }
+
+            $changed = false;
+            foreach ($filters as &$filter) {
+                $excludes = [];
+
+                if(isset($filter['method']) && $filter['method'] === 'not_in_list') {
+                    $excludes[$filter['type']] = [
+                        'type' => $filter['type'],
+                        'value' => $filter['value']
+                    ];
+                    $filter['type'] = 'any';
+                    $filter['method'] = '';
+                    $filter['value'] = '';
+                    $changed = true;
+                }
+
+                if(isset($filter['product_exclude']) && isset($filter['product_exclude']['values']) 
+                        && is_array($filter['product_exclude']['values'])
+                        && !empty($filter['product_exclude']['values'])) {
+
+                    if(isset($excludes['products'])) {
+                        $excludes['products']['value'] = array_unique(
+                            array_merge(
+                                $excludes['products']['value'],
+                                $filter['product_exclude']['values']
+                            )
+                        );
+                    } else {
+                        $excludes['products'] = [
+                            'type' => 'products',
+                            'value' => $filter['product_exclude']['values']
+                        ];
+                    }
+                    unset($filter['product_exclude']['values']);
+                    $changed = true;
+                }
+
+                if(isset($filter['collections_exclude']) && isset($filter['collections_exclude']['values']) 
+                        && is_array($filter['collections_exclude']['values'])
+                        && !empty($filter['collections_exclude']['values'])) {
+
+                    if(isset($excludes['product_collections'])) {
+                        $excludes['product_collections']['value'] = array_unique(
+                            array_merge(
+                                $excludes['product_collections']['value'],
+                                $filter['collections_exclude']['values']
+                            )
+                        );
+                    } else {
+                        $excludes['product_collections'] = [
+                            'type' => 'product_collections',
+                            'value' => $filter['collections_exclude']['values']
+                        ];
+                    }
+                    unset($filter['collections_exclude']);
+                    $changed = true;
+                }
+
+                if($changed) {
+                    $filter['excludes'] = array_values($excludes);
+                }
+            }
+
+            if($changed) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $wpdb->update($table, [
+                    'filters' => serialize($filters),
+                ], ['id' => $id]);
+            }
+        }
     }
 }
 

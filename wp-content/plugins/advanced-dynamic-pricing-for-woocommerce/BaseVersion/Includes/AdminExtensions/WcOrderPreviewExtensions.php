@@ -42,7 +42,7 @@ class WcOrderPreviewExtensions
 
     public function addAppliedDiscountsData($exportData, $order)
     {
-        $rules = $this->orderRepository->getAppliedRulesForOrder($exportData['order_number']);
+        $rules = $this->orderRepository->getAppliedRulesForOrder($order->get_id());
         if ( ! empty($rules)) {
             $exportData['rules_rendered'] = $this->previewOrderAppliedDiscountRulesOutout($rules);
         }

@@ -8,9 +8,9 @@ use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Interfaces\ValueComparisonC
 use ADP\BaseVersion\Includes\Core\Rule\Internationalization\FilterTranslator;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\CartTotals;
 use ADP\Factory;
-use ADP\ProVersion\Includes\Core\Cart\Cart;
-use ADP\ProVersion\Includes\Core\Rule\CartCondition\ConditionsLoader;
-use ADP\ProVersion\Includes\Core\RuleProcessor\ProductFiltering;
+use ADP\BaseVersion\Includes\Core\Cart\Cart;
+use ADP\BaseVersion\Includes\Core\Rule\CartCondition\ConditionsLoader;
+use ADP\BaseVersion\Includes\Core\RuleProcessor\ProductFiltering;
 
 defined('ABSPATH') or exit;
 
@@ -203,8 +203,7 @@ class ConditionCartItemsAmount implements ListComparisonCondition, ValueComparis
      */
     public function isValid()
     {
-        return ! is_null($this->inListMode)
-               && ! is_null($this->comparisonList)
+        return !is_null($this->comparisonList)
                && ! is_null($this->comparisonMethod)
                && ! is_null($this->comparisonAmount);
     }

@@ -1,16 +1,16 @@
-=== HubSpot - CRM, Email Marketing, Live Chat, Forms & Analytics ===
+=== HubSpot All-In-One Marketing - Forms, Popups, Live Chat ===
 Contributors: HubSpotDev, leadin
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
-Tags: CRM, Marketing, Live Chat, Forms, Analytics, popups, newsletter, contact management, chat, contact form, marketing automation
+Tags: CRM, Marketing, Live Chat, Forms, Analytics
 Requires at least: 5.8
-Tested up to: 6.7.1
+Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 11.2.9
+Stable tag: 11.3.75
 
 The CRM, Sales, and Marketing WordPress plugin to grow your business better.
 
-Capture, organize, and engage web visitors with free live chat, forms, CRM (contact management), email marketing, and analytics. Easy to use, no coding.
+Capture and engage web visitors with free live chat, forms, CRM, email marketing, and analytics. Easy to use, no coding required.
 
 == Description ==
 
@@ -113,7 +113,6 @@ First, get familiar with our different form types:
 
 ✅ Embedded
 ✅ Standalone page
-✅ Pop-up box
 ✅ Dropdown banner
 ✅ Slide in left/right box
 
@@ -121,37 +120,15 @@ Then, when you're ready to go, pick a custom template:
 
 ✅ Contact us
 ✅ Newsletter sign up form template
-✅ Support template
-✅ eBook download template
 ✅ Event registration template
+✅ Talk to an expert template
+✅ Book a meeting template
+✅ Gated content template
 ✅ More coming soon
 
 Choose from a variety of settings, color schemes, and fonts — or start from scratch. HubSpot comes with an intuitive form and popup builder that simplifies the process, no matter what type of form you have in mind.
 
 Rather stick with your existing forms and popup plugin? That’s fine too! HubSpot integrates with most WordPress form builders, form creators, and popup builders out-of-the-box so you don’t have to worry about a thing.
-
-### [Live Chat & Chatbots](https://www.hubspot.com/products/wordpress/live-chat)
-Make your website a 24-hour marketing machine on autopilot.
-
-Live web chat inside the HubSpot WordPress plugin streamlines the customer experience, making it easier than ever for you to engage with leads, convert them into customers, and provide them with the support they need.
-
-HubSpot’s WordPress live chat software offers:
-
-😀 Custom styling to match your website
-🤖 A variety of bot options including:
-
-- ✅ Concierge bot
-- ✅ Qualify leads bot
-- ✅ Meetings bot
-- ✅ Tickets bot
-- ✅ Knowledge base & support bot
-- ✅ Offline bot
-
-📲 Real-time messaging on the go via HubSpot’s mobile app
-👨‍💻 A Slack integration to receive and respond to chat notifications
-🕐 24/7 live support on autopilot
-
-Our free live chat feature helps you turn website visitors into customers by providing insightful, real-time support.
 
 ### [Analytics](https://www.hubspot.com/products/wordpress/analytics)
 
@@ -418,12 +395,12 @@ Please visit the <a href="https://community.hubspot.com/?utm_source=wordpress-pl
 == Changelog ==
 
 <a href="http://plugins.svn.wordpress.org/leadin/trunk/changelog.txt" target="_blank">Full changelog here</a>
-- Current version: 11.2.9
-- Version release date: 2025-03-20
+- Current version: 11.3.75
+- Version release date: 2026-09-16
 
-= 11.2.8 (2025-03-17) =
-* Move cron schedule action to proxy mapping class
+= 11.3.75 (2026-09-16) =
+* Fix Elementor HubSpot form and meeting blocks not being selectable in the editor when the embed renders as an iframe
 
-= 11.2.0 (2025-03-05) =
-* Add reverse proxy to HubSpot domain feature
+= 11.3.74 (2026-09-16) =
+* Fix HubSpot widgets showing "Unable to load HubSpot" when the embedder script arrives late by waiting for it before failing, and report the failure when it does not arrive
 

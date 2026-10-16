@@ -2,40 +2,22 @@
 
 use WPML\PB\Shortcode\StringCleanUp;
 
-/**
- * Class WPML_PB_Register_Shortcodes
- */
 class WPML_PB_Register_Shortcodes {
 
-	/** @var WPML_PB_String_Registration $handle_strings */
 	private $handle_strings;
-	/** @var  WPML_PB_Shortcode_Strategy $shortcode_strategy */
 	private $shortcode_strategy;
-	/** @var  WPML_PB_Shortcode_Encoding $encoding */
 	private $encoding;
-	/** @var WPML_PB_Reuse_Translations_By_Strategy|null $reuse_translations */
 	private $reuse_translations;
 
-	/** @var StringCleanUp|null */
 	private $existingStrings;
 
-	/** @var int $location_index */
 	private $location_index;
 
-	/** @var int $group_index */
-	private $group_index;
-
-	/**
-	 * @param WPML_PB_String_Registration                 $handle_strings
-	 * @param WPML_PB_Shortcode_Strategy                  $shortcode_strategy
-	 * @param WPML_PB_Shortcode_Encoding                  $encoding
-	 * @param WPML_PB_Reuse_Translations_By_Strategy|null $reuse_translations
-	 */
 	public function __construct(
 		WPML_PB_String_Registration $handle_strings,
 		WPML_PB_Shortcode_Strategy $shortcode_strategy,
 		WPML_PB_Shortcode_Encoding $encoding,
-		WPML_PB_Reuse_Translations_By_Strategy $reuse_translations = null
+		?WPML_PB_Reuse_Translations_By_Strategy $reuse_translations = null
 	) {
 		$this->handle_strings     = $handle_strings;
 		$this->shortcode_strategy = $shortcode_strategy;
@@ -43,23 +25,15 @@ class WPML_PB_Register_Shortcodes {
 		$this->reuse_translations = $reuse_translations;
 	}
 
-	/**
-	 * @param string|int    $post_id
-	 * @param string        $content
-	 * @param StringCleanUp $externalStringCleanUp
-	 *
-	 * @return bool
-	 */
 	public function register_shortcode_strings(
 		$post_id,
 		$content,
-		StringCleanUp $externalStringCleanUp = null
+		?StringCleanUp $externalStringCleanUp = null
 	) {
 
 		$any_registered = false;
 
 		$this->location_index = 1;
-		$this->group_index    = 0;
 
 		$content = apply_filters( 'wpml_pb_shortcode_content_for_translation', $content, $post_id );
 		$content = WPML_PB_Shortcode_Content_Wrapper::maybeWrap( $content, $this->shortcode_strategy->get_shortcodes() );
@@ -96,8 +70,6 @@ class WPML_PB_Register_Shortcodes {
 					}
 				}
 			}
-
-			$this->group_index ++;
 		}
 
 		if ( $this->reuse_translations ) {
@@ -109,14 +81,11 @@ class WPML_PB_Register_Shortcodes {
 			$this->mark_post_as_migrate_location_done( $post_id );
 		}
 
+		do_action( 'wpml_pb_after_register_shortcode_strings', $post_id );
+
 		return $any_registered;
 	}
 
-	/**
-	 * @param array $shortcode
-	 *
-	 * @return bool
-	 */
 	private function should_handle_content( $shortcode ) {
 		$tag = $shortcode['tag'];
 
@@ -132,18 +101,6 @@ class WPML_PB_Register_Shortcodes {
 			)
 		);
 
-		/**
-		 * Allow page builders to override if the shortcode should be handled as a translatable string.
-		 *
-		 * @since 4.2
-		 * @param bool $handle_content.
-		 * @param array $shortcode {
-		 *
-		 *      @type string $tag.
-		 *      @type string $content.
-		 *      @type string $attributes.
-		 * }
-		 */
 		return apply_filters( 'wpml_pb_should_handle_content', $handle_content, $shortcode );
 	}
 
@@ -154,7 +111,6 @@ class WPML_PB_Register_Shortcodes {
 		}
 
 		$shortcode_attributes = [];
-		$shortcode_tag        = $shortcode['tag'];
 		$current_title        = $this->get_shortcode_string_title( $string_id );
 
 		if ( $current_title ) {
@@ -171,7 +127,7 @@ class WPML_PB_Register_Shortcodes {
 		sort( $shortcode_attributes );
 		$shortcode_attributes = array_unique( $shortcode_attributes );
 
-		return $shortcode_tag . ': ' . implode( ', ', $shortcode_attributes );
+		return implode( '/', $shortcode['crumbs'] ) . ': ' . implode( ', ', $shortcode_attributes );
 	}
 
 	public function get_shortcode_string_title( $string_id ) {
@@ -194,30 +150,23 @@ class WPML_PB_Register_Shortcodes {
 			try {
 				$string_id = $this->handle_strings->get_string_id_from_package( $post_id, $content );
 
-				/**
-				 * @param string $title
-				 * @param array  $shortcode
-				 */
 				$string_title = apply_filters( 'wpml_pb_shortcode_string_title', $this->get_updated_shortcode_string_title( $string_id, $shortcode, $attribute ), $shortcode );
 
-				$string_id = $this->handle_strings->register_string( $post_id, $content, $editor_type, $string_title, '', $this->location_index, '', $this->group_index );
+				$string_id = $this->handle_strings->register_string( $post_id, $content, $editor_type, $string_title, '', $this->location_index, '' );
 				if ( $string_id ) {
-					$this->location_index ++;
+					++$this->location_index;
+
+					do_action( 'wpml_pb_register_shortcode_string', $post_id, $content, $shortcode );
 				}
 			} catch ( Exception $exception ) {
 				$string_id = 0;
 			}
 		}
 
-		return 0 !== $string_id;
+		return (bool) $string_id;
 	}
 
-	/**
-	 * @param int $post_id
-	 */
 	private function mark_post_as_migrate_location_done( $post_id ) {
 		update_post_meta( $post_id, WPML_PB_Integration::MIGRATION_DONE_POST_META, true );
 	}
-
-
 }

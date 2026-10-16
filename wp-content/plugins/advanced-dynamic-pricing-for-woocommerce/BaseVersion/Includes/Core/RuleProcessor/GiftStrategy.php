@@ -2,24 +2,25 @@
 
 namespace ADP\BaseVersion\Includes\Core\RuleProcessor;
 
+use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
-use ADP\BaseVersion\Includes\Core\Cart\CartItem;
-use ADP\BaseVersion\Includes\Core\Cart\FreeCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Basic\BasicCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\CartItemAttributeEnum;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Free\FreeCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\Notice;
 use ADP\BaseVersion\Includes\Core\Rule\PackageRule;
 use ADP\BaseVersion\Includes\Core\Rule\Rule;
 use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\FreeCartItemChoices;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Gift;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\ProductStock\ProductStockController;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartItemsCollection;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartSet;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartSetCollection;
-use ADP\BaseVersion\Includes\Enums\BaseEnum;
 use ADP\BaseVersion\Includes\Enums\GiftChoiceMethodEnum;
 use ADP\BaseVersion\Includes\Enums\GiftChoiceTypeEnum;
 use ADP\BaseVersion\Includes\Enums\GiftModeEnum;
-use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\WC\WcTaxFunctions;
 use ADP\Factory;
 use Exception;
@@ -143,6 +144,8 @@ class GiftStrategy
         /** @var array<int, array<int,FreeCartItem>> $freeCartItemsByHash */
         $freeCartItemsByHash = array();
 
+        $mapIsTmpItemsByHash = array();
+
         $maxAmountForGiftsLeft = $rule->getMaxAmountForGifts();
         if ($maxAmountForGiftsLeft !== null) {
             $maxAmountForGiftsLeft = (new WcTaxFunctions())->getBasePrice($maxAmountForGiftsLeft);
@@ -163,7 +166,7 @@ class GiftStrategy
             }
 
             $giftIndex = 0;
-            /** @var CartItem $item */
+            /** @var BasicCartItem $item */
             foreach ($rule->getItemGiftsCollection()->asArray() as $gift) {
                 if ($gift->getQty() <= 0) {
                     continue;
@@ -171,6 +174,7 @@ class GiftStrategy
 
                 $freeCartItemChoices = $this->convertGiftToFreeCartItemChoices($gift, array($item));
                 $hash                = $freeCartItemChoices->generateHash($rule, $giftIndex, $gift);
+                $mapIsTmpItemsByHash[$hash] = ($mapIsTmpItemsByHash[$hash] ?? false) || $item->hasAttr(CartItemAttributeEnum::TEMPORARY());
 
                 if ($gift->isAllowToSelect()) {
                     continue;
@@ -205,6 +209,9 @@ class GiftStrategy
                 }
 
                 $removedFreeItems->set($freeCartItem->hash(), $deletedQty);
+                if($mapIsTmpItemsByHash[$hash] ?? false) {
+                    $freeCartItem->addAttr($freeCartItem::ATTR_TEMP);
+                }
                 $cart->addToCart($freeCartItem);
             }
         }
@@ -212,7 +219,7 @@ class GiftStrategy
 
     /**
      * @param Gift $gift
-     * @param array<int,CartItem> $items
+     * @param array<int,BasicCartItem> $items
      *
      * @return FreeCartItemChoices
      */
@@ -233,6 +240,26 @@ class GiftStrategy
                 $newGiftChoice->setMethod(new GiftChoiceMethodEnum(GiftChoiceMethodEnum::IN_LIST));
                 $newGiftChoices = array($newGiftChoice);
                 break;
+            } elseif ($giftChoice->getType()->getValue() === GiftChoiceTypeEnum::CLONE_ADJUSTED_FIRST) {
+                $newGiftChoice = clone $giftChoice;
+                $newGiftChoice->setType(new GiftChoiceTypeEnum(GiftChoiceTypeEnum::PRODUCT));
+
+                $values = array();
+                if ( count($items) > 0 ) {
+                    $item = reset($items);
+                    $values[] = $item->getWcItem()->getProduct()->get_id();
+                }
+                $newGiftChoice->setValues($values);
+
+                $newGiftChoice->setMethod(new GiftChoiceMethodEnum(GiftChoiceMethodEnum::IN_LIST));
+                $newGiftChoices = array($newGiftChoice);
+                break;
+            } elseif ($giftChoice->getType()->equals(GiftChoiceTypeEnum::PRODUCT())) {
+                if ($gift->getMode()->equals(GiftModeEnum::GIFTABLE_PRODUCTS_IN_RANDOM())) {
+                    $values = $giftChoice->getValues();
+                    shuffle($values);
+                    $giftChoice->setValues($values);
+                }
             }
 
             $newGiftChoices[] = $giftChoice;
@@ -245,6 +272,7 @@ class GiftStrategy
             $gift->getMode()->equals(GiftModeEnum::REQUIRE_TO_CHOOSE())
             || $gift->getMode()->equals(GiftModeEnum::REQUIRE_TO_CHOOSE_FROM_PRODUCT_CAT())
         );
+        $freeCartItemChoices->setRuleId($this->rule->getId());
 
         return $freeCartItemChoices;
     }
@@ -360,6 +388,38 @@ class GiftStrategy
     }
 
     /**
+     * @param float $initialPrice
+     * @return float
+     */
+    protected function calculateGiftPrice($initialPrice)
+    {
+        return self::calculateGiftPriceForRule($this->rule, $initialPrice);
+    }
+
+    /**
+     * @param Rule $rule
+     * @param float $initialPrice
+     * @return float
+     */
+    public static function calculateGiftPriceForRule($rule, $initialPrice)
+    {
+        if (!$rule || !method_exists($rule, 'getItemGiftsDiscount')) {
+            return floatval(0);
+        }
+
+        $discount = $rule->getItemGiftsDiscount();
+
+        if (!($discount instanceof Discount)) {
+            return floatval(0);
+        }
+
+        /** @var PriceCalculator $priceCalculator */
+        $priceCalculator = Factory::get("Core_RuleProcessor_PriceCalculator", $rule, $discount);
+
+        return floatval($priceCalculator->calculateSinglePrice(floatval($initialPrice)));
+    }
+
+    /**
      * @param Cart $cart
      * @param int $productId
      * @param float $qty
@@ -414,6 +474,7 @@ class GiftStrategy
         }
 
         $freeItem->setCartItemData($cartItemData);
+        $freeItem->setPrice($this->calculateGiftPrice($freeItem->getInitialPrice()));
 
         if ($isReplace && $replaceCode) {
             $freeItem->setReplaceWithCoupon($isReplace);
@@ -436,14 +497,16 @@ class GiftStrategy
         $cart,
         $freeCartItemChoices,
         $giftedCount = 0.0,
-        &$maxAmountForGiftsLeft = null
+        &$maxAmountForGiftsLeft = null,
+        $maxAmountForGift = null
     ) {
         $readyList = $this->freeItemChoicesSuitability->getProductsSuitableToGift(
             $freeCartItemChoices,
             $this->ruleUsedStock,
             $giftedCount,
             $cart,
-            $maxAmountForGiftsLeft
+            $maxAmountForGiftsLeft,
+            $maxAmountForGift
         );
 
         if ( ! isset($freeCartItemsByHash[$hash])) {

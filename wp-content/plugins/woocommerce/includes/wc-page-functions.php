@@ -13,13 +13,18 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Replace a page title with the endpoint title.
  *
- * @param  string $title Post title.
+ * @param  string $title   Post title.
+ * @param  int    $post_id Optional. The post ID the title belongs to. Passed by the `the_title` filter. Defaults to 0 for backwards compatibility with callers that pass only the title, in which case the queried-object check is skipped (matching the original single-argument behaviour).
  * @return string
  */
-function wc_page_endpoint_title( $title ) {
+function wc_page_endpoint_title( $title, $post_id = 0 ) {
 	global $wp_query;
 
-	if ( ! is_null( $wp_query ) && ! is_admin() && is_main_query() && in_the_loop() && is_page() && is_wc_endpoint_url() ) {
+	// In block themes the whole template (header, footer, content) renders inside the main
+	// loop, so `the_title` fires for any post title rendered on the page (e.g. a product in a
+	// server-rendered mini-cart) - not just the page's own heading. Only replace the title of
+	// the queried page so an earlier title doesn't consume this one-shot filter.
+	if ( ! is_null( $wp_query ) && ! is_admin() && is_main_query() && in_the_loop() && is_page() && is_wc_endpoint_url() && ( ! $post_id || get_queried_object_id() === $post_id ) ) {
 		$endpoint       = WC()->query->get_current_endpoint();
 		$action         = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
 		$endpoint_title = WC()->query->get_endpoint_title( $endpoint, $action );
@@ -31,7 +36,37 @@ function wc_page_endpoint_title( $title ) {
 	return $title;
 }
 
-add_filter( 'the_title', 'wc_page_endpoint_title' );
+add_filter( 'the_title', 'wc_page_endpoint_title', 10, 2 );
+
+/**
+ * Replace the title part of the document title.
+ *
+ * @param array $title {
+ *     The document title parts.
+ *
+ *     @type string $title   Title of the viewed page.
+ *     @type string $page    Optional. Page number if paginated.
+ *     @type string $tagline Optional. Site description when on home page.
+ *     @type string $site    Optional. Site title when not on home page.
+ * }
+ * @return array
+ */
+function wc_page_endpoint_document_title_parts( $title ) {
+	global $wp_query;
+
+	if ( ! is_null( $wp_query ) && ! is_admin() && is_main_query() && is_page() && is_wc_endpoint_url() ) {
+		$endpoint       = WC()->query->get_current_endpoint();
+		$action         = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$endpoint_title = WC()->query->get_endpoint_title( $endpoint, $action );
+		$title['title'] = $endpoint_title ? $endpoint_title : $title['title'];
+
+		remove_filter( 'document_title_parts', 'wc_page_endpoint_document_title_parts' );
+	}
+
+	return $title;
+}
+
+add_filter( 'document_title_parts', 'wc_page_endpoint_document_title_parts' );
 
 /**
  * Retrieve page ids - used for myaccount, edit_address, shop, cart, checkout, pay, view_order, terms. returns -1 if no page is found.
@@ -119,26 +154,51 @@ function wc_get_endpoint_url( $endpoint, $value = '', $permalink = '' ) {
 }
 
 /**
- * Hide menu items conditionally.
+ * Get the tokenized Review Order URL for the given order.
+ *
+ * Top-level rewrite: returns `/review-order/{id}/?key={order_key}` on pretty
+ * permalinks and `/?review-order={id}&key={order_key}` on plain permalinks.
+ * The order key allows guest customers to reach the page without logging in.
+ *
+ * @since 10.8.0
+ * @param  WC_Order $order Order object.
+ * @return string
+ */
+function wc_get_review_order_url( $order ) {
+	if ( ! $order instanceof WC_Order ) {
+		return '';
+	}
+
+	return \Automattic\WooCommerce\Internal\OrderReviews\Endpoint::get_url( $order );
+}
+
+/**
+ * Hide or adjust menu items conditionally.
  *
  * @param array $items Navigation items.
  * @return array
  */
 function wc_nav_menu_items( $items ) {
-	if ( ! is_user_logged_in() ) {
-		$customer_logout = get_option( 'woocommerce_logout_endpoint', 'customer-logout' );
+	$logout_endpoint = get_option( 'woocommerce_logout_endpoint', 'customer-logout' );
 
-		if ( ! empty( $customer_logout ) && ! empty( $items ) && is_array( $items ) ) {
-			foreach ( $items as $key => $item ) {
-				if ( empty( $item->url ) ) {
-					continue;
-				}
-				$path  = wp_parse_url( $item->url, PHP_URL_PATH );
-				$query = wp_parse_url( $item->url, PHP_URL_QUERY );
+	if ( ! empty( $logout_endpoint ) && ! empty( $items ) && is_array( $items ) ) {
+		foreach ( $items as $key => $item ) {
+			if ( empty( $item->url ) ) {
+				continue;
+			}
 
-				if ( strstr( $path, $customer_logout ) || strstr( $query, $customer_logout ) ) {
-					unset( $items[ $key ] );
-				}
+			$path           = wp_parse_url( $item->url, PHP_URL_PATH ) ?? '';
+			$query          = wp_parse_url( $item->url, PHP_URL_QUERY ) ?? '';
+			$is_logout_link = strstr( $path, $logout_endpoint ) || strstr( $query, $logout_endpoint );
+
+			if ( ! $is_logout_link ) {
+				continue;
+			}
+
+			if ( is_user_logged_in() ) {
+				$items[ $key ]->url = wp_nonce_url( $item->url, 'customer-logout' );
+			} else {
+				unset( $items[ $key ] );
 			}
 		}
 	}
@@ -147,6 +207,40 @@ function wc_nav_menu_items( $items ) {
 }
 add_filter( 'wp_nav_menu_objects', 'wc_nav_menu_items', 10 );
 
+/**
+ * Hide menu items in navigation blocks conditionally.
+ *
+ * Does the same thing as wc_nav_menu_items but for block themes.
+ *
+ * @since 9.3.0
+ * @param \WP_Block_list $inner_blocks Inner blocks.
+ * @return \WP_Block_list
+ */
+function wc_nav_menu_inner_blocks( $inner_blocks ) {
+	$logout_endpoint = get_option( 'woocommerce_logout_endpoint', 'customer-logout' );
+
+	if ( ! empty( $logout_endpoint ) && $inner_blocks ) {
+		foreach ( $inner_blocks as $inner_block_key => $inner_block ) {
+			$url            = $inner_block->parsed_block['attrs']['url'] ?? '';
+			$path           = wp_parse_url( $url, PHP_URL_PATH ) ?? '';
+			$query          = wp_parse_url( $url, PHP_URL_QUERY ) ?? '';
+			$is_logout_link = strstr( $path, $logout_endpoint ) || strstr( $query, $logout_endpoint );
+
+			if ( ! $is_logout_link ) {
+				continue;
+			}
+
+			if ( is_user_logged_in() ) {
+				$inner_block->parsed_block['attrs']['url'] = wp_nonce_url( $inner_block->parsed_block['attrs']['url'], 'customer-logout' );
+			} else {
+				unset( $inner_blocks[ $inner_block_key ] );
+			}
+		}
+	}
+
+	return $inner_blocks;
+}
+add_filter( 'block_core_navigation_render_inner_blocks', 'wc_nav_menu_inner_blocks' );
 
 /**
  * Fix active class in nav for shop page.
@@ -168,7 +262,7 @@ function wc_nav_menu_item_classes( $menu_items ) {
 			$menu_id = (int) $menu_item->object_id;
 
 			// Unset active class for blog page.
-			if ( $page_for_posts === $menu_id ) {
+			if ( $page_for_posts === $menu_id && isset( $menu_item->object ) && 'page' === $menu_item->object ) {
 				$menu_items[ $key ]->current = false;
 
 				if ( in_array( 'current_page_parent', $classes, true ) ) {

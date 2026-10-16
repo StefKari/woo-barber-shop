@@ -8,9 +8,14 @@
  * @version 2.1.0
  */
 
+use Automattic\WooCommerce\Enums\WeightUnit;
+use Automattic\WooCommerce\Internal\Settings\OptionSanitizer;
+use Automattic\WooCommerce\Utilities\I18nUtil;
 use Automattic\WooCommerce\Utilities\NumberUtil;
 
 defined( 'ABSPATH' ) || exit;
+
+// Once WooCommerce requires PHP 7.4, the "$x = $x ?? ''" constructs can be replaced with "$x ??= ''".
 
 /**
  * Converts a string (e.g. 'yes' or 'no') to a bool.
@@ -20,6 +25,7 @@ defined( 'ABSPATH' ) || exit;
  * @return bool
  */
 function wc_string_to_bool( $string ) {
+	$string = $string ?? '';
 	return is_bool( $string ) ? $string : ( 'yes' === strtolower( $string ) || 1 === $string || 'true' === strtolower( $string ) || '1' === $string );
 }
 
@@ -46,6 +52,7 @@ function wc_bool_to_string( $bool ) {
  * @return array
  */
 function wc_string_to_array( $string, $delimiter = ',' ) {
+	$string = $string ?? '';
 	return is_array( $string ) ? $string : array_filter( explode( $delimiter, $string ) );
 }
 
@@ -57,7 +64,7 @@ function wc_string_to_array( $string, $delimiter = ',' ) {
  * @return string
  */
 function wc_sanitize_taxonomy_name( $taxonomy ) {
-	return apply_filters( 'sanitize_taxonomy_name', urldecode( sanitize_title( urldecode( $taxonomy ) ) ), $taxonomy );
+	return apply_filters( 'sanitize_taxonomy_name', urldecode( sanitize_title( urldecode( $taxonomy ?? '' ) ) ), $taxonomy );
 }
 
 /**
@@ -72,7 +79,7 @@ function wc_sanitize_taxonomy_name( $taxonomy ) {
 function wc_sanitize_permalink( $value ) {
 	global $wpdb;
 
-	$value = $wpdb->strip_invalid_text_for_column( $wpdb->options, 'option_value', $value );
+	$value = $wpdb->strip_invalid_text_for_column( $wpdb->options, 'option_value', $value ?? '' );
 
 	if ( is_wp_error( $value ) ) {
 		$value = '';
@@ -105,10 +112,10 @@ function wc_get_filename_from_url( $file_url ) {
  *
  * @param int|float $dimension    Dimension.
  * @param string    $to_unit      Unit to convert to.
- *                                Options: 'in', 'm', 'cm', 'm'.
+ *                                Options: 'in', 'mm', 'cm', 'm'.
  * @param string    $from_unit    Unit to convert from.
  *                                Defaults to ''.
- *                                Options: 'in', 'm', 'cm', 'm'.
+ *                                Options: 'in', 'mm', 'cm', 'm'.
  * @return float
  */
 function wc_get_dimension( $dimension, $to_unit, $from_unit = '' ) {
@@ -181,26 +188,26 @@ function wc_get_weight( $weight, $to_unit, $from_unit = '' ) {
 	// Unify all units to kg first.
 	if ( $from_unit !== $to_unit ) {
 		switch ( $from_unit ) {
-			case 'g':
+			case WeightUnit::GRAM:
 				$weight *= 0.001;
 				break;
-			case 'lbs':
+			case WeightUnit::POUND:
 				$weight *= 0.453592;
 				break;
-			case 'oz':
+			case WeightUnit::OUNCE:
 				$weight *= 0.0283495;
 				break;
 		}
 
 		// Output desired unit.
 		switch ( $to_unit ) {
-			case 'g':
+			case WeightUnit::GRAM:
 				$weight *= 1000;
 				break;
-			case 'lbs':
+			case WeightUnit::POUND:
 				$weight *= 2.20462;
 				break;
-			case 'oz':
+			case WeightUnit::OUNCE:
 				$weight *= 35.274;
 				break;
 		}
@@ -216,7 +223,7 @@ function wc_get_weight( $weight, $to_unit, $from_unit = '' ) {
  * @return string
  */
 function wc_trim_zeros( $price ) {
-	return preg_replace( '/' . preg_quote( wc_get_price_decimal_separator(), '/' ) . '0++$/', '', $price );
+	return preg_replace( '/' . preg_quote( wc_get_price_decimal_separator(), '/' ) . '0++$/', '', $price ?? '' );
 }
 
 /**
@@ -227,15 +234,8 @@ function wc_trim_zeros( $price ) {
  * @return float
  */
 function wc_round_tax_total( $value, $precision = null ) {
-	$precision = is_null( $precision ) ? wc_get_price_decimals() : intval( $precision );
-
-	if ( version_compare( PHP_VERSION, '5.3.0', '>=' ) ) {
-		$rounded_tax = NumberUtil::round( $value, $precision, wc_get_tax_rounding_mode() ); // phpcs:ignore PHPCompatibility.FunctionUse.NewFunctionParameters.round_modeFound
-	} elseif ( 2 === wc_get_tax_rounding_mode() ) {
-		$rounded_tax = wc_legacy_round_half_down( $value, $precision );
-	} else {
-		$rounded_tax = NumberUtil::round( $value, $precision );
-	}
+	$precision   = is_null( $precision ) ? wc_get_price_decimals() : intval( $precision );
+	$rounded_tax = NumberUtil::round( $value, $precision, wc_get_tax_rounding_mode() ); // phpcs:ignore PHPCompatibility.FunctionUse.NewFunctionParameters.round_modeFound
 
 	return apply_filters( 'wc_round_tax_total', $rounded_tax, $value, $precision, WC_TAX_ROUNDING_MODE );
 }
@@ -249,7 +249,7 @@ function wc_round_tax_total( $value, $precision = null ) {
  * @return float
  */
 function wc_legacy_round_half_down( $value, $precision ) {
-	$value = wc_float_to_string( $value );
+	$value = wc_float_to_string( $value ) ?? '';
 
 	if ( false !== strstr( $value, '.' ) ) {
 		$value = explode( '.', $value );
@@ -278,7 +278,7 @@ function wc_format_refund_total( $amount ) {
 /**
  * Format decimal numbers ready for DB storage.
  *
- * Sanitize, remove decimals, and optionally round + trim off zeros.
+ * Sanitize, optionally remove decimals, and optionally round + trim off zeros.
  *
  * This function does not remove thousands - this should be done before passing a value to the function.
  *
@@ -288,6 +288,12 @@ function wc_format_refund_total( $amount ) {
  * @return string
  */
 function wc_format_decimal( $number, $dp = false, $trim_zeros = false ) {
+	$number = $number ?? '';
+
+	if ( '' === $number ) {
+		return '';
+	}
+
 	$locale   = localeconv();
 	$decimals = array( wc_get_price_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point'] );
 
@@ -345,14 +351,16 @@ function wc_format_localized_price( $value ) {
 }
 
 /**
- * Format a decimal with PHP Locale settings.
+ * Format a decimal with the decimal separator for prices or PHP Locale settings.
  *
  * @param  string $value Decimal to localize.
  * @return string
  */
 function wc_format_localized_decimal( $value ) {
-	$locale = localeconv();
-	return apply_filters( 'woocommerce_format_localized_decimal', str_replace( '.', $locale['decimal_point'], strval( $value ) ), $value );
+	$locale        = localeconv();
+	$decimal_point = isset( $locale['decimal_point'] ) ? $locale['decimal_point'] : '.';
+	$decimal       = ( ! empty( wc_get_price_decimal_separator() ) ) ? wc_get_price_decimal_separator() : $decimal_point;
+	return apply_filters( 'woocommerce_format_localized_decimal', str_replace( '.', $decimal, strval( $value ) ), $value );
 }
 
 /**
@@ -369,15 +377,24 @@ function wc_format_coupon_code( $value ) {
 /**
  * Sanitize a coupon code.
  *
- * Uses sanitize_post_field since coupon codes are stored as
- * post_titles - the sanitization and escaping must match.
+ * Uses sanitize_post_field since coupon codes are stored as post_titles - the sanitization and escaping must match.
+ *
+ * Due to the unfiltered_html capability that some (admin) users have, we need to account for slashes.
+ *
+ * The html_entity_decode() call handles coupon codes that contain special characters like ampersands (&), quotes ("),
+ * and other HTML entities. Without this decoding step, coupon codes with special characters would fail to match
+ * during application, causing legitimate coupons to be rejected.
+ *
+ * @see WC_Cart_Test::test_coupon_codes_with_special_characters
  *
  * @since  3.6.0
+ * @since  10.0.0 Decode HTML entities here instead of via woocommerce_coupon_code filter.
  * @param  string $value Coupon code to format.
  * @return string
  */
 function wc_sanitize_coupon_code( $value ) {
-	return wp_filter_kses( sanitize_post_field( 'post_title', $value, 0, 'db' ) );
+	$value = wp_kses( sanitize_post_field( 'post_title', html_entity_decode( $value ?? '', ENT_COMPAT, get_bloginfo( 'charset' ) ), 0, 'db' ), 'entities' );
+	return current_user_can( 'unfiltered_html' ) ? $value : stripslashes( $value );
 }
 
 /**
@@ -417,7 +434,7 @@ function wc_check_invalid_utf8( $var ) {
  * @return string
  */
 function wc_sanitize_textarea( $var ) {
-	return implode( "\n", array_map( 'wc_clean', explode( "\n", $var ) ) );
+	return implode( "\n", array_map( 'wc_clean', explode( "\n", $var ?? '' ) ) );
 }
 
 /**
@@ -430,7 +447,7 @@ function wc_sanitize_textarea( $var ) {
 function wc_sanitize_tooltip( $var ) {
 	return htmlspecialchars(
 		wp_kses(
-			html_entity_decode( $var ),
+			html_entity_decode( $var ?? '' ),
 			array(
 				'br'     => array(),
 				'em'     => array(),
@@ -474,7 +491,24 @@ function wc_array_overlay( $a1, $a2 ) {
  * @return int|float
  */
 function wc_stock_amount( $amount ) {
-	return apply_filters( 'woocommerce_stock_amount', $amount );
+	/**
+	 * Filter the stock amount. If an invalid value is returned by hooks, falls back to intval( $amount ).
+	 *
+	 * @since  2.3
+	 * @param int|float $amount Stock amount.
+	 * @return int|float
+	 */
+	return NumberUtil::normalize( apply_filters( 'woocommerce_stock_amount', $amount ), intval( $amount ) );
+}
+
+/**
+ * Check if the stock amount is an integer.
+ *
+ * @since 10.1.0
+ * @return bool
+ */
+function wc_is_stock_amount_integer() {
+	return wc_stock_amount( 1 ) === 1;
 }
 
 /**
@@ -555,6 +589,8 @@ function wc_get_price_decimals() {
  *                                      Defaults the result of wc_get_price_decimals().
  *     @type string $price_format       Price format depending on the currency position.
  *                                      Defaults the result of get_woocommerce_price_format().
+ *     @type bool   $in_span            Whether to enclose the formatted price in an HTML <span> element.
+ *                                      Defaults to true.
  * }
  * @return string
  */
@@ -570,6 +606,8 @@ function wc_price( $price, $args = array() ) {
 				'thousand_separator' => wc_get_price_thousand_separator(),
 				'decimals'           => wc_get_price_decimals(),
 				'price_format'       => get_woocommerce_price_format(),
+				'in_span'            => true,
+				'aria-hidden'        => false,
 			)
 		)
 	);
@@ -605,9 +643,16 @@ function wc_price( $price, $args = array() ) {
 	if ( apply_filters( 'woocommerce_price_trim_zeros', false ) && $args['decimals'] > 0 ) {
 		$price = wc_trim_zeros( $price );
 	}
-	
-	$formatted_price = ( $negative ? '-' : '' ) . sprintf( $args['price_format'], '<span class="woocommerce-Price-currencySymbol">' . get_woocommerce_currency_symbol( $args['currency'] ) . '</span>', $price );
-	$return          = '<span class="woocommerce-Price-amount amount"><bdi>' . $formatted_price .'</bdi></span>';
+
+	if ( $args['in_span'] ) {
+		// dir="auto" isolates the symbol so RTL-script symbols (e.g. Lebanese Pound) can't flip the visual order of the price or bleed into surrounding text; it must stay "auto" (not "ltr") so those symbols' glyphs keep rendering in their native right-to-left order.
+		$formatted_price = ( $negative ? '-' : '' ) . sprintf( $args['price_format'], '<span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">' . get_woocommerce_currency_symbol( $args['currency'] ) . '</span>', $price );
+		$aria_hidden     = $args['aria-hidden'] ? ' aria-hidden="true"' : '';
+		$return          = '<span class="woocommerce-Price-amount amount"' . $aria_hidden . '><bdi>' . $formatted_price . '</bdi></span>';
+	} else {
+		$formatted_price = ( $negative ? '-' : '' ) . sprintf( $args['price_format'], get_woocommerce_currency_symbol( $args['currency'] ), $price );
+		$return          = $formatted_price;
+	}
 
 	if ( $args['ex_tax_label'] && wc_tax_enabled() ) {
 		$return .= ' <small class="woocommerce-Price-taxLabel tax_label">' . WC()->countries->ex_tax_or_vat() . '</small>';
@@ -634,6 +679,8 @@ function wc_price( $price, $args = array() ) {
  * @return int
  */
 function wc_let_to_num( $size ) {
+	$size = $size ?? '';
+
 	$l   = substr( $size, -1 );
 	$ret = (int) substr( $size, 0, -1 );
 	switch ( strtoupper( $l ) ) {
@@ -695,6 +742,8 @@ function wc_time_format() {
  * @return int
  */
 function wc_string_to_timestamp( $time_string, $from_timestamp = null ) {
+	$time_string = $time_string ?? '';
+
 	$original_timezone = date_default_timezone_get();
 
 	// @codingStandardsIgnoreStart
@@ -720,6 +769,8 @@ function wc_string_to_timestamp( $time_string, $from_timestamp = null ) {
  * @return WC_DateTime
  */
 function wc_string_to_datetime( $time_string ) {
+	$time_string = $time_string ?? '';
+
 	// Strings are defined in local WP timezone. Convert to UTC.
 	if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $time_string, $date_bits ) ) {
 		$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
@@ -827,7 +878,7 @@ if ( ! function_exists( 'wc_rgb_from_hex' ) ) {
 	 * @return array
 	 */
 	function wc_rgb_from_hex( $color ) {
-		$color = str_replace( '#', '', $color );
+		$color = str_replace( '#', '', $color ?? '000' );
 		// Convert shorthand colors to full format, e.g. "FFF" -> "FFFFFF".
 		$color = preg_replace( '~^(.)(.)(.)$~', '$1$1$2$2$3$3', $color );
 
@@ -910,7 +961,7 @@ if ( ! function_exists( 'wc_hex_is_light' ) ) {
 	 * @return bool  True if a light color.
 	 */
 	function wc_hex_is_light( $color ) {
-		$hex = str_replace( '#', '', $color );
+		$hex = str_replace( '#', '', $color ?? '' );
 
 		$c_r = hexdec( substr( $hex, 0, 2 ) );
 		$c_g = hexdec( substr( $hex, 2, 2 ) );
@@ -948,7 +999,7 @@ if ( ! function_exists( 'wc_format_hex' ) ) {
 	 * @return string|null
 	 */
 	function wc_format_hex( $hex ) {
-		$hex = trim( str_replace( '#', '', $hex ) );
+		$hex = trim( str_replace( '#', '', $hex ?? '' ) );
 
 		if ( strlen( $hex ) === 3 ) {
 			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
@@ -966,9 +1017,12 @@ if ( ! function_exists( 'wc_format_hex' ) ) {
  * @return string
  */
 function wc_format_postcode( $postcode, $country ) {
-	$postcode = wc_normalize_postcode( $postcode );
+	$postcode = wc_normalize_postcode( $postcode ?? '' );
 
 	switch ( $country ) {
+		case 'SE':
+			$postcode = substr_replace( $postcode, ' ', -2, 0 );
+			break;
 		case 'CA':
 		case 'GB':
 			$postcode = substr_replace( $postcode, ' ', -3, 0 );
@@ -988,10 +1042,22 @@ function wc_format_postcode( $postcode, $country ) {
 			break;
 		case 'PR':
 		case 'US':
+		case 'MN':
 			$postcode = rtrim( substr_replace( $postcode, '-', 5, 0 ), '-' );
 			break;
 		case 'NL':
 			$postcode = substr_replace( $postcode, ' ', 4, 0 );
+			break;
+		case 'LV':
+			$postcode = preg_replace( '/^(LV)?-?(\d+)$/', 'LV-${2}', $postcode );
+			break;
+		case 'CZ':
+		case 'SK':
+			$postcode = preg_replace( "/^({$country})-?(\d+)$/", '${1}-${2}', $postcode );
+			$postcode = substr_replace( $postcode, ' ', -2, 0 );
+			break;
+		case 'DK':
+			$postcode = preg_replace( '/^(DK)(.+)$/', '${1}-${2}', $postcode );
 			break;
 	}
 
@@ -1008,7 +1074,7 @@ function wc_format_postcode( $postcode, $country ) {
  * @return string
  */
 function wc_normalize_postcode( $postcode ) {
-	return preg_replace( '/[\s\-]/', '', trim( wc_strtoupper( $postcode ) ) );
+	return preg_replace( '/[\s\-]/', '', trim( wc_strtoupper( $postcode ?? '' ) ) );
 }
 
 /**
@@ -1018,10 +1084,23 @@ function wc_normalize_postcode( $postcode ) {
  * @return string
  */
 function wc_format_phone_number( $phone ) {
-	if ( ! WC_Validation::is_phone( $phone ) ) {
-		return '';
-	}
-	return preg_replace( '/[^0-9\+\-\(\)\s]/', '-', preg_replace( '/[\x00-\x1F\x7F-\xFF]/', '', $phone ) );
+	$original = $phone ?? '';
+
+	$is_valid  = WC_Validation::is_phone_format( $original );
+	$formatted = $is_valid
+		? (string) preg_replace( '/[^0-9\+\-\(\)\s]/', '-', preg_replace( '/[\x00-\x1F\x7F-\xFF]/', '', $original ) )
+		: '';
+
+	/**
+	 * Filters the formatted phone number.
+	 *
+	 * @since 11.0.0
+	 *
+	 * @param string $formatted The formatted phone number, or an empty string if $original isn't a valid phone number.
+	 * @param string $original  The phone number passed to the function.
+	 * @param bool   $is_valid  Whether $original passed the default phone number validation.
+	 */
+	return apply_filters( 'woocommerce_format_phone_number', $formatted, $original, $is_valid );
 }
 
 /**
@@ -1033,7 +1112,7 @@ function wc_format_phone_number( $phone ) {
  * @return string
  */
 function wc_sanitize_phone_number( $phone ) {
-	return preg_replace( '/[^\d+]/', '', $phone );
+	return preg_replace( '/[^\d+]/', '', $phone ?? '' );
 }
 
 /**
@@ -1044,6 +1123,7 @@ function wc_sanitize_phone_number( $phone ) {
  * @return string
  */
 function wc_strtoupper( $string ) {
+	$string = $string ?? '';
 	return function_exists( 'mb_strtoupper' ) ? mb_strtoupper( $string ) : strtoupper( $string );
 }
 
@@ -1056,6 +1136,7 @@ function wc_strtoupper( $string ) {
  * @return string
  */
 function wc_strtolower( $string ) {
+	$string = $string ?? '';
 	return function_exists( 'mb_strtolower' ) ? mb_strtolower( $string ) : strtolower( $string );
 }
 
@@ -1070,6 +1151,8 @@ function wc_strtolower( $string ) {
  * @return string
  */
 function wc_trim_string( $string, $chars = 200, $suffix = '...' ) {
+	$string = $string ?? '';
+
 	if ( strlen( $string ) > $chars ) {
 		if ( function_exists( 'mb_substr' ) ) {
 			$string = mb_substr( $string, 0, ( $chars - mb_strlen( $suffix ) ) ) . $suffix;
@@ -1088,6 +1171,7 @@ function wc_trim_string( $string, $chars = 200, $suffix = '...' ) {
  * @return string
  */
 function wc_format_content( $raw_string ) {
+	$raw_string = $raw_string ?? '';
 	return apply_filters( 'woocommerce_format_content', apply_filters( 'woocommerce_short_description', $raw_string ), $raw_string );
 }
 
@@ -1119,16 +1203,15 @@ function wc_format_product_short_description( $content ) {
 }
 
 /**
- * Formats curency symbols when saved in settings.
+ * Validates and sanitizes currency separators when saved in settings.
  *
- * @codeCoverageIgnore
- * @param  string $value     Option value.
- * @param  array  $option    Option name.
- * @param  string $raw_value Raw value.
+ * @param  mixed $value     Option value passed through earlier filters.
+ * @param  array $option    Option data including 'id'.
+ * @param  mixed $raw_value Raw request value, null when the field was not submitted.
  * @return string
  */
 function wc_format_option_price_separators( $value, $option, $raw_value ) {
-	return wp_kses_post( $raw_value );
+	return wc_get_container()->get( OptionSanitizer::class )->sanitize_price_separator_setting( $option['id'], $raw_value );
 }
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_price_decimal_sep', 'wc_format_option_price_separators', 10, 3 );
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_price_thousand_sep', 'wc_format_option_price_separators', 10, 3 );
@@ -1159,11 +1242,28 @@ add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_price_num_de
 function wc_format_option_hold_stock_minutes( $value, $option, $raw_value ) {
 	$value = ! empty( $raw_value ) ? absint( $raw_value ) : ''; // Allow > 0 or set to ''.
 
-	wp_clear_scheduled_hook( 'woocommerce_cancel_unpaid_orders' );
+	// Clear existing scheduled events.
+	if ( function_exists( 'as_unschedule_all_actions' ) ) {
+		as_unschedule_all_actions( 'woocommerce_cancel_unpaid_orders' );
+	} else {
+		wp_clear_scheduled_hook( 'woocommerce_cancel_unpaid_orders' );
+	}
 
 	if ( '' !== $value ) {
+		/**
+		 * Filters the interval at which to cancel unpaid orders in minutes.
+		 *
+		 * @since 5.1.0
+		 *
+		 * @param int $cancel_unpaid_interval The interval at which to cancel unpaid orders in minutes.
+		 */
 		$cancel_unpaid_interval = apply_filters( 'woocommerce_cancel_unpaid_orders_interval_minutes', absint( $value ) );
-		wp_schedule_single_event( time() + ( absint( $cancel_unpaid_interval ) * 60 ), 'woocommerce_cancel_unpaid_orders' );
+
+		if ( function_exists( 'as_schedule_single_action' ) ) {
+			as_schedule_single_action( time() + ( absint( $cancel_unpaid_interval ) * 60 ), 'woocommerce_cancel_unpaid_orders', array(), 'woocommerce', true );
+		} else {
+			wp_schedule_single_event( time() + ( absint( $cancel_unpaid_interval ) * 60 ), 'woocommerce_cancel_unpaid_orders' );
+		}
 	}
 
 	return $value;
@@ -1178,7 +1278,7 @@ add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_hold_stock_m
  * @return string
  */
 function wc_sanitize_term_text_based( $term ) {
-	return trim( wp_strip_all_tags( wp_unslash( $term ) ) );
+	return trim( wp_strip_all_tags( wp_unslash( $term ?? '' ) ) );
 }
 
 if ( ! function_exists( 'wc_make_numeric_postcode' ) ) {
@@ -1193,13 +1293,13 @@ if ( ! function_exists( 'wc_make_numeric_postcode' ) ) {
 	 * @return string
 	 */
 	function wc_make_numeric_postcode( $postcode ) {
-		$postcode           = str_replace( array( ' ', '-' ), '', $postcode );
+		$postcode           = str_replace( array( ' ', '-' ), '', $postcode ?? '' );
 		$postcode_length    = strlen( $postcode );
 		$letters_to_numbers = array_merge( array( 0 ), range( 'A', 'Z' ) );
 		$letters_to_numbers = array_flip( $letters_to_numbers );
 		$numeric_postcode   = '';
 
-		for ( $i = 0; $i < $postcode_length; $i ++ ) {
+		for ( $i = 0; $i < $postcode_length; $i++ ) {
 			if ( is_numeric( $postcode[ $i ] ) ) {
 				$numeric_postcode .= str_pad( $postcode[ $i ], 2, '0', STR_PAD_LEFT );
 			} elseif ( isset( $letters_to_numbers[ $postcode[ $i ] ] ) ) {
@@ -1265,7 +1365,28 @@ function wc_format_stock_quantity_for_display( $stock_quantity, $product ) {
  * @return string
  */
 function wc_format_sale_price( $regular_price, $sale_price ) {
-	$price = '<del>' . ( is_numeric( $regular_price ) ? wc_price( $regular_price ) : $regular_price ) . '</del> <ins>' . ( is_numeric( $sale_price ) ? wc_price( $sale_price ) : $sale_price ) . '</ins>';
+	// Format the prices.
+	$formatted_regular_price = is_numeric( $regular_price ) ? wc_price( $regular_price ) : $regular_price;
+	$formatted_sale_price    = is_numeric( $sale_price ) ? wc_price( $sale_price ) : $sale_price;
+
+	// Strikethrough pricing.
+	$price = '<del aria-hidden="true">' . $formatted_regular_price . '</del> ';
+
+	// For accessibility (a11y) we'll also display that information to screen readers.
+	$price .= '<span class="screen-reader-text">';
+	// translators: %s is a product's regular price.
+	$price .= esc_html( sprintf( __( 'Original price was: %s.', 'woocommerce' ), wp_strip_all_tags( $formatted_regular_price ) ) );
+	$price .= '</span>';
+
+	// Add the sale price.
+	$price .= '<ins aria-hidden="true">' . $formatted_sale_price . '</ins>';
+
+	// For accessibility (a11y) we'll also display that information to screen readers.
+	$price .= '<span class="screen-reader-text">';
+	// translators: %s is a product's current (sale) price.
+	$price .= esc_html( sprintf( __( 'Current price is: %s.', 'woocommerce' ), wp_strip_all_tags( $formatted_sale_price ) ) );
+	$price .= '</span>';
+
 	return apply_filters( 'woocommerce_format_sale_price', $price, $regular_price, $sale_price );
 }
 
@@ -1278,7 +1399,15 @@ function wc_format_sale_price( $regular_price, $sale_price ) {
  */
 function wc_format_price_range( $from, $to ) {
 	/* translators: 1: price from 2: price to */
-	$price = sprintf( _x( '%1$s &ndash; %2$s', 'Price range: from-to', 'woocommerce' ), is_numeric( $from ) ? wc_price( $from ) : $from, is_numeric( $to ) ? wc_price( $to ) : $to );
+	$price  = sprintf( _x( '%1$s <span aria-hidden="true">&ndash;</span> %2$s', 'Price range: from-to', 'woocommerce' ), is_numeric( $from ) ? wc_price( $from, array( 'aria-hidden' => true ) ) : $from, is_numeric( $to ) ? wc_price( $to, array( 'aria-hidden' => true ) ) : $to );
+	$price .= '<span class="screen-reader-text">';
+	$price .= sprintf(
+		/* translators: 1: price from 2: price to */
+		__( 'Price range: %1$s through %2$s', 'woocommerce' ),
+		is_numeric( $from ) ? wp_strip_all_tags( wc_price( $from ) ) : wp_strip_all_tags( $from ),
+		is_numeric( $to ) ? wp_strip_all_tags( wc_price( $to ) ) : wp_strip_all_tags( $to )
+	);
+	$price .= '</span>';
 	return apply_filters( 'woocommerce_format_price_range', $price, $from, $to );
 }
 
@@ -1293,7 +1422,14 @@ function wc_format_weight( $weight ) {
 	$weight_string = wc_format_localized_decimal( $weight );
 
 	if ( ! empty( $weight_string ) ) {
-		$weight_string .= ' ' . get_option( 'woocommerce_weight_unit' );
+		$weight_label = I18nUtil::get_weight_unit_label( get_option( 'woocommerce_weight_unit' ) );
+
+		$weight_string = sprintf(
+			// translators: 1. A formatted number; 2. A label for a weight unit of measure. E.g. 2.72 kg.
+			_x( '%1$s %2$s', 'formatted weight', 'woocommerce' ),
+			$weight_string,
+			$weight_label
+		);
 	} else {
 		$weight_string = __( 'N/A', 'woocommerce' );
 	}
@@ -1312,7 +1448,14 @@ function wc_format_dimensions( $dimensions ) {
 	$dimension_string = implode( ' &times; ', array_filter( array_map( 'wc_format_localized_decimal', $dimensions ) ) );
 
 	if ( ! empty( $dimension_string ) ) {
-		$dimension_string .= ' ' . get_option( 'woocommerce_dimension_unit' );
+		$dimension_label = I18nUtil::get_dimensions_unit_label( get_option( 'woocommerce_dimension_unit' ) );
+
+		$dimension_string = sprintf(
+			// translators: 1. A formatted number; 2. A label for a dimensions unit of measure. E.g. 3.14 cm.
+			_x( '%1$s %2$s', 'formatted dimensions', 'woocommerce' ),
+			$dimension_string,
+			$dimension_label
+		);
 	} else {
 		$dimension_string = __( 'N/A', 'woocommerce' );
 	}
@@ -1349,7 +1492,7 @@ function wc_format_datetime( $date, $format = '' ) {
 function wc_do_oembeds( $content ) {
 	global $wp_embed;
 
-	$content = $wp_embed->autoembed( $content );
+	$content = $wp_embed->autoembed( $content ?? '' );
 
 	return $content;
 }
@@ -1499,8 +1642,72 @@ function wc_parse_relative_date_option( $raw_value ) {
  * @return string
  */
 function wc_sanitize_endpoint_slug( $raw_value ) {
-	return sanitize_title( $raw_value );
+	return sanitize_title( $raw_value ?? '' );
 }
+
+/**
+ * Removes useless non-displayable and problematic Unicode characters from a string.
+ *
+ * Covers the characters that are invisible to the reader but still count as content to
+ * anything matching on the string: soft hyphen, zero-width spaces and joiners, bidirectional
+ * marks, isolates and overrides, variation selectors, Hangul and Mongolian fillers, tag
+ * characters, and the byte order mark. Interlinear annotation marks (`U+FFF9`–`U+FFFB`) are
+ * removed too, though they are not invisible.
+ *
+ * Copy-pasting from PDFs, word processors and web pages routinely carries these along, and a
+ * reader has no way to see why the value they pasted is being rejected.
+ *
+ * Non-breaking spaces (`U+00A0`, `U+202F`) are **not** removed. They are visible spaces, so
+ * deleting them would run words together rather than restore the intended text.
+ *
+ * @param string $raw_value The input string to sanitize.
+ *
+ * @return string The sanitized string without problematic characters.
+ * @since 9.9.0
+ * @since 11.2.0 Removes every Unicode default-ignorable code point, including the word joiner
+ *               (`U+2060`) and the variation selectors earlier versions kept.
+ */
+function wc_remove_non_displayable_chars( string $raw_value ): string {
+	// Ranges rather than \p{Default_Ignorable_Code_Point}: that property needs PCRE2 10.43,
+	// newer than the build many supported installs link against. An unsupported property
+	// makes preg_replace return null instead of failing loudly.
+	$pattern = '/['
+		. '\x{00AD}\x{034F}\x{061C}\x{115F}\x{1160}\x{17B4}\x{17B5}\x{180B}-\x{180F}'
+		. '\x{200B}-\x{200F}\x{202A}-\x{202E}\x{2060}-\x{206F}\x{3164}'
+		. '\x{FE00}-\x{FE0F}\x{FEFF}\x{FFA0}\x{FFF0}-\x{FFFB}'
+		. '\x{1BCA0}-\x{1BCA3}\x{1D173}-\x{1D17A}\x{E0000}-\x{E0FFF}'
+		. ']/u';
+
+	$result = preg_replace( $pattern, '', $raw_value );
+
+	if ( null !== $result ) {
+		return $result;
+	}
+
+	// Malformed UTF-8 makes a /u pattern bail. Fall back to a byte-wise replacement over the
+	// soft hyphen, zero-width characters, bidirectional marks, BOM and interlinear annotation
+	// marks, so such input is cleaned no less than it was before this pattern existed.
+	$fallback_chars = array(
+		"\u{00AD}",
+		"\u{200B}",
+		"\u{200C}",
+		"\u{200D}",
+		"\u{200E}",
+		"\u{200F}",
+		"\u{202A}",
+		"\u{202B}",
+		"\u{202C}",
+		"\u{202D}",
+		"\u{202E}",
+		"\u{FEFF}",
+		"\u{FFF9}",
+		"\u{FFFA}",
+		"\u{FFFB}",
+	);
+
+	return str_replace( $fallback_chars, '', $raw_value );
+}
+
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_checkout_pay_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_checkout_order_received_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_add_payment_method_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
@@ -1508,6 +1715,8 @@ add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_de
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_set_default_payment_method_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_orders_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_view_order_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
+add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_order_withdrawal_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
+add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_stock_notifications_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_downloads_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_edit_account_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );
 add_filter( 'woocommerce_admin_settings_sanitize_option_woocommerce_myaccount_edit_address_endpoint', 'wc_sanitize_endpoint_slug', 10, 1 );

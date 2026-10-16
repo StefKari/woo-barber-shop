@@ -19,8 +19,9 @@ class Barbers_Attribute_Filter_Frontend {
         // Desktop hook
         add_action( 'woocommerce_before_shop_loop',        [ $this, 'render_filter_desktop' ], 5 );
         add_action( 'woocommerce_before_subcategory_list', [ $this, 'render_filter_desktop' ], 5 );
-        // Urus mobilni template — hook se okida i na desktopu, pa proveravamo
-        add_action( 'urus_shop_control_top',               [ $this, 'render_filter_mobile' ], 5 );
+        // Mobile template (child shop-mobile.php): rendered directly above the toolbar, where the
+        // JS used to move it, so the layout does not shift once scripts run.
+        add_action( 'barbers_shop_mobile_before_toolbar',  [ $this, 'render_filter_mobile' ], 5 );
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
     }
 
@@ -81,7 +82,8 @@ class Barbers_Attribute_Filter_Frontend {
                 : add_query_arg( 'filter_' . $attribute_name, $term->slug, $base_url );
 
             $image_id  = absint( get_term_meta( $term->term_id, $this->meta_key, true ) );
-            $image_url = $image_id ? wp_get_attachment_image_url( $image_id, [ 100, 100 ] ) : '';
+            // 'thumbnail' (150x150): an array size fell back to the full image (640px) for a ~60px icon.
+            $image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'thumbnail' ) : '';
 
             echo '<li class="barbers-attr-filter__item' . ( $is_active ? ' is-active' : '' ) . '">';
             echo '<a href="' . esc_url( $url ) . '" class="barbers-attr-filter__link">';
@@ -122,19 +124,28 @@ class Barbers_Attribute_Filter_Frontend {
     }
 
     private function get_product_ids_in_category( int $term_id ): array {
+        $cache_key = 'barbers_product_ids_cat_' . $term_id;
+        $cached    = get_transient( $cache_key );
+        if ( $cached !== false ) {
+            return $cached;
+        }
+
         $query = new WP_Query( [
             'post_type'      => 'product',
             'post_status'    => 'publish',
             'posts_per_page' => -1,
             'fields'         => 'ids',
             'tax_query'      => [ [
-                'taxonomy' => 'product_cat',
-                'field'    => 'term_id',
-                'terms'    => $term_id,
+                'taxonomy'         => 'product_cat',
+                'field'            => 'term_id',
+                'terms'            => $term_id,
                 'include_children' => true,
             ] ],
         ] );
-        return $query->posts ?: [];
+
+        $ids = $query->posts ?: [];
+        set_transient( $cache_key, $ids, HOUR_IN_SECONDS * 6 );
+        return $ids;
     }
 
     private function get_active_slug(): string {

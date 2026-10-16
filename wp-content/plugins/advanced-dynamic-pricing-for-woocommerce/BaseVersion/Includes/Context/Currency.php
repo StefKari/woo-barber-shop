@@ -1,10 +1,11 @@
 <?php
 
 namespace ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Helpers\Serializable;
 
 defined('ABSPATH') or exit;
 
-class Currency
+class Currency extends Serializable
 {
     /**
      * @var string
@@ -37,6 +38,13 @@ class Currency
         if ($this->code === null || $this->symbol === null || $this->rate === null) {
             throw new \Exception("Wrong currency init!");
         }
+    }
+
+    public function hash(): string
+    {
+        $props = [$this->code, $this->symbol, $this->rate];
+
+        return md5(serialize($props));
     }
 
     /**

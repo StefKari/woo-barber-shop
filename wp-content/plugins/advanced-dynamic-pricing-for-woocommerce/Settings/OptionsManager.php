@@ -74,9 +74,9 @@ class OptionsManager
         return $option ? $option->get() : null;
     }
 
-    public function getOptions()
+    public function getOptions($default = false)
     {
-        return $this->options->getOptionsArray();
+        return $this->options->getOptionsArray($default);
     }
 
     /**
@@ -128,6 +128,11 @@ class OptionsManager
     public function save()
     {
         $this->storeStrategy->save($this->options);
+    }
+
+    public function drop()
+    {
+        $this->storeStrategy->drop();
     }
 
     public function load()

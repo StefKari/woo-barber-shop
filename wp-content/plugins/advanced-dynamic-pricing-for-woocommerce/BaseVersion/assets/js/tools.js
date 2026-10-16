@@ -23,6 +23,12 @@ jQuery(document).ready(function () {
       window.open(ajaxurl + '?action=export-csv-bulk-ranges' + '&' + wdpTools.security_param + '=' + wdpTools.security, '_blank')
     });
 
+    jQuery( '.wdp-export-json-settings' ).click(function () {
+
+      var export_select = jQuery('#wdp-export-select').val();
+      window.open(ajaxurl + '?action=export-json-settings' + '&' + 'export_select=' +export_select + '&' + wdpTools.security_param + '=' + wdpTools.security, '_blank')
+    });
+
     setTimeout( function () {
       if ( window.location.hash.indexOf( 'section' ) !== - 1 ) {
         jQuery( '.section_choice[href="' + window.location.hash + '"]' ).click();
@@ -44,23 +50,6 @@ jQuery(document).ready(function () {
             jQuery(this).select();
         });
 
-      function showError($e) {
-        var message = '';
-        if ( $e instanceof Error) {
-          message = $e.message;
-        } else if ( $e instanceof String) {
-          message = $e;
-        } else {
-          return;
-        }
-
-        let errorEl = jQuery("<p class='import-notice notice-fail'>" + message + "</p>")
-        errorEl.insertBefore(jQuery("label[for='wdp-import-data']"));
-        setTimeout(function() {
-          errorEl.remove();
-        }, 10000);
-      }
-
       jQuery('#wdp-import').click(function (e) {
         try {
           JSON.parse(jQuery('#wdp-import-data').val());
@@ -70,25 +59,50 @@ jQuery(document).ready(function () {
           return false;
         }
       });
-
-	jQuery('#wdp-import-select').change(function () {
-            var selected = jQuery(this).val();
-            let collections_opt = jQuery('.wdp-import-type-options-product_collections');
-            let rules_opt = jQuery('.wdp-import-type-options-rules');
-            jQuery('.wdp-import-tools-form .wdp-import-type-options').removeClass('active');
-            jQuery('.wdp-import-tools-form .wdp-import-type-options-' + selected).addClass('active');
-            collections_opt.hide();
-            rules_opt.hide();
-            jQuery('#wdp-import-data-reset-product-collections').prop( "checked", false );
-            jQuery('#wdp-import-data-reset-rules').prop( "checked", false );
-            if (selected === 'rules') {
-              rules_opt.show();
-            }
-            if (selected === 'product_collections') {
-              collections_opt.show();
-            }
-        }).change();
     }
+
+    function showError($e) {
+      var message = '';
+      if ( $e instanceof Error) {
+        message = $e.message;
+      } else if ( $e instanceof String) {
+        message = $e;
+      } else {
+        return;
+      }
+
+      let errorEl = jQuery("<p class='import-notice notice-fail'>" + message + "</p>")
+      errorEl.insertBefore(jQuery("label[for='wdp-import-data']"));
+      setTimeout(function() {
+        errorEl.remove();
+      }, 10000);
+    }
+
+    jQuery('#wdp-import-json').click(function (e) {
+      e.preventDefault()
+      jQuery('#json-to-import').trigger('click')
+    });
+
+    jQuery('#json-to-import').change(function (e) {
+      const file = e.target.files[0];
+
+      if (!file) {
+        return
+      }
+
+      const reader = new FileReader();
+      reader.addEventListener('load', function() {
+        try {
+          JSON.parse(reader.result);
+          jQuery('#wdp-import-data').val(reader.result)
+        } catch (err) {
+          showError(err)
+          return false
+        }
+      })
+
+      reader.readAsText(file);
+    });
 
   jQuery('#rules-to-import-csv').change(function(){
     if(jQuery(this).val() !== undefined){

@@ -75,6 +75,10 @@ class ProductVariationDataStoreCpt extends WC_Product_Variation_Data_Store_CPT i
         $foundParentAttributes = array();
         $variationAttributes   = array();
 
+        if (!is_array($parentAttributes) || empty($parentAttributes)) {
+            return [];
+        }
+
         // Compare to parent variable product attributes and ensure they match.
         foreach ($parentAttributes as $attributeName => $attribute) {
             /**
@@ -108,7 +112,9 @@ class ProductVariationDataStoreCpt extends WC_Product_Variation_Data_Store_CPT i
     {
         $reflection = new ReflectionClass($product);
         $property   = $reflection->getProperty('data');
-        $property->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $property->setAccessible(true);
+        }
         $data = $property->getValue($product);
 
         $property->setValue($product, array_merge($data, $props));

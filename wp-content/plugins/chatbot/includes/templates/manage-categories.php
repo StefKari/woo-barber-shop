@@ -6,7 +6,7 @@ global $wpdb;
 
 $table = $wpdb->prefix.'wpbot_response_category';
 
-$data = $wpdb->get_results($wpdb->prepare("select * from $table")); //DB Call OK, No Caching OK
+$data = $wpdb->get_results($wpdb->prepare("select * from {$table}")); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 
 ?>
 <style type="text/css">
@@ -38,12 +38,12 @@ table.qcdf_table {
     <div class="wp-chatbot-wrap">
 	
 	
-		<div class="wpbot_dashboard_header container">
+		<div class="wpbot_dashboard_header ">
 			<h1>Manage STR Categories</h1>
 			
 		</div>
 		
-		<div class="wpbot_addons_section container">
+		<div class="wpbot_addons_section ">
 		
 			<a href="<?php echo esc_url( add_query_arg( 'opt', 'add', admin_url('admin.php?page=simple-text-response&action=manage-category') ) ); ?>" class="page-title-action button">Add New Category</a>
 		

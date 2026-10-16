@@ -1,4 +1,8 @@
 <?php
+
+use Automattic\WooCommerce\Enums\OrderStatus;
+use Automattic\WooCommerce\Enums\TaxDisplayMode;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -329,7 +333,7 @@ abstract class WC_Abstract_Legacy_Order extends WC_Data {
 	/**
 	 * Set the customer address.
 	 * @param array $address Address data.
-	 * @param string $type billing or shipping.
+	 * @param string $type Type of address; 'billing' or 'shipping'.
 	 */
 	public function set_address( $address, $type = 'billing' ) {
 		foreach ( $address as $key => $value ) {
@@ -430,9 +434,9 @@ abstract class WC_Abstract_Legacy_Order extends WC_Data {
 		} elseif ( 'tax_display_cart' === $key ) {
 			return get_option( 'woocommerce_tax_display_cart' );
 		} elseif ( 'display_totals_ex_tax' === $key ) {
-			return 'excl' === get_option( 'woocommerce_tax_display_cart' );
+			return TaxDisplayMode::EXCLUSIVE === get_option( 'woocommerce_tax_display_cart' );
 		} elseif ( 'display_cart_ex_tax' === $key ) {
-			return 'excl' === get_option( 'woocommerce_tax_display_cart' );
+			return TaxDisplayMode::EXCLUSIVE === get_option( 'woocommerce_tax_display_cart' );
 		} elseif ( 'cart_discount' === $key ) {
 			return $this->get_total_discount();
 		} elseif ( 'cart_discount_tax' === $key ) {
@@ -683,7 +687,7 @@ abstract class WC_Abstract_Legacy_Order extends WC_Data {
 	public function cancel_order( $note = '' ) {
 		wc_deprecated_function( 'WC_Order::cancel_order', '3.0', 'WC_Order::update_status' );
 		WC()->session->set( 'order_awaiting_payment', false );
-		$this->update_status( 'cancelled', $note );
+		$this->update_status( OrderStatus::CANCELLED, $note );
 	}
 
 	/**

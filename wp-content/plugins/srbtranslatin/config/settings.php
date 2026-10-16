@@ -15,20 +15,33 @@ $navigation_menus   = get_registered_nav_menus();
 
 $nav_menus = 0 === count( $navigation_menus ) ? false : true;
 
+/*
+ * Translating before 'init' triggers a _load_textdomain_just_in_time notice (WP 6.7+).
+ * The settings array is first read while the plugin boots, where only the keys and
+ * defaults matter, so labels stay untranslated until 'init' has fired.
+ */
+$stl_translate = did_action( 'init' );
+$stl__         = $stl_translate ? '__' : static function ( $text ) {
+	return $text;
+};
+$stl_x         = $stl_translate ? '_x' : static function ( $text ) {
+	return $text;
+};
+
 return array(
-    'name'     => __( 'srbtranslatin - Serbian Latinisation', 'srbtranslatin' ),
+    'name'     => $stl__( 'srbtranslatin - Serbian Latinisation', 'srbtranslatin' ),
     'basename' => STL_PLUGIN_BASENAME,
     'meta'     => array(
         array(
             'link' => 'https://oblak.studio/plugins/srbtranslatin/',
-            'text' => __( 'Documentation', 'srbtranslatin' ),
+            'text' => $stl__( 'Documentation', 'srbtranslatin' ),
         ),
     ),
     'page'     => array(
         'root'       => true,
         'parent'     => 'options-general.php',
-        'title'      => __( 'Latinisation', 'srbtranslatin' ),
-        'menu_title' => __( 'Settings', 'default' ),
+        'title'      => $stl__( 'Latinisation', 'srbtranslatin' ),
+        'menu_title' => $stl__( 'Settings', 'default' ),
         'cap'        => 'manage_options',
         'image'  => file_get_contents( STL_PLUGIN_PATH . 'assets/images/stl-logo.svg' ), // phpcs:ignore
         'prio'       => 99,
@@ -36,15 +49,15 @@ return array(
     'settings' => array(
         'general'        => array(
             array(
-                'title' => _x( 'General settings', 'section name', 'srbtranslatin' ),
+                'title' => $stl_x( 'General settings', 'section name', 'srbtranslatin' ),
                 'type'  => 'title',
-                'desc'  => __( 'General settings control main functionality of the plugin', 'srbtranslatin' ),
+                'desc'  => $stl__( 'General settings control main functionality of the plugin', 'srbtranslatin' ),
                 'id'    => 'srbtranslatin_general_settings',
             ),
 
             array(
-                'title'   => __( 'Default script', 'srbtranslatin' ),
-                'desc'    => __( 'Default script used for the website if user did not select a script', 'srbtranslatin' ),
+                'title'   => $stl__( 'Default script', 'srbtranslatin' ),
+                'desc'    => $stl__( 'Default script used for the website if user did not select a script', 'srbtranslatin' ),
                 'id'      => 'default_script',
                 'type'    => 'select',
                 'default' => 'cir',
@@ -52,9 +65,9 @@ return array(
             ),
 
             array(
-                'title'   => __( 'URL Parameter', 'srbtranslatin' ),
+                'title'   => $stl__( 'URL Parameter', 'srbtranslatin' ),
                 'id'      => 'url_param',
-                'desc'    => __( 'URL parameter used for script selector', 'srbtranslatin' ),
+                'desc'    => $stl__( 'URL parameter used for script selector', 'srbtranslatin' ),
                 'type'    => 'text',
                 'default' => 'pismo',
             ),
@@ -65,9 +78,9 @@ return array(
             ),
 
             array(
-                'title' => _x( 'Menu settings', 'section name', 'srbtranslatin' ),
+                'title' => $stl_x( 'Menu settings', 'section name', 'srbtranslatin' ),
                 'type'  => 'title',
-                'desc'  => __( 'Options that control the display of the script selector', 'srbtranslatin' ),
+                'desc'  => $stl__( 'Options that control the display of the script selector', 'srbtranslatin' ),
                 'id'    => 'srbtranslatin_menu_settings',
             ),
 
@@ -78,22 +91,22 @@ return array(
         ),
         'menu'           => array(
             array(
-                'title' => _x( 'Navigation menu settings', 'section name', 'srbtranslatin' ),
+                'title' => $stl_x( 'Navigation menu settings', 'section name', 'srbtranslatin' ),
                 'type'  => 'title',
-                'desc'  => __( 'Menu settings control extending and tweaking the script selector in theme menus', 'srbtranslatin' ),
+                'desc'  => $stl__( 'Menu settings control extending and tweaking the script selector in theme menus', 'srbtranslatin' ),
                 'id'    => 'srbtranslatin_menu_settings',
             ),
             array(
                 'id'   => 'srbtranslatin_menu_warning',
                 'type' => 'info',
                 'text' => ! $nav_menus
-                    ? '<strong>' . __( 'Options in this section are disabled because you do not have any navigation menus registered', 'srbtranslatin' ) . '</strong>'
+                    ? '<strong>' . $stl__( 'Options in this section are disabled because you do not have any navigation menus registered', 'srbtranslatin' ) . '</strong>'
                     : '',
             ),
 
             array(
-                'title'    => __( 'Extend navigation menu', 'srbtranslatin' ),
-                'desc'     => __( 'Adds a script selector to the navigation menu', 'srbtranslatin' ),
+                'title'    => $stl__( 'Extend navigation menu', 'srbtranslatin' ),
+                'desc'     => $stl__( 'Adds a script selector to the navigation menu', 'srbtranslatin' ),
                 'id'       => 'extend',
                 'type'     => 'checkbox',
                 'disabled' => ! $nav_menus,
@@ -101,12 +114,12 @@ return array(
             ),
 
             array(
-                'title'    => __( 'Navigation menu to extend', 'srbtranslatin' ),
-                'desc'     => __( 'Select the navigation menu you want to extend', 'srbtranslatin' ),
+                'title'    => $stl__( 'Navigation menu to extend', 'srbtranslatin' ),
+                'desc'     => $stl__( 'Select the navigation menu you want to extend', 'srbtranslatin' ),
                 'id'       => 'extend_menu',
                 'type'     => 'select',
                 'options'  => array_merge(
-                    array( '' => __( 'Select a menu', 'srbtranslatin' ) ),
+                    array( '' => $stl__( 'Select a menu', 'srbtranslatin' ) ),
                     $navigation_menus,
                 ),
                 'disabled' => ! $nav_menus,
@@ -114,13 +127,13 @@ return array(
             ),
 
             array(
-                'title'    => __( 'Selector type', 'srbtranslatin' ),
-                'desc'     => __( 'Choose the type of the script selector', 'srbtranslatin' ),
+                'title'    => $stl__( 'Selector type', 'srbtranslatin' ),
+                'desc'     => $stl__( 'Choose the type of the script selector', 'srbtranslatin' ),
                 'id'       => 'selector_type',
                 'type'     => 'select',
                 'options'  => array(
-                    'submenu' => __( 'Submenu', 'srbtranslatin' ),
-                    'inline'  => __( 'Inline', 'srbtranslatin' ),
+                    'submenu' => $stl__( 'Submenu', 'srbtranslatin' ),
+                    'inline'  => $stl__( 'Inline', 'srbtranslatin' ),
                 ),
                 'default'  => 'submenu',
                 'disabled' => ! $nav_menus,
@@ -128,11 +141,11 @@ return array(
             ),
 
             array(
-                'title'    => __( 'Menu item title', 'srbtranslatin' ),
-                'desc'     => __( 'Title of the menu item', 'srbtranslatin' ),
+                'title'    => $stl__( 'Menu item title', 'srbtranslatin' ),
+                'desc'     => $stl__( 'Title of the menu item', 'srbtranslatin' ),
                 'id'       => 'menu_title',
                 'type'     => 'text',
-                'default'  => __( 'Script', 'srbtranslatin' ),
+                'default'  => $stl__( 'Script', 'srbtranslatin' ),
                 'disabled' => ! $nav_menus,
 
             ),
@@ -144,45 +157,45 @@ return array(
         ),
         'media'          => array(
             array(
-                'title' => _x( 'File and Media settings', 'section name', 'srbtranslatin' ),
+                'title' => $stl_x( 'File and Media settings', 'section name', 'srbtranslatin' ),
                 'type'  => 'title',
-                'desc'  => __( 'File and media settings control filename transliteration and media saving', 'srbtranslatin' ),
+                'desc'  => $stl__( 'File and media settings control filename transliteration and media saving', 'srbtranslatin' ),
                 'id'    => 'srbtranslatin_media_settings',
             ),
 
             array(
-                'title'   => __( 'Transliterate uploads', 'srbtranslatin' ),
+                'title'   => $stl__( 'Transliterate uploads', 'srbtranslatin' ),
                 'type'    => 'checkbox',
-                'desc'    => __( 'Transliterate filenames on upload', 'srbtranslatin' ),
+                'desc'    => $stl__( 'Transliterate filenames on upload', 'srbtranslatin' ),
                 'default' => 'yes',
                 'id'      => 'transliterate_uploads',
             ),
 
             array(
-                'title'   => __( 'Script specific filenames', 'srbtranslatin' ),
+                'title'   => $stl__( 'Script specific filenames', 'srbtranslatin' ),
                 'type'    => 'checkbox',
-                'desc'    => __( 'Check this box if you want to have separate filenames for each script', 'srbtranslatin' ),
+                'desc'    => $stl__( 'Check this box if you want to have separate filenames for each script', 'srbtranslatin' ),
                 'id'      => 'separate_uploads',
                 'default' => 'yes',
             ),
 
             array(
-                'title'   => __( 'Filename separator', 'srbtranslatin' ),
+                'title'   => $stl__( 'Filename separator', 'srbtranslatin' ),
                 'type'    => 'text',
-                'desc'    => __( 'Separator used for script specific filenames', 'srbtranslatin' ),
+                'desc'    => $stl__( 'Separator used for script specific filenames', 'srbtranslatin' ),
                 'id'      => 'filename_separator',
                 'class'   => 'small-text',
                 'default' => '-',
             ),
 
             array(
-                'title'   => __( 'Transliteration method', 'srbtranslatin' ),
+                'title'   => $stl__( 'Transliteration method', 'srbtranslatin' ),
                 'type'    => 'select',
-                'desc'    => __( 'Choose if you want to limit the script specific filenames on the entire website, or in content only', 'srbtranslatin' ),
+                'desc'    => $stl__( 'Choose if you want to limit the script specific filenames on the entire website, or in content only', 'srbtranslatin' ),
                 'id'      => 'transliteration_method',
                 'options' => array(
-                    'website' => __( 'Entire website', 'srbtranslatin' ),
-                    'content' => __( 'Content only', 'srbtranslatin' ),
+                    'website' => $stl__( 'Entire website', 'srbtranslatin' ),
+                    'content' => $stl__( 'Content only', 'srbtranslatin' ),
                 ),
                 'default' => 'website',
             ),
@@ -195,25 +208,25 @@ return array(
         'wpml'           => array(
             array(
                 'id'      => 'extend_ls',
-                'title'   => __( 'Enable', 'srbtranslatin' ),
+                'title'   => $stl__( 'Enable', 'srbtranslatin' ),
                 'type'    => 'checkbox',
                 'default' => 'yes',
-                'desc'    => __( 'Extend WPML Language Switcher', 'srbtranslatin' ),
+                'desc'    => $stl__( 'Extend WPML Language Switcher', 'srbtranslatin' ),
             ),
         ),
         'polylang'       => array(),
         'translatepress' => array(),
         'advanced'       => array(
             array(
-                'title' => _x( 'Advanced settings', 'section name', 'srbtranslatin' ),
+                'title' => $stl_x( 'Advanced settings', 'section name', 'srbtranslatin' ),
                 'type'  => 'title',
-                'desc'  => __( 'Advanced settings control permalink and search settings', 'srbtranslatin' ),
+                'desc'  => $stl__( 'Advanced settings control permalink and search settings', 'srbtranslatin' ),
                 'id'    => 'srbtranslatin_advanced_settings',
             ),
 
             array(
-                'title'    => __( 'Fix Permalinks', 'srbtranslatin' ),
-                'desc'     => __( 'Fixes permalinks for cyrillic scripts', 'srbtranslatin' ),
+                'title'    => $stl__( 'Fix Permalinks', 'srbtranslatin' ),
+                'desc'     => $stl__( 'Fixes permalinks for cyrillic scripts', 'srbtranslatin' ),
                 'id'       => 'fix_permalinks',
                 'type'     => 'checkbox',
                 'default'  => 'no',
@@ -221,31 +234,31 @@ return array(
                 'tooltip'  => $disable_permalinks
                     ? sprintf(
                         // translators: %s is the current locale.
-                        __( 'This option is currently disabled because your current locale is set to %s which will automatically change permalnks', 'srbtranslatin' ),
+                        $stl__( 'This option is currently disabled because your current locale is set to %s which will automatically change permalnks', 'srbtranslatin' ),
                         $wplang
                     )
                     : null,
             ),
 
             array(
-                'title'   => __( 'Fix Search', 'srbtranslatin' ),
-                'desc'    => __( 'Enables searching cyrillic content via latin script', 'srbtranslatin' ),
+                'title'   => $stl__( 'Fix Search', 'srbtranslatin' ),
+                'desc'    => $stl__( 'Enables searching cyrillic content via latin script', 'srbtranslatin' ),
                 'id'      => 'fix_search',
                 'type'    => 'checkbox',
                 'default' => 'no',
             ),
 
             array(
-                'title'   => __( 'Fix Ajax', 'srbtranslatin' ),
-                'desc'    => __( 'Transliterates ajax calls', 'srbtranslatin' ),
+                'title'   => $stl__( 'Fix Ajax', 'srbtranslatin' ),
+                'desc'    => $stl__( 'Transliterates ajax calls', 'srbtranslatin' ),
                 'id'      => 'fix_ajax',
                 'type'    => 'checkbox',
                 'default' => 'no',
             ),
 
             array(
-                'title'   => __( 'Fix Titles', 'srbtranslatin' ),
-                'desc'    => __( 'Fixes titles for cyrillic scripts', 'srbtranslatin' ),
+                'title'   => $stl__( 'Fix Titles', 'srbtranslatin' ),
+                'desc'    => $stl__( 'Fixes titles for cyrillic scripts', 'srbtranslatin' ),
                 'id'      => 'fix_titles',
                 'type'    => 'checkbox',
                 'default' => 'no',

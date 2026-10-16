@@ -6,6 +6,7 @@ use WPML\StringTranslation\Application\StringCore\Domain\StringItem;
 use WPML\StringTranslation\Application\StringCore\Query\Criteria\SearchCriteria;
 use WPML\StringTranslation\Application\StringCore\Query\Criteria\FetchFiltersCriteria;
 use WPML\StringTranslation\Application\StringCore\Query\Criteria\SearchSelectCriteria;
+use WPML\StringTranslation\Infrastructure\TranslateEverything\EnglishSourceLanguage;
 use WPML\StringTranslation\Infrastructure\Translation\TranslationStatusesParser;
 
 abstract class QueryBuilder {
@@ -15,23 +16,17 @@ abstract class QueryBuilder {
 		return $wpdb->prefix;
 	}
 
-	protected function prepare( $sql, ...$args ): string {
-		global $wpdb;
-		return $wpdb->prepare( $sql, $args );
-	}
-
 	protected function prepareLike( $value ): string {
 		global $wpdb;
 		return $wpdb->esc_like( $value );
 	}
 
 	protected function buildPagination( SearchCriteria $criteria ): string {
-		return $this->prepare( ' LIMIT %d OFFSET %d', $criteria->getLimit(), $criteria->getOffset() );
+		global $wpdb;
+
+		return $wpdb->prepare( ' LIMIT %d OFFSET %d', $criteria->getLimit(), $criteria->getOffset() );
 	}
 
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 */
 	protected function buildWhereSql( $criteria ): string {
 		$sqlParts = $this->getWhereSqlParts( $criteria );
 
@@ -88,9 +83,6 @@ abstract class QueryBuilder {
 		return implode( ',', $sql );
 	}
 
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 */
 	protected function shouldSelectOnlyAutoregistered( $criteria ) {
 		$hasSource = in_array(
 			$criteria->getSource(),
@@ -104,9 +96,6 @@ abstract class QueryBuilder {
 		return $hasSource && ! $this->shouldSelectOnlyNotAutoregistered( $criteria );
 	}
 
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 */
 	protected function shouldSelectOnlyNotAutoregistered( $criteria ): bool {
 		$kind                     = $criteria->getKind();
 		$hasNotAutoregisteredKind = is_int( $kind ) && $kind === StringItem::STRING_TYPE_DEFAULT;
@@ -114,9 +103,6 @@ abstract class QueryBuilder {
 		return $hasNotAutoregisteredKind;
 	}
 
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 */
 	protected function shouldCheckForInProgressStatusInStringTranslations( $criteria ): bool {
 		$statuses = $criteria->getTranslationStatuses();
 
@@ -126,14 +112,6 @@ abstract class QueryBuilder {
 		);
 	}
 
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 *
-	 * icl_strings.status(ICL_STRING_TRANSLATION_PARTIAL=2) matches ICL_TM_IN_PROGRESS=2, we should filter it out if we
-	 * need to check for in progress strings only.
-	 *
-	 * @return int[]
-	 */
 	protected function filterOutTranslationPartialStatusFromStrings( $criteria ): array {
 		return array_filter(
 			$criteria->getTranslationStatuses(),
@@ -143,9 +121,6 @@ abstract class QueryBuilder {
 		);
 	}
 
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 */
 	protected function getStringTranslationsSql( $criteria ): string {
 		if ( ! $this->shouldCheckForInProgressStatusInStringTranslations( $criteria ) ) {
 			return '';
@@ -157,9 +132,6 @@ abstract class QueryBuilder {
 		";
 	}
 
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 */
 	protected function getStringPositionsSql( $criteria ): string {
 		return "
             LEFT JOIN (
@@ -178,28 +150,11 @@ abstract class QueryBuilder {
         ';
 	}
 
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 */
-	protected function buildHavingSql( $criteria ): string {
-		$sqlParts = [];
-		foreach ( $criteria->getTranslationStatuses() as $status ) {
-			$sqlParts[] = "translation_statuses LIKE '%status:" . $this->prepareLike( $status ) . ",%'";
-		}
-
-		if ( count( $sqlParts ) === 0 ) {
-			return '';
-		}
-
-		return ' HAVING (' . implode( ' OR ', $sqlParts ) . ')';
-	}
-
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 */
 	protected function buildLanguagesCrossJoin( $criteria ): string {
 		$buildLanguageSelect = function ( string $code ): string {
-			return $this->prepare(
+			global $wpdb;
+
+			return $wpdb->prepare(
 				'SELECT %s AS language_code',
 				$code
 			);
@@ -224,9 +179,6 @@ abstract class QueryBuilder {
         ";
 	}
 
-	/**
-	 * @param $source int|null
-	 */
 	private function getSourcesSql( $source ): array {
 		if ( $source === ICL_STRING_TRANSLATION_STRING_TRACKING_TYPE_FRONTEND ) {
 			return [ $source ];
@@ -239,10 +191,9 @@ abstract class QueryBuilder {
 		];
 	}
 
-	/**
-	 * @param SearchCriteria|FetchFiltersCriteria $criteria
-	 */
 	protected function getWhereSqlParts( $criteria ): array {
+		global $wpdb;
+
 		$selectOnlyAutoregistered    = $this->shouldSelectOnlyAutoregistered( $criteria );
 		$selectOnlyNotAutoregistered = $this->shouldSelectOnlyNotAutoregistered( $criteria );
 
@@ -252,19 +203,19 @@ abstract class QueryBuilder {
 
 		if ( $selectOnlyAutoregistered || $selectOnlyNotAutoregistered ) {
 			$kind       = $selectOnlyAutoregistered ? StringItem::STRING_TYPE_AUTOREGISTER : StringItem::STRING_TYPE_DEFAULT;
-			$sqlParts[] = $this->prepare( 'strings.string_type = %d', $kind );
+			$sqlParts[] = $wpdb->prepare( 'strings.string_type = %d', $kind );
 		}
 
 		if ( $criteria->getType() && $selectOnlyAutoregistered ) {
-			$sqlParts[] = $this->prepare( 'strings.component_type = %d', $criteria->getType() );
+			$sqlParts[] = $wpdb->prepare( 'strings.component_type = %d', $criteria->getType() );
 		}
 
 		if ( $criteria->getSource() && $selectOnlyAutoregistered ) {
 			$like = '%' . $this->prepareLike( ICL_STRING_TRANSLATION_STRING_TRACKING_TYPE_FRONTEND ) . '%';
 			if ( $criteria->getSource() === ICL_STRING_TRANSLATION_STRING_TRACKING_TYPE_FRONTEND ) {
-				$sqlParts[] = '(' . $this->prepare( 'string_positions.sources IS NOT NULL AND string_positions.sources LIKE %s', $like ) . ')';
+				$sqlParts[] = '(' . $wpdb->prepare( 'string_positions.sources IS NOT NULL AND string_positions.sources LIKE %s', $like ) . ')';
 			} else {
-				$sqlParts[] = '(' . $this->prepare( 'string_positions.sources IS NULL OR string_positions.sources NOT LIKE %s', $like ) . ')';
+				$sqlParts[] = '(' . $wpdb->prepare( 'string_positions.sources IS NULL OR string_positions.sources NOT LIKE %s', $like ) . ')';
 			}
 		}
 		if ( $criteria->getDomain() ) {
@@ -272,39 +223,51 @@ abstract class QueryBuilder {
 			$escDomain = esc_html( $criteria->getDomain() );
 
 			if ( $domain === $escDomain ) {
-				$sqlParts[] = $this->prepare('strings.context = %s', $domain );
+				$sqlParts[] = $wpdb->prepare('strings.context = %s', $domain );
 			} else {
-				$sqlParts[] = $this->prepare('strings.context = %s OR strings.context = %s', $domain, $escDomain );
+				$sqlParts[] = '(' . $wpdb->prepare('strings.context = %s OR strings.context = %s', $domain, $escDomain ) . ')';
 			}
 		}
 		if ( $criteria->getTitle() ) {
-			$title = $this->prepareLike( $criteria->getTitle() );
-			$escTitle = $this->prepareLike( esc_html( $criteria->getTitle() ) );
+			$title = '%' . $this->prepareLike( $criteria->getTitle() ) . '%';
+			$escTitle = '%' . $this->prepareLike( esc_html( $criteria->getTitle() ) ) . '%';
 
 			if ( $title === $escTitle ) {
-				$sqlParts[] = $this->prepare('strings.value LIKE %s', '%' . $title . '%');
+				$sqlParts[] = '(' . $wpdb->prepare(
+					'strings.value LIKE %s OR strings.name LIKE %s',
+					$title,
+					$title
+				) . ')';
 			} else {
-				$sqlParts[] = $this->prepare('strings.value LIKE %s OR strings.value LIKE %s', '%' . $title . '%', '%' . $escTitle . '%' );
+				$sqlParts[] = '(' . $wpdb->prepare(
+					'strings.value LIKE %s OR strings.value LIKE %s OR strings.name LIKE %s OR strings.name LIKE %s',
+					$title,
+					$escTitle,
+					$title,
+					$escTitle
+				) . ')';
 			}
 		}
 		if ( $criteria->getTranslationPriority() ) {
-			$sqlParts[] = $this->prepare( 'strings.translation_priority = %s', $criteria->getTranslationPriority() );
+			$sqlParts[] = $wpdb->prepare( 'strings.translation_priority = %s', $criteria->getTranslationPriority() );
 		}
 
-		$defaultLanguageCode = $this->settingsRepository->getDefaultLanguageCode();
-		$isDefaultLanguageEn = $defaultLanguageCode === 'en';
-		$sourceLanguageCode = $criteria->getSourceLanguageCode();
-		$langCodesToShow = $sourceLanguageCode ? [ $sourceLanguageCode ] : [];
-		if ( ! $isDefaultLanguageEn && $sourceLanguageCode === $defaultLanguageCode ) {
-			// Always add english strings when default language is selected.
-			$langCodesToShow[] = 'en';
+		$defaultLanguageCode      = $this->settingsRepository->getDefaultLanguageCode();
+		$englishSourceLanguage    = EnglishSourceLanguage::resolve(
+			$this->settingsRepository->getActiveLanguageCodes(),
+			$defaultLanguageCode
+		);
+		$isDefaultLanguageEnglish = $defaultLanguageCode === $englishSourceLanguage;
+		$sourceLanguageCode       = $criteria->getSourceLanguageCode();
+		$langCodesToShow          = $sourceLanguageCode ? [ $sourceLanguageCode ] : [];
+		if ( ! $isDefaultLanguageEnglish && $sourceLanguageCode === $defaultLanguageCode ) {
+			$langCodesToShow[] = $englishSourceLanguage;
 		}
 
 		if ( $langCodesToShow ) {
 			$sqlParts[] = 'strings.language IN (' . wpml_prepare_in( $langCodesToShow ) . ')';
 		}
 
-		// We should remove strings with translation partial status when we are on 'In Progress' tab, but not when we are on 'Not Completed' tab.
 		$stringStatuses = $this->shouldCheckForInProgressStatusInStringTranslations( $criteria ) && count( $criteria->getTranslationStatuses() ) === 2
 			? $this->filterOutTranslationPartialStatusFromStrings( $criteria )
 			: $criteria->getTranslationStatuses();

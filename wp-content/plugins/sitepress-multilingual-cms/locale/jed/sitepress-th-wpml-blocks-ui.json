@@ -3,7 +3,9 @@
    "locale_data": {
       "messages": {
          "": {
-            "domain": "messages"
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
          },
          "Advanced": [
             "ขั้นสูง"
@@ -12,19 +14,19 @@
             "HTML anchor"
          ],
          "Add a shortcut to this block when loading the page using the “#anchor” URL.": [
-            "เพิ่มทางลัดไปยังบล็อกนี้เมื่อโหลดหน้าโดยใช้ URL “#anchor”."
+            "เพิ่มทางลัดไปยังบล็อกนี้เมื่อโหลดหน้าเว็บโดยใช้ URL “#anchor”"
          ],
          "Additional CSS class(es)": [
             "คลาส CSS เพิ่มเติม"
          ],
          "Separate multiple classes with spaces.": [
-            "แยกหลายคลาสด้วยช่องว่าง."
+            "แยกหลายคลาสด้วยการเว้นวรรค"
          ],
          "Color": [
             "สี"
          ],
          "px": [
-            "พิกเซล"
+            "px"
          ],
          "%": [
             "%"
@@ -36,19 +38,19 @@
             "บล็อก"
          ],
          "Block margin": [
-            "ระยะขอบบล็อก"
+            "ระยะห่างภายนอกบล็อก"
          ],
          "Block padding": [
-            "ระยะขอบในบล็อก"
+            "ระยะห่างภายในบล็อก"
          ],
          "LANGUAGE": [
             "ภาษา"
          ],
          "Language spacing": [
-            "ระยะห่างของภาษา"
+            "ระยะห่างระหว่างภาษา"
          ],
          "Language padding": [
-            "ระยะขอบในของภาษา"
+            "ระยะห่างภายในภาษา"
          ],
          "Display": [
             "การแสดงผล"
@@ -77,8 +79,14 @@
          "Spacing": [
             "ระยะห่าง"
          ],
+         "Switch to %s": [
+            "สลับเป็น %s"
+         ],
+         "Available languages": [
+            "ภาษาที่มีอยู่"
+         ],
          "Allow wrapping to multiple lines": [
-            "อนุญาตให้ขึ้นบรรทัดใหม่"
+            "อนุญาตให้ตัดขึ้นบรรทัดใหม่"
          ],
          "Open on click": [
             "เปิดเมื่อคลิก"
@@ -87,16 +95,22 @@
             "แสดงลูกศร"
          ],
          "Layout": [
-            "เค้าโครง"
+            "เลย์เอาต์"
          ],
          "Justification": [
-            "การจัดวาง"
+            "การจัดตำแหน่ง"
          ],
          "Orientation": [
-            "ทิศทาง"
+            "แนววาง"
+         ],
+         "Language Switcher": [
+            "ตัวสลับภาษา"
+         ],
+         "Language switcher, press tab to navigate to other languages": [
+            "ตัวสลับภาษา กดแท็บเพื่อไปยังภาษาอื่น"
          ],
          "Typography": [
-            "การจัดรูปแบบตัวอักษร"
+            "การจัดพิมพ์"
          ],
          "Background": [
             "พื้นหลัง"
@@ -120,16 +134,16 @@
             "รหัส"
          ],
          "Justify items left": [
-            "จัดวางรายการชิดซ้าย"
+            "จัดรายการชิดซ้าย"
          ],
          "Justify items center": [
-            "จัดวางรายการตรงกลาง"
+            "จัดรายการไว้ตรงกลาง"
          ],
          "Justify items right": [
-            "จัดวางรายการชิดขวา"
+            "จัดรายการชิดขวา"
          ],
          "Justify items space between": [
-            "จัดวางรายการกระจายเต็มพื้นที่"
+            "จัดรายการแบบกระจายตัว"
          ],
          "Horizontal": [
             "แนวนอน"
@@ -141,7 +155,7 @@
             "ปกติ"
          ],
          "Medium": [
-            "ปานกลาง"
+            "กลาง"
          ],
          "Large": [
             "ใหญ่"
@@ -150,31 +164,25 @@
             "ใหญ่พิเศษ"
          ],
          "Ab": [
-            "Ab"
+            "กข"
          ],
          "AB": [
-            "AB"
+            "กข"
          ],
          "ab": [
-            "ab"
+            "กข"
          ],
          "Small": [
             "เล็ก"
          ],
          "Displays the WPML Language Switcher.": [
-            "แสดงตัวสลับภาษา WPML."
-         ],
-         "Language Switcher": [
-            "ตัวสลับภาษา"
+            "แสดงตัวสลับภาษา WPML"
          ],
          "displays the WPML Language Switcher": [
             "แสดงตัวสลับภาษา WPML"
          ],
-         "Displays the WPML Language Switcher. <br/> Learn <a>how to translate this block</a>.": [
-            "แสดงตัวสลับภาษา WPML <br/> เรียนรู้ <a>วิธีแปลบล็อกนี้</a>."
-         ],
          "Navigation Language Switcher": [
-            "ตัวสลับภาษาในการนำทาง"
+            "ตัวสลับภาษาสำหรับการนำทาง"
          ],
          "Reset all": [
             "รีเซ็ตทั้งหมด"

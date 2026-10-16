@@ -339,7 +339,14 @@ class elFinderVolumeDropbox2 extends elFinderVolumeDriver
                 $code = $itpCare? $options['code'] : (isset($_GET['code'])? $_GET['code'] : '');
                 $state = $itpCare? $options['state'] : (isset($_GET['state'])? $_GET['state'] : '');
                 if (!$aToken && empty($code)) {
-                    $url = $authHelper->getAuthUrl($callback);
+                    // CSRF protection: bind this authorization attempt to a
+                    // random, unguessable state value that WE generate and
+                    // store server-side (session), independent of the SDK's
+                    // own (broken) persistent-data-store round trip below.
+                    $csrfState = bin2hex(random_bytes(16));
+                    $options['csrfState'] = $csrfState;
+
+                    $url = $authHelper->getAuthUrl($callback, $csrfState);
 
                     $html = '<input id="elf-volumedriver-dropbox2-host-btn" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" value="{msg:btnApprove}" type="button">';
                     $html .= '<script>
@@ -351,6 +358,8 @@ class elFinderVolumeDropbox2 extends elFinderVolumeDriver
 
                         return ['exit' => true, 'body' => $html];
                     } else {
+                        $this->session->set('Dropbox2AuthParams', $options);
+
                         $out = [
                             'node' => $options['id'],
                             'json' => '{"protocol": "dropbox2", "mode": "makebtn", "body" : "' . str_replace($html, '"', '\\"') . '", "error" : "' . elFinder::ERROR_ACCESS_DENIED . '"}',
@@ -362,8 +371,23 @@ class elFinderVolumeDropbox2 extends elFinderVolumeDriver
                 } else {
                     if ($code && $state) {
                         if (!empty($options['id'])) {
+                            // Verify against OUR OWN server-side expected value
+                            // first. Do this before touching the SDK's
+                            // persistent data store at all: seeding that store
+                            // from the request-supplied $state (below) is only
+                            // safe once we already know $state is the value we
+                            // handed out for this session, not one an attacker
+                            // supplied.
+                            $expectedState = isset($options['csrfState']) ? $options['csrfState'] : null;
+                            if (empty($expectedState) || !hash_equals((string)$expectedState, (string)$state)) {
+                                $this->session->remove('Dropbox2AuthParams')->remove('Dropbox2Tokens');
+
+                                return ['exit' => true, 'body' => '{msg:' . elFinder::ERROR_ACCESS_DENIED . '}'];
+                            }
+                            unset($options['csrfState']);
+
                             // see https://github.com/kunalvarma05/dropbox-php-sdk/issues/115
-                            $authHelper->getPersistentDataStore()->set('state', filter_var($state, FILTER_SANITIZE_STRING));
+                            $authHelper->getPersistentDataStore()->set('state', htmlspecialchars($state));
                             $tokenObj = $authHelper->getAccessToken($code, $state, $callback);
                             $options['tokens'] = [
                                 'access_token' => $tokenObj->getToken(),

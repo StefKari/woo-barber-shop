@@ -16,18 +16,18 @@ class WPML_WP_Options_General_Hooks implements IWPML_Action {
 			ICL_SITEPRESS_SCRIPT_VERSION
 		);
 
-		$site_language_link = '<a href="' . admin_url( 'admin.php?page=' . WPML_PLUGIN_FOLDER . '/menu/languages.php#lang-sec-1' ) . '">' .
-			/* translators: "WPML Site Languages section" is the title of the WPML settings page where administrators can configure the site's languages */
+		$site_language_link = '<a href="' . admin_url( 'admin.php?page=' . WPML_TM_FOLDER . '/menu/settings&section=languages#lang-sec-1' ) . '">' .
+			/* translators: Link text on the WordPress general settings screen that opens the WPML screen where the languages of the site are set. It is the name of that screen. */
 			esc_html__( 'WPML Site Languages section', 'sitepress' ) .
 			'</a>';
 
 		$profile_language_link = '<a href="' . admin_url( 'profile.php' ) . '">' .
-			/* translators: "Language section" refers to the language settings in user profile */
+			/* translators: Link text on the WordPress general settings screen that opens the part of the user's own profile where the admin language is chosen. */
 			esc_html__( 'Language section', 'sitepress' ) .
 			'</a>';
 
 		$message = sprintf(
-		/* translators: %1$s will be replaced with link to "WPML Site Languages section", %2$s will be replaced with link to profile "Language section" */
+		/* translators: Note WPML adds to the WordPress general settings screen. %1$s: a link whose text is "WPML Site Languages section", %2$s: a link whose text is "Language section"; both are already wrapped in their tags. */
             __( 'With WPML activated, you can set your site’s languages from the %1$s.<br>To change the language of your WordPress admin, go to the %2$s in your user profile.', 'sitepress' ),
 			$site_language_link,
 			$profile_language_link

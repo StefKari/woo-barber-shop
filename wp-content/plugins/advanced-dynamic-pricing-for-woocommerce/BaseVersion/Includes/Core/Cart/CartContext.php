@@ -15,7 +15,7 @@ class CartContext
     /**
      * @var CartCustomer
      */
-    private $customer;
+    protected $customer;
 
     /**
      * @var array
@@ -81,7 +81,7 @@ class CartContext
      */
     public function datetime($format)
     {
-        return date($format, $this->environment['timestamp']);
+        return gmdate($format, $this->environment['timestamp']);
     }
 
     /**
@@ -95,7 +95,7 @@ class CartContext
     /**
      * @return CartCustomer
      */
-    public function getCustomer(): CartCustomer
+    public function getCustomer()
     {
         return $this->customer;
     }
@@ -138,6 +138,45 @@ class CartContext
         return $this->orderRepository->getCountOfRuleUsagesPerCustomer($ruleId, $customerId);
     }
 
+    public function getCountOfRuleUsagesPerCustomerData($ruleId) {
+        $data = array();
+        //phpcs:ignore WordPress.Security.NonceVerification.Missing
+        if (isset($_POST['post_data'])) {
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
+            parse_str(wp_unslash($_POST['post_data']), $postData);
+            $data['customer_email'] = $postData['billing_email'];
+            $data['customer_first_name'] = $postData['billing_first_name'];
+            $data['customer_last_name'] = $postData['billing_last_name'];
+            $data['customer_address_1'] = $postData['billing_address_1'];
+            $data['customer_address_2'] = $postData['billing_address_2'];
+            $data['customer_city'] = $postData['billing_city'];
+            $data['customer_state'] = $postData['billing_state'];
+            $data['customer_zip'] = $postData['billing_postcode'];
+        } elseif( WC()->cart ) { // loaded when WC cart exists?
+            $wcCustomer = WC()->cart->get_customer();
+            $data['customer_email'] = $wcCustomer->get_billing_email();
+            $data['customer_first_name'] = $wcCustomer->get_billing_first_name();
+            $data['customer_last_name'] = $wcCustomer->get_billing_last_name();
+            $data['customer_address_1'] = $wcCustomer->get_billing_address_1();
+            $data['customer_address_2'] = $wcCustomer->get_billing_address_2();
+            $data['customer_city'] = $wcCustomer->get_billing_city();
+            $data['customer_state'] = $wcCustomer->get_billing_state();
+            $data['customer_zip'] = $wcCustomer->get_shipping_postcode();
+        }
+
+        if (!empty($data['customer_email']) ||
+            ($data['customer_first_name'] &&
+                $data['customer_last_name'] &&
+                $data['customer_address_1'] &&
+                $data['customer_city'] &&
+                $data['customer_state'] &&
+                $data['customer_zip'])) {
+            return $this->orderRepository->getCountOfRuleUsagesPerCustomerData($ruleId, $data);
+        } else {
+            return 0;
+        }
+    }
+
     public function isTaxEnabled()
     {
         return isset($this->environment['tab_enabled']) ? $this->environment['tab_enabled'] : false;
@@ -161,7 +200,7 @@ class CartContext
     /**
      * @param WcCustomerSessionFacade $sessionFacade
      */
-    public function withSession(WcCustomerSessionFacade $sessionFacade)
+    public function withSession($sessionFacade)
     {
         if ($sessionFacade instanceof WcCustomerSessionFacade) {
             $this->sessionFacade = $sessionFacade;
@@ -171,7 +210,7 @@ class CartContext
     /**
      * @return WcCustomerSessionFacade
      */
-    public function getSession(): WcCustomerSessionFacade
+    public function getSession()
     {
         return $this->sessionFacade;
     }

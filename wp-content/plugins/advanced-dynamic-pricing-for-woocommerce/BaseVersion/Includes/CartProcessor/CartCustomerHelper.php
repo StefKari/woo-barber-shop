@@ -56,17 +56,26 @@ class CartCustomerHelper
             return floatval(0);
         }
 
+        // must ignore draft orders created by blocks-based cart
+        $existing_orders_statuses = wc_get_order_statuses();
+        if(isset($existing_orders_statuses['wc-checkout-draft']))
+            unset($existing_orders_statuses['wc-checkout-draft']);
+
         $args = array(
-            'post_status' => array_keys(wc_get_order_statuses()),
+            'post_status' => array_keys($existing_orders_statuses),
         );
 
         if ( ! empty($time)) {
-            $args['date_query'] = array(
-                array(
-                    'column' => 'post_date',
-                    'after'  => $time,
-                ),
-            );
+            if ($this->context->isHPOSEnabled()) {
+                $args['date_after'] = $time;
+            } else {
+                $args['date_query'] = array(
+                    array(
+                        'column' => 'post_date',
+                        'after' => $time,
+                    ),
+                );
+            }
         }
 
         return count($this->getOrderIds($args));
@@ -90,12 +99,16 @@ class CartCustomerHelper
         );
 
         if ( ! empty($time)) {
-            $args['date_query'] = array(
-                array(
-                    'column' => 'post_date',
-                    'after'  => $time,
-                ),
-            );
+            if ($this->context->isHPOSEnabled()) {
+                $args['date_after'] = $time;
+            } else {
+                $args['date_query'] = array(
+                    array(
+                        'column' => 'post_date',
+                        'after' => $time,
+                    ),
+                );
+            }
         }
 
         return count($this->getOrderIds($args));
@@ -131,6 +144,82 @@ class CartCustomerHelper
         return count($orderIds) > 0;
     }
 
+    public function getRulesAplied()
+    {
+        global $wpdb;
+        $orderIds = $this->getOrderIds(array(
+            'post_status' => $this->getPreparedIsPaidOrderStatuses(),
+        ));
+
+        if(!count($orderIds)) {
+            return [];
+        }
+
+        $tableStats = $wpdb->prefix . 'wdp_orders';
+        $orderIds     = array_map('absint', $orderIds);
+        $placeholders = implode(', ', array_fill(0, count($orderIds), '%d'));
+
+        // $tableStats is a hardcoded internal table name; $placeholders contains only repeated %d tokens, built at runtime so PHPCS can't see them statically.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        $ids = $wpdb->get_col($wpdb->prepare(
+            "SELECT DISTINCT rule_id FROM {$tableStats} WHERE order_id IN ({$placeholders})",
+            $orderIds
+        ));
+        // phpcs:enable
+
+        return $ids;
+    }
+
+    public function getOrderedProductIds()
+    {
+        $args = array();
+
+        if ($this->cartCustomer->isGuest()) {
+            if(!$this->cartCustomer->getBillingEmail() )
+                return array();
+            $args['billing_email'] = $this->cartCustomer->getBillingEmail();
+        } else {
+            $args['customer_id'] = $this->cartCustomer->getId();
+        }
+
+        $args = array_merge(array(
+            'numberposts' => -1,
+            'orderby'     => 'date',
+            'order'       => 'DESC',
+            'post_type'   => wc_get_order_types(),
+            'post_status' => $this->getPreparedIsPaidOrderStatuses(),
+            'limit'   => -1,
+        ), $args);
+
+        $orders = wc_get_orders($args);
+
+        if(!count($orders)) {
+            return [];
+        }
+
+        $productIds = [];
+
+        foreach ($orders as $order) {
+            foreach ($order->get_items() as $item) {
+                $productIds[] = $item->get_product_id();
+            }
+        }
+
+        return array_unique($productIds);
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isRulesAplied()
+    {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        $ids = $this->getRulesAplied();
+
+        return count($ids) > 0;
+    }
+
     /**
      * @param string $time
      *
@@ -149,12 +238,30 @@ class CartCustomerHelper
         );
 
         if ( ! empty($time)) {
-            $args['date_query'] = array(
-                array(
-                    'column' => 'post_date',
-                    'after'  => $time,
-                ),
-            );
+            if(is_array($time)) {
+                if ($this->context->isHPOSEnabled()) {
+                    $args['date_after'] = $time[0];
+                    $args['date_before'] = $time[1];
+                } else {
+                    $args['date_query'] = array(
+                        array(
+                            'column' => 'post_date',
+                            'after' => $time[0],
+                            'before' => $time[1],
+                            'inclusive' => true
+                        ),
+                    );
+                }
+            } else if ($this->context->isHPOSEnabled()) {
+                $args['date_after'] = $time;
+            } else {
+                $args['date_query'] = array(
+                    array(
+                        'column' => 'post_date',
+                        'after' => $time,
+                    ),
+                );
+            }
         }
 
         $order_ids = $this->getOrderIds($args);
@@ -179,7 +286,7 @@ class CartCustomerHelper
     public function getAvgSpendAmount()
     {
         $order_ids = $this->getOrderIds(array(
-            'statuses' => array('wc-completed'),
+            'post_status' => array('wc-completed'),
         ));
 
         $orders = array_filter(array_map('wc_get_order', $order_ids));
@@ -200,23 +307,26 @@ class CartCustomerHelper
      */
     protected function getOrderIds($args = array()): array
     {
+
         if ($this->cartCustomer->isGuest()) {
-            return array();
+            if(!$this->cartCustomer->getBillingEmail() )
+                return array();
+            $args['billing_email'] = $this->cartCustomer->getBillingEmail();
+        } else {
+            $args['customer_id'] = $this->cartCustomer->getId();
         }
 
         $args = array_merge(array(
             'numberposts' => -1,
             'orderby'     => 'date',
             'order'       => 'DESC',
-            'meta_key'    => '_customer_user',
-            'meta_value'  => $this->cartCustomer->getId(),
             'post_type'   => wc_get_order_types(),
             'post_status' => array_keys(wc_get_order_statuses()),
-            'fields'      => 'ids',
+            'return'      => 'ids',
 
         ), $args);
 
-        return get_posts($args);
+        return wc_get_orders($args);
     }
 
     /**
@@ -247,9 +357,15 @@ class CartCustomerHelper
         } elseif ('this week' == $time) {
             $time = 'last monday';
         } elseif ('this month' == $time) {
-            $time = 'first day of ' . date('F Y', current_time('timestamp'));
+            $time = 'first day of ' . gmdate('F Y', current_time('timestamp'));
         } elseif ('this year' == $time) {
-            $time = 'first day of January ' . date('Y', current_time('timestamp'));
+            $time = 'first day of January ' . gmdate('Y', current_time('timestamp'));
+        } elseif ('last week' == $time) {
+            $time = ['last week monday 00:00:00', 'last week sunday 23:59:59'];
+        } elseif ('last month' == $time) {
+            $time = ['first day of last month 00:00:00', 'last day of last month 23:59:59'];
+        } elseif ('last year' == $time) {
+            $time = ['first day of january last year 00:00:00', 'last day of december last year 23:59:59'];
         }
 
         return $time;

@@ -6,15 +6,28 @@ class WPML_PO_Import_Strings {
 
 	private $errors;
 
-	/** @var SitePress $sitepress */
 	private $sitepress;
 
 	public function __construct( \SitePress $sitepress ) {
 		$this->sitepress = $sitepress;
 	}
 
+	public static function is_review_render_request() {
+		if ( ! array_key_exists( 'icl_po_upload', $_POST ) || ! isset( $_POST['_wpnonce'] ) ) {
+			return false;
+		}
+
+		$nonce = sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) );
+
+		return (bool) wp_verify_nonce( $nonce, 'icl_po_form' );
+	}
+
 	public function maybe_import_po_add_strings() {
-		if ( array_key_exists( 'icl_po_upload', $_POST ) && isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'icl_po_form' ) ) {
+		if ( ! current_user_can( 'wpml_manage_string_translation' ) && ! current_user_can( 'manage_translations' ) ) {
+			return;
+		}
+
+		if ( self::is_review_render_request() ) {
 			add_filter( 'wpml_st_get_po_importer', array( $this, 'import_po' ) );
 			return;
 		}
@@ -24,9 +37,6 @@ class WPML_PO_Import_Strings {
 		}
 	}
 
-	/**
-	 * @return null|WPML_PO_Import
-	 */
 	public function import_po() {
 		if ( $_FILES[ 'icl_po_file' ][ 'size' ] === 0 ) {
 			$this->errors = esc_html__( 'File upload error', 'wpml-string-translation' );
@@ -38,22 +48,23 @@ class WPML_PO_Import_Strings {
 		}
 	}
 
-	/**
-	 * @return string
-	 */
 	public function get_errors() {
 		return $this->errors;
 	}
 
 	private function add_strings() {
-		/** @var WPML_ST_String_Factory $wpml_st_string_factory */
 		$wpml_st_string_factory = WPML\Container\make( WPML_ST_String_Factory::class );
 		$strings                = json_decode( $_POST['strings_json'] );
-		$source_lang            = $this->get_filtered_source_lang();
+		$source_lang            = \WPML\StringTranslation\Infrastructure\TranslateEverything\EnglishSourceLanguage::normalize(
+			(string) $this->get_filtered_source_lang(),
+			array_map( 'strval', array_keys( (array) $this->sitepress->get_active_languages() ) ),
+			(string) $this->sitepress->get_default_language()
+		);
 
 		foreach ( (array) $strings as $string ) {
 			$original = WPML_Kses_Post::wp_kses_post_preserve_tags_format( $string->original );
-			$context  = (string) \WPML\API\Sanitize::string( $string->context );
+			$context = isset( $string->context )
+				? (string) \WPML\API\Sanitize::string( $string->context ) : '';
 
 			$string->original = str_replace( '\n', "\n", $original );
 			$name             = isset( $string->name )
@@ -75,17 +86,26 @@ class WPML_PO_Import_Strings {
 
 			$registered_string_lang = $wpml_st_string_factory->find_by_id( $string_id )->get_language();
 			if ( $registered_string_lang !== $source_lang ) {
-				// If any string already exists in different language than selected source language, exit with error.
 				$source_lang_details = $this->sitepress->get_language_details( $source_lang );
 				$registered_string_lang_details = $this->sitepress->get_language_details( $registered_string_lang );
-				$this->errors = sprintf(
-					/* translators: 1: Language name, 2: Language name, 3: Opening anchor tag, 4: Closing anchor tag. */
-					esc_html__( 'You\'re trying to import strings that are already registered in %1$s. To import them as %2$s, first %3$schange the source language of existing strings%4$s using String Translation. Then, try importing them again.', 'wpml-string-translation' ),
+				$source_language_doc_url = \WPML\ST\OutboundLinks\OutboundLinks::to(
+					'https://wpml.org/documentation/translating-your-contents/strings/how-to-change-the-source-language-of-strings/',
+					array(
+						'medium'   => 'notice',
+						'campaign' => 'string-translation',
+						'content'  => 'po-import',
+					)
+				);
+				$this->errors = wpml_bold_names( sprintf(
+					/* translators: Error on the String Translation page when the .po file being imported uses a different source language. %1$s: the language the texts are already registered in, %2$s: the language the user is importing them as, %3$s: opening link tag, %4$s: closing link tag. */
+					__( 'You\'re trying to import strings that are already registered in %1$s. To import them as %2$s, first %3$schange the source language of existing strings%4$s using <b>String Translation</b>. Then, try importing them again.', 'wpml-string-translation' ),
 					$registered_string_lang_details['display_name'] ?? $registered_string_lang,
 					$source_lang_details['display_name'] ?? $source_lang,
-					'<a target="_blank" class="external-link" href="https://wpml.org/documentation/getting-started-guide/string-translation/how-to-change-the-source-language-of-strings/?utm_source=plugin&utm_medium=gui&utm_campaign=string-translation">',
+					'<a target="_blank" class="external-link" href="' . esc_url( $source_language_doc_url ) . '">',
 					'</a>'
-				);
+				), array(
+					'a' => array( 'href' => array(), 'target' => array(), 'class' => array() ),
+				) );
 				break;
 			}
 
@@ -93,10 +113,6 @@ class WPML_PO_Import_Strings {
 		}
 	}
 
-	/**
-	 * @param int|false|null $string_id
-	 * @param \stdClass      $string
-	 */
 	private function maybe_add_translation( $string_id, $string ) {
 		if ( $string_id && array_key_exists( 'icl_st_po_language', $_POST ) ) {
 			if ( $string->translation !== '' ) {
@@ -112,10 +128,6 @@ class WPML_PO_Import_Strings {
 		}
 	}
 
-	/**
-	 * Wrapper function for `filter_input()`.
-	 * @return string
-	 */
 	protected function get_filtered_source_lang(): string {
 		return ! empty( $_POST['icl_st_po_source_language'] )
 			? filter_input( INPUT_POST, 'icl_st_po_source_language', FILTER_SANITIZE_FULL_SPECIAL_CHARS )

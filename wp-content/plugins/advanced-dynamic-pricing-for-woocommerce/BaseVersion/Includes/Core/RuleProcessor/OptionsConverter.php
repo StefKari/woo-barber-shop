@@ -25,6 +25,7 @@ use ADP\BaseVersion\Includes\Core\Rule\Limit\Interfaces\MaxUsageLimit;
 use ADP\BaseVersion\Includes\Core\Rule\Limit\LimitsLoader;
 use ADP\Factory;
 use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\Interfaces\CouponListCartAdj;
+use ADP\BaseVersion\Includes\Core\Rule\CartAdjustment\Interfaces\PaymentMethodCartAdj;
 use Exception;
 
 defined('ABSPATH') or exit;
@@ -263,6 +264,13 @@ class OptionsConverter
                 $data['options'][$adj::SHIPPING_CARTADJ_METHOD] = $data['options'][0];
             }
             unset($data['options'][0]);
+        } elseif($adj instanceof PaymentMethodCartAdj) {
+
+            if (isset($data['options'][0])) {
+                $data['options'][$adj::PAYMENT_CARTADJ_METHOD] = $data['options'];
+                $data['options'] = array_intersect_key($data['options'], array_flip([$adj::PAYMENT_CARTADJ_METHOD]));
+            }
+            
         }
 
         return $data;

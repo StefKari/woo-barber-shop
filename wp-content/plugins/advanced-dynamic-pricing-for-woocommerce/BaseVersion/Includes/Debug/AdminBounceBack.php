@@ -23,8 +23,15 @@ class AdminBounceBack
         $this->profiler = $profiler;
     }
 
+    public static function isEnabled()
+    {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        return ! empty($_REQUEST[self::REQUEST_KEY]);
+    }
+
     public function catchBounceEvent()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if ( ! empty($_REQUEST[self::REQUEST_KEY])) {
             $this->actionBounceBack();
             $this->profiler->installActionCollectReport();
@@ -39,11 +46,13 @@ class AdminBounceBack
         if (did_action('wp_print_scripts')) {
             _doing_it_wrong(__FUNCTION__,
                 sprintf(
-                    __('%1$s should not be called earlier the %2$s action.', 'woocommerce'),
+                    /* translators: Message about the load order*/
+                    //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch, WordPress.WP.I18n.MissingTranslatorsComment
+                    esc_html__('%1$s should not be called earlier the %2$s action.', 'woocommerce'),
                     'action_bounce_back',
                     'wp_print_scripts'
                 ),
-                WC_ADP_VERSION
+                esc_html(WC_ADP_VERSION)
             );
 
             return null;
@@ -55,7 +64,9 @@ class AdminBounceBack
             WC()->session->set(self::LAST_IMPORT_KEY_SESSION_KEY, $this->profiler->getImportKey());
 
             ?>
-            <meta http-equiv="refresh" content="0; url=<?php echo $referer; ?>">
+            <meta http-equiv="refresh" content="0; url=<?php
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $referer; ?>">
             <?php
         });
     }

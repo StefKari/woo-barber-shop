@@ -5,12 +5,19 @@ namespace ADP\BaseVersion\Includes;
 use ADP\BaseVersion\Includes\CartProcessor\CartProcessor;
 use ADP\BaseVersion\Includes\CartProcessor\FreeAutoAddItemsController;
 use ADP\BaseVersion\Includes\Compatibility\CTXFeedCmp;
+use ADP\BaseVersion\Includes\Compatibility\DonationForWoocommerceCmp;
+use ADP\BaseVersion\Includes\Compatibility\GermanMarketCmp;
+use ADP\BaseVersion\Includes\Compatibility\KlarnaCmp;
 use ADP\BaseVersion\Includes\Compatibility\SmartCouponsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcSubscriptionsCmp;
+use ADP\BaseVersion\Includes\Compatibility\WcQuoteCmp;
+use ADP\BaseVersion\Includes\Compatibility\WebToffeeWooGiftCardsCmp;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\Debug\CalculationProfiler;
 use ADP\BaseVersion\Includes\PriceDisplay\PriceDisplay;
 use ADP\BaseVersion\Includes\PriceDisplay\Processor;
+use ADP\BaseVersion\Includes\PriceDisplay\WcProductProcessor\InCartWcProductProcessor;
+use ADP\BaseVersion\Includes\PriceDisplay\WcProductProcessor\IWcProductProcessor;
 use ADP\BaseVersion\Includes\WC\WcCartItemDisplayExtensions;
 use ADP\Factory;
 use WC_Cart;
@@ -25,7 +32,7 @@ class Engine
     protected $cartProcessor;
 
     /**
-     * @var Processor
+     * @var IWcProductProcessor
      */
     protected $productProcessor;
 
@@ -65,9 +72,17 @@ class Engine
         $this->context                   = adp_context();
         $wcCart                          = $contextOrWcCart instanceof WC_Cart ? $contextOrWcCart : $deprecated;
         $this->cartProcessor             = Factory::get('CartProcessor_CartProcessor', $wcCart);
-        $this->productProcessor          = new Processor();
 
-        $this->priceDisplay              = Factory::get('PriceDisplay_PriceDisplay', $this->productProcessor);
+        if ($this->context->getOption("process_product_strategy") === "when") {
+            $this->productProcessor = new Processor();
+        } elseif ($this->context->getOption("process_product_strategy") === "after") {
+            $this->productProcessor = new InCartWcProductProcessor();
+        } else {
+            //phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+            throw new \Exception("Missing process product strategy for value: " . $this->context->getOption("process_product_strategy"));
+        }
+
+        $this->priceDisplay              = Factory::get('PriceDisplay_PriceDisplay', $this->productProcessor, $this);
         $this->cartItemDisplayExtensions = Factory::get('WC_WcCartItemDisplayExtensions');
         $this->profiler                  = Factory::get(
             "Debug_CalculationProfiler",
@@ -79,12 +94,39 @@ class Engine
         $this->freeItemsController       = Factory::get('CartProcessor_FreeAutoAddItemsController', $customizer);
         $this->freeItemsController->installHooks();
 
+        if (!$this->context->isBaseVersion()) {
+            $this->cartProcessor->installHooks();
+        }
+
         (new SmartCouponsCmp())->addActionToMoveAction();
+        (new WebToffeeWooGiftCardsCmp())->addActionToMoveAction();
 
         $ctxFeedCmp = new CTXFeedCmp();
         if ($ctxFeedCmp->isActive()) {
             $ctxFeedCmp->prepareHooks();
         }
+
+        $wcQuoteCmp = new WcQuoteCmp();
+        if ($wcQuoteCmp->isActive()) {
+            $wcQuoteCmp->prepareHooks();
+        }
+
+        $germanMarket = new GermanMarketCmp();
+        if ($germanMarket->isActive()) {
+            $germanMarket->prepareHooks();
+        }
+
+        $donationForWoocommerceCmp = new DonationForWoocommerceCmp();
+        if ($donationForWoocommerceCmp->isActive()) {
+            $donationForWoocommerceCmp->prepareHooks();
+        }
+
+        if ($this->context->getOption("support_persistence_rules") ) {
+            //must refill min_price when run >WooCommerce>Status>Tools>Product lookup tables, Regenerate
+            $persistentRuleRepository = new PersistentRuleRepository();
+            $persistentRuleRepository->installHooksForProductLookupTable();
+        }
+
     }
 
     public function withContext(Context $context)
@@ -122,7 +164,7 @@ class Engine
     public function installCartProcessAction()
     {
         add_action('wp_loaded', array($this, 'firstTimeProcessCart'), 15);
-        $this->cartProcessor->installActionFirstProcess();
+        $this->cartProcessor->installActionFirstProcess(true);
     }
 
     public function installProductProcessorWithEmptyCart()
@@ -148,7 +190,12 @@ class Engine
 
         $this->process(true);
 
-        $hookPriority = intval(apply_filters('wdp_calculate_totals_hook_priority', PHP_INT_MAX));
+        $klarnaCmp = new KlarnaCmp();
+        if($klarnaCmp->isActive()){
+            $hookPriority = intval(apply_filters('wdp_calculate_totals_hook_priority', 999998));
+        } else {
+            $hookPriority = intval(apply_filters('wdp_calculate_totals_hook_priority', PHP_INT_MAX));
+        }
         add_action('woocommerce_after_calculate_totals', array($this, 'afterCalculateTotals'), $hookPriority);
 
         /**
@@ -157,7 +204,7 @@ class Engine
         add_action('woocommerce_checkout_process', function () {
             $context = $this->context;
             $context->setProps(array($context::WC_CHECKOUT_PAGE => true));
-            $this->process();
+//            $this->process();
         }, PHP_INT_MAX);
 
         /**
@@ -170,6 +217,7 @@ class Engine
                 $context->setProps(array($context::WC_CHECKOUT_PAGE => true));
             }, PHP_INT_MAX);
         }
+
     }
 
     public function process($first = false)
@@ -179,6 +227,10 @@ class Engine
         $this->priceDisplay->initHooks();
         $this->cartItemDisplayExtensions->register();
         $this->freeItemsController->withCart($cart);
+
+        if ( adp_functions() ) {
+            adp_functions()->getProductProcessor()->withCart($cart);
+        }
     }
 
 //	public function woocommerce_checkout_update_order_review() {
@@ -191,6 +243,10 @@ class Engine
     {
 //		$this->priceDisplay->remove_price_hooks();
         if (WcSubscriptionsCmp::isRecurringCartCalculation()) {
+            return;
+        }
+
+        if ( apply_filters("adp_disable_process_after_calculate_totals", false) ) {
             return;
         }
 
@@ -207,9 +263,9 @@ class Engine
     }
 
     /**
-     * @return Processor
+     * @return IWcProductProcessor
      */
-    public function getProductProcessor(): Processor
+    public function getProductProcessor(): IWcProductProcessor
     {
         return $this->productProcessor;
     }

@@ -8,6 +8,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+use Automattic\WooCommerce\Enums\ProductStockStatus;
+
 /**
  * Widget recently viewed.
  */
@@ -20,7 +22,7 @@ class WC_Widget_Recently_Viewed extends WC_Widget {
 		$this->widget_cssclass    = 'woocommerce widget_recently_viewed_products';
 		$this->widget_description = __( "Display a list of a customer's recently viewed products.", 'woocommerce' );
 		$this->widget_id          = 'woocommerce_recently_viewed_products';
-		$this->widget_name        = __( 'Recent Viewed Products', 'woocommerce' );
+		$this->widget_name        = __( 'Recently Viewed Products list', 'woocommerce' );
 		$this->settings           = array(
 			'title'  => array(
 				'type'  => 'text',
@@ -69,14 +71,14 @@ class WC_Widget_Recently_Viewed extends WC_Widget {
 		);
 
 		if ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) ) {
-			$query_args['tax_query'] = array(
+			$query_args['tax_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Required to exclude hidden out-of-stock products from the recently viewed widget.
 				array(
 					'taxonomy' => 'product_visibility',
 					'field'    => 'name',
-					'terms'    => 'outofstock',
+					'terms'    => ProductStockStatus::OUT_OF_STOCK,
 					'operator' => 'NOT IN',
 				),
-			); // WPCS: slow query ok.
+			);
 		}
 
 		$r = new WP_Query( apply_filters( 'woocommerce_recently_viewed_products_widget_query_args', $query_args ) );
@@ -105,6 +107,6 @@ class WC_Widget_Recently_Viewed extends WC_Widget {
 
 		$content = ob_get_clean();
 
-		echo $content; // WPCS: XSS ok.
+		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Buffered widget markup; each dynamic value is escaped or annotated where it is rendered.
 	}
 }

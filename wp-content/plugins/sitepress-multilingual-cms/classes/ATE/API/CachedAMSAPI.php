@@ -5,29 +5,31 @@ namespace WPML\TM\ATE\API;
 use WPML\FP\Lst;
 use WPML\FP\Maybe;
 use WPML\TM\ATE\API\CacheStorage\Storage;
+use WPML\TM\ATE\ClonedSites\ReconnectState;
 use function WPML\FP\curryN;
 
 class CachedAMSAPI {
 
 	const CACHE_OPTION = 'wpml-tm-ams-api-cache';
 
-	/** @var  \WPML_TM_AMS_API */
 	private $amsApi;
 
-	/** @var Storage */
 	private $storage;
 
-	private $cachedFns = [ 'getGlossaryCount' ];
+	private $cachedFns = [ 'getGlossaryCount', 'getNormalizedSuggestionsCount', 'get_translation_engines' ];
+	private $clearCacheFns = [ 'update_translation_engines' ];
 
-	/**
-	 * @param \WPML_TM_AMS_API $amsApi
-	 */
+	private $noCollectionAsReturnType = [ 'get_translation_engines' ];
+
 	public function __construct( \WPML_TM_AMS_API $amsApi, Storage $storage ) {
 		$this->amsApi  = $amsApi;
 		$this->storage = $storage;
 	}
 
 	public function __call( $name, $args ) {
+		if ( Lst::includes( $name, $this->clearCacheFns ) ) {
+			$this->storage->delete( self::CACHE_OPTION );
+		}
 		return Lst::includes( $name, $this->cachedFns ) ? $this->callWithCache( $name, $args ) : call_user_func_array( [ $this->amsApi, $name ], $args );
 	}
 
@@ -36,11 +38,20 @@ class CachedAMSAPI {
 		$key  = $this->getKey( $args );
 
 		if ( ! array_key_exists( $fnName, $data ) || ! array_key_exists( $key, $data[ $fnName ] ) ) {
-			return call_user_func_array( [ $this->amsApi, $fnName ], $args )->map( $this->cacheValue( $fnName, $args ) );
+			$data = call_user_func_array( [ $this->amsApi, $fnName ], $args );
+
+			if ( Lst::includes( $fnName, $this->noCollectionAsReturnType ) ) {
+				return ReconnectState::isReconnecting()
+					? $data
+					: $this->cacheValue( $fnName, $args, $data );
+			}
+
+			return $data->map( $this->cacheValue( $fnName, $args ) );
 		}
 
-		return Maybe::of( $data[ $fnName ][ $key ] );
-
+		return Lst::includes( $fnName, $this->noCollectionAsReturnType )
+			? $data[ $fnName ][ $key ]
+			: Maybe::of( $data[ $fnName ][ $key ] );
 	}
 
 	public function cacheValue( $functionName = null, $args = null, $result = null ) {
@@ -55,13 +66,13 @@ class CachedAMSAPI {
 		return call_user_func_array( $function, func_get_args() );
 	}
 
-	/**
-	 * @param mixed $parameters
-	 *
-	 * @return string
-	 */
 	private function getKey( $parameters ) {
-		// phpcs:disable WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
 		return \serialize( $parameters );
+	}
+
+
+	public static function clearCache() {
+		$storage = new \WPML\TM\ATE\API\CacheStorage\Transient();
+		$storage->delete( self::CACHE_OPTION );
 	}
 }

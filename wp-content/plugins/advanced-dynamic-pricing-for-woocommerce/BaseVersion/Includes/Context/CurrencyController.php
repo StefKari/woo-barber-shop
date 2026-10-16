@@ -58,6 +58,9 @@ class CurrencyController
     public function __construct($context, $defaultCurrency)
     {
         $this->context         = $context;
+        if(!$defaultCurrency) {
+            $defaultCurrency = self::getDefaultWoocomerceCurrency();
+        }
         $this->defaultCurrency = $defaultCurrency;
         $this->currentCurrency = $defaultCurrency;
         $this->rate            = $this->defaultCurrency->getRate();
@@ -69,7 +72,7 @@ class CurrencyController
      */
     public function setCurrentCurrency($currency)
     {
-        if ($currency instanceof Currency) {
+        if ($currency instanceof Currency AND $this->defaultCurrency->getRate()) {
             $this->currentCurrency = $currency;
             $this->rate            = floatval($this->currentCurrency->getRate() / $this->defaultCurrency->getRate());
         }
@@ -122,7 +125,9 @@ class CurrencyController
         try {
             $reflection = new ReflectionClass($product);
             $property   = $reflection->getProperty('data');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
         } catch (ReflectionException $e) {
             $property = null;
         }
@@ -464,6 +469,15 @@ class CurrencyController
             'ZAR' => '&#82;',
             'ZMW' => 'ZK',
         );
+    }
+
+    public static function getDefaultWoocomerceCurrency()
+    {
+        $currencyCode = get_option('woocommerce_currency');
+        $symbols      = self::getDefaultCurrencySymbols();
+
+        $symbol       = isset($symbols[$currencyCode]) ? $symbols[$currencyCode] : '';
+        return new Currency($currencyCode, $symbol, 1);
     }
 
 }

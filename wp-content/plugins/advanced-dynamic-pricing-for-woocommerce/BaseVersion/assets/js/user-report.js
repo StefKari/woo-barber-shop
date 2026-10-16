@@ -19,7 +19,7 @@ var rule_tooltip = {
             rule_id = target.getAttribute('data-rule-id');
         }
 
-        if (!rule_id) return;
+        if (!rule_id || rule_id === "0") return;
 
         var tooltip_content = '';
         // tooltip_content += "<div>" + user_report_data.i.rule_id + ':' + rule_id + "</div>";
@@ -132,6 +132,8 @@ var wdp_reporter = {
             'single_item': '#wdp_reporter_tab_items_single_item_template',
             'cart_coupon': '#wdp_reporter_tab_items_single_coupon_template',
             'cart_adj_history_chunk': '#wdp_reporter_tab_items_cart_adj_history_chink_template',
+            'cart_merged_coupon_chunk': '#wdp_reporter_tab_items_cart_merged_coupon_chink_template',
+            'cart_merged_coupon_dist_item_chunk': '#wdp_reporter_tab_items_cart_merged_coupon_dist_item_chink_template',
             'empty_history': '#wdp_reporter_tab_items_single_item_empty_history_template',
             'gifted_history': '#wdp_reporter_tab_items_single_item_gifted_history_template',
             'cart_fee': '#wdp_reporter_tab_items_single_fee_template',
@@ -549,7 +551,15 @@ var wdp_reporter = {
                 return Object.keys(data.coupons).length > 0;
             },
 
-            get_coupons_html: function (coupons) {
+            get_coupons_html: function(coupons) {
+                if ( coupons['use_merged'] !== undefined && coupons['use_merged'] === true ) {
+                  return this.get_coupons_html_merged(coupons);
+                } else {
+                  return this.get_coupons_html_legacy(coupons);
+                }
+            },
+
+            get_coupons_html_legacy: function (coupons) {
                 var $cart_coupons_tab_content = '';
 
                 jQuery.each(coupons.applied, function ($index, $name) {
@@ -603,6 +613,43 @@ var wdp_reporter = {
                 return wdp_reporter.template_manager.get_template('cart_coupons', {
                     'coupons': $cart_coupons_tab_content
                 });
+            },
+
+            get_coupons_html_merged: function (coupons) {
+              let cartCouponsTabContent = '';
+
+              jQuery.each(coupons['adp_merged_coupons'], function (index, data) {
+                let parts = '';
+
+                jQuery.each(data.parts, function(index, couponPart) {
+                  let totalByItemsHtml = "";
+
+                  jQuery.each(couponPart.dist, function(index, distItem) {
+                    totalByItemsHtml += wdp_reporter.template_manager.get_template('cart_merged_coupon_dist_item_chunk', {
+                      'name': distItem.name,
+                      'qty': distItem.qty,
+                      'amount': distItem.amount,
+                    });
+                  });
+
+                  parts += wdp_reporter.template_manager.get_template('cart_merged_coupon_chunk', {
+                    'rule_id': couponPart.rule_id,
+                    'type_title': couponPart.type_title,
+                    'total_by_items_html': totalByItemsHtml,
+                  });
+                });
+
+                cartCouponsTabContent += wdp_reporter.template_manager.get_template('cart_coupon', {
+                  'index': index+1,
+                  'coupon_code': data['code'],
+                  'coupon_amount': data['amount_for_display'],
+                  'affected_rules': parts,
+                });
+              })
+
+              return wdp_reporter.template_manager.get_template('cart_coupons', {
+                'coupons': cartCouponsTabContent
+              });
             },
 
             get_selector_html: function (selected, index) {
@@ -865,6 +912,7 @@ var wdp_reporter = {
         set_button_handlers: function () {
             jQuery('#wdp-report-tab-window #export_all').on('click', function (event) {
                 var src = wdp_reporter.ajaxurl + (wdp_reporter.ajaxurl.indexOf('?') === -1 ? '?' : '&') + 'action=download_report&import_key=' + wdp_reporter.import_key + '&reports=all';
+                src += "&" + user_report_data.security_param + "=" + user_report_data.security;
                 jQuery('#wdp_export_new_window_frame').attr("src", src);
             });
         },
@@ -891,6 +939,14 @@ var wdp_reporter = {
             if (h >= resizerHeight && h <= maxheight) {
                 wdp_reporter.container.height(h);
             }
+
+            if (h <= jQuery('#wdp-report-control-bar').height() + 10) {
+                jQuery('#wdp-arrow-report-down').removeClass('dashicons-arrow-down-alt2').addClass('dashicons-arrow-up-alt2');
+                localStorage.setItem('downOrUpReport', JSON.stringify(false));
+            } else {
+                jQuery('#wdp-arrow-report-down').removeClass('dashicons-arrow-up-alt2').addClass('dashicons-arrow-down-alt2');
+                localStorage.setItem('downOrUpReport', JSON.stringify(true));
+            }
         }
 
         function stop_resizer_drag(event) {
@@ -898,15 +954,81 @@ var wdp_reporter = {
             jQuery(document).off('mouseup', stop_resizer_drag);
         }
 
+        /** Taking information about the debug report opening status and checking for its existence */
+        var openOrCloseReport = localStorage.getItem('openOrCloseReport');
+
+        if (openOrCloseReport === null) {
+            openOrCloseReport = false;
+            jQuery('#wdp-icon-report').hide();
+        } else {
+            openOrCloseReport = JSON.parse(openOrCloseReport);
+
+            /** Depending on the variable, the display is debug */
+            if(openOrCloseReport == false){
+                wdp_reporter.container.show();
+                jQuery('#wdp-icon-report').hide();
+            } else {
+                wdp_reporter.container.hide();
+                jQuery('#wdp-icon-report').show();
+            }
+        }
+
+        /** Registering a variable in localstorage */
         /** Close handle */
         wdp_reporter.container.on('click', '#wdp-report-window-close .dashicons', function (event) {
             wdp_reporter.container.hide();
+            localStorage.setItem('openOrCloseReport', JSON.stringify(true));
+            localStorage.setItem('downOrUpReport', JSON.stringify(true));
+            jQuery('#wdp-arrow-report-down').removeClass('dashicons-arrow-up-alt2').addClass('dashicons-arrow-down-alt2');
+            jQuery('#wdp-icon-report').show();
         });
 
         /** Open handle */
-        jQuery('#wp-toolbar').find('.wdp-report-visibility-control').click(function (e) {
+        jQuery('#wdp-icon-report').click(function (e) {
+            jQuery('#wdp-icon-report').hide();
             wdp_reporter.container.show();
+            localStorage.setItem('openOrCloseReport', JSON.stringify(false));
+
+            if (JSON.parse(localStorage.getItem('downOrUpReport'))) {
+                wdp_reporter.container.height(window.innerHeight / 2);
+            } else {
+                wdp_reporter.container.height(jQuery('#wdp-report-control-bar').height());
+            }
         });
+
+        /** Taking a variable that stores information about the status of hiding the curtain down */
+        var downOrUpReport = localStorage.getItem('downOrUpReport');
+
+        if (downOrUpReport === null) {
+            downOrUpReport = true;
+        } else {
+
+            downOrUpReport = JSON.parse(downOrUpReport);
+
+            /** Hiding or opening debug */
+            if(downOrUpReport == false){
+                wdp_reporter.container.height(jQuery('#wdp-report-control-bar').height());
+                jQuery('#wdp-arrow-report-down').removeClass('dashicons-arrow-down-alt2').addClass('dashicons-arrow-up-alt2');
+            }else {
+                wdp_reporter.container.height(window.innerHeight / 2);
+                jQuery('#wdp-arrow-report-down').removeClass('dashicons-arrow-up-alt2').addClass('dashicons-arrow-down-alt2');
+            }
+        }
+
+        /** Processing of clicking on the arrow to hide or open the degub curtain */
+        jQuery(document).on('click', '#wdp-arrow-report', function() {
+
+            if (jQuery('#wdp-arrow-report-down').hasClass('dashicons-arrow-down-alt2')) {
+                wdp_reporter.container.height(jQuery('#wdp-report-control-bar').height());
+                jQuery('#wdp-arrow-report-down').removeClass('dashicons-arrow-down-alt2').addClass('dashicons-arrow-up-alt2');
+                localStorage.setItem('downOrUpReport', JSON.stringify(false));
+            } else {
+                wdp_reporter.container.height(window.innerHeight / 2);
+                jQuery('#wdp-arrow-report-down').removeClass('dashicons-arrow-up-alt2').addClass('dashicons-arrow-down-alt2');
+                localStorage.setItem('downOrUpReport', JSON.stringify(true));
+            }
+        });
+
     },
 
 };
@@ -923,6 +1045,7 @@ jQuery(document).ready(function ($) {
     if(params !== "" && params.indexOf('wdp_debug_kill=1') > 0) {
         //jQuery('#export_all').trigger('click');
         var src = wdp_reporter.ajaxurl + (wdp_reporter.ajaxurl.indexOf('?') === -1 ? '?' : '&') + 'action=download_report&import_key=' + wdp_reporter.import_key + '&reports=all';
+        src += "&" + user_report_data.security_param + "=" + user_report_data.security;
         jQuery('#wdp_export_new_window_frame').attr("src", src);
 
         setTimeout('window.close()',5000);

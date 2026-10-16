@@ -1,7 +1,2 @@
 <?php
-
-namespace WPML\PHP\Exception;
-
-class RuntimeException extends Exception {
-
-}
+require_once __DIR__ . '/../../../../../../wpml/lib/Php/Exception/RuntimeException.php';

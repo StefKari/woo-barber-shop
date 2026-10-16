@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong
 // phpcs:disable Yoast.NamingConventions.NamespaceName.MaxExceeded
 namespace Yoast\WP\SEO\Dashboard\Infrastructure\Score_Groups;
@@ -20,7 +21,7 @@ class Score_Group_Link_Collector {
 	 * @param Taxonomy|null          $taxonomy     The taxonomy of the term we might be filtering.
 	 * @param int|null               $term_id      The ID of the term we might be filtering.
 	 *
-	 * @return string The view link of the score.
+	 * @return string|null The view link of the score.
 	 */
 	public function get_view_link( Score_Groups_Interface $score_group, Content_Type $content_type, ?Taxonomy $taxonomy, ?int $term_id ): ?string {
 		$posts_page = \admin_url( 'edit.php' );

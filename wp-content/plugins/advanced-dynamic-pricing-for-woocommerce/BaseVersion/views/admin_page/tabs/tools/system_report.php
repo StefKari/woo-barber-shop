@@ -7,10 +7,14 @@ $bounceBackReportUrl         = \ADP\BaseVersion\Includes\Debug\AdminBounceBack::
 
 <div>
     <?php if ($bounceBackDownloadReportUrl): ?>
-        <iframe src="<?php echo $bounceBackDownloadReportUrl; ?>" width=0 height=0 style='display:none'></iframe>
+        <iframe src="<?php
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $bounceBackDownloadReportUrl; ?>" width=0 height=0 style='display:none'></iframe>
     <?php endif; ?>
     <div id="wdp_reporter_tab_reports_buttons_template" style="margin-top: 15px;">
-        <a class="button" href="<?php echo $bounceBackReportUrl; ?>"
-           id="export_all"><?php echo __('Get system report', 'advanced-dynamic-pricing-for-woocommerce'); ?></a>
+        <a class="button" href="<?php
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $bounceBackReportUrl; ?>"
+           id="export_all"><?php echo esc_html__('Get system report', 'advanced-dynamic-pricing-for-woocommerce'); ?></a>
     </div>
 </div>

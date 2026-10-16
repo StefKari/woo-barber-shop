@@ -1,16 +1,2 @@
 <?php
-
-namespace WPML\Core\Component\Translation\Domain\TranslationMethod;
-
-use WPML\Core\SharedKernel\Component\Translation\Domain\TranslationMethod\TargetLanguageMethodType;
-
-class DuplicateMethod implements TranslationMethodInterface {
-
-
-  /** @return TargetLanguageMethodType::DUPLICATE */
-  public function get() {
-    return TargetLanguageMethodType::DUPLICATE;
-  }
-
-
-}
+require_once __DIR__ . '/../../../../../../../../../wpml/src/Core/Component/Translation/Domain/TranslationMethod/DuplicateMethod.php';

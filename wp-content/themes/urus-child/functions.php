@@ -18,16 +18,16 @@ if( !function_exists('urus_child_enqueue_styles')){
 }
 
 function urus_related_products_carousel_settings($atts,$woo_single_layout) {
-  if( $woo_single_layout == 'full'){
-      $atts['md_items'] = 4;
-      $atts['lg_items'] = 6;
+    if( $woo_single_layout == 'full'){
+        $atts['md_items'] = 4;
+        $atts['lg_items'] = 6;
 
-  }else{
-      $atts['md_items'] = 3;
-      $atts['lg_items'] = 4;
+    }else{
+        $atts['md_items'] = 3;
+        $atts['lg_items'] = 4;
 
-  }
-  return $atts;
+    }
+    return $atts;
 }
 add_filter('urus_related_products_carousel_settings','urus_related_products_carousel_settings',10,2);
 
@@ -58,57 +58,66 @@ function remove_draft_widget(){
 // End remove post type
 
 function so_38878702_remove_hook(){
-   remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
 }
-add_action( 'woocommerce_single_product_summary', 'so_38878702_remove_hook', 1 );  
+add_action( 'woocommerce_single_product_summary', 'so_38878702_remove_hook', 1 );
 
 function so_38878702_add_hook(){
-    $brands = wp_get_post_terms( get_the_ID(), 'pwb-brand' );
+    $product_id = get_the_ID();
+    $cache_key  = 'barbers_brands_' . $product_id;
+    $cached     = get_transient( $cache_key );
 
-	if ( ! is_wp_error( $brands ) ) {
+    if ( $cached !== false ) {
+        echo $cached; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        return;
+    }
 
-		if ( sizeof( $brands ) > 0 ) {
+    $brands = wp_get_post_terms( $product_id, 'pwb-brand' );
 
-			$show_as = get_option( 'wc_pwb_admin_tab_brands_in_single' );
+    if ( ! is_wp_error( $brands ) ) {
 
-			if ( $show_as != 'no' ) {
+        if ( sizeof( $brands ) > 0 ) {
 
+            $show_as         = get_option( 'wc_pwb_admin_tab_brands_in_single' );
+            $image_size_selected = get_option( 'wc_pwb_admin_tab_brand_logo_size', 'thumbnail' );
+            $image_size      = $image_size_selected ?: 'thumbnail';
+
+            if ( $show_as != 'no' ) {
+
+                ob_start();
                 echo '<div class="pwb-single-product-brands-container">';
-				    echo '<div class="pwb-single-product-brands pwb-clearfix">';
+                echo '<div class="pwb-single-product-brands pwb-clearfix">';
 
-				    if ( $show_as == 'brand_link' ) {
-				    	$before_brands_links  = '<span class="pwb-text-before-brands-links">';
-				    	$before_brands_links .= apply_filters( 'pwb_text_before_brands_links', esc_html__( 'Brands', 'perfect-woocommerce-brands' ) );
-				    	$before_brands_links .= ':</span>';
-				    	echo wp_kses_post( apply_filters( 'pwb_html_before_brands_links', $before_brands_links ) );
-				    }
+                if ( $show_as == 'brand_link' ) {
+                    $before_brands_links  = '<span class="pwb-text-before-brands-links">';
+                    $before_brands_links .= apply_filters( 'pwb_text_before_brands_links', esc_html__( 'Brands', 'perfect-woocommerce-brands' ) );
+                    $before_brands_links .= ':</span>';
+                    echo wp_kses_post( apply_filters( 'pwb_html_before_brands_links', $before_brands_links ) );
+                }
 
-				    foreach ( $brands as $brand ) {
-				    	$brand_link    = get_term_link( $brand->term_id, 'pwb-brand' );
-				    	$attachment_id = get_term_meta( $brand->term_id, 'pwb_brand_image', 1 );
+                foreach ( $brands as $brand ) {
+                    $brand_link      = get_term_link( $brand->term_id, 'pwb-brand' );
+                    $attachment_id   = get_term_meta( $brand->term_id, 'pwb_brand_image', 1 );
+                    $attachment_html = wp_get_attachment_image( $attachment_id, $image_size );
 
-				    	$image_size          = 'thumbnail';
-				    	$image_size_selected = get_option( 'wc_pwb_admin_tab_brand_logo_size', 'thumbnail' );
-				    	if ( $image_size_selected != false ) {
-				    		$image_size = $image_size_selected;
-				    	}
+                    if ( ! empty( $attachment_html ) && $show_as == 'brand_image' || ! empty( $attachment_html ) && ! $show_as ) {
+                        echo '<a href="' . esc_url( $brand_link ) . '" title="' . esc_attr( $brand->name ) . '">' . $attachment_html . '</a>';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    } else {
+                        echo '<a href="' . esc_url( $brand_link ) . '" title="' . esc_html__( 'View brand', 'perfect-woocommerce-brands' ) . '">' . esc_html( $brand->name ) . '</a>';
+                    }
+                }
+                echo '</div>';
 
-				    	$attachment_html = wp_get_attachment_image( $attachment_id, $image_size );
-
-				    	if ( ! empty( $attachment_html ) && $show_as == 'brand_image' || ! empty( $attachment_html ) && ! $show_as ) {
-				    		echo '<a href="' . esc_url( $brand_link ) . '" title="' . esc_attr( $brand->name ) . '">' . $attachment_html . '</a>';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				    	} else {
-				    		echo '<a href="' . esc_url( $brand_link ) . '" title="' . esc_html__( 'View brand', 'perfect-woocommerce-brands' ) . '">' . esc_html( $brand->name ) . '</a>';
-				    	}
-				    }
-				    echo '</div>';
-
-				    the_title( '<h1 class="product_title entry-title">', '</h1>' );
+                the_title( '<h1 class="product_title entry-title">', '</h1>' );
 
                 echo '</div>';
-			}
-		}
-	}
+                $html = ob_get_clean();
+
+                set_transient( $cache_key, $html, HOUR_IN_SECONDS * 12 );
+                echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            }
+        }
+    }
 }
 add_action( 'woocommerce_single_product_summary', 'so_38878702_add_hook', 5 );
 
@@ -564,3 +573,65 @@ function display_delivery_sticker() {
         echo '</div>';
     }
 }
+
+// 4. MINI CART: since WooCommerce 7.8 the cart fragments script is no longer enqueued
+// automatically; the theme's header mini cart (cart drawer and counter) depends on it.
+// Only needed when the cart has items: an empty mini cart is already correct in the HTML, and
+// ajax add-to-cart updates it from its own response. Pages for visitors with items in the cart
+// are never served from the page cache (woocommerce_items_in_cart cookie), so this stays correct.
+add_action('wp_enqueue_scripts', 'barbers_enqueue_cart_fragments', 20);
+function barbers_enqueue_cart_fragments() {
+    if (function_exists('WC') && !is_cart() && !is_checkout() && !empty($_COOKIE['woocommerce_items_in_cart'])) {
+        wp_enqueue_script('wc-cart-fragments');
+    }
+}
+
+// WooCommerce admin fixes the product list price column at 10ch, so "1,900.00 RSD" overflows into
+// the categories column; widen it so the price (and sale price) fits on its own.
+add_action('admin_head-edit.php', 'barbers_admin_price_column');
+function barbers_admin_price_column() {
+    if (($GLOBALS['typenow'] ?? '') === 'product') {
+        echo '<style>table.wp-list-table .column-price{width:15ch}</style>';
+    }
+}
+
+// Theme-internal post types (menus, footers, popups, category texts) are building blocks, not pages:
+// keep them out of the Yoast sitemaps and out of the search index.
+function barbers_internal_post_types() {
+    return array('familab_menu', 'urus-footer', 'category_description', 'urus-popup');
+}
+add_filter('wpseo_sitemap_exclude_post_type', function ($excluded, $post_type) {
+    return $excluded || in_array($post_type, barbers_internal_post_types(), true);
+}, 10, 2);
+add_filter('wpseo_robots', function ($robots) {
+    return is_singular(barbers_internal_post_types()) ? 'noindex, nofollow' : $robots;
+});
+
+// Local business data for Google (store address, contact), linked to Yoast's Organization.
+add_filter('wpseo_schema_graph', function ($graph) {
+    if (!is_front_page() && !is_page('kontakt')) {
+        return $graph;
+    }
+    $graph[] = array(
+        '@type'              => 'Store',
+        '@id'                => home_url('/#store'),
+        'name'               => 'Barbers Shop',
+        'description'        => 'Prodajna vitrina u berbernici The Barbers – kozmetika za bradu i kosu, oprema za brijanje.',
+        'url'                => home_url('/'),
+        'image'              => 'https://www.barbers.rs/wp-content/uploads/2020/02/Barbers-logo.png',
+        'telephone'          => '+381641448424',
+        'email'              => 'bgbarbersshop@gmail.com',
+        'priceRange'         => 'RSD',
+        'address'            => array(
+            '@type'           => 'PostalAddress',
+            'streetAddress'   => 'Karađorđeva 49/1 (ugao sa Crnogorskom)',
+            'addressLocality' => 'Beograd',
+            'addressRegion'   => 'Savski venac',
+            'postalCode'      => '11000',
+            'addressCountry'  => 'RS',
+        ),
+        'hasMap'             => 'https://maps.google.com/maps?q=Kara%C4%91or%C4%91eva+49%2C+Beograd',
+        'parentOrganization' => array('@id' => home_url('/#organization')),
+    );
+    return $graph;
+});

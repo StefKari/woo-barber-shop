@@ -4,10 +4,16 @@ namespace ADP\BaseVersion\Includes;
 
 use ADP\BaseVersion\Includes\AdminExtensions\AdminNotice;
 use ADP\BaseVersion\Includes\AdminExtensions\AdminPage;
-use ADP\BaseVersion\Includes\Compatibility\AeliaSwitcherCmp;
-use ADP\BaseVersion\Includes\Compatibility\AlgWcCurrencySwitcherCmp;
+use ADP\BaseVersion\Includes\Compatibility\HeyLightCmp;
+use ADP\BaseVersion\Includes\Compatibility\PriceBasedOnCountryCmp;
+use ADP\BaseVersion\Includes\Context\Container\ContainerCompatibilityManager;
+use ADP\BaseVersion\Includes\Context\ContextBuilder;
 use ADP\BaseVersion\Includes\Compatibility\VillaThemeMultiCurrencyCmp;
 use ADP\BaseVersion\Includes\Compatibility\WoocsCmp;
+use ADP\BaseVersion\Includes\Compatibility\YayCurrencyCmp;
+use ADP\BaseVersion\Includes\Compatibility\WooCommerceMultiCurrencyCmp;
+use ADP\BaseVersion\Includes\Compatibility\KlarnaOnSiteMessagingCmp;
+use ADP\BaseVersion\Includes\Compatibility\KlarnaCmp;
 use ADP\BaseVersion\Includes\Context\Currency;
 use ADP\BaseVersion\Includes\Context\CurrencyController;
 use ADP\BaseVersion\Includes\Context\Geolocation;
@@ -16,6 +22,7 @@ use ADP\BaseVersion\Includes\Context\PriceSettings;
 use ADP\BaseVersion\Includes\SpecialStrategies\GeoLocationStrategy;
 use ADP\Factory;
 use ADP\Settings\OptionsManager;
+use Automattic\WooCommerce\Utilities\OrderUtil;
 use Exception;
 use WC_Tax;
 use WP_Theme;
@@ -123,7 +130,7 @@ class Context
     /**
      * @var Geolocation
      */
-    public $geoLocation;
+    private $geoLocation;
 
     /**
      * @var AdminNotice
@@ -134,6 +141,8 @@ class Context
      * @var Language
      */
     public $language;
+
+    private $containerCompatibilityManager;
 
     /**
      * @param OptionsManager|null $settings
@@ -212,42 +221,42 @@ class Context
         $this->currencyController = new CurrencyController($this, new Currency($currencyCode, $symbol, 1));
         $this->currencyController->setCurrencySymbols($symbols);
 
-        $woocsCmp = new WoocsCmp();
-        if ($woocsCmp->isActive()) {
-            $woocsCmp->modifyContext($this);
-            $woocsCmp->prepareHooks();
+        $klarnaCmp = new KlarnaCmp();
+        if ($klarnaCmp->isActive()) {
+            $klarnaCmp->prepareHooks();
         }
 
-        $villaCmp = new VillaThemeMultiCurrencyCmp();
-        if ($villaCmp->isActive()) {
-            $villaCmp->modifyContext($this);
-            $villaCmp->prepareHooks();
+        $heightCmp = new HeylightCmp();
+        if ($heightCmp->isActive()) {
+            $heightCmp->prepareHooks();
         }
 
-        $aeliaCmp = new AeliaSwitcherCmp();
-        if ($aeliaCmp->isActive()) {
-            $aeliaCmp->modifyContext($this);
+        $klarnaOsmCmp = new KlarnaOnSiteMessagingCmp();
+        if ($klarnaOsmCmp->isActive()) {
+            $klarnaOsmCmp->prepareHooks();
         }
 
-        $algCmp = new AlgWcCurrencySwitcherCmp();
-        if ($algCmp->isActive()) {
-            $algCmp->modifyContext($this);
+        $priceBasedOnCountryCmp = new PriceBasedOnCountryCmp();
+        if ($priceBasedOnCountryCmp->isActive()) {
+            $priceBasedOnCountryCmp->modifyContext($this);
+            $priceBasedOnCountryCmp->prepareHooks();
         }
         /** --- End Currency ---  */
 
         $this->currentTheme = $this->loadCurrentTheme();
 
-        $location = GeoLocationStrategy::geoLocateIp();
-        $this->geoLocation = new Geolocation(
-            $location['country'] ?? "",
-            $location['state'] ?? "",
-            $location['city'] ?? "",
-            $location['postcode'] ?? ""
-        );
+        $this->geoLocation = null;
 
         $this->adminNotice = new AdminNotice($this);
 
         $this->language = Language::buildAsDefault();
+
+        $this->containerCompatibilityManager = new ContainerCompatibilityManager();
+    }
+
+    public static function builder(): ContextBuilder
+    {
+        return new ContextBuilder();
     }
 
     public function fetchQueryProps()
@@ -285,6 +294,7 @@ class Context
 
     protected static function isProcessingUpdatePlugin()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         return wp_doing_ajax() && isset($_REQUEST['action']) && $_REQUEST['action'] === 'update-plugin';
     }
 
@@ -297,6 +307,19 @@ class Context
         $rest_prefix = trailingslashit(rest_get_url_prefix());
         $request_uri = esc_url_raw(wp_unslash($_SERVER['REQUEST_URI']));
         $wordpress   = (false !== strpos($request_uri, $rest_prefix));
+
+        return $wordpress;
+    }
+
+    public function isWCStoreAPIRequest() {
+        if (empty($_SERVER['REQUEST_URI'])) {
+            return false;
+        }
+
+        $rest_prefix = trailingslashit(rest_get_url_prefix());
+        $wc_store_prefix = $rest_prefix . 'wc/store';
+        $request_uri = esc_url_raw(wp_unslash($_SERVER['REQUEST_URI']));
+        $wordpress   = (false !== strpos($request_uri, $wc_store_prefix));
 
         return $wordpress;
     }
@@ -314,9 +337,9 @@ class Context
         if ( ! isset($_SERVER["HTTP_REFERER"])) {
             return false;
         }
-
-        $referer = parse_url($_SERVER["HTTP_REFERER"]);
-        $admin   = parse_url(admin_url("admin.php"));
+        //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+        $referer = wp_parse_url($_SERVER["HTTP_REFERER"]);
+        $admin   = wp_parse_url(admin_url("admin.php"));
 
         return isset($referer['path'], $admin['path']) && ($referer['path'] === $admin['path']);
     }
@@ -343,7 +366,12 @@ class Context
      */
     public function getOption($key, $default = false)
     {
-        return $this->settings->getOption($key);
+        static $cache;
+        if(isset($cache[$key])) return $cache[$key];
+
+        $value = $this->settings->getOption($key);
+        $cache[$key] = $value;
+        return $value;
     }
 
     /**
@@ -408,6 +436,7 @@ class Context
 
     public function isPluginAdminPage()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         return $this->getProp(self::ADMIN) && isset($_GET['page']) && $_GET['page'] === AdminPage::SLUG;
     }
 
@@ -472,39 +501,6 @@ class Context
         return $this->availableTaxClassSlugs;
     }
 
-    public function setMode($mode)
-    {
-        if (self::MODE_PRODUCTION === $mode || self::MODE_DEBUG === $mode) {
-            $this->mode = $mode;
-        }
-    }
-
-    /**
-     * @param string $mode
-     *
-     * @return bool
-     */
-    public function isMode($mode)
-    {
-        return $this->mode === $mode;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isProductionMode()
-    {
-        return $this->mode === self::MODE_PRODUCTION;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDebugMode()
-    {
-        return $this->mode === self::MODE_DEBUG;
-    }
-
     /**
      * TODO implement
      *
@@ -557,7 +553,7 @@ class Context
 
     public function isShowBulkTablePricesIncludingCoupons()
     {
-        return apply_filters('adp_show_bulk_table_prices_including_coupons', false);
+        return apply_filters('adp_show_bulk_table_prices_including_coupons', true);
     }
 
     public function isToCompensateTrdPartAdjustmentForFixedPrice()
@@ -565,14 +561,56 @@ class Context
         return apply_filters('adp_is_to_compensate_trd_party_adj_for_fixed_price', true);
     }
 
-    public function isIgnoreConditionsForDisplayingAdvertising()
-    {
-        return apply_filters('adp_is_ignore_conditions_for_displaying_advertising', false);
-    }
-
     public function isCheckParentsWhenFindingProductOnlyRule()
     {
         return apply_filters('adp_is_check_parents_when_finding_product_only_rule', true);
+    }
+
+    public function isRegisterUpdateCheckoutScript()
+    {
+        return apply_filters('adp_is_register_update_checkout_script', true);
+    }
+
+    public function isRuleSuppressed()
+    {
+        return apply_filters('adp_rules_suppression', false);
+    }
+
+    public function isUseMergedCoupons()
+    {
+        return apply_filters('adp_use_merged_coupons', true);
+    }
+
+    public function isUseSelectedShippingMethodsEverywhere()
+    {
+        return apply_filters('adp_use_shipping_methods_everywhere', false);
+    }
+
+    public function isUseSelectedPaymentMethodEverywhere()
+    {
+        return apply_filters('adp_use_payment_method_everywhere', false);
+    }
+
+    public function isTranslateRules()
+    {
+        return apply_filters('adp_translate_rules', true);
+    }
+
+    public function isShowPriceRangeInBulkTableForVariableProducts()
+    {
+        return apply_filters('adp_show_price_range_in_bulk_table_for_variable_products', false);
+    }
+
+    public function isGenerateSqlPerRule() {
+        return apply_filters('adp_generate_sql_per_rule', false);
+    }
+
+    public function isTaxExemptProcessorActive() {
+        return apply_filters('adp_is_tax_exempt_processor_active', true);
+    }
+
+    public function refreshShippingProcessorWhenNoAppliedRules() {
+        return apply_filters('adp_refresh_shipping_processor_when_no_applied_rules', false);
     }
 
     protected function setUpPricesSettings()
@@ -651,5 +689,65 @@ class Context
     public function setLanguage($language)
     {
         $this->language = $language;
+    }
+
+    /**
+     * @return Geolocation
+     */
+    public function getGeoLocation(): Geolocation
+    {
+        if ($this->geoLocation !== null) {
+            return $this->geoLocation;
+        }
+
+        $location = GeoLocationStrategy::geoLocateIp();
+        $this->geoLocation = new Geolocation(
+            $location['country'] ?? "",
+            $location['state'] ?? "",
+            $location['city'] ?? "",
+            $location['postcode'] ?? ""
+        );
+
+        return $this->geoLocation;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHPOSEnabled() {
+        $isHPOSEnabled = false;
+        if (class_exists('Automattic\WooCommerce\Utilities\OrderUtil')) {
+            $isHPOSEnabled = OrderUtil::custom_orders_table_usage_is_enabled();
+        }
+        return $isHPOSEnabled;
+    }
+
+    public function getContainerCompatibilityManager(): ContainerCompatibilityManager
+    {
+        return $this->containerCompatibilityManager;
+    }
+
+    public function isBaseVersion(): bool {
+        return !defined('WC_ADP_PRO_VERSION_PATH');
+    }
+
+    public function isDebug()
+    {
+        return is_super_admin($this->getCurrentUser()->ID) 
+            && ($this->getOption("show_debug_bar")
+                || Factory::callStaticMethod("Debug_AdminBounceBack", "isEnabled")
+            );
+    }
+
+    public function useCachedCart() {
+        return $this->getOption('dont_recalculate_cart_if_not_changed') && !$this->isDebug();
+    }
+
+    public function __serialize() {
+        return [];
+    }
+
+    public function __unserialize($data) {
+        $this->__construct();
     }
 }

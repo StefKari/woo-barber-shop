@@ -378,6 +378,13 @@
                             disable_search_threshold: 20
                         }
                     );
+                    // Accessibility: Chosen's generated search input has no label and its toggle link no href.
+                    var label = $(this).attr('aria-label') || $(this).find('option:selected').text() || 'Izbor';
+                    var $chosen = $(this).next('.chosen-container');
+                    $chosen.find('.chosen-search-input').attr('aria-label', label);
+                    $chosen.find('a.chosen-single').attr({href: '#', role: 'button', 'aria-label': label}).on('click', function (e) {
+                        e.preventDefault();
+                    });
                 });
             }
         },
@@ -1340,6 +1347,12 @@
                     autoHideScrollbar: true,
                 }
             );
+            // mCustomScrollbar wraps list items in its own <div>s; move the list semantics to its
+            // inner container so the mini cart stays a valid list for assistive technology.
+            $('ul.mCustomScrollbar, ol.mCustomScrollbar').each(function () {
+                $(this).attr('role', 'none').find('> .mCustomScrollBox > .mCSB_container').first().attr('role', 'list');
+                $(this).find('li').attr('role', 'listitem');
+            });
         },
         smooth_scroll_target: function () {
             $document.on('click', 'a[href^="#smooth_scroll_"]', function (event) {
@@ -2297,7 +2310,24 @@
         },
         urus_instant_search: function () {
             // SEARCH STYLE DRAWER
-            var products = Object.values(familab_ajax._urus_live_search_products);
+            var products = Object.values(familab_ajax._urus_live_search_products || {}),
+                products_request = null;
+            // The search index is no longer inlined in the page; fetch it once, on first use.
+            var load_products = function (callback) {
+                if (products.length || !familab_ajax._urus_live_search_url) {
+                    callback();
+                    return;
+                }
+                if (!products_request) {
+                    products_request = $.ajax({url: familab_ajax._urus_live_search_url, dataType: 'json', cache: true}).done(function (data) {
+                        products = Object.values(data || {});
+                    });
+                }
+                products_request.always(callback);
+            };
+            $document.on('focus touchstart', '#familab-search-mobile input[name="s"], .familab-header-mobile.style2 .serchfield', function () {
+                load_products(function () {});
+            });
             $('#search_drawer_content').attr('data-products', '[]').attr('data-ipp', '');
             //Disable submit if there is no option available
             var is_submit_form = $('#familab-search-mobile').attr('data-form-submit');
@@ -2323,7 +2353,7 @@
                 }
             });
 
-            $('#familab-search-mobile input[name="s"]').on('keyup', URUS.urus_delay(function (e) {
+            var drawer_search = function (e) {
                 var q = $(this).val();
                 var search_sku = false;
                 if (q == '') {
@@ -2355,6 +2385,12 @@
                     $('#search_drawer_content .search-result').html(familab_ajax.search_empty);
                 }
                 $(this).attr('last-search-field', q);
+            };
+            $('#familab-search-mobile input[name="s"]').on('keyup', URUS.urus_delay(function (e) {
+                var self = this, args = arguments;
+                load_products(function () {
+                    drawer_search.apply(self, args);
+                });
             }, 500));
 
             // SEARCH STYLE INLINE
@@ -2378,7 +2414,7 @@
                     }
                 }
             });
-            $('.familab-header-mobile.style2 .serchfield').on('keyup', URUS.urus_delay(function (e) {
+            var inline_search = function (e) {
                 var search_container = $('.familab-header-mobile.style2 .mobile-search-input'),
                     search_result_field = search_container.find('.inline-search-result'),
                     q = $(this).val(),
@@ -2406,6 +2442,12 @@
                 } else {
                     search_result_field.html(familab_ajax.search_empty);
                 }
+            };
+            $('.familab-header-mobile.style2 .serchfield').on('keyup', URUS.urus_delay(function (e) {
+                var self = this, args = arguments;
+                load_products(function () {
+                    inline_search.apply(self, args);
+                });
             }, 500));
             $(".familab-header-mobile.style2 .inline-search-result-wrapper").on('scroll', function () {
                 var search_container = $('.familab-header-mobile.style2 .mobile-search-input');
@@ -3499,6 +3541,10 @@
             script urus short code video
          */
         //Video by youtube link
+        // Only pages with a video shortcode need the YouTube API.
+        if (!document.querySelector(".urus_shortcode_video iframe, .urus_shortcode_video video")) {
+            return;
+        }
         // YouTube API stuff
         var tag = document.createElement("script");
         tag.src = "https://www.youtube.com/iframe_api";

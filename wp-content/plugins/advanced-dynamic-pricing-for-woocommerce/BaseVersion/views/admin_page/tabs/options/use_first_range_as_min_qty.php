@@ -4,12 +4,12 @@ defined('ABSPATH') or exit;
 ?>
 
 <tr valign="top">
-    <th scope="row" class="titledesc"><?php _e('Use first range as minimum quantity if bulk rule is active',
+    <th scope="row" class="titledesc"><?php esc_html_e('Use first range as minimum quantity if bulk rule is active',
             'advanced-dynamic-pricing-for-woocommerce') ?></th>
     <td class="forminp forminp-checkbox">
         <fieldset>
             <legend class="screen-reader-text">
-                <span><?php _e('Use first range as minimum quantity if bulk rule is active',
+                <span><?php esc_html_e('Use first range as minimum quantity if bulk rule is active',
                         'advanced-dynamic-pricing-for-woocommerce') ?></span></legend>
             <label for="use_first_range_as_min_qty">
                 <input <?php checked($options['use_first_range_as_min_qty']); ?>

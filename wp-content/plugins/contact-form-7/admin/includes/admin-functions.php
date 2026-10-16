@@ -1,12 +1,14 @@
 <?php
 
-function wpcf7_current_action() {
-	if ( isset( $_REQUEST['action'] ) and -1 != $_REQUEST['action'] ) {
-		return $_REQUEST['action'];
-	}
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-	if ( isset( $_REQUEST['action2'] ) and -1 != $_REQUEST['action2'] ) {
-		return $_REQUEST['action2'];
+function wpcf7_current_action() {
+	foreach ( array( 'action', 'action2' ) as $var ) {
+		$action = wpcf7_superglobal_request( $var, null );
+
+		if ( isset( $action ) and -1 !== $action ) {
+			return $action;
+		}
 	}
 
 	return false;

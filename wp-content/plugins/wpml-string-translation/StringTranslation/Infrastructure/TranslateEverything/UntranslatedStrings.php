@@ -4,37 +4,28 @@ namespace WPML\StringTranslation\Infrastructure\TranslateEverything;
 
 use WPML\API\PostTypes;
 use WPML\Core\Component\Translation\Application\String\Repository\StringBatchRepositoryInterface;
+use WPML\Core\SharedKernel\Component\Language\Domain\LanguageCode;
 use WPML\Element\API\Languages;
 use WPML\FP\Cast;
 use WPML\FP\Fns;
 use WPML\FP\Lst;
 use WPML\FP\Obj;
 use WPML\Setup\Option;
+use WPML\ST\TranslationPauseScope;
 use WPML\TM\API\ATE\CachedLanguageMappings;
 use WPML\TM\API\ATE\LanguageMappings;
 use WPML\TM\ATE\TranslateEverything\UntranslatedElementsInterface;
 use WPML\TM\AutomaticTranslation\Actions\Actions;
 
-/**
- * It handles sending strings to translation in Translate Everything process.
- *
- * !Important note: we include only English strings in the Translate Everything process.
- */
 class UntranslatedStrings implements UntranslatedElementsInterface {
 
-	const ENGLISH_SOURCE_LANGUAGE = 'en';
+	const ENGLISH_SOURCE_LANGUAGE = LanguageCode::ENGLISH;
 
-	/**
-	 * @var \wpdb
-	 */
 	private $wpdb;
 
-	/**
-	 * @var StringBatchRepositoryInterface
-	 */
 	private $stringBatchRepository;
 
-	public function __construct( StringBatchRepositoryInterface $stringBatchRepository, \wpdb $wpdb = null ) {
+	public function __construct( StringBatchRepositoryInterface $stringBatchRepository, ?\wpdb $wpdb = null ) {
 		$this->stringBatchRepository = $stringBatchRepository;
 
 		if ( ! $wpdb ) {
@@ -43,37 +34,18 @@ class UntranslatedStrings implements UntranslatedElementsInterface {
 		$this->wpdb = $wpdb;
 	}
 
-	/**
-	 * @return {
-	 *   0: string,
-	 *   1: string[]
-	 * } 0: type, 1: languageCodes
-	 */
 	public function getTypeWithLanguagesToProcess() {
 		$completed             = $this->getCompleted();
-		$notCompletedLanguages = array_diff( $this->getEligibleLanguageCodes(), $completed );
+		$notCompletedLanguages = array_diff( $this->getEligibleLanguageCodes( true ), $completed );
 
 		return [ 'string', $notCompletedLanguages ];
 	}
 
-	/**
-	 * @param string[] $languages Language codes
-	 * @param string   $type
-	 * @param int      $queueSize
-	 *
-	 * @return {
-	 *   0: int
-	 *   1: string
-	 * }[] For example [ [element_id1, language_code1], [element_id1, language_code2], ... ]
-	 */
 	public function getElementsToProcess( $languages, $type, $queueSize ) {
-		$languageSelect    = array_map(
-			function ( $languageCode ) {
-				return "SELECT '{$languageCode}' AS code";
-			},
-			$languages
+		$languageSelect    = implode(
+			' UNION ALL ',
+			array_fill( 0, count( $languages ), 'SELECT %s AS code' )
 		);
-		$languageSelect    = implode( ' UNION ALL ', $languageSelect );
 		$languageCrossJoin = "
 			CROSS JOIN (
 				$languageSelect	
@@ -81,30 +53,96 @@ class UntranslatedStrings implements UntranslatedElementsInterface {
 		";
 
 		$sql = "
-			SELECT strings.id, langs.code AS language_code 
+			SELECT strings.id, langs.code AS language_code
 			FROM {$this->wpdb->prefix}icl_strings strings
 			{$languageCrossJoin}
 			LEFT JOIN {$this->wpdb->prefix}icl_string_translations translations
 				ON strings.id = translations.string_id AND translations.language = langs.code
-			WHERE strings.string_type = 1 
+			WHERE (
+					(
+						strings.string_type = 1
+						AND EXISTS (
+							SELECT 1
+							FROM {$this->wpdb->prefix}icl_string_positions positions
+							WHERE positions.string_id = strings.id
+								AND positions.kind = %d
+						)
+					)
+					-- The site-identity strings (site title + tagline) are registered
+					-- programmatically by WPML core itself -- see
+					-- WPML_String_Translation::initialize_wp_and_widget_strings()
+					-- (inc/wpml-string-translation.class.php), which calls
+					-- icl_register_string( 'WP', 'Blog Title' | 'Tagline', ... ). Being
+					-- programmatic they are string_type 0 and carry no frontend-kind
+					-- position row, so they failed BOTH filters above and never entered
+					-- TEA's string scope even though they are the most visible strings on
+					-- the site (wpmldev-7226). Admitted here as an exactly-named set, not
+					-- as every type-0 string, which would sweep the whole admin-text
+					-- corpus into automatic translation and billing.
+					OR (
+						strings.context = %s
+						AND strings.name IN ( %s, %s )
+					)
+				)
 				AND ( translations.status IS NULL OR translations.status = 0 )
-				AND EXISTS (
-	        SELECT 1
-	        FROM {$this->wpdb->prefix}icl_string_positions positions
-	        WHERE positions.string_id = strings.id
-	          AND positions.kind = %d
-	    	) AND strings.language = %s
-			ORDER BY langs.code, strings.id ASC 
+				-- wpmldev-7665: the line above reads the ST status MIRROR, which
+				-- is written after ATE has been called and billed, by a deferred
+				-- closure on the far side of a hook chain that can fail in
+				-- between. A mirror reading 0 or NULL is therefore not proof
+				-- the string is idle -- in every reproducing run the mirror was the
+				-- only thing that was wrong while the job tables were correct,
+				-- so strings that had already been sent and paid for were picked
+				-- again, re-batched byte-identically and re-billed.
+				--
+				-- Ask the job tables instead: a string carrying an ACTIVE
+				-- st-batch job for this language is in flight, full stop. Same
+				-- join shape JobLog's own in-flight precheck uses.
+				AND NOT EXISTS (
+					SELECT 1
+					FROM {$this->wpdb->prefix}icl_string_batches active_batch
+					INNER JOIN {$this->wpdb->prefix}icl_translations active_original
+						ON active_original.element_id = active_batch.batch_id
+						AND active_original.element_type = 'st-batch_strings'
+						AND active_original.source_language_code IS NULL
+					INNER JOIN {$this->wpdb->prefix}icl_translations active_target
+						ON active_target.trid = active_original.trid
+						AND active_target.source_language_code IS NOT NULL
+					INNER JOIN {$this->wpdb->prefix}icl_translation_status active_status
+						ON active_status.translation_id = active_target.translation_id
+					-- Both correlations live in the WHERE on purpose: MySQL does
+					-- not resolve an outer reference inside a subquery ON clause.
+					WHERE active_batch.string_id = strings.id
+						AND active_target.language_code = langs.code
+						AND active_status.status IN ( %d, %d )
+				)
+				AND strings.language = %s
+				-- Never target a string own source language. TEA appends the site
+				-- default language to the target list (wpmldev-6406), so on an
+				-- English-default site en appears as both source and target; without
+				-- this guard each English string would be batched to translate into
+				-- English, producing an empty-source ATE job (the Missing language
+				-- mapping sync error, wpmldev-7222). Keyed on the string actual
+				-- source, so a non-English string is still translated into English.
+				AND langs.code != strings.language
+			ORDER BY langs.code, strings.id ASC
 			LIMIT %d
 		";
 
-		$sql = $this->wpdb->prepare( 
-			$sql, 
-			[ 
-				ICL_STRING_TRANSLATION_STRING_TRACKING_TYPE_FRONTEND, 
-				self::ENGLISH_SOURCE_LANGUAGE,
-				$queueSize 
-			] 
+		$sql = $this->wpdb->prepare(
+			$sql,
+			array_merge(
+				array_values( $languages ),
+				[
+					ICL_STRING_TRANSLATION_STRING_TRACKING_TYPE_FRONTEND,
+					\WPML_ST_Blog_Name_And_Description_Hooks::STRING_DOMAIN,
+					\WPML_ST_Blog_Name_And_Description_Hooks::STRING_NAME_BLOGNAME,
+					\WPML_ST_Blog_Name_And_Description_Hooks::STRING_NAME_BLOGDESCRIPTION,
+					ICL_TM_WAITING_FOR_TRANSLATOR,
+					ICL_TM_IN_PROGRESS,
+					$this->getSourceLanguage(),
+					$queueSize,
+				]
+			)
 		);
 
 		$rowset = $this->wpdb->get_results( $sql, ARRAY_N );
@@ -117,38 +155,47 @@ class UntranslatedStrings implements UntranslatedElementsInterface {
 		);
 	}
 
-	/**
-	 * @param Actions $actions
-	 * @param array   $elements [ [element_id1, language_code1], [element_id1, language_code2], ... ]
-	 * @param string  $type (not used for strings)
-	 *
-	 * @return {
-	 *  elementId: int,
-	 *  lang: string,
-	 *  elementType: string,
-	 *  jobId: int,
-	 * }[] For example [[elementId: 14, lang: fr, elementType: post, jobId: 123], ...]
-	 */
 	public function createTranslationJobs( Actions $actions, array $elements, $type ) {
-		/** Like: {fr: [1,2,3], 'de': [5,6],...} */
 		$stringsGroupedByLanguages = \wpml_collect( $elements )
 			->groupBy( 1 )
 			->map( Lst::pluck( 0 ) )
 			->map( Fns::map( Cast::toInt() ) )
 			->toArray();
 
+		$sourceLanguage = $this->getSourceLanguage();
+
 		$batchElements = [];
 		foreach ( $stringsGroupedByLanguages as $languageCode => $strings ) {
+			$alreadyInFlight = $this->getStringIdsWithActiveJob( $strings, $languageCode );
+
+			if ( $alreadyInFlight ) {
+				$this->reportRefusedDuplicateJob( $alreadyInFlight, $languageCode );
+
+				$strings = array_values( array_diff( $strings, $alreadyInFlight ) );
+
+				$stringsGroupedByLanguages[ $languageCode ] = $strings;
+			}
+
+			if ( ! $strings ) {
+				continue;
+			}
+
 			$batchId = $this->stringBatchRepository->create(
 				'translate everything|string|' . $languageCode,
 				$strings,
-				self::ENGLISH_SOURCE_LANGUAGE
+				$sourceLanguage
 			);
+
+			$this->markStringsAsWaiting( $strings, $languageCode );
 
 			$batchElements[] = [ $batchId, $languageCode ];
 		}
 
-		$jobs = $actions->createNewTranslationJobs( 'en', $batchElements, 'st-batch' );
+		if ( ! $batchElements ) {
+			return [];
+		}
+
+		$jobs = $actions->createNewTranslationJobs( $sourceLanguage, $batchElements, 'st-batch' );
 
 		$jobsPerString = [];
 		foreach ( $jobs as $job ) {
@@ -165,6 +212,65 @@ class UntranslatedStrings implements UntranslatedElementsInterface {
 		}
 
 		return $jobsPerString;
+	}
+
+	private function getStringIdsWithActiveJob( array $stringIds, string $languageCode ): array {
+		if ( ! $stringIds ) {
+			return [];
+		}
+
+		$placeholders = implode( ', ', array_fill( 0, count( $stringIds ), '%d' ) );
+
+		$sql = "
+			SELECT DISTINCT active_batch.string_id
+			FROM {$this->wpdb->prefix}icl_string_batches active_batch
+			INNER JOIN {$this->wpdb->prefix}icl_translations active_original
+				ON active_original.element_id = active_batch.batch_id
+				AND active_original.element_type = 'st-batch_strings'
+				AND active_original.source_language_code IS NULL
+			INNER JOIN {$this->wpdb->prefix}icl_translations active_target
+				ON active_target.trid = active_original.trid
+				AND active_target.language_code = %s
+				AND active_target.source_language_code IS NOT NULL
+			INNER JOIN {$this->wpdb->prefix}icl_translation_status active_status
+				ON active_status.translation_id = active_target.translation_id
+			WHERE active_batch.string_id IN ( {$placeholders} )
+				AND active_status.status IN ( %d, %d )
+		";
+
+		$rows = $this->wpdb->get_col(
+			$this->wpdb->prepare(
+				$sql,
+				array_merge(
+					[ $languageCode ],
+					array_map( 'intval', array_values( $stringIds ) ),
+					[ ICL_TM_WAITING_FOR_TRANSLATOR, ICL_TM_IN_PROGRESS ]
+				)
+			)
+		);
+
+		return array_map( 'intval', (array) $rows );
+	}
+
+	private function reportRefusedDuplicateJob( array $stringIds, string $languageCode ) {
+		if ( class_exists( \WPML\TM\Jobs\JobLog::class ) ) {
+			\WPML\TM\Jobs\JobLog::addError(
+				'tea_duplicate_string_job_refused',
+				[
+					'language'   => $languageCode,
+					'string_ids' => array_values( $stringIds ),
+					'count'      => count( $stringIds ),
+				]
+			);
+		}
+
+		do_action( 'wpml_st_batch_duplicate_job_refused', array_values( $stringIds ), $languageCode );
+	}
+
+	private function markStringsAsWaiting( array $stringIds, string $languageCode ) {
+		foreach ( $stringIds as $stringId ) {
+			icl_add_string_translation( (int) $stringId, $languageCode, null, ICL_TM_WAITING_FOR_TRANSLATOR );
+		}
 	}
 
 	public function isEverythingProcessed( $cached = false ) {
@@ -184,20 +290,16 @@ class UntranslatedStrings implements UntranslatedElementsInterface {
 
 		$targetLanguages = $this->maybeAppendDefaultLanguage( $languageMapper, $targetLanguages );
 
-		// filter out source language as it's the hardcoded source language
 		$targetLanguages = $this->removeEnglishFromTargetLanguages( $targetLanguages );
 
-		return $targetLanguages;
+		return TranslationPauseScope::translatable( array_values( $targetLanguages ) );
 	}
 
-	/**
-	 * @return string[]
-	 */
 	private function getTargetLanguages(): array {
 		$targetLanguages = Languages::getSecondaryCodes();
 
-		if ( Languages::getDefaultCode() !== self::ENGLISH_SOURCE_LANGUAGE ) {
-			$primary   = [ Languages::getDefaultCode() ];
+		if ( Languages::getDefaultCode() !== $this->getSourceLanguage() ) {
+			$primary         = [ Languages::getDefaultCode() ];
 			$targetLanguages = array_merge( $targetLanguages, $primary );
 		}
 
@@ -206,12 +308,6 @@ class UntranslatedStrings implements UntranslatedElementsInterface {
 		return $targetLanguages;
 	}
 
-	/**
-	 * @param string $type It's irrelevant for strings
-	 * @param array  $languages
-	 *
-	 * @return void
-	 */
 	public function markTypeAsCompleted( string $type ) {
 		$this->setCompleted( $this->getTargetLanguages() );
 	}
@@ -236,43 +332,32 @@ class UntranslatedStrings implements UntranslatedElementsInterface {
 		$this->setCompleted( $completed );
 	}
 
-	/**
-	 * @return string[] For example ['fr', 'de']
-	 */
 	private function getCompleted() {
 		return Option::getTranslateEverythingCompletedStrings();
 	}
 
-	/**
-	 * @param string[] $completed For example ['fr', 'de']
-	 *
-	 * @return void
-	 */
 	private function setCompleted( array $completed ) {
 		Option::setTranslateEverythingCompletedStrings( $completed );
 	}
 
-	/**
-	 * @param array $targetLanguages
-	 *
-	 * @return array
-	 */
 	private function removeEnglishFromTargetLanguages( array $targetLanguages ): array {
-		$targetLanguages = array_filter( $targetLanguages, function ( $languageCode ) {
-			return $languageCode !== self::ENGLISH_SOURCE_LANGUAGE;
-		} );
+		$sourceLanguage  = $this->getSourceLanguage();
+		$targetLanguages = array_filter(
+			$targetLanguages,
+			function ( $languageCode ) use ( $sourceLanguage ) {
+				return $sourceLanguage !== $languageCode;
+			}
+		);
 
 		return $targetLanguages;
 	}
 
-	/**
-	 * @param string $languageMapper
-	 * @param array $targetLanguages
-	 *
-	 * @return array
-	 */
+	private function getSourceLanguage(): string {
+		return EnglishSourceLanguage::resolveForSite();
+	}
+
 	private function maybeAppendDefaultLanguage( string $languageMapper, array $targetLanguages ): array {
-		if ( Languages::getDefaultCode() !== self::ENGLISH_SOURCE_LANGUAGE && $languageMapper::doesDefaultLanguageSupportAutomaticTranslations() ) {
+		if ( Languages::getDefaultCode() !== $this->getSourceLanguage() && $languageMapper::doesDefaultLanguageSupportAutomaticTranslations() ) {
 			$targetLanguages[] = Languages::getDefaultCode();
 		}
 

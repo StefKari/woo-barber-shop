@@ -47,9 +47,7 @@ class WPSEO_Premium_Metabox implements WPSEO_WordPress_Integration {
 		Current_Page_Helper $current_page_helper,
 		?WPSEO_Metabox_Link_Suggestions $link_suggestions = null
 	) {
-		if ( $link_suggestions === null ) {
-			$link_suggestions = new WPSEO_Metabox_Link_Suggestions();
-		}
+		$link_suggestions ??= new WPSEO_Metabox_Link_Suggestions();
 
 		$this->prominent_words_helper = $prominent_words_helper;
 		$this->current_page_helper    = $current_page_helper;
@@ -154,7 +152,7 @@ class WPSEO_Premium_Metabox implements WPSEO_WordPress_Integration {
 			'integrationsTabURL'          => admin_url( 'admin.php?page=wpseo_integrations' ),
 			'premiumAssessmentsScriptUrl' => plugins_url(
 				'assets/js/dist/register-premium-assessments-' . $assets_manager->flatten_version( WPSEO_PREMIUM_VERSION ) . WPSEO_CSSJS_SUFFIX . '.js',
-				WPSEO_PREMIUM_FILE
+				WPSEO_PREMIUM_FILE,
 			),
 			'pluginUrl'                   => plugins_url( '', WPSEO_PREMIUM_FILE ),
 			'isAiFeatureEnabled'          => WPSEO_Options::get( 'enable_ai_generator' ),
@@ -163,7 +161,7 @@ class WPSEO_Premium_Metabox implements WPSEO_WordPress_Integration {
 		if ( defined( 'YOAST_SEO_TEXT_FORMALITY' ) && YOAST_SEO_TEXT_FORMALITY === true ) {
 			$data['textFormalityScriptUrl'] = plugins_url(
 				'assets/js/dist/register-text-formality-' . $assets_manager->flatten_version( WPSEO_PREMIUM_VERSION ) . WPSEO_CSSJS_SUFFIX . '.js',
-				WPSEO_PREMIUM_FILE
+				WPSEO_PREMIUM_FILE,
 			);
 		}
 
@@ -189,7 +187,7 @@ class WPSEO_Premium_Metabox implements WPSEO_WordPress_Integration {
 				'data' => [
 					'disableTableOfContents' => $disable_table_of_content,
 				],
-			]
+			],
 		);
 	}
 
@@ -202,6 +200,17 @@ class WPSEO_Premium_Metabox implements WPSEO_WordPress_Integration {
 		$link_suggestions_enabled = WPSEO_Options::get( 'enable_link_suggestions', false );
 
 		$post = $this->get_post();
+
+		// Bail when the global post can't be resolved (e.g. third-party builders that enqueue scripts on a post-edit screen before $GLOBALS['post_ID'] is set).
+		if ( ! ( $post instanceof WP_Post ) ) {
+			return [
+				'linkSuggestionsEnabled'     => 'disabled',
+				'linkSuggestionsAvailable'   => false,
+				'linkSuggestionsUnindexed'   => false,
+				'isProminentWordsAvailable'  => false,
+				'isTitleAssessmentAvailable' => false,
+			];
+		}
 
 		$prominent_words_support      = new WPSEO_Premium_Prominent_Words_Support();
 		$is_prominent_words_available = $prominent_words_support->is_post_type_supported( $post->post_type );

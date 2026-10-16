@@ -28,7 +28,7 @@ class WPSEO_Premium {
 	 *
 	 * @var string
 	 */
-	public const PLUGIN_VERSION_NAME = '24.8';
+	public const PLUGIN_VERSION_NAME = '28.7';
 
 	/**
 	 * Machine readable version for determining whether an upgrade is needed.
@@ -91,7 +91,7 @@ class WPSEO_Premium {
 		$this->integrations = [
 			'premium-metabox'              => new WPSEO_Premium_Metabox(
 				YoastSEOPremium()->helpers->prominent_words,
-				YoastSEOPremium()->helpers->current_page
+				YoastSEOPremium()->helpers->current_page,
 			),
 			'premium-assets'               => new WPSEO_Premium_Assets(),
 			'link-suggestions'             => new WPSEO_Metabox_Link_Suggestions(),
@@ -119,8 +119,6 @@ class WPSEO_Premium {
 	 * @return void
 	 */
 	private function setup() {
-		$this->load_textdomain();
-
 		$this->redirect_setup();
 
 		add_action( 'init', [ 'WPSEO_Premium_Option', 'register_option' ] );
@@ -131,6 +129,8 @@ class WPSEO_Premium {
 			add_filter( 'wpseo_helpscout_beacon_settings', [ $this, 'filter_helpscout_beacon' ], 1 );
 
 			add_filter( 'wpseo_enable_tracking', '__return_true', 1 );
+
+			add_filter( 'wpseo_tracking_settings_include_list', [ $this, 'add_redirect_options_to_tracking' ] );
 
 			// Add Sub Menu page and add redirect page to admin page array.
 			// This should be possible in one method in the future, see #535.
@@ -144,10 +144,13 @@ class WPSEO_Premium {
 					'admin_page_meta_post_types_checkboxes',
 				],
 				10,
-				2
+				2,
 			);
 			// Settings.
 			add_action( 'admin_init', [ $this, 'register_settings' ] );
+
+			// Dismiss the 27.6.1 redirect-cleanup notice when the admin lands on the .htaccess file editor.
+			add_action( 'admin_init', [ 'WPSEO_Redirect_Upgrade', 'maybe_dismiss_cleanup_27_6_1_notice' ] );
 
 			// Add Premium imports.
 			$this->integrations[] = new WPSEO_Premium_Import_Manager();
@@ -156,7 +159,7 @@ class WPSEO_Premium {
 		// Add page analysis fields to variable array key patterns.
 		add_filter(
 			'wpseo_option_titles_variable_array_key_patterns',
-			[ $this, 'add_variable_array_key_pattern' ]
+			[ $this, 'add_variable_array_key_pattern' ],
 		);
 
 		// Only activate post and term watcher if permalink structure is enabled.
@@ -241,8 +244,9 @@ class WPSEO_Premium {
 			$redirect_url = home_url( $redirect_url );
 		}
 
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Redirect URL is validated and sanitized by redirect object.
 		wp_redirect( $redirect_url, $redirect->get_type(), 'Yoast SEO Premium' );
-		exit;
+		exit();
 	}
 
 	/**
@@ -281,6 +285,21 @@ class WPSEO_Premium {
 	}
 
 	/**
+	 * Extends the Free tracking include list with the redirect-mode options so we can see
+	 * what proportion of installs runs PHP redirects vs file-based ones.
+	 *
+	 * @param array<string> $include_list The tracking include list from WPSEO_Tracking_Settings_Data.
+	 *
+	 * @return array<string> The extended include list.
+	 */
+	public function add_redirect_options_to_tracking( $include_list ) {
+		$include_list[] = 'disable_php_redirect';
+		$include_list[] = 'separate_file';
+
+		return $include_list;
+	}
+
+	/**
 	 * Add page analysis to array with variable array key patterns
 	 *
 	 * @param array $patterns Array with patterns for page analysis.
@@ -309,7 +328,7 @@ class WPSEO_Premium {
 	public function admin_page_meta_post_types_checkboxes( $yform, $name ) {
 		$custom_fields_help_link = new Help_Link_Presenter(
 			WPSEO_Shortlinker::get( 'https://yoa.st/4cr' ),
-			__( 'Learn more about including custom fields in the page analysis', 'wordpress-seo-premium' )
+			__( 'Learn more about including custom fields in the page analysis', 'wordpress-seo-premium' ),
 		);
 
 		echo '<div class="yoast-settings-section yoast-settings-section--last">';
@@ -319,7 +338,7 @@ class WPSEO_Premium {
 			esc_html__( 'Custom fields to include in page analysis', 'wordpress-seo-premium' ),
 			[
 				'extra_content' => $custom_fields_help_link,
-			]
+			],
 		);
 		echo '</div>';
 	}
@@ -393,15 +412,6 @@ class WPSEO_Premium {
 	}
 
 	/**
-	 * Load textdomain
-	 *
-	 * @return void
-	 */
-	private function load_textdomain() {
-		load_plugin_textdomain( 'wordpress-seo-premium', false, dirname( WPSEO_PREMIUM_BASENAME ) . '/languages/' );
-	}
-
-	/**
 	 * Initializes the HelpScout support modal for WPSEO settings pages.
 	 *
 	 * @param array $helpscout_settings The helpscout settings.
@@ -409,16 +419,8 @@ class WPSEO_Premium {
 	 * @return array The HelpScout beacon settings array.
 	 */
 	public function filter_helpscout_beacon( $helpscout_settings ) {
-		$beacon_id = '1ae02e91-5865-4f13-b220-7daed946ba25';
-
-		$helpscout_settings['products'][] = WPSEO_Addon_Manager::PREMIUM_SLUG;
-
-		// Set the beacon to the premium beacon for all pages.
-		foreach ( $helpscout_settings['pages_ids'] as $page => $beacon ) {
-			$helpscout_settings['pages_ids'][ $page ] = $beacon_id;
-		}
-		// Add the redirects page.
-		$helpscout_settings['pages_ids']['wpseo_redirects'] = $beacon_id;
+		$helpscout_settings['products'][]                   = WPSEO_Addon_Manager::PREMIUM_SLUG;
+		$helpscout_settings['pages_ids']['wpseo_redirects'] = '1ae02e91-5865-4f13-b220-7daed946ba25';
 
 		return $helpscout_settings;
 	}

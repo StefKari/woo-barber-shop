@@ -105,7 +105,7 @@ class WC_Order_Item_Meta {
 		if ( $return ) {
 			return $output;
 		} else {
-			echo $output; // WPCS: XSS ok.
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Base meta values are KSES-sanitized before the public legacy HTML filter.
 		}
 	}
 
@@ -168,7 +168,7 @@ class WC_Order_Item_Meta {
 	 * @return array
 	 */
 	public function get_formatted_legacy( $hideprefix = '_' ) {
-		if ( ! is_ajax() ) {
+		if ( ! wp_doing_ajax() ) {
 			wc_deprecated_argument( 'WC_Order_Item_Meta::get_formatted', '2.4', 'Item Meta Data is being called with legacy arguments' );
 		}
 

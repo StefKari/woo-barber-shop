@@ -18,16 +18,18 @@ class Yoast_Form {
 	/**
 	 * Instance of this class
 	 *
-	 * @var Yoast_Form
 	 * @since 2.0
+	 *
+	 * @var Yoast_Form
 	 */
 	public static $instance;
 
 	/**
 	 * The short name of the option to use for the current page.
 	 *
-	 * @var string
 	 * @since 2.0
+	 *
+	 * @var string
 	 */
 	public $option_name;
 
@@ -326,13 +328,13 @@ class Yoast_Form {
 				esc_attr( $this->option_name . '[' . $variable . '][' . $name . ']' ),
 				checked( ! empty( $values[ $name ] ), true, false ),
 				esc_attr( $name ),
-				disabled( ( isset( $attr['disabled'] ) && $attr['disabled'] ), true, false )
+				disabled( ( isset( $attr['disabled'] ) && $attr['disabled'] ), true, false ),
 			);
 
 			printf(
 				'<label class="checkbox" for="%1$s">%2$s</label>',
 				esc_attr( $variable . '-' . $name ), // #1
-				esc_html( $label )
+				esc_html( $label ),
 			);
 			echo '<br class="clear">';
 		}
@@ -377,7 +379,7 @@ class Yoast_Form {
 			$reverse,
 			$help,
 			$strong,
-			$disabled_attribute
+			$disabled_attribute,
 		);
 
 		// phpcs:ignore WordPress.Security.EscapeOutput -- Reason: All output is properly escaped or hardcoded in the presenter.
@@ -422,7 +424,7 @@ class Yoast_Form {
 			[
 				'for'   => $variable,
 				'class' => 'textinput',
-			]
+			],
 		);
 
 		$aria_attributes = Yoast_Input_Validation::get_the_aria_invalid_attribute( $variable );
@@ -463,7 +465,7 @@ class Yoast_Form {
 			[
 				'for'   => $variable,
 				'class' => 'textinput ' . $attr['class'],
-			]
+			],
 		);
 
 		$aria_attributes  = Yoast_Input_Validation::get_the_aria_invalid_attribute( $variable );
@@ -508,7 +510,7 @@ class Yoast_Form {
 			[
 				'for'   => $variable,
 				'class' => $attr['class'] . '--label',
-			]
+			],
 		);
 
 		if ( isset( $attr['extra_content'] ) ) {
@@ -531,7 +533,7 @@ class Yoast_Form {
 			isset( $attr['autocomplete'] ) ? ' autocomplete="' . esc_attr( $attr['autocomplete'] ) . '"' : '',
 			$aria_attributes,
 			esc_attr( $val ),
-			$this->get_disabled_attribute( $variable, $attr )
+			$this->get_disabled_attribute( $variable, $attr ),
 		);
 		// phpcs:enable
 		// phpcs:ignore WordPress.Security.EscapeOutput -- Reason: output is properly escaped.
@@ -570,7 +572,7 @@ class Yoast_Form {
 			[
 				'for'   => $variable,
 				'class' => 'textinput',
-			]
+			],
 		);
 
 		$disabled_attribute = $this->get_disabled_attribute( $variable, $attr );
@@ -591,9 +593,7 @@ class Yoast_Form {
 	 * @return void
 	 */
 	public function hidden( $variable, $id = '', $val = null ) {
-		if ( is_null( $val ) ) {
-			$val = $this->get_field_value( $variable, '' );
-		}
+		$val ??= $this->get_field_value( $variable, '' );
 
 		if ( is_bool( $val ) ) {
 			$val = ( $val === true ) ? 'true' : 'false';
@@ -637,7 +637,7 @@ class Yoast_Form {
 				[
 					'for'   => $variable,
 					'class' => 'select',
-				]
+				],
 			);
 			echo $help; // phpcs:ignore WordPress.Security.EscapeOutput -- Reason: The help contains HTML.
 		}
@@ -700,7 +700,7 @@ class Yoast_Form {
 			[
 				'for'   => $variable,
 				'class' => 'select',
-			]
+			],
 		);
 
 		$disabled_attribute = $this->get_disabled_attribute( $variable, $attr );
@@ -714,63 +714,6 @@ class Yoast_Form {
 			$this->hidden( 'url', $this->option_name . '_url' );
 			$this->hidden( 'type', $this->option_name . '_type' );
 		}
-		echo '<br class="clear"/>';
-	}
-
-	/**
-	 * Media input.
-	 *
-	 * @since 2.0
-	 * @deprecated 23.5
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $variable Option name.
-	 * @param string $label    Label message.
-	 * @param array  $attr     Extra attributes to add to the media input and buttons.
-	 *
-	 * @return void
-	 */
-	public function media_input( $variable, $label, $attr = [] ) {
-
-		_deprecated_function( __METHOD__, 'Yoast SEO 23.5' );
-
-		$val      = $this->get_field_value( $variable, '' );
-		$id_value = $this->get_field_value( $variable . '_id', '' );
-
-		$var_esc = esc_attr( $variable );
-
-		$defaults = [
-			'disabled' => false,
-		];
-		$attr     = wp_parse_args( $attr, $defaults );
-
-		$this->label(
-			$label,
-			[
-				'for'   => 'wpseo_' . $variable,
-				'class' => 'select',
-			]
-		);
-
-		$id_field_id = 'wpseo_' . $var_esc . '_id';
-
-		echo '<span>';
-			echo '<input',
-				' class="textinput"',
-				' id="wpseo_', $var_esc, '"', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- output escaped before.
-				' type="text" size="36"',
-				' name="', esc_attr( $this->option_name ), '[', $var_esc, ']"', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- output escaped before.
-				' value="', esc_attr( $val ), '"',
-				' readonly="readonly"',
-				' /> ';
-			echo '<input',
-				' type="hidden"',
-				' id="', esc_attr( $id_field_id ), '"',
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- output escaped before.
-				' name="', esc_attr( $this->option_name ), '[', $var_esc, '_id]"',
-				' value="', esc_attr( $id_value ), '"',
-				' />';
-		echo '</span>';
 		echo '<br class="clear"/>';
 	}
 
@@ -836,7 +779,7 @@ class Yoast_Form {
 					'for'        => $var_esc . '-' . $key_esc,
 					'class'      => 'radio',
 					'aria_label' => $aria_label,
-				]
+				],
 			);
 		}
 		echo '</fieldset>';
@@ -967,10 +910,10 @@ class Yoast_Form {
 			sprintf(
 				/* translators: %s expands to an indexable object's name, like a post type or taxonomy */
 				esc_html__( 'Show %s in search results?', 'wordpress-seo' ),
-				$label
+				$label,
 			),
 			$help,
-			[ 'disabled' => $is_disabled ]
+			[ 'disabled' => $is_disabled ],
 		);
 	}
 
@@ -1006,7 +949,7 @@ class Yoast_Form {
 			$show_hide_switch,
 			$label,
 			$help,
-			[ 'disabled' => $is_disabled ]
+			[ 'disabled' => $is_disabled ],
 		);
 	}
 

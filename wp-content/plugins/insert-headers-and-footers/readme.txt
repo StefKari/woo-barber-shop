@@ -1,10 +1,10 @@
 === WPCode - Insert Headers and Footers + Custom Code Snippets - WordPress Code Manager ===
 Contributors: WPbeginner, smub, gripgrip, wpcodeteam
 Tags: code, css, php, header, code snippets
-Requires at least: 4.6
-Tested up to: 6.7
-Requires PHP: 5.5
-Stable tag: 2.2.7
+Requires at least: 5.0
+Tested up to: 7.1
+Requires PHP: 7.0
+Stable tag: 2.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -231,6 +231,66 @@ WPCode comes with a ready-made code snippets library that allows you to replace 
 ... and basically any plugin that adds a functionality which can be added via custom code snippets.
 
 == Changelog ==
+
+= 2.4.0 =
+* Fix: Improved safe mode security so only users who can manage snippets can load the site with snippets disabled.
+
+= 2.3.9 =
+* Fix: PHP fatal error when a snippet error was logged on a frontend or REST request while the logs folder was missing.
+* Fix: Snippets no longer get overwritten with visual editor content when other plugins trigger editor events in the admin.
+* Fix: Library snippet previews now always start at the top of the code.
+* Fix: PHP fatal error on some admin AJAX requests from the library connect notice.
+
+= 2.3.8 =
+* Tweak: You can now resize the code editor on the Live CSS Preview screen by dragging the divider between it and the preview, and it remembers the size you set.
+* Tweak: Editing an active snippet now requires permission to activate snippets; without it the editor is read-only.
+
+= 2.3.7 =
+* New: Set up a whole group of related snippets at once with Snippet Packs — pick a pack and install every snippet in it with a single click, then manage or remove a pack anytime while keeping any snippets you use across other packs.
+
+= 2.3.6 =
+* New: You can now easily tell where each library snippet came from — imported snippets show a small cloud badge and the originating library author (WPCode, WPForms, AIOSEO, and more).
+* Tweak: We improved how the snippet library handles unexpected cache or server errors, so the library tab keeps working reliably and failed imports no longer leave behind blank snippets.
+* Tweak: We added extra permission checks around snippet creation and editing to ensure only authorized users can make changes.
+
+= 2.3.5 =
+* Fix: Switching a snippet from shortcode back to auto-insert mode now correctly restores the selected location.
+* Fix: Changes made in the Text tab of the visual editor for text snippets are now saved correctly.
+* Fix: Resolved a fatal error that could occur when the snippet library cache returns invalid data.
+
+= 2.3.4 =
+* New: Integration with the WordPress Abilities API (requires WordPress 6.9+).
+
+= 2.3.3 =
+* Tweak: Improved PHP 8.5 compatibility.
+
+= 2.3.2.1 =
+* Fix: Fixed an issue where users who can't edit snippets saw an error message.
+
+= 2.3.2 =
+* New: Live CSS preview, you can now see the changes you make to a CSS snippet in real-time on the frontend of your website.
+
+= 2.3.1 =
+* Fix: We changed the way labels are loaded in conditional logic classes to avoid notices when used with "Run Everywhere" snippets.
+* Fix: We fixed an issue with notices being thrown in certain setups when saving advanced settings.
+* Tweak: Force refresh editor in the snippet generator to display gutters correctly.
+* Tweak: Added extra checks for the WPCode settings option to ensure it's always the correct format and avoid notices in edge cases when the option is cleared externally.
+* Tweak: Minimum PHP version updated to 7.0.
+* Tweak: Minimum WP version updated to 5.0.
+
+= 2.3.0 =
+* New: We added a way to 1-click update snippets installed from the WPCode library when new versions are available.
+* Tweak: We improved JSON code snippets import validation to show accurate error messages when files are incorrectly formatted.
+
+= 2.2.9 =
+* New: Added a new importer for the Post Snippets plugin to make it easier to migrate your code snippets.
+* Tweak: We adjusted the way the safe mode works to limit its effects on frontend urls.
+
+= 2.2.8 =
+* New: Schema Generators - we added 20 new code generators to make it easier to manage schema code on your website.
+* Tweak: We moved the button to update generated snippets to the top so that you can update snippets easier.
+* Tweak: We added "suppress_filters" to WP_Query used by WPCode to avoid conflicts with other plugins.
+* Fix: We fixed an issue where the generated snippets were not automatically inserted when activated.
 
 = 2.2.7 =
 * New: Added support for automatically importing snippets from 2 new plugins.

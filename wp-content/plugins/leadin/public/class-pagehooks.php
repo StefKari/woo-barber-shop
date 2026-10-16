@@ -119,7 +119,11 @@ class PageHooks {
 	 */
 	public function add_id_to_tracking_code( $tag, $handle ) {
 		if ( AssetsManager::TRACKING_CODE === $handle ) {
-			$tag = str_replace( "id='" . $handle . "-js'", "async defer id='hs-script-loader'", $tag );
+			$tag = preg_replace(
+				'/id=[\'"]' . preg_quote( $handle . '-js', '/' ) . '[\'"]/',
+				"async defer id='hs-script-loader'",
+				$tag
+			);
 		}
 		return $tag;
 	}
@@ -131,7 +135,7 @@ class PageHooks {
 	 * @param String $handle handle.
 	 */
 	public function add_defer_to_forms_script( $tag, $handle ) {
-		if ( AssetsManager::FORMS_SCRIPT === $handle ) {
+		if ( AssetsManager::FORMS_SCRIPT === $handle || AssetsManager::FORMS_V4_SCRIPT === $handle ) {
 			$tag = str_replace( 'src', 'defer src', $tag );
 		}
 		return $tag;

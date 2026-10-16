@@ -46,6 +46,7 @@ class ReporterAjax
     public function getUserReportData()
     {
         $this->checkNonceOrDie();
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
         $importKey = isset($_REQUEST[self::IMPORT_KEY_REQUEST_KEY]) ? $_REQUEST[self::IMPORT_KEY_REQUEST_KEY] : false;
 
         $data = $this->makeResponseData($importKey);
@@ -74,9 +75,10 @@ class ReporterAjax
 
     protected function checkNonceOrDie()
     {
+        //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
         if (wp_verify_nonce($_REQUEST[$this->nonceParam] ?? null, $this->nonceName) === false) {
-            wp_die(__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
-                __('Error', 'advanced-dynamic-pricing-for-woocommerce'), ['response' => 403]);
+            wp_die(esc_html__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                esc_html__('Error', 'advanced-dynamic-pricing-for-woocommerce'), ['response' => 403]);
         }
     }
 
@@ -115,6 +117,7 @@ class ReporterAjax
     public function handleDownloadReport()
     {
         $this->checkNonceOrDie();
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
         $importKey = isset($_REQUEST[self::IMPORT_KEY_REQUEST_KEY]) ? $_REQUEST[self::IMPORT_KEY_REQUEST_KEY] : false;
 
         if ( ! $importKey) {
@@ -124,12 +127,13 @@ class ReporterAjax
         if ( ! is_super_admin(get_current_user_id())) {
             wp_send_json_error(__('Wrong import key', 'advanced-dynamic-pricing-for-woocommerce'));
         }
-
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (empty($_REQUEST['reports'])) {
             wp_send_json_error(__('Wrong value for parameter "reports"', 'advanced-dynamic-pricing-for-woocommerce'));
         }
 
         $storage = new ReportsStorage($importKey);
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
         $reports = explode(',', $_REQUEST['reports']);
         $keys    = array(
             'initial_cart',
@@ -140,6 +144,7 @@ class ReporterAjax
             'additions',
             'active_hooks',
             'rules',
+            'product_collections'
         );
 
         if ( ! in_array('all', $reports)) {
@@ -153,8 +158,11 @@ class ReporterAjax
 
         $tmp_dir  = ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir();
         $filepath = @tempnam($tmp_dir, 'wdp');
+        //phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
         $handler  = fopen($filepath, 'a');
+        //phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
         fwrite($handler, json_encode($data, JSON_PRETTY_PRINT));
+        //phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         fclose($handler);
 
         $this->killBuffers();
@@ -176,18 +184,22 @@ class ReporterAjax
     {
         if ( ! empty($filename)) {
             if ( ! $this->functionDisabled('readfile')) {
+                //phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
                 readfile($filename);
             } else {
                 // fallback, emulate readfile
+                //phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
                 $file = fopen($filename, 'rb');
                 if ($file !== false) {
                     while ( ! feof($file)) {
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.AlternativeFunctions.file_system_operations_fread
                         echo fread($file, 4096);
                     }
+                    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
                     fclose($file);
                 }
             }
-            unlink($filename);
+            wp_delete_file($filename);
         }
     }
 
